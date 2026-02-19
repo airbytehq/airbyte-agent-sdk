@@ -476,15 +476,6 @@ class PixelOwnerAdAccount(BaseModel):
     id: Union[str | None, Any] = Field(default=None, description="Owner ad account ID (with act_ prefix)")
     """Owner ad account ID (with act_ prefix)"""
 
-class PixelCreator(BaseModel):
-    """User who created the pixel"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None, description="Creator user ID")
-    """Creator user ID"""
-    name: Union[str | None, Any] = Field(default=None, description="Creator user name")
-    """Creator user name"""
-
 class PixelOwnerBusiness(BaseModel):
     """Business that owns the pixel"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -493,6 +484,15 @@ class PixelOwnerBusiness(BaseModel):
     """Owner business ID"""
     name: Union[str | None, Any] = Field(default=None, description="Owner business name")
     """Owner business name"""
+
+class PixelCreator(BaseModel):
+    """User who created the pixel"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None, description="Creator user ID")
+    """Creator user ID"""
+    name: Union[str | None, Any] = Field(default=None, description="Creator user name")
+    """Creator user name"""
 
 class Pixel(BaseModel):
     """Facebook Ads Pixel"""
@@ -689,33 +689,6 @@ class AdUpdateParams(BaseModel):
     tracking_specs: Union[str | None, Any] = Field(default=None)
     bid_amount: Union[str | None, Any] = Field(default=None)
 
-class AdLibraryAdDeliveryByRegionItem(BaseModel):
-    """Nested schema for AdLibraryAd.delivery_by_region_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    region: Union[str | None, Any] = Field(default=None, description="Region name")
-    """Region name"""
-    percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this region")
-    """Percentage of audience in this region"""
-
-class AdLibraryAdEstimatedAudienceSize(BaseModel):
-    """Estimated audience size range"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    lower_bound: Union[int | None, Any] = Field(default=None, description="Lower bound of the estimated audience size")
-    """Lower bound of the estimated audience size"""
-    upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of the estimated audience size")
-    """Upper bound of the estimated audience size"""
-
-class AdLibraryAdImpressions(BaseModel):
-    """Number of impressions as a range"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    lower_bound: Union[int | None, Any] = Field(default=None, description="Lower bound of impressions")
-    """Lower bound of impressions"""
-    upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of impressions")
-    """Upper bound of impressions"""
-
 class AdLibraryAdDemographicDistributionItem(BaseModel):
     """Nested schema for AdLibraryAd.demographic_distribution_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -726,6 +699,33 @@ class AdLibraryAdDemographicDistributionItem(BaseModel):
     """Gender category"""
     percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this demographic")
     """Percentage of audience in this demographic"""
+
+class AdLibraryAdImpressions(BaseModel):
+    """Number of impressions as a range"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    lower_bound: Union[int | None, Any] = Field(default=None, description="Lower bound of impressions")
+    """Lower bound of impressions"""
+    upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of impressions")
+    """Upper bound of impressions"""
+
+class AdLibraryAdEstimatedAudienceSize(BaseModel):
+    """Estimated audience size range"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    lower_bound: Union[int | None, Any] = Field(default=None, description="Lower bound of the estimated audience size")
+    """Lower bound of the estimated audience size"""
+    upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of the estimated audience size")
+    """Upper bound of the estimated audience size"""
+
+class AdLibraryAdDeliveryByRegionItem(BaseModel):
+    """Nested schema for AdLibraryAd.delivery_by_region_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    region: Union[str | None, Any] = Field(default=None, description="Region name")
+    """Region name"""
+    percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this region")
+    """Percentage of audience in this region"""
 
 class AdLibraryAdSpend(BaseModel):
     """Amount spent on the ad as a range"""
