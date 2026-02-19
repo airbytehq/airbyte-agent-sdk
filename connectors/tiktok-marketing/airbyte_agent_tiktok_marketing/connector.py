@@ -21,10 +21,14 @@ from ._vendored.connector_sdk.introspection import describe_entities, generate_t
 from ._vendored.connector_sdk.types import AirbyteHostedAuthConfig as AirbyteAuthConfig
 from .types import (
     AdGroupsListParams,
+    AdGroupsReportsDailyListParams,
     AdsListParams,
+    AdsReportsDailyListParams,
     AdvertisersListParams,
+    AdvertisersReportsDailyListParams,
     AudiencesListParams,
     CampaignsListParams,
+    CampaignsReportsDailyListParams,
     CreativeAssetsImagesListParams,
     CreativeAssetsVideosListParams,
     AirbyteSearchParams,
@@ -42,6 +46,14 @@ from .types import (
     CreativeAssetsImagesSearchQuery,
     CreativeAssetsVideosSearchFilter,
     CreativeAssetsVideosSearchQuery,
+    AdvertisersReportsDailySearchFilter,
+    AdvertisersReportsDailySearchQuery,
+    CampaignsReportsDailySearchFilter,
+    CampaignsReportsDailySearchQuery,
+    AdGroupsReportsDailySearchFilter,
+    AdGroupsReportsDailySearchQuery,
+    AdsReportsDailySearchFilter,
+    AdsReportsDailySearchQuery,
 )
 from .models import TiktokMarketingAuthConfig
 if TYPE_CHECKING:
@@ -59,11 +71,19 @@ from .models import (
     AudiencesListResult,
     CreativeAssetsImagesListResult,
     CreativeAssetsVideosListResult,
+    AdvertisersReportsDailyListResult,
+    CampaignsReportsDailyListResult,
+    AdGroupsReportsDailyListResult,
+    AdsReportsDailyListResult,
     Ad,
     AdGroup,
+    AdGroupsReportDaily,
+    AdsReportDaily,
     Advertiser,
+    AdvertisersReportDaily,
     Audience,
     Campaign,
+    CampaignsReportDaily,
     CreativeAssetImage,
     CreativeAssetVideo,
     AirbyteSearchMeta,
@@ -82,6 +102,14 @@ from .models import (
     CreativeAssetsImagesSearchResult,
     CreativeAssetsVideosSearchData,
     CreativeAssetsVideosSearchResult,
+    AdvertisersReportsDailySearchData,
+    AdvertisersReportsDailySearchResult,
+    CampaignsReportsDailySearchData,
+    CampaignsReportsDailySearchResult,
+    AdGroupsReportsDailySearchData,
+    AdGroupsReportsDailySearchResult,
+    AdsReportsDailySearchData,
+    AdsReportsDailySearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -129,7 +157,7 @@ class TiktokMarketingConnector:
     """
 
     connector_name = "tiktok-marketing"
-    connector_version = "1.0.2"
+    connector_version = "1.1.1"
     vendored_sdk_version = "0.1.0"  # Version of vendored connector-sdk
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
@@ -141,6 +169,10 @@ class TiktokMarketingConnector:
         ("audiences", "list"): True,
         ("creative_assets_images", "list"): True,
         ("creative_assets_videos", "list"): True,
+        ("advertisers_reports_daily", "list"): True,
+        ("campaigns_reports_daily", "list"): True,
+        ("ad_groups_reports_daily", "list"): True,
+        ("ads_reports_daily", "list"): True,
     }
 
     # Map of (entity, action) -> {python_param_name: api_param_name}
@@ -153,6 +185,10 @@ class TiktokMarketingConnector:
         ('audiences', 'list'): {'advertiser_id': 'advertiser_id', 'page': 'page', 'page_size': 'page_size'},
         ('creative_assets_images', 'list'): {'advertiser_id': 'advertiser_id', 'page': 'page', 'page_size': 'page_size'},
         ('creative_assets_videos', 'list'): {'advertiser_id': 'advertiser_id', 'page': 'page', 'page_size': 'page_size'},
+        ('advertisers_reports_daily', 'list'): {'advertiser_id': 'advertiser_id', 'service_type': 'service_type', 'report_type': 'report_type', 'data_level': 'data_level', 'dimensions': 'dimensions', 'metrics': 'metrics', 'start_date': 'start_date', 'end_date': 'end_date', 'page': 'page', 'page_size': 'page_size'},
+        ('campaigns_reports_daily', 'list'): {'advertiser_id': 'advertiser_id', 'service_type': 'service_type', 'report_type': 'report_type', 'data_level': 'data_level', 'dimensions': 'dimensions', 'metrics': 'metrics', 'start_date': 'start_date', 'end_date': 'end_date', 'page': 'page', 'page_size': 'page_size'},
+        ('ad_groups_reports_daily', 'list'): {'advertiser_id': 'advertiser_id', 'service_type': 'service_type', 'report_type': 'report_type', 'data_level': 'data_level', 'dimensions': 'dimensions', 'metrics': 'metrics', 'start_date': 'start_date', 'end_date': 'end_date', 'page': 'page', 'page_size': 'page_size'},
+        ('ads_reports_daily', 'list'): {'advertiser_id': 'advertiser_id', 'service_type': 'service_type', 'report_type': 'report_type', 'data_level': 'data_level', 'dimensions': 'dimensions', 'metrics': 'metrics', 'start_date': 'start_date', 'end_date': 'end_date', 'page': 'page', 'page_size': 'page_size'},
     }
 
     # Accepted auth_config types for isinstance validation
@@ -252,6 +288,10 @@ class TiktokMarketingConnector:
         self.audiences = AudiencesQuery(self)
         self.creative_assets_images = CreativeAssetsImagesQuery(self)
         self.creative_assets_videos = CreativeAssetsVideosQuery(self)
+        self.advertisers_reports_daily = AdvertisersReportsDailyQuery(self)
+        self.campaigns_reports_daily = CampaignsReportsDailyQuery(self)
+        self.ad_groups_reports_daily = AdGroupsReportsDailyQuery(self)
+        self.ads_reports_daily = AdsReportsDailyQuery(self)
 
     # ===== TYPED EXECUTE METHOD (Recommended Interface) =====
 
@@ -310,6 +350,38 @@ class TiktokMarketingConnector:
         action: Literal["list"],
         params: "CreativeAssetsVideosListParams"
     ) -> "CreativeAssetsVideosListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["advertisers_reports_daily"],
+        action: Literal["list"],
+        params: "AdvertisersReportsDailyListParams"
+    ) -> "AdvertisersReportsDailyListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["campaigns_reports_daily"],
+        action: Literal["list"],
+        params: "CampaignsReportsDailyListParams"
+    ) -> "CampaignsReportsDailyListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["ad_groups_reports_daily"],
+        action: Literal["list"],
+        params: "AdGroupsReportsDailyListParams"
+    ) -> "AdGroupsReportsDailyListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["ads_reports_daily"],
+        action: Literal["list"],
+        params: "AdsReportsDailyListParams"
+    ) -> "AdsReportsDailyListResult": ...
 
 
     @overload
@@ -1427,6 +1499,642 @@ class CreativeAssetsVideosQuery:
         return CreativeAssetsVideosSearchResult(
             data=[
                 CreativeAssetsVideosSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
+class AdvertisersReportsDailyQuery:
+    """
+    Query class for AdvertisersReportsDaily entity operations.
+    """
+
+    def __init__(self, connector: TiktokMarketingConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        advertiser_id: str,
+        service_type: str,
+        report_type: str,
+        data_level: str,
+        dimensions: str,
+        metrics: str,
+        start_date: str,
+        end_date: str,
+        page: int | None = None,
+        page_size: int | None = None,
+        **kwargs
+    ) -> AdvertisersReportsDailyListResult:
+        """
+        Get daily performance reports at the advertiser level
+
+        Args:
+            advertiser_id: Advertiser ID
+            service_type: Service type
+            report_type: Report type
+            data_level: Data level for the report
+            dimensions: Dimensions for the report (JSON array)
+            metrics: Metrics to retrieve (JSON array)
+            start_date: Report start date (YYYY-MM-DD)
+            end_date: Report end date (YYYY-MM-DD)
+            page: Page number
+            page_size: Number of items per page
+            **kwargs: Additional parameters
+
+        Returns:
+            AdvertisersReportsDailyListResult
+        """
+        params = {k: v for k, v in {
+            "advertiser_id": advertiser_id,
+            "service_type": service_type,
+            "report_type": report_type,
+            "data_level": data_level,
+            "dimensions": dimensions,
+            "metrics": metrics,
+            "start_date": start_date,
+            "end_date": end_date,
+            "page": page,
+            "page_size": page_size,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("advertisers_reports_daily", "list", params)
+        # Cast generic envelope to concrete typed result
+        return AdvertisersReportsDailyListResult(
+            data=result.data,
+            meta=result.meta
+        )
+
+
+
+    async def search(
+        self,
+        query: AdvertisersReportsDailySearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> AdvertisersReportsDailySearchResult:
+        """
+        Search advertisers_reports_daily records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (AdvertisersReportsDailySearchFilter):
+        - advertiser_id: The unique identifier for the advertiser.
+        - stat_time_day: The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format).
+        - spend: Total amount of money spent.
+        - cash_spend: The amount of money spent in cash.
+        - voucher_spend: Amount spent using vouchers.
+        - cpc: Cost per click.
+        - cpm: Cost per thousand impressions.
+        - impressions: Number of times the ad was displayed.
+        - clicks: Number of clicks on the ad.
+        - ctr: Click-through rate.
+        - reach: Total number of unique users reached.
+        - cost_per_1000_reached: Cost per 1000 unique users reached.
+        - frequency: Average number of times each person saw the ad.
+        - video_play_actions: Number of video play actions.
+        - video_watched_2s: Number of times video was watched for at least 2 seconds.
+        - video_watched_6s: Number of times video was watched for at least 6 seconds.
+        - average_video_play: Average video play duration.
+        - average_video_play_per_user: Average video play duration per user.
+        - video_views_p25: Number of times video was watched to 25%.
+        - video_views_p50: Number of times video was watched to 50%.
+        - video_views_p75: Number of times video was watched to 75%.
+        - video_views_p100: Number of times video was watched to 100%.
+        - profile_visits: Number of profile visits.
+        - likes: Number of likes.
+        - comments: Number of comments.
+        - shares: Number of shares.
+        - follows: Number of follows.
+        - clicks_on_music_disc: Number of clicks on the music disc.
+        - real_time_app_install: Real-time app installations.
+        - real_time_app_install_cost: Cost of real-time app installations.
+        - app_install: Number of app installations.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            AdvertisersReportsDailySearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("advertisers_reports_daily", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return AdvertisersReportsDailySearchResult(
+            data=[
+                AdvertisersReportsDailySearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
+class CampaignsReportsDailyQuery:
+    """
+    Query class for CampaignsReportsDaily entity operations.
+    """
+
+    def __init__(self, connector: TiktokMarketingConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        advertiser_id: str,
+        service_type: str,
+        report_type: str,
+        data_level: str,
+        dimensions: str,
+        metrics: str,
+        start_date: str,
+        end_date: str,
+        page: int | None = None,
+        page_size: int | None = None,
+        **kwargs
+    ) -> CampaignsReportsDailyListResult:
+        """
+        Get daily performance reports at the campaign level
+
+        Args:
+            advertiser_id: Advertiser ID
+            service_type: Service type
+            report_type: Report type
+            data_level: Data level for the report
+            dimensions: Dimensions for the report (JSON array)
+            metrics: Metrics to retrieve (JSON array)
+            start_date: Report start date (YYYY-MM-DD)
+            end_date: Report end date (YYYY-MM-DD)
+            page: Page number
+            page_size: Number of items per page
+            **kwargs: Additional parameters
+
+        Returns:
+            CampaignsReportsDailyListResult
+        """
+        params = {k: v for k, v in {
+            "advertiser_id": advertiser_id,
+            "service_type": service_type,
+            "report_type": report_type,
+            "data_level": data_level,
+            "dimensions": dimensions,
+            "metrics": metrics,
+            "start_date": start_date,
+            "end_date": end_date,
+            "page": page,
+            "page_size": page_size,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("campaigns_reports_daily", "list", params)
+        # Cast generic envelope to concrete typed result
+        return CampaignsReportsDailyListResult(
+            data=result.data,
+            meta=result.meta
+        )
+
+
+
+    async def search(
+        self,
+        query: CampaignsReportsDailySearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> CampaignsReportsDailySearchResult:
+        """
+        Search campaigns_reports_daily records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (CampaignsReportsDailySearchFilter):
+        - campaign_id: The unique identifier for the campaign.
+        - stat_time_day: The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format).
+        - campaign_name: The name of the marketing campaign.
+        - spend: Total amount of money spent.
+        - cpc: Cost per click.
+        - cpm: Cost per thousand impressions.
+        - impressions: Number of times the ad was displayed.
+        - clicks: Number of clicks on the ad.
+        - ctr: Click-through rate.
+        - reach: Total number of unique users reached.
+        - cost_per_1000_reached: Cost per 1000 unique users reached.
+        - frequency: Average number of times each person saw the ad.
+        - video_play_actions: Number of video play actions.
+        - video_watched_2s: Number of times video was watched for at least 2 seconds.
+        - video_watched_6s: Number of times video was watched for at least 6 seconds.
+        - average_video_play: Average video play duration.
+        - average_video_play_per_user: Average video play duration per user.
+        - video_views_p25: Number of times video was watched to 25%.
+        - video_views_p50: Number of times video was watched to 50%.
+        - video_views_p75: Number of times video was watched to 75%.
+        - video_views_p100: Number of times video was watched to 100%.
+        - profile_visits: Number of profile visits.
+        - likes: Number of likes.
+        - comments: Number of comments.
+        - shares: Number of shares.
+        - follows: Number of follows.
+        - clicks_on_music_disc: Number of clicks on the music disc.
+        - real_time_app_install: Real-time app installations.
+        - real_time_app_install_cost: Cost of real-time app installations.
+        - app_install: Number of app installations.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            CampaignsReportsDailySearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("campaigns_reports_daily", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return CampaignsReportsDailySearchResult(
+            data=[
+                CampaignsReportsDailySearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
+class AdGroupsReportsDailyQuery:
+    """
+    Query class for AdGroupsReportsDaily entity operations.
+    """
+
+    def __init__(self, connector: TiktokMarketingConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        advertiser_id: str,
+        service_type: str,
+        report_type: str,
+        data_level: str,
+        dimensions: str,
+        metrics: str,
+        start_date: str,
+        end_date: str,
+        page: int | None = None,
+        page_size: int | None = None,
+        **kwargs
+    ) -> AdGroupsReportsDailyListResult:
+        """
+        Get daily performance reports at the ad group level
+
+        Args:
+            advertiser_id: Advertiser ID
+            service_type: Service type
+            report_type: Report type
+            data_level: Data level for the report
+            dimensions: Dimensions for the report (JSON array)
+            metrics: Metrics to retrieve (JSON array)
+            start_date: Report start date (YYYY-MM-DD)
+            end_date: Report end date (YYYY-MM-DD)
+            page: Page number
+            page_size: Number of items per page
+            **kwargs: Additional parameters
+
+        Returns:
+            AdGroupsReportsDailyListResult
+        """
+        params = {k: v for k, v in {
+            "advertiser_id": advertiser_id,
+            "service_type": service_type,
+            "report_type": report_type,
+            "data_level": data_level,
+            "dimensions": dimensions,
+            "metrics": metrics,
+            "start_date": start_date,
+            "end_date": end_date,
+            "page": page,
+            "page_size": page_size,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("ad_groups_reports_daily", "list", params)
+        # Cast generic envelope to concrete typed result
+        return AdGroupsReportsDailyListResult(
+            data=result.data,
+            meta=result.meta
+        )
+
+
+
+    async def search(
+        self,
+        query: AdGroupsReportsDailySearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> AdGroupsReportsDailySearchResult:
+        """
+        Search ad_groups_reports_daily records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (AdGroupsReportsDailySearchFilter):
+        - adgroup_id: The unique identifier for the ad group.
+        - stat_time_day: The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format).
+        - campaign_name: The name of the marketing campaign.
+        - campaign_id: The unique identifier for the campaign.
+        - adgroup_name: The name of the ad group.
+        - placement_type: Type of ad placement.
+        - spend: Total amount of money spent.
+        - cpc: Cost per click.
+        - cpm: Cost per thousand impressions.
+        - impressions: Number of times the ad was displayed.
+        - clicks: Number of clicks on the ad.
+        - ctr: Click-through rate.
+        - reach: Total number of unique users reached.
+        - cost_per_1000_reached: Cost per 1000 unique users reached.
+        - conversion: Number of conversions.
+        - cost_per_conversion: Cost per conversion.
+        - conversion_rate: Rate of conversions.
+        - real_time_conversion: Real-time conversions.
+        - real_time_cost_per_conversion: Real-time cost per conversion.
+        - real_time_conversion_rate: Real-time conversion rate.
+        - result: Number of results.
+        - cost_per_result: Cost per result.
+        - result_rate: Rate of results.
+        - real_time_result: Real-time results.
+        - real_time_cost_per_result: Real-time cost per result.
+        - real_time_result_rate: Real-time result rate.
+        - secondary_goal_result: Results for secondary goals.
+        - cost_per_secondary_goal_result: Cost per secondary goal result.
+        - secondary_goal_result_rate: Rate of secondary goal results.
+        - frequency: Average number of times each person saw the ad.
+        - video_play_actions: Number of video play actions.
+        - video_watched_2s: Number of times video was watched for at least 2 seconds.
+        - video_watched_6s: Number of times video was watched for at least 6 seconds.
+        - average_video_play: Average video play duration.
+        - average_video_play_per_user: Average video play duration per user.
+        - video_views_p25: Number of times video was watched to 25%.
+        - video_views_p50: Number of times video was watched to 50%.
+        - video_views_p75: Number of times video was watched to 75%.
+        - video_views_p100: Number of times video was watched to 100%.
+        - profile_visits: Number of profile visits.
+        - likes: Number of likes.
+        - comments: Number of comments.
+        - shares: Number of shares.
+        - follows: Number of follows.
+        - clicks_on_music_disc: Number of clicks on the music disc.
+        - real_time_app_install: Real-time app installations.
+        - real_time_app_install_cost: Cost of real-time app installations.
+        - app_install: Number of app installations.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            AdGroupsReportsDailySearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("ad_groups_reports_daily", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return AdGroupsReportsDailySearchResult(
+            data=[
+                AdGroupsReportsDailySearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
+class AdsReportsDailyQuery:
+    """
+    Query class for AdsReportsDaily entity operations.
+    """
+
+    def __init__(self, connector: TiktokMarketingConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        advertiser_id: str,
+        service_type: str,
+        report_type: str,
+        data_level: str,
+        dimensions: str,
+        metrics: str,
+        start_date: str,
+        end_date: str,
+        page: int | None = None,
+        page_size: int | None = None,
+        **kwargs
+    ) -> AdsReportsDailyListResult:
+        """
+        Get daily performance reports at the ad level
+
+        Args:
+            advertiser_id: Advertiser ID
+            service_type: Service type
+            report_type: Report type
+            data_level: Data level for the report
+            dimensions: Dimensions for the report (JSON array)
+            metrics: Metrics to retrieve (JSON array)
+            start_date: Report start date (YYYY-MM-DD)
+            end_date: Report end date (YYYY-MM-DD)
+            page: Page number
+            page_size: Number of items per page
+            **kwargs: Additional parameters
+
+        Returns:
+            AdsReportsDailyListResult
+        """
+        params = {k: v for k, v in {
+            "advertiser_id": advertiser_id,
+            "service_type": service_type,
+            "report_type": report_type,
+            "data_level": data_level,
+            "dimensions": dimensions,
+            "metrics": metrics,
+            "start_date": start_date,
+            "end_date": end_date,
+            "page": page,
+            "page_size": page_size,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("ads_reports_daily", "list", params)
+        # Cast generic envelope to concrete typed result
+        return AdsReportsDailyListResult(
+            data=result.data,
+            meta=result.meta
+        )
+
+
+
+    async def search(
+        self,
+        query: AdsReportsDailySearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> AdsReportsDailySearchResult:
+        """
+        Search ads_reports_daily records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (AdsReportsDailySearchFilter):
+        - ad_id: The unique identifier for the ad.
+        - stat_time_day: The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format).
+        - campaign_name: The name of the marketing campaign.
+        - campaign_id: The unique identifier for the campaign.
+        - adgroup_name: The name of the ad group.
+        - adgroup_id: The unique identifier for the ad group.
+        - ad_name: The name of the ad.
+        - ad_text: The text content of the ad.
+        - placement_type: Type of ad placement.
+        - spend: Total amount of money spent.
+        - cpc: Cost per click.
+        - cpm: Cost per thousand impressions.
+        - impressions: Number of times the ad was displayed.
+        - clicks: Number of clicks on the ad.
+        - ctr: Click-through rate.
+        - reach: Total number of unique users reached.
+        - cost_per_1000_reached: Cost per 1000 unique users reached.
+        - conversion: Number of conversions.
+        - cost_per_conversion: Cost per conversion.
+        - conversion_rate: Rate of conversions.
+        - real_time_conversion: Real-time conversions.
+        - real_time_cost_per_conversion: Real-time cost per conversion.
+        - real_time_conversion_rate: Real-time conversion rate.
+        - result: Number of results.
+        - cost_per_result: Cost per result.
+        - result_rate: Rate of results.
+        - real_time_result: Real-time results.
+        - real_time_cost_per_result: Real-time cost per result.
+        - real_time_result_rate: Real-time result rate.
+        - secondary_goal_result: Results for secondary goals.
+        - cost_per_secondary_goal_result: Cost per secondary goal result.
+        - secondary_goal_result_rate: Rate of secondary goal results.
+        - frequency: Average number of times each person saw the ad.
+        - video_play_actions: Number of video play actions.
+        - video_watched_2s: Number of times video was watched for at least 2 seconds.
+        - video_watched_6s: Number of times video was watched for at least 6 seconds.
+        - average_video_play: Average video play duration.
+        - average_video_play_per_user: Average video play duration per user.
+        - video_views_p25: Number of times video was watched to 25%.
+        - video_views_p50: Number of times video was watched to 50%.
+        - video_views_p75: Number of times video was watched to 75%.
+        - video_views_p100: Number of times video was watched to 100%.
+        - profile_visits: Number of profile visits.
+        - likes: Number of likes.
+        - comments: Number of comments.
+        - shares: Number of shares.
+        - follows: Number of follows.
+        - clicks_on_music_disc: Number of clicks on the music disc.
+        - real_time_app_install: Real-time app installations.
+        - real_time_app_install_cost: Cost of real-time app installations.
+        - app_install: Number of app installations.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            AdsReportsDailySearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("ads_reports_daily", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return AdsReportsDailySearchResult(
+            data=[
+                AdsReportsDailySearchData(**row)
                 for row in result.get("data", [])
                 if isinstance(row, dict)
             ],

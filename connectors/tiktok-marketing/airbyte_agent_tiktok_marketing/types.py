@@ -61,6 +61,58 @@ class CreativeAssetsVideosListParams(TypedDict):
     page: NotRequired[int]
     page_size: NotRequired[int]
 
+class AdvertisersReportsDailyListParams(TypedDict):
+    """Parameters for advertisers_reports_daily.list operation"""
+    advertiser_id: str
+    service_type: str
+    report_type: str
+    data_level: str
+    dimensions: str
+    metrics: str
+    start_date: str
+    end_date: str
+    page: NotRequired[int]
+    page_size: NotRequired[int]
+
+class CampaignsReportsDailyListParams(TypedDict):
+    """Parameters for campaigns_reports_daily.list operation"""
+    advertiser_id: str
+    service_type: str
+    report_type: str
+    data_level: str
+    dimensions: str
+    metrics: str
+    start_date: str
+    end_date: str
+    page: NotRequired[int]
+    page_size: NotRequired[int]
+
+class AdGroupsReportsDailyListParams(TypedDict):
+    """Parameters for ad_groups_reports_daily.list operation"""
+    advertiser_id: str
+    service_type: str
+    report_type: str
+    data_level: str
+    dimensions: str
+    metrics: str
+    start_date: str
+    end_date: str
+    page: NotRequired[int]
+    page_size: NotRequired[int]
+
+class AdsReportsDailyListParams(TypedDict):
+    """Parameters for ads_reports_daily.list operation"""
+    advertiser_id: str
+    service_type: str
+    report_type: str
+    data_level: str
+    dimensions: str
+    metrics: str
+    start_date: str
+    end_date: str
+    page: NotRequired[int]
+    page_size: NotRequired[int]
+
 # ===== SEARCH TYPES =====
 
 # Sort specification
@@ -1929,6 +1981,2066 @@ class CreativeAssetsVideosSearchQuery(TypedDict, total=False):
     """Search query for creative_assets_videos entity."""
     filter: CreativeAssetsVideosCondition
     sort: list[CreativeAssetsVideosSortFilter]
+
+
+# ===== ADVERTISERS_REPORTS_DAILY SEARCH TYPES =====
+
+class AdvertisersReportsDailySearchFilter(TypedDict, total=False):
+    """Available fields for filtering advertisers_reports_daily search queries."""
+    advertiser_id: int | None
+    """The unique identifier for the advertiser."""
+    stat_time_day: str | None
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    spend: str | None
+    """Total amount of money spent."""
+    cash_spend: str | None
+    """The amount of money spent in cash."""
+    voucher_spend: str | None
+    """Amount spent using vouchers."""
+    cpc: str | None
+    """Cost per click."""
+    cpm: str | None
+    """Cost per thousand impressions."""
+    impressions: str | None
+    """Number of times the ad was displayed."""
+    clicks: str | None
+    """Number of clicks on the ad."""
+    ctr: str | None
+    """Click-through rate."""
+    reach: str | None
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str | None
+    """Cost per 1000 unique users reached."""
+    frequency: str | None
+    """Average number of times each person saw the ad."""
+    video_play_actions: float | None
+    """Number of video play actions."""
+    video_watched_2s: float | None
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: float | None
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: float | None
+    """Average video play duration."""
+    average_video_play_per_user: float | None
+    """Average video play duration per user."""
+    video_views_p25: float | None
+    """Number of times video was watched to 25%."""
+    video_views_p50: float | None
+    """Number of times video was watched to 50%."""
+    video_views_p75: float | None
+    """Number of times video was watched to 75%."""
+    video_views_p100: float | None
+    """Number of times video was watched to 100%."""
+    profile_visits: float | None
+    """Number of profile visits."""
+    likes: float | None
+    """Number of likes."""
+    comments: float | None
+    """Number of comments."""
+    shares: float | None
+    """Number of shares."""
+    follows: float | None
+    """Number of follows."""
+    clicks_on_music_disc: float | None
+    """Number of clicks on the music disc."""
+    real_time_app_install: float | None
+    """Real-time app installations."""
+    real_time_app_install_cost: float | None
+    """Cost of real-time app installations."""
+    app_install: float | None
+    """Number of app installations."""
+
+
+class AdvertisersReportsDailyInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    advertiser_id: list[int]
+    """The unique identifier for the advertiser."""
+    stat_time_day: list[str]
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    spend: list[str]
+    """Total amount of money spent."""
+    cash_spend: list[str]
+    """The amount of money spent in cash."""
+    voucher_spend: list[str]
+    """Amount spent using vouchers."""
+    cpc: list[str]
+    """Cost per click."""
+    cpm: list[str]
+    """Cost per thousand impressions."""
+    impressions: list[str]
+    """Number of times the ad was displayed."""
+    clicks: list[str]
+    """Number of clicks on the ad."""
+    ctr: list[str]
+    """Click-through rate."""
+    reach: list[str]
+    """Total number of unique users reached."""
+    cost_per_1000_reached: list[str]
+    """Cost per 1000 unique users reached."""
+    frequency: list[str]
+    """Average number of times each person saw the ad."""
+    video_play_actions: list[float]
+    """Number of video play actions."""
+    video_watched_2s: list[float]
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: list[float]
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: list[float]
+    """Average video play duration."""
+    average_video_play_per_user: list[float]
+    """Average video play duration per user."""
+    video_views_p25: list[float]
+    """Number of times video was watched to 25%."""
+    video_views_p50: list[float]
+    """Number of times video was watched to 50%."""
+    video_views_p75: list[float]
+    """Number of times video was watched to 75%."""
+    video_views_p100: list[float]
+    """Number of times video was watched to 100%."""
+    profile_visits: list[float]
+    """Number of profile visits."""
+    likes: list[float]
+    """Number of likes."""
+    comments: list[float]
+    """Number of comments."""
+    shares: list[float]
+    """Number of shares."""
+    follows: list[float]
+    """Number of follows."""
+    clicks_on_music_disc: list[float]
+    """Number of clicks on the music disc."""
+    real_time_app_install: list[float]
+    """Real-time app installations."""
+    real_time_app_install_cost: list[float]
+    """Cost of real-time app installations."""
+    app_install: list[float]
+    """Number of app installations."""
+
+
+class AdvertisersReportsDailyAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    advertiser_id: Any
+    """The unique identifier for the advertiser."""
+    stat_time_day: Any
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    spend: Any
+    """Total amount of money spent."""
+    cash_spend: Any
+    """The amount of money spent in cash."""
+    voucher_spend: Any
+    """Amount spent using vouchers."""
+    cpc: Any
+    """Cost per click."""
+    cpm: Any
+    """Cost per thousand impressions."""
+    impressions: Any
+    """Number of times the ad was displayed."""
+    clicks: Any
+    """Number of clicks on the ad."""
+    ctr: Any
+    """Click-through rate."""
+    reach: Any
+    """Total number of unique users reached."""
+    cost_per_1000_reached: Any
+    """Cost per 1000 unique users reached."""
+    frequency: Any
+    """Average number of times each person saw the ad."""
+    video_play_actions: Any
+    """Number of video play actions."""
+    video_watched_2s: Any
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: Any
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: Any
+    """Average video play duration."""
+    average_video_play_per_user: Any
+    """Average video play duration per user."""
+    video_views_p25: Any
+    """Number of times video was watched to 25%."""
+    video_views_p50: Any
+    """Number of times video was watched to 50%."""
+    video_views_p75: Any
+    """Number of times video was watched to 75%."""
+    video_views_p100: Any
+    """Number of times video was watched to 100%."""
+    profile_visits: Any
+    """Number of profile visits."""
+    likes: Any
+    """Number of likes."""
+    comments: Any
+    """Number of comments."""
+    shares: Any
+    """Number of shares."""
+    follows: Any
+    """Number of follows."""
+    clicks_on_music_disc: Any
+    """Number of clicks on the music disc."""
+    real_time_app_install: Any
+    """Real-time app installations."""
+    real_time_app_install_cost: Any
+    """Cost of real-time app installations."""
+    app_install: Any
+    """Number of app installations."""
+
+
+class AdvertisersReportsDailyStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    advertiser_id: str
+    """The unique identifier for the advertiser."""
+    stat_time_day: str
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    spend: str
+    """Total amount of money spent."""
+    cash_spend: str
+    """The amount of money spent in cash."""
+    voucher_spend: str
+    """Amount spent using vouchers."""
+    cpc: str
+    """Cost per click."""
+    cpm: str
+    """Cost per thousand impressions."""
+    impressions: str
+    """Number of times the ad was displayed."""
+    clicks: str
+    """Number of clicks on the ad."""
+    ctr: str
+    """Click-through rate."""
+    reach: str
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str
+    """Cost per 1000 unique users reached."""
+    frequency: str
+    """Average number of times each person saw the ad."""
+    video_play_actions: str
+    """Number of video play actions."""
+    video_watched_2s: str
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: str
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: str
+    """Average video play duration."""
+    average_video_play_per_user: str
+    """Average video play duration per user."""
+    video_views_p25: str
+    """Number of times video was watched to 25%."""
+    video_views_p50: str
+    """Number of times video was watched to 50%."""
+    video_views_p75: str
+    """Number of times video was watched to 75%."""
+    video_views_p100: str
+    """Number of times video was watched to 100%."""
+    profile_visits: str
+    """Number of profile visits."""
+    likes: str
+    """Number of likes."""
+    comments: str
+    """Number of comments."""
+    shares: str
+    """Number of shares."""
+    follows: str
+    """Number of follows."""
+    clicks_on_music_disc: str
+    """Number of clicks on the music disc."""
+    real_time_app_install: str
+    """Real-time app installations."""
+    real_time_app_install_cost: str
+    """Cost of real-time app installations."""
+    app_install: str
+    """Number of app installations."""
+
+
+class AdvertisersReportsDailySortFilter(TypedDict, total=False):
+    """Available fields for sorting advertisers_reports_daily search results."""
+    advertiser_id: AirbyteSortOrder
+    """The unique identifier for the advertiser."""
+    stat_time_day: AirbyteSortOrder
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    spend: AirbyteSortOrder
+    """Total amount of money spent."""
+    cash_spend: AirbyteSortOrder
+    """The amount of money spent in cash."""
+    voucher_spend: AirbyteSortOrder
+    """Amount spent using vouchers."""
+    cpc: AirbyteSortOrder
+    """Cost per click."""
+    cpm: AirbyteSortOrder
+    """Cost per thousand impressions."""
+    impressions: AirbyteSortOrder
+    """Number of times the ad was displayed."""
+    clicks: AirbyteSortOrder
+    """Number of clicks on the ad."""
+    ctr: AirbyteSortOrder
+    """Click-through rate."""
+    reach: AirbyteSortOrder
+    """Total number of unique users reached."""
+    cost_per_1000_reached: AirbyteSortOrder
+    """Cost per 1000 unique users reached."""
+    frequency: AirbyteSortOrder
+    """Average number of times each person saw the ad."""
+    video_play_actions: AirbyteSortOrder
+    """Number of video play actions."""
+    video_watched_2s: AirbyteSortOrder
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: AirbyteSortOrder
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: AirbyteSortOrder
+    """Average video play duration."""
+    average_video_play_per_user: AirbyteSortOrder
+    """Average video play duration per user."""
+    video_views_p25: AirbyteSortOrder
+    """Number of times video was watched to 25%."""
+    video_views_p50: AirbyteSortOrder
+    """Number of times video was watched to 50%."""
+    video_views_p75: AirbyteSortOrder
+    """Number of times video was watched to 75%."""
+    video_views_p100: AirbyteSortOrder
+    """Number of times video was watched to 100%."""
+    profile_visits: AirbyteSortOrder
+    """Number of profile visits."""
+    likes: AirbyteSortOrder
+    """Number of likes."""
+    comments: AirbyteSortOrder
+    """Number of comments."""
+    shares: AirbyteSortOrder
+    """Number of shares."""
+    follows: AirbyteSortOrder
+    """Number of follows."""
+    clicks_on_music_disc: AirbyteSortOrder
+    """Number of clicks on the music disc."""
+    real_time_app_install: AirbyteSortOrder
+    """Real-time app installations."""
+    real_time_app_install_cost: AirbyteSortOrder
+    """Cost of real-time app installations."""
+    app_install: AirbyteSortOrder
+    """Number of app installations."""
+
+
+# Entity-specific condition types for advertisers_reports_daily
+class AdvertisersReportsDailyEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: AdvertisersReportsDailySearchFilter
+
+
+class AdvertisersReportsDailyNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: AdvertisersReportsDailySearchFilter
+
+
+class AdvertisersReportsDailyGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: AdvertisersReportsDailySearchFilter
+
+
+class AdvertisersReportsDailyGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: AdvertisersReportsDailySearchFilter
+
+
+class AdvertisersReportsDailyLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: AdvertisersReportsDailySearchFilter
+
+
+class AdvertisersReportsDailyLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: AdvertisersReportsDailySearchFilter
+
+
+class AdvertisersReportsDailyLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: AdvertisersReportsDailyStringFilter
+
+
+class AdvertisersReportsDailyFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: AdvertisersReportsDailyStringFilter
+
+
+class AdvertisersReportsDailyKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: AdvertisersReportsDailyStringFilter
+
+
+class AdvertisersReportsDailyContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: AdvertisersReportsDailyAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+AdvertisersReportsDailyInCondition = TypedDict("AdvertisersReportsDailyInCondition", {"in": AdvertisersReportsDailyInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+AdvertisersReportsDailyNotCondition = TypedDict("AdvertisersReportsDailyNotCondition", {"not": "AdvertisersReportsDailyCondition"}, total=False)
+"""Negates the nested condition."""
+
+AdvertisersReportsDailyAndCondition = TypedDict("AdvertisersReportsDailyAndCondition", {"and": "list[AdvertisersReportsDailyCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+AdvertisersReportsDailyOrCondition = TypedDict("AdvertisersReportsDailyOrCondition", {"or": "list[AdvertisersReportsDailyCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+AdvertisersReportsDailyAnyCondition = TypedDict("AdvertisersReportsDailyAnyCondition", {"any": AdvertisersReportsDailyAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all advertisers_reports_daily condition types
+AdvertisersReportsDailyCondition = (
+    AdvertisersReportsDailyEqCondition
+    | AdvertisersReportsDailyNeqCondition
+    | AdvertisersReportsDailyGtCondition
+    | AdvertisersReportsDailyGteCondition
+    | AdvertisersReportsDailyLtCondition
+    | AdvertisersReportsDailyLteCondition
+    | AdvertisersReportsDailyInCondition
+    | AdvertisersReportsDailyLikeCondition
+    | AdvertisersReportsDailyFuzzyCondition
+    | AdvertisersReportsDailyKeywordCondition
+    | AdvertisersReportsDailyContainsCondition
+    | AdvertisersReportsDailyNotCondition
+    | AdvertisersReportsDailyAndCondition
+    | AdvertisersReportsDailyOrCondition
+    | AdvertisersReportsDailyAnyCondition
+)
+
+
+class AdvertisersReportsDailySearchQuery(TypedDict, total=False):
+    """Search query for advertisers_reports_daily entity."""
+    filter: AdvertisersReportsDailyCondition
+    sort: list[AdvertisersReportsDailySortFilter]
+
+
+# ===== CAMPAIGNS_REPORTS_DAILY SEARCH TYPES =====
+
+class CampaignsReportsDailySearchFilter(TypedDict, total=False):
+    """Available fields for filtering campaigns_reports_daily search queries."""
+    campaign_id: int | None
+    """The unique identifier for the campaign."""
+    stat_time_day: str | None
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: str | None
+    """The name of the marketing campaign."""
+    spend: str | None
+    """Total amount of money spent."""
+    cpc: str | None
+    """Cost per click."""
+    cpm: str | None
+    """Cost per thousand impressions."""
+    impressions: str | None
+    """Number of times the ad was displayed."""
+    clicks: str | None
+    """Number of clicks on the ad."""
+    ctr: str | None
+    """Click-through rate."""
+    reach: str | None
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str | None
+    """Cost per 1000 unique users reached."""
+    frequency: str | None
+    """Average number of times each person saw the ad."""
+    video_play_actions: float | None
+    """Number of video play actions."""
+    video_watched_2s: float | None
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: float | None
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: float | None
+    """Average video play duration."""
+    average_video_play_per_user: float | None
+    """Average video play duration per user."""
+    video_views_p25: float | None
+    """Number of times video was watched to 25%."""
+    video_views_p50: float | None
+    """Number of times video was watched to 50%."""
+    video_views_p75: float | None
+    """Number of times video was watched to 75%."""
+    video_views_p100: float | None
+    """Number of times video was watched to 100%."""
+    profile_visits: float | None
+    """Number of profile visits."""
+    likes: float | None
+    """Number of likes."""
+    comments: float | None
+    """Number of comments."""
+    shares: float | None
+    """Number of shares."""
+    follows: float | None
+    """Number of follows."""
+    clicks_on_music_disc: float | None
+    """Number of clicks on the music disc."""
+    real_time_app_install: float | None
+    """Real-time app installations."""
+    real_time_app_install_cost: float | None
+    """Cost of real-time app installations."""
+    app_install: float | None
+    """Number of app installations."""
+
+
+class CampaignsReportsDailyInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    campaign_id: list[int]
+    """The unique identifier for the campaign."""
+    stat_time_day: list[str]
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: list[str]
+    """The name of the marketing campaign."""
+    spend: list[str]
+    """Total amount of money spent."""
+    cpc: list[str]
+    """Cost per click."""
+    cpm: list[str]
+    """Cost per thousand impressions."""
+    impressions: list[str]
+    """Number of times the ad was displayed."""
+    clicks: list[str]
+    """Number of clicks on the ad."""
+    ctr: list[str]
+    """Click-through rate."""
+    reach: list[str]
+    """Total number of unique users reached."""
+    cost_per_1000_reached: list[str]
+    """Cost per 1000 unique users reached."""
+    frequency: list[str]
+    """Average number of times each person saw the ad."""
+    video_play_actions: list[float]
+    """Number of video play actions."""
+    video_watched_2s: list[float]
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: list[float]
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: list[float]
+    """Average video play duration."""
+    average_video_play_per_user: list[float]
+    """Average video play duration per user."""
+    video_views_p25: list[float]
+    """Number of times video was watched to 25%."""
+    video_views_p50: list[float]
+    """Number of times video was watched to 50%."""
+    video_views_p75: list[float]
+    """Number of times video was watched to 75%."""
+    video_views_p100: list[float]
+    """Number of times video was watched to 100%."""
+    profile_visits: list[float]
+    """Number of profile visits."""
+    likes: list[float]
+    """Number of likes."""
+    comments: list[float]
+    """Number of comments."""
+    shares: list[float]
+    """Number of shares."""
+    follows: list[float]
+    """Number of follows."""
+    clicks_on_music_disc: list[float]
+    """Number of clicks on the music disc."""
+    real_time_app_install: list[float]
+    """Real-time app installations."""
+    real_time_app_install_cost: list[float]
+    """Cost of real-time app installations."""
+    app_install: list[float]
+    """Number of app installations."""
+
+
+class CampaignsReportsDailyAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    campaign_id: Any
+    """The unique identifier for the campaign."""
+    stat_time_day: Any
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: Any
+    """The name of the marketing campaign."""
+    spend: Any
+    """Total amount of money spent."""
+    cpc: Any
+    """Cost per click."""
+    cpm: Any
+    """Cost per thousand impressions."""
+    impressions: Any
+    """Number of times the ad was displayed."""
+    clicks: Any
+    """Number of clicks on the ad."""
+    ctr: Any
+    """Click-through rate."""
+    reach: Any
+    """Total number of unique users reached."""
+    cost_per_1000_reached: Any
+    """Cost per 1000 unique users reached."""
+    frequency: Any
+    """Average number of times each person saw the ad."""
+    video_play_actions: Any
+    """Number of video play actions."""
+    video_watched_2s: Any
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: Any
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: Any
+    """Average video play duration."""
+    average_video_play_per_user: Any
+    """Average video play duration per user."""
+    video_views_p25: Any
+    """Number of times video was watched to 25%."""
+    video_views_p50: Any
+    """Number of times video was watched to 50%."""
+    video_views_p75: Any
+    """Number of times video was watched to 75%."""
+    video_views_p100: Any
+    """Number of times video was watched to 100%."""
+    profile_visits: Any
+    """Number of profile visits."""
+    likes: Any
+    """Number of likes."""
+    comments: Any
+    """Number of comments."""
+    shares: Any
+    """Number of shares."""
+    follows: Any
+    """Number of follows."""
+    clicks_on_music_disc: Any
+    """Number of clicks on the music disc."""
+    real_time_app_install: Any
+    """Real-time app installations."""
+    real_time_app_install_cost: Any
+    """Cost of real-time app installations."""
+    app_install: Any
+    """Number of app installations."""
+
+
+class CampaignsReportsDailyStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    campaign_id: str
+    """The unique identifier for the campaign."""
+    stat_time_day: str
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: str
+    """The name of the marketing campaign."""
+    spend: str
+    """Total amount of money spent."""
+    cpc: str
+    """Cost per click."""
+    cpm: str
+    """Cost per thousand impressions."""
+    impressions: str
+    """Number of times the ad was displayed."""
+    clicks: str
+    """Number of clicks on the ad."""
+    ctr: str
+    """Click-through rate."""
+    reach: str
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str
+    """Cost per 1000 unique users reached."""
+    frequency: str
+    """Average number of times each person saw the ad."""
+    video_play_actions: str
+    """Number of video play actions."""
+    video_watched_2s: str
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: str
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: str
+    """Average video play duration."""
+    average_video_play_per_user: str
+    """Average video play duration per user."""
+    video_views_p25: str
+    """Number of times video was watched to 25%."""
+    video_views_p50: str
+    """Number of times video was watched to 50%."""
+    video_views_p75: str
+    """Number of times video was watched to 75%."""
+    video_views_p100: str
+    """Number of times video was watched to 100%."""
+    profile_visits: str
+    """Number of profile visits."""
+    likes: str
+    """Number of likes."""
+    comments: str
+    """Number of comments."""
+    shares: str
+    """Number of shares."""
+    follows: str
+    """Number of follows."""
+    clicks_on_music_disc: str
+    """Number of clicks on the music disc."""
+    real_time_app_install: str
+    """Real-time app installations."""
+    real_time_app_install_cost: str
+    """Cost of real-time app installations."""
+    app_install: str
+    """Number of app installations."""
+
+
+class CampaignsReportsDailySortFilter(TypedDict, total=False):
+    """Available fields for sorting campaigns_reports_daily search results."""
+    campaign_id: AirbyteSortOrder
+    """The unique identifier for the campaign."""
+    stat_time_day: AirbyteSortOrder
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: AirbyteSortOrder
+    """The name of the marketing campaign."""
+    spend: AirbyteSortOrder
+    """Total amount of money spent."""
+    cpc: AirbyteSortOrder
+    """Cost per click."""
+    cpm: AirbyteSortOrder
+    """Cost per thousand impressions."""
+    impressions: AirbyteSortOrder
+    """Number of times the ad was displayed."""
+    clicks: AirbyteSortOrder
+    """Number of clicks on the ad."""
+    ctr: AirbyteSortOrder
+    """Click-through rate."""
+    reach: AirbyteSortOrder
+    """Total number of unique users reached."""
+    cost_per_1000_reached: AirbyteSortOrder
+    """Cost per 1000 unique users reached."""
+    frequency: AirbyteSortOrder
+    """Average number of times each person saw the ad."""
+    video_play_actions: AirbyteSortOrder
+    """Number of video play actions."""
+    video_watched_2s: AirbyteSortOrder
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: AirbyteSortOrder
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: AirbyteSortOrder
+    """Average video play duration."""
+    average_video_play_per_user: AirbyteSortOrder
+    """Average video play duration per user."""
+    video_views_p25: AirbyteSortOrder
+    """Number of times video was watched to 25%."""
+    video_views_p50: AirbyteSortOrder
+    """Number of times video was watched to 50%."""
+    video_views_p75: AirbyteSortOrder
+    """Number of times video was watched to 75%."""
+    video_views_p100: AirbyteSortOrder
+    """Number of times video was watched to 100%."""
+    profile_visits: AirbyteSortOrder
+    """Number of profile visits."""
+    likes: AirbyteSortOrder
+    """Number of likes."""
+    comments: AirbyteSortOrder
+    """Number of comments."""
+    shares: AirbyteSortOrder
+    """Number of shares."""
+    follows: AirbyteSortOrder
+    """Number of follows."""
+    clicks_on_music_disc: AirbyteSortOrder
+    """Number of clicks on the music disc."""
+    real_time_app_install: AirbyteSortOrder
+    """Real-time app installations."""
+    real_time_app_install_cost: AirbyteSortOrder
+    """Cost of real-time app installations."""
+    app_install: AirbyteSortOrder
+    """Number of app installations."""
+
+
+# Entity-specific condition types for campaigns_reports_daily
+class CampaignsReportsDailyEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: CampaignsReportsDailySearchFilter
+
+
+class CampaignsReportsDailyNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: CampaignsReportsDailySearchFilter
+
+
+class CampaignsReportsDailyGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: CampaignsReportsDailySearchFilter
+
+
+class CampaignsReportsDailyGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: CampaignsReportsDailySearchFilter
+
+
+class CampaignsReportsDailyLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: CampaignsReportsDailySearchFilter
+
+
+class CampaignsReportsDailyLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: CampaignsReportsDailySearchFilter
+
+
+class CampaignsReportsDailyLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: CampaignsReportsDailyStringFilter
+
+
+class CampaignsReportsDailyFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: CampaignsReportsDailyStringFilter
+
+
+class CampaignsReportsDailyKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: CampaignsReportsDailyStringFilter
+
+
+class CampaignsReportsDailyContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: CampaignsReportsDailyAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+CampaignsReportsDailyInCondition = TypedDict("CampaignsReportsDailyInCondition", {"in": CampaignsReportsDailyInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+CampaignsReportsDailyNotCondition = TypedDict("CampaignsReportsDailyNotCondition", {"not": "CampaignsReportsDailyCondition"}, total=False)
+"""Negates the nested condition."""
+
+CampaignsReportsDailyAndCondition = TypedDict("CampaignsReportsDailyAndCondition", {"and": "list[CampaignsReportsDailyCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+CampaignsReportsDailyOrCondition = TypedDict("CampaignsReportsDailyOrCondition", {"or": "list[CampaignsReportsDailyCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+CampaignsReportsDailyAnyCondition = TypedDict("CampaignsReportsDailyAnyCondition", {"any": CampaignsReportsDailyAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all campaigns_reports_daily condition types
+CampaignsReportsDailyCondition = (
+    CampaignsReportsDailyEqCondition
+    | CampaignsReportsDailyNeqCondition
+    | CampaignsReportsDailyGtCondition
+    | CampaignsReportsDailyGteCondition
+    | CampaignsReportsDailyLtCondition
+    | CampaignsReportsDailyLteCondition
+    | CampaignsReportsDailyInCondition
+    | CampaignsReportsDailyLikeCondition
+    | CampaignsReportsDailyFuzzyCondition
+    | CampaignsReportsDailyKeywordCondition
+    | CampaignsReportsDailyContainsCondition
+    | CampaignsReportsDailyNotCondition
+    | CampaignsReportsDailyAndCondition
+    | CampaignsReportsDailyOrCondition
+    | CampaignsReportsDailyAnyCondition
+)
+
+
+class CampaignsReportsDailySearchQuery(TypedDict, total=False):
+    """Search query for campaigns_reports_daily entity."""
+    filter: CampaignsReportsDailyCondition
+    sort: list[CampaignsReportsDailySortFilter]
+
+
+# ===== AD_GROUPS_REPORTS_DAILY SEARCH TYPES =====
+
+class AdGroupsReportsDailySearchFilter(TypedDict, total=False):
+    """Available fields for filtering ad_groups_reports_daily search queries."""
+    adgroup_id: int | None
+    """The unique identifier for the ad group."""
+    stat_time_day: str | None
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: str | None
+    """The name of the marketing campaign."""
+    campaign_id: int | None
+    """The unique identifier for the campaign."""
+    adgroup_name: str | None
+    """The name of the ad group."""
+    placement_type: str | None
+    """Type of ad placement."""
+    spend: str | None
+    """Total amount of money spent."""
+    cpc: str | None
+    """Cost per click."""
+    cpm: str | None
+    """Cost per thousand impressions."""
+    impressions: str | None
+    """Number of times the ad was displayed."""
+    clicks: str | None
+    """Number of clicks on the ad."""
+    ctr: str | None
+    """Click-through rate."""
+    reach: str | None
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str | None
+    """Cost per 1000 unique users reached."""
+    conversion: str | None
+    """Number of conversions."""
+    cost_per_conversion: str | None
+    """Cost per conversion."""
+    conversion_rate: str | None
+    """Rate of conversions."""
+    real_time_conversion: str | None
+    """Real-time conversions."""
+    real_time_cost_per_conversion: str | None
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: str | None
+    """Real-time conversion rate."""
+    result: str | None
+    """Number of results."""
+    cost_per_result: str | None
+    """Cost per result."""
+    result_rate: str | None
+    """Rate of results."""
+    real_time_result: str | None
+    """Real-time results."""
+    real_time_cost_per_result: str | None
+    """Real-time cost per result."""
+    real_time_result_rate: str | None
+    """Real-time result rate."""
+    secondary_goal_result: str | None
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: str | None
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: str | None
+    """Rate of secondary goal results."""
+    frequency: str | None
+    """Average number of times each person saw the ad."""
+    video_play_actions: float | None
+    """Number of video play actions."""
+    video_watched_2s: float | None
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: float | None
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: float | None
+    """Average video play duration."""
+    average_video_play_per_user: float | None
+    """Average video play duration per user."""
+    video_views_p25: float | None
+    """Number of times video was watched to 25%."""
+    video_views_p50: float | None
+    """Number of times video was watched to 50%."""
+    video_views_p75: float | None
+    """Number of times video was watched to 75%."""
+    video_views_p100: float | None
+    """Number of times video was watched to 100%."""
+    profile_visits: float | None
+    """Number of profile visits."""
+    likes: float | None
+    """Number of likes."""
+    comments: float | None
+    """Number of comments."""
+    shares: float | None
+    """Number of shares."""
+    follows: float | None
+    """Number of follows."""
+    clicks_on_music_disc: float | None
+    """Number of clicks on the music disc."""
+    real_time_app_install: float | None
+    """Real-time app installations."""
+    real_time_app_install_cost: float | None
+    """Cost of real-time app installations."""
+    app_install: float | None
+    """Number of app installations."""
+
+
+class AdGroupsReportsDailyInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    adgroup_id: list[int]
+    """The unique identifier for the ad group."""
+    stat_time_day: list[str]
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: list[str]
+    """The name of the marketing campaign."""
+    campaign_id: list[int]
+    """The unique identifier for the campaign."""
+    adgroup_name: list[str]
+    """The name of the ad group."""
+    placement_type: list[str]
+    """Type of ad placement."""
+    spend: list[str]
+    """Total amount of money spent."""
+    cpc: list[str]
+    """Cost per click."""
+    cpm: list[str]
+    """Cost per thousand impressions."""
+    impressions: list[str]
+    """Number of times the ad was displayed."""
+    clicks: list[str]
+    """Number of clicks on the ad."""
+    ctr: list[str]
+    """Click-through rate."""
+    reach: list[str]
+    """Total number of unique users reached."""
+    cost_per_1000_reached: list[str]
+    """Cost per 1000 unique users reached."""
+    conversion: list[str]
+    """Number of conversions."""
+    cost_per_conversion: list[str]
+    """Cost per conversion."""
+    conversion_rate: list[str]
+    """Rate of conversions."""
+    real_time_conversion: list[str]
+    """Real-time conversions."""
+    real_time_cost_per_conversion: list[str]
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: list[str]
+    """Real-time conversion rate."""
+    result: list[str]
+    """Number of results."""
+    cost_per_result: list[str]
+    """Cost per result."""
+    result_rate: list[str]
+    """Rate of results."""
+    real_time_result: list[str]
+    """Real-time results."""
+    real_time_cost_per_result: list[str]
+    """Real-time cost per result."""
+    real_time_result_rate: list[str]
+    """Real-time result rate."""
+    secondary_goal_result: list[str]
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: list[str]
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: list[str]
+    """Rate of secondary goal results."""
+    frequency: list[str]
+    """Average number of times each person saw the ad."""
+    video_play_actions: list[float]
+    """Number of video play actions."""
+    video_watched_2s: list[float]
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: list[float]
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: list[float]
+    """Average video play duration."""
+    average_video_play_per_user: list[float]
+    """Average video play duration per user."""
+    video_views_p25: list[float]
+    """Number of times video was watched to 25%."""
+    video_views_p50: list[float]
+    """Number of times video was watched to 50%."""
+    video_views_p75: list[float]
+    """Number of times video was watched to 75%."""
+    video_views_p100: list[float]
+    """Number of times video was watched to 100%."""
+    profile_visits: list[float]
+    """Number of profile visits."""
+    likes: list[float]
+    """Number of likes."""
+    comments: list[float]
+    """Number of comments."""
+    shares: list[float]
+    """Number of shares."""
+    follows: list[float]
+    """Number of follows."""
+    clicks_on_music_disc: list[float]
+    """Number of clicks on the music disc."""
+    real_time_app_install: list[float]
+    """Real-time app installations."""
+    real_time_app_install_cost: list[float]
+    """Cost of real-time app installations."""
+    app_install: list[float]
+    """Number of app installations."""
+
+
+class AdGroupsReportsDailyAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    adgroup_id: Any
+    """The unique identifier for the ad group."""
+    stat_time_day: Any
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: Any
+    """The name of the marketing campaign."""
+    campaign_id: Any
+    """The unique identifier for the campaign."""
+    adgroup_name: Any
+    """The name of the ad group."""
+    placement_type: Any
+    """Type of ad placement."""
+    spend: Any
+    """Total amount of money spent."""
+    cpc: Any
+    """Cost per click."""
+    cpm: Any
+    """Cost per thousand impressions."""
+    impressions: Any
+    """Number of times the ad was displayed."""
+    clicks: Any
+    """Number of clicks on the ad."""
+    ctr: Any
+    """Click-through rate."""
+    reach: Any
+    """Total number of unique users reached."""
+    cost_per_1000_reached: Any
+    """Cost per 1000 unique users reached."""
+    conversion: Any
+    """Number of conversions."""
+    cost_per_conversion: Any
+    """Cost per conversion."""
+    conversion_rate: Any
+    """Rate of conversions."""
+    real_time_conversion: Any
+    """Real-time conversions."""
+    real_time_cost_per_conversion: Any
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: Any
+    """Real-time conversion rate."""
+    result: Any
+    """Number of results."""
+    cost_per_result: Any
+    """Cost per result."""
+    result_rate: Any
+    """Rate of results."""
+    real_time_result: Any
+    """Real-time results."""
+    real_time_cost_per_result: Any
+    """Real-time cost per result."""
+    real_time_result_rate: Any
+    """Real-time result rate."""
+    secondary_goal_result: Any
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: Any
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: Any
+    """Rate of secondary goal results."""
+    frequency: Any
+    """Average number of times each person saw the ad."""
+    video_play_actions: Any
+    """Number of video play actions."""
+    video_watched_2s: Any
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: Any
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: Any
+    """Average video play duration."""
+    average_video_play_per_user: Any
+    """Average video play duration per user."""
+    video_views_p25: Any
+    """Number of times video was watched to 25%."""
+    video_views_p50: Any
+    """Number of times video was watched to 50%."""
+    video_views_p75: Any
+    """Number of times video was watched to 75%."""
+    video_views_p100: Any
+    """Number of times video was watched to 100%."""
+    profile_visits: Any
+    """Number of profile visits."""
+    likes: Any
+    """Number of likes."""
+    comments: Any
+    """Number of comments."""
+    shares: Any
+    """Number of shares."""
+    follows: Any
+    """Number of follows."""
+    clicks_on_music_disc: Any
+    """Number of clicks on the music disc."""
+    real_time_app_install: Any
+    """Real-time app installations."""
+    real_time_app_install_cost: Any
+    """Cost of real-time app installations."""
+    app_install: Any
+    """Number of app installations."""
+
+
+class AdGroupsReportsDailyStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    adgroup_id: str
+    """The unique identifier for the ad group."""
+    stat_time_day: str
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: str
+    """The name of the marketing campaign."""
+    campaign_id: str
+    """The unique identifier for the campaign."""
+    adgroup_name: str
+    """The name of the ad group."""
+    placement_type: str
+    """Type of ad placement."""
+    spend: str
+    """Total amount of money spent."""
+    cpc: str
+    """Cost per click."""
+    cpm: str
+    """Cost per thousand impressions."""
+    impressions: str
+    """Number of times the ad was displayed."""
+    clicks: str
+    """Number of clicks on the ad."""
+    ctr: str
+    """Click-through rate."""
+    reach: str
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str
+    """Cost per 1000 unique users reached."""
+    conversion: str
+    """Number of conversions."""
+    cost_per_conversion: str
+    """Cost per conversion."""
+    conversion_rate: str
+    """Rate of conversions."""
+    real_time_conversion: str
+    """Real-time conversions."""
+    real_time_cost_per_conversion: str
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: str
+    """Real-time conversion rate."""
+    result: str
+    """Number of results."""
+    cost_per_result: str
+    """Cost per result."""
+    result_rate: str
+    """Rate of results."""
+    real_time_result: str
+    """Real-time results."""
+    real_time_cost_per_result: str
+    """Real-time cost per result."""
+    real_time_result_rate: str
+    """Real-time result rate."""
+    secondary_goal_result: str
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: str
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: str
+    """Rate of secondary goal results."""
+    frequency: str
+    """Average number of times each person saw the ad."""
+    video_play_actions: str
+    """Number of video play actions."""
+    video_watched_2s: str
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: str
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: str
+    """Average video play duration."""
+    average_video_play_per_user: str
+    """Average video play duration per user."""
+    video_views_p25: str
+    """Number of times video was watched to 25%."""
+    video_views_p50: str
+    """Number of times video was watched to 50%."""
+    video_views_p75: str
+    """Number of times video was watched to 75%."""
+    video_views_p100: str
+    """Number of times video was watched to 100%."""
+    profile_visits: str
+    """Number of profile visits."""
+    likes: str
+    """Number of likes."""
+    comments: str
+    """Number of comments."""
+    shares: str
+    """Number of shares."""
+    follows: str
+    """Number of follows."""
+    clicks_on_music_disc: str
+    """Number of clicks on the music disc."""
+    real_time_app_install: str
+    """Real-time app installations."""
+    real_time_app_install_cost: str
+    """Cost of real-time app installations."""
+    app_install: str
+    """Number of app installations."""
+
+
+class AdGroupsReportsDailySortFilter(TypedDict, total=False):
+    """Available fields for sorting ad_groups_reports_daily search results."""
+    adgroup_id: AirbyteSortOrder
+    """The unique identifier for the ad group."""
+    stat_time_day: AirbyteSortOrder
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: AirbyteSortOrder
+    """The name of the marketing campaign."""
+    campaign_id: AirbyteSortOrder
+    """The unique identifier for the campaign."""
+    adgroup_name: AirbyteSortOrder
+    """The name of the ad group."""
+    placement_type: AirbyteSortOrder
+    """Type of ad placement."""
+    spend: AirbyteSortOrder
+    """Total amount of money spent."""
+    cpc: AirbyteSortOrder
+    """Cost per click."""
+    cpm: AirbyteSortOrder
+    """Cost per thousand impressions."""
+    impressions: AirbyteSortOrder
+    """Number of times the ad was displayed."""
+    clicks: AirbyteSortOrder
+    """Number of clicks on the ad."""
+    ctr: AirbyteSortOrder
+    """Click-through rate."""
+    reach: AirbyteSortOrder
+    """Total number of unique users reached."""
+    cost_per_1000_reached: AirbyteSortOrder
+    """Cost per 1000 unique users reached."""
+    conversion: AirbyteSortOrder
+    """Number of conversions."""
+    cost_per_conversion: AirbyteSortOrder
+    """Cost per conversion."""
+    conversion_rate: AirbyteSortOrder
+    """Rate of conversions."""
+    real_time_conversion: AirbyteSortOrder
+    """Real-time conversions."""
+    real_time_cost_per_conversion: AirbyteSortOrder
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: AirbyteSortOrder
+    """Real-time conversion rate."""
+    result: AirbyteSortOrder
+    """Number of results."""
+    cost_per_result: AirbyteSortOrder
+    """Cost per result."""
+    result_rate: AirbyteSortOrder
+    """Rate of results."""
+    real_time_result: AirbyteSortOrder
+    """Real-time results."""
+    real_time_cost_per_result: AirbyteSortOrder
+    """Real-time cost per result."""
+    real_time_result_rate: AirbyteSortOrder
+    """Real-time result rate."""
+    secondary_goal_result: AirbyteSortOrder
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: AirbyteSortOrder
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: AirbyteSortOrder
+    """Rate of secondary goal results."""
+    frequency: AirbyteSortOrder
+    """Average number of times each person saw the ad."""
+    video_play_actions: AirbyteSortOrder
+    """Number of video play actions."""
+    video_watched_2s: AirbyteSortOrder
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: AirbyteSortOrder
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: AirbyteSortOrder
+    """Average video play duration."""
+    average_video_play_per_user: AirbyteSortOrder
+    """Average video play duration per user."""
+    video_views_p25: AirbyteSortOrder
+    """Number of times video was watched to 25%."""
+    video_views_p50: AirbyteSortOrder
+    """Number of times video was watched to 50%."""
+    video_views_p75: AirbyteSortOrder
+    """Number of times video was watched to 75%."""
+    video_views_p100: AirbyteSortOrder
+    """Number of times video was watched to 100%."""
+    profile_visits: AirbyteSortOrder
+    """Number of profile visits."""
+    likes: AirbyteSortOrder
+    """Number of likes."""
+    comments: AirbyteSortOrder
+    """Number of comments."""
+    shares: AirbyteSortOrder
+    """Number of shares."""
+    follows: AirbyteSortOrder
+    """Number of follows."""
+    clicks_on_music_disc: AirbyteSortOrder
+    """Number of clicks on the music disc."""
+    real_time_app_install: AirbyteSortOrder
+    """Real-time app installations."""
+    real_time_app_install_cost: AirbyteSortOrder
+    """Cost of real-time app installations."""
+    app_install: AirbyteSortOrder
+    """Number of app installations."""
+
+
+# Entity-specific condition types for ad_groups_reports_daily
+class AdGroupsReportsDailyEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: AdGroupsReportsDailySearchFilter
+
+
+class AdGroupsReportsDailyNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: AdGroupsReportsDailySearchFilter
+
+
+class AdGroupsReportsDailyGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: AdGroupsReportsDailySearchFilter
+
+
+class AdGroupsReportsDailyGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: AdGroupsReportsDailySearchFilter
+
+
+class AdGroupsReportsDailyLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: AdGroupsReportsDailySearchFilter
+
+
+class AdGroupsReportsDailyLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: AdGroupsReportsDailySearchFilter
+
+
+class AdGroupsReportsDailyLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: AdGroupsReportsDailyStringFilter
+
+
+class AdGroupsReportsDailyFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: AdGroupsReportsDailyStringFilter
+
+
+class AdGroupsReportsDailyKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: AdGroupsReportsDailyStringFilter
+
+
+class AdGroupsReportsDailyContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: AdGroupsReportsDailyAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+AdGroupsReportsDailyInCondition = TypedDict("AdGroupsReportsDailyInCondition", {"in": AdGroupsReportsDailyInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+AdGroupsReportsDailyNotCondition = TypedDict("AdGroupsReportsDailyNotCondition", {"not": "AdGroupsReportsDailyCondition"}, total=False)
+"""Negates the nested condition."""
+
+AdGroupsReportsDailyAndCondition = TypedDict("AdGroupsReportsDailyAndCondition", {"and": "list[AdGroupsReportsDailyCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+AdGroupsReportsDailyOrCondition = TypedDict("AdGroupsReportsDailyOrCondition", {"or": "list[AdGroupsReportsDailyCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+AdGroupsReportsDailyAnyCondition = TypedDict("AdGroupsReportsDailyAnyCondition", {"any": AdGroupsReportsDailyAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all ad_groups_reports_daily condition types
+AdGroupsReportsDailyCondition = (
+    AdGroupsReportsDailyEqCondition
+    | AdGroupsReportsDailyNeqCondition
+    | AdGroupsReportsDailyGtCondition
+    | AdGroupsReportsDailyGteCondition
+    | AdGroupsReportsDailyLtCondition
+    | AdGroupsReportsDailyLteCondition
+    | AdGroupsReportsDailyInCondition
+    | AdGroupsReportsDailyLikeCondition
+    | AdGroupsReportsDailyFuzzyCondition
+    | AdGroupsReportsDailyKeywordCondition
+    | AdGroupsReportsDailyContainsCondition
+    | AdGroupsReportsDailyNotCondition
+    | AdGroupsReportsDailyAndCondition
+    | AdGroupsReportsDailyOrCondition
+    | AdGroupsReportsDailyAnyCondition
+)
+
+
+class AdGroupsReportsDailySearchQuery(TypedDict, total=False):
+    """Search query for ad_groups_reports_daily entity."""
+    filter: AdGroupsReportsDailyCondition
+    sort: list[AdGroupsReportsDailySortFilter]
+
+
+# ===== ADS_REPORTS_DAILY SEARCH TYPES =====
+
+class AdsReportsDailySearchFilter(TypedDict, total=False):
+    """Available fields for filtering ads_reports_daily search queries."""
+    ad_id: int | None
+    """The unique identifier for the ad."""
+    stat_time_day: str | None
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: str | None
+    """The name of the marketing campaign."""
+    campaign_id: int | None
+    """The unique identifier for the campaign."""
+    adgroup_name: str | None
+    """The name of the ad group."""
+    adgroup_id: int | None
+    """The unique identifier for the ad group."""
+    ad_name: str | None
+    """The name of the ad."""
+    ad_text: str | None
+    """The text content of the ad."""
+    placement_type: str | None
+    """Type of ad placement."""
+    spend: str | None
+    """Total amount of money spent."""
+    cpc: str | None
+    """Cost per click."""
+    cpm: str | None
+    """Cost per thousand impressions."""
+    impressions: str | None
+    """Number of times the ad was displayed."""
+    clicks: str | None
+    """Number of clicks on the ad."""
+    ctr: str | None
+    """Click-through rate."""
+    reach: str | None
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str | None
+    """Cost per 1000 unique users reached."""
+    conversion: str | None
+    """Number of conversions."""
+    cost_per_conversion: str | None
+    """Cost per conversion."""
+    conversion_rate: str | None
+    """Rate of conversions."""
+    real_time_conversion: str | None
+    """Real-time conversions."""
+    real_time_cost_per_conversion: str | None
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: str | None
+    """Real-time conversion rate."""
+    result: str | None
+    """Number of results."""
+    cost_per_result: str | None
+    """Cost per result."""
+    result_rate: str | None
+    """Rate of results."""
+    real_time_result: str | None
+    """Real-time results."""
+    real_time_cost_per_result: str | None
+    """Real-time cost per result."""
+    real_time_result_rate: str | None
+    """Real-time result rate."""
+    secondary_goal_result: str | None
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: str | None
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: str | None
+    """Rate of secondary goal results."""
+    frequency: str | None
+    """Average number of times each person saw the ad."""
+    video_play_actions: float | None
+    """Number of video play actions."""
+    video_watched_2s: float | None
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: float | None
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: float | None
+    """Average video play duration."""
+    average_video_play_per_user: float | None
+    """Average video play duration per user."""
+    video_views_p25: float | None
+    """Number of times video was watched to 25%."""
+    video_views_p50: float | None
+    """Number of times video was watched to 50%."""
+    video_views_p75: float | None
+    """Number of times video was watched to 75%."""
+    video_views_p100: float | None
+    """Number of times video was watched to 100%."""
+    profile_visits: float | None
+    """Number of profile visits."""
+    likes: float | None
+    """Number of likes."""
+    comments: float | None
+    """Number of comments."""
+    shares: float | None
+    """Number of shares."""
+    follows: float | None
+    """Number of follows."""
+    clicks_on_music_disc: float | None
+    """Number of clicks on the music disc."""
+    real_time_app_install: float | None
+    """Real-time app installations."""
+    real_time_app_install_cost: float | None
+    """Cost of real-time app installations."""
+    app_install: float | None
+    """Number of app installations."""
+
+
+class AdsReportsDailyInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    ad_id: list[int]
+    """The unique identifier for the ad."""
+    stat_time_day: list[str]
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: list[str]
+    """The name of the marketing campaign."""
+    campaign_id: list[int]
+    """The unique identifier for the campaign."""
+    adgroup_name: list[str]
+    """The name of the ad group."""
+    adgroup_id: list[int]
+    """The unique identifier for the ad group."""
+    ad_name: list[str]
+    """The name of the ad."""
+    ad_text: list[str]
+    """The text content of the ad."""
+    placement_type: list[str]
+    """Type of ad placement."""
+    spend: list[str]
+    """Total amount of money spent."""
+    cpc: list[str]
+    """Cost per click."""
+    cpm: list[str]
+    """Cost per thousand impressions."""
+    impressions: list[str]
+    """Number of times the ad was displayed."""
+    clicks: list[str]
+    """Number of clicks on the ad."""
+    ctr: list[str]
+    """Click-through rate."""
+    reach: list[str]
+    """Total number of unique users reached."""
+    cost_per_1000_reached: list[str]
+    """Cost per 1000 unique users reached."""
+    conversion: list[str]
+    """Number of conversions."""
+    cost_per_conversion: list[str]
+    """Cost per conversion."""
+    conversion_rate: list[str]
+    """Rate of conversions."""
+    real_time_conversion: list[str]
+    """Real-time conversions."""
+    real_time_cost_per_conversion: list[str]
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: list[str]
+    """Real-time conversion rate."""
+    result: list[str]
+    """Number of results."""
+    cost_per_result: list[str]
+    """Cost per result."""
+    result_rate: list[str]
+    """Rate of results."""
+    real_time_result: list[str]
+    """Real-time results."""
+    real_time_cost_per_result: list[str]
+    """Real-time cost per result."""
+    real_time_result_rate: list[str]
+    """Real-time result rate."""
+    secondary_goal_result: list[str]
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: list[str]
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: list[str]
+    """Rate of secondary goal results."""
+    frequency: list[str]
+    """Average number of times each person saw the ad."""
+    video_play_actions: list[float]
+    """Number of video play actions."""
+    video_watched_2s: list[float]
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: list[float]
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: list[float]
+    """Average video play duration."""
+    average_video_play_per_user: list[float]
+    """Average video play duration per user."""
+    video_views_p25: list[float]
+    """Number of times video was watched to 25%."""
+    video_views_p50: list[float]
+    """Number of times video was watched to 50%."""
+    video_views_p75: list[float]
+    """Number of times video was watched to 75%."""
+    video_views_p100: list[float]
+    """Number of times video was watched to 100%."""
+    profile_visits: list[float]
+    """Number of profile visits."""
+    likes: list[float]
+    """Number of likes."""
+    comments: list[float]
+    """Number of comments."""
+    shares: list[float]
+    """Number of shares."""
+    follows: list[float]
+    """Number of follows."""
+    clicks_on_music_disc: list[float]
+    """Number of clicks on the music disc."""
+    real_time_app_install: list[float]
+    """Real-time app installations."""
+    real_time_app_install_cost: list[float]
+    """Cost of real-time app installations."""
+    app_install: list[float]
+    """Number of app installations."""
+
+
+class AdsReportsDailyAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    ad_id: Any
+    """The unique identifier for the ad."""
+    stat_time_day: Any
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: Any
+    """The name of the marketing campaign."""
+    campaign_id: Any
+    """The unique identifier for the campaign."""
+    adgroup_name: Any
+    """The name of the ad group."""
+    adgroup_id: Any
+    """The unique identifier for the ad group."""
+    ad_name: Any
+    """The name of the ad."""
+    ad_text: Any
+    """The text content of the ad."""
+    placement_type: Any
+    """Type of ad placement."""
+    spend: Any
+    """Total amount of money spent."""
+    cpc: Any
+    """Cost per click."""
+    cpm: Any
+    """Cost per thousand impressions."""
+    impressions: Any
+    """Number of times the ad was displayed."""
+    clicks: Any
+    """Number of clicks on the ad."""
+    ctr: Any
+    """Click-through rate."""
+    reach: Any
+    """Total number of unique users reached."""
+    cost_per_1000_reached: Any
+    """Cost per 1000 unique users reached."""
+    conversion: Any
+    """Number of conversions."""
+    cost_per_conversion: Any
+    """Cost per conversion."""
+    conversion_rate: Any
+    """Rate of conversions."""
+    real_time_conversion: Any
+    """Real-time conversions."""
+    real_time_cost_per_conversion: Any
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: Any
+    """Real-time conversion rate."""
+    result: Any
+    """Number of results."""
+    cost_per_result: Any
+    """Cost per result."""
+    result_rate: Any
+    """Rate of results."""
+    real_time_result: Any
+    """Real-time results."""
+    real_time_cost_per_result: Any
+    """Real-time cost per result."""
+    real_time_result_rate: Any
+    """Real-time result rate."""
+    secondary_goal_result: Any
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: Any
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: Any
+    """Rate of secondary goal results."""
+    frequency: Any
+    """Average number of times each person saw the ad."""
+    video_play_actions: Any
+    """Number of video play actions."""
+    video_watched_2s: Any
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: Any
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: Any
+    """Average video play duration."""
+    average_video_play_per_user: Any
+    """Average video play duration per user."""
+    video_views_p25: Any
+    """Number of times video was watched to 25%."""
+    video_views_p50: Any
+    """Number of times video was watched to 50%."""
+    video_views_p75: Any
+    """Number of times video was watched to 75%."""
+    video_views_p100: Any
+    """Number of times video was watched to 100%."""
+    profile_visits: Any
+    """Number of profile visits."""
+    likes: Any
+    """Number of likes."""
+    comments: Any
+    """Number of comments."""
+    shares: Any
+    """Number of shares."""
+    follows: Any
+    """Number of follows."""
+    clicks_on_music_disc: Any
+    """Number of clicks on the music disc."""
+    real_time_app_install: Any
+    """Real-time app installations."""
+    real_time_app_install_cost: Any
+    """Cost of real-time app installations."""
+    app_install: Any
+    """Number of app installations."""
+
+
+class AdsReportsDailyStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    ad_id: str
+    """The unique identifier for the ad."""
+    stat_time_day: str
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: str
+    """The name of the marketing campaign."""
+    campaign_id: str
+    """The unique identifier for the campaign."""
+    adgroup_name: str
+    """The name of the ad group."""
+    adgroup_id: str
+    """The unique identifier for the ad group."""
+    ad_name: str
+    """The name of the ad."""
+    ad_text: str
+    """The text content of the ad."""
+    placement_type: str
+    """Type of ad placement."""
+    spend: str
+    """Total amount of money spent."""
+    cpc: str
+    """Cost per click."""
+    cpm: str
+    """Cost per thousand impressions."""
+    impressions: str
+    """Number of times the ad was displayed."""
+    clicks: str
+    """Number of clicks on the ad."""
+    ctr: str
+    """Click-through rate."""
+    reach: str
+    """Total number of unique users reached."""
+    cost_per_1000_reached: str
+    """Cost per 1000 unique users reached."""
+    conversion: str
+    """Number of conversions."""
+    cost_per_conversion: str
+    """Cost per conversion."""
+    conversion_rate: str
+    """Rate of conversions."""
+    real_time_conversion: str
+    """Real-time conversions."""
+    real_time_cost_per_conversion: str
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: str
+    """Real-time conversion rate."""
+    result: str
+    """Number of results."""
+    cost_per_result: str
+    """Cost per result."""
+    result_rate: str
+    """Rate of results."""
+    real_time_result: str
+    """Real-time results."""
+    real_time_cost_per_result: str
+    """Real-time cost per result."""
+    real_time_result_rate: str
+    """Real-time result rate."""
+    secondary_goal_result: str
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: str
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: str
+    """Rate of secondary goal results."""
+    frequency: str
+    """Average number of times each person saw the ad."""
+    video_play_actions: str
+    """Number of video play actions."""
+    video_watched_2s: str
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: str
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: str
+    """Average video play duration."""
+    average_video_play_per_user: str
+    """Average video play duration per user."""
+    video_views_p25: str
+    """Number of times video was watched to 25%."""
+    video_views_p50: str
+    """Number of times video was watched to 50%."""
+    video_views_p75: str
+    """Number of times video was watched to 75%."""
+    video_views_p100: str
+    """Number of times video was watched to 100%."""
+    profile_visits: str
+    """Number of profile visits."""
+    likes: str
+    """Number of likes."""
+    comments: str
+    """Number of comments."""
+    shares: str
+    """Number of shares."""
+    follows: str
+    """Number of follows."""
+    clicks_on_music_disc: str
+    """Number of clicks on the music disc."""
+    real_time_app_install: str
+    """Real-time app installations."""
+    real_time_app_install_cost: str
+    """Cost of real-time app installations."""
+    app_install: str
+    """Number of app installations."""
+
+
+class AdsReportsDailySortFilter(TypedDict, total=False):
+    """Available fields for sorting ads_reports_daily search results."""
+    ad_id: AirbyteSortOrder
+    """The unique identifier for the ad."""
+    stat_time_day: AirbyteSortOrder
+    """The date for which the statistical data is recorded (YYYY-MM-DD HH:MM:SS format)."""
+    campaign_name: AirbyteSortOrder
+    """The name of the marketing campaign."""
+    campaign_id: AirbyteSortOrder
+    """The unique identifier for the campaign."""
+    adgroup_name: AirbyteSortOrder
+    """The name of the ad group."""
+    adgroup_id: AirbyteSortOrder
+    """The unique identifier for the ad group."""
+    ad_name: AirbyteSortOrder
+    """The name of the ad."""
+    ad_text: AirbyteSortOrder
+    """The text content of the ad."""
+    placement_type: AirbyteSortOrder
+    """Type of ad placement."""
+    spend: AirbyteSortOrder
+    """Total amount of money spent."""
+    cpc: AirbyteSortOrder
+    """Cost per click."""
+    cpm: AirbyteSortOrder
+    """Cost per thousand impressions."""
+    impressions: AirbyteSortOrder
+    """Number of times the ad was displayed."""
+    clicks: AirbyteSortOrder
+    """Number of clicks on the ad."""
+    ctr: AirbyteSortOrder
+    """Click-through rate."""
+    reach: AirbyteSortOrder
+    """Total number of unique users reached."""
+    cost_per_1000_reached: AirbyteSortOrder
+    """Cost per 1000 unique users reached."""
+    conversion: AirbyteSortOrder
+    """Number of conversions."""
+    cost_per_conversion: AirbyteSortOrder
+    """Cost per conversion."""
+    conversion_rate: AirbyteSortOrder
+    """Rate of conversions."""
+    real_time_conversion: AirbyteSortOrder
+    """Real-time conversions."""
+    real_time_cost_per_conversion: AirbyteSortOrder
+    """Real-time cost per conversion."""
+    real_time_conversion_rate: AirbyteSortOrder
+    """Real-time conversion rate."""
+    result: AirbyteSortOrder
+    """Number of results."""
+    cost_per_result: AirbyteSortOrder
+    """Cost per result."""
+    result_rate: AirbyteSortOrder
+    """Rate of results."""
+    real_time_result: AirbyteSortOrder
+    """Real-time results."""
+    real_time_cost_per_result: AirbyteSortOrder
+    """Real-time cost per result."""
+    real_time_result_rate: AirbyteSortOrder
+    """Real-time result rate."""
+    secondary_goal_result: AirbyteSortOrder
+    """Results for secondary goals."""
+    cost_per_secondary_goal_result: AirbyteSortOrder
+    """Cost per secondary goal result."""
+    secondary_goal_result_rate: AirbyteSortOrder
+    """Rate of secondary goal results."""
+    frequency: AirbyteSortOrder
+    """Average number of times each person saw the ad."""
+    video_play_actions: AirbyteSortOrder
+    """Number of video play actions."""
+    video_watched_2s: AirbyteSortOrder
+    """Number of times video was watched for at least 2 seconds."""
+    video_watched_6s: AirbyteSortOrder
+    """Number of times video was watched for at least 6 seconds."""
+    average_video_play: AirbyteSortOrder
+    """Average video play duration."""
+    average_video_play_per_user: AirbyteSortOrder
+    """Average video play duration per user."""
+    video_views_p25: AirbyteSortOrder
+    """Number of times video was watched to 25%."""
+    video_views_p50: AirbyteSortOrder
+    """Number of times video was watched to 50%."""
+    video_views_p75: AirbyteSortOrder
+    """Number of times video was watched to 75%."""
+    video_views_p100: AirbyteSortOrder
+    """Number of times video was watched to 100%."""
+    profile_visits: AirbyteSortOrder
+    """Number of profile visits."""
+    likes: AirbyteSortOrder
+    """Number of likes."""
+    comments: AirbyteSortOrder
+    """Number of comments."""
+    shares: AirbyteSortOrder
+    """Number of shares."""
+    follows: AirbyteSortOrder
+    """Number of follows."""
+    clicks_on_music_disc: AirbyteSortOrder
+    """Number of clicks on the music disc."""
+    real_time_app_install: AirbyteSortOrder
+    """Real-time app installations."""
+    real_time_app_install_cost: AirbyteSortOrder
+    """Cost of real-time app installations."""
+    app_install: AirbyteSortOrder
+    """Number of app installations."""
+
+
+# Entity-specific condition types for ads_reports_daily
+class AdsReportsDailyEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: AdsReportsDailySearchFilter
+
+
+class AdsReportsDailyNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: AdsReportsDailySearchFilter
+
+
+class AdsReportsDailyGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: AdsReportsDailySearchFilter
+
+
+class AdsReportsDailyGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: AdsReportsDailySearchFilter
+
+
+class AdsReportsDailyLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: AdsReportsDailySearchFilter
+
+
+class AdsReportsDailyLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: AdsReportsDailySearchFilter
+
+
+class AdsReportsDailyLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: AdsReportsDailyStringFilter
+
+
+class AdsReportsDailyFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: AdsReportsDailyStringFilter
+
+
+class AdsReportsDailyKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: AdsReportsDailyStringFilter
+
+
+class AdsReportsDailyContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: AdsReportsDailyAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+AdsReportsDailyInCondition = TypedDict("AdsReportsDailyInCondition", {"in": AdsReportsDailyInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+AdsReportsDailyNotCondition = TypedDict("AdsReportsDailyNotCondition", {"not": "AdsReportsDailyCondition"}, total=False)
+"""Negates the nested condition."""
+
+AdsReportsDailyAndCondition = TypedDict("AdsReportsDailyAndCondition", {"and": "list[AdsReportsDailyCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+AdsReportsDailyOrCondition = TypedDict("AdsReportsDailyOrCondition", {"or": "list[AdsReportsDailyCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+AdsReportsDailyAnyCondition = TypedDict("AdsReportsDailyAnyCondition", {"any": AdsReportsDailyAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all ads_reports_daily condition types
+AdsReportsDailyCondition = (
+    AdsReportsDailyEqCondition
+    | AdsReportsDailyNeqCondition
+    | AdsReportsDailyGtCondition
+    | AdsReportsDailyGteCondition
+    | AdsReportsDailyLtCondition
+    | AdsReportsDailyLteCondition
+    | AdsReportsDailyInCondition
+    | AdsReportsDailyLikeCondition
+    | AdsReportsDailyFuzzyCondition
+    | AdsReportsDailyKeywordCondition
+    | AdsReportsDailyContainsCondition
+    | AdsReportsDailyNotCondition
+    | AdsReportsDailyAndCondition
+    | AdsReportsDailyOrCondition
+    | AdsReportsDailyAnyCondition
+)
+
+
+class AdsReportsDailySearchQuery(TypedDict, total=False):
+    """Search query for ads_reports_daily entity."""
+    filter: AdsReportsDailyCondition
+    sort: list[AdsReportsDailySortFilter]
 
 
 
