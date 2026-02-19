@@ -151,6 +151,7 @@ class AirtableConnector:
             connector = AirtableConnector(
                 auth_config=AirbyteAuthConfig(
                     external_user_id="user-123",
+                    organization_id="00000000-0000-0000-0000-000000000123",
                     airbyte_client_id="client_abc123",
                     airbyte_client_secret="secret_xyz789"
                 )
@@ -181,6 +182,7 @@ class AirtableConnector:
                 airbyte_client_secret=auth_config.airbyte_client_secret,
                 connector_id=auth_config.connector_id,
                 external_user_id=auth_config.external_user_id,
+                organization_id=auth_config.organization_id,
                 connector_definition_id=str(AirtableConnectorModel.id),
             )
         else:
@@ -502,6 +504,7 @@ class AirtableConnector:
 
         Args:
             airbyte_config: Airbyte hosted auth config with client credentials and external_user_id.
+                Optionally include organization_id for multi-org request routing.
             auth_config: Typed auth config (same as local mode)
             name: Optional source name (defaults to connector name + external_user_id)
             replication_config: Optional replication settings dict.
@@ -517,6 +520,7 @@ class AirtableConnector:
             connector = await AirtableConnector.create(
                 airbyte_config=AirbyteAuthConfig(
                     external_user_id="my-workspace",
+                    organization_id="00000000-0000-0000-0000-000000000123",
                     airbyte_client_id="client_abc",
                     airbyte_client_secret="secret_xyz",
                 ),
@@ -536,6 +540,7 @@ class AirtableConnector:
         client = AirbyteCloudClient(
             client_id=airbyte_config.airbyte_client_id,
             client_secret=airbyte_config.airbyte_client_secret,
+            organization_id=airbyte_config.organization_id,
         )
 
         try:
@@ -561,6 +566,7 @@ class AirtableConnector:
             auth_config=_AirbyteAuthConfig(
                 airbyte_client_id=airbyte_config.airbyte_client_id,
                 airbyte_client_secret=airbyte_config.airbyte_client_secret,
+                organization_id=airbyte_config.organization_id,
                 connector_id=source_id,
             ),
         )
