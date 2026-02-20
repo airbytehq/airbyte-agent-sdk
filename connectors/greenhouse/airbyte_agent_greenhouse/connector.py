@@ -221,7 +221,7 @@ class GreenhouseConnector:
 
         Supports both local and hosted execution modes:
         - Local mode: Provide connector-specific auth config (e.g., GreenhouseAuthConfig)
-        - Hosted mode: Provide `AirbyteAuthConfig` with client credentials and either `connector_id` or `external_user_id`
+        - Hosted mode: Provide `AirbyteAuthConfig` with client credentials and either `connector_id` or `customer_name`
 
         Args:
             auth_config: Either connector-specific auth config for local mode, or AirbyteAuthConfig for hosted mode
@@ -240,10 +240,10 @@ class GreenhouseConnector:
                 )
             )
 
-            # Hosted mode with lookup by external_user_id
+            # Hosted mode with lookup by customer_name
             connector = GreenhouseConnector(
                 auth_config=AirbyteAuthConfig(
-                    external_user_id="user-123",
+                    customer_name="user-123",
                     organization_id="00000000-0000-0000-0000-000000000123",
                     airbyte_client_id="client_abc123",
                     airbyte_client_secret="secret_xyz789"
@@ -274,7 +274,7 @@ class GreenhouseConnector:
                 airbyte_client_id=auth_config.airbyte_client_id,
                 airbyte_client_secret=auth_config.airbyte_client_secret,
                 connector_id=auth_config.connector_id,
-                external_user_id=auth_config.external_user_id,
+                customer_name=auth_config.customer_name,
                 organization_id=auth_config.organization_id,
                 connector_definition_id=str(GreenhouseConnectorModel.id),
             )
@@ -741,10 +741,10 @@ class GreenhouseConnector:
         2. Returns a connector configured with the new connector_id
 
         Args:
-            airbyte_config: Airbyte hosted auth config with client credentials and external_user_id.
+            airbyte_config: Airbyte hosted auth config with client credentials and customer_name.
                 Optionally include organization_id for multi-org request routing.
             auth_config: Typed auth config (same as local mode)
-            name: Optional source name (defaults to connector name + external_user_id)
+            name: Optional source name (defaults to connector name + customer_name)
             replication_config: Optional replication settings dict.
                 Required for connectors with x-airbyte-replication-config (REPLICATION mode sources).
             source_template_id: Source template ID. Required when organization has
@@ -757,7 +757,7 @@ class GreenhouseConnector:
             # Create a new hosted connector with API key auth
             connector = await GreenhouseConnector.create(
                 airbyte_config=AirbyteAuthConfig(
-                    external_user_id="my-workspace",
+                    customer_name="my-workspace",
                     organization_id="00000000-0000-0000-0000-000000000123",
                     airbyte_client_id="client_abc",
                     airbyte_client_secret="secret_xyz",
@@ -768,8 +768,8 @@ class GreenhouseConnector:
             # Use the connector
             result = await connector.execute("entity", "list", {})
         """
-        if not airbyte_config.external_user_id:
-            raise ValueError("airbyte_config.external_user_id is required for create()")
+        if not airbyte_config.customer_name:
+            raise ValueError("airbyte_config.customer_name is required for create()")
 
 
         from ._vendored.connector_sdk.cloud_utils import AirbyteCloudClient
@@ -787,11 +787,11 @@ class GreenhouseConnector:
             replication_config_dict = replication_config.model_dump(exclude_none=True) if replication_config else None
 
             # Create source on Airbyte Cloud
-            source_name = name or f"{cls.connector_name} - {airbyte_config.external_user_id}"
+            source_name = name or f"{cls.connector_name} - {airbyte_config.customer_name}"
             source_id = await client.create_source(
                 name=source_name,
                 connector_definition_id=str(GreenhouseConnectorModel.id),
-                external_user_id=airbyte_config.external_user_id,
+                customer_name=airbyte_config.customer_name,
                 credentials=credentials,
                 replication_config=replication_config_dict,
                 source_template_id=source_template_id,
