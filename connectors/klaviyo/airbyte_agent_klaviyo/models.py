@@ -95,12 +95,6 @@ class ProfilesList(BaseModel):
     data: Union[list[Profile], Any] = Field(default=None)
     links: Union[ProfilesListLinks | None, Any] = Field(default=None)
 
-class ListLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class ListAttributes(BaseModel):
     """List attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -113,6 +107,12 @@ class ListAttributes(BaseModel):
     """Last update timestamp"""
     opt_in_process: Union[str | None, Any] = Field(default=None, description="Opt-in process type")
     """Opt-in process type"""
+
+class ListLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
 
 class List(BaseModel):
     """A Klaviyo list for organizing profiles"""
@@ -137,6 +137,12 @@ class ListsList(BaseModel):
 
     data: Union[list[List], Any] = Field(default=None)
     links: Union[ListsListLinks | None, Any] = Field(default=None)
+
+class CampaignLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
 
 class CampaignAttributes(BaseModel):
     """Campaign attributes"""
@@ -165,12 +171,6 @@ class CampaignAttributes(BaseModel):
     send_time: Union[str | None, Any] = Field(default=None, description="Actual send time")
     """Actual send time"""
 
-class CampaignLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class Campaign(BaseModel):
     """A Klaviyo campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -195,18 +195,18 @@ class CampaignsList(BaseModel):
     data: Union[list[Campaign], Any] = Field(default=None)
     links: Union[CampaignsListLinks | None, Any] = Field(default=None)
 
-class EventAttributes(BaseModel):
-    """Event attributes"""
+class EventRelationshipsProfileData(BaseModel):
+    """Nested schema for EventRelationshipsProfile.data"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    timestamp: Union[Any, Any] = Field(default=None, description="Event timestamp (can be ISO string or Unix timestamp)")
-    """Event timestamp (can be ISO string or Unix timestamp)"""
-    datetime: Union[str | None, Any] = Field(default=None, description="Event datetime")
-    """Event datetime"""
-    uuid: Union[str | None, Any] = Field(default=None, description="Event UUID")
-    """Event UUID"""
-    event_properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom event properties")
-    """Custom event properties"""
+    type: Union[str | None, Any] = Field(default=None)
+    id: Union[str | None, Any] = Field(default=None)
+
+class EventRelationshipsProfile(BaseModel):
+    """Nested schema for EventRelationships.profile"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: Union[EventRelationshipsProfileData | None, Any] = Field(default=None)
 
 class EventRelationshipsMetricData(BaseModel):
     """Nested schema for EventRelationshipsMetric.data"""
@@ -221,25 +221,25 @@ class EventRelationshipsMetric(BaseModel):
 
     data: Union[EventRelationshipsMetricData | None, Any] = Field(default=None)
 
-class EventRelationshipsProfileData(BaseModel):
-    """Nested schema for EventRelationshipsProfile.data"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type: Union[str | None, Any] = Field(default=None)
-    id: Union[str | None, Any] = Field(default=None)
-
-class EventRelationshipsProfile(BaseModel):
-    """Nested schema for EventRelationships.profile"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: Union[EventRelationshipsProfileData | None, Any] = Field(default=None)
-
 class EventRelationships(BaseModel):
     """Related resources"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     profile: Union[EventRelationshipsProfile | None, Any] = Field(default=None)
     metric: Union[EventRelationshipsMetric | None, Any] = Field(default=None)
+
+class EventAttributes(BaseModel):
+    """Event attributes"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    timestamp: Union[Any, Any] = Field(default=None, description="Event timestamp (can be ISO string or Unix timestamp)")
+    """Event timestamp (can be ISO string or Unix timestamp)"""
+    datetime: Union[str | None, Any] = Field(default=None, description="Event datetime")
+    """Event datetime"""
+    uuid: Union[str | None, Any] = Field(default=None, description="Event UUID")
+    """Event UUID"""
+    event_properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom event properties")
+    """Custom event properties"""
 
 class EventLinks(BaseModel):
     """Related links"""
@@ -323,12 +323,6 @@ class MetricsList(BaseModel):
     data: Union[list[Metric], Any] = Field(default=None)
     links: Union[MetricsListLinks | None, Any] = Field(default=None)
 
-class FlowLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class FlowAttributes(BaseModel):
     """Flow attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -345,6 +339,12 @@ class FlowAttributes(BaseModel):
     """Last update timestamp"""
     trigger_type: Union[str | None, Any] = Field(default=None, description="Type of trigger for the flow")
     """Type of trigger for the flow"""
+
+class FlowLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
 
 class Flow(BaseModel):
     """A Klaviyo flow (automated sequence)"""
