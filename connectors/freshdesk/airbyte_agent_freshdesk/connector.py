@@ -833,7 +833,7 @@ class TicketsQuery:
         - status: Status: 2=Open, 3=Pending, 4=Resolved, 5=Closed
         - priority: Priority: 1=Low, 2=Medium, 3=High, 4=Urgent
         - source: Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email
-        - type: Ticket type
+        - type_: Ticket type
         - requester_id: ID of the requester
         - requester: Requester details including name, email, and contact info
         - responder_id: ID of the agent to whom the ticket is assigned
@@ -1054,7 +1054,7 @@ class AgentsQuery:
         - occasional: Whether the agent is an occasional agent
         - signature: Signature of the agent (HTML)
         - ticket_scope: Ticket scope: 1=Global, 2=Group, 3=Restricted
-        - type: Agent type: support_agent, field_agent, collaborator
+        - type_: Agent type: support_agent, field_agent, collaborator
         - last_active_at: Timestamp of last agent activity
         - created_at: Agent creation timestamp
         - updated_at: Agent last update timestamp

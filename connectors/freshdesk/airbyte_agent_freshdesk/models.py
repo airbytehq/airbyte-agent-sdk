@@ -33,7 +33,7 @@ class Ticket(BaseModel):
     status: Union[int | None, Any] = Field(default=None)
     priority: Union[int | None, Any] = Field(default=None)
     source: Union[int | None, Any] = Field(default=None)
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     requester_id: Union[int | None, Any] = Field(default=None)
     responder_id: Union[int | None, Any] = Field(default=None)
     company_id: Union[int | None, Any] = Field(default=None)
@@ -140,7 +140,7 @@ class Agent(BaseModel):
     occasional: Union[bool | None, Any] = Field(default=None)
     signature: Union[str | None, Any] = Field(default=None)
     ticket_scope: Union[int | None, Any] = Field(default=None)
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     skill_ids: Union[list[int] | None, Any] = Field(default=None)
     group_ids: Union[list[int] | None, Any] = Field(default=None)
     role_ids: Union[list[int] | None, Any] = Field(default=None)
@@ -272,7 +272,7 @@ class TicketField(BaseModel):
     label_for_customers: Union[str | None, Any] = Field(default=None)
     description: Union[str | None, Any] = Field(default=None)
     position: Union[int | None, Any] = Field(default=None)
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     default: Union[bool | None, Any] = Field(default=None)
     required_for_closure: Union[bool | None, Any] = Field(default=None)
     required_for_agents: Union[bool | None, Any] = Field(default=None)
@@ -358,7 +358,7 @@ class TicketsSearchData(BaseModel):
     """Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"""
     source: int | None = None
     """Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"""
-    type: str | None = None
+    type_: str | None = None
     """Ticket type"""
     requester_id: int | None = None
     """ID of the requester"""
@@ -432,7 +432,7 @@ class AgentsSearchData(BaseModel):
     """Signature of the agent (HTML)"""
     ticket_scope: int | None = None
     """Ticket scope: 1=Global, 2=Group, 3=Restricted"""
-    type: str | None = None
+    type_: str | None = None
     """Agent type: support_agent, field_agent, collaborator"""
     last_active_at: str | None = None
     """Timestamp of last agent activity"""
