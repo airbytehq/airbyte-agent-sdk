@@ -11636,4 +11636,5 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
     ],
+    server_variable_defaults={'shop': 'my-store'},
 )
