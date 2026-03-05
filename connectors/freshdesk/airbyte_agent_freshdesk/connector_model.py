@@ -2863,4 +2863,5 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
             'updated_at',
         ],
     },
+    server_variable_defaults={'subdomain': 'your-subdomain'},
 )

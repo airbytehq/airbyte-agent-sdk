@@ -121,7 +121,7 @@ class TicketsSearchFilter(TypedDict, total=False):
     """Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"""
     source: int | None
     """Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"""
-    type: str | None
+    type_: str | None
     """Ticket type"""
     requester_id: int | None
     """ID of the requester"""
@@ -193,7 +193,7 @@ class TicketsInFilter(TypedDict, total=False):
     """Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"""
     source: list[int]
     """Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"""
-    type: list[str]
+    type_: list[str]
     """Ticket type"""
     requester_id: list[int]
     """ID of the requester"""
@@ -265,7 +265,7 @@ class TicketsAnyValueFilter(TypedDict, total=False):
     """Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"""
     source: Any
     """Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"""
-    type: Any
+    type_: Any
     """Ticket type"""
     requester_id: Any
     """ID of the requester"""
@@ -337,7 +337,7 @@ class TicketsStringFilter(TypedDict, total=False):
     """Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"""
     source: str
     """Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"""
-    type: str
+    type_: str
     """Ticket type"""
     requester_id: str
     """ID of the requester"""
@@ -409,7 +409,7 @@ class TicketsSortFilter(TypedDict, total=False):
     """Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"""
     source: AirbyteSortOrder
     """Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"""
-    type: AirbyteSortOrder
+    type_: AirbyteSortOrder
     """Ticket type"""
     requester_id: AirbyteSortOrder
     """ID of the requester"""
@@ -576,7 +576,7 @@ class AgentsSearchFilter(TypedDict, total=False):
     """Signature of the agent (HTML)"""
     ticket_scope: int | None
     """Ticket scope: 1=Global, 2=Group, 3=Restricted"""
-    type: str | None
+    type_: str | None
     """Agent type: support_agent, field_agent, collaborator"""
     last_active_at: str | None
     """Timestamp of last agent activity"""
@@ -602,7 +602,7 @@ class AgentsInFilter(TypedDict, total=False):
     """Signature of the agent (HTML)"""
     ticket_scope: list[int]
     """Ticket scope: 1=Global, 2=Group, 3=Restricted"""
-    type: list[str]
+    type_: list[str]
     """Agent type: support_agent, field_agent, collaborator"""
     last_active_at: list[str]
     """Timestamp of last agent activity"""
@@ -628,7 +628,7 @@ class AgentsAnyValueFilter(TypedDict, total=False):
     """Signature of the agent (HTML)"""
     ticket_scope: Any
     """Ticket scope: 1=Global, 2=Group, 3=Restricted"""
-    type: Any
+    type_: Any
     """Agent type: support_agent, field_agent, collaborator"""
     last_active_at: Any
     """Timestamp of last agent activity"""
@@ -654,7 +654,7 @@ class AgentsStringFilter(TypedDict, total=False):
     """Signature of the agent (HTML)"""
     ticket_scope: str
     """Ticket scope: 1=Global, 2=Group, 3=Restricted"""
-    type: str
+    type_: str
     """Agent type: support_agent, field_agent, collaborator"""
     last_active_at: str
     """Timestamp of last agent activity"""
@@ -680,7 +680,7 @@ class AgentsSortFilter(TypedDict, total=False):
     """Signature of the agent (HTML)"""
     ticket_scope: AirbyteSortOrder
     """Ticket scope: 1=Global, 2=Group, 3=Restricted"""
-    type: AirbyteSortOrder
+    type_: AirbyteSortOrder
     """Agent type: support_agent, field_agent, collaborator"""
     last_active_at: AirbyteSortOrder
     """Timestamp of last agent activity"""
