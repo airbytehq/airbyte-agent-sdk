@@ -1326,7 +1326,7 @@ Downloads the audio media file for a call. Temporarily, the request body must be
         self,
         path: str,
         filter: CallAudioDownloadParamsFilter | None = None,
-        contentSelector: CallAudioDownloadParamsContentselector | None = None,
+        content_selector: CallAudioDownloadParamsContentselector | None = None,
         range_header: str | None = None,
         **kwargs
     ) -> Path:
@@ -1338,7 +1338,7 @@ Downloads the audio media file for a call. Temporarily, the request body must be
 
         Args:
             filter: Parameter filter
-            contentSelector: Parameter contentSelector
+            content_selector: Parameter contentSelector
             range_header: Optional Range header for partial downloads (e.g., 'bytes=0-99')
             path: File path to save downloaded content
             **kwargs: Additional parameters
@@ -1351,7 +1351,7 @@ Downloads the audio media file for a call. Temporarily, the request body must be
         # Get the async iterator
         content_iterator = await self.download(
             filter=filter,
-            contentSelector=contentSelector,
+            content_selector=content_selector,
             range_header=range_header,
             **kwargs
         )
@@ -1405,7 +1405,7 @@ Downloads the video media file for a call. Temporarily, the request body must be
         self,
         path: str,
         filter: CallVideoDownloadParamsFilter | None = None,
-        contentSelector: CallVideoDownloadParamsContentselector | None = None,
+        content_selector: CallVideoDownloadParamsContentselector | None = None,
         range_header: str | None = None,
         **kwargs
     ) -> Path:
@@ -1417,7 +1417,7 @@ Downloads the video media file for a call. Temporarily, the request body must be
 
         Args:
             filter: Parameter filter
-            contentSelector: Parameter contentSelector
+            content_selector: Parameter contentSelector
             range_header: Optional Range header for partial downloads (e.g., 'bytes=0-99')
             path: File path to save downloaded content
             **kwargs: Additional parameters
@@ -1430,7 +1430,7 @@ Downloads the video media file for a call. Temporarily, the request body must be
         # Get the async iterator
         content_iterator = await self.download(
             filter=filter,
-            contentSelector=contentSelector,
+            content_selector=content_selector,
             range_header=range_header,
             **kwargs
         )
