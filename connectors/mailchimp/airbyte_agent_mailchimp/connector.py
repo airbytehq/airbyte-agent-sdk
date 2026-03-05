@@ -910,7 +910,7 @@ class CampaignsQuery:
         - social_card: The preview for the campaign, rendered by social networks like Facebook and Twitter. [Learn more]...
         - status: The current status of the campaign.
         - tracking: The tracking options for a campaign.
-        - type: There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y...
+        - type_: There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y...
         - variate_settings: The settings specific to A/B test campaigns.
         - web_id: The ID used in the Mailchimp web application. View this campaign in your Mailchimp account at `ht...
 
@@ -1339,7 +1339,7 @@ class ReportsQuery:
         - subject_line: The subject line for the campaign.
         - timeseries: An hourly breakdown of the performance of the campaign over the first 24 hours.
         - timewarp: An hourly breakdown of sends, opens, and clicks if a campaign is sent using timewarp.
-        - type: The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto).
+        - type_: The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto).
         - unsubscribed: The total number of unsubscribed members for this campaign.
 
         Args:
@@ -1450,7 +1450,7 @@ class EmailActivityQuery:
         - list_id: The unique id for the list.
         - list_is_active: The status of the list used, namely if it's deleted or disabled.
         - timestamp: The date and time recorded for the action in ISO 8601 format.
-        - type: If the action is a 'bounce', the type of bounce received: 'hard', 'soft'.
+        - type_: If the action is a 'bounce', the type of bounce received: 'hard', 'soft'.
         - url: If the action is a 'click', the URL on which the member clicked.
 
         Args:

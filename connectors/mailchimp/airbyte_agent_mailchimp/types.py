@@ -212,7 +212,7 @@ class CampaignsSearchFilter(TypedDict, total=False):
     """The current status of the campaign."""
     tracking: dict[str, Any] | None
     """The tracking options for a campaign."""
-    type: str | None
+    type_: str | None
     """There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y..."""
     variate_settings: dict[str, Any] | None
     """The settings specific to A/B test campaigns."""
@@ -260,7 +260,7 @@ class CampaignsInFilter(TypedDict, total=False):
     """The current status of the campaign."""
     tracking: list[dict[str, Any]]
     """The tracking options for a campaign."""
-    type: list[str]
+    type_: list[str]
     """There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y..."""
     variate_settings: list[dict[str, Any]]
     """The settings specific to A/B test campaigns."""
@@ -308,7 +308,7 @@ class CampaignsAnyValueFilter(TypedDict, total=False):
     """The current status of the campaign."""
     tracking: Any
     """The tracking options for a campaign."""
-    type: Any
+    type_: Any
     """There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y..."""
     variate_settings: Any
     """The settings specific to A/B test campaigns."""
@@ -356,7 +356,7 @@ class CampaignsStringFilter(TypedDict, total=False):
     """The current status of the campaign."""
     tracking: str
     """The tracking options for a campaign."""
-    type: str
+    type_: str
     """There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y..."""
     variate_settings: str
     """The settings specific to A/B test campaigns."""
@@ -404,7 +404,7 @@ class CampaignsSortFilter(TypedDict, total=False):
     """The current status of the campaign."""
     tracking: AirbyteSortOrder
     """The tracking options for a campaign."""
-    type: AirbyteSortOrder
+    type_: AirbyteSortOrder
     """There are four types of [campaigns](https://mailchimp.com/help/getting-started-with-campaigns/) y..."""
     variate_settings: AirbyteSortOrder
     """The settings specific to A/B test campaigns."""
@@ -525,7 +525,7 @@ class EmailActivitySearchFilter(TypedDict, total=False):
     """The status of the list used, namely if it's deleted or disabled."""
     timestamp: str | None
     """The date and time recorded for the action in ISO 8601 format."""
-    type: str | None
+    type_: str | None
     """If the action is a 'bounce', the type of bounce received: 'hard', 'soft'."""
     url: str | None
     """If the action is a 'click', the URL on which the member clicked."""
@@ -549,7 +549,7 @@ class EmailActivityInFilter(TypedDict, total=False):
     """The status of the list used, namely if it's deleted or disabled."""
     timestamp: list[str]
     """The date and time recorded for the action in ISO 8601 format."""
-    type: list[str]
+    type_: list[str]
     """If the action is a 'bounce', the type of bounce received: 'hard', 'soft'."""
     url: list[str]
     """If the action is a 'click', the URL on which the member clicked."""
@@ -573,7 +573,7 @@ class EmailActivityAnyValueFilter(TypedDict, total=False):
     """The status of the list used, namely if it's deleted or disabled."""
     timestamp: Any
     """The date and time recorded for the action in ISO 8601 format."""
-    type: Any
+    type_: Any
     """If the action is a 'bounce', the type of bounce received: 'hard', 'soft'."""
     url: Any
     """If the action is a 'click', the URL on which the member clicked."""
@@ -597,7 +597,7 @@ class EmailActivityStringFilter(TypedDict, total=False):
     """The status of the list used, namely if it's deleted or disabled."""
     timestamp: str
     """The date and time recorded for the action in ISO 8601 format."""
-    type: str
+    type_: str
     """If the action is a 'bounce', the type of bounce received: 'hard', 'soft'."""
     url: str
     """If the action is a 'click', the URL on which the member clicked."""
@@ -621,7 +621,7 @@ class EmailActivitySortFilter(TypedDict, total=False):
     """The status of the list used, namely if it's deleted or disabled."""
     timestamp: AirbyteSortOrder
     """The date and time recorded for the action in ISO 8601 format."""
-    type: AirbyteSortOrder
+    type_: AirbyteSortOrder
     """If the action is a 'bounce', the type of bounce received: 'hard', 'soft'."""
     url: AirbyteSortOrder
     """If the action is a 'click', the URL on which the member clicked."""
@@ -1097,7 +1097,7 @@ class ReportsSearchFilter(TypedDict, total=False):
     """An hourly breakdown of the performance of the campaign over the first 24 hours."""
     timewarp: list[Any] | None
     """An hourly breakdown of sends, opens, and clicks if a campaign is sent using timewarp."""
-    type: str | None
+    type_: str | None
     """The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto)."""
     unsubscribed: int | None
     """The total number of unsubscribed members for this campaign."""
@@ -1153,7 +1153,7 @@ class ReportsInFilter(TypedDict, total=False):
     """An hourly breakdown of the performance of the campaign over the first 24 hours."""
     timewarp: list[list[Any]]
     """An hourly breakdown of sends, opens, and clicks if a campaign is sent using timewarp."""
-    type: list[str]
+    type_: list[str]
     """The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto)."""
     unsubscribed: list[int]
     """The total number of unsubscribed members for this campaign."""
@@ -1209,7 +1209,7 @@ class ReportsAnyValueFilter(TypedDict, total=False):
     """An hourly breakdown of the performance of the campaign over the first 24 hours."""
     timewarp: Any
     """An hourly breakdown of sends, opens, and clicks if a campaign is sent using timewarp."""
-    type: Any
+    type_: Any
     """The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto)."""
     unsubscribed: Any
     """The total number of unsubscribed members for this campaign."""
@@ -1265,7 +1265,7 @@ class ReportsStringFilter(TypedDict, total=False):
     """An hourly breakdown of the performance of the campaign over the first 24 hours."""
     timewarp: str
     """An hourly breakdown of sends, opens, and clicks if a campaign is sent using timewarp."""
-    type: str
+    type_: str
     """The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto)."""
     unsubscribed: str
     """The total number of unsubscribed members for this campaign."""
@@ -1321,7 +1321,7 @@ class ReportsSortFilter(TypedDict, total=False):
     """An hourly breakdown of the performance of the campaign over the first 24 hours."""
     timewarp: AirbyteSortOrder
     """An hourly breakdown of sends, opens, and clicks if a campaign is sent using timewarp."""
-    type: AirbyteSortOrder
+    type_: AirbyteSortOrder
     """The type of campaign (regular, plain-text, ab_split, rss, automation, variate, or auto)."""
     unsubscribed: AirbyteSortOrder
     """The total number of unsubscribed members for this campaign."""

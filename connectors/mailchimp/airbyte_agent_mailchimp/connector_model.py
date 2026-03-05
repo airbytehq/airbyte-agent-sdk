@@ -4989,4 +4989,5 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
             'unsubscribed',
         ],
     },
+    server_variable_defaults={'data_center': 'us1'},
 )
