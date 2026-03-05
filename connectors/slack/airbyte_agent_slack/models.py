@@ -199,27 +199,6 @@ class Reaction(BaseModel):
     users: Union[list[str] | None, Any] = Field(default=None)
     count: Union[int | None, Any] = Field(default=None)
 
-class Attachment(BaseModel):
-    """Message attachment"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    fallback: Union[str | None, Any] = Field(default=None)
-    color: Union[str | None, Any] = Field(default=None)
-    pretext: Union[str | None, Any] = Field(default=None)
-    author_name: Union[str | None, Any] = Field(default=None)
-    author_link: Union[str | None, Any] = Field(default=None)
-    author_icon: Union[str | None, Any] = Field(default=None)
-    title: Union[str | None, Any] = Field(default=None)
-    title_link: Union[str | None, Any] = Field(default=None)
-    text: Union[str | None, Any] = Field(default=None)
-    fields: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
-    image_url: Union[str | None, Any] = Field(default=None)
-    thumb_url: Union[str | None, Any] = Field(default=None)
-    footer: Union[str | None, Any] = Field(default=None)
-    footer_icon: Union[str | None, Any] = Field(default=None)
-    ts: Union[Any, Any] = Field(default=None)
-
 class File(BaseModel):
     """File object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -244,11 +223,32 @@ class File(BaseModel):
     created: Union[int | None, Any] = Field(default=None)
     timestamp: Union[int | None, Any] = Field(default=None)
 
+class Attachment(BaseModel):
+    """Message attachment"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    fallback: Union[str | None, Any] = Field(default=None)
+    color: Union[str | None, Any] = Field(default=None)
+    pretext: Union[str | None, Any] = Field(default=None)
+    author_name: Union[str | None, Any] = Field(default=None)
+    author_link: Union[str | None, Any] = Field(default=None)
+    author_icon: Union[str | None, Any] = Field(default=None)
+    title: Union[str | None, Any] = Field(default=None)
+    title_link: Union[str | None, Any] = Field(default=None)
+    text: Union[str | None, Any] = Field(default=None)
+    fields: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
+    image_url: Union[str | None, Any] = Field(default=None)
+    thumb_url: Union[str | None, Any] = Field(default=None)
+    footer: Union[str | None, Any] = Field(default=None)
+    footer_icon: Union[str | None, Any] = Field(default=None)
+    ts: Union[Any, Any] = Field(default=None)
+
 class Message(BaseModel):
     """Slack message object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     subtype: Union[str | None, Any] = Field(default=None)
     ts: Union[str, Any] = Field(default=None)
     user: Union[str | None, Any] = Field(default=None)
@@ -274,7 +274,7 @@ class Thread(BaseModel):
     """Slack thread reply message object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     subtype: Union[str | None, Any] = Field(default=None)
     ts: Union[str, Any] = Field(default=None)
     user: Union[str | None, Any] = Field(default=None)
@@ -349,7 +349,7 @@ class CreatedMessage(BaseModel):
     """A message object returned from create/update operations"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     subtype: Union[str | None, Any] = Field(default=None)
     text: Union[str | None, Any] = Field(default=None)
     ts: Union[str, Any] = Field(default=None)
