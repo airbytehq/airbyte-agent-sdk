@@ -115,7 +115,7 @@ See the official [Linkedin-Ads API reference](https://learn.microsoft.com/en-us/
 
 ## Version information
 
-- **Package version:** 0.1.0
+- **Package version:** 0.1.1
 - **Connector version:** 1.0.1
-- **Generated with Connector SDK commit SHA:** ab8474f2663d284cb7d8b11c3e325209bcb8dc25
+- **Generated with Connector SDK commit SHA:** e50d6dd2afcab025208f4c255431a51c213a1c5c
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/linkedin-ads/CHANGELOG.md)
