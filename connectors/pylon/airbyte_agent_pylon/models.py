@@ -126,7 +126,7 @@ class Issue(BaseModel):
     tags: Union[list[str] | None, Any] = Field(default=None)
     team: Union[Any, Any] = Field(default=None)
     title: Union[str | None, Any] = Field(default=None)
-    type: Union[Any, Any] = Field(default=None)
+    type_: Union[Any, Any] = Field(default=None, alias="type")
 
 class IssuesResponse(BaseModel):
     """IssuesResponse type definition"""
@@ -209,7 +209,7 @@ class Account(BaseModel):
     owner: Union[Any, Any] = Field(default=None)
     primary_domain: Union[str | None, Any] = Field(default=None)
     tags: Union[list[str] | None, Any] = Field(default=None)
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
 
 class AccountsResponse(BaseModel):
     """AccountsResponse type definition"""
@@ -398,7 +398,7 @@ class CustomField(BaseModel):
     select_metadata: Union[Any, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
     source: Union[str | None, Any] = Field(default=None)
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
     updated_at: Union[str | None, Any] = Field(default=None)
 
 class CustomFieldsResponse(BaseModel):
@@ -423,7 +423,7 @@ class TicketFormField(BaseModel):
     description_html: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
-    type: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
 
 class TicketForm(BaseModel):
     """TicketForm type definition"""

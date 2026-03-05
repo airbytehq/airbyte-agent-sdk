@@ -1,5 +1,10 @@
 # Pylon changelog
 
+## [0.1.10] - 2026-03-05
+- Updated connector definition (YAML version 0.1.3)
+- Source commit: e50d6dd2
+- SDK version: 0.1.0
+
 ## [0.1.9] - 2026-03-03
 - Updated connector definition (YAML version 0.1.3)
 - Source commit: 9808f8a1
