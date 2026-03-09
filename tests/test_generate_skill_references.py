@@ -667,10 +667,12 @@ def test_generate_skill_md_has_operational_content():
     assert "## Security Best Practices" in result
     # Must have pagination example
     assert "fetch_all" in result
-    # Must have Skill Metadata section in body (not frontmatter)
+    # Must have Skill Metadata section in body (not frontmatter) with all 6 bullets
     assert "## Skill Metadata" in result
     assert "**Author:** Airbyte" in result
+    assert "**Version:** 1.2.0" in result
     assert "**License:** Elastic-2.0" in result
+    assert "**Compatibility:** Requires Python 3.11+" in result
     assert "**Repository:** https://github.com/airbytehq/airbyte-agent-connectors" in result
     assert "**MCP Server:** airbyte-agent-mcp" in result
     # Must have Reference Documentation table with all 8 links
