@@ -17,8 +17,8 @@
 | [Confluence](connectors/confluence.md) | `airbyte-agent-confluence` | Token | Spaces, Pages, Blog Posts, Groups, Audit | complete |
 | [Facebook Marketing](connectors/facebook-marketing.md) | `airbyte-agent-facebook-marketing` | OAuth, Token | Current User, Ad Accounts, Campaigns, Ad Sets, Ads, Ad Cr... | complete |
 | [Freshdesk](connectors/freshdesk.md) | `airbyte-agent-freshdesk` | Token | Tickets, Contacts, Agents, Groups, Companies, Roles, Sati... | complete |
-| [Github](connectors/github.md) | `airbyte-agent-github` | OAuth, Token | Repositories, Org Repositories, Branches, Commits, Releas... | complete |
-| [Gitlab](connectors/gitlab.md) | `airbyte-agent-gitlab` | OAuth, Token | Projects, Issues, Merge Requests, Users, Commits, Groups,... | complete |
+| [GitHub](connectors/github.md) | `airbyte-agent-github` | OAuth, Token | Repositories, Org Repositories, Branches, Commits, Releas... | complete |
+| [GitLab](connectors/gitlab.md) | `airbyte-agent-gitlab` | OAuth, Token | Projects, Issues, Merge Requests, Users, Commits, Groups,... | complete |
 | [Gmail](connectors/gmail.md) | `airbyte-agent-gmail` | OAuth | Profile, Messages, Labels, Drafts, Drafts Send, Threads, ... | complete |
 | [Gong](connectors/gong.md) | `airbyte-agent-gong` | OAuth, Token | Users, Calls, Calls Extensive, Call Audio, Call Video, Wo... | complete |
 | [Google Ads](connectors/google-ads.md) | `airbyte-agent-google-ads` | OAuth | Accessible Customers, Accounts, Campaigns, Ad Groups, Ad ... | complete |
@@ -28,7 +28,7 @@
 | [Granola](connectors/granola.md) | `airbyte-agent-granola` | Token | Notes | complete |
 | [Greenhouse](connectors/greenhouse.md) | `airbyte-agent-greenhouse` | Token | Candidates, Applications, Jobs, Offers, Users, Department... | complete |
 | [Harvest](connectors/harvest.md) | `airbyte-agent-harvest` | OAuth, Token | Users, Clients, Contacts, Company, Projects, Tasks, Time ... | complete |
-| [Hubspot](connectors/hubspot.md) | `airbyte-agent-hubspot` | OAuth | Contacts, Companies, Deals, Tickets, Schemas, Objects | complete |
+| [HubSpot](connectors/hubspot.md) | `airbyte-agent-hubspot` | OAuth | Contacts, Companies, Deals, Tickets, Schemas, Objects | complete |
 | [incident.io](connectors/incident-io.md) | `airbyte-agent-incident-io` | Token | Incidents, Alerts, Escalations, Users, Incident Updates, ... | complete |
 | [Intercom](connectors/intercom.md) | `airbyte-agent-intercom` | Token | Contacts, Conversations, Companies, Teams, Admins, Tags, ... | complete |
 | [Jira](connectors/jira.md) | `airbyte-agent-jira` | Token | Issues, Projects, Users, Issue Fields, Issue Comments, Is... | complete |
@@ -43,7 +43,7 @@
 | [Pinterest](connectors/pinterest.md) | `airbyte-agent-pinterest` | OAuth | Ad Accounts, Boards, Campaigns, Ad Groups, Ads, Board Sec... | complete |
 | [Pylon](connectors/pylon.md) | `airbyte-agent-pylon` | Token | Issues, Messages, Issue Notes, Issue Threads, Accounts, C... | complete |
 | [Salesforce](connectors/salesforce.md) | `airbyte-agent-salesforce` | OAuth | Sobjects, Accounts, Contacts, Leads, Opportunities, Tasks... | complete |
-| [Sendgrid](connectors/sendgrid.md) | `airbyte-agent-sendgrid` | Token | Contacts, Lists, Segments, Campaigns, Singlesends, Templa... | complete |
+| [SendGrid](connectors/sendgrid.md) | `airbyte-agent-sendgrid` | Token | Contacts, Lists, Segments, Campaigns, Singlesends, Templa... | complete |
 | [Sentry](connectors/sentry.md) | `airbyte-agent-sentry` | Token | Projects, Issues, Events, Releases, Project Detail | complete |
 | [Shopify](connectors/shopify.md) | `airbyte-agent-shopify` | Token | Customers, Orders, Products, Product Variants, Product Im... | complete |
 | [Slack](connectors/slack.md) | `airbyte-agent-slack` | OAuth, Token | Users, Channels, Channel Messages, Threads, Messages, Cha... | complete |
@@ -52,7 +52,7 @@
 | [TikTok Marketing](connectors/tiktok-marketing.md) | `airbyte-agent-tiktok-marketing` | OAuth | Advertisers, Campaigns, Ad Groups, Ads, Audiences, Creati... | complete |
 | [Twilio](connectors/twilio.md) | `airbyte-agent-twilio` | Token | Accounts, Calls, Messages, Incoming Phone Numbers, Record... | complete |
 | [Typeform](connectors/typeform.md) | `airbyte-agent-typeform` | Token | Forms, Responses, Webhooks, Workspaces, Images, Themes | complete |
-| [Woocommerce](connectors/woocommerce.md) | `airbyte-agent-woocommerce` | Token | Customers, Orders, Products, Coupons, Product Categories,... | complete |
+| [WooCommerce](connectors/woocommerce.md) | `airbyte-agent-woocommerce` | Token | Customers, Orders, Products, Coupons, Product Categories,... | complete |
 | [Zendesk Chat](connectors/zendesk-chat.md) | `airbyte-agent-zendesk-chat` | OAuth | Accounts, Agents, Agent Timeline, Bans, Chats, Department... | complete |
 | [Zendesk Support](connectors/zendesk-support.md) | `airbyte-agent-zendesk-support` | OAuth, Token | Tickets, Users, Organizations, Groups, Ticket Comments, A... | complete |
 | [Zendesk Talk](connectors/zendesk-talk.md) | `airbyte-agent-zendesk-talk` | OAuth, Token | Phone Numbers, Addresses, Greetings, Greeting Categories,... | complete |

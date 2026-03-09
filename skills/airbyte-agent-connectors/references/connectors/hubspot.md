@@ -1,7 +1,7 @@
 <!-- AUTO-GENERATED from connectors/hubspot/ -- do not edit manually -->
 <!-- Source format: v1 | Generated: 2026-03-09 -->
 
-# Hubspot
+# HubSpot
 
 The Hubspot agent connector is a Python package that equips AI agents to interact with Hubspot through strongly typed, well-documented tools. It's ready to use directly in your Python app, in an agent framework, or exposed through an MCP.
 
