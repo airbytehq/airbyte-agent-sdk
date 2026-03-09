@@ -26,7 +26,7 @@ from uuid import (
 AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('fa9f58c6-2d03-4237-aaa4-07d75e0c1396'),
     name='amplitude',
-    version='1.0.1',
+    version='1.0.2',
     base_url='https://amplitude.com/api',
     auth=AuthConfig(
         type=AuthType.BASIC,
