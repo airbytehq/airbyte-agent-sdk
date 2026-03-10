@@ -1,5 +1,10 @@
 # Amazon Seller Partner changelog
 
+## [0.1.2] - 2026-03-10
+- Updated connector definition (YAML version 1.0.3)
+- Source commit: 083869cd
+- SDK version: 0.1.0
+
 ## [0.1.1] - 2026-03-07
 - Updated connector definition (YAML version 1.0.2)
 - Source commit: 7f2011ce
