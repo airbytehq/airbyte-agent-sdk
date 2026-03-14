@@ -10,7 +10,6 @@ from __future__ import annotations
 from ._vendored.connector_sdk.types import (
     Action,
     AuthConfig,
-    AuthType,
     ConnectorModel,
     EndpointDefinition,
     EntityDefinition,
@@ -25,7 +24,7 @@ RedditFinanceConnectorModel: ConnectorModel = ConnectorModel(
     version='0.1.0',
     base_url='https://www.reddit.com',
     auth=AuthConfig(
-        type=AuthType.NONE,
+        type=None,
         config={
             'default_headers': {
                 'User-Agent': 'AirbyteTradingBot/1.0 (by /u/airbyte_connector)',
