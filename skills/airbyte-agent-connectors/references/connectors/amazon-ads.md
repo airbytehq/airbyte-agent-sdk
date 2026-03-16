@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/amazon-ads/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Amazon Ads
 
@@ -7,7 +7,7 @@ The Amazon-Ads agent connector is a Python package that equips AI agents to inte
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-amazon-ads` v0.1.63
+- **Package:** `airbyte-agent-amazon-ads` v0.1.65
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://advertising.amazon.com/API/docs/en-us)
 - **Status:** complete

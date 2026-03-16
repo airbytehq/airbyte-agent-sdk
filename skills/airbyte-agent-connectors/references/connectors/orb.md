@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/orb/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Orb
 
@@ -7,7 +7,7 @@ The Orb agent connector is a Python package that equips AI agents to interact wi
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-orb` v0.1.45
+- **Package:** `airbyte-agent-orb` v0.1.47
 - **Auth:** Token
 - **Docs:** [Official API docs](https://docs.withorb.com/api-reference)
 - **Status:** complete

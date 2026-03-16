@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/slack/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Slack
 
@@ -7,7 +7,7 @@ The Slack agent connector is a Python package that equips AI agents to interact 
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-slack` v0.1.79
+- **Package:** `airbyte-agent-slack` v0.1.81
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://api.slack.com/methods)
 - **Status:** complete

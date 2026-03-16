@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/typeform/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Typeform
 
@@ -7,7 +7,7 @@ The Typeform agent connector is a Python package that equips AI agents to intera
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-typeform` v0.1.0
+- **Package:** `airbyte-agent-typeform` v0.1.2
 - **Auth:** Token
 - **Docs:** [Official API docs](https://developer.typeform.com/)
 - **Status:** complete

@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/mailchimp/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Mailchimp
 
@@ -7,7 +7,7 @@ The Mailchimp agent connector is a Python package that equips AI agents to inter
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-mailchimp` v0.1.70
+- **Package:** `airbyte-agent-mailchimp` v0.1.72
 - **Auth:** Token
 - **Docs:** [Official API docs](https://mailchimp.com/developer/marketing/api/)
 - **Status:** complete

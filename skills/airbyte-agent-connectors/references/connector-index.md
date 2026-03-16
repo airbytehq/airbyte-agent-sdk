@@ -1,9 +1,9 @@
 <!-- AUTO-GENERATED -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Connector Index
 
-49 connectors available. Each entry links to its full reference doc.
+51 connectors available. Each entry links to its full reference doc.
 
 | Name | Package | Auth | Key Entities | Status |
 |------|---------|------|--------------|--------|
@@ -14,6 +14,7 @@
 | [Asana](connectors/asana.md) | `airbyte-agent-asana` | OAuth, Token | Tasks, Project Tasks, Workspace Task Search, Projects, Ta... | complete |
 | [Ashby](connectors/ashby.md) | `airbyte-agent-ashby` | Token | Candidates, Applications, Jobs, Departments, Locations, U... | complete |
 | [Chargebee](connectors/chargebee.md) | `airbyte-agent-chargebee` | Token | Customer, Subscription, Invoice, Credit Note, Coupon, Tra... | complete |
+| [Clickup Api](connectors/clickup-api.md) | `airbyte-agent-clickup-api` | Token | User, Teams, Spaces, Folders, Lists, Tasks, Comments, Goa... | complete |
 | [Confluence](connectors/confluence.md) | `airbyte-agent-confluence` | Token | Spaces, Pages, Blog Posts, Groups, Audit | complete |
 | [Facebook Marketing](connectors/facebook-marketing.md) | `airbyte-agent-facebook-marketing` | OAuth, Token | Current User, Ad Accounts, Campaigns, Ad Sets, Ads, Ad Cr... | complete |
 | [Freshdesk](connectors/freshdesk.md) | `airbyte-agent-freshdesk` | Token | Tickets, Contacts, Agents, Groups, Companies, Roles, Sati... | complete |
@@ -56,3 +57,4 @@
 | [Zendesk Chat](connectors/zendesk-chat.md) | `airbyte-agent-zendesk-chat` | OAuth | Accounts, Agents, Agent Timeline, Bans, Chats, Department... | complete |
 | [Zendesk Support](connectors/zendesk-support.md) | `airbyte-agent-zendesk-support` | OAuth, Token | Tickets, Users, Organizations, Groups, Ticket Comments, A... | complete |
 | [Zendesk Talk](connectors/zendesk-talk.md) | `airbyte-agent-zendesk-talk` | OAuth, Token | Phone Numbers, Addresses, Greetings, Greeting Categories,... | complete |
+| [Zoho Crm](connectors/zoho-crm.md) | `airbyte-agent-zoho-crm` | OAuth | Leads, Contacts, Accounts, Deals, Campaigns, Tasks, Event... | complete |

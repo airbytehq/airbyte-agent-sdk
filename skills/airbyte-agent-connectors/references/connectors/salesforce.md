@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/salesforce/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Salesforce
 
@@ -7,7 +7,7 @@ The Salesforce agent connector is a Python package that equips AI agents to inte
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-salesforce` v0.1.108
+- **Package:** `airbyte-agent-salesforce` v0.1.110
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm)
 - **Status:** complete

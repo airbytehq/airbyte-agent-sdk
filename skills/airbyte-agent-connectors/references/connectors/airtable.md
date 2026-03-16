@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/airtable/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Airtable
 
@@ -7,7 +7,7 @@ The Airtable agent connector is a Python package that equips AI agents to intera
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-airtable` v0.1.43
+- **Package:** `airbyte-agent-airtable` v0.1.46
 - **Auth:** Token
 - **Docs:** [Official API docs](https://airtable.com/developers/web/api/introduction)
 - **Status:** complete

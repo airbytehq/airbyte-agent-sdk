@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/gmail/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-09 -->
+<!-- Source format: v1 | Generated: 2026-03-16 -->
 
 # Gmail
 
@@ -7,7 +7,7 @@ The Gmail agent connector is a Python package that equips AI agents to interact 
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-gmail` v0.1.16
+- **Package:** `airbyte-agent-gmail` v0.1.18
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developers.google.com/gmail/api/reference/rest)
 - **Status:** complete

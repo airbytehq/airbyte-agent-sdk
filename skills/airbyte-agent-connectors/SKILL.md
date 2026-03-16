@@ -2,7 +2,7 @@
 name: airbyte-agent-connectors
 description: |
   Sets up and operates Airbyte Agent Connectors -- strongly typed Python packages
-  for accessing 49+ third-party APIs (Salesforce, HubSpot, GitHub, Slack, Stripe,
+  for accessing 51+ third-party APIs (Salesforce, HubSpot, GitHub, Slack, Stripe,
   Jira, and more) through a unified entity-action interface. Use when the user wants
   to connect to a SaaS API, set up an Airbyte connector, integrate third-party data
   into an AI agent, or configure MCP tools for Claude. Covers Platform Mode (Airbyte
@@ -39,7 +39,7 @@ Use when:
 
 ## Supported Connectors
 
-49 connectors available. All connectors follow the same entity-action pattern: `connector.execute(entity, action, params)`
+51 connectors available. All connectors follow the same entity-action pattern: `connector.execute(entity, action, params)`
 
 | Connector | Package | Auth Type | Key Entities |
 |-----------|---------|-----------|--------------|
@@ -49,7 +49,7 @@ Use when:
 | [Salesforce](references/connectors/salesforce.md) | `airbyte-agent-salesforce` | OAuth | Sobjects, Accounts, Contacts, Leads, ... |
 | [Gong](references/connectors/gong.md) | `airbyte-agent-gong` | OAuth, Token | Users, Calls, Calls Extensive, Call A... |
 
-> **Full table:** See [references/connector-index.md](references/connector-index.md) for all 49 connectors with auth types, key entities, and documentation status.
+> **Full table:** See [references/connector-index.md](references/connector-index.md) for all 51 connectors with auth types, key entities, and documentation status.
 
 **If the connector is NOT in the index:** Inform the user that this connector isn't available yet. Point them to [GitHub issues](https://github.com/airbytehq/airbyte-agent-connectors/issues).
 
