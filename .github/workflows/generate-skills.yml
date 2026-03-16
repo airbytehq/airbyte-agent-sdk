@@ -51,4 +51,4 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "docs: auto-update skill reference docs [skip ci]"
           git pull --rebase origin main
-          git push origin main
+          git push origin main || (git pull --rebase origin main && git push origin main)

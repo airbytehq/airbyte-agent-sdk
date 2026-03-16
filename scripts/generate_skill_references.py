@@ -739,6 +739,7 @@ def generate_connector_index(
 # Anchor brands for the SKILL.md description.  Each entry is
 # (display_name, [connector_dir_names_that_satisfy_it]).
 # An anchor appears if ANY of its connector dirs exist in the discovered set.
+# Ordered by brand recognition (intentional — do not alphabetize).
 _ANCHOR_SERVICES: list[tuple[str, list[str]]] = [
     ("Salesforce", ["salesforce"]),
     ("HubSpot", ["hubspot"]),
@@ -778,10 +779,10 @@ name: airbyte-agent-connectors
 description: |
   Sets up and operates Airbyte Agent Connectors — strongly typed Python packages
   for accessing {count}+ third-party SaaS APIs through a unified entity-action interface.
-  Supported services include {anchor_names}, and {remaining} more connectors spanning
-  CRM, billing, payments, e-commerce, marketing, analytics, project management, helpdesk,
-  developer tools, HR, and communication platforms. Make sure to use this skill when the
-  user wants to connect to any SaaS API, install an airbyte-agent connector package,
+  Supported services include {anchor_names},{remaining_clause} spanning CRM, billing,
+  payments, e-commerce, marketing, analytics, project management, helpdesk, developer
+  tools, HR, and communication platforms. Make sure to use this skill when the user wants
+  to connect to any SaaS API, install an airbyte-agent connector package,
   integrate third-party service data into a Python application or AI agent, query or
   search records from any supported service, or configure Airbyte MCP tools for Claude.
   Covers Platform Mode (Airbyte Cloud) and OSS Mode (local Python SDK).
@@ -1100,11 +1101,12 @@ def generate_skill_md(connector_metadata: list[dict]) -> str:
     anchor_names, consumed = _build_anchor_names(discovered)
     count = len(connector_metadata)
     remaining = count - consumed
+    remaining_clause = f"\n  and {remaining} more connectors" if remaining > 0 else ""
 
     return SKILL_MD_TEMPLATE.format(
         count=count,
         anchor_names=anchor_names,
-        remaining=remaining,
+        remaining_clause=remaining_clause,
         popular_rows="\n".join(rows),
     )
 
