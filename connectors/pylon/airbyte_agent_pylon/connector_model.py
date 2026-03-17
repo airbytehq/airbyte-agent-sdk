@@ -26,7 +26,7 @@ from uuid import (
 PylonConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6'),
     name='pylon',
-    version='0.1.4',
+    version='0.1.5',
     base_url='https://api.usepylon.com',
     auth=AuthConfig(
         type=AuthType.BEARER,
@@ -362,7 +362,6 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'next_cursor': '$.pagination.cursor', 'has_next_page': '$.pagination.has_next_page'},
-                    preferred_for_check=True,
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
@@ -1873,6 +1872,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'next_cursor': '$.pagination.cursor', 'has_next_page': '$.pagination.has_next_page'},
+                    preferred_for_check=True,
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
