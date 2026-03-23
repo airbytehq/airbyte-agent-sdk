@@ -134,13 +134,6 @@ class AdSquadSkadnetworkProperties(BaseModel):
     enable_skoverlay: Union[bool, Any] = Field(default=None)
     status: Union[str, Any] = Field(default=None)
 
-class AdSquadTargetingGeosItem(BaseModel):
-    """Nested schema for AdSquadTargeting.geos_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    country_code: Union[str, Any] = Field(default=None)
-    operation: Union[str, Any] = Field(default=None)
-
 class AdSquadTargetingAutoExpansionOptionsInterestExpansionOption(BaseModel):
     """Nested schema for AdSquadTargetingAutoExpansionOptions.interest_expansion_option"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -152,6 +145,13 @@ class AdSquadTargetingAutoExpansionOptions(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     interest_expansion_option: Union[AdSquadTargetingAutoExpansionOptionsInterestExpansionOption, Any] = Field(default=None)
+
+class AdSquadTargetingGeosItem(BaseModel):
+    """Nested schema for AdSquadTargeting.geos_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    country_code: Union[str, Any] = Field(default=None)
+    operation: Union[str, Any] = Field(default=None)
 
 class AdSquadTargeting(BaseModel):
     """Targeting specification"""
