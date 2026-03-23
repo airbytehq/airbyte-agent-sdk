@@ -1,5 +1,10 @@
 # Facebook Marketing changelog
 
+## [0.1.55] - 2026-03-23
+- Updated connector definition (YAML version 1.0.19)
+- Source commit: 5718dee3
+- SDK version: 0.1.0
+
 ## [0.1.54] - 2026-03-12
 - Updated connector definition (YAML version 1.0.19)
 - Source commit: b541ca65
