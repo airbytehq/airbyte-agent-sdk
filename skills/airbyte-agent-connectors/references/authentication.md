@@ -113,11 +113,11 @@ connector = GithubConnector(
 
 ```python
 from airbyte_agent_slack import SlackConnector
-from airbyte_agent_slack.models import SlackAuthConfig
+from airbyte_agent_slack.models import SlackTokenAuthenticationAuthConfig
 
 connector = SlackConnector(
-    auth_config=SlackAuthConfig(
-        token="xoxb-your-bot-token"
+    auth_config=SlackTokenAuthenticationAuthConfig(
+        api_token="xoxb-your-bot-token"
     )
 )
 ```

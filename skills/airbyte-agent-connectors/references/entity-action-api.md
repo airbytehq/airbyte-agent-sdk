@@ -192,47 +192,56 @@ result = await connector.execute("files", "download", {
 
 ## Execution Result
 
-All operations return an `ExecutionResult`:
+Return types depend on the action:
 
-```python
-@dataclass
-class ExecutionResult:
-    success: bool
-    data: dict[str, Any] | list[dict] | AsyncIterator[bytes]
-    error: str | None = None
-    meta: dict[str, Any] | None = None
-```
+- **`list` / `api_search`** actions return a typed envelope:
+  ```python
+  # For Slack: SlackExecuteResultWithMeta (or similar per connector)
+  result.data   # Typed list of Pydantic models (e.g., list[Channel])
+  result.meta   # Pagination metadata with fields like next_cursor, has_more
+  ```
+
+- **`get` / `create` / `update` / `delete`** actions return the Pydantic model directly:
+  ```python
+  # Returns e.g. User, Channel, CreatedMessage — not an envelope
+  user = await connector.execute("users", "get", {"user": "U123"})
+  print(user.name)  # Access typed attributes directly
+  ```
+
+- **Errors** are raised as exceptions (`RuntimeError`, `TypeError`, `ValueError`, `NotImplementedError`). There is no `.success` or `.error` attribute on the result — if the call returns, it succeeded.
 
 ### Handling Results
 
 ```python
+# List action — returns envelope with .data and .meta
 result = await connector.execute("customers", "list", {"limit": 10})
+for customer in result.data:
+    print(f"{customer['id']}: {customer.get('email', 'N/A')}")
 
-if result.success:
-    # Access the data
-    customers = result.data
-    for customer in customers:
-        print(f"{customer['id']}: {customer['email']}")
-
-    # Check pagination metadata
-    if result.meta and result.meta.get("has_more"):
-        next_cursor = result.meta.get("next_cursor")
+# Check pagination metadata
+if hasattr(result, 'meta') and result.meta:
+    next_cursor = getattr(result.meta, 'next_cursor', None)
+    if next_cursor:
         print(f"More results available, cursor: {next_cursor}")
-else:
-    # Handle error
-    print(f"Operation failed: {result.error}")
+
+# Get action — returns the model directly
+try:
+    user = await connector.execute("users", "get", {"user": "U123"})
+    print(user.name)
+except RuntimeError as e:
+    print(f"Operation failed: {e}")
 ```
 
 ### Result Structure by Action
 
-| Action | `result.data` Type | Notes |
+| Action | Return Type | Notes |
 |--------|-------------------|-------|
-| `get` | `dict` | Single record |
-| `list` | `list[dict]` | Array of records |
-| `create` | `dict` | Created record |
-| `update` | `dict` | Updated record |
-| `delete` | `dict` | Deletion confirmation |
-| `api_search` | `list[dict]` | Array of matching records |
+| `get` | Pydantic model | Single record (e.g., `User`, `Channel`) |
+| `list` | Envelope with `.data` and `.meta` | `.data` is a typed list, `.meta` has pagination |
+| `create` | Pydantic model | Created record |
+| `update` | Pydantic model | Updated record |
+| `delete` | Pydantic model | Deletion confirmation |
+| `api_search` | Envelope with `.data` and `.meta` | `.data` is a typed list |
 | `download` | `AsyncIterator[bytes]` | Stream for file content |
 
 ## Pagination
@@ -253,16 +262,11 @@ async def list_all_customers(connector):
             params["starting_after"] = cursor
 
         result = await connector.execute("customers", "list", params)
-
-        if not result.success:
-            raise Exception(f"Failed: {result.error}")
-
         all_customers.extend(result.data)
 
         # Check if more pages exist
-        if result.meta and result.meta.get("has_more"):
-            cursor = result.meta.get("next_cursor")
-        else:
+        cursor = getattr(result.meta, 'next_cursor', None) if result.meta else None
+        if not cursor:
             break
 
     return all_customers
@@ -299,123 +303,65 @@ result = await connector.execute("repositories", "get", {
 
 ## Validation
 
-Validate operations before executing them to catch errors early. This is especially useful in agent workflows where you want to verify parameters before making API calls.
+You can discover available entities and actions before executing them to catch errors early. Use `list_entities()` and `entity_schema()` for introspection.
 
-### Basic Validation
+### Discovering Entities and Actions
 
 ```python
-# Validate that entity, action, and params are correct
-validation = await connector.validate_operation("customers", "get", {"id": "cus_xxx"})
+# List available entities
+entities = connector.list_entities()
+print(entities)  # ['customers', 'invoices', 'charges', ...]
 
-if validation.is_valid:
-    result = await connector.execute("customers", "get", {"id": "cus_xxx"})
-else:
-    print(f"Validation errors: {validation.errors}")
+# Get schema for an entity (available actions and parameters)
+schema = connector.entity_schema("customers")
+print(schema)  # Shows available actions and their parameter schemas
 ```
 
-### Validation in Agent Tools
+### Safe Execution in Agent Tools
+
+Since `execute()` raises exceptions on failure, wrap calls in try/except:
 
 ```python
 @agent.tool_plain
 async def safe_execute(entity: str, action: str, params: dict | None = None) -> str:
-    """Execute an operation with validation."""
+    """Execute an operation with error handling."""
     params = params or {}
-
-    # Validate first
-    validation = await connector.validate_operation(entity, action, params)
-    if not validation.is_valid:
-        return f"Invalid operation: {', '.join(validation.errors)}"
-
-    # Execute if valid
-    result = await connector.execute(entity, action, params)
-    if result.success:
-        return json.dumps(result.data)
-    else:
-        return f"Error: {result.error}"
+    try:
+        result = await connector.execute(entity, action, params)
+        # For list actions, result has .data and .meta
+        if hasattr(result, 'data'):
+            return json.dumps(result.data, default=str)
+        # For get/create/update, result is the model directly
+        return str(result)
+    except (RuntimeError, TypeError, ValueError) as e:
+        return f"Error: {e}"
 ```
 
-### What Validation Checks
+## Error Handling
 
-| Check | Description |
+The `execute()` method raises standard Python exceptions on failure. There is no `.success` or `.error` attribute — if the call returns, it succeeded.
+
+| Error | Common Cause |
 |-------|-------------|
-| Entity exists | Verifies the entity name is valid for this connector |
-| Action supported | Verifies the action is available for this entity |
-| Required params | Checks all required parameters are provided |
-| Param types | Validates parameter types match expected schema |
-| Param values | Checks enum values, ranges, and formats |
-
-### Validation Response
-
-```python
-@dataclass
-class ValidationResult:
-    is_valid: bool
-    errors: list[str]  # List of validation error messages
-    warnings: list[str]  # Non-blocking issues
-```
-
-### Example: Catching Missing Parameters
-
-```python
-# Missing required 'owner' parameter
-validation = await connector.validate_operation("repositories", "get", {
-    "repo": "airbyte"  # Missing 'owner'
-})
-
-print(validation.is_valid)  # False
-print(validation.errors)    # ["Missing required parameter: owner"]
-```
-
-### Example: Invalid Parameter Value
-
-```python
-# Invalid state value
-validation = await connector.validate_operation("issues", "list", {
-    "owner": "airbytehq",
-    "repo": "airbyte",
-    "states": ["INVALID_STATE"]  # Should be OPEN, CLOSED, or MERGED
-})
-
-print(validation.is_valid)  # False
-print(validation.errors)    # ["Invalid value for 'states': INVALID_STATE"]
-```
-
-## Error Types
-
-The connectors raise specific errors for common failure modes:
-
-| Error | Description | Common Cause |
-|-------|-------------|--------------|
-| `EntityNotFoundError` | Entity not available in connector | Using wrong entity name |
-| `ActionNotSupportedError` | Action not available for entity | E.g., `delete` on read-only entity |
-| `MissingParameterError` | Required parameter not provided | Missing `id` on `get` action |
-| `InvalidParameterError` | Parameter value is invalid | Wrong type or format |
-| `AuthenticationError` | Credentials invalid or expired | Bad API key, expired token |
-| `RateLimitError` | API rate limit exceeded | Too many requests |
+| `RuntimeError` | API call failed (e.g., invalid params, auth failure, rate limit) |
+| `TypeError` | Wrong parameter types |
+| `ValueError` | Invalid parameter values |
+| `NotImplementedError` | Action not supported (e.g., `search` in OSS mode) |
 
 ### Error Handling Example
 
 ```python
-from airbyte_agent_core.errors import (
-    EntityNotFoundError,
-    ActionNotSupportedError,
-    MissingParameterError,
-    AuthenticationError,
-    RateLimitError
-)
-
 try:
     result = await connector.execute("customers", "get", {"id": "cus_xxx"})
-except EntityNotFoundError:
-    print("'customers' is not a valid entity for this connector")
-except ActionNotSupportedError:
-    print("'get' action not supported for customers")
-except MissingParameterError as e:
-    print(f"Missing required parameter: {e}")
-except AuthenticationError:
-    print("Authentication failed - check your credentials")
-except RateLimitError:
-    print("Rate limited - wait and retry")
+except RuntimeError as e:
+    # Covers API errors, auth failures, rate limits, etc.
+    print(f"Operation failed: {e}")
+except TypeError as e:
+    print(f"Invalid parameter type: {e}")
+except ValueError as e:
+    print(f"Invalid parameter value: {e}")
+except NotImplementedError:
+    print("This action is not supported in the current mode")
 ```
 
 ## Using with Agent Frameworks
@@ -439,10 +385,10 @@ async def execute(entity: str, action: str, params: dict | None = None) -> str:
         JSON string of the result
     """
     result = await connector.execute(entity, action, params or {})
-    if result.success:
-        return json.dumps(result.data)
-    else:
-        return f"Error: {result.error}"
+    # For list actions, result has .data; for get/create/update, result is the model
+    if hasattr(result, 'data'):
+        return json.dumps(result.data, default=str)
+    return str(result)
 ```
 
 ### Entity-Specific Tools
@@ -457,13 +403,13 @@ async def list_customers(limit: int = 10, email_filter: str | None = None) -> st
     if email_filter:
         params["email"] = email_filter
     result = await connector.execute("customers", "list", params)
-    return json.dumps(result.data) if result.success else f"Error: {result.error}"
+    return json.dumps(result.data, default=str)
 
 @agent.tool_plain
 async def get_customer(customer_id: str) -> str:
     """Get a specific Stripe customer by ID."""
     result = await connector.execute("customers", "get", {"id": customer_id})
-    return json.dumps(result.data) if result.success else f"Error: {result.error}"
+    return str(result)
 ```
 
 ### Framework Quick Start
@@ -510,8 +456,8 @@ github_tool = StructuredTool.from_function(
 entities = connector.list_entities()
 print(entities)  # ['customers', 'invoices', 'charges', ...]
 
-# Get entity details
-schema = connector.describe_entity("customers")
+# Get entity schema (available actions and parameters)
+schema = connector.entity_schema("customers")
 print(schema)  # Shows available actions and parameters
 ```
 

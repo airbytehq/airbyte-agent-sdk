@@ -113,10 +113,10 @@ result = await connector.execute("calls", "list", {})
 
 ```python
 from airbyte_agent_slack import SlackConnector
-from airbyte_agent_slack.models import SlackAuthConfig
+from airbyte_agent_slack.models import SlackTokenAuthenticationAuthConfig
 
 connector = SlackConnector(
-    auth_config=SlackAuthConfig(token=os.environ["SLACK_BOT_TOKEN"])
+    auth_config=SlackTokenAuthenticationAuthConfig(api_token=os.environ["SLACK_BOT_TOKEN"])
 )
 
 # List channels

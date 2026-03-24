@@ -158,14 +158,13 @@ This guide covers common errors and solutions when working with Airbyte Agent Co
 
    async def execute_with_retry(connector, entity, action, params, max_retries=3):
        for attempt in range(max_retries):
-           result = await connector.execute(entity, action, params)
-           if result.success:
-               return result
-           if "5" in str(result.error)[:3]:  # 5xx error
-               await asyncio.sleep(2 ** attempt)  # Exponential backoff
-           else:
-               break
-       return result
+           try:
+               return await connector.execute(entity, action, params)
+           except RuntimeError as e:
+               if "5" in str(e)[:3] and attempt < max_retries - 1:
+                   await asyncio.sleep(2 ** attempt)  # Exponential backoff
+               else:
+                   raise
    ```
 
 ## Retry Configuration
@@ -410,13 +409,19 @@ logging.getLogger("airbyte_agent_github").setLevel(logging.DEBUG)
 ### Inspect Result Objects
 
 ```python
+# For list actions — returns envelope with .data and .meta
 result = await connector.execute("customers", "list", {"limit": 1})
 
-print(f"Success: {result.success}")
-print(f"Error: {result.error}")
+print(f"Type: {type(result)}")
 print(f"Data type: {type(result.data)}")
 print(f"Data: {result.data}")
-print(f"Meta: {result.meta}")
+if hasattr(result, 'meta'):
+    print(f"Meta: {result.meta}")
+
+# For get actions — returns the Pydantic model directly
+user = await connector.execute("users", "get", {"user": "U123"})
+print(f"Type: {type(user)}")
+print(f"User: {user}")
 ```
 
 ### Test Credentials Independently
@@ -427,16 +432,16 @@ async def test_auth(connector):
     """Test basic connectivity."""
     try:
         # Use a simple, low-impact operation
+        # execute() raises RuntimeError on failure, so if it returns, auth worked
         result = await connector.execute("viewer", "get", {})  # GitHub
         # or
         result = await connector.execute("balance", "get", {})  # Stripe
 
-        if result.success:
-            print("Authentication successful!")
-            return True
-        else:
-            print(f"Auth failed: {result.error}")
-            return False
+        print("Authentication successful!")
+        return True
+    except RuntimeError as e:
+        print(f"Auth failed: {e}")
+        return False
     except Exception as e:
         print(f"Auth error: {e}")
         return False

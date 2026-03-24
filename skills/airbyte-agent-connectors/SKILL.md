@@ -141,20 +141,21 @@ All connectors use the same interface:
 
 ```python
 result = await connector.execute(entity, action, params)
-# result.data contains the records (list or dict depending on action)
-# result.meta contains pagination info for list operations
+# For list actions: returns an envelope with result.data (typed list) and result.meta (pagination)
+# For get/create/update actions: returns the Pydantic model directly (e.g., Channel, User)
+# Raises RuntimeError on failure — no need to check result.success
 ```
 
 ### Actions
 
-| Action | Description | `result.data` Type |
+| Action | Description | Return Type |
 |--------|-------------|-------------------|
-| `list` | Get multiple records | `list[dict]` |
-| `get` | Get single record by ID | `dict` |
-| `create` | Create new record | `dict` |
-| `update` | Modify existing record | `dict` |
-| `delete` | Remove record | `dict` |
-| `api_search` | Native API search syntax | `list[dict]` |
+| `list` | Get multiple records | Envelope with `.data` (typed list) and `.meta` (pagination) |
+| `get` | Get single record by ID | Pydantic model (e.g., `User`, `Channel`) |
+| `create` | Create new record | Pydantic model |
+| `update` | Modify existing record | Pydantic model |
+| `delete` | Remove record | Pydantic model |
+| `api_search` | Native API search syntax | Envelope with `.data` and `.meta` |
 
 ### Quick Examples
 
@@ -181,15 +182,12 @@ async def fetch_all(connector, entity, params=None):
 
     while True:
         if cursor:
-            params["after"] = cursor
+            params["cursor"] = cursor
         result = await connector.execute(entity, "list", params)
         all_records.extend(result.data)
 
-        if result.meta and hasattr(result.meta, 'pagination'):
-            cursor = getattr(result.meta.pagination, 'cursor', None)
-            if not cursor:
-                break
-        else:
+        cursor = getattr(result.meta, 'next_cursor', None) if result.meta else None
+        if not cursor:
             break
 
     return all_records
@@ -225,8 +223,8 @@ from airbyte_agent_github.models import GithubPersonalAccessTokenAuthConfig
 auth_config=GithubPersonalAccessTokenAuthConfig(token="ghp_...")
 
 # Slack
-from airbyte_agent_slack.models import SlackAuthConfig
-auth_config=SlackAuthConfig(token="xoxb-...")
+from airbyte_agent_slack.models import SlackTokenAuthenticationAuthConfig
+auth_config=SlackTokenAuthenticationAuthConfig(api_token="xoxb-...")
 ```
 
 ### OAuth (requires refresh token)
