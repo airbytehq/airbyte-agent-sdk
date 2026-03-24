@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/snapchat-marketing/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-23 -->
+<!-- Source format: v1 | Generated: 2026-03-24 -->
 
 # Snapchat Marketing
 
