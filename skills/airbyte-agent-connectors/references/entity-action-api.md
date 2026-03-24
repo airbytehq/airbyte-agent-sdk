@@ -283,6 +283,8 @@ async def list_all_customers(connector):
 | Salesforce | `limit` | `next_page_token` | `has_more`, `next_page_token` |
 | Slack | `limit` | `cursor` | `has_more`, `next_cursor` |
 
+> **For connectors not listed above:** Check the connector's `REFERENCE.md` at `connectors/{name}/REFERENCE.md`. Each list action includes a Parameters table (with the cursor param) and a Meta table (with the response pagination fields). You can also call `connector.entity_schema(entity)` at runtime to inspect available parameters programmatically.
+
 ## Field Selection
 
 Many connectors support selecting specific fields to reduce response size:

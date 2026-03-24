@@ -174,7 +174,7 @@ await connector.execute("repositories", "api_search", {
 
 ### Pagination
 
-> **Pagination is connector-specific.** The cursor parameter name and meta field names vary by connector. Check each connector's reference docs or the [pagination table](references/entity-action-api.md#pagination-parameters-by-connector) for the correct names. Common examples: Slack uses `cursor` param / `next_cursor` meta, Stripe uses `starting_after` / `next_cursor`, GitHub uses `after` / `end_cursor`.
+> **Pagination is connector-specific.** The cursor parameter name and meta field names vary by connector. To find the correct names for your connector, check its `REFERENCE.md` file at `connectors/{name}/REFERENCE.md` — each list action documents the cursor parameter and meta fields in its Parameters and Meta tables. See also the [pagination table](references/entity-action-api.md#pagination-parameters-by-connector) for a quick summary. Common examples: Slack uses `cursor` param / `next_cursor` meta, Stripe uses `starting_after` / `next_cursor`, GitHub uses `after` / `end_cursor`.
 
 ```python
 # Example for Slack (cursor param = "cursor", meta key = "next_cursor")
