@@ -29,7 +29,7 @@ from uuid import (
 GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('253487c0-2246-43ba-a21f-5116b20a2c50'),
     name='google-ads',
-    version='1.0.5',
+    version='1.0.6',
     base_url='https://googleads.googleapis.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -109,7 +109,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='accounts',
-            stream_name='accounts',
+            stream_name='customer',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -190,7 +190,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'accounts',
-                                    'x-airbyte-stream-name': 'accounts',
+                                    'x-airbyte-stream-name': 'customer',
                                 },
                             },
                             'nextPageToken': {'type': 'string', 'description': 'Token for retrieving the next page'},
@@ -251,12 +251,12 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'accounts',
-                'x-airbyte-stream-name': 'accounts',
+                'x-airbyte-stream-name': 'customer',
             },
         ),
         EntityDefinition(
             name='campaigns',
-            stream_name='campaigns',
+            stream_name='campaign',
             actions=[Action.LIST, Action.UPDATE],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -364,7 +364,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'campaigns',
-                                    'x-airbyte-stream-name': 'campaigns',
+                                    'x-airbyte-stream-name': 'campaign',
                                 },
                             },
                             'nextPageToken': {'type': 'string'},
@@ -507,12 +507,12 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'campaigns',
-                'x-airbyte-stream-name': 'campaigns',
+                'x-airbyte-stream-name': 'campaign',
             },
         ),
         EntityDefinition(
             name='ad_groups',
-            stream_name='ad_groups',
+            stream_name='ad_group',
             actions=[Action.LIST, Action.UPDATE],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -608,7 +608,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ad_groups',
-                                    'x-airbyte-stream-name': 'ad_groups',
+                                    'x-airbyte-stream-name': 'ad_group',
                                 },
                             },
                             'nextPageToken': {'type': 'string'},
@@ -740,12 +740,12 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ad_groups',
-                'x-airbyte-stream-name': 'ad_groups',
+                'x-airbyte-stream-name': 'ad_group',
             },
         ),
         EntityDefinition(
             name='ad_group_ads',
-            stream_name='ad_group_ads',
+            stream_name='ad_group_ad',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -848,7 +848,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ad_group_ads',
-                                    'x-airbyte-stream-name': 'ad_group_ads',
+                                    'x-airbyte-stream-name': 'ad_group_ad',
                                 },
                             },
                             'nextPageToken': {'type': 'string'},
@@ -928,12 +928,12 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ad_group_ads',
-                'x-airbyte-stream-name': 'ad_group_ads',
+                'x-airbyte-stream-name': 'ad_group_ad',
             },
         ),
         EntityDefinition(
             name='campaign_labels',
-            stream_name='campaign_labels',
+            stream_name='campaign_label',
             actions=[Action.LIST, Action.CREATE],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -996,7 +996,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'campaign_labels',
-                                    'x-airbyte-stream-name': 'campaign_labels',
+                                    'x-airbyte-stream-name': 'campaign_label',
                                 },
                             },
                             'nextPageToken': {'type': 'string'},
@@ -1088,12 +1088,12 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'campaign_labels',
-                'x-airbyte-stream-name': 'campaign_labels',
+                'x-airbyte-stream-name': 'campaign_label',
             },
         ),
         EntityDefinition(
             name='ad_group_labels',
-            stream_name='ad_group_labels',
+            stream_name='ad_group_label',
             actions=[Action.LIST, Action.CREATE],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1156,7 +1156,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ad_group_labels',
-                                    'x-airbyte-stream-name': 'ad_group_labels',
+                                    'x-airbyte-stream-name': 'ad_group_label',
                                 },
                             },
                             'nextPageToken': {'type': 'string'},
@@ -1248,12 +1248,12 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ad_group_labels',
-                'x-airbyte-stream-name': 'ad_group_labels',
+                'x-airbyte-stream-name': 'ad_group_label',
             },
         ),
         EntityDefinition(
             name='ad_group_ad_labels',
-            stream_name='ad_group_ad_labels',
+            stream_name='ad_group_ad_label',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1321,7 +1321,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ad_group_ad_labels',
-                                    'x-airbyte-stream-name': 'ad_group_ad_labels',
+                                    'x-airbyte-stream-name': 'ad_group_ad_label',
                                 },
                             },
                             'nextPageToken': {'type': 'string'},
@@ -1366,7 +1366,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ad_group_ad_labels',
-                'x-airbyte-stream-name': 'ad_group_ad_labels',
+                'x-airbyte-stream-name': 'ad_group_ad_label',
             },
         ),
         EntityDefinition(
