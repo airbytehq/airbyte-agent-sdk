@@ -174,19 +174,22 @@ await connector.execute("repositories", "api_search", {
 
 ### Pagination
 
+> **Pagination is connector-specific.** The cursor parameter name and meta field names vary by connector. Check each connector's reference docs or the [pagination table](references/entity-action-api.md#pagination-parameters-by-connector) for the correct names. Common examples: Slack uses `cursor` param / `next_cursor` meta, Stripe uses `starting_after` / `next_cursor`, GitHub uses `after` / `end_cursor`.
+
 ```python
-async def fetch_all(connector, entity, params=None):
+# Example for Slack (cursor param = "cursor", meta key = "next_cursor")
+async def fetch_all_slack(connector, entity, params=None):
     all_records = []
     cursor = None
     params = params or {}
 
     while True:
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = cursor  # Slack-specific; Stripe uses "starting_after", GitHub uses "after"
         result = await connector.execute(entity, "list", params)
         all_records.extend(result.data)
 
-        cursor = result.meta.get('next_cursor') if result.meta else None
+        cursor = result.meta.get('next_cursor') if result.meta else None  # dict access, not attribute
         if not cursor:
             break
 
