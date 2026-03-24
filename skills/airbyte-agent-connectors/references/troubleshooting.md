@@ -161,7 +161,7 @@ This guide covers common errors and solutions when working with Airbyte Agent Co
            try:
                return await connector.execute(entity, action, params)
            except RuntimeError as e:
-               if "5" in str(e)[:3] and attempt < max_retries - 1:
+               if any(code in str(e) for code in ("500", "502", "503", "504")) and attempt < max_retries - 1:
                    await asyncio.sleep(2 ** attempt)  # Exponential backoff
                else:
                    raise
