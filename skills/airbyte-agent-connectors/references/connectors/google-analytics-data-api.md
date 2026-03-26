@@ -59,9 +59,12 @@ connector = GoogleAnalyticsDataApiConnector(
 )
 
 @agent.tool_plain # assumes you're using Pydantic AI
-@GoogleAnalyticsDataApiConnector.tool_utils
+@GoogleAnalyticsDataApiConnector.tool_utils(enable_hosted_mode_features=False)
 async def google_analytics_data_api_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ### Hosted Mode
@@ -81,7 +84,10 @@ connector = GoogleAnalyticsDataApiConnector(
 @agent.tool_plain # assumes you're using Pydantic AI
 @GoogleAnalyticsDataApiConnector.tool_utils
 async def google_analytics_data_api_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ## Entities and Actions

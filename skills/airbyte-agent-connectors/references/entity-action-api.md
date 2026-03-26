@@ -377,7 +377,7 @@ Create a single tool that handles any entity/action combination:
 
 ```python
 @agent.tool_plain
-@Connector.tool_utils
+@Connector.tool_utils(enable_hosted_mode_features=False)
 async def execute(entity: str, action: str, params: dict | None = None) -> str:
     """Execute an operation on the connector.
 
@@ -389,11 +389,14 @@ async def execute(entity: str, action: str, params: dict | None = None) -> str:
     Returns:
         JSON string of the result
     """
-    result = await connector.execute(entity, action, params or {})
-    # For list actions, result has .data; for get/create/update, result is a raw dict
-    if hasattr(result, 'data'):
-        return json.dumps(result.data, default=str)
-    return json.dumps(result, default=str)
+    try:
+        result = await connector.execute(entity, action, params or {})
+        # For list actions, result has .data; for get/create/update, result is a raw dict
+        if hasattr(result, 'data'):
+            return json.dumps(result.data, default=str)
+        return json.dumps(result, default=str)
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ### Entity-Specific Tools
@@ -407,14 +410,20 @@ async def list_customers(limit: int = 10, email_filter: str | None = None) -> st
     params = {"limit": limit}
     if email_filter:
         params["email"] = email_filter
-    result = await connector.execute("customers", "list", params)
-    return json.dumps(result.data, default=str)
+    try:
+        result = await connector.execute("customers", "list", params)
+        return json.dumps(result.data, default=str)
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 
 @agent.tool_plain
 async def get_customer(customer_id: str) -> str:
     """Get a specific Stripe customer by ID."""
-    result = await connector.execute("customers", "get", {"id": customer_id})
-    return json.dumps(result, default=str)  # result is a dict
+    try:
+        result = await connector.execute("customers", "get", {"id": customer_id})
+        return json.dumps(result, default=str)  # result is a dict
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ### Framework Quick Start
@@ -428,7 +437,10 @@ agent = Agent("openai:gpt-4o", system_prompt="You help with GitHub data.")
 
 @agent.tool_plain
 async def github_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 #### LangChain

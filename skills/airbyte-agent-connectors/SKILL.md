@@ -141,9 +141,21 @@ All connectors use the same interface:
 
 ```python
 result = await connector.execute(entity, action, params)
-# result.data contains the records (list or dict depending on action)
-# result.meta contains pagination info for list operations
+# For list actions: returns an envelope with result.data (list) and result.meta (pagination dict)
+# For get/create/update actions: returns a raw dict (use dict access like result['name'])
+# Raises exceptions on failure (RuntimeError, TypeError, ValueError, etc.)
 ```
+
+> **Important: Error handling in agent tools.** When registering `execute()` as a tool for an AI agent (PydanticAI, LangChain, etc.), **always wrap the call in try/except** and return the error message as a string. This prevents unhandled exceptions from crashing the agent and lets the LLM recover gracefully:
+>
+> ```python
+> @agent.tool_plain
+> async def execute(entity: str, action: str, params: dict | None = None) -> str:
+>     try:
+>         return await connector.execute(entity, action, params or {})
+>     except Exception as e:
+>         return f"Error: {type(e).__name__}: {e}"
+> ```
 
 ### Actions
 

@@ -58,9 +58,12 @@ connector = ConfluenceConnector(
 )
 
 @agent.tool_plain # assumes you're using Pydantic AI
-@ConfluenceConnector.tool_utils
+@ConfluenceConnector.tool_utils(enable_hosted_mode_features=False)
 async def confluence_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ### Hosted Mode
@@ -80,7 +83,10 @@ connector = ConfluenceConnector(
 @agent.tool_plain # assumes you're using Pydantic AI
 @ConfluenceConnector.tool_utils
 async def confluence_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ## Entities and Actions

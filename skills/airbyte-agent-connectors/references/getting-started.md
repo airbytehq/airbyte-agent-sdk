@@ -226,34 +226,43 @@ agent = Agent(
 @agent.tool_plain
 async def list_issues(owner: str, repo: str, limit: int = 10) -> str:
     """List open issues in a GitHub repository."""
-    result = await connector.execute("issues", "list", {
-        "owner": owner,
-        "repo": repo,
-        "states": ["OPEN"],
-        "per_page": limit
-    })
-    return str(result.data)
+    try:
+        result = await connector.execute("issues", "list", {
+            "owner": owner,
+            "repo": repo,
+            "states": ["OPEN"],
+            "per_page": limit
+        })
+        return str(result.data)
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 
 @agent.tool_plain
 async def list_pull_requests(owner: str, repo: str, limit: int = 10) -> str:
     """List open pull requests in a GitHub repository."""
-    result = await connector.execute("pull_requests", "list", {
-        "owner": owner,
-        "repo": repo,
-        "states": ["OPEN"],
-        "per_page": limit
-    })
-    return str(result.data)
+    try:
+        result = await connector.execute("pull_requests", "list", {
+            "owner": owner,
+            "repo": repo,
+            "states": ["OPEN"],
+            "per_page": limit
+        })
+        return str(result.data)
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 
 @agent.tool_plain
 async def get_repository(owner: str, repo: str) -> str:
     """Get details about a specific GitHub repository."""
-    result = await connector.execute("repositories", "get", {
-        "owner": owner,
-        "repo": repo
-    })
-    # get actions return a raw dict
-    return json.dumps(result, default=str)
+    try:
+        result = await connector.execute("repositories", "get", {
+            "owner": owner,
+            "repo": repo
+        })
+        # get actions return a raw dict
+        return json.dumps(result, default=str)
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 
 async def main():
     print("GitHub Agent Ready! Ask questions about repositories.")

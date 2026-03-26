@@ -58,9 +58,12 @@ connector = HarvestConnector(
 )
 
 @agent.tool_plain # assumes you're using Pydantic AI
-@HarvestConnector.tool_utils
+@HarvestConnector.tool_utils(enable_hosted_mode_features=False)
 async def harvest_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ### Hosted Mode
@@ -80,7 +83,10 @@ connector = HarvestConnector(
 @agent.tool_plain # assumes you're using Pydantic AI
 @HarvestConnector.tool_utils
 async def harvest_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
+    try:
+        return await connector.execute(entity, action, params or {})
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}"
 ```
 
 ## Entities and Actions
