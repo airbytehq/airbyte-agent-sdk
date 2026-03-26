@@ -31,6 +31,8 @@ Use when:
 - User wants connectors visible in the Airbyte UI at app.airbyte.ai
 - User needs managed credential storage, context store, or multi-tenant deployments
 
+> See [Agent Engine Platform docs](https://docs.airbyte.com/ai-agents/platform) and the [hosted quickstart tutorial](https://docs.airbyte.com/ai-agents/tutorials/quickstarts/tutorial-hosted) for full details.
+
 ### OSS Mode (Open Source / Local SDK)
 Use when:
 - User wants to run connectors directly without platform integration
@@ -285,6 +287,14 @@ Each per-connector reference includes: package name and version, authentication 
 | Programmatic Setup | [references/programmatic-setup.md](references/programmatic-setup.md) |
 | MCP Integration | [references/mcp-integration.md](references/mcp-integration.md) |
 | Troubleshooting | [references/troubleshooting.md](references/troubleshooting.md) |
+
+### External Documentation
+
+| Topic | Link |
+|-------|------|
+| Agent Engine Platform | [docs.airbyte.com/ai-agents/platform](https://docs.airbyte.com/ai-agents/platform) |
+| Context Store | [docs.airbyte.com/ai-agents/platform/context-store](https://docs.airbyte.com/ai-agents/platform/context-store) |
+| Hosted Quickstart | [docs.airbyte.com/ai-agents/tutorials/quickstarts/tutorial-hosted](https://docs.airbyte.com/ai-agents/tutorials/quickstarts/tutorial-hosted) |
 
 ## How References Are Generated
 
