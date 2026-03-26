@@ -131,7 +131,7 @@ class LinearConnector:
     """
 
     connector_name = "linear"
-    connector_version = "0.1.12"
+    connector_version = "0.1.13"
     vendored_sdk_version = "0.1.0"  # Version of vendored connector-sdk
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
@@ -157,8 +157,8 @@ class LinearConnector:
     _PARAM_MAP = {
         ('issues', 'list'): {'first': 'first', 'after': 'after'},
         ('issues', 'get'): {'id': 'id'},
-        ('issues', 'create'): {'team_id': 'teamId', 'title': 'title', 'description': 'description', 'state_id': 'stateId', 'priority': 'priority'},
-        ('issues', 'update'): {'id': 'id', 'title': 'title', 'description': 'description', 'state_id': 'stateId', 'priority': 'priority', 'assignee_id': 'assigneeId'},
+        ('issues', 'create'): {'team_id': 'teamId', 'title': 'title', 'description': 'description', 'state_id': 'stateId', 'priority': 'priority', 'project_id': 'projectId'},
+        ('issues', 'update'): {'id': 'id', 'title': 'title', 'description': 'description', 'state_id': 'stateId', 'priority': 'priority', 'assignee_id': 'assigneeId', 'project_id': 'projectId'},
         ('projects', 'list'): {'first': 'first', 'after': 'after'},
         ('projects', 'get'): {'id': 'id'},
         ('teams', 'list'): {'first': 'first', 'after': 'after'},
@@ -784,6 +784,7 @@ class IssuesQuery:
         description: str | None = None,
         state_id: str | None = None,
         priority: int | None = None,
+        project_id: str | None = None,
         **kwargs
     ) -> IssueCreateResponse:
         """
@@ -795,6 +796,7 @@ class IssuesQuery:
             description: The description of the issue (supports markdown)
             state_id: The ID of the workflow state for the issue
             priority: The priority of the issue (0=No priority, 1=Urgent, 2=High, 3=Medium, 4=Low)
+            project_id: The ID of the project to add the issue to. Get project IDs from the projects list.
             **kwargs: Additional parameters
 
         Returns:
@@ -806,6 +808,7 @@ class IssuesQuery:
             "description": description,
             "stateId": state_id,
             "priority": priority,
+            "projectId": project_id,
             **kwargs
         }.items() if v is not None}
 
@@ -822,6 +825,7 @@ class IssuesQuery:
         state_id: str | None = None,
         priority: int | None = None,
         assignee_id: str | None = None,
+        project_id: str | None = None,
         **kwargs
     ) -> IssueUpdateResponse:
         """
@@ -837,6 +841,7 @@ Omit assigneeId to leave the current assignee unchanged.
             state_id: The ID of the new workflow state for the issue
             priority: The new priority of the issue (0=No priority, 1=Urgent, 2=High, 3=Medium, 4=Low)
             assignee_id: The ID of the user to assign to this issue. Get user IDs from the users list.
+            project_id: The ID of the project to add this issue to. Get project IDs from the projects list.
             **kwargs: Additional parameters
 
         Returns:
@@ -849,6 +854,7 @@ Omit assigneeId to leave the current assignee unchanged.
             "stateId": state_id,
             "priority": priority,
             "assigneeId": assignee_id,
+            "projectId": project_id,
             **kwargs
         }.items() if v is not None}
 
