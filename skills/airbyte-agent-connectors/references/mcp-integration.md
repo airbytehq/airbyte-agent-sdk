@@ -153,15 +153,13 @@ connectors:
       client_secret: SALESFORCE_CLIENT_SECRET
       refresh_token: SALESFORCE_REFRESH_TOKEN
 
-  # HubSpot - OAuth
+  # HubSpot - Private App
   - id: hubspot
     type: local
     connector_name: hubspot
     description: "HubSpot CRM and marketing"
     secrets:
-      client_id: HUBSPOT_CLIENT_ID
-      client_secret: HUBSPOT_CLIENT_SECRET
-      refresh_token: HUBSPOT_REFRESH_TOKEN
+      private_app_token: HUBSPOT_PRIVATE_APP_TOKEN
 
   # Slack - Bot Token
   - id: slack
@@ -189,7 +187,7 @@ SALESFORCE_CLIENT_SECRET=your_client_secret
 SALESFORCE_REFRESH_TOKEN=your_refresh_token
 
 # HubSpot
-HUBSPOT_ACCESS_TOKEN=pat-na1-xxx
+HUBSPOT_PRIVATE_APP_TOKEN=pat-na1-xxx
 
 # Slack
 SLACK_BOT_TOKEN=xoxb-your-token

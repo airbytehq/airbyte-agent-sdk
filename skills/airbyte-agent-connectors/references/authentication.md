@@ -28,7 +28,7 @@ Airbyte Agent Connectors support multiple authentication methods depending on th
 | Gong | ✓ | | |
 | Google Drive | | ✓ | |
 | Greenhouse | ✓ | | |
-| HubSpot | | ✓ | |
+| HubSpot | ✓ (Private App) | ✓ | |
 | Intercom | ✓ | | |
 | Jira | ✓ | | |
 | Klaviyo | ✓ | | |
@@ -64,7 +64,7 @@ connector = StripeConnector(
 | Connector | Where to Get Key |
 |-----------|------------------|
 | Stripe | [Dashboard > Developers > API keys](https://dashboard.stripe.com/apikeys) |
-| HubSpot | Settings > Integrations > Apps (OAuth) |
+| HubSpot | Settings > Integrations > Private Apps |
 | Jira | Account Settings > Security > API tokens |
 | Intercom | Settings > Developers > Access tokens |
 | Airtable | Account > Developer hub > Personal access tokens |
@@ -182,10 +182,10 @@ The connector automatically refreshes the access token when it expires.
 
 ```python
 from airbyte_agent_hubspot import HubspotConnector
-from airbyte_agent_hubspot.models import HubspotAuthConfig
+from airbyte_agent_hubspot.models import HubspotOauth2AuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotAuthConfig(
+    auth_config=HubspotOauth2AuthConfig(
         client_id="your_client_id",
         client_secret="your_client_secret",
         refresh_token="your_refresh_token"
@@ -377,15 +377,27 @@ connector = ZendeskSupportConnector(
 )
 ```
 
-### HubSpot (OAuth)
+### HubSpot (Private App and OAuth)
 
-HubSpot uses OAuth authentication in both OSS and Platform Mode. See [HubSpot AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/hubspot/AUTH.md) for step-by-step credential setup.
+HubSpot supports both Private App tokens and OAuth. See [HubSpot AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/hubspot/AUTH.md) for step-by-step credential setup.
 
+**Private App Token:**
 ```python
-from airbyte_agent_hubspot.models import HubspotAuthConfig
+from airbyte_agent_hubspot.models import HubspotPrivateAppAuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotAuthConfig(
+    auth_config=HubspotPrivateAppAuthConfig(
+        private_app_token="pat-na1-xxx"
+    )
+)
+```
+
+**OAuth:**
+```python
+from airbyte_agent_hubspot.models import HubspotOauth2AuthConfig
+
+connector = HubspotConnector(
+    auth_config=HubspotOauth2AuthConfig(
         client_id="...",
         client_secret="...",
         refresh_token="..."

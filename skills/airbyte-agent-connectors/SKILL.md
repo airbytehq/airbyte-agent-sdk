@@ -226,9 +226,13 @@ auth_config=GongAccessKeyAuthenticationAuthConfig(
     access_key="...", access_key_secret="..."
 )
 
+# HubSpot (Private App)
+from airbyte_agent_hubspot.models import HubspotPrivateAppAuthConfig
+auth_config=HubspotPrivateAppAuthConfig(private_app_token="pat-na1-...")
+
 # HubSpot (OAuth)
-from airbyte_agent_hubspot.models import HubspotAuthConfig
-auth_config=HubspotAuthConfig(
+from airbyte_agent_hubspot.models import HubspotOauth2AuthConfig
+auth_config=HubspotOauth2AuthConfig(
     client_id="...", client_secret="...", refresh_token="..."
 )
 ```
