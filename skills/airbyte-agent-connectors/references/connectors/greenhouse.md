@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/greenhouse/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-03-25 -->
+<!-- Source format: v1 | Generated: 2026-03-26 -->
 
 # Greenhouse
 
