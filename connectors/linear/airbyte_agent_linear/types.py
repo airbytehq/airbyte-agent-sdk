@@ -35,6 +35,7 @@ class IssuesCreateParams(TypedDict):
     description: NotRequired[str]
     state_id: NotRequired[str]
     priority: NotRequired[int]
+    project_id: NotRequired[str]
 
 class IssuesUpdateParams(TypedDict):
     """Parameters for issues.update operation"""
@@ -44,6 +45,7 @@ class IssuesUpdateParams(TypedDict):
     state_id: NotRequired[str]
     priority: NotRequired[int]
     assignee_id: NotRequired[str]
+    project_id: NotRequired[str]
 
 class ProjectsListParams(TypedDict):
     """Parameters for projects.list operation"""

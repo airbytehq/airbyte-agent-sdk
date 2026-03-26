@@ -29,7 +29,7 @@ from uuid import (
 LinearConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('1c5d8316-ed42-4473-8fbc-2626f03f070c'),
     name='linear',
-    version='0.1.12',
+    version='0.1.13',
     base_url='https://api.linear.app',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -405,6 +405,19 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                         ],
                                                         'description': 'Assigned user with ID',
                                                     },
+                                                    'project': {
+                                                        'oneOf': [
+                                                            {
+                                                                'type': 'object',
+                                                                'properties': {
+                                                                    'id': {'type': 'string'},
+                                                                    'name': {'type': 'string'},
+                                                                },
+                                                            },
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project the issue belongs to',
+                                                    },
                                                     'createdAt': {
                                                         'type': 'string',
                                                         'format': 'date-time',
@@ -425,13 +438,14 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'mutation($teamId: String!, $title: String!, $description: String, $stateId: String, $priority: Int) { issueCreate(input: { teamId: $teamId, title: $title, description: $description, stateId: $stateId, priority: $priority }) { success issue { id title description state { id name } priority assignee { name email } createdAt updatedAt } } }',
+                        'query': 'mutation($teamId: String!, $title: String!, $description: String, $stateId: String, $priority: Int, $projectId: String) { issueCreate(input: { teamId: $teamId, title: $title, description: $description, stateId: $stateId, priority: $priority, projectId: $projectId }) { success issue { id title description state { id name } priority assignee { name email } project { id name } createdAt updatedAt } } }',
                         'variables': {
                             'teamId': '{{ teamId }}',
                             'title': '{{ title }}',
                             'description': '{{ description }}',
                             'stateId': '{{ stateId }}',
                             'priority': '{{ priority }}',
+                            'projectId': '{{ projectId }}',
                         },
                     },
                 ),
@@ -510,6 +524,19 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                         ],
                                                         'description': 'Assigned user with ID',
                                                     },
+                                                    'project': {
+                                                        'oneOf': [
+                                                            {
+                                                                'type': 'object',
+                                                                'properties': {
+                                                                    'id': {'type': 'string'},
+                                                                    'name': {'type': 'string'},
+                                                                },
+                                                            },
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project the issue belongs to',
+                                                    },
                                                     'createdAt': {
                                                         'type': 'string',
                                                         'format': 'date-time',
@@ -530,7 +557,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'mutation($id: String!, $title: String, $description: String, $stateId: String, $priority: Int, $assigneeId: String) { issueUpdate(id: $id, input: { title: $title, description: $description, stateId: $stateId, priority: $priority, assigneeId: $assigneeId }) { success issue { id title description state { id name } priority assignee { id name email } createdAt updatedAt } } }',
+                        'query': 'mutation($id: String!, $title: String, $description: String, $stateId: String, $priority: Int, $assigneeId: String, $projectId: String) { issueUpdate(id: $id, input: { title: $title, description: $description, stateId: $stateId, priority: $priority, assigneeId: $assigneeId, projectId: $projectId }) { success issue { id title description state { id name } priority assignee { id name email } project { id name } createdAt updatedAt } } }',
                         'variables': {
                             'id': '{{ id }}',
                             'title': '{{ title }}',
@@ -538,8 +565,9 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             'stateId': '{{ stateId }}',
                             'priority': '{{ priority }}',
                             'assigneeId': '{{ assigneeId }}',
+                            'projectId': '{{ projectId }}',
                         },
-                        'nullable_variables': ['assigneeId'],
+                        'nullable_variables': ['assigneeId', 'projectId'],
                     },
                 ),
             },

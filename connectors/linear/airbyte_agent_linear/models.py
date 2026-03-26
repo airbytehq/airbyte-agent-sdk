@@ -195,6 +195,7 @@ class IssueCreateParams(BaseModel):
     description: Union[str, Any] = Field(default=None)
     state_id: Union[str, Any] = Field(default=None, alias="stateId")
     priority: Union[int, Any] = Field(default=None)
+    project_id: Union[str, Any] = Field(default=None, alias="projectId")
 
 class IssueUpdateParams(BaseModel):
     """Parameters for updating an issue. All fields except id are optional for partial updates.
@@ -210,6 +211,7 @@ Omit assigneeId to leave the current assignee unchanged.
     state_id: Union[str, Any] = Field(default=None, alias="stateId")
     priority: Union[int, Any] = Field(default=None)
     assignee_id: Union[str, Any] = Field(default=None, alias="assigneeId")
+    project_id: Union[str, Any] = Field(default=None, alias="projectId")
 
 class IssueWithState(BaseModel):
     """Issue object with state ID and assignee ID included"""
@@ -221,6 +223,7 @@ class IssueWithState(BaseModel):
     state: Union[Any, Any] = Field(default=None)
     priority: Union[Any, Any] = Field(default=None)
     assignee: Union[Any, Any] = Field(default=None)
+    project: Union[Any, Any] = Field(default=None)
     created_at: Union[str, Any] = Field(default=None, alias="createdAt")
     updated_at: Union[str, Any] = Field(default=None, alias="updatedAt")
 
