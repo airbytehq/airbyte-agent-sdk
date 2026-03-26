@@ -181,7 +181,7 @@ connector = await SalesforceConnector.create_hosted(
 | Connector | OAuth Required | Notes |
 |-----------|----------------|-------|
 | Salesforce | Yes | Requires Connected App setup |
-| HubSpot | Optional | Can also use Private App token |
+| HubSpot | Yes | Requires OAuth app setup |
 | Google Drive | Yes | Requires Google Cloud project |
 | Amazon Ads | Yes | Requires Amazon Developer account |
 | Facebook Marketing | Yes | Requires Facebook App |

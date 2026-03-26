@@ -42,7 +42,7 @@ This guide covers common errors and solutions when working with Airbyte Agent Co
    ```python
    # Salesforce with refresh token
    connector = SalesforceConnector(
-       auth_config=SalesforceOAuthConfig(
+       auth_config=SalesforceAuthConfig(
            client_id=os.environ["SF_CLIENT_ID"],
            client_secret=os.environ["SF_CLIENT_SECRET"],
            refresh_token=os.environ["SF_REFRESH_TOKEN"]  # Required for auto-refresh

@@ -124,7 +124,7 @@ Each connector's AUTH.md file documents how to obtain credentials:
 | GitHub | Personal Access Token | [GitHub Settings > Developer settings > Tokens](https://github.com/settings/tokens) |
 | Stripe | API Key | [Stripe Dashboard > Developers > API keys](https://dashboard.stripe.com/apikeys) |
 | Slack | Bot Token | [Slack API > Create App > OAuth & Permissions](https://api.slack.com/apps) |
-| HubSpot | Private App Token | [HubSpot > Settings > Integrations > Private Apps](https://developers.hubspot.com/docs/api/private-apps) |
+| HubSpot | OAuth Credentials | [HubSpot > Settings > Integrations > Apps](https://developers.hubspot.com/docs/api/overview) |
 | Salesforce | OAuth Credentials | [Salesforce Setup > App Manager > Connected App](https://help.salesforce.com/s/articleView?id=sf.connected_app_create.htm) |
 
 For detailed authentication instructions, see the connector's AUTH.md:
@@ -354,11 +354,13 @@ result = await connector.execute("channel_messages", "list", {"channel": "C01234
 
 ```python
 from airbyte_agent_hubspot import HubspotConnector
-from airbyte_agent_hubspot.models import HubspotPrivateAppAuthConfig
+from airbyte_agent_hubspot.models import HubspotAuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotPrivateAppAuthConfig(
-        access_token=os.environ["HUBSPOT_ACCESS_TOKEN"]
+    auth_config=HubspotAuthConfig(
+        client_id=os.environ["HUBSPOT_CLIENT_ID"],
+        client_secret=os.environ["HUBSPOT_CLIENT_SECRET"],
+        refresh_token=os.environ["HUBSPOT_REFRESH_TOKEN"]
     )
 )
 

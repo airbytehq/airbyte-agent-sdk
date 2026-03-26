@@ -28,7 +28,7 @@ Airbyte Agent Connectors support multiple authentication methods depending on th
 | Gong | ✓ | | |
 | Google Drive | | ✓ | |
 | Greenhouse | ✓ | | |
-| HubSpot | ✓ | ✓ | |
+| HubSpot | | ✓ | |
 | Intercom | ✓ | | |
 | Jira | ✓ | | |
 | Klaviyo | ✓ | | |
@@ -64,7 +64,7 @@ connector = StripeConnector(
 | Connector | Where to Get Key |
 |-----------|------------------|
 | Stripe | [Dashboard > Developers > API keys](https://dashboard.stripe.com/apikeys) |
-| HubSpot | Settings > Integrations > Private Apps |
+| HubSpot | Settings > Integrations > Apps (OAuth) |
 | Jira | Account Settings > Security > API tokens |
 | Intercom | Settings > Developers > Access tokens |
 | Airtable | Account > Developer hub > Personal access tokens |
@@ -155,10 +155,10 @@ For long-lived access with automatic token refresh:
 
 ```python
 from airbyte_agent_salesforce import SalesforceConnector
-from airbyte_agent_salesforce.models import SalesforceOAuthConfig
+from airbyte_agent_salesforce.models import SalesforceAuthConfig
 
 connector = SalesforceConnector(
-    auth_config=SalesforceOAuthConfig(
+    auth_config=SalesforceAuthConfig(
         client_id="your_client_id",
         client_secret="your_client_secret",
         refresh_token="your_refresh_token"
@@ -182,10 +182,10 @@ The connector automatically refreshes the access token when it expires.
 
 ```python
 from airbyte_agent_hubspot import HubspotConnector
-from airbyte_agent_hubspot.models import HubspotOAuthConfig
+from airbyte_agent_hubspot.models import HubspotAuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotOAuthConfig(
+    auth_config=HubspotAuthConfig(
         client_id="your_client_id",
         client_secret="your_client_secret",
         refresh_token="your_refresh_token"
@@ -197,10 +197,10 @@ connector = HubspotConnector(
 
 ```python
 from airbyte_agent_google_drive import GoogleDriveConnector
-from airbyte_agent_google_drive.models import GoogleDriveOAuthConfig
+from airbyte_agent_google_drive.models import GoogleDriveAuthConfig
 
 connector = GoogleDriveConnector(
-    auth_config=GoogleDriveOAuthConfig(
+    auth_config=GoogleDriveAuthConfig(
         client_id="your_client_id",
         client_secret="your_client_secret",
         refresh_token="your_refresh_token"
@@ -354,10 +354,10 @@ Some connectors support multiple authentication methods. Choose based on your us
 **API Token:**
 ```python
 from airbyte_agent_zendesk_support import ZendeskSupportConnector
-from airbyte_agent_zendesk_support.models import ZendeskAPITokenAuthConfig
+from airbyte_agent_zendesk_support.models import ZendeskSupportApiTokenAuthConfig
 
 connector = ZendeskSupportConnector(
-    auth_config=ZendeskAPITokenAuthConfig(
+    auth_config=ZendeskSupportApiTokenAuthConfig(
         subdomain="yourcompany",
         email="admin@yourcompany.com",
         api_token="your_api_token"
@@ -367,37 +367,25 @@ connector = ZendeskSupportConnector(
 
 **OAuth:**
 ```python
-from airbyte_agent_zendesk_support.models import ZendeskOAuthConfig
+from airbyte_agent_zendesk_support.models import ZendeskSupportOauth20AuthConfig
 
 connector = ZendeskSupportConnector(
-    auth_config=ZendeskOAuthConfig(
+    auth_config=ZendeskSupportOauth20AuthConfig(
         subdomain="yourcompany",
         access_token="oauth_access_token"
     )
 )
 ```
 
-### HubSpot (Private App vs OAuth)
+### HubSpot (OAuth)
 
-> **Platform Mode note:** The Airbyte API only recognizes the OAuth auth scheme for HubSpot. Private App tokens work in OSS Mode but not in Platform Mode. Use OAuth credentials (`client_id`, `client_secret`, `refresh_token`) when creating connectors via the HTTP API or `create_hosted()`. See the [HubSpot OAuth setup](#hubspot) above for a code example, or [HubSpot AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/hubspot/AUTH.md) for step-by-step credential setup.
+HubSpot uses OAuth authentication in both OSS and Platform Mode. See [HubSpot AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/hubspot/AUTH.md) for step-by-step credential setup.
 
-**Private App Token (OSS Mode only):**
 ```python
-from airbyte_agent_hubspot.models import HubspotPrivateAppAuthConfig
+from airbyte_agent_hubspot.models import HubspotAuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotPrivateAppAuthConfig(
-        access_token="pat-na1-xxx"
-    )
-)
-```
-
-**OAuth (OSS and Platform Mode):**
-```python
-from airbyte_agent_hubspot.models import HubspotOAuthConfig
-
-connector = HubspotConnector(
-    auth_config=HubspotOAuthConfig(
+    auth_config=HubspotAuthConfig(
         client_id="...",
         client_secret="...",
         refresh_token="..."
@@ -467,7 +455,7 @@ Each connector's AUTH.md has complete authentication details:
 - [GitHub AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/github/AUTH.md) - PAT and OAuth
 - [Stripe AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/stripe/AUTH.md) - API Key
 - [Salesforce AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/salesforce/AUTH.md) - OAuth with refresh
-- [HubSpot AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/hubspot/AUTH.md) - Private App and OAuth
+- [HubSpot AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/hubspot/AUTH.md) - OAuth setup
 - [Zendesk Support AUTH.md](https://github.com/airbytehq/airbyte-agent-connectors/tree/main/connectors/zendesk-support/AUTH.md) - API Token and OAuth
 
 See the connector's AUTH.md for:

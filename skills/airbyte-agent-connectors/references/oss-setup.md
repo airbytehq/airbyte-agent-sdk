@@ -123,15 +123,17 @@ connector = SlackConnector(
 result = await connector.execute("channels", "list", {})
 ```
 
-### HubSpot with Private App Token
+### HubSpot with OAuth
 
 ```python
 from airbyte_agent_hubspot import HubspotConnector
-from airbyte_agent_hubspot.models import HubspotPrivateAppAuthConfig
+from airbyte_agent_hubspot.models import HubspotAuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotPrivateAppAuthConfig(
-        access_token=os.environ["HUBSPOT_ACCESS_TOKEN"]
+    auth_config=HubspotAuthConfig(
+        client_id=os.environ["HUBSPOT_CLIENT_ID"],
+        client_secret=os.environ["HUBSPOT_CLIENT_SECRET"],
+        refresh_token=os.environ["HUBSPOT_REFRESH_TOKEN"]
     )
 )
 
@@ -147,10 +149,10 @@ For OAuth connectors in OSS Mode, you need to handle the OAuth flow yourself and
 
 ```python
 from airbyte_agent_salesforce import SalesforceConnector
-from airbyte_agent_salesforce.models import SalesforceOAuthConfig
+from airbyte_agent_salesforce.models import SalesforceAuthConfig
 
 connector = SalesforceConnector(
-    auth_config=SalesforceOAuthConfig(
+    auth_config=SalesforceAuthConfig(
         client_id=os.environ["SALESFORCE_CLIENT_ID"],
         client_secret=os.environ["SALESFORCE_CLIENT_SECRET"],
         refresh_token=os.environ["SALESFORCE_REFRESH_TOKEN"]
@@ -165,10 +167,10 @@ result = await connector.execute("accounts", "list", {"limit": 50})
 
 ```python
 from airbyte_agent_hubspot import HubspotConnector
-from airbyte_agent_hubspot.models import HubspotOAuthConfig
+from airbyte_agent_hubspot.models import HubspotAuthConfig
 
 connector = HubspotConnector(
-    auth_config=HubspotOAuthConfig(
+    auth_config=HubspotAuthConfig(
         client_id=os.environ["HUBSPOT_CLIENT_ID"],
         client_secret=os.environ["HUBSPOT_CLIENT_SECRET"],
         refresh_token=os.environ["HUBSPOT_REFRESH_TOKEN"]
@@ -194,8 +196,10 @@ GONG_ACCESS_KEY_SECRET=your_access_key_secret
 # Slack (Bot Token)
 SLACK_BOT_TOKEN=xoxb-your-token
 
-# HubSpot (Private App Token)
-HUBSPOT_ACCESS_TOKEN=pat-na1-xxx
+# HubSpot (OAuth)
+HUBSPOT_CLIENT_ID=your_client_id
+HUBSPOT_CLIENT_SECRET=your_client_secret
+HUBSPOT_REFRESH_TOKEN=your_refresh_token
 
 # Jira (API Token)
 JIRA_API_TOKEN=your_api_token
