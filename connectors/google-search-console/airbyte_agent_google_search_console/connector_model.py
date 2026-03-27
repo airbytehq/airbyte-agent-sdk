@@ -29,6 +29,7 @@ from uuid import (
 GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('eb4c9e00-db83-4d63-a386-39cfa91012a8'),
     name='google-search-console',
+    version='1.0.1',
     base_url='https://www.googleapis.com/webmasters/v3',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -231,6 +232,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.sitemap',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -469,6 +473,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.rows',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
             },
         ),
@@ -591,6 +598,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.rows',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
             },
         ),
@@ -713,6 +723,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.rows',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
             },
         ),
@@ -835,6 +848,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.rows',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
             },
         ),
@@ -957,6 +973,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.rows',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
             },
         ),
@@ -1091,6 +1110,9 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.rows',
+                    param_sources={
+                        'siteUrl': {'parent_entity': 'sites', 'parent_key': 'siteUrl'},
+                    },
                 ),
             },
         ),
