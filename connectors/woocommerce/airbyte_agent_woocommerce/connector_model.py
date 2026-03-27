@@ -26,7 +26,7 @@ from uuid import (
 WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('2a2552ca-9f78-4c1c-9eb7-4d0dc66d72df'),
     name='woocommerce',
-    version='1.0.1',
+    version='1.0.2',
     base_url='https://{shop}/wp-json/wc/v3',
     auth=AuthConfig(
         type=AuthType.BASIC,
@@ -5291,6 +5291,9 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'product_variations',
                         },
                     },
+                    param_sources={
+                        'product_id': {'parent_entity': 'products', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -5879,6 +5882,9 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'order_notes',
                         },
                     },
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -6191,6 +6197,9 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-entity-name': 'refunds',
                             'x-airbyte-stream-name': 'refunds',
                         },
+                    },
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
