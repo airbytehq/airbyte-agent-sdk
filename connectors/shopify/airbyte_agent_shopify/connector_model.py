@@ -26,7 +26,7 @@ from uuid import (
 ShopifyConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9da77001-af33-4bcd-be46-6252bf9342b9'),
     name='shopify',
-    version='0.1.9',
+    version='0.1.10',
     base_url='https://{shop}.myshopify.com/admin/api/2025-01',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -4289,6 +4289,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.variants',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'product_id': {'parent_entity': 'products', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4612,6 +4615,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.images',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'product_id': {'parent_entity': 'products', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -5888,6 +5894,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.inventory_levels',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'location_id': {'parent_entity': 'locations', 'parent_key': 'id'},
+                    },
                 ),
             },
             entity_schema={
@@ -6910,6 +6919,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.discount_codes',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'price_rule_id': {'parent_entity': 'price_rules', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -9152,6 +9164,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.fulfillments',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -9569,6 +9584,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.refunds',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -9896,6 +9914,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.transactions',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -10555,6 +10576,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'customer_id': {'parent_entity': 'customers', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -10645,6 +10669,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'product_id': {'parent_entity': 'products', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -10735,6 +10762,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -10825,6 +10855,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'draft_order_id': {'parent_entity': 'draft_orders', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -10915,6 +10948,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'location_id': {'parent_entity': 'locations', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -11005,6 +11041,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'variant_id': {'parent_entity': 'product_variants', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -11095,6 +11134,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'collection_id': {'parent_entity': 'smart_collections', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -11187,6 +11229,10 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
                     untested=True,
+                    param_sources={
+                        'product_id': {'parent_entity': 'products', 'parent_key': 'id'},
+                        'image_id': {'parent_entity': 'product_images', 'parent_key': 'id'},
+                    },
                 ),
             },
         ),
@@ -11293,6 +11339,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.addresses',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'customer_id': {'parent_entity': 'customers', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -11478,6 +11527,9 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.fulfillment_orders',
                     meta_extractor={'next_page_url': '@link.next'},
+                    param_sources={
+                        'order_id': {'parent_entity': 'orders', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
