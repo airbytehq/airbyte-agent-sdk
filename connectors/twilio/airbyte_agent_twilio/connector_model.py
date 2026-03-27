@@ -26,7 +26,7 @@ from uuid import (
 TwilioConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('b9dc6155-672e-42ea-b10d-9f1f1fb95ab1'),
     name='twilio',
-    version='1.0.1',
+    version='1.0.2',
     base_url='https://api.twilio.com/2010-04-01',
     auth=AuthConfig(
         type=AuthType.BASIC,
@@ -450,6 +450,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'page': '$.page',
                         'page_size': '$.page_size',
                     },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -856,6 +859,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'first_page_uri': '$.first_page_uri',
                         'page': '$.page',
                         'page_size': '$.page_size',
+                    },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -1283,6 +1289,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'first_page_uri': '$.first_page_uri',
                         'page': '$.page',
                         'page_size': '$.page_size',
+                    },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -1786,6 +1795,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'page': '$.page',
                         'page_size': '$.page_size',
                     },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2096,6 +2108,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'page': '$.page',
                         'page_size': '$.page_size',
                     },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2355,6 +2370,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'page': '$.page',
                         'page_size': '$.page_size',
                     },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
+                    },
                 ),
             },
             entity_schema={
@@ -2557,6 +2575,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'first_page_uri': '$.first_page_uri',
                         'page': '$.page',
                         'page_size': '$.page_size',
+                    },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -2830,6 +2851,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'page': '$.page',
                         'page_size': '$.page_size',
                     },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3067,6 +3091,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'page': '$.page',
                         'page_size': '$.page_size',
                     },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3301,6 +3328,9 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'first_page_uri': '$.first_page_uri',
                         'page': '$.page',
                         'page_size': '$.page_size',
+                    },
+                    param_sources={
+                        'AccountSid': {'parent_entity': 'accounts', 'parent_key': 'sid'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
