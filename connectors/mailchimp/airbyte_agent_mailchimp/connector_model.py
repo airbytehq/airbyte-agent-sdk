@@ -26,7 +26,7 @@ from uuid import (
 MailchimpConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('b03a9f3e-22a5-11eb-adc1-0242ac120002'),
     name='mailchimp',
-    version='1.0.8',
+    version='1.0.9',
     base_url='https://{data_center}.api.mailchimp.com/3.0',
     auth=AuthConfig(
         type=AuthType.BASIC,
@@ -1929,6 +1929,9 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.members',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'list_id': {'parent_entity': 'lists', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3227,6 +3230,9 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.emails',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'campaign_id': {'parent_entity': 'campaigns', 'parent_key': 'id'},
+                    },
                 ),
             },
             entity_schema={
@@ -3734,6 +3740,9 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.tags',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'list_id': {'parent_entity': 'lists', 'parent_key': 'id'},
+                    },
                 ),
             },
             entity_schema={
@@ -3825,6 +3834,9 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.categories',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'list_id': {'parent_entity': 'lists', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3980,6 +3992,10 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.interests',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'list_id': {'parent_entity': 'lists', 'parent_key': 'id'},
+                        'interest_category_id': {'parent_entity': 'interest_categories', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4165,6 +4181,9 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.segments',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'list_id': {'parent_entity': 'lists', 'parent_key': 'id'},
+                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4466,6 +4485,10 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.members',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'list_id': {'parent_entity': 'lists', 'parent_key': 'id'},
+                        'segment_id': {'parent_entity': 'segments', 'parent_key': 'id'},
+                    },
                 ),
             },
             entity_schema={
@@ -4693,6 +4716,9 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.unsubscribes',
                     meta_extractor={'total_items': '$.total_items'},
+                    param_sources={
+                        'campaign_id': {'parent_entity': 'campaigns', 'parent_key': 'id'},
+                    },
                 ),
             },
             entity_schema={
