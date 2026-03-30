@@ -38,7 +38,7 @@
 | [LinkedIn Ads](connectors/linkedin-ads.md) | `airbyte-agent-linkedin-ads` | OAuth | Accounts, Account Users, Campaigns, Campaign Groups, Crea... | complete |
 | [Mailchimp](connectors/mailchimp.md) | `airbyte-agent-mailchimp` | Token | Campaigns, Lists, List Members, Reports, Email Activity, ... | complete |
 | [Monday](connectors/monday.md) | `airbyte-agent-monday` | OAuth, Token | Users, Boards, Items, Teams, Tags, Updates, Workspaces, A... | complete |
-| [Notion](connectors/notion.md) | `airbyte-agent-notion` | Token | Users, Pages, Data Sources, Blocks, Comments | complete |
+| [Notion](connectors/notion.md) | `airbyte-agent-notion` | OAuth, Token | Users, Pages, Data Sources, Blocks, Comments | complete |
 | [Orb](connectors/orb.md) | `airbyte-agent-orb` | Token | Customers, Subscriptions, Plans, Invoices | complete |
 | [PayPal Transaction](connectors/paypal-transaction.md) | `airbyte-agent-paypal-transaction` | OAuth | Balances, Transactions, List Payments, List Disputes, Lis... | complete |
 | [Pinterest](connectors/pinterest.md) | `airbyte-agent-pinterest` | OAuth | Ad Accounts, Boards, Campaigns, Ad Groups, Ads, Board Sec... | complete |
