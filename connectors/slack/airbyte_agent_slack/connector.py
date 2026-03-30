@@ -36,6 +36,10 @@ from .types import (
     AirbyteSearchParams,
     ChannelsSearchFilter,
     ChannelsSearchQuery,
+    ChannelMessagesSearchFilter,
+    ChannelMessagesSearchQuery,
+    ThreadsSearchFilter,
+    ThreadsSearchQuery,
     UsersSearchFilter,
     UsersSearchQuery,
 )
@@ -63,6 +67,10 @@ from .models import (
     AirbyteSearchResult,
     ChannelsSearchData,
     ChannelsSearchResult,
+    ChannelMessagesSearchData,
+    ChannelMessagesSearchResult,
+    ThreadsSearchData,
+    ThreadsSearchResult,
     UsersSearchData,
     UsersSearchResult,
 )
@@ -112,7 +120,7 @@ class SlackConnector:
     """
 
     connector_name = "slack"
-    connector_version = "0.1.16"
+    connector_version = "0.1.17"
     vendored_sdk_version = "0.1.0"  # Version of vendored connector-sdk
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
@@ -1219,6 +1227,78 @@ class ChannelMessagesQuery:
 
 
 
+    async def search(
+        self,
+        query: ChannelMessagesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ChannelMessagesSearchResult:
+        """
+        Search channel_messages records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ChannelMessagesSearchFilter):
+        - type_: Message type.
+        - subtype: Message subtype.
+        - ts: Message timestamp (unique identifier).
+        - user: User ID who sent the message.
+        - text: Message text content.
+        - thread_ts: Thread parent timestamp.
+        - reply_count: Number of replies in thread.
+        - reply_users_count: Number of unique users who replied.
+        - latest_reply: Timestamp of latest reply.
+        - reply_users: User IDs who replied to the thread.
+        - is_locked: Whether the thread is locked.
+        - subscribed: Whether the user is subscribed to the thread.
+        - reactions: Reactions to the message.
+        - attachments: Message attachments.
+        - blocks: Block kit blocks.
+        - bot_id: Bot ID if message was sent by a bot.
+        - bot_profile: Bot profile information.
+        - team: Team ID.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ChannelMessagesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("channel_messages", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ChannelMessagesSearchResult(
+            data=[
+                ChannelMessagesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class ThreadsQuery:
     """
     Query class for Threads entity operations.
@@ -1274,6 +1354,76 @@ class ThreadsQuery:
         )
 
 
+
+    async def search(
+        self,
+        query: ThreadsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ThreadsSearchResult:
+        """
+        Search threads records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ThreadsSearchFilter):
+        - type_: Message type.
+        - subtype: Message subtype.
+        - ts: Message timestamp (unique identifier).
+        - user: User ID who sent the message.
+        - text: Message text content.
+        - thread_ts: Thread parent timestamp.
+        - parent_user_id: User ID of the parent message author (present in thread replies).
+        - reply_count: Number of replies in thread.
+        - reply_users_count: Number of unique users who replied.
+        - latest_reply: Timestamp of latest reply.
+        - reply_users: User IDs who replied to the thread.
+        - is_locked: Whether the thread is locked.
+        - subscribed: Whether the user is subscribed to the thread.
+        - blocks: Block kit blocks.
+        - bot_id: Bot ID if message was sent by a bot.
+        - team: Team ID.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ThreadsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("threads", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ThreadsSearchResult(
+            data=[
+                ThreadsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class MessagesQuery:
     """

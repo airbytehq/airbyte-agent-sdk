@@ -529,6 +529,576 @@ class ChannelsSearchQuery(TypedDict, total=False):
     sort: list[ChannelsSortFilter]
 
 
+# ===== CHANNEL_MESSAGES SEARCH TYPES =====
+
+class ChannelMessagesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering channel_messages search queries."""
+    type_: str | None
+    """Message type."""
+    subtype: str | None
+    """Message subtype."""
+    ts: str | None
+    """Message timestamp (unique identifier)."""
+    user: str | None
+    """User ID who sent the message."""
+    text: str | None
+    """Message text content."""
+    thread_ts: str | None
+    """Thread parent timestamp."""
+    reply_count: int | None
+    """Number of replies in thread."""
+    reply_users_count: int | None
+    """Number of unique users who replied."""
+    latest_reply: str | None
+    """Timestamp of latest reply."""
+    reply_users: list[Any] | None
+    """User IDs who replied to the thread."""
+    is_locked: bool | None
+    """Whether the thread is locked."""
+    subscribed: bool | None
+    """Whether the user is subscribed to the thread."""
+    reactions: list[Any] | None
+    """Reactions to the message."""
+    attachments: list[Any] | None
+    """Message attachments."""
+    blocks: list[Any] | None
+    """Block kit blocks."""
+    bot_id: str | None
+    """Bot ID if message was sent by a bot."""
+    bot_profile: dict[str, Any] | None
+    """Bot profile information."""
+    team: str | None
+    """Team ID."""
+
+
+class ChannelMessagesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    type_: list[str]
+    """Message type."""
+    subtype: list[str]
+    """Message subtype."""
+    ts: list[str]
+    """Message timestamp (unique identifier)."""
+    user: list[str]
+    """User ID who sent the message."""
+    text: list[str]
+    """Message text content."""
+    thread_ts: list[str]
+    """Thread parent timestamp."""
+    reply_count: list[int]
+    """Number of replies in thread."""
+    reply_users_count: list[int]
+    """Number of unique users who replied."""
+    latest_reply: list[str]
+    """Timestamp of latest reply."""
+    reply_users: list[list[Any]]
+    """User IDs who replied to the thread."""
+    is_locked: list[bool]
+    """Whether the thread is locked."""
+    subscribed: list[bool]
+    """Whether the user is subscribed to the thread."""
+    reactions: list[list[Any]]
+    """Reactions to the message."""
+    attachments: list[list[Any]]
+    """Message attachments."""
+    blocks: list[list[Any]]
+    """Block kit blocks."""
+    bot_id: list[str]
+    """Bot ID if message was sent by a bot."""
+    bot_profile: list[dict[str, Any]]
+    """Bot profile information."""
+    team: list[str]
+    """Team ID."""
+
+
+class ChannelMessagesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    type_: Any
+    """Message type."""
+    subtype: Any
+    """Message subtype."""
+    ts: Any
+    """Message timestamp (unique identifier)."""
+    user: Any
+    """User ID who sent the message."""
+    text: Any
+    """Message text content."""
+    thread_ts: Any
+    """Thread parent timestamp."""
+    reply_count: Any
+    """Number of replies in thread."""
+    reply_users_count: Any
+    """Number of unique users who replied."""
+    latest_reply: Any
+    """Timestamp of latest reply."""
+    reply_users: Any
+    """User IDs who replied to the thread."""
+    is_locked: Any
+    """Whether the thread is locked."""
+    subscribed: Any
+    """Whether the user is subscribed to the thread."""
+    reactions: Any
+    """Reactions to the message."""
+    attachments: Any
+    """Message attachments."""
+    blocks: Any
+    """Block kit blocks."""
+    bot_id: Any
+    """Bot ID if message was sent by a bot."""
+    bot_profile: Any
+    """Bot profile information."""
+    team: Any
+    """Team ID."""
+
+
+class ChannelMessagesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    type_: str
+    """Message type."""
+    subtype: str
+    """Message subtype."""
+    ts: str
+    """Message timestamp (unique identifier)."""
+    user: str
+    """User ID who sent the message."""
+    text: str
+    """Message text content."""
+    thread_ts: str
+    """Thread parent timestamp."""
+    reply_count: str
+    """Number of replies in thread."""
+    reply_users_count: str
+    """Number of unique users who replied."""
+    latest_reply: str
+    """Timestamp of latest reply."""
+    reply_users: str
+    """User IDs who replied to the thread."""
+    is_locked: str
+    """Whether the thread is locked."""
+    subscribed: str
+    """Whether the user is subscribed to the thread."""
+    reactions: str
+    """Reactions to the message."""
+    attachments: str
+    """Message attachments."""
+    blocks: str
+    """Block kit blocks."""
+    bot_id: str
+    """Bot ID if message was sent by a bot."""
+    bot_profile: str
+    """Bot profile information."""
+    team: str
+    """Team ID."""
+
+
+class ChannelMessagesSortFilter(TypedDict, total=False):
+    """Available fields for sorting channel_messages search results."""
+    type_: AirbyteSortOrder
+    """Message type."""
+    subtype: AirbyteSortOrder
+    """Message subtype."""
+    ts: AirbyteSortOrder
+    """Message timestamp (unique identifier)."""
+    user: AirbyteSortOrder
+    """User ID who sent the message."""
+    text: AirbyteSortOrder
+    """Message text content."""
+    thread_ts: AirbyteSortOrder
+    """Thread parent timestamp."""
+    reply_count: AirbyteSortOrder
+    """Number of replies in thread."""
+    reply_users_count: AirbyteSortOrder
+    """Number of unique users who replied."""
+    latest_reply: AirbyteSortOrder
+    """Timestamp of latest reply."""
+    reply_users: AirbyteSortOrder
+    """User IDs who replied to the thread."""
+    is_locked: AirbyteSortOrder
+    """Whether the thread is locked."""
+    subscribed: AirbyteSortOrder
+    """Whether the user is subscribed to the thread."""
+    reactions: AirbyteSortOrder
+    """Reactions to the message."""
+    attachments: AirbyteSortOrder
+    """Message attachments."""
+    blocks: AirbyteSortOrder
+    """Block kit blocks."""
+    bot_id: AirbyteSortOrder
+    """Bot ID if message was sent by a bot."""
+    bot_profile: AirbyteSortOrder
+    """Bot profile information."""
+    team: AirbyteSortOrder
+    """Team ID."""
+
+
+# Entity-specific condition types for channel_messages
+class ChannelMessagesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ChannelMessagesSearchFilter
+
+
+class ChannelMessagesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ChannelMessagesSearchFilter
+
+
+class ChannelMessagesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ChannelMessagesSearchFilter
+
+
+class ChannelMessagesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ChannelMessagesSearchFilter
+
+
+class ChannelMessagesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ChannelMessagesSearchFilter
+
+
+class ChannelMessagesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ChannelMessagesSearchFilter
+
+
+class ChannelMessagesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ChannelMessagesStringFilter
+
+
+class ChannelMessagesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ChannelMessagesStringFilter
+
+
+class ChannelMessagesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ChannelMessagesStringFilter
+
+
+class ChannelMessagesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ChannelMessagesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ChannelMessagesInCondition = TypedDict("ChannelMessagesInCondition", {"in": ChannelMessagesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ChannelMessagesNotCondition = TypedDict("ChannelMessagesNotCondition", {"not": "ChannelMessagesCondition"}, total=False)
+"""Negates the nested condition."""
+
+ChannelMessagesAndCondition = TypedDict("ChannelMessagesAndCondition", {"and": "list[ChannelMessagesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ChannelMessagesOrCondition = TypedDict("ChannelMessagesOrCondition", {"or": "list[ChannelMessagesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ChannelMessagesAnyCondition = TypedDict("ChannelMessagesAnyCondition", {"any": ChannelMessagesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all channel_messages condition types
+ChannelMessagesCondition = (
+    ChannelMessagesEqCondition
+    | ChannelMessagesNeqCondition
+    | ChannelMessagesGtCondition
+    | ChannelMessagesGteCondition
+    | ChannelMessagesLtCondition
+    | ChannelMessagesLteCondition
+    | ChannelMessagesInCondition
+    | ChannelMessagesLikeCondition
+    | ChannelMessagesFuzzyCondition
+    | ChannelMessagesKeywordCondition
+    | ChannelMessagesContainsCondition
+    | ChannelMessagesNotCondition
+    | ChannelMessagesAndCondition
+    | ChannelMessagesOrCondition
+    | ChannelMessagesAnyCondition
+)
+
+
+class ChannelMessagesSearchQuery(TypedDict, total=False):
+    """Search query for channel_messages entity."""
+    filter: ChannelMessagesCondition
+    sort: list[ChannelMessagesSortFilter]
+
+
+# ===== THREADS SEARCH TYPES =====
+
+class ThreadsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering threads search queries."""
+    type_: str | None
+    """Message type."""
+    subtype: str | None
+    """Message subtype."""
+    ts: str | None
+    """Message timestamp (unique identifier)."""
+    user: str | None
+    """User ID who sent the message."""
+    text: str | None
+    """Message text content."""
+    thread_ts: str | None
+    """Thread parent timestamp."""
+    parent_user_id: str | None
+    """User ID of the parent message author (present in thread replies)."""
+    reply_count: int | None
+    """Number of replies in thread."""
+    reply_users_count: int | None
+    """Number of unique users who replied."""
+    latest_reply: str | None
+    """Timestamp of latest reply."""
+    reply_users: list[Any] | None
+    """User IDs who replied to the thread."""
+    is_locked: bool | None
+    """Whether the thread is locked."""
+    subscribed: bool | None
+    """Whether the user is subscribed to the thread."""
+    blocks: list[Any] | None
+    """Block kit blocks."""
+    bot_id: str | None
+    """Bot ID if message was sent by a bot."""
+    team: str | None
+    """Team ID."""
+
+
+class ThreadsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    type_: list[str]
+    """Message type."""
+    subtype: list[str]
+    """Message subtype."""
+    ts: list[str]
+    """Message timestamp (unique identifier)."""
+    user: list[str]
+    """User ID who sent the message."""
+    text: list[str]
+    """Message text content."""
+    thread_ts: list[str]
+    """Thread parent timestamp."""
+    parent_user_id: list[str]
+    """User ID of the parent message author (present in thread replies)."""
+    reply_count: list[int]
+    """Number of replies in thread."""
+    reply_users_count: list[int]
+    """Number of unique users who replied."""
+    latest_reply: list[str]
+    """Timestamp of latest reply."""
+    reply_users: list[list[Any]]
+    """User IDs who replied to the thread."""
+    is_locked: list[bool]
+    """Whether the thread is locked."""
+    subscribed: list[bool]
+    """Whether the user is subscribed to the thread."""
+    blocks: list[list[Any]]
+    """Block kit blocks."""
+    bot_id: list[str]
+    """Bot ID if message was sent by a bot."""
+    team: list[str]
+    """Team ID."""
+
+
+class ThreadsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    type_: Any
+    """Message type."""
+    subtype: Any
+    """Message subtype."""
+    ts: Any
+    """Message timestamp (unique identifier)."""
+    user: Any
+    """User ID who sent the message."""
+    text: Any
+    """Message text content."""
+    thread_ts: Any
+    """Thread parent timestamp."""
+    parent_user_id: Any
+    """User ID of the parent message author (present in thread replies)."""
+    reply_count: Any
+    """Number of replies in thread."""
+    reply_users_count: Any
+    """Number of unique users who replied."""
+    latest_reply: Any
+    """Timestamp of latest reply."""
+    reply_users: Any
+    """User IDs who replied to the thread."""
+    is_locked: Any
+    """Whether the thread is locked."""
+    subscribed: Any
+    """Whether the user is subscribed to the thread."""
+    blocks: Any
+    """Block kit blocks."""
+    bot_id: Any
+    """Bot ID if message was sent by a bot."""
+    team: Any
+    """Team ID."""
+
+
+class ThreadsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    type_: str
+    """Message type."""
+    subtype: str
+    """Message subtype."""
+    ts: str
+    """Message timestamp (unique identifier)."""
+    user: str
+    """User ID who sent the message."""
+    text: str
+    """Message text content."""
+    thread_ts: str
+    """Thread parent timestamp."""
+    parent_user_id: str
+    """User ID of the parent message author (present in thread replies)."""
+    reply_count: str
+    """Number of replies in thread."""
+    reply_users_count: str
+    """Number of unique users who replied."""
+    latest_reply: str
+    """Timestamp of latest reply."""
+    reply_users: str
+    """User IDs who replied to the thread."""
+    is_locked: str
+    """Whether the thread is locked."""
+    subscribed: str
+    """Whether the user is subscribed to the thread."""
+    blocks: str
+    """Block kit blocks."""
+    bot_id: str
+    """Bot ID if message was sent by a bot."""
+    team: str
+    """Team ID."""
+
+
+class ThreadsSortFilter(TypedDict, total=False):
+    """Available fields for sorting threads search results."""
+    type_: AirbyteSortOrder
+    """Message type."""
+    subtype: AirbyteSortOrder
+    """Message subtype."""
+    ts: AirbyteSortOrder
+    """Message timestamp (unique identifier)."""
+    user: AirbyteSortOrder
+    """User ID who sent the message."""
+    text: AirbyteSortOrder
+    """Message text content."""
+    thread_ts: AirbyteSortOrder
+    """Thread parent timestamp."""
+    parent_user_id: AirbyteSortOrder
+    """User ID of the parent message author (present in thread replies)."""
+    reply_count: AirbyteSortOrder
+    """Number of replies in thread."""
+    reply_users_count: AirbyteSortOrder
+    """Number of unique users who replied."""
+    latest_reply: AirbyteSortOrder
+    """Timestamp of latest reply."""
+    reply_users: AirbyteSortOrder
+    """User IDs who replied to the thread."""
+    is_locked: AirbyteSortOrder
+    """Whether the thread is locked."""
+    subscribed: AirbyteSortOrder
+    """Whether the user is subscribed to the thread."""
+    blocks: AirbyteSortOrder
+    """Block kit blocks."""
+    bot_id: AirbyteSortOrder
+    """Bot ID if message was sent by a bot."""
+    team: AirbyteSortOrder
+    """Team ID."""
+
+
+# Entity-specific condition types for threads
+class ThreadsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ThreadsSearchFilter
+
+
+class ThreadsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ThreadsSearchFilter
+
+
+class ThreadsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ThreadsSearchFilter
+
+
+class ThreadsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ThreadsSearchFilter
+
+
+class ThreadsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ThreadsSearchFilter
+
+
+class ThreadsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ThreadsSearchFilter
+
+
+class ThreadsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ThreadsStringFilter
+
+
+class ThreadsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ThreadsStringFilter
+
+
+class ThreadsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ThreadsStringFilter
+
+
+class ThreadsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ThreadsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ThreadsInCondition = TypedDict("ThreadsInCondition", {"in": ThreadsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ThreadsNotCondition = TypedDict("ThreadsNotCondition", {"not": "ThreadsCondition"}, total=False)
+"""Negates the nested condition."""
+
+ThreadsAndCondition = TypedDict("ThreadsAndCondition", {"and": "list[ThreadsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ThreadsOrCondition = TypedDict("ThreadsOrCondition", {"or": "list[ThreadsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ThreadsAnyCondition = TypedDict("ThreadsAnyCondition", {"any": ThreadsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all threads condition types
+ThreadsCondition = (
+    ThreadsEqCondition
+    | ThreadsNeqCondition
+    | ThreadsGtCondition
+    | ThreadsGteCondition
+    | ThreadsLtCondition
+    | ThreadsLteCondition
+    | ThreadsInCondition
+    | ThreadsLikeCondition
+    | ThreadsFuzzyCondition
+    | ThreadsKeywordCondition
+    | ThreadsContainsCondition
+    | ThreadsNotCondition
+    | ThreadsAndCondition
+    | ThreadsOrCondition
+    | ThreadsAnyCondition
+)
+
+
+class ThreadsSearchQuery(TypedDict, total=False):
+    """Search query for threads entity."""
+    filter: ThreadsCondition
+    sort: list[ThreadsSortFilter]
+
+
 # ===== USERS SEARCH TYPES =====
 
 class UsersSearchFilter(TypedDict, total=False):

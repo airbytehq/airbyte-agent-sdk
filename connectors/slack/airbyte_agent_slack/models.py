@@ -199,27 +199,6 @@ class Reaction(BaseModel):
     users: Union[list[str] | None, Any] = Field(default=None)
     count: Union[int | None, Any] = Field(default=None)
 
-class Attachment(BaseModel):
-    """Message attachment"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    fallback: Union[str | None, Any] = Field(default=None)
-    color: Union[str | None, Any] = Field(default=None)
-    pretext: Union[str | None, Any] = Field(default=None)
-    author_name: Union[str | None, Any] = Field(default=None)
-    author_link: Union[str | None, Any] = Field(default=None)
-    author_icon: Union[str | None, Any] = Field(default=None)
-    title: Union[str | None, Any] = Field(default=None)
-    title_link: Union[str | None, Any] = Field(default=None)
-    text: Union[str | None, Any] = Field(default=None)
-    fields: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
-    image_url: Union[str | None, Any] = Field(default=None)
-    thumb_url: Union[str | None, Any] = Field(default=None)
-    footer: Union[str | None, Any] = Field(default=None)
-    footer_icon: Union[str | None, Any] = Field(default=None)
-    ts: Union[Any, Any] = Field(default=None)
-
 class File(BaseModel):
     """File object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -243,6 +222,27 @@ class File(BaseModel):
     permalink_public: Union[str | None, Any] = Field(default=None)
     created: Union[int | None, Any] = Field(default=None)
     timestamp: Union[int | None, Any] = Field(default=None)
+
+class Attachment(BaseModel):
+    """Message attachment"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    fallback: Union[str | None, Any] = Field(default=None)
+    color: Union[str | None, Any] = Field(default=None)
+    pretext: Union[str | None, Any] = Field(default=None)
+    author_name: Union[str | None, Any] = Field(default=None)
+    author_link: Union[str | None, Any] = Field(default=None)
+    author_icon: Union[str | None, Any] = Field(default=None)
+    title: Union[str | None, Any] = Field(default=None)
+    title_link: Union[str | None, Any] = Field(default=None)
+    text: Union[str | None, Any] = Field(default=None)
+    fields: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
+    image_url: Union[str | None, Any] = Field(default=None)
+    thumb_url: Union[str | None, Any] = Field(default=None)
+    footer: Union[str | None, Any] = Field(default=None)
+    footer_icon: Union[str | None, Any] = Field(default=None)
+    ts: Union[Any, Any] = Field(default=None)
 
 class Message(BaseModel):
     """Slack message object"""
@@ -604,6 +604,86 @@ class ChannelsSearchData(BaseModel):
     """The timestamp when the channel was last updated."""
 
 
+class ChannelMessagesSearchData(BaseModel):
+    """Search result data for channel_messages entity."""
+    model_config = ConfigDict(extra="allow")
+
+    type_: str | None = None
+    """Message type."""
+    subtype: str | None = None
+    """Message subtype."""
+    ts: str | None = None
+    """Message timestamp (unique identifier)."""
+    user: str | None = None
+    """User ID who sent the message."""
+    text: str | None = None
+    """Message text content."""
+    thread_ts: str | None = None
+    """Thread parent timestamp."""
+    reply_count: int | None = None
+    """Number of replies in thread."""
+    reply_users_count: int | None = None
+    """Number of unique users who replied."""
+    latest_reply: str | None = None
+    """Timestamp of latest reply."""
+    reply_users: list[Any] | None = None
+    """User IDs who replied to the thread."""
+    is_locked: bool | None = None
+    """Whether the thread is locked."""
+    subscribed: bool | None = None
+    """Whether the user is subscribed to the thread."""
+    reactions: list[Any] | None = None
+    """Reactions to the message."""
+    attachments: list[Any] | None = None
+    """Message attachments."""
+    blocks: list[Any] | None = None
+    """Block kit blocks."""
+    bot_id: str | None = None
+    """Bot ID if message was sent by a bot."""
+    bot_profile: dict[str, Any] | None = None
+    """Bot profile information."""
+    team: str | None = None
+    """Team ID."""
+
+
+class ThreadsSearchData(BaseModel):
+    """Search result data for threads entity."""
+    model_config = ConfigDict(extra="allow")
+
+    type_: str | None = None
+    """Message type."""
+    subtype: str | None = None
+    """Message subtype."""
+    ts: str | None = None
+    """Message timestamp (unique identifier)."""
+    user: str | None = None
+    """User ID who sent the message."""
+    text: str | None = None
+    """Message text content."""
+    thread_ts: str | None = None
+    """Thread parent timestamp."""
+    parent_user_id: str | None = None
+    """User ID of the parent message author (present in thread replies)."""
+    reply_count: int | None = None
+    """Number of replies in thread."""
+    reply_users_count: int | None = None
+    """Number of unique users who replied."""
+    latest_reply: str | None = None
+    """Timestamp of latest reply."""
+    reply_users: list[Any] | None = None
+    """User IDs who replied to the thread."""
+    is_locked: bool | None = None
+    """Whether the thread is locked."""
+    subscribed: bool | None = None
+    """Whether the user is subscribed to the thread."""
+    blocks: list[Any] | None = None
+    """Block kit blocks."""
+    bot_id: str | None = None
+    """Bot ID if message was sent by a bot."""
+    team: str | None = None
+    """Team ID."""
+
+
 class UsersSearchData(BaseModel):
     """Search result data for users entity."""
     model_config = ConfigDict(extra="allow")
@@ -684,6 +764,12 @@ class AirbyteSearchResult(BaseModel, Generic[D]):
 
 ChannelsSearchResult = AirbyteSearchResult[ChannelsSearchData]
 """Search result type for channels entity."""
+
+ChannelMessagesSearchResult = AirbyteSearchResult[ChannelMessagesSearchData]
+"""Search result type for channel_messages entity."""
+
+ThreadsSearchResult = AirbyteSearchResult[ThreadsSearchData]
+"""Search result type for threads entity."""
 
 UsersSearchResult = AirbyteSearchResult[UsersSearchData]
 """Search result type for users entity."""
