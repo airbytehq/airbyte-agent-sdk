@@ -58,20 +58,13 @@ from .models import (
     TeamsListResult,
     UsersListResult,
     CommentsListResult,
-    CommentCreateResponse,
-    CommentResponse,
-    CommentUpdateResponse,
-    CommentsListResponse,
+    Comment,
+    CommentMutationPayload,
     Issue,
-    IssueCreateResponse,
-    IssueResponse,
-    IssueUpdateResponse,
+    IssueMutationPayload,
     Project,
-    ProjectResponse,
     Team,
-    TeamResponse,
-    UserResponse,
-    UsersListResponse,
+    User,
     AirbyteSearchMeta,
     AirbyteSearchResult,
     CommentsSearchData,
@@ -131,7 +124,7 @@ class LinearConnector:
     """
 
     connector_name = "linear"
-    connector_version = "0.1.13"
+    connector_version = "0.1.14"
     vendored_sdk_version = "0.1.0"  # Version of vendored connector-sdk
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
@@ -285,7 +278,7 @@ class LinearConnector:
         entity: Literal["issues"],
         action: Literal["get"],
         params: "IssuesGetParams"
-    ) -> "IssueResponse": ...
+    ) -> "Issue": ...
 
     @overload
     async def execute(
@@ -293,7 +286,7 @@ class LinearConnector:
         entity: Literal["issues"],
         action: Literal["create"],
         params: "IssuesCreateParams"
-    ) -> "IssueCreateResponse": ...
+    ) -> "IssueMutationPayload": ...
 
     @overload
     async def execute(
@@ -301,7 +294,7 @@ class LinearConnector:
         entity: Literal["issues"],
         action: Literal["update"],
         params: "IssuesUpdateParams"
-    ) -> "IssueUpdateResponse": ...
+    ) -> "IssueMutationPayload": ...
 
     @overload
     async def execute(
@@ -317,7 +310,7 @@ class LinearConnector:
         entity: Literal["projects"],
         action: Literal["get"],
         params: "ProjectsGetParams"
-    ) -> "ProjectResponse": ...
+    ) -> "Project": ...
 
     @overload
     async def execute(
@@ -333,7 +326,7 @@ class LinearConnector:
         entity: Literal["teams"],
         action: Literal["get"],
         params: "TeamsGetParams"
-    ) -> "TeamResponse": ...
+    ) -> "Team": ...
 
     @overload
     async def execute(
@@ -349,7 +342,7 @@ class LinearConnector:
         entity: Literal["users"],
         action: Literal["get"],
         params: "UsersGetParams"
-    ) -> "UserResponse": ...
+    ) -> "User": ...
 
     @overload
     async def execute(
@@ -365,7 +358,7 @@ class LinearConnector:
         entity: Literal["comments"],
         action: Literal["get"],
         params: "CommentsGetParams"
-    ) -> "CommentResponse": ...
+    ) -> "Comment": ...
 
     @overload
     async def execute(
@@ -373,7 +366,7 @@ class LinearConnector:
         entity: Literal["comments"],
         action: Literal["create"],
         params: "CommentsCreateParams"
-    ) -> "CommentCreateResponse": ...
+    ) -> "CommentMutationPayload": ...
 
     @overload
     async def execute(
@@ -381,7 +374,7 @@ class LinearConnector:
         entity: Literal["comments"],
         action: Literal["update"],
         params: "CommentsUpdateParams"
-    ) -> "CommentUpdateResponse": ...
+    ) -> "CommentMutationPayload": ...
 
 
     @overload
@@ -756,7 +749,7 @@ class IssuesQuery:
         self,
         id: str | None = None,
         **kwargs
-    ) -> IssueResponse:
+    ) -> Issue:
         """
         Get a single issue by ID via GraphQL
 
@@ -765,7 +758,7 @@ class IssuesQuery:
             **kwargs: Additional parameters
 
         Returns:
-            IssueResponse
+            Issue
         """
         params = {k: v for k, v in {
             "id": id,
@@ -786,7 +779,7 @@ class IssuesQuery:
         priority: int | None = None,
         project_id: str | None = None,
         **kwargs
-    ) -> IssueCreateResponse:
+    ) -> IssueMutationPayload:
         """
         Create a new issue via GraphQL mutation
 
@@ -800,7 +793,7 @@ class IssuesQuery:
             **kwargs: Additional parameters
 
         Returns:
-            IssueCreateResponse
+            IssueMutationPayload
         """
         params = {k: v for k, v in {
             "teamId": team_id,
@@ -827,7 +820,7 @@ class IssuesQuery:
         assignee_id: str | None = None,
         project_id: str | None = None,
         **kwargs
-    ) -> IssueUpdateResponse:
+    ) -> IssueMutationPayload:
         """
         Update an existing issue via GraphQL mutation. All fields except id are optional for partial updates.
 To assign a user, provide assigneeId with the user's ID (get user IDs from the users list).
@@ -845,7 +838,7 @@ Omit assigneeId to leave the current assignee unchanged.
             **kwargs: Additional parameters
 
         Returns:
-            IssueUpdateResponse
+            IssueMutationPayload
         """
         params = {k: v for k, v in {
             "id": id,
@@ -1015,7 +1008,7 @@ class ProjectsQuery:
         self,
         id: str | None = None,
         **kwargs
-    ) -> ProjectResponse:
+    ) -> Project:
         """
         Get a single project by ID via GraphQL
 
@@ -1024,7 +1017,7 @@ class ProjectsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            ProjectResponse
+            Project
         """
         params = {k: v for k, v in {
             "id": id,
@@ -1175,7 +1168,7 @@ class TeamsQuery:
         self,
         id: str | None = None,
         **kwargs
-    ) -> TeamResponse:
+    ) -> Team:
         """
         Get a single team by ID via GraphQL
 
@@ -1184,7 +1177,7 @@ class TeamsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            TeamResponse
+            Team
         """
         params = {k: v for k, v in {
             "id": id,
@@ -1325,7 +1318,8 @@ class UsersQuery:
         result = await self._connector.execute("users", "list", params)
         # Cast generic envelope to concrete typed result
         return UsersListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 
@@ -1334,7 +1328,7 @@ class UsersQuery:
         self,
         id: str | None = None,
         **kwargs
-    ) -> UserResponse:
+    ) -> User:
         """
         Get a single user by ID via GraphQL
 
@@ -1343,7 +1337,7 @@ class UsersQuery:
             **kwargs: Additional parameters
 
         Returns:
-            UserResponse
+            User
         """
         params = {k: v for k, v in {
             "id": id,
@@ -1467,7 +1461,8 @@ class CommentsQuery:
         result = await self._connector.execute("comments", "list", params)
         # Cast generic envelope to concrete typed result
         return CommentsListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 
@@ -1476,7 +1471,7 @@ class CommentsQuery:
         self,
         id: str | None = None,
         **kwargs
-    ) -> CommentResponse:
+    ) -> Comment:
         """
         Get a single comment by ID via GraphQL
 
@@ -1485,7 +1480,7 @@ class CommentsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            CommentResponse
+            Comment
         """
         params = {k: v for k, v in {
             "id": id,
@@ -1502,7 +1497,7 @@ class CommentsQuery:
         issue_id: str,
         body: str,
         **kwargs
-    ) -> CommentCreateResponse:
+    ) -> CommentMutationPayload:
         """
         Create a new comment on an issue via GraphQL mutation
 
@@ -1512,7 +1507,7 @@ class CommentsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            CommentCreateResponse
+            CommentMutationPayload
         """
         params = {k: v for k, v in {
             "issueId": issue_id,
@@ -1530,7 +1525,7 @@ class CommentsQuery:
         body: str,
         id: str | None = None,
         **kwargs
-    ) -> CommentUpdateResponse:
+    ) -> CommentMutationPayload:
         """
         Update an existing comment via GraphQL mutation
 
@@ -1540,7 +1535,7 @@ class CommentsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            CommentUpdateResponse
+            CommentMutationPayload
         """
         params = {k: v for k, v in {
             "id": id,

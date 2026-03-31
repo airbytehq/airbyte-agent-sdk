@@ -439,6 +439,20 @@ class TeamsListResultMeta(BaseModel):
     has_next_page: Union[bool, Any] = Field(default=None, alias="hasNextPage")
     end_cursor: Union[str | None, Any] = Field(default=None, alias="endCursor")
 
+class UsersListResultMeta(BaseModel):
+    """Metadata for users.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    has_next_page: Union[bool, Any] = Field(default=None, alias="hasNextPage")
+    end_cursor: Union[str | None, Any] = Field(default=None, alias="endCursor")
+
+class CommentsListResultMeta(BaseModel):
+    """Metadata for comments.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    has_next_page: Union[bool, Any] = Field(default=None, alias="hasNextPage")
+    end_cursor: Union[str | None, Any] = Field(default=None, alias="endCursor")
+
 # ===== CHECK RESULT MODEL =====
 
 class LinearCheckResult(BaseModel):
@@ -913,9 +927,9 @@ ProjectsListResult = LinearExecuteResultWithMeta[list[Project], ProjectsListResu
 TeamsListResult = LinearExecuteResultWithMeta[list[Team], TeamsListResultMeta]
 """Result type for teams.list operation with data and metadata."""
 
-UsersListResult = LinearExecuteResult[UsersListResponse]
-"""Result type for users.list operation."""
+UsersListResult = LinearExecuteResultWithMeta[list[User], UsersListResultMeta]
+"""Result type for users.list operation with data and metadata."""
 
-CommentsListResult = LinearExecuteResult[CommentsListResponse]
-"""Result type for comments.list operation."""
+CommentsListResult = LinearExecuteResultWithMeta[list[Comment], CommentsListResultMeta]
+"""Result type for comments.list operation with data and metadata."""
 

@@ -29,7 +29,7 @@ from uuid import (
 LinearConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('1c5d8316-ed42-4473-8fbc-2626f03f070c'),
     name='linear',
-    version='0.1.13',
+    version='0.1.14',
     base_url='https://api.linear.app',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -329,6 +329,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'query($id: String!) { issue(id: $id) { id title description state { name } priority assignee { name email } team { id name } project { id name } createdAt updatedAt } }',
                         'variables': {'id': '{{ id }}'},
                     },
+                    record_extractor='$.data.issue',
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
@@ -448,6 +449,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             'projectId': '{{ projectId }}',
                         },
                     },
+                    record_extractor='$.data.issueCreate',
                 ),
                 Action.UPDATE: EndpointDefinition(
                     method='POST',
@@ -569,6 +571,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'nullable_variables': ['assigneeId', 'projectId'],
                     },
+                    record_extractor='$.data.issueUpdate',
                 ),
             },
             entity_schema={
@@ -882,6 +885,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'query($id: String!) { project(id: $id) { id name description state startDate targetDate lead { name email } createdAt updatedAt } }',
                         'variables': {'id': '{{ id }}'},
                     },
+                    record_extractor='$.data.project',
                 ),
             },
             entity_schema={
@@ -1119,6 +1123,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'query($id: String!) { team(id: $id) { id name key description timezone createdAt updatedAt } }',
                         'variables': {'id': '{{ id }}'},
                     },
+                    record_extractor='$.data.team',
                 ),
             },
             entity_schema={
@@ -1251,6 +1256,8 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'query($first: Int, $after: String) { users(first: $first, after: $after) { nodes { id name email displayName active admin createdAt updatedAt } pageInfo { hasNextPage endCursor } } }',
                         'variables': {'first': '{{ first }}', 'after': '{{ after }}'},
                     },
+                    record_extractor='$.data.users.nodes',
+                    meta_extractor={'hasNextPage': '$.data.users.pageInfo.hasNextPage', 'endCursor': '$.data.users.pageInfo.endCursor'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='POST',
@@ -1318,6 +1325,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'query($id: String!) { user(id: $id) { id name email displayName active admin createdAt updatedAt } }',
                         'variables': {'id': '{{ id }}'},
                     },
+                    record_extractor='$.data.user',
                 ),
             },
             entity_schema={
@@ -1477,6 +1485,8 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             'after': '{{ after }}',
                         },
                     },
+                    record_extractor='$.data.issue.comments.nodes',
+                    meta_extractor={'hasNextPage': '$.data.issue.comments.pageInfo.hasNextPage', 'endCursor': '$.data.issue.comments.pageInfo.endCursor'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='POST',
@@ -1561,6 +1571,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'query($id: String!) { comment(id: $id) { id body user { id name email } issue { id title } createdAt updatedAt } }',
                         'variables': {'id': '{{ id }}'},
                     },
+                    record_extractor='$.data.comment',
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
@@ -1648,6 +1659,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'mutation($issueId: String!, $body: String!) { commentCreate(input: { issueId: $issueId, body: $body }) { success comment { id body user { id name email } createdAt updatedAt } } }',
                         'variables': {'issueId': '{{ issueId }}', 'body': '{{ body }}'},
                     },
+                    record_extractor='$.data.commentCreate',
                 ),
                 Action.UPDATE: EndpointDefinition(
                     method='POST',
@@ -1735,6 +1747,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'query': 'mutation($id: String!, $body: String!) { commentUpdate(id: $id, input: { body: $body }) { success comment { id body user { id name email } createdAt updatedAt } } }',
                         'variables': {'id': '{{ id }}', 'body': '{{ body }}'},
                     },
+                    record_extractor='$.data.commentUpdate',
                 ),
             },
             entity_schema={
