@@ -1,5 +1,10 @@
 # Pinterest changelog
 
+## [0.1.9] - 2026-04-01
+- Updated connector definition (YAML version 0.1.2)
+- Source commit: 513344c6
+- SDK version: 0.1.0
+
 ## [0.1.8] - 2026-03-27
 - Updated connector definition (YAML version 0.1.2)
 - Source commit: 09ed4945
