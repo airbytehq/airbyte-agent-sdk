@@ -133,7 +133,7 @@ See the official [Gmail API reference](https://developers.google.com/gmail/api/r
 
 ## Version information
 
-- **Package version:** 0.1.24
+- **Package version:** 0.1.25
 - **Connector version:** 0.1.3
-- **Generated with Connector SDK commit SHA:** 513344c6596e4c750dff4973729629f6cb7f924a
+- **Generated with Connector SDK commit SHA:** e4c7493336bcabf5bea5a761ab7b4edfe2a606a5
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/gmail/CHANGELOG.md)
