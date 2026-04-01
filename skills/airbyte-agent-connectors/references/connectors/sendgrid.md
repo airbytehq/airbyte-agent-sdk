@@ -7,7 +7,7 @@ The Sendgrid agent connector is a Python package that equips AI agents to intera
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-sendgrid` v0.1.15
+- **Package:** `airbyte-agent-sendgrid` v0.1.16
 - **Auth:** Token
 - **Docs:** [Official API docs](https://docs.sendgrid.com/api-reference)
 - **Status:** complete
