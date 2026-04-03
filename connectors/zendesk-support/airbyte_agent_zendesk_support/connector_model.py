@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -30,7 +33,7 @@ from uuid import (
 ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('79c1aa37-dae3-42ae-b333-d1c105477715'),
     name='zendesk-support',
-    version='0.1.18',
+    version='0.1.19',
     base_url='https://{subdomain}.zendesk.com/api/v2',
     auth=AuthConfig(
         options=[
@@ -1530,9 +1533,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                         'previous_page': '$.previous_page',
                         'count': '$.count',
                     },
-                    param_sources={
-                        'ticket_id': {'parent_entity': 'tickets', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -1563,6 +1563,14 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_comments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ticket_comments',
+                    target_entity='tickets',
+                    foreign_key='ticket_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='attachments',
@@ -1728,9 +1736,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                         'previous_page': '$.previous_page',
                         'count': '$.count',
                     },
-                    param_sources={
-                        'ticket_id': {'parent_entity': 'tickets', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -1756,6 +1761,14 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_audits',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ticket_audits',
+                    target_entity='tickets',
+                    foreign_key='ticket_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ticket_metrics',
@@ -4068,9 +4081,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                         'previous_page': '$.previous_page',
                         'count': '$.count',
                     },
-                    param_sources={
-                        'article_id': {'parent_entity': 'articles', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4173,6 +4183,14 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 'required': ['id', 'file_name'],
                 'x-airbyte-entity-name': 'article_attachments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='article_attachments',
+                    target_entity='articles',
+                    foreign_key='article_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
     ],
     search_field_paths={
