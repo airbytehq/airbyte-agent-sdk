@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/hubspot/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-04-01 -->
+<!-- Source format: v1 | Generated: 2026-04-03 -->
 
 # HubSpot
 

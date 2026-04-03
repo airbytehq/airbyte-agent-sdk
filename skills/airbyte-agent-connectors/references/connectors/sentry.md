@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/sentry/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-04-01 -->
+<!-- Source format: v1 | Generated: 2026-04-03 -->
 
 # Sentry
 
@@ -7,7 +7,7 @@ The Sentry agent connector is a Python package that equips AI agents to interact
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-sentry` v0.1.10
+- **Package:** `airbyte-agent-sentry` v0.1.11
 - **Auth:** Token
 - **Docs:** [Official API docs](https://docs.sentry.io/api/)
 - **Status:** complete
