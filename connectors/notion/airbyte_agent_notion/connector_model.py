@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -30,7 +33,7 @@ from uuid import (
 NotionConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('6e00b415-b02e-4160-bf02-58176a0ae687'),
     name='notion',
-    version='0.1.8',
+    version='0.1.9',
     base_url='https://api.notion.com',
     auth=AuthConfig(
         options=[
@@ -2769,9 +2772,6 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.results',
                     meta_extractor={'next_cursor': '$.next_cursor', 'has_more': '$.has_more'},
-                    param_sources={
-                        'block_id': {'parent_entity': 'pages', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4294,6 +4294,14 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'blocks',
                 'x-airbyte-stream-name': 'blocks',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='blocks',
+                    target_entity='pages',
+                    foreign_key='block_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='comments',
@@ -4491,9 +4499,6 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.results',
                     meta_extractor={'next_cursor': '$.next_cursor', 'has_more': '$.has_more'},
-                    param_sources={
-                        'block_id': {'parent_entity': 'pages', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -4546,6 +4551,14 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'comments',
                 'x-airbyte-stream-name': 'comments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='comments',
+                    target_entity='pages',
+                    foreign_key='block_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
     ],
     search_field_paths={
