@@ -21,6 +21,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from uuid import (
     UUID,
 )
@@ -28,7 +31,7 @@ from uuid import (
 FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('e7778cfc-e97c-4458-9ecb-b4f2bba8946c'),
     name='facebook-marketing',
-    version='1.0.22',
+    version='1.0.23',
     base_url='https://graph.facebook.com/v24.0',
     auth=AuthConfig(
         options=[
@@ -585,9 +588,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
@@ -1017,6 +1017,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'campaigns',
                 'x-airbyte-stream-name': 'campaigns',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='campaigns',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ad_sets',
@@ -1300,9 +1309,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
@@ -1819,6 +1825,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'ad_sets',
                 'x-airbyte-stream-name': 'ad_sets',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ad_sets',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ads',
@@ -2071,9 +2086,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',
@@ -2480,6 +2492,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'ads',
                 'x-airbyte-stream-name': 'ads',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ads',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ad_creatives',
@@ -2620,9 +2641,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
             },
             entity_schema={
@@ -2700,6 +2718,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'ad_creatives',
                 'x-airbyte-stream-name': 'ad_creatives',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ad_creatives',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ads_insights',
@@ -2959,9 +2986,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
             },
             entity_schema={
@@ -3052,6 +3076,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'ads_insights',
                 'x-airbyte-stream-name': 'ads_insights',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ads_insights',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ad_account',
@@ -3536,9 +3569,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
             },
             entity_schema={
@@ -3619,6 +3649,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'custom_conversions',
                 'x-airbyte-stream-name': 'custom_conversions',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='custom_conversions',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='images',
@@ -3764,9 +3803,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
             },
             entity_schema={
@@ -3849,6 +3885,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'images',
                 'x-airbyte-stream-name': 'images',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='images',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='videos',
@@ -4071,9 +4116,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
             },
             entity_schema={
@@ -4209,6 +4251,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'videos',
                 'x-airbyte-stream-name': 'videos',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='videos',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='pixels',
@@ -4362,9 +4413,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
-                    param_sources={
-                        'account_id': {'parent_entity': 'ad_accounts', 'parent_key': 'account_id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4563,6 +4611,15 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 'required': ['id'],
                 'x-airbyte-entity-name': 'pixels',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='pixels',
+                    target_entity='ad_accounts',
+                    foreign_key='account_id',
+                    target_key='account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='pixel_stats',
@@ -4644,9 +4701,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data',
-                    param_sources={
-                        'pixel_id': {'parent_entity': 'pixels', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -4697,6 +4751,14 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'pixel_stats',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='pixel_stats',
+                    target_entity='pixels',
+                    foreign_key='pixel_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ad_library',
