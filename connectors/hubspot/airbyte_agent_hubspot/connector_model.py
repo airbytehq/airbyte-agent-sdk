@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from uuid import (
     UUID,
 )
@@ -27,7 +30,7 @@ from uuid import (
 HubspotConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('36c891d9-4bd9-43ac-bad2-10e12756272c'),
     name='hubspot',
-    version='0.1.16',
+    version='0.1.17',
     base_url='https://api.hubapi.com',
     auth=AuthConfig(
         options=[
@@ -2542,9 +2545,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.results',
                     meta_extractor={'next_cursor': '$.paging.next.after', 'next_link': '$.paging.next.link'},
-                    param_sources={
-                        'objectType': {'parent_entity': 'schemas', 'parent_key': 'fullyQualifiedName'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2688,6 +2688,15 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'objects',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='objects',
+                    target_entity='schemas',
+                    foreign_key='objectType',
+                    target_key='fullyQualifiedName',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
     ],
     search_field_paths={
