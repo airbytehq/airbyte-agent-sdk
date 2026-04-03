@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from uuid import (
     UUID,
 )
@@ -26,7 +29,7 @@ from uuid import (
 TypeformConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('e7eff203-90bf-43e5-a240-19ea3056c474'),
     name='typeform',
-    version='1.0.2',
+    version='1.0.3',
     base_url='https://api.typeform.com',
     auth=AuthConfig(
         type=AuthType.BEARER,
@@ -2216,9 +2219,6 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.items',
                     meta_extractor={'total_items': '$.total_items', 'page_count': '$.page_count'},
-                    param_sources={
-                        'form_id': {'parent_entity': 'forms', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -2405,6 +2405,14 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'responses',
                 'x-airbyte-stream-name': 'responses',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='responses',
+                    target_entity='forms',
+                    foreign_key='form_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='webhooks',
@@ -2470,9 +2478,6 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    param_sources={
-                        'form_id': {'parent_entity': 'forms', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -2515,6 +2520,14 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'webhooks',
                 'x-airbyte-stream-name': 'webhooks',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='webhooks',
+                    target_entity='forms',
+                    foreign_key='form_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='workspaces',
