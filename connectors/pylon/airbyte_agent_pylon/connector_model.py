@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from uuid import (
     UUID,
 )
@@ -26,7 +29,7 @@ from uuid import (
 PylonConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6'),
     name='pylon',
-    version='0.1.6',
+    version='0.1.7',
     base_url='https://api.usepylon.com',
     auth=AuthConfig(
         type=AuthType.BEARER,
@@ -1607,9 +1610,6 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'next_cursor': '$.pagination.cursor', 'has_next_page': '$.pagination.has_next_page'},
-                    param_sources={
-                        'id': {'parent_entity': 'issues', 'parent_key': 'id'},
-                    },
                 ),
             },
             entity_schema={
@@ -1656,6 +1656,14 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'messages',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='messages',
+                    target_entity='issues',
+                    foreign_key='id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='issue_notes',
