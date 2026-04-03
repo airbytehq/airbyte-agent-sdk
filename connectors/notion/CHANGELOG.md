@@ -1,5 +1,10 @@
 # Notion changelog
 
+## [0.1.29] - 2026-04-03
+- Updated connector definition (YAML version 0.1.10)
+- Source commit: 525a1c0f
+- SDK version: 0.1.0
+
 ## [0.1.28] - 2026-04-03
 - Updated connector definition (YAML version 0.1.9)
 - Source commit: 7956e2eb

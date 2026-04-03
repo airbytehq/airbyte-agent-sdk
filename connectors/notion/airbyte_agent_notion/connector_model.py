@@ -23,6 +23,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -33,7 +36,7 @@ from uuid import (
 NotionConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('6e00b415-b02e-4160-bf02-58176a0ae687'),
     name='notion',
-    version='0.1.9',
+    version='0.1.10',
     base_url='https://api.notion.com',
     auth=AuthConfig(
         options=[
@@ -531,6 +534,20 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'pages',
                                     'x-airbyte-stream-name': 'pages',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Internal documentation, wiki pages, databases, and company knowledge',
+                                        'when_to_use': 'Questions about internal docs, company policies, processes, or wiki content',
+                                        'trigger_phrases': [
+                                            'is there a doc for',
+                                            'Notion page about',
+                                            'where is the doc',
+                                            'company policy on',
+                                            'internal wiki',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Is there a doc for the connector setup process?', 'Find the Notion page about onboarding', 'What does the internal wiki say about release process?'],
+                                        'search_strategy': 'Pages have no title field — search the url field which contains the title slug. For multi-word queries, split into separate OR conditions on url.',
+                                    },
                                 },
                             },
                             'next_cursor': {
@@ -696,6 +713,20 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                         'required': ['id'],
                         'x-airbyte-entity-name': 'pages',
                         'x-airbyte-stream-name': 'pages',
+                        'x-airbyte-ai-hints': {
+                            'summary': 'Internal documentation, wiki pages, databases, and company knowledge',
+                            'when_to_use': 'Questions about internal docs, company policies, processes, or wiki content',
+                            'trigger_phrases': [
+                                'is there a doc for',
+                                'Notion page about',
+                                'where is the doc',
+                                'company policy on',
+                                'internal wiki',
+                            ],
+                            'freshness': 'live',
+                            'example_questions': ['Is there a doc for the connector setup process?', 'Find the Notion page about onboarding', 'What does the internal wiki say about release process?'],
+                            'search_strategy': 'Pages have no title field — search the url field which contains the title slug. For multi-word queries, split into separate OR conditions on url.',
+                        },
                     },
                 ),
             },
@@ -792,6 +823,34 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                 'required': ['id'],
                 'x-airbyte-entity-name': 'pages',
                 'x-airbyte-stream-name': 'pages',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Internal documentation, wiki pages, databases, and company knowledge',
+                    'when_to_use': 'Questions about internal docs, company policies, processes, or wiki content',
+                    'trigger_phrases': [
+                        'is there a doc for',
+                        'Notion page about',
+                        'where is the doc',
+                        'company policy on',
+                        'internal wiki',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Is there a doc for the connector setup process?', 'Find the Notion page about onboarding', 'What does the internal wiki say about release process?'],
+                    'search_strategy': 'Pages have no title field — search the url field which contains the title slug. For multi-word queries, split into separate OR conditions on url.',
+                },
+            },
+            ai_hints={
+                'summary': 'Internal documentation, wiki pages, databases, and company knowledge',
+                'when_to_use': 'Questions about internal docs, company policies, processes, or wiki content',
+                'trigger_phrases': [
+                    'is there a doc for',
+                    'Notion page about',
+                    'where is the doc',
+                    'company policy on',
+                    'internal wiki',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Is there a doc for the connector setup process?', 'Find the Notion page about onboarding', 'What does the internal wiki say about release process?'],
+                'search_strategy': 'Pages have no title field — search the url field which contains the title slug. For multi-word queries, split into separate OR conditions on url.',
             },
         ),
         EntityDefinition(
@@ -4655,4 +4714,23 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
             'video',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all users in my Notion workspace',
+            'Show me all pages in my Notion workspace',
+            'What data sources exist in my Notion workspace?',
+            'Get the details of a specific page by ID',
+            'List child blocks of a specific page',
+            'Show me comments on a specific page',
+            'What is the schema of a specific data source?',
+            'Who are the bot users in my workspace?',
+        ],
+        search=['Find pages created in the last week', 'List data sources that have been recently edited', 'Show me all archived pages'],
+        unsupported=[
+            'Create a new page in Notion',
+            'Update a data source property',
+            'Delete a block',
+            'Add a comment to a page',
+        ],
+    ),
 )
