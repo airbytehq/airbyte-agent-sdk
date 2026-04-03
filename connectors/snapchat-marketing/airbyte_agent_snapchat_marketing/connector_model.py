@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from uuid import (
     UUID,
 )
@@ -26,7 +29,7 @@ from uuid import (
 SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('200330b2-ea62-4d11-ac6d-cfe3e3f8ab2b'),
     name='snapchat-marketing',
-    version='1.0.2',
+    version='1.0.3',
     base_url='https://adsapi.snapchat.com/v1',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -325,9 +328,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.adaccounts[*].adaccount',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'organization_id': {'parent_entity': 'organizations', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -423,6 +423,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'adaccounts',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='adaccounts',
+                    target_entity='organizations',
+                    foreign_key='organization_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='campaigns',
@@ -492,9 +500,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.campaigns[*].campaign',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'ad_account_id': {'parent_entity': 'adaccounts', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -586,6 +591,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'campaigns',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='campaigns',
+                    target_entity='adaccounts',
+                    foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='adsquads',
@@ -711,9 +724,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.adsquads[*].adsquad',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'ad_account_id': {'parent_entity': 'adaccounts', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -917,6 +927,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'adsquads',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='adsquads',
+                    target_entity='adaccounts',
+                    foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='ads',
@@ -982,9 +1000,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.ads[*].ad',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'ad_account_id': {'parent_entity': 'adaccounts', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1068,6 +1083,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'ads',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='ads',
+                    target_entity='adaccounts',
+                    foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='creatives',
@@ -1152,9 +1175,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.creatives[*].creative',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'ad_account_id': {'parent_entity': 'adaccounts', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1276,6 +1296,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'creatives',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='creatives',
+                    target_entity='adaccounts',
+                    foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='media',
@@ -1350,9 +1378,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.media[*].media',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'ad_account_id': {'parent_entity': 'adaccounts', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1454,6 +1479,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'media',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='media',
+                    target_entity='adaccounts',
+                    foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='segments',
@@ -1518,9 +1551,6 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.segments[*].segment',
                     meta_extractor={'next_link': '$.paging.next_link'},
-                    param_sources={
-                        'ad_account_id': {'parent_entity': 'adaccounts', 'parent_key': 'id'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1602,6 +1632,14 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'segments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='segments',
+                    target_entity='adaccounts',
+                    foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
     ],
     search_field_paths={
