@@ -19,6 +19,10 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+    ScopingParamConfig,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -29,7 +33,7 @@ from uuid import (
 SentryConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('cdaf146a-9b75-49fd-9dd2-9d64a0bb4781'),
     name='sentry',
-    version='1.0.2',
+    version='1.0.3',
     base_url='https://{hostname}/api/0',
     auth=AuthConfig(
         type=AuthType.BEARER,
@@ -1036,10 +1040,6 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'issues',
                         },
                     },
-                    param_sources={
-                        'organization_slug': {'config': 'organization'},
-                        'project_slug': {'parent_entity': 'projects', 'parent_key': 'slug'},
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1373,6 +1373,15 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'issues',
                 'x-airbyte-stream-name': 'issues',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='issues',
+                    target_entity='projects',
+                    foreign_key='project_slug',
+                    target_key='slug',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='events',
@@ -1572,10 +1581,6 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-entity-name': 'events',
                             'x-airbyte-stream-name': 'events',
                         },
-                    },
-                    param_sources={
-                        'organization_slug': {'config': 'organization'},
-                        'project_slug': {'parent_entity': 'projects', 'parent_key': 'slug'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -1935,6 +1940,15 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'events',
                 'x-airbyte-stream-name': 'events',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='events',
+                    target_entity='projects',
+                    foreign_key='project_slug',
+                    target_key='slug',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='releases',
@@ -2126,9 +2140,6 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-entity-name': 'releases',
                             'x-airbyte-stream-name': 'releases',
                         },
-                    },
-                    param_sources={
-                        'organization_slug': {'config': 'organization'},
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -3446,5 +3457,11 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
             'versionInfo.buildHash',
         ],
     },
+    scoping=[
+        ScopingParamConfig(
+            param='organization_slug',
+            config_key='organization',
+        ),
+    ],
     server_variable_defaults={'hostname': 'sentry.io'},
 )
