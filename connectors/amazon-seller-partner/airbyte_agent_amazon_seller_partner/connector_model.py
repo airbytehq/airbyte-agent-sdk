@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from ._vendored.connector_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -29,7 +32,7 @@ from uuid import (
 AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('e55879a8-0ef8-4557-abcf-ab34c53ec460'),
     name='amazon-seller-partner',
-    version='1.0.3',
+    version='1.0.4',
     base_url='https://sellingpartnerapi-{region}.amazon.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -875,6 +878,15 @@ AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'order_items',
                 'x-airbyte-stream-name': 'OrderItems',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='order_items',
+                    target_entity='orders',
+                    foreign_key='orderId',
+                    target_key='AmazonOrderId',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='list_financial_event_groups',
