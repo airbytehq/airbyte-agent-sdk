@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -17880,4 +17883,33 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
             'updated',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List customers created in the last 7 days',
+            'Show me details for a recent customer',
+            'List recent charges',
+            'Show me details for a recent charge',
+            'List recent invoices',
+            'List active subscriptions',
+        ],
+        search=[
+            'Show me my top 10 customers by total revenue this month',
+            'List all customers who have spent over $5,000 in the last quarter',
+            'Analyze payment trends for my Stripe customers',
+            'Identify which customers have the most consistent subscription payments',
+            'Give me insights into my customer retention rates',
+            'Summarize the payment history for {customer}',
+            'Compare customer spending patterns from last month to this month',
+            'Show me details about my highest-value Stripe customers',
+            'What are the key financial insights from my customer base?',
+            'Break down my customers by their average transaction value',
+        ],
+        unsupported=[
+            'Create a new customer profile in Stripe',
+            'Update the billing information for {customer}',
+            'Delete a customer record',
+            'Send a payment reminder to {customer}',
+            'Schedule an automatic invoice for {company}',
+        ],
+    ),
 )
