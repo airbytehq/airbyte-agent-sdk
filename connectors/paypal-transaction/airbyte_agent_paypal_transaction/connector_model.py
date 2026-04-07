@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -1835,4 +1838,26 @@ PaypalTransactionConnectorModel: ConnectorModel = ConnectorModel(
             'update_time',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all balances for my PayPal account',
+            'Show recent transactions from the last 7 days',
+            'List all catalog products',
+            'Show details for a specific product',
+            'List all disputes',
+            'Show recent payments',
+        ],
+        search=[
+            'What transactions had the highest amounts last month?',
+            'Find all declined transactions',
+            'Show disputes grouped by status',
+            'What is the total balance across all currencies?',
+        ],
+        unsupported=[
+            'Create a new payment',
+            'Refund a transaction',
+            'Delete a dispute',
+            'Update product details',
+        ],
+    ),
 )
