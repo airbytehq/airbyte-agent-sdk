@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -2941,4 +2944,29 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
             'visibilityType',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all users in my Gong account',
+            'Show me calls from last week',
+            'Get the transcript for a recent call',
+            'List all workspaces in Gong',
+            'Show me the scorecard configurations',
+            'What trackers are set up in my account?',
+            'Get coaching metrics for a manager',
+        ],
+        search=[
+            'What are the activity stats for our sales team?',
+            'Find calls mentioning {keyword} this month',
+            'Show me calls for rep {user_id} in the last 30 days',
+            'Which calls had the longest duration last week?',
+        ],
+        unsupported=[
+            'Create a new user in Gong',
+            'Delete a call recording',
+            'Update scorecard questions',
+            'Schedule a new meeting',
+            'Send feedback to a team member',
+            'Modify tracker keywords',
+        ],
+    ),
 )
