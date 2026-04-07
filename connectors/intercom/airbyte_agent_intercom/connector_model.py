@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -5628,4 +5631,35 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
             'type',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all contacts in my Intercom workspace',
+            'List all companies in Intercom',
+            'What teams are configured in my workspace?',
+            'Show me all admins in my Intercom account',
+            'List all tags used in Intercom',
+            'Show me all customer segments',
+            'Show me details for a recent contact',
+            'Show me details for a recent company',
+            'Show me details for a recent conversation',
+            "Create a new lead contact named 'Jane Smith' with email jane@example.com",
+            "Create an internal article titled 'Onboarding Guide' with instructions for new team members",
+            "Create a company named 'Acme Corp' with company_id 'acme-001'",
+            "Create a tag named 'VIP Customer'",
+        ],
+        search=[
+            "Update the name of contact {id} to 'John Updated'",
+            "Add a note to contact {id} saying 'Followed up on support request'",
+            'Show me conversations from the last week',
+            'List conversations assigned to team {team_id}',
+            'Show me open conversations',
+        ],
+        unsupported=[
+            'Send a message to a customer',
+            'Delete a conversation',
+            'Delete a contact',
+            'Delete a company',
+            'Assign a conversation to an admin',
+        ],
+    ),
 )
