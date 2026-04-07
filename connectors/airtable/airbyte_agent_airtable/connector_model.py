@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from ._vendored.connector_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -29,7 +32,7 @@ from uuid import (
 AirtableConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('14c6e7ea-97ed-4f5e-a7b5-25e9a80b8212'),
     name='airtable',
-    version='1.0.6',
+    version='1.0.7',
     base_url='https://api.airtable.com/v0',
     auth=AuthConfig(
         type=AuthType.BEARER,
@@ -238,6 +241,14 @@ AirtableConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'tables',
                 'x-airbyte-stream-name': 'tables',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='tables',
+                    target_entity='bases',
+                    foreign_key='base_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='records',
@@ -352,6 +363,20 @@ AirtableConnectorModel: ConnectorModel = ConnectorModel(
                 'required': ['id'],
                 'x-airbyte-entity-name': 'records',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='records',
+                    target_entity='bases',
+                    foreign_key='base_id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='records',
+                    target_entity='tables',
+                    foreign_key='table_id_or_name',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
     ],
     search_field_paths={
