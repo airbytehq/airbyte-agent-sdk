@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -3208,4 +3211,27 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
             'end_date',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all my LinkedIn ad accounts',
+            'Show me all campaigns in my ad account',
+            'List all campaign groups',
+            'Show me the creatives for my campaigns',
+            'List all conversions configured for my ad accounts',
+            'Show me account users for my LinkedIn ads accounts',
+        ],
+        search=[
+            'Which campaigns have the highest click-through rate?',
+            'What is the total ad spend across all campaigns this month?',
+            'Show me campaigns with status ACTIVE',
+            'Which creatives have the most impressions?',
+            'Compare campaign performance by cost type',
+        ],
+        unsupported=[
+            'Create a new campaign',
+            'Update campaign budgets',
+            'Delete an ad creative',
+            'Pause a campaign',
+        ],
+    ),
 )
