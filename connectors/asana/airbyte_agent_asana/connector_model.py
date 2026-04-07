@@ -23,6 +23,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -2401,4 +2404,28 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
             'resource_type',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'What tasks are assigned to me this week?',
+            'List all projects in my workspace',
+            'Show me the tasks for a recent project',
+            'Who are the team members in one of my teams?',
+            'Show me details of my current workspace and its users',
+        ],
+        search=[
+            "Summarize my team's workload and task completion rates",
+            'Find all tasks related to {client_name} across my workspaces',
+            'Analyze the most active projects in my workspace last month',
+            'Compare task completion rates between my different teams',
+            'Identify overdue tasks across all my projects',
+        ],
+        unsupported=[
+            'Create a new task for [TeamMember]',
+            'Update the priority of this task',
+            'Delete the project [ProjectName]',
+            'Schedule a new team meeting',
+            'Add a new team member to [Workspace]',
+            'Move this task to another project',
+        ],
+    ),
 )
