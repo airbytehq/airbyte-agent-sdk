@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from ._vendored.connector_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -29,7 +32,7 @@ from uuid import (
 JiraConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('68e63de2-bb83-4c7e-93fa-a8a9051e3993'),
     name='jira',
-    version='1.1.7',
+    version='1.1.8',
     base_url='https://{subdomain}.atlassian.net',
     auth=AuthConfig(
         type=AuthType.BASIC,
@@ -3369,6 +3372,14 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'issue_comments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='issue_comments',
+                    target_entity='issues',
+                    foreign_key='issueIdOrKey',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='issue_worklogs',
@@ -3679,6 +3690,14 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 ),
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='issue_worklogs',
+                    target_entity='issues',
+                    foreign_key='issueIdOrKey',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='issues_assignee',
