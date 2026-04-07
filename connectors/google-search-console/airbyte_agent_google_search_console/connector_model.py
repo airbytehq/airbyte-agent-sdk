@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -1310,4 +1313,29 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
             'site_url',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all my verified sites in Search Console',
+            'Show me the sitemaps for my website',
+            'Get search analytics by date for the last 7 days',
+            'Show search performance broken down by country',
+            'What devices are people using to find my site?',
+            'Which pages get the most clicks?',
+            'What queries bring the most traffic to my site?',
+        ],
+        search=[
+            'Which country has the highest CTR for my site?',
+            'What are my top 10 search queries by impressions?',
+            'Compare mobile vs desktop click-through rates',
+            'Which pages have the worst average position?',
+            'Show me search performance trends over the last month',
+        ],
+        unsupported=[
+            'Submit a new sitemap',
+            'Add a new site to Search Console',
+            'Remove a site from Search Console',
+            "Inspect a URL's index status",
+            'Request indexing for a page',
+        ],
+    ),
 )
