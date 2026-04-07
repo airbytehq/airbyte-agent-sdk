@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -11781,5 +11784,27 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
             ],
         ),
     ],
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all customers in my Shopify store',
+            'Show me details for a recent customer',
+            'What products do I have in my store?',
+            'List all locations for my store',
+            'Show me inventory levels for a recent location',
+            'Show me all draft orders',
+            'List all custom collections in my store',
+            'Show me details for a recent order',
+            'Show me product variants for a recent product',
+        ],
+        search=['Show me orders from the last 30 days', 'Show me abandoned checkouts from this week', 'What price rules are currently active?'],
+        unsupported=[
+            'Create a new customer in Shopify',
+            'Update product pricing',
+            'Delete an order',
+            'Process a refund',
+            'Send shipping notification to customer',
+            'Create a new discount code',
+        ],
+    ),
     server_variable_defaults={'shop': 'my-store'},
 )
