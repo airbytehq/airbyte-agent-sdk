@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from ._vendored.connector_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -33,7 +36,7 @@ from uuid import (
 GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9f8dda77-1048-4368-815b-269bf54ee9b8'),
     name='google-drive',
-    version='0.2.2',
+    version='0.2.3',
     base_url='https://www.googleapis.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -4515,6 +4518,14 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'permissions',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='permissions',
+                    target_entity='files',
+                    foreign_key='fileId',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='comments',
@@ -5030,6 +5041,14 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'comments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='comments',
+                    target_entity='files',
+                    foreign_key='fileId',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='replies',
@@ -5309,6 +5328,20 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'replies',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='replies',
+                    target_entity='files',
+                    foreign_key='fileId',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='replies',
+                    target_entity='comments',
+                    foreign_key='commentId',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='revisions',
@@ -5618,6 +5651,14 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'revisions',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='revisions',
+                    target_entity='files',
+                    foreign_key='fileId',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='changes',
