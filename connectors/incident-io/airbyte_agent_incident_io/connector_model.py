@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -4250,4 +4253,30 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
             'updated_at',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all incidents',
+            'Show all open incidents',
+            'List all alerts',
+            'Show all users',
+            'List all escalations',
+            'Show all on-call schedules',
+            'List all severities',
+            'Show all incident statuses',
+            'List all custom fields',
+        ],
+        search=[
+            'Which incidents were created this week?',
+            'What are the most recent high-severity incidents?',
+            'Who is currently on-call?',
+            'How many incidents are in triage status?',
+            'What incidents were updated today?',
+        ],
+        unsupported=[
+            'Create a new incident',
+            "Update an incident's severity",
+            'Delete an alert',
+            'Assign someone to an incident role',
+        ],
+    ),
 )
