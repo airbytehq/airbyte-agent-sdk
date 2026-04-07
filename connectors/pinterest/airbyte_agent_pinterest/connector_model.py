@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -3305,4 +3308,28 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
             'value',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all my Pinterest ad accounts',
+            'List all my Pinterest boards',
+            'Show me all campaigns in my ad account',
+            'List all ads in my ad account',
+            'Show me all ad groups in my ad account',
+            'List all audiences for my ad account',
+            'Show me my catalog feeds',
+        ],
+        search=[
+            'Which campaigns are currently active?',
+            'What are the top boards by pin count?',
+            'Show me ads that have been rejected',
+            'Find campaigns with the highest daily spend cap',
+        ],
+        unsupported=[
+            'Create a new Pinterest board',
+            'Update a campaign budget',
+            'Delete an ad group',
+            'Post a new pin',
+            'Show me campaign analytics or performance metrics',
+        ],
+    ),
 )
