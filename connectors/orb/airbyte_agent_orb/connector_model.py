@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -2142,4 +2145,36 @@ OrbConnectorModel: ConnectorModel = ConnectorModel(
             'subscription',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'Show me all my customers in Orb',
+            'List all active subscriptions',
+            'What plans are available?',
+            'Show me recent invoices',
+            'Show me details for a recent customer',
+            'What is the status of a recent subscription?',
+            'Show me the pricing details for a plan',
+            'Confirm the Stripe ID linked to a customer',
+            'What is the payment provider ID for a customer?',
+        ],
+        search=[
+            'List all invoices for a specific customer',
+            'List all subscriptions for customer XYZ',
+            'Show all active subscriptions for a specific customer',
+            'What subscriptions does customer {external_customer_id} have?',
+            'Pull all invoices from the last month',
+            'Show invoices created after {date}',
+            'List all paid invoices for customer {customer_id}',
+            'What invoices are in draft status?',
+            'Show all issued invoices for subscription {subscription_id}',
+        ],
+        unsupported=[
+            'Create a new customer in Orb',
+            'Update subscription details',
+            'Delete a customer record',
+            'Send an invoice to a customer',
+            'Filter subscriptions by plan name (must filter client-side after listing)',
+            'Pull customers billed for specific products (must examine invoice line_items client-side)',
+        ],
+    ),
 )
