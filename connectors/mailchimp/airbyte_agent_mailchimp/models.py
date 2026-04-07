@@ -22,50 +22,20 @@ class MailchimpAuthConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class CampaignReportSummaryEcommerce(BaseModel):
-    """E-Commerce stats for a campaign"""
+class CampaignDeliveryStatus(BaseModel):
+    """Updates on campaigns in the process of sending"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    total_orders: Union[int | None, Any] = Field(default=None, description="The total orders for a campaign")
-    """The total orders for a campaign"""
-    total_spent: Union[float | None, Any] = Field(default=None, description="The total spent for a campaign")
-    """The total spent for a campaign"""
-    total_revenue: Union[float | None, Any] = Field(default=None, description="The total revenue for a campaign")
-    """The total revenue for a campaign"""
-
-class CampaignReportSummary(BaseModel):
-    """For sent campaigns, a summary of opens, clicks, and e-commerce data"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    opens: Union[int | None, Any] = Field(default=None, description="The total number of opens for a campaign")
-    """The total number of opens for a campaign"""
-    unique_opens: Union[int | None, Any] = Field(default=None, description="The number of unique opens")
-    """The number of unique opens"""
-    open_rate: Union[float | None, Any] = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
-    """The number of unique opens divided by the total number of successful deliveries"""
-    clicks: Union[int | None, Any] = Field(default=None, description="The total number of clicks for an campaign")
-    """The total number of clicks for an campaign"""
-    subscriber_clicks: Union[int | None, Any] = Field(default=None, description="The number of unique clicks")
-    """The number of unique clicks"""
-    click_rate: Union[float | None, Any] = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
-    """The number of unique clicks divided by the total number of successful deliveries"""
-    ecommerce: Union[CampaignReportSummaryEcommerce | None, Any] = Field(default=None, description="E-Commerce stats for a campaign")
-    """E-Commerce stats for a campaign"""
-
-class CampaignRecipients(BaseModel):
-    """List settings for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    list_id: Union[str | None, Any] = Field(default=None, description="The unique list id")
-    """The unique list id"""
-    list_is_active: Union[bool | None, Any] = Field(default=None, description="The status of the list used")
-    """The status of the list used"""
-    list_name: Union[str | None, Any] = Field(default=None, description="The name of the list")
-    """The name of the list"""
-    segment_text: Union[str | None, Any] = Field(default=None, description="A description of the segment used for the campaign")
-    """A description of the segment used for the campaign"""
-    recipient_count: Union[int | None, Any] = Field(default=None, description="Count of the recipients on the associated list")
-    """Count of the recipients on the associated list"""
+    enabled: Union[bool | None, Any] = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
+    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
+    can_cancel: Union[bool | None, Any] = Field(default=None, description="Whether a campaign send can be canceled")
+    """Whether a campaign send can be canceled"""
+    status: Union[str | None, Any] = Field(default=None, description="The current state of a campaign delivery")
+    """The current state of a campaign delivery"""
+    emails_sent: Union[int | None, Any] = Field(default=None, description="The total number of emails confirmed sent for this campaign so far")
+    """The total number of emails confirmed sent for this campaign so far"""
+    emails_canceled: Union[int | None, Any] = Field(default=None, description="The total number of emails canceled for this campaign")
+    """The total number of emails canceled for this campaign"""
 
 class CampaignTracking(BaseModel):
     """The tracking options for a campaign"""
@@ -85,21 +55,6 @@ class CampaignTracking(BaseModel):
     """The custom slug for Google Analytics tracking"""
     clicktale: Union[str | None, Any] = Field(default=None, description="The custom slug for ClickTale tracking")
     """The custom slug for ClickTale tracking"""
-
-class CampaignDeliveryStatus(BaseModel):
-    """Updates on campaigns in the process of sending"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: Union[bool | None, Any] = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
-    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
-    can_cancel: Union[bool | None, Any] = Field(default=None, description="Whether a campaign send can be canceled")
-    """Whether a campaign send can be canceled"""
-    status: Union[str | None, Any] = Field(default=None, description="The current state of a campaign delivery")
-    """The current state of a campaign delivery"""
-    emails_sent: Union[int | None, Any] = Field(default=None, description="The total number of emails confirmed sent for this campaign so far")
-    """The total number of emails confirmed sent for this campaign so far"""
-    emails_canceled: Union[int | None, Any] = Field(default=None, description="The total number of emails canceled for this campaign")
-    """The total number of emails canceled for this campaign"""
 
 class CampaignSettings(BaseModel):
     """The settings for your campaign"""
@@ -138,6 +93,51 @@ class CampaignSettings(BaseModel):
     drag_and_drop: Union[bool | None, Any] = Field(default=None, description="Whether the campaign uses the drag-and-drop editor")
     """Whether the campaign uses the drag-and-drop editor"""
 
+class CampaignRecipients(BaseModel):
+    """List settings for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    list_id: Union[str | None, Any] = Field(default=None, description="The unique list id")
+    """The unique list id"""
+    list_is_active: Union[bool | None, Any] = Field(default=None, description="The status of the list used")
+    """The status of the list used"""
+    list_name: Union[str | None, Any] = Field(default=None, description="The name of the list")
+    """The name of the list"""
+    segment_text: Union[str | None, Any] = Field(default=None, description="A description of the segment used for the campaign")
+    """A description of the segment used for the campaign"""
+    recipient_count: Union[int | None, Any] = Field(default=None, description="Count of the recipients on the associated list")
+    """Count of the recipients on the associated list"""
+
+class CampaignReportSummaryEcommerce(BaseModel):
+    """E-Commerce stats for a campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total_orders: Union[int | None, Any] = Field(default=None, description="The total orders for a campaign")
+    """The total orders for a campaign"""
+    total_spent: Union[float | None, Any] = Field(default=None, description="The total spent for a campaign")
+    """The total spent for a campaign"""
+    total_revenue: Union[float | None, Any] = Field(default=None, description="The total revenue for a campaign")
+    """The total revenue for a campaign"""
+
+class CampaignReportSummary(BaseModel):
+    """For sent campaigns, a summary of opens, clicks, and e-commerce data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    opens: Union[int | None, Any] = Field(default=None, description="The total number of opens for a campaign")
+    """The total number of opens for a campaign"""
+    unique_opens: Union[int | None, Any] = Field(default=None, description="The number of unique opens")
+    """The number of unique opens"""
+    open_rate: Union[float | None, Any] = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
+    """The number of unique opens divided by the total number of successful deliveries"""
+    clicks: Union[int | None, Any] = Field(default=None, description="The total number of clicks for an campaign")
+    """The total number of clicks for an campaign"""
+    subscriber_clicks: Union[int | None, Any] = Field(default=None, description="The number of unique clicks")
+    """The number of unique clicks"""
+    click_rate: Union[float | None, Any] = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
+    """The number of unique clicks divided by the total number of successful deliveries"""
+    ecommerce: Union[CampaignReportSummaryEcommerce | None, Any] = Field(default=None, description="E-Commerce stats for a campaign")
+    """E-Commerce stats for a campaign"""
+
 class Campaign(BaseModel):
     """A summary of an individual campaign's settings and content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -167,40 +167,6 @@ class CampaignsList(BaseModel):
 
     campaigns: Union[list[Campaign], Any] = Field(default=None)
     total_items: Union[int, Any] = Field(default=None)
-
-class ListCampaignDefaults(BaseModel):
-    """Default values for campaigns created for this list"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    from_name: Union[str | None, Any] = Field(default=None, description="The default from name for campaigns sent to this list")
-    """The default from name for campaigns sent to this list"""
-    from_email: Union[str | None, Any] = Field(default=None, description="The default from email for campaigns sent to this list")
-    """The default from email for campaigns sent to this list"""
-    subject: Union[str | None, Any] = Field(default=None, description="The default subject line for campaigns sent to this list")
-    """The default subject line for campaigns sent to this list"""
-    language: Union[str | None, Any] = Field(default=None, description="The default language for this list's forms")
-    """The default language for this list's forms"""
-
-class ListContact(BaseModel):
-    """Contact information displayed in campaign footers to comply with international spam laws"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    company: Union[str | None, Any] = Field(default=None, description="The company name for the list")
-    """The company name for the list"""
-    address1: Union[str | None, Any] = Field(default=None, description="The street address for the list contact")
-    """The street address for the list contact"""
-    address2: Union[str | None, Any] = Field(default=None, description="The street address for the list contact")
-    """The street address for the list contact"""
-    city: Union[str | None, Any] = Field(default=None, description="The city for the list contact")
-    """The city for the list contact"""
-    state: Union[str | None, Any] = Field(default=None, description="The state for the list contact")
-    """The state for the list contact"""
-    zip: Union[str | None, Any] = Field(default=None, description="The postal or zip code for the list contact")
-    """The postal or zip code for the list contact"""
-    country: Union[str | None, Any] = Field(default=None, description="A two-character ISO3166 country code")
-    """A two-character ISO3166 country code"""
-    phone: Union[str | None, Any] = Field(default=None, description="The phone number for the list contact")
-    """The phone number for the list contact"""
 
 class ListStats(BaseModel):
     """Stats for the list"""
@@ -241,6 +207,40 @@ class ListStats(BaseModel):
     last_unsub_date: Union[str | None, Any] = Field(default=None, description="The date and time of the last time someone unsubscribed from this list")
     """The date and time of the last time someone unsubscribed from this list"""
 
+class ListCampaignDefaults(BaseModel):
+    """Default values for campaigns created for this list"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    from_name: Union[str | None, Any] = Field(default=None, description="The default from name for campaigns sent to this list")
+    """The default from name for campaigns sent to this list"""
+    from_email: Union[str | None, Any] = Field(default=None, description="The default from email for campaigns sent to this list")
+    """The default from email for campaigns sent to this list"""
+    subject: Union[str | None, Any] = Field(default=None, description="The default subject line for campaigns sent to this list")
+    """The default subject line for campaigns sent to this list"""
+    language: Union[str | None, Any] = Field(default=None, description="The default language for this list's forms")
+    """The default language for this list's forms"""
+
+class ListContact(BaseModel):
+    """Contact information displayed in campaign footers to comply with international spam laws"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    company: Union[str | None, Any] = Field(default=None, description="The company name for the list")
+    """The company name for the list"""
+    address1: Union[str | None, Any] = Field(default=None, description="The street address for the list contact")
+    """The street address for the list contact"""
+    address2: Union[str | None, Any] = Field(default=None, description="The street address for the list contact")
+    """The street address for the list contact"""
+    city: Union[str | None, Any] = Field(default=None, description="The city for the list contact")
+    """The city for the list contact"""
+    state: Union[str | None, Any] = Field(default=None, description="The state for the list contact")
+    """The state for the list contact"""
+    zip: Union[str | None, Any] = Field(default=None, description="The postal or zip code for the list contact")
+    """The postal or zip code for the list contact"""
+    country: Union[str | None, Any] = Field(default=None, description="A two-character ISO3166 country code")
+    """A two-character ISO3166 country code"""
+    phone: Union[str | None, Any] = Field(default=None, description="The phone number for the list contact")
+    """The phone number for the list contact"""
+
 class List(BaseModel):
     """Information about a specific list"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -273,6 +273,28 @@ class ListsList(BaseModel):
     lists: Union[list[List], Any] = Field(default=None)
     total_items: Union[int, Any] = Field(default=None)
 
+class ListMemberStatsEcommerceData(BaseModel):
+    """Ecommerce stats for the list member if the list is attached to a store"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total_revenue: Union[float | None, Any] = Field(default=None, description="The total revenue the list member has brought in")
+    """The total revenue the list member has brought in"""
+    number_of_orders: Union[float | None, Any] = Field(default=None, description="The total number of orders placed by the list member")
+    """The total number of orders placed by the list member"""
+    currency_code: Union[str | None, Any] = Field(default=None, description="The three-letter ISO 4217 code for the currency that the store accepts")
+    """The three-letter ISO 4217 code for the currency that the store accepts"""
+
+class ListMemberStats(BaseModel):
+    """Open and click rates for this subscriber"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avg_open_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average open rate")
+    """A subscriber's average open rate"""
+    avg_click_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average clickthrough rate")
+    """A subscriber's average clickthrough rate"""
+    ecommerce_data: Union[ListMemberStatsEcommerceData | None, Any] = Field(default=None, description="Ecommerce stats for the list member if the list is attached to a store")
+    """Ecommerce stats for the list member if the list is attached to a store"""
+
 class ListMemberLocation(BaseModel):
     """Subscriber location information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -300,28 +322,6 @@ class ListMemberTagsItem(BaseModel):
     """The tag id"""
     name: Union[str | None, Any] = Field(default=None, description="The name of the tag")
     """The name of the tag"""
-
-class ListMemberStatsEcommerceData(BaseModel):
-    """Ecommerce stats for the list member if the list is attached to a store"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    total_revenue: Union[float | None, Any] = Field(default=None, description="The total revenue the list member has brought in")
-    """The total revenue the list member has brought in"""
-    number_of_orders: Union[float | None, Any] = Field(default=None, description="The total number of orders placed by the list member")
-    """The total number of orders placed by the list member"""
-    currency_code: Union[str | None, Any] = Field(default=None, description="The three-letter ISO 4217 code for the currency that the store accepts")
-    """The three-letter ISO 4217 code for the currency that the store accepts"""
-
-class ListMemberStats(BaseModel):
-    """Open and click rates for this subscriber"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avg_open_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average open rate")
-    """A subscriber's average open rate"""
-    avg_click_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average clickthrough rate")
-    """A subscriber's average clickthrough rate"""
-    ecommerce_data: Union[ListMemberStatsEcommerceData | None, Any] = Field(default=None, description="Ecommerce stats for the list member if the list is attached to a store")
-    """Ecommerce stats for the list member if the list is attached to a store"""
 
 class ListMember(BaseModel):
     """Individuals who are currently or have been previously subscribed to this list"""
@@ -372,6 +372,74 @@ class ReportForwards(BaseModel):
     forwards_opens: Union[int | None, Any] = Field(default=None, description="How many times the forwarded campaign has been opened")
     """How many times the forwarded campaign has been opened"""
 
+class ReportListStats(BaseModel):
+    """The average campaign statistics for your list"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    sub_rate: Union[float | None, Any] = Field(default=None, description="The average number of subscriptions per month for the list")
+    """The average number of subscriptions per month for the list"""
+    unsub_rate: Union[float | None, Any] = Field(default=None, description="The average number of unsubscriptions per month for the list")
+    """The average number of unsubscriptions per month for the list"""
+    open_rate: Union[float | None, Any] = Field(default=None, description="The average open rate for campaigns sent to this list")
+    """The average open rate for campaigns sent to this list"""
+    click_rate: Union[float | None, Any] = Field(default=None, description="The average click rate for campaigns sent to this list")
+    """The average click rate for campaigns sent to this list"""
+
+class ReportFacebookLikes(BaseModel):
+    """An object describing campaign engagement on Facebook"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    recipient_likes: Union[int | None, Any] = Field(default=None, description="The number of recipients who liked the campaign on Facebook")
+    """The number of recipients who liked the campaign on Facebook"""
+    unique_likes: Union[int | None, Any] = Field(default=None, description="The number of unique likes")
+    """The number of unique likes"""
+    facebook_likes: Union[int | None, Any] = Field(default=None, description="The number of Facebook likes for the campaign")
+    """The number of Facebook likes for the campaign"""
+
+class ReportEcommerce(BaseModel):
+    """E-Commerce stats for a campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total_orders: Union[int | None, Any] = Field(default=None, description="The total orders for a campaign")
+    """The total orders for a campaign"""
+    total_spent: Union[float | None, Any] = Field(default=None, description="The total spent for a campaign")
+    """The total spent for a campaign"""
+    total_revenue: Union[float | None, Any] = Field(default=None, description="The total revenue for a campaign")
+    """The total revenue for a campaign"""
+
+class ReportDeliveryStatus(BaseModel):
+    """Updates on campaigns in the process of sending"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: Union[bool | None, Any] = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
+    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
+
+class ReportBounces(BaseModel):
+    """An object describing the bounce summary for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    hard_bounces: Union[int | None, Any] = Field(default=None, description="The total number of hard bounced email addresses")
+    """The total number of hard bounced email addresses"""
+    soft_bounces: Union[int | None, Any] = Field(default=None, description="The total number of soft bounced email addresses")
+    """The total number of soft bounced email addresses"""
+    syntax_errors: Union[int | None, Any] = Field(default=None, description="The total number of addresses that were syntax-related bounces")
+    """The total number of addresses that were syntax-related bounces"""
+
+class ReportClicks(BaseModel):
+    """An object describing the click activity for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    clicks_total: Union[int | None, Any] = Field(default=None, description="The total number of clicks for the campaign")
+    """The total number of clicks for the campaign"""
+    unique_clicks: Union[int | None, Any] = Field(default=None, description="The total number of unique clicks for links across a campaign")
+    """The total number of unique clicks for links across a campaign"""
+    unique_subscriber_clicks: Union[int | None, Any] = Field(default=None, description="The total number of subscribers who clicked on a campaign")
+    """The total number of subscribers who clicked on a campaign"""
+    click_rate: Union[float | None, Any] = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
+    """The number of unique clicks divided by the total number of successful deliveries"""
+    last_click: Union[str | None, Any] = Field(default=None, description="The date and time of the last recorded click for the campaign")
+    """The date and time of the last recorded click for the campaign"""
+
 class ReportIndustryStats(BaseModel):
     """The average campaign statistics for your industry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -390,74 +458,6 @@ class ReportIndustryStats(BaseModel):
     """The industry unsubscribe rate"""
     abuse_rate: Union[float | None, Any] = Field(default=None, description="The industry abuse rate")
     """The industry abuse rate"""
-
-class ReportBounces(BaseModel):
-    """An object describing the bounce summary for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    hard_bounces: Union[int | None, Any] = Field(default=None, description="The total number of hard bounced email addresses")
-    """The total number of hard bounced email addresses"""
-    soft_bounces: Union[int | None, Any] = Field(default=None, description="The total number of soft bounced email addresses")
-    """The total number of soft bounced email addresses"""
-    syntax_errors: Union[int | None, Any] = Field(default=None, description="The total number of addresses that were syntax-related bounces")
-    """The total number of addresses that were syntax-related bounces"""
-
-class ReportDeliveryStatus(BaseModel):
-    """Updates on campaigns in the process of sending"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: Union[bool | None, Any] = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
-    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
-
-class ReportListStats(BaseModel):
-    """The average campaign statistics for your list"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    sub_rate: Union[float | None, Any] = Field(default=None, description="The average number of subscriptions per month for the list")
-    """The average number of subscriptions per month for the list"""
-    unsub_rate: Union[float | None, Any] = Field(default=None, description="The average number of unsubscriptions per month for the list")
-    """The average number of unsubscriptions per month for the list"""
-    open_rate: Union[float | None, Any] = Field(default=None, description="The average open rate for campaigns sent to this list")
-    """The average open rate for campaigns sent to this list"""
-    click_rate: Union[float | None, Any] = Field(default=None, description="The average click rate for campaigns sent to this list")
-    """The average click rate for campaigns sent to this list"""
-
-class ReportEcommerce(BaseModel):
-    """E-Commerce stats for a campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    total_orders: Union[int | None, Any] = Field(default=None, description="The total orders for a campaign")
-    """The total orders for a campaign"""
-    total_spent: Union[float | None, Any] = Field(default=None, description="The total spent for a campaign")
-    """The total spent for a campaign"""
-    total_revenue: Union[float | None, Any] = Field(default=None, description="The total revenue for a campaign")
-    """The total revenue for a campaign"""
-
-class ReportFacebookLikes(BaseModel):
-    """An object describing campaign engagement on Facebook"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    recipient_likes: Union[int | None, Any] = Field(default=None, description="The number of recipients who liked the campaign on Facebook")
-    """The number of recipients who liked the campaign on Facebook"""
-    unique_likes: Union[int | None, Any] = Field(default=None, description="The number of unique likes")
-    """The number of unique likes"""
-    facebook_likes: Union[int | None, Any] = Field(default=None, description="The number of Facebook likes for the campaign")
-    """The number of Facebook likes for the campaign"""
-
-class ReportClicks(BaseModel):
-    """An object describing the click activity for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    clicks_total: Union[int | None, Any] = Field(default=None, description="The total number of clicks for the campaign")
-    """The total number of clicks for the campaign"""
-    unique_clicks: Union[int | None, Any] = Field(default=None, description="The total number of unique clicks for links across a campaign")
-    """The total number of unique clicks for links across a campaign"""
-    unique_subscriber_clicks: Union[int | None, Any] = Field(default=None, description="The total number of subscribers who clicked on a campaign")
-    """The total number of subscribers who clicked on a campaign"""
-    click_rate: Union[float | None, Any] = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
-    """The number of unique clicks divided by the total number of successful deliveries"""
-    last_click: Union[str | None, Any] = Field(default=None, description="The date and time of the last recorded click for the campaign")
-    """The date and time of the last recorded click for the campaign"""
 
 class ReportOpens(BaseModel):
     """An object describing the open activity for the campaign"""
@@ -540,6 +540,23 @@ class EmailActivityList(BaseModel):
     campaign_id: Union[str | None, Any] = Field(default=None)
     total_items: Union[int, Any] = Field(default=None)
 
+class AutomationReportSummary(BaseModel):
+    """A summary of opens and clicks for sent campaigns"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    opens: Union[int | None, Any] = Field(default=None, description="The total number of opens for a campaign")
+    """The total number of opens for a campaign"""
+    unique_opens: Union[int | None, Any] = Field(default=None, description="The number of unique opens")
+    """The number of unique opens"""
+    open_rate: Union[float | None, Any] = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
+    """The number of unique opens divided by the total number of successful deliveries"""
+    clicks: Union[int | None, Any] = Field(default=None, description="The total number of clicks for an campaign")
+    """The total number of clicks for an campaign"""
+    subscriber_clicks: Union[int | None, Any] = Field(default=None, description="The number of unique clicks")
+    """The number of unique clicks"""
+    click_rate: Union[float | None, Any] = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
+    """The number of unique clicks divided by the total number of successful deliveries"""
+
 class AutomationRecipientsSegmentOpts(BaseModel):
     """An object representing all segmentation options"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -605,23 +622,6 @@ class AutomationTracking(BaseModel):
     """The custom slug for Google Analytics tracking"""
     clicktale: Union[str | None, Any] = Field(default=None, description="The custom slug for ClickTale tracking")
     """The custom slug for ClickTale tracking"""
-
-class AutomationReportSummary(BaseModel):
-    """A summary of opens and clicks for sent campaigns"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    opens: Union[int | None, Any] = Field(default=None, description="The total number of opens for a campaign")
-    """The total number of opens for a campaign"""
-    unique_opens: Union[int | None, Any] = Field(default=None, description="The number of unique opens")
-    """The number of unique opens"""
-    open_rate: Union[float | None, Any] = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
-    """The number of unique opens divided by the total number of successful deliveries"""
-    clicks: Union[int | None, Any] = Field(default=None, description="The total number of clicks for an campaign")
-    """The total number of clicks for an campaign"""
-    subscriber_clicks: Union[int | None, Any] = Field(default=None, description="The number of unique clicks")
-    """The number of unique clicks"""
-    click_rate: Union[float | None, Any] = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
-    """The number of unique clicks divided by the total number of successful deliveries"""
 
 class Automation(BaseModel):
     """A summary of an individual Automation workflow's settings and content"""
@@ -726,15 +726,6 @@ class SegmentsList(BaseModel):
     list_id: Union[str | None, Any] = Field(default=None)
     total_items: Union[int, Any] = Field(default=None)
 
-class SegmentMemberStats(BaseModel):
-    """Open and click rates for this subscriber"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avg_open_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average open rate")
-    """A subscriber's average open rate"""
-    avg_click_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average clickthrough rate")
-    """A subscriber's average clickthrough rate"""
-
 class SegmentMemberLocation(BaseModel):
     """Subscriber location information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -753,6 +744,15 @@ class SegmentMemberLocation(BaseModel):
     """The timezone for the location"""
     region: Union[str | None, Any] = Field(default=None, description="The region for the location")
     """The region for the location"""
+
+class SegmentMemberStats(BaseModel):
+    """Open and click rates for this subscriber"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avg_open_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average open rate")
+    """A subscriber's average open rate"""
+    avg_click_rate: Union[float | None, Any] = Field(default=None, description="A subscriber's average clickthrough rate")
+    """A subscriber's average clickthrough rate"""
 
 class SegmentMember(BaseModel):
     """Individuals who are currently or have been previously subscribed to this list"""

@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -5068,5 +5071,31 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
             'unsubscribed',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all subscribers in my main mailing list',
+            'List all automation workflows in my account',
+            'Show me all segments for my primary audience',
+            'List all interest categories for my primary audience',
+            'Show me email activity for a recent campaign',
+            'Show me the performance report for a recent campaign',
+        ],
+        search=[
+            'Show me all my email campaigns from the last month',
+            'What are the open rates for my recent campaigns?',
+            'Who unsubscribed from list {list_id} this week?',
+            'What tags are applied to my subscribers?',
+            'How many subscribers do I have in each list?',
+            'What are my top performing campaigns by click rate?',
+        ],
+        unsupported=[
+            'Create a new email campaign',
+            'Add a subscriber to my list',
+            'Delete a campaign',
+            'Update subscriber information',
+            'Send a campaign now',
+            'Create a new automation workflow',
+        ],
+    ),
     server_variable_defaults={'data_center': 'us1'},
 )
