@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -2463,5 +2466,23 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
         ],
         'triggers': ['id', 'name', 'enabled'],
     },
+    example_questions=ExampleQuestions(
+        direct=['List all banned visitors', 'List all departments with their settings'],
+        search=[
+            'Show me all chats from last week',
+            'List all agents in the support department',
+            'What are the most used chat shortcuts?',
+            'Show chat volume by department',
+            'What triggers are currently active?',
+            'Show agent activity timeline for today',
+        ],
+        unsupported=[
+            'Start a new chat session',
+            'Send a message to a visitor',
+            'Create a new agent',
+            'Update department settings',
+            'Delete a shortcut',
+        ],
+    ),
     server_variable_defaults={'subdomain': 'your-subdomain'},
 )
