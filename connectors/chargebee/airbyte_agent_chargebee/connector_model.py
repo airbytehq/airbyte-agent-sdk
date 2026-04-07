@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -3661,5 +3664,35 @@ ChargebeeConnectorModel: ConnectorModel = ConnectorModel(
             'updated_at',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all active subscriptions',
+            'Show me details for a specific customer',
+            'List recent invoices',
+            'Show me details for a specific subscription',
+            'List all coupons',
+            'List recent transactions',
+            'List recent events',
+        ],
+        search=[
+            'Show me customers with the highest monthly recurring revenue',
+            'Which subscriptions are set to cancel in the next 30 days?',
+            'List all overdue invoices and their amounts',
+            'Analyze subscription churn trends over the past quarter',
+            'What are the most popular items by number of subscriptions?',
+            'Show me total revenue breakdown by currency',
+            'Identify customers with expiring payment sources',
+            'Compare subscription plan distribution across item prices',
+            'List all credit notes issued in the past month',
+            'What is the average subscription lifetime for each plan?',
+        ],
+        unsupported=[
+            'Create a new subscription in Chargebee',
+            "Update a customer's billing address",
+            'Cancel a subscription',
+            'Apply a coupon to a subscription',
+            'Issue a refund for an invoice',
+        ],
+    ),
     server_variable_defaults={'site': 'your-site'},
 )
