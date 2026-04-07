@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -3618,4 +3621,34 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
             'date_updated',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all calls from the last 7 days',
+            'Show me recent inbound SMS messages',
+            'List all active phone numbers on my account',
+            'Show me details for a specific call',
+            'List all recordings',
+            'Show me conference calls',
+            'List usage records for my account',
+            'Show me all queues',
+            'List outgoing caller IDs',
+            'Show me addresses on my account',
+            'List transcriptions',
+        ],
+        search=[
+            'What are my top 10 most expensive calls this month?',
+            'How many SMS messages did I send vs receive in the last 30 days?',
+            'Summarize my usage costs by category',
+            'Which phone numbers have the most incoming calls?',
+            'Show me all failed messages and their error codes',
+            'What is the average call duration for outbound calls?',
+        ],
+        unsupported=[
+            'Send a new SMS message',
+            'Make a phone call',
+            'Purchase a new phone number',
+            'Delete a recording',
+            'Create a new queue',
+        ],
+    ),
 )
