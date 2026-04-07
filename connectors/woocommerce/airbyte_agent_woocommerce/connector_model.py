@@ -22,6 +22,9 @@ from ._vendored.connector_sdk.schema.security import (
 from ._vendored.connector_sdk.schema.extensions import (
     EntityRelationshipConfig,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -7721,5 +7724,32 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
         ],
         'tax_classes': ['name', 'slug'],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all customers in WooCommerce',
+            'Show me all orders',
+            'List all products',
+            'Show me all coupons',
+            'List all product categories',
+            'Show me the product reviews',
+            'List all shipping zones',
+            'Show me the tax rates',
+            'List all payment gateways',
+        ],
+        search=[
+            'Find orders placed this month',
+            'What are the top-selling products?',
+            'Show me customers who have made purchases',
+            'Find all coupons expiring this year',
+            'What orders are still processing?',
+        ],
+        unsupported=[
+            'Create a new product',
+            'Update an order status',
+            'Delete a customer',
+            'Apply a coupon to an order',
+            'Process a refund',
+        ],
+    ),
     server_variable_defaults={'shop': 'example.com'},
 )
