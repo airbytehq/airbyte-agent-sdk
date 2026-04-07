@@ -19,6 +19,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from uuid import (
     UUID,
 )
@@ -363,4 +366,22 @@ AirtableConnectorModel: ConnectorModel = ConnectorModel(
             'views[]',
         ],
     },
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all my Airtable bases',
+            'What tables are in my first base?',
+            'Show me the schema for tables in a base',
+            'List records from a table in my base',
+            'Show me recent records from a table',
+            'What fields are in a table?',
+        ],
+        search=["List records where Status is 'Done' in table tblXXX", 'Find records created last week in table tblXXX', 'Show me records updated in the last 30 days in base appXXX'],
+        unsupported=[
+            'Create a new record in Airtable',
+            'Update a record in Airtable',
+            'Delete a record from Airtable',
+            'Create a new table',
+            'Modify table schema',
+        ],
+    ),
 )
