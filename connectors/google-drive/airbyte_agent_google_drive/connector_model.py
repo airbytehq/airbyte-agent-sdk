@@ -20,6 +20,9 @@ from ._vendored.connector_sdk.schema.security import (
     AirbyteAuthConfig,
     AuthConfigFieldSpec,
 )
+from ._vendored.connector_sdk.schema.base import (
+    ExampleQuestions,
+)
 from ._vendored.connector_sdk.schema.components import (
     PathOverrideConfig,
 )
@@ -6830,4 +6833,28 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
     ],
+    example_questions=ExampleQuestions(
+        direct=[
+            'List all files in my Google Drive',
+            'Show me details for a recent file',
+            'Download a recent file from my Drive',
+            'Export a recent Google Doc as PDF',
+            'Export a recent Google Sheet as CSV',
+            'Show me the content of a recent file',
+            'List all shared drives I have access to',
+            'Show me details for a shared drive I have access to',
+            'Show permissions for a recent file',
+            'List comments on a recent file',
+            'Show replies to a recent comment on a file',
+            'Show revision history for a recent file',
+            'Get my Drive storage quota and user info',
+            'List files in a folder I have access to',
+            'Create a new file in Google Drive',
+            'Upload a document to Drive',
+            'Delete a file from Drive',
+            'Move a file to a different folder',
+        ],
+        search=['Show me files modified in the last week', 'What changes have been made since my last sync?'],
+        unsupported=['Update file permissions', 'Add a comment to a file'],
+    ),
 )
