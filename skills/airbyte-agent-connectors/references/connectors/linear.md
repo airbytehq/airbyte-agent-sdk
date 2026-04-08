@@ -7,7 +7,7 @@ The Linear agent connector is a Python package that equips AI agents to interact
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-linear` v0.19.129
+- **Package:** `airbyte-agent-linear` v0.19.130
 - **Auth:** Token
 - **Docs:** [Official API docs](https://linear.app/developers/graphql)
 - **Status:** complete
@@ -98,6 +98,7 @@ async def linear_execute(entity: str, action: str, params: dict | None = None):
 | Issues | List, Get, Create, Update, Search |
 | Projects | List, Get, Search |
 | Teams | List, Get, Search |
+| Workflow States | List, Search |
 | Users | List, Get, Search |
 | Comments | List, Get, Create, Update, Search |
 

@@ -34,7 +34,7 @@
 | [Intercom](connectors/intercom.md) | `airbyte-agent-intercom` | Token | Contacts, Conversations, Companies, Teams, Admins, Tags, ... | complete |
 | [Jira](connectors/jira.md) | `airbyte-agent-jira` | Token | Issues, Projects, Users, Issue Fields, Issue Comments, Is... | complete |
 | [Klaviyo](connectors/klaviyo.md) | `airbyte-agent-klaviyo` | Token | Profiles, Lists, Campaigns, Events, Metrics, Flows, Email... | complete |
-| [Linear](connectors/linear.md) | `airbyte-agent-linear` | Token | Issues, Projects, Teams, Users, Comments | complete |
+| [Linear](connectors/linear.md) | `airbyte-agent-linear` | Token | Issues, Projects, Teams, Workflow States, Users, Comments | complete |
 | [LinkedIn Ads](connectors/linkedin-ads.md) | `airbyte-agent-linkedin-ads` | OAuth | Accounts, Account Users, Campaigns, Campaign Groups, Crea... | complete |
 | [Mailchimp](connectors/mailchimp.md) | `airbyte-agent-mailchimp` | Token | Campaigns, Lists, List Members, Reports, Email Activity, ... | complete |
 | [Monday](connectors/monday.md) | `airbyte-agent-monday` | OAuth, Token | Users, Boards, Items, Teams, Tags, Updates, Workspaces, A... | complete |
