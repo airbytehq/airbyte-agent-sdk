@@ -7,7 +7,7 @@ The Amplitude agent connector is a Python package that equips AI agents to inter
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-amplitude` v0.1.15
+- **Package:** `airbyte-agent-amplitude` v0.1.16
 - **Auth:** Token
 - **Docs:** [Official API docs](https://www.docs.developers.amplitude.com/analytics/apis/)
 - **Status:** complete
