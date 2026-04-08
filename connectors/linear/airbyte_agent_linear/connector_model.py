@@ -35,7 +35,7 @@ from uuid import (
 LinearConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('1c5d8316-ed42-4473-8fbc-2626f03f070c'),
     name='linear',
-    version='0.1.17',
+    version='0.1.18',
     base_url='https://api.linear.app',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -120,12 +120,13 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                                 {
                                                                     'type': 'object',
                                                                     'properties': {
+                                                                        'id': {'type': 'string', 'description': 'Workflow state UUID for status update operations'},
                                                                         'name': {'type': 'string'},
                                                                     },
                                                                 },
                                                                 {'type': 'null'},
                                                             ],
-                                                            'description': 'Issue state',
+                                                            'description': 'Issue workflow state with ID for status transitions',
                                                         },
                                                         'priority': {
                                                             'oneOf': [
@@ -139,13 +140,14 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                                 {
                                                                     'type': 'object',
                                                                     'properties': {
+                                                                        'id': {'type': 'string', 'description': 'Unique user identifier (UUID) for assignment operations'},
                                                                         'name': {'type': 'string'},
                                                                         'email': {'type': 'string'},
                                                                     },
                                                                 },
                                                                 {'type': 'null'},
                                                             ],
-                                                            'description': 'Assigned user',
+                                                            'description': 'Assigned user with ID for reassignment workflows',
                                                         },
                                                         'team': {
                                                             'oneOf': [
@@ -221,7 +223,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'query($first: Int, $after: String) { issues(first: $first, after: $after) { nodes { id title description state { name } priority assignee { name email } team { id name } project { id name } createdAt updatedAt } pageInfo { hasNextPage endCursor } } }',
+                        'query': 'query($first: Int, $after: String) { issues(first: $first, after: $after) { nodes { id title description state { id name } priority assignee { id name email } team { id name } project { id name } createdAt updatedAt } pageInfo { hasNextPage endCursor } } }',
                         'variables': {'first': '{{ first }}', 'after': '{{ after }}'},
                     },
                     record_extractor='$.data.issues.nodes',
@@ -273,12 +275,13 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     {
                                                         'type': 'object',
                                                         'properties': {
+                                                            'id': {'type': 'string', 'description': 'Workflow state UUID for status update operations'},
                                                             'name': {'type': 'string'},
                                                         },
                                                     },
                                                     {'type': 'null'},
                                                 ],
-                                                'description': 'Issue state',
+                                                'description': 'Issue workflow state with ID for status transitions',
                                             },
                                             'priority': {
                                                 'oneOf': [
@@ -292,13 +295,14 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     {
                                                         'type': 'object',
                                                         'properties': {
+                                                            'id': {'type': 'string', 'description': 'Unique user identifier (UUID) for assignment operations'},
                                                             'name': {'type': 'string'},
                                                             'email': {'type': 'string'},
                                                         },
                                                     },
                                                     {'type': 'null'},
                                                 ],
-                                                'description': 'Assigned user',
+                                                'description': 'Assigned user with ID for reassignment workflows',
                                             },
                                             'team': {
                                                 'oneOf': [
@@ -360,7 +364,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'query($id: String!) { issue(id: $id) { id title description state { name } priority assignee { name email } team { id name } project { id name } createdAt updatedAt } }',
+                        'query': 'query($id: String!) { issue(id: $id) { id title description state { id name } priority assignee { id name email } team { id name } project { id name } createdAt updatedAt } }',
                         'variables': {'id': '{{ id }}'},
                     },
                     record_extractor='$.data.issue',
@@ -473,7 +477,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'mutation($teamId: String!, $title: String!, $description: String, $stateId: String, $priority: Int, $projectId: String) { issueCreate(input: { teamId: $teamId, title: $title, description: $description, stateId: $stateId, priority: $priority, projectId: $projectId }) { success issue { id title description state { id name } priority assignee { name email } project { id name } createdAt updatedAt } } }',
+                        'query': 'mutation($teamId: String!, $title: String!, $description: String, $stateId: String, $priority: Int, $projectId: String) { issueCreate(input: { teamId: $teamId, title: $title, description: $description, stateId: $stateId, priority: $priority, projectId: $projectId }) { success issue { id title description state { id name } priority assignee { id name email } project { id name } createdAt updatedAt } } }',
                         'variables': {
                             'teamId': '{{ teamId }}',
                             'title': '{{ title }}',
@@ -626,12 +630,13 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             {
                                 'type': 'object',
                                 'properties': {
+                                    'id': {'type': 'string', 'description': 'Workflow state UUID for status update operations'},
                                     'name': {'type': 'string'},
                                 },
                             },
                             {'type': 'null'},
                         ],
-                        'description': 'Issue state',
+                        'description': 'Issue workflow state with ID for status transitions',
                     },
                     'priority': {
                         'oneOf': [
@@ -645,13 +650,14 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             {
                                 'type': 'object',
                                 'properties': {
+                                    'id': {'type': 'string', 'description': 'Unique user identifier (UUID) for assignment operations'},
                                     'name': {'type': 'string'},
                                     'email': {'type': 'string'},
                                 },
                             },
                             {'type': 'null'},
                         ],
-                        'description': 'Assigned user',
+                        'description': 'Assigned user with ID for reassignment workflows',
                     },
                     'team': {
                         'oneOf': [
@@ -1222,6 +1228,171 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'name', 'key'],
                 'x-airbyte-entity-name': 'teams',
+            },
+        ),
+        EntityDefinition(
+            name='workflow_states',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/graphql:listWorkflowStates',
+                    path_override=PathOverrideConfig(
+                        path='/graphql',
+                    ),
+                    action=Action.LIST,
+                    description='Returns workflow states for a team via GraphQL, including name and UUID for status transitions',
+                    query_params=['first', 'after'],
+                    query_params_schema={
+                        'first': {
+                            'type': 'integer',
+                            'required': False,
+                            'default': 50,
+                        },
+                        'after': {'type': 'string', 'required': False},
+                    },
+                    header_params=['x-apollo-operation-name'],
+                    header_params_schema={
+                        'x-apollo-operation-name': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'listWorkflowStates',
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'GraphQL response for workflow states list',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'properties': {
+                                    'workflowStates': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'nodes': {
+                                                'type': 'array',
+                                                'items': {
+                                                    'type': 'object',
+                                                    'description': "Linear workflow state object representing a status in a team's workflow",
+                                                    'properties': {
+                                                        'id': {'type': 'string', 'description': 'Unique workflow state identifier (UUID) used for issue status transitions'},
+                                                        'name': {'type': 'string', 'description': 'Workflow state name (e.g., Backlog, In Progress, Done)'},
+                                                        'type': {'type': 'string', 'description': 'State type category (triage, backlog, unstarted, started, completed, cancelled)'},
+                                                        'position': {
+                                                            'oneOf': [
+                                                                {'type': 'number'},
+                                                                {'type': 'null'},
+                                                            ],
+                                                            'description': 'Display position order',
+                                                        },
+                                                        'color': {
+                                                            'oneOf': [
+                                                                {'type': 'string'},
+                                                                {'type': 'null'},
+                                                            ],
+                                                            'description': 'State color hex code',
+                                                        },
+                                                        'team': {
+                                                            'oneOf': [
+                                                                {
+                                                                    'type': 'object',
+                                                                    'properties': {
+                                                                        'id': {'type': 'string'},
+                                                                        'name': {'type': 'string'},
+                                                                    },
+                                                                },
+                                                                {'type': 'null'},
+                                                            ],
+                                                            'description': 'Team this workflow state belongs to',
+                                                        },
+                                                        'createdAt': {
+                                                            'type': 'string',
+                                                            'format': 'date-time',
+                                                            'description': 'Creation timestamp',
+                                                        },
+                                                        'updatedAt': {
+                                                            'type': 'string',
+                                                            'format': 'date-time',
+                                                            'description': 'Last update timestamp',
+                                                        },
+                                                    },
+                                                    'required': ['id', 'name', 'type'],
+                                                    'x-airbyte-entity-name': 'workflow_states',
+                                                },
+                                            },
+                                            'pageInfo': {
+                                                'type': 'object',
+                                                'description': 'Pagination information',
+                                                'properties': {
+                                                    'hasNextPage': {'type': 'boolean', 'description': 'Whether there are more items available'},
+                                                    'endCursor': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'Cursor to fetch next page',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    graphql_body={
+                        'type': 'graphql',
+                        'query': 'query($first: Int, $after: String) { workflowStates(first: $first, after: $after) { nodes { id name type position color team { id name } createdAt updatedAt } pageInfo { hasNextPage endCursor } } }',
+                        'variables': {'first': '{{ first }}', 'after': '{{ after }}'},
+                    },
+                    record_extractor='$.data.workflowStates.nodes',
+                    meta_extractor={'hasNextPage': '$.data.workflowStates.pageInfo.hasNextPage', 'endCursor': '$.data.workflowStates.pageInfo.endCursor'},
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': "Linear workflow state object representing a status in a team's workflow",
+                'properties': {
+                    'id': {'type': 'string', 'description': 'Unique workflow state identifier (UUID) used for issue status transitions'},
+                    'name': {'type': 'string', 'description': 'Workflow state name (e.g., Backlog, In Progress, Done)'},
+                    'type': {'type': 'string', 'description': 'State type category (triage, backlog, unstarted, started, completed, cancelled)'},
+                    'position': {
+                        'oneOf': [
+                            {'type': 'number'},
+                            {'type': 'null'},
+                        ],
+                        'description': 'Display position order',
+                    },
+                    'color': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'null'},
+                        ],
+                        'description': 'State color hex code',
+                    },
+                    'team': {
+                        'oneOf': [
+                            {
+                                'type': 'object',
+                                'properties': {
+                                    'id': {'type': 'string'},
+                                    'name': {'type': 'string'},
+                                },
+                            },
+                            {'type': 'null'},
+                        ],
+                        'description': 'Team this workflow state belongs to',
+                    },
+                    'createdAt': {
+                        'type': 'string',
+                        'format': 'date-time',
+                        'description': 'Creation timestamp',
+                    },
+                    'updatedAt': {
+                        'type': 'string',
+                        'format': 'date-time',
+                        'description': 'Last update timestamp',
+                    },
+                },
+                'required': ['id', 'name', 'type'],
+                'x-airbyte-entity-name': 'workflow_states',
             },
         ),
         EntityDefinition(

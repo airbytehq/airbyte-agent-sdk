@@ -65,6 +65,11 @@ class TeamsGetParams(TypedDict):
     """Parameters for teams.get operation"""
     id: str
 
+class WorkflowStatesListParams(TypedDict):
+    """Parameters for workflow_states.list operation"""
+    first: NotRequired[int]
+    after: NotRequired[str]
+
 class UsersListParams(TypedDict):
     """Parameters for users.list operation"""
     first: NotRequired[int]
@@ -2352,6 +2357,231 @@ class UsersSearchQuery(TypedDict, total=False):
     """Search query for users entity."""
     filter: UsersCondition
     sort: list[UsersSortFilter]
+
+
+# ===== WORKFLOW_STATES SEARCH TYPES =====
+
+class WorkflowStatesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering workflow_states search queries."""
+    color: str | None
+    """"""
+    created_at: str | None
+    """"""
+    description: str | None
+    """"""
+    id: str | None
+    """"""
+    inherited_from_id: str | None
+    """"""
+    name: str | None
+    """"""
+    position: float | None
+    """"""
+    team: dict[str, Any] | None
+    """"""
+    team_id: str | None
+    """"""
+    type_: str | None
+    """"""
+    updated_at: str | None
+    """"""
+
+
+class WorkflowStatesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    color: list[str]
+    """"""
+    created_at: list[str]
+    """"""
+    description: list[str]
+    """"""
+    id: list[str]
+    """"""
+    inherited_from_id: list[str]
+    """"""
+    name: list[str]
+    """"""
+    position: list[float]
+    """"""
+    team: list[dict[str, Any]]
+    """"""
+    team_id: list[str]
+    """"""
+    type_: list[str]
+    """"""
+    updated_at: list[str]
+    """"""
+
+
+class WorkflowStatesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    color: Any
+    """"""
+    created_at: Any
+    """"""
+    description: Any
+    """"""
+    id: Any
+    """"""
+    inherited_from_id: Any
+    """"""
+    name: Any
+    """"""
+    position: Any
+    """"""
+    team: Any
+    """"""
+    team_id: Any
+    """"""
+    type_: Any
+    """"""
+    updated_at: Any
+    """"""
+
+
+class WorkflowStatesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    color: str
+    """"""
+    created_at: str
+    """"""
+    description: str
+    """"""
+    id: str
+    """"""
+    inherited_from_id: str
+    """"""
+    name: str
+    """"""
+    position: str
+    """"""
+    team: str
+    """"""
+    team_id: str
+    """"""
+    type_: str
+    """"""
+    updated_at: str
+    """"""
+
+
+class WorkflowStatesSortFilter(TypedDict, total=False):
+    """Available fields for sorting workflow_states search results."""
+    color: AirbyteSortOrder
+    """"""
+    created_at: AirbyteSortOrder
+    """"""
+    description: AirbyteSortOrder
+    """"""
+    id: AirbyteSortOrder
+    """"""
+    inherited_from_id: AirbyteSortOrder
+    """"""
+    name: AirbyteSortOrder
+    """"""
+    position: AirbyteSortOrder
+    """"""
+    team: AirbyteSortOrder
+    """"""
+    team_id: AirbyteSortOrder
+    """"""
+    type_: AirbyteSortOrder
+    """"""
+    updated_at: AirbyteSortOrder
+    """"""
+
+
+# Entity-specific condition types for workflow_states
+class WorkflowStatesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: WorkflowStatesSearchFilter
+
+
+class WorkflowStatesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: WorkflowStatesSearchFilter
+
+
+class WorkflowStatesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: WorkflowStatesSearchFilter
+
+
+class WorkflowStatesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: WorkflowStatesSearchFilter
+
+
+class WorkflowStatesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: WorkflowStatesSearchFilter
+
+
+class WorkflowStatesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: WorkflowStatesSearchFilter
+
+
+class WorkflowStatesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: WorkflowStatesStringFilter
+
+
+class WorkflowStatesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: WorkflowStatesStringFilter
+
+
+class WorkflowStatesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: WorkflowStatesStringFilter
+
+
+class WorkflowStatesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: WorkflowStatesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+WorkflowStatesInCondition = TypedDict("WorkflowStatesInCondition", {"in": WorkflowStatesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+WorkflowStatesNotCondition = TypedDict("WorkflowStatesNotCondition", {"not": "WorkflowStatesCondition"}, total=False)
+"""Negates the nested condition."""
+
+WorkflowStatesAndCondition = TypedDict("WorkflowStatesAndCondition", {"and": "list[WorkflowStatesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+WorkflowStatesOrCondition = TypedDict("WorkflowStatesOrCondition", {"or": "list[WorkflowStatesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+WorkflowStatesAnyCondition = TypedDict("WorkflowStatesAnyCondition", {"any": WorkflowStatesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all workflow_states condition types
+WorkflowStatesCondition = (
+    WorkflowStatesEqCondition
+    | WorkflowStatesNeqCondition
+    | WorkflowStatesGtCondition
+    | WorkflowStatesGteCondition
+    | WorkflowStatesLtCondition
+    | WorkflowStatesLteCondition
+    | WorkflowStatesInCondition
+    | WorkflowStatesLikeCondition
+    | WorkflowStatesFuzzyCondition
+    | WorkflowStatesKeywordCondition
+    | WorkflowStatesContainsCondition
+    | WorkflowStatesNotCondition
+    | WorkflowStatesAndCondition
+    | WorkflowStatesOrCondition
+    | WorkflowStatesAnyCondition
+)
+
+
+class WorkflowStatesSearchQuery(TypedDict, total=False):
+    """Search query for workflow_states entity."""
+    filter: WorkflowStatesCondition
+    sort: list[WorkflowStatesSortFilter]
 
 
 

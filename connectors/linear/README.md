@@ -110,6 +110,7 @@ This connector supports the following entities and actions. For more details, se
 | Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [Create](./REFERENCE.md#issues-create), [Update](./REFERENCE.md#issues-update), [Search](./REFERENCE.md#issues-search) |
 | Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get), [Search](./REFERENCE.md#projects-search) |
 | Teams | [List](./REFERENCE.md#teams-list), [Get](./REFERENCE.md#teams-get), [Search](./REFERENCE.md#teams-search) |
+| Workflow States | [List](./REFERENCE.md#workflow-states-list), [Search](./REFERENCE.md#workflow-states-search) |
 | Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get), [Search](./REFERENCE.md#users-search) |
 | Comments | [List](./REFERENCE.md#comments-list), [Get](./REFERENCE.md#comments-get), [Create](./REFERENCE.md#comments-create), [Update](./REFERENCE.md#comments-update), [Search](./REFERENCE.md#comments-search) |
 
@@ -124,7 +125,7 @@ See the official [Linear API reference](https://linear.app/developers/graphql).
 
 ## Version information
 
-- **Package version:** 0.19.129
-- **Connector version:** 0.1.17
-- **Generated with Connector SDK commit SHA:** 0bc9ab764a18fc48c3b595e69ba87a5337c63d51
+- **Package version:** 0.19.130
+- **Connector version:** 0.1.18
+- **Generated with Connector SDK commit SHA:** 96cb4889e7e0662ae6b653abebe179a13687776d
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/linear/CHANGELOG.md)
