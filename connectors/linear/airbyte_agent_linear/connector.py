@@ -34,6 +34,7 @@ from .types import (
     TeamsListParams,
     UsersGetParams,
     UsersListParams,
+    WorkflowStatesListParams,
     AirbyteSearchParams,
     CommentsSearchFilter,
     CommentsSearchQuery,
@@ -45,6 +46,8 @@ from .types import (
     TeamsSearchQuery,
     UsersSearchFilter,
     UsersSearchQuery,
+    WorkflowStatesSearchFilter,
+    WorkflowStatesSearchQuery,
 )
 from .models import LinearAuthConfig
 
@@ -56,6 +59,7 @@ from .models import (
     IssuesListResult,
     ProjectsListResult,
     TeamsListResult,
+    WorkflowStatesListResult,
     UsersListResult,
     CommentsListResult,
     Comment,
@@ -65,6 +69,7 @@ from .models import (
     Project,
     Team,
     User,
+    WorkflowState,
     AirbyteSearchMeta,
     AirbyteSearchResult,
     CommentsSearchData,
@@ -77,6 +82,8 @@ from .models import (
     TeamsSearchResult,
     UsersSearchData,
     UsersSearchResult,
+    WorkflowStatesSearchData,
+    WorkflowStatesSearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -124,7 +131,7 @@ class LinearConnector:
     """
 
     connector_name = "linear"
-    connector_version = "0.1.17"
+    connector_version = "0.1.18"
     vendored_sdk_version = "0.1.0"  # Version of vendored connector-sdk
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
@@ -137,6 +144,7 @@ class LinearConnector:
         ("projects", "get"): None,
         ("teams", "list"): True,
         ("teams", "get"): None,
+        ("workflow_states", "list"): True,
         ("users", "list"): True,
         ("users", "get"): None,
         ("comments", "list"): True,
@@ -156,6 +164,7 @@ class LinearConnector:
         ('projects', 'get'): {'id': 'id'},
         ('teams', 'list'): {'first': 'first', 'after': 'after'},
         ('teams', 'get'): {'id': 'id'},
+        ('workflow_states', 'list'): {'first': 'first', 'after': 'after'},
         ('users', 'list'): {'first': 'first', 'after': 'after'},
         ('users', 'get'): {'id': 'id'},
         ('comments', 'list'): {'issue_id': 'issueId', 'first': 'first', 'after': 'after'},
@@ -259,6 +268,7 @@ class LinearConnector:
         self.issues = IssuesQuery(self)
         self.projects = ProjectsQuery(self)
         self.teams = TeamsQuery(self)
+        self.workflow_states = WorkflowStatesQuery(self)
         self.users = UsersQuery(self)
         self.comments = CommentsQuery(self)
 
@@ -327,6 +337,14 @@ class LinearConnector:
         action: Literal["get"],
         params: "TeamsGetParams"
     ) -> "Team": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["workflow_states"],
+        action: Literal["list"],
+        params: "WorkflowStatesListParams"
+    ) -> "WorkflowStatesListResult": ...
 
     @overload
     async def execute(
@@ -1273,6 +1291,112 @@ class TeamsQuery:
         return TeamsSearchResult(
             data=[
                 TeamsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
+class WorkflowStatesQuery:
+    """
+    Query class for WorkflowStates entity operations.
+    """
+
+    def __init__(self, connector: LinearConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        first: int | None = None,
+        after: str | None = None,
+        **kwargs
+    ) -> WorkflowStatesListResult:
+        """
+        Returns workflow states for a team via GraphQL, including name and UUID for status transitions
+
+        Args:
+            first: Number of items to return (max 250)
+            after: Cursor to start after (for pagination)
+            **kwargs: Additional parameters
+
+        Returns:
+            WorkflowStatesListResult
+        """
+        params = {k: v for k, v in {
+            "first": first,
+            "after": after,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("workflow_states", "list", params)
+        # Cast generic envelope to concrete typed result
+        return WorkflowStatesListResult(
+            data=result.data,
+            meta=result.meta
+        )
+
+
+
+    async def search(
+        self,
+        query: WorkflowStatesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> WorkflowStatesSearchResult:
+        """
+        Search workflow_states records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (WorkflowStatesSearchFilter):
+        - color: 
+        - created_at: 
+        - description: 
+        - id: 
+        - inherited_from_id: 
+        - name: 
+        - position: 
+        - team: 
+        - team_id: 
+        - type_: 
+        - updated_at: 
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            WorkflowStatesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("workflow_states", "search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return WorkflowStatesSearchResult(
+            data=[
+                WorkflowStatesSearchData(**row)
                 for row in result.get("data", [])
                 if isinstance(row, dict)
             ],

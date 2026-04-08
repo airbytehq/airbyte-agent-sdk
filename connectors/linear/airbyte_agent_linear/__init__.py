@@ -28,6 +28,11 @@ from .models import (
     TeamsListResponse,
     TeamResponseData,
     TeamResponse,
+    WorkflowState,
+    WorkflowStatesListResponseDataWorkflowstatesPageinfo,
+    WorkflowStatesListResponseDataWorkflowstates,
+    WorkflowStatesListResponseData,
+    WorkflowStatesListResponse,
     IssueCreateParams,
     IssueUpdateParams,
     IssueWithState,
@@ -61,6 +66,7 @@ from .models import (
     IssuesListResultMeta,
     ProjectsListResultMeta,
     TeamsListResultMeta,
+    WorkflowStatesListResultMeta,
     UsersListResultMeta,
     CommentsListResultMeta,
     LinearCheckResult,
@@ -69,6 +75,7 @@ from .models import (
     IssuesListResult,
     ProjectsListResult,
     TeamsListResult,
+    WorkflowStatesListResult,
     UsersListResult,
     CommentsListResult,
     AirbyteSearchMeta,
@@ -82,7 +89,9 @@ from .models import (
     TeamsSearchData,
     TeamsSearchResult,
     UsersSearchData,
-    UsersSearchResult
+    UsersSearchResult,
+    WorkflowStatesSearchData,
+    WorkflowStatesSearchResult
 )
 from .types import (
     IssuesListParams,
@@ -93,6 +102,7 @@ from .types import (
     ProjectsGetParams,
     TeamsListParams,
     TeamsGetParams,
+    WorkflowStatesListParams,
     UsersListParams,
     UsersGetParams,
     CommentsListParams,
@@ -115,7 +125,10 @@ from .types import (
     TeamsCondition,
     UsersSearchFilter,
     UsersSearchQuery,
-    UsersCondition
+    UsersCondition,
+    WorkflowStatesSearchFilter,
+    WorkflowStatesSearchQuery,
+    WorkflowStatesCondition
 )
 from ._vendored.connector_sdk.types import AirbyteHostedAuthConfig as AirbyteAuthConfig
 
@@ -144,6 +157,11 @@ __all__ = [
     "TeamsListResponse",
     "TeamResponseData",
     "TeamResponse",
+    "WorkflowState",
+    "WorkflowStatesListResponseDataWorkflowstatesPageinfo",
+    "WorkflowStatesListResponseDataWorkflowstates",
+    "WorkflowStatesListResponseData",
+    "WorkflowStatesListResponse",
     "IssueCreateParams",
     "IssueUpdateParams",
     "IssueWithState",
@@ -177,6 +195,7 @@ __all__ = [
     "IssuesListResultMeta",
     "ProjectsListResultMeta",
     "TeamsListResultMeta",
+    "WorkflowStatesListResultMeta",
     "UsersListResultMeta",
     "CommentsListResultMeta",
     "LinearCheckResult",
@@ -185,6 +204,7 @@ __all__ = [
     "IssuesListResult",
     "ProjectsListResult",
     "TeamsListResult",
+    "WorkflowStatesListResult",
     "UsersListResult",
     "CommentsListResult",
     "AirbyteSearchMeta",
@@ -199,6 +219,8 @@ __all__ = [
     "TeamsSearchResult",
     "UsersSearchData",
     "UsersSearchResult",
+    "WorkflowStatesSearchData",
+    "WorkflowStatesSearchResult",
     "IssuesListParams",
     "IssuesGetParams",
     "IssuesCreateParams",
@@ -207,6 +229,7 @@ __all__ = [
     "ProjectsGetParams",
     "TeamsListParams",
     "TeamsGetParams",
+    "WorkflowStatesListParams",
     "UsersListParams",
     "UsersGetParams",
     "CommentsListParams",
@@ -230,4 +253,7 @@ __all__ = [
     "UsersSearchFilter",
     "UsersSearchQuery",
     "UsersCondition",
+    "WorkflowStatesSearchFilter",
+    "WorkflowStatesSearchQuery",
+    "WorkflowStatesCondition",
 ]

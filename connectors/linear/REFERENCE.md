@@ -11,6 +11,7 @@ The Linear connector supports the following entities and actions.
 | Issues | [List](#issues-list), [Get](#issues-get), [Create](#issues-create), [Update](#issues-update), [Search](#issues-search) |
 | Projects | [List](#projects-list), [Get](#projects-get), [Search](#projects-search) |
 | Teams | [List](#teams-list), [Get](#teams-get), [Search](#teams-search) |
+| Workflow States | [List](#workflow-states-list), [Search](#workflow-states-search) |
 | Users | [List](#users-list), [Get](#users-get), [Search](#users-search) |
 | Comments | [List](#comments-list), [Get](#comments-get), [Create](#comments-create), [Update](#comments-update), [Search](#comments-search) |
 
@@ -937,6 +938,143 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `data[].triageEnabled` | `boolean` |  |
 | `data[].triageIssueStateId` | `string` |  |
 | `data[].upcomingCycleCount` | `number` |  |
+| `data[].updatedAt` | `string` |  |
+
+</details>
+
+## Workflow States
+
+### Workflow States List
+
+Returns workflow states for a team via GraphQL, including name and UUID for status transitions
+
+#### Python SDK
+
+```python
+await linear.workflow_states.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "workflow_states",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `first` | `integer` | No | Number of items to return (max 250) |
+| `after` | `string` | No | Cursor to start after (for pagination) |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `id` | `string` |  |
+| `name` | `string` |  |
+| `type` | `string` |  |
+| `position` | `number \| any` |  |
+| `color` | `string \| any` |  |
+| `team` | `object \| any` |  |
+| `createdAt` | `string` |  |
+| `updatedAt` | `string` |  |
+
+
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `hasNextPage` | `boolean` |  |
+| `endCursor` | `string \| null` |  |
+
+</details>
+
+### Workflow States Search
+
+Search and filter workflow states records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
+
+#### Python SDK
+
+```python
+await linear.workflow_states.search(
+    query={"filter": {"eq": {"color": "<str>"}}}
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "workflow_states",
+    "action": "search",
+    "params": {
+        "query": {"filter": {"eq": {"color": "<str>"}}}
+    }
+}'
+```
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `query` | `object` | Yes | Filter and sort conditions. Supports operators: eq, neq, gt, gte, lt, lte, in, like, fuzzy, keyword, not, and, or |
+| `query.filter` | `object` | No | Filter conditions |
+| `query.sort` | `array` | No | Sort conditions |
+| `limit` | `integer` | No | Maximum results to return (default 1000) |
+| `cursor` | `string` | No | Pagination cursor from previous response's `meta.cursor` |
+| `fields` | `array` | No | Field paths to include in results |
+
+#### Searchable Fields
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `color` | `string` |  |
+| `createdAt` | `string` |  |
+| `description` | `string` |  |
+| `id` | `string` |  |
+| `inheritedFromId` | `string` |  |
+| `name` | `string` |  |
+| `position` | `number` |  |
+| `team` | `object` |  |
+| `teamId` | `string` |  |
+| `type` | `string` |  |
+| `updatedAt` | `string` |  |
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `data` | `array` | List of matching records |
+| `meta` | `object` | Pagination metadata |
+| `meta.has_more` | `boolean` | Whether additional pages are available |
+| `meta.cursor` | `string \| null` | Cursor for next page of results |
+| `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+| `data[].color` | `string` |  |
+| `data[].createdAt` | `string` |  |
+| `data[].description` | `string` |  |
+| `data[].id` | `string` |  |
+| `data[].inheritedFromId` | `string` |  |
+| `data[].name` | `string` |  |
+| `data[].position` | `number` |  |
+| `data[].team` | `object` |  |
+| `data[].teamId` | `string` |  |
+| `data[].type` | `string` |  |
 | `data[].updatedAt` | `string` |  |
 
 </details>

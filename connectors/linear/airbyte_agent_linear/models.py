@@ -186,6 +186,48 @@ class TeamResponse(BaseModel):
 
     data: Union[TeamResponseData, Any] = Field(default=None)
 
+class WorkflowState(BaseModel):
+    """Linear workflow state object representing a status in a team's workflow"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str, Any] = Field(default=None)
+    name: Union[str, Any] = Field(default=None)
+    type_: Union[str, Any] = Field(default=None, alias="type")
+    position: Union[Any, Any] = Field(default=None)
+    color: Union[Any, Any] = Field(default=None)
+    team: Union[Any, Any] = Field(default=None)
+    created_at: Union[str, Any] = Field(default=None, alias="createdAt")
+    updated_at: Union[str, Any] = Field(default=None, alias="updatedAt")
+
+class WorkflowStatesListResponseDataWorkflowstatesPageinfo(BaseModel):
+    """Pagination information"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    has_next_page: Union[bool, Any] = Field(default=None, alias="hasNextPage", description="Whether there are more items available")
+    """Whether there are more items available"""
+    end_cursor: Union[str | None, Any] = Field(default=None, alias="endCursor", description="Cursor to fetch next page")
+    """Cursor to fetch next page"""
+
+class WorkflowStatesListResponseDataWorkflowstates(BaseModel):
+    """Nested schema for WorkflowStatesListResponseData.workflowStates"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    nodes: Union[list[WorkflowState], Any] = Field(default=None)
+    page_info: Union[WorkflowStatesListResponseDataWorkflowstatesPageinfo, Any] = Field(default=None, alias="pageInfo", description="Pagination information")
+    """Pagination information"""
+
+class WorkflowStatesListResponseData(BaseModel):
+    """Nested schema for WorkflowStatesListResponse.data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    workflow_states: Union[WorkflowStatesListResponseDataWorkflowstates, Any] = Field(default=None, alias="workflowStates")
+
+class WorkflowStatesListResponse(BaseModel):
+    """GraphQL response for workflow states list"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: Union[WorkflowStatesListResponseData, Any] = Field(default=None)
+
 class IssueCreateParams(BaseModel):
     """Parameters for creating an issue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -434,6 +476,13 @@ class ProjectsListResultMeta(BaseModel):
 
 class TeamsListResultMeta(BaseModel):
     """Metadata for teams.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    has_next_page: Union[bool, Any] = Field(default=None, alias="hasNextPage")
+    end_cursor: Union[str | None, Any] = Field(default=None, alias="endCursor")
+
+class WorkflowStatesListResultMeta(BaseModel):
+    """Metadata for workflow_states.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     has_next_page: Union[bool, Any] = Field(default=None, alias="hasNextPage")
@@ -870,6 +919,34 @@ class UsersSearchData(BaseModel):
     """"""
 
 
+class WorkflowStatesSearchData(BaseModel):
+    """Search result data for workflow_states entity."""
+    model_config = ConfigDict(extra="allow")
+
+    color: str | None = None
+    """"""
+    created_at: str | None = None
+    """"""
+    description: str | None = None
+    """"""
+    id: str | None = None
+    """"""
+    inherited_from_id: str | None = None
+    """"""
+    name: str | None = None
+    """"""
+    position: float | None = None
+    """"""
+    team: dict[str, Any] | None = None
+    """"""
+    team_id: str | None = None
+    """"""
+    type_: str | None = None
+    """"""
+    updated_at: str | None = None
+    """"""
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -911,6 +988,9 @@ TeamsSearchResult = AirbyteSearchResult[TeamsSearchData]
 UsersSearchResult = AirbyteSearchResult[UsersSearchData]
 """Search result type for users entity."""
 
+WorkflowStatesSearchResult = AirbyteSearchResult[WorkflowStatesSearchData]
+"""Search result type for workflow_states entity."""
+
 
 
 # ===== OPERATION RESULT TYPE ALIASES =====
@@ -926,6 +1006,9 @@ ProjectsListResult = LinearExecuteResultWithMeta[list[Project], ProjectsListResu
 
 TeamsListResult = LinearExecuteResultWithMeta[list[Team], TeamsListResultMeta]
 """Result type for teams.list operation with data and metadata."""
+
+WorkflowStatesListResult = LinearExecuteResultWithMeta[list[WorkflowState], WorkflowStatesListResultMeta]
+"""Result type for workflow_states.list operation with data and metadata."""
 
 UsersListResult = LinearExecuteResultWithMeta[list[User], UsersListResultMeta]
 """Result type for users.list operation with data and metadata."""
