@@ -1,0 +1,3115 @@
+openapi: 3.1.0
+
+info:
+  title: Harvest API Connector
+  version: 1.0.3
+  description: |
+    Connector for the Harvest time-tracking and invoicing API (v2). Provides read access
+    to time tracking data including users, clients, projects, tasks, time entries, invoices,
+    estimates, expenses, and more. Harvest is a cloud-based time tracking and invoicing
+    solution that helps teams track time, manage projects, and streamline invoicing.
+  x-airbyte-connector-name: harvest
+  x-airbyte-connector-definition-id: fe2b4084-3386-4d3b-9ad6-308f61a6f1e6
+  x-airbyte-replication-version: "1.2.31"
+  x-airbyte-replication-compatibility: ">=1.2.31, <2.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Harvest API V2 Documentation
+      url: https://help.getharvest.com/api-v2/
+  x-airbyte-example-questions:
+    direct:
+      - "List all users in Harvest"
+      - "Show me all active projects"
+      - "List all clients"
+      - "Show me recent time entries"
+      - "List all invoices"
+      - "Show me all tasks"
+      - "List all expense categories"
+      - "Get company information"
+    search:
+      - "How many hours were logged last week?"
+      - "Which projects have the most time entries?"
+      - "Show me all unbilled time entries"
+      - "What are the active projects for a specific client?"
+      - "List all overdue invoices"
+      - "Which users logged the most hours this month?"
+    unsupported:
+      - "Create a new time entry in Harvest"
+      - "Update a project budget"
+      - "Delete an invoice"
+      - "Start a timer for a task"
+
+  x-airbyte-skip-suggested-streams:
+    - project_assignments
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Harvest.
+    properties:
+      replication_start_date:
+        type: string
+        title: Start Date
+        description: >-
+          UTC date and time in YYYY-MM-DDTHH:mm:ssZ format from which to start replicating data.
+          Data before this date will not be replicated.
+        format: date-time
+    required:
+      - replication_start_date
+    replication_config_key_mapping:
+      replication_start_date: replication_start_date
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: clients
+        fields:
+          - name: address
+            type: ["null", "string"]
+            description: "The client's postal address"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When the client record was created"
+          - name: currency
+            type: ["null", "string"]
+            description: "The currency used by the client"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the client"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether the client is active"
+          - name: name
+            type: ["null", "string"]
+            description: "The client's name"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When the client record was last updated"
+      - entity: company
+        fields:
+          - name: base_uri
+            type: ["null", "string"]
+            description: "The base URI"
+          - name: currency
+            type: ["null", "string"]
+            description: "Currency used by the company"
+          - name: full_domain
+            type: ["null", "string"]
+            description: "The full domain name"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether the company is active"
+          - name: name
+            type: ["null", "string"]
+            description: "The name of the company"
+          - name: plan_type
+            type: ["null", "string"]
+            description: "The plan type"
+          - name: weekly_capacity
+            type: ["null", "integer"]
+            description: "Weekly capacity in seconds"
+      - entity: contacts
+        fields:
+          - name: client
+            type: ["null", "object"]
+            description: "Client associated with the contact"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: email
+            type: ["null", "string"]
+            description: "Email address"
+          - name: first_name
+            type: ["null", "string"]
+            description: "First name"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: last_name
+            type: ["null", "string"]
+            description: "Last name"
+          - name: title
+            type: ["null", "string"]
+            description: "Job title"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: estimate_item_categories
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: name
+            type: ["null", "string"]
+            description: "Category name"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: estimates
+        fields:
+          - name: amount
+            type: ["null", "number"]
+            description: "Total amount"
+          - name: client
+            type: ["null", "object"]
+            description: "Client details"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: currency
+            type: ["null", "string"]
+            description: "Currency"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: issue_date
+            type: ["null", "string"]
+            description: "Issue date"
+          - name: number
+            type: ["null", "string"]
+            description: "Estimate number"
+          - name: state
+            type: ["null", "string"]
+            description: "Current state"
+          - name: subject
+            type: ["null", "string"]
+            description: "Subject"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: expense_categories
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether active"
+          - name: name
+            type: ["null", "string"]
+            description: "Category name"
+          - name: unit_name
+            type: ["null", "string"]
+            description: "Unit name"
+          - name: unit_price
+            type: ["null", "number"]
+            description: "Unit price"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: expenses
+        fields:
+          - name: billable
+            type: ["null", "boolean"]
+            description: "Whether billable"
+          - name: client
+            type: ["null", "object"]
+            description: "Associated client"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: expense_category
+            type: ["null", "object"]
+            description: "Expense category"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_billed
+            type: ["null", "boolean"]
+            description: "Whether billed"
+          - name: notes
+            type: ["null", "string"]
+            description: "Notes"
+          - name: project
+            type: ["null", "object"]
+            description: "Associated project"
+          - name: spent_date
+            type: ["null", "string"]
+            description: "Date spent"
+          - name: total_cost
+            type: ["null", "number"]
+            description: "Total cost"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+          - name: user
+            type: ["null", "object"]
+            description: "Associated user"
+      - entity: invoice_item_categories
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: name
+            type: ["null", "string"]
+            description: "Category name"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+          - name: use_as_expense
+            type: ["null", "boolean"]
+            description: "Whether used as expense type"
+          - name: use_as_service
+            type: ["null", "boolean"]
+            description: "Whether used as service type"
+      - entity: invoices
+        fields:
+          - name: amount
+            type: ["null", "number"]
+            description: "Total amount"
+          - name: client
+            type: ["null", "object"]
+            description: "Client details"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: currency
+            type: ["null", "string"]
+            description: "Currency"
+          - name: due_amount
+            type: ["null", "number"]
+            description: "Amount due"
+          - name: due_date
+            type: ["null", "string"]
+            description: "Due date"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: issue_date
+            type: ["null", "string"]
+            description: "Issue date"
+          - name: number
+            type: ["null", "string"]
+            description: "Invoice number"
+          - name: state
+            type: ["null", "string"]
+            description: "Current state"
+          - name: subject
+            type: ["null", "string"]
+            description: "Subject"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: projects
+        fields:
+          - name: budget
+            type: ["null", "number"]
+            description: "Budget amount"
+          - name: client
+            type: ["null", "object"]
+            description: "Client details"
+          - name: code
+            type: ["null", "string"]
+            description: "Project code"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: hourly_rate
+            type: ["null", "number"]
+            description: "Hourly rate"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether active"
+          - name: is_billable
+            type: ["null", "boolean"]
+            description: "Whether billable"
+          - name: name
+            type: ["null", "string"]
+            description: "Project name"
+          - name: starts_on
+            type: ["null", "string"]
+            description: "Start date"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: roles
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: name
+            type: ["null", "string"]
+            description: "Role name"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+          - name: user_ids
+            type: ["null", "array"]
+            description: "User IDs with this role"
+      - entity: task_assignments
+        fields:
+          - name: billable
+            type: ["null", "boolean"]
+            description: "Whether billable"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: hourly_rate
+            type: ["null", "number"]
+            description: "Hourly rate"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether active"
+          - name: project
+            type: ["null", "object"]
+            description: "Associated project"
+          - name: task
+            type: ["null", "object"]
+            description: "Associated task"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: tasks
+        fields:
+          - name: billable_by_default
+            type: ["null", "boolean"]
+            description: "Whether billable by default"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: default_hourly_rate
+            type: ["null", "number"]
+            description: "Default hourly rate"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether active"
+          - name: name
+            type: ["null", "string"]
+            description: "Task name"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+      - entity: time_entries
+        fields:
+          - name: billable
+            type: ["null", "boolean"]
+            description: "Whether billable"
+          - name: client
+            type: ["null", "object"]
+            description: "Associated client"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: hours
+            type: ["null", "number"]
+            description: "Hours logged"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_billed
+            type: ["null", "boolean"]
+            description: "Whether billed"
+          - name: notes
+            type: ["null", "string"]
+            description: "Notes"
+          - name: project
+            type: ["null", "object"]
+            description: "Associated project"
+          - name: spent_date
+            type: ["null", "string"]
+            description: "Date time was spent"
+          - name: task
+            type: ["null", "object"]
+            description: "Associated task"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+          - name: user
+            type: ["null", "object"]
+            description: "Associated user"
+      - entity: time_projects
+        fields:
+          - name: billable_amount
+            type: ["null", "number"]
+            description: "Total billable amount"
+          - name: billable_hours
+            type: ["null", "number"]
+            description: "Number of billable hours"
+          - name: client_id
+            type: ["null", "integer"]
+            description: "Client identifier"
+          - name: client_name
+            type: ["null", "string"]
+            description: "Client name"
+          - name: currency
+            type: ["null", "string"]
+            description: "Currency code"
+          - name: project_id
+            type: ["null", "integer"]
+            description: "Project identifier"
+          - name: project_name
+            type: ["null", "string"]
+            description: "Project name"
+          - name: total_hours
+            type: ["null", "number"]
+            description: "Total hours spent"
+      - entity: time_tasks
+        fields:
+          - name: billable_amount
+            type: ["null", "number"]
+            description: "Total billable amount"
+          - name: billable_hours
+            type: ["null", "number"]
+            description: "Number of billable hours"
+          - name: currency
+            type: ["null", "string"]
+            description: "Currency code"
+          - name: task_id
+            type: ["null", "integer"]
+            description: "Task identifier"
+          - name: task_name
+            type: ["null", "string"]
+            description: "Task name"
+          - name: total_hours
+            type: ["null", "number"]
+            description: "Total hours spent"
+      - entity: user_assignments
+        fields:
+          - name: budget
+            type: ["null", "number"]
+            description: "Budget"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: hourly_rate
+            type: ["null", "number"]
+            description: "Hourly rate"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether active"
+          - name: is_project_manager
+            type: ["null", "boolean"]
+            description: "Whether project manager"
+          - name: project
+            type: ["null", "object"]
+            description: "Associated project"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+          - name: user
+            type: ["null", "object"]
+            description: "Associated user"
+      - entity: users
+        fields:
+          - name: avatar_url
+            type: ["null", "string"]
+            description: "Avatar URL"
+          - name: cost_rate
+            type: ["null", "number"]
+            description: "Cost rate"
+          - name: created_at
+            type: ["null", "string"]
+            description: "When created"
+          - name: default_hourly_rate
+            type: ["null", "number"]
+            description: "Default hourly rate"
+          - name: email
+            type: ["null", "string"]
+            description: "Email address"
+          - name: first_name
+            type: ["null", "string"]
+            description: "First name"
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier"
+          - name: is_active
+            type: ["null", "boolean"]
+            description: "Whether active"
+          - name: is_contractor
+            type: ["null", "boolean"]
+            description: "Whether contractor"
+          - name: last_name
+            type: ["null", "string"]
+            description: "Last name"
+          - name: roles
+            type: ["null", "array"]
+            description: "Assigned roles"
+          - name: telephone
+            type: ["null", "string"]
+            description: "Phone number"
+          - name: timezone
+            type: ["null", "string"]
+            description: "Timezone"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "When last updated"
+          - name: weekly_capacity
+            type: ["null", "integer"]
+            description: "Weekly capacity in seconds"
+
+servers:
+  - url: https://api.harvestapp.com/v2
+    description: Harvest API V2 server
+
+security:
+  - oauth2: []
+  - bearer: []
+
+paths:
+  /users:
+    get:
+      summary: List all users
+      description: Returns a paginated list of users in the Harvest account
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.users
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersList"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /users/{id}:
+    get:
+      summary: Get a user
+      description: Get a single user by ID
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+        "401":
+          description: Unauthorized
+
+  /clients:
+    get:
+      summary: List all clients
+      description: Returns a paginated list of clients
+      operationId: listClients
+      x-airbyte-entity: clients
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.clients
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of clients
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientsList"
+        "401":
+          description: Unauthorized
+
+  /clients/{id}:
+    get:
+      summary: Get a client
+      description: Get a single client by ID
+      operationId: getClient
+      x-airbyte-entity: clients
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Client ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Client object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "404":
+          description: Client not found
+        "401":
+          description: Unauthorized
+
+  /contacts:
+    get:
+      summary: List all contacts
+      description: Returns a paginated list of contacts
+      operationId: listContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.contacts
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactsList"
+        "401":
+          description: Unauthorized
+
+  /contacts/{id}:
+    get:
+      summary: Get a contact
+      description: Get a single contact by ID
+      operationId: getContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Contact ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Contact object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+
+  /company:
+    get:
+      summary: Get company information
+      description: Returns the company information for the authenticated account
+      operationId: getCompany
+      x-airbyte-entity: company
+      x-airbyte-action: get
+      responses:
+        "200":
+          description: Company object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "401":
+          description: Unauthorized
+
+  /projects:
+    get:
+      summary: List all projects
+      description: Returns a paginated list of projects
+      operationId: listProjects
+      x-airbyte-entity: projects
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.projects
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectsList"
+        "401":
+          description: Unauthorized
+
+  /projects/{id}:
+    get:
+      summary: Get a project
+      description: Get a single project by ID
+      operationId: getProject
+      x-airbyte-entity: projects
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Project ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Project not found
+        "401":
+          description: Unauthorized
+
+  /tasks:
+    get:
+      summary: List all tasks
+      description: Returns a paginated list of tasks
+      operationId: listTasks
+      x-airbyte-entity: tasks
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.tasks
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksList"
+        "401":
+          description: Unauthorized
+
+  /tasks/{id}:
+    get:
+      summary: Get a task
+      description: Get a single task by ID
+      operationId: getTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Task object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Task not found
+        "401":
+          description: Unauthorized
+
+  /time_entries:
+    get:
+      summary: List all time entries
+      description: Returns a paginated list of time entries
+      operationId: listTimeEntries
+      x-airbyte-entity: time_entries
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.time_entries
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of time entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntriesList"
+        "401":
+          description: Unauthorized
+
+  /time_entries/{id}:
+    get:
+      summary: Get a time entry
+      description: Get a single time entry by ID
+      operationId: getTimeEntry
+      x-airbyte-entity: time_entries
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Time entry ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Time entry object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        "404":
+          description: Time entry not found
+        "401":
+          description: Unauthorized
+
+  /invoices:
+    get:
+      summary: List all invoices
+      description: Returns a paginated list of invoices
+      operationId: listInvoices
+      x-airbyte-entity: invoices
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.invoices
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoicesList"
+        "401":
+          description: Unauthorized
+
+  /invoices/{id}:
+    get:
+      summary: Get an invoice
+      description: Get a single invoice by ID
+      operationId: getInvoice
+      x-airbyte-entity: invoices
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Invoice object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "404":
+          description: Invoice not found
+        "401":
+          description: Unauthorized
+
+  /invoice_item_categories:
+    get:
+      summary: List all invoice item categories
+      description: Returns a paginated list of invoice item categories
+      operationId: listInvoiceItemCategories
+      x-airbyte-entity: invoice_item_categories
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.invoice_item_categories
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of invoice item categories
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceItemCategoriesList"
+        "401":
+          description: Unauthorized
+
+  /invoice_item_categories/{id}:
+    get:
+      summary: Get an invoice item category
+      description: Get a single invoice item category by ID
+      operationId: getInvoiceItemCategory
+      x-airbyte-entity: invoice_item_categories
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invoice item category ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Invoice item category object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceItemCategory"
+        "404":
+          description: Invoice item category not found
+        "401":
+          description: Unauthorized
+
+  /estimates:
+    get:
+      summary: List all estimates
+      description: Returns a paginated list of estimates
+      operationId: listEstimates
+      x-airbyte-entity: estimates
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.estimates
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of estimates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EstimatesList"
+        "401":
+          description: Unauthorized
+
+  /estimates/{id}:
+    get:
+      summary: Get an estimate
+      description: Get a single estimate by ID
+      operationId: getEstimate
+      x-airbyte-entity: estimates
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Estimate ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Estimate object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Estimate"
+        "404":
+          description: Estimate not found
+        "401":
+          description: Unauthorized
+
+  /estimate_item_categories:
+    get:
+      summary: List all estimate item categories
+      description: Returns a paginated list of estimate item categories
+      operationId: listEstimateItemCategories
+      x-airbyte-entity: estimate_item_categories
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.estimate_item_categories
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of estimate item categories
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EstimateItemCategoriesList"
+        "401":
+          description: Unauthorized
+
+  /estimate_item_categories/{id}:
+    get:
+      summary: Get an estimate item category
+      description: Get a single estimate item category by ID
+      operationId: getEstimateItemCategory
+      x-airbyte-entity: estimate_item_categories
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Estimate item category ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Estimate item category object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EstimateItemCategory"
+        "404":
+          description: Estimate item category not found
+        "401":
+          description: Unauthorized
+
+  /expenses:
+    get:
+      summary: List all expenses
+      description: Returns a paginated list of expenses
+      operationId: listExpenses
+      x-airbyte-entity: expenses
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.expenses
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of expenses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpensesList"
+        "401":
+          description: Unauthorized
+
+  /expenses/{id}:
+    get:
+      summary: Get an expense
+      description: Get a single expense by ID
+      operationId: getExpense
+      x-airbyte-entity: expenses
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Expense ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Expense object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Expense"
+        "404":
+          description: Expense not found
+        "401":
+          description: Unauthorized
+
+  /expense_categories:
+    get:
+      summary: List all expense categories
+      description: Returns a paginated list of expense categories
+      operationId: listExpenseCategories
+      x-airbyte-entity: expense_categories
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.expense_categories
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of expense categories
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpenseCategoriesList"
+        "401":
+          description: Unauthorized
+
+  /expense_categories/{id}:
+    get:
+      summary: Get an expense category
+      description: Get a single expense category by ID
+      operationId: getExpenseCategory
+      x-airbyte-entity: expense_categories
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Expense category ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Expense category object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpenseCategory"
+        "404":
+          description: Expense category not found
+        "401":
+          description: Unauthorized
+
+  /roles:
+    get:
+      summary: List all roles
+      description: Returns a paginated list of roles
+      operationId: listRoles
+      x-airbyte-entity: roles
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.roles
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RolesList"
+        "401":
+          description: Unauthorized
+
+  /roles/{id}:
+    get:
+      summary: Get a role
+      description: Get a single role by ID
+      operationId: getRole
+      x-airbyte-entity: roles
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Role ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Role object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        "404":
+          description: Role not found
+        "401":
+          description: Unauthorized
+
+  /user_assignments:
+    get:
+      summary: List all user assignments
+      description: Returns a paginated list of user assignments across all projects
+      operationId: listUserAssignments
+      x-airbyte-entity: user_assignments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.user_assignments
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of user assignments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAssignmentsList"
+        "401":
+          description: Unauthorized
+
+  /task_assignments:
+    get:
+      summary: List all task assignments
+      description: Returns a paginated list of task assignments across all projects
+      operationId: listTaskAssignments
+      x-airbyte-entity: task_assignments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.task_assignments
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: List of task assignments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskAssignmentsList"
+        "401":
+          description: Unauthorized
+
+  /reports/time/projects:
+    get:
+      summary: List time report by project
+      description: Returns time report data grouped by project for a given date range
+      operationId: listTimeProjects
+      x-airbyte-entity: time_projects
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: from
+          in: query
+          required: true
+          description: Start date for the report in YYYYMMDD format
+          schema:
+            type: string
+            default: "20200101"
+        - name: to
+          in: query
+          required: true
+          description: End date for the report in YYYYMMDD format
+          schema:
+            type: string
+            default: "21000101"
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: Time report by project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeProjectsList"
+        "401":
+          description: Unauthorized
+
+  /reports/time/tasks:
+    get:
+      summary: List time report by task
+      description: Returns time report data grouped by task for a given date range
+      operationId: listTimeTasks
+      x-airbyte-entity: time_tasks
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_link: $.links.next
+      parameters:
+        - name: from
+          in: query
+          required: true
+          description: Start date for the report in YYYYMMDD format
+          schema:
+            type: string
+            default: "20200101"
+        - name: to
+          in: query
+          required: true
+          description: End date for the report in YYYYMMDD format
+          schema:
+            type: string
+            default: "21000101"
+        - name: per_page
+          in: query
+          description: Number of records per page (max 2000)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 50
+      responses:
+        "200":
+          description: Time report by task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeTasksList"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      x-airbyte-untested: true
+      description: >
+        Harvest OAuth 2.0 authentication using client credentials and refresh token.
+        A Harvest-Account-Id header is required with every request.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://id.getharvest.com/oauth2/authorize
+          tokenUrl: https://id.getharvest.com/api/v2/oauth2/token
+          refreshUrl: https://id.getharvest.com/api/v2/oauth2/token
+          scopes: {}
+      x-airbyte-auth-config:
+        title: OAuth 2.0
+        type: object
+        required:
+          - client_id
+          - client_secret
+          - refresh_token
+          - account_id
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+          client_secret:
+            type: string
+            title: Client Secret
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: Your Harvest OAuth2 refresh token
+          account_id:
+            type: string
+            title: Account ID
+            description: Your Harvest account ID
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          refresh_token: "${refresh_token}"
+        additional_headers:
+          Harvest-Account-Id: "{{ account_id }}"
+        replication_auth_key_mapping:
+          credentials.refresh_token: "refresh_token"
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          account_id: "account_id"
+        replication_auth_key_constants:
+          credentials.auth_type: "Client"
+
+    bearer:
+      type: http
+      scheme: bearer
+      description: >
+        Harvest Personal Access Token (PAT) authentication.
+        A Harvest-Account-Id header is required with every request.
+      x-airbyte-auth-config:
+        title: Personal Access Token
+        type: object
+        required:
+          - token
+          - account_id
+        properties:
+          token:
+            type: string
+            title: Personal Access Token
+            description: Your Harvest personal access token
+          account_id:
+            type: string
+            title: Account ID
+            description: Your Harvest account ID
+        auth_mapping:
+          token: "${token}"
+        additional_headers:
+          Harvest-Account-Id: "{{ account_id }}"
+        replication_auth_key_mapping:
+          credentials.api_token: "token"
+          account_id: "account_id"
+        replication_auth_key_constants:
+          credentials.auth_type: "Token"
+
+  schemas:
+    PaginationLinks:
+      type: object
+      description: Pagination links for navigating result pages
+      properties:
+        first:
+          type: ["null", "string"]
+          description: URL to the first page of results
+        previous:
+          type: ["null", "string"]
+          description: URL to the previous page of results
+        next:
+          type: ["null", "string"]
+          description: URL to the next page of results
+        last:
+          type: ["null", "string"]
+          description: URL to the last page of results
+
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
+      description: A Harvest user
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique user ID
+        first_name:
+          type: ["null", "string"]
+          description: First name of the user
+        last_name:
+          type: ["null", "string"]
+          description: Last name of the user
+        email:
+          type: ["null", "string"]
+          description: Email address of the user
+        telephone:
+          type: ["null", "string"]
+          description: Telephone number of the user
+        timezone:
+          type: ["null", "string"]
+          description: Timezone of the user
+        has_access_to_all_future_projects:
+          type: ["null", "boolean"]
+          description: Whether the user has access to all future projects
+        is_contractor:
+          type: ["null", "boolean"]
+          description: Whether the user is a contractor
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the user is active
+        weekly_capacity:
+          type: ["null", "integer"]
+          description: Weekly capacity in seconds
+        default_hourly_rate:
+          type: ["null", "number"]
+          description: Default hourly rate for the user
+        cost_rate:
+          type: ["null", "number"]
+          description: Cost rate for the user
+        roles:
+          type: ["null", "array"]
+          description: Roles assigned to the user
+          items:
+            type: string
+        access_roles:
+          type: ["null", "array"]
+          description: Access roles assigned to the user
+          items:
+            type: string
+        avatar_url:
+          type: ["null", "string"]
+          description: URL to the user's avatar image
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the user was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the user was last updated
+        employee_id:
+          type: ["null", "string"]
+          description: Employee ID of the user
+        calendar_integration_enabled:
+          type: ["null", "boolean"]
+          description: Whether calendar integration is enabled for the user
+        calendar_integration_source:
+          type: ["null", "string"]
+          description: Source of calendar integration
+        can_create_projects:
+          type: ["null", "boolean"]
+          description: Whether the user can create projects
+        permissions_claims:
+          type: ["null", "array"]
+          description: List of permission claims for the user
+          items:
+            type: string
+
+    UsersList:
+      type: object
+      description: Paginated list of users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Client:
+      type: object
+      x-airbyte-entity-name: clients
+      x-airbyte-stream-name: clients
+      description: A Harvest client
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique client ID
+        name:
+          type: ["null", "string"]
+          description: Name of the client
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the client is active
+        address:
+          type: ["null", "string"]
+          description: Address of the client
+        statement_key:
+          type: ["null", "string"]
+          description: Statement key for the client
+        currency:
+          type: ["null", "string"]
+          description: Currency code for the client
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the client was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the client was last updated
+
+    ClientsList:
+      type: object
+      description: Paginated list of clients
+      properties:
+        clients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Client"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Contact:
+      type: object
+      x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: contacts
+      description: A Harvest contact associated with a client
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique contact ID
+        title:
+          type: ["null", "string"]
+          description: Title of the contact
+        first_name:
+          type: ["null", "string"]
+          description: First name of the contact
+        last_name:
+          type: ["null", "string"]
+          description: Last name of the contact
+        email:
+          type: ["null", "string"]
+          description: Email address of the contact
+        phone_office:
+          type: ["null", "string"]
+          description: Office phone number
+        phone_mobile:
+          type: ["null", "string"]
+          description: Mobile phone number
+        fax:
+          type: ["null", "string"]
+          description: Fax number
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the contact was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the contact was last updated
+        client:
+          type: ["null", "object"]
+          description: The client associated with this contact
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Client ID
+            name:
+              type: ["null", "string"]
+              description: Client name
+
+    ContactsList:
+      type: object
+      description: Paginated list of contacts
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Contact"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Company:
+      type: object
+      x-airbyte-entity-name: company
+      x-airbyte-stream-name: company
+      description: The Harvest company/account information
+      properties:
+        base_uri:
+          type: ["null", "string"]
+          description: Base URI for the Harvest account
+        full_domain:
+          type: ["null", "string"]
+          description: Full domain of the Harvest account
+        name:
+          type: ["null", "string"]
+          description: Name of the company
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the company account is active
+        week_start_day:
+          type: ["null", "string"]
+          description: Day of the week the company's work week starts
+        wants_timestamp_timers:
+          type: ["null", "boolean"]
+          description: Whether timestamp timers are enabled
+        time_format:
+          type: ["null", "string"]
+          description: Time format used by the company
+        date_format:
+          type: ["null", "string"]
+          description: Date format used by the company
+        plan_type:
+          type: ["null", "string"]
+          description: The Harvest plan type
+        clock:
+          type: ["null", "string"]
+          description: Clock format (12h or 24h)
+        currency_code_display:
+          type: ["null", "string"]
+          description: Currency code display format
+        currency_symbol_display:
+          type: ["null", "string"]
+          description: Currency symbol display format
+        decimal_symbol:
+          type: ["null", "string"]
+          description: Decimal symbol used for numbers
+        thousands_separator:
+          type: ["null", "string"]
+          description: Thousands separator used for numbers
+        color_scheme:
+          type: ["null", "string"]
+          description: Color scheme of the Harvest account
+        weekly_capacity:
+          type: ["null", "integer"]
+          description: Weekly capacity in seconds
+        expense_feature:
+          type: ["null", "boolean"]
+          description: Whether the expense feature is enabled
+        invoice_feature:
+          type: ["null", "boolean"]
+          description: Whether the invoice feature is enabled
+        estimate_feature:
+          type: ["null", "boolean"]
+          description: Whether the estimate feature is enabled
+        approval_feature:
+          type: ["null", "boolean"]
+          description: Whether the approval feature is enabled
+        team_feature:
+          type: ["null", "boolean"]
+          description: Whether the team feature is enabled
+        currency:
+          type: ["null", "string"]
+          description: Currency used by the company
+        saml_sign_in_required:
+          type: ["null", "boolean"]
+          description: Whether SAML sign-in is required
+        day_entry_notes_required:
+          type: ["null", "boolean"]
+          description: Whether day entry notes are required
+
+    Project:
+      type: object
+      x-airbyte-entity-name: projects
+      x-airbyte-stream-name: projects
+      description: A Harvest project
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique project ID
+        name:
+          type: ["null", "string"]
+          description: Name of the project
+        code:
+          type: ["null", "string"]
+          description: Project code
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the project is active
+        is_billable:
+          type: ["null", "boolean"]
+          description: Whether the project is billable
+        is_fixed_fee:
+          type: ["null", "boolean"]
+          description: Whether the project is a fixed fee project
+        bill_by:
+          type: ["null", "string"]
+          description: Billing method for the project
+        hourly_rate:
+          type: ["null", "number"]
+          description: Hourly rate for the project
+        budget_by:
+          type: ["null", "string"]
+          description: Budget method for the project
+        budget_is_monthly:
+          type: ["null", "boolean"]
+          description: Whether the budget resets monthly
+        budget:
+          type: ["null", "number"]
+          description: Budget amount for the project
+        cost_budget:
+          type: ["null", "number"]
+          description: Cost budget for the project
+        cost_budget_include_expenses:
+          type: ["null", "boolean"]
+          description: Whether the cost budget includes expenses
+        notify_when_over_budget:
+          type: ["null", "boolean"]
+          description: Whether to notify when over budget
+        over_budget_notification_percentage:
+          type: ["null", "number"]
+          description: Percentage at which over-budget notification triggers
+        over_budget_notification_date:
+          type: ["null", "string"]
+          description: Date of the last over-budget notification
+        show_budget_to_all:
+          type: ["null", "boolean"]
+          description: Whether to show the budget to all users
+        fee:
+          type: ["null", "number"]
+          description: Fixed fee amount for the project
+        notes:
+          type: ["null", "string"]
+          description: Notes about the project
+        starts_on:
+          type: ["null", "string"]
+          description: Start date of the project
+        ends_on:
+          type: ["null", "string"]
+          description: End date of the project
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the project was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the project was last updated
+        client:
+          type: ["null", "object"]
+          description: The client associated with the project
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Client ID
+            name:
+              type: ["null", "string"]
+              description: Client name
+            currency:
+              type: ["null", "string"]
+              description: Client currency
+
+    ProjectsList:
+      type: object
+      description: Paginated list of projects
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Project"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Task:
+      type: object
+      x-airbyte-entity-name: tasks
+      x-airbyte-stream-name: tasks
+      description: A Harvest task
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique task ID
+        name:
+          type: ["null", "string"]
+          description: Name of the task
+        billable_by_default:
+          type: ["null", "boolean"]
+          description: Whether the task is billable by default
+        default_hourly_rate:
+          type: ["null", "number"]
+          description: Default hourly rate for the task
+        is_default:
+          type: ["null", "boolean"]
+          description: Whether the task is a default task
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the task is active
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the task was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the task was last updated
+
+    TasksList:
+      type: object
+      description: Paginated list of tasks
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    TimeEntry:
+      type: object
+      x-airbyte-entity-name: time_entries
+      x-airbyte-stream-name: time_entries
+      description: A Harvest time entry
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique time entry ID
+        spent_date:
+          type: ["null", "string"]
+          description: Date the time was spent
+        hours:
+          type: ["null", "number"]
+          description: Total hours tracked
+        hours_without_timer:
+          type: ["null", "number"]
+          description: Hours tracked without a timer
+        rounded_hours:
+          type: ["null", "number"]
+          description: Rounded hours
+        notes:
+          type: ["null", "string"]
+          description: Notes for the time entry
+        is_locked:
+          type: ["null", "boolean"]
+          description: Whether the time entry is locked
+        locked_reason:
+          type: ["null", "string"]
+          description: Reason the time entry is locked
+        is_closed:
+          type: ["null", "boolean"]
+          description: Whether the time entry is closed
+        is_billed:
+          type: ["null", "boolean"]
+          description: Whether the time entry has been billed
+        timer_started_at:
+          type: ["null", "string"]
+          description: Timestamp when the timer was started
+        started_time:
+          type: ["null", "string"]
+          description: Start time of the time entry
+        ended_time:
+          type: ["null", "string"]
+          description: End time of the time entry
+        is_running:
+          type: ["null", "boolean"]
+          description: Whether the timer is currently running
+        billable:
+          type: ["null", "boolean"]
+          description: Whether the time entry is billable
+        budgeted:
+          type: ["null", "boolean"]
+          description: Whether the time entry is budgeted
+        billable_rate:
+          type: ["null", "number"]
+          description: Billable rate for the time entry
+        cost_rate:
+          type: ["null", "number"]
+          description: Cost rate for the time entry
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the time entry was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the time entry was last updated
+        approval_status:
+          type: ["null", "string"]
+          description: Approval status of the time entry
+        is_explicitly_locked:
+          type: ["null", "boolean"]
+          description: Whether the time entry is explicitly locked
+        user:
+          type: ["null", "object"]
+          description: The user associated with the time entry
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: User ID
+            name:
+              type: ["null", "string"]
+              description: User name
+        client:
+          type: ["null", "object"]
+          description: The client associated with the time entry
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Client ID
+            name:
+              type: ["null", "string"]
+              description: Client name
+        project:
+          type: ["null", "object"]
+          description: The project associated with the time entry
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Project ID
+            name:
+              type: ["null", "string"]
+              description: Project name
+        task:
+          type: ["null", "object"]
+          description: The task associated with the time entry
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Task ID
+            name:
+              type: ["null", "string"]
+              description: Task name
+        user_assignment:
+          type: ["null", "object"]
+          description: The user assignment associated with the time entry
+        task_assignment:
+          type: ["null", "object"]
+          description: The task assignment associated with the time entry
+        external_reference:
+          type: ["null", "object"]
+          description: External reference for the time entry
+        invoice:
+          type: ["null", "object"]
+          description: The invoice associated with the time entry
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Invoice ID
+            number:
+              type: ["null", "string"]
+              description: Invoice number
+
+    TimeEntriesList:
+      type: object
+      description: Paginated list of time entries
+      properties:
+        time_entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeEntry"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Invoice:
+      type: object
+      x-airbyte-entity-name: invoices
+      x-airbyte-stream-name: invoices
+      description: A Harvest invoice
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique invoice ID
+        client_key:
+          type: ["null", "string"]
+          description: Client key for the invoice
+        number:
+          type: ["null", "string"]
+          description: Invoice number
+        purchase_order:
+          type: ["null", "string"]
+          description: Purchase order number
+        amount:
+          type: ["null", "number"]
+          description: Total amount of the invoice
+        due_amount:
+          type: ["null", "number"]
+          description: Amount due on the invoice
+        tax:
+          type: ["null", "number"]
+          description: Tax percentage
+        tax_amount:
+          type: ["null", "number"]
+          description: Tax amount
+        tax2:
+          type: ["null", "number"]
+          description: Second tax percentage
+        tax2_amount:
+          type: ["null", "number"]
+          description: Second tax amount
+        discount:
+          type: ["null", "number"]
+          description: Discount percentage
+        discount_amount:
+          type: ["null", "number"]
+          description: Discount amount
+        subject:
+          type: ["null", "string"]
+          description: Subject of the invoice
+        notes:
+          type: ["null", "string"]
+          description: Notes on the invoice
+        currency:
+          type: ["null", "string"]
+          description: Currency code for the invoice
+        state:
+          type: ["null", "string"]
+          description: State of the invoice (draft, open, paid, closed)
+        period_start:
+          type: ["null", "string"]
+          description: Start of the invoice period
+        period_end:
+          type: ["null", "string"]
+          description: End of the invoice period
+        issue_date:
+          type: ["null", "string"]
+          description: Date the invoice was issued
+        due_date:
+          type: ["null", "string"]
+          description: Date the invoice is due
+        payment_term:
+          type: ["null", "string"]
+          description: Payment term for the invoice
+        payment_options:
+          type: ["null", "array"]
+          description: Available payment options
+          items:
+            type: string
+        sent_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the invoice was sent
+        paid_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the invoice was paid
+        paid_date:
+          type: ["null", "string"]
+          description: Date the invoice was paid
+        closed_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the invoice was closed
+        recurring_invoice_id:
+          type: ["null", "integer"]
+          description: ID of the recurring invoice
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the invoice was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the invoice was last updated
+        client:
+          type: ["null", "object"]
+          description: The client associated with the invoice
+        estimate:
+          type: ["null", "object"]
+          description: The estimate associated with the invoice
+        retainer:
+          type: ["null", "object"]
+          description: The retainer associated with the invoice
+        creator:
+          type: ["null", "object"]
+          description: The creator of the invoice
+        line_items:
+          type: ["null", "array"]
+          description: Line items on the invoice
+          items:
+            type: object
+
+    InvoicesList:
+      type: object
+      description: Paginated list of invoices
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invoice"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    InvoiceItemCategory:
+      type: object
+      x-airbyte-entity-name: invoice_item_categories
+      x-airbyte-stream-name: invoice_item_categories
+      description: A Harvest invoice item category
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique invoice item category ID
+        name:
+          type: ["null", "string"]
+          description: Name of the category
+        use_as_service:
+          type: ["null", "boolean"]
+          description: Whether the category is used as a service
+        use_as_expense:
+          type: ["null", "boolean"]
+          description: Whether the category is used as an expense
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the category was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the category was last updated
+
+    InvoiceItemCategoriesList:
+      type: object
+      description: Paginated list of invoice item categories
+      properties:
+        invoice_item_categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvoiceItemCategory"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Estimate:
+      type: object
+      x-airbyte-entity-name: estimates
+      x-airbyte-stream-name: estimates
+      description: A Harvest estimate
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique estimate ID
+        client_key:
+          type: ["null", "string"]
+          description: Client key for the estimate
+        number:
+          type: ["null", "string"]
+          description: Estimate number
+        purchase_order:
+          type: ["null", "string"]
+          description: Purchase order number
+        amount:
+          type: ["null", "number"]
+          description: Total amount of the estimate
+        tax:
+          type: ["null", "number"]
+          description: Tax percentage
+        tax_amount:
+          type: ["null", "number"]
+          description: Tax amount
+        tax2:
+          type: ["null", "number"]
+          description: Second tax percentage
+        tax2_amount:
+          type: ["null", "number"]
+          description: Second tax amount
+        discount:
+          type: ["null", "number"]
+          description: Discount percentage
+        discount_amount:
+          type: ["null", "number"]
+          description: Discount amount
+        subject:
+          type: ["null", "string"]
+          description: Subject of the estimate
+        notes:
+          type: ["null", "string"]
+          description: Notes on the estimate
+        currency:
+          type: ["null", "string"]
+          description: Currency code for the estimate
+        state:
+          type: ["null", "string"]
+          description: State of the estimate (draft, sent, accepted, declined)
+        issue_date:
+          type: ["null", "string"]
+          description: Date the estimate was issued
+        sent_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the estimate was sent
+        accepted_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the estimate was accepted
+        declined_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the estimate was declined
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the estimate was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the estimate was last updated
+        client:
+          type: ["null", "object"]
+          description: The client associated with the estimate
+        creator:
+          type: ["null", "object"]
+          description: The creator of the estimate
+        line_items:
+          type: ["null", "array"]
+          description: Line items on the estimate
+          items:
+            type: object
+
+    EstimatesList:
+      type: object
+      description: Paginated list of estimates
+      properties:
+        estimates:
+          type: array
+          items:
+            $ref: "#/components/schemas/Estimate"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    EstimateItemCategory:
+      type: object
+      x-airbyte-entity-name: estimate_item_categories
+      x-airbyte-stream-name: estimate_item_categories
+      description: A Harvest estimate item category
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique estimate item category ID
+        name:
+          type: ["null", "string"]
+          description: Name of the category
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the category was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the category was last updated
+
+    EstimateItemCategoriesList:
+      type: object
+      description: Paginated list of estimate item categories
+      properties:
+        estimate_item_categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/EstimateItemCategory"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Expense:
+      type: object
+      x-airbyte-entity-name: expenses
+      x-airbyte-stream-name: expenses
+      description: A Harvest expense
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique expense ID
+        notes:
+          type: ["null", "string"]
+          description: Notes about the expense
+        total_cost:
+          type: ["null", "number"]
+          description: Total cost of the expense
+        units:
+          type: ["null", "number"]
+          description: Number of units
+        is_closed:
+          type: ["null", "boolean"]
+          description: Whether the expense is closed
+        is_locked:
+          type: ["null", "boolean"]
+          description: Whether the expense is locked
+        is_billed:
+          type: ["null", "boolean"]
+          description: Whether the expense has been billed
+        locked_reason:
+          type: ["null", "string"]
+          description: Reason the expense is locked
+        spent_date:
+          type: ["null", "string"]
+          description: Date the expense was incurred
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the expense was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the expense was last updated
+        billable:
+          type: ["null", "boolean"]
+          description: Whether the expense is billable
+        approval_status:
+          type: ["null", "string"]
+          description: Approval status of the expense
+        is_explicitly_locked:
+          type: ["null", "boolean"]
+          description: Whether the expense is explicitly locked
+        receipt:
+          type: ["null", "object"]
+          description: Receipt attached to the expense
+        user:
+          type: ["null", "object"]
+          description: The user who created the expense
+        user_assignment:
+          type: ["null", "object"]
+          description: The user assignment associated with the expense
+        project:
+          type: ["null", "object"]
+          description: The project associated with the expense
+        expense_category:
+          type: ["null", "object"]
+          description: The expense category
+        client:
+          type: ["null", "object"]
+          description: The client associated with the expense
+        invoice:
+          type: ["null", "object"]
+          description: The invoice associated with the expense
+
+    ExpensesList:
+      type: object
+      description: Paginated list of expenses
+      properties:
+        expenses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Expense"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    ExpenseCategory:
+      type: object
+      x-airbyte-entity-name: expense_categories
+      x-airbyte-stream-name: expense_categories
+      description: A Harvest expense category
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique expense category ID
+        name:
+          type: ["null", "string"]
+          description: Name of the expense category
+        unit_name:
+          type: ["null", "string"]
+          description: Unit name for the expense category
+        unit_price:
+          type: ["null", "number"]
+          description: Unit price for the expense category
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the expense category is active
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the expense category was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the expense category was last updated
+
+    ExpenseCategoriesList:
+      type: object
+      description: Paginated list of expense categories
+      properties:
+        expense_categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExpenseCategory"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    Role:
+      type: object
+      x-airbyte-entity-name: roles
+      x-airbyte-stream-name: roles
+      description: A Harvest role
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique role ID
+        name:
+          type: ["null", "string"]
+          description: Name of the role
+        user_ids:
+          type: ["null", "array"]
+          description: IDs of users assigned to this role
+          items:
+            type: integer
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the role was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the role was last updated
+
+    RolesList:
+      type: object
+      description: Paginated list of roles
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    UserAssignment:
+      type: object
+      x-airbyte-entity-name: user_assignments
+      x-airbyte-stream-name: user_assignments
+      description: A Harvest user assignment linking a user to a project
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique user assignment ID
+        is_project_manager:
+          type: ["null", "boolean"]
+          description: Whether the user is the project manager
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the assignment is active
+        budget:
+          type: ["null", "number"]
+          description: Budget for the user assignment
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the assignment was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the assignment was last updated
+        hourly_rate:
+          type: ["null", "number"]
+          description: Hourly rate for the assignment
+        use_default_rates:
+          type: ["null", "boolean"]
+          description: Whether the assignment uses default rates
+        project:
+          type: ["null", "object"]
+          description: The project associated with the assignment
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Project ID
+            name:
+              type: ["null", "string"]
+              description: Project name
+            code:
+              type: ["null", "string"]
+              description: Project code
+        user:
+          type: ["null", "object"]
+          description: The user associated with the assignment
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: User ID
+            name:
+              type: ["null", "string"]
+              description: User name
+
+    UserAssignmentsList:
+      type: object
+      description: Paginated list of user assignments
+      properties:
+        user_assignments:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserAssignment"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    TaskAssignment:
+      type: object
+      x-airbyte-entity-name: task_assignments
+      x-airbyte-stream-name: task_assignments
+      description: A Harvest task assignment linking a task to a project
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique task assignment ID
+        billable:
+          type: ["null", "boolean"]
+          description: Whether the task assignment is billable
+        is_active:
+          type: ["null", "boolean"]
+          description: Whether the assignment is active
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the assignment was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the assignment was last updated
+        hourly_rate:
+          type: ["null", "number"]
+          description: Hourly rate for the assignment
+        budget:
+          type: ["null", "number"]
+          description: Budget for the task assignment
+        project:
+          type: ["null", "object"]
+          description: The project associated with the assignment
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Project ID
+            name:
+              type: ["null", "string"]
+              description: Project name
+            code:
+              type: ["null", "string"]
+              description: Project code
+        task:
+          type: ["null", "object"]
+          description: The task associated with the assignment
+          properties:
+            id:
+              type: ["null", "integer"]
+              description: Task ID
+            name:
+              type: ["null", "string"]
+              description: Task name
+
+    TaskAssignmentsList:
+      type: object
+      description: Paginated list of task assignments
+      properties:
+        task_assignments:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskAssignment"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    TimeProject:
+      type: object
+      x-airbyte-entity-name: time_projects
+      x-airbyte-stream-name: time_projects
+      description: A time report entry grouped by project
+      properties:
+        project_id:
+          type: ["null", "integer"]
+          description: Unique identifier for the project
+        project_name:
+          type: ["null", "string"]
+          description: Name of the project
+        client_id:
+          type: ["null", "integer"]
+          description: Unique identifier for the client associated with this project
+        client_name:
+          type: ["null", "string"]
+          description: Name of the client associated with this project
+        total_hours:
+          type: ["null", "number"]
+          description: Total number of hours spent on this project
+        billable_hours:
+          type: ["null", "number"]
+          description: Number of billable hours spent on this project
+        currency:
+          type: ["null", "string"]
+          description: Currency code for the billable amount
+        billable_amount:
+          type: ["null", "number"]
+          description: Total billable amount for this project
+
+    TimeProjectsList:
+      type: object
+      description: Paginated list of time report entries by project
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeProject"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"
+
+    TimeTask:
+      type: object
+      x-airbyte-entity-name: time_tasks
+      x-airbyte-stream-name: time_tasks
+      description: A time report entry grouped by task
+      properties:
+        task_id:
+          type: ["null", "integer"]
+          description: Unique identifier for the task
+        task_name:
+          type: ["null", "string"]
+          description: Name of the task
+        total_hours:
+          type: ["null", "number"]
+          description: Total number of hours spent on this task
+        billable_hours:
+          type: ["null", "number"]
+          description: Number of billable hours spent on this task
+        currency:
+          type: ["null", "string"]
+          description: Currency code for the billable amount
+        billable_amount:
+          type: ["null", "number"]
+          description: Total billable amount for this task
+
+    TimeTasksList:
+      type: object
+      description: Paginated list of time report entries by task
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeTask"
+        per_page:
+          type: integer
+          description: Number of records per page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_entries:
+          type: integer
+          description: Total number of entries
+        page:
+          type: integer
+          description: Current page number
+        next_page:
+          type: ["null", "integer"]
+          description: The next page number
+        previous_page:
+          type: ["null", "integer"]
+          description: The previous page number
+        links:
+          $ref: "#/components/schemas/PaginationLinks"

@@ -1,0 +1,73 @@
+"""
+Zendesk-Support connector for Airbyte SDK.
+
+Auto-generated from OpenAPI specification.
+"""
+
+from .connector import ZendeskSupportConnector
+from .models import (
+    ZendeskSupportAuthConfig,
+    AirbyteSearchMeta,
+    AirbyteSearchResult,
+    BrandsSearchData,
+    BrandsSearchResult,
+    GroupsSearchData,
+    GroupsSearchResult,
+    OrganizationsSearchData,
+    OrganizationsSearchResult,
+    SatisfactionRatingsSearchData,
+    SatisfactionRatingsSearchResult,
+    TagsSearchData,
+    TagsSearchResult,
+    TicketAuditsSearchData,
+    TicketAuditsSearchResult,
+    TicketCommentsSearchData,
+    TicketCommentsSearchResult,
+    TicketFieldsSearchData,
+    TicketFieldsSearchResult,
+    TicketFormsSearchData,
+    TicketFormsSearchResult,
+    TicketMetricsSearchData,
+    TicketMetricsSearchResult,
+    TicketsSearchData,
+    TicketsSearchResult,
+    DeletedTicketsSearchData,
+    DeletedTicketsSearchResult,
+    UsersSearchData,
+    UsersSearchResult,
+)
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+__all__ = [
+    "ZendeskSupportConnector",
+    "AirbyteAuthConfig",
+    "ZendeskSupportAuthConfig",
+    "AirbyteSearchMeta",
+    "AirbyteSearchResult",
+    "BrandsSearchData",
+    "BrandsSearchResult",
+    "GroupsSearchData",
+    "GroupsSearchResult",
+    "OrganizationsSearchData",
+    "OrganizationsSearchResult",
+    "SatisfactionRatingsSearchData",
+    "SatisfactionRatingsSearchResult",
+    "TagsSearchData",
+    "TagsSearchResult",
+    "TicketAuditsSearchData",
+    "TicketAuditsSearchResult",
+    "TicketCommentsSearchData",
+    "TicketCommentsSearchResult",
+    "TicketFieldsSearchData",
+    "TicketFieldsSearchResult",
+    "TicketFormsSearchData",
+    "TicketFormsSearchResult",
+    "TicketMetricsSearchData",
+    "TicketMetricsSearchResult",
+    "TicketsSearchData",
+    "TicketsSearchResult",
+    "DeletedTicketsSearchData",
+    "DeletedTicketsSearchResult",
+    "UsersSearchData",
+    "UsersSearchResult",
+]

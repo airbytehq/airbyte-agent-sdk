@@ -1,0 +1,1318 @@
+openapi: 3.1.0
+
+info:
+  title: Google Search Console API Connector
+  version: 1.0.3
+  description: >
+    Connector for the Google Search Console API. Provides access to website search
+    performance data including clicks, impressions, CTR, and average position.
+    Supports listing verified sites, sitemaps, and querying search analytics data
+    broken down by date, country, device, page, and query dimensions.
+  x-airbyte-connector-name: google-search-console
+  x-airbyte-connector-definition-id: eb4c9e00-db83-4d63-a386-39cfa91012a8
+  x-airbyte-replication-version: "1.10.25"
+  x-airbyte-replication-compatibility: ">=1.10.25, <2.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Google Search Console API Documentation
+    url: https://developers.google.com/webmaster-tools/v1/api_reference_index
+  x-airbyte-example-questions:
+    direct:
+    - "List all my verified sites in Search Console"
+    - "Show me the sitemaps for my website"
+    - "Get search analytics by date for the last 7 days"
+    - "Show search performance broken down by country"
+    - "What devices are people using to find my site?"
+    - "Which pages get the most clicks?"
+    - "What queries bring the most traffic to my site?"
+    search:
+    - "Which country has the highest CTR for my site?"
+    - "What are my top 10 search queries by impressions?"
+    - "Compare mobile vs desktop click-through rates"
+    - "Which pages have the worst average position?"
+    - "Show me search performance trends over the last month"
+    unsupported:
+    - "Submit a new sitemap"
+    - "Add a new site to Search Console"
+    - "Remove a site from Search Console"
+    - "Inspect a URL's index status"
+    - "Request indexing for a page"
+  x-airbyte-entity-relationships:
+  - source_entity: sitemaps
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  - source_entity: search_analytics_by_date
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  - source_entity: search_analytics_by_country
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  - source_entity: search_analytics_by_device
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  - source_entity: search_analytics_by_page
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  - source_entity: search_analytics_by_query
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  - source_entity: search_analytics_all_fields
+    target_entity: sites
+    foreign_key: siteUrl
+    target_key: siteUrl
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: sites
+      fields:
+      - name: permissionLevel
+        type: ["null", "string"]
+        description: The user's permission level for the site (owner, full, restricted, etc.)
+      - name: siteUrl
+        type: ["null", "string"]
+        description: The URL of the site data being fetched
+    - entity: sitemaps
+      fields:
+      - name: contents
+        type: ["null", "array"]
+        description: Data related to the sitemap contents
+      - name: errors
+        type: ["null", "string"]
+        description: Errors encountered while processing the sitemaps
+      - name: isPending
+        type: ["null", "boolean"]
+        description: Flag indicating if the sitemap is pending for processing
+      - name: isSitemapsIndex
+        type: ["null", "boolean"]
+        description: Flag indicating if the data represents a sitemap index
+      - name: lastDownloaded
+        type: ["null", "string"]
+        description: Timestamp when the sitemap was last downloaded
+      - name: lastSubmitted
+        type: ["null", "string"]
+        description: Timestamp when the sitemap was last submitted
+      - name: path
+        type: ["null", "string"]
+        description: Path to the sitemap file
+      - name: type
+        type: ["null", "string"]
+        description: Type of the sitemap
+      - name: warnings
+        type: ["null", "string"]
+        description: Warnings encountered while processing the sitemaps
+    - entity: search_analytics_all_fields
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of times users clicked on the search result for a specific query
+      - name: country
+        type: ["null", "string"]
+        description: The country from which the search query originated
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate, calculated as clicks divided by impressions
+      - name: date
+        type: ["null", "string"]
+        description: The date when the search query occurred
+      - name: device
+        type: ["null", "string"]
+        description: The type of device used by the user (e.g., desktop, mobile)
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of times a search result appeared in response to a query
+      - name: page
+        type: ["null", "string"]
+        description: The page URL that appeared in the search results
+      - name: position
+        type: ["null", "number"]
+        description: The average position of the search result on the search engine results page
+      - name: query
+        type: ["null", "string"]
+        description: The search query entered by the user
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search (e.g., web, image, video) that triggered the search result
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site from which the data originates
+    - entity: search_analytics_by_country
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of times users clicked on the search result for a specific country
+      - name: country
+        type: ["null", "string"]
+        description: The country for which the search analytics data is being reported
+      - name: ctr
+        type: ["null", "number"]
+        description: The click-through rate for a specific country
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the search analytics data is being reported
+      - name: impressions
+        type: ["null", "integer"]
+        description: The total number of times a search result was shown for a specific country
+      - name: position
+        type: ["null", "number"]
+        description: The average position at which the site's search result appeared for a specific country
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search for which the data is being reported
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site for which the search analytics data is being reported
+    - entity: search_analytics_by_date
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The total number of clicks on the specific date
+      - name: ctr
+        type: ["null", "number"]
+        description: The click-through rate for the specific date
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the search analytics data is being reported
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of impressions on the specific date
+      - name: position
+        type: ["null", "number"]
+        description: The average position in search results for the specific date
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search query that generated the data
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site for which the search analytics data is being reported
+    - entity: search_analytics_by_device
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The total number of clicks by device type
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate by device type
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the search analytics data is provided
+      - name: device
+        type: ["null", "string"]
+        description: The type of device used by the user (e.g., desktop, mobile)
+      - name: impressions
+        type: ["null", "integer"]
+        description: The total number of impressions by device type
+      - name: position
+        type: ["null", "number"]
+        description: The average position in search results by device type
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search performed
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site for which search analytics data is being provided
+    - entity: search_analytics_by_page
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of clicks for a specific page
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate for the page
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the search analytics data is reported
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of impressions for the page
+      - name: page
+        type: ["null", "string"]
+        description: The URL of the specific page being analyzed
+      - name: position
+        type: ["null", "number"]
+        description: The average position at which the page appeared in search results
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search query that led to the page being displayed
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site for which the search analytics data is being reported
+    - entity: search_analytics_by_query
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of clicks for the specific query
+      - name: ctr
+        type: ["null", "number"]
+        description: The click-through rate for the specific query
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the search analytics data is recorded
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of impressions for the specific query
+      - name: position
+        type: ["null", "number"]
+        description: The average position for the specific query
+      - name: query
+        type: ["null", "string"]
+        description: The search query for which the data is recorded
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search result for the specific query
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site for which the search analytics data is captured
+    - entity: search_analytics_page_report
+      x-airbyte-name: search_analytics_page_report
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The total number of clicks from search results
+      - name: country
+        type: ["null", "string"]
+        description: The country from which the search originated
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate for the given search query
+      - name: date
+        type: ["null", "string"]
+        description: The date when the search data was recorded
+      - name: device
+        type: ["null", "string"]
+        description: The type of device used for the search query
+      - name: impressions
+        type: ["null", "integer"]
+        description: The total number of impressions in search results
+      - name: page
+        type: ["null", "string"]
+        description: The specific page URL within the website that appeared in search results
+      - name: position
+        type: ["null", "number"]
+        description: The average position in search results
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search that led users to the website
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the website for which the data is reported
+    - entity: search_analytics_site_report_by_page
+      x-airbyte-name: search_analytics_site_report_by_page
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The total number of clicks received by the page
+      - name: country
+        type: ["null", "string"]
+        description: The country from which the search traffic originated
+      - name: ctr
+        type: ["null", "number"]
+        description: The click-through rate
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the data is being reported
+      - name: device
+        type: ["null", "string"]
+        description: The type of device used by the searcher
+      - name: impressions
+        type: ["null", "integer"]
+        description: The total number of impressions
+      - name: position
+        type: ["null", "number"]
+        description: The average position in search results
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search query
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the page on the site
+    - entity: search_analytics_site_report_by_site
+      x-airbyte-name: search_analytics_site_report_by_site
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of clicks on search results linking to the site
+      - name: country
+        type: ["null", "string"]
+        description: The country where the search took place
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate calculated as clicks divided by impressions
+      - name: date
+        type: ["null", "string"]
+        description: The date of the search analytics data
+      - name: device
+        type: ["null", "string"]
+        description: The type of device used for the search
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of times the site appeared in search results
+      - name: position
+        type: ["null", "number"]
+        description: The average position of the site in search results
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site being analyzed
+    - entity: search_analytics_keyword_page_report
+      x-airbyte-name: search_analytics_keyword_page_report
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of clicks for the keyword on a specific page
+      - name: country
+        type: ["null", "string"]
+        description: The country where the search is made
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate for the keyword
+      - name: date
+        type: ["null", "string"]
+        description: The date of the search data collected
+      - name: device
+        type: ["null", "string"]
+        description: The device type used for the search
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of times the keyword appeared in search results
+      - name: page
+        type: ["null", "string"]
+        description: The page URL on which the keyword appears in search results
+      - name: position
+        type: ["null", "number"]
+        description: The average position of the keyword on search results pages
+      - name: query
+        type: ["null", "string"]
+        description: The search query used to find the site
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the website being monitored
+    - entity: search_analytics_keyword_site_report_by_page
+      x-airbyte-name: search_analytics_keyword_site_report_by_page
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of clicks from search results
+      - name: country
+        type: ["null", "string"]
+        description: The country from which the search query originated
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate
+      - name: date
+        type: ["null", "string"]
+        description: The date when the search data was recorded
+      - name: device
+        type: ["null", "string"]
+        description: The device type used for the search query
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of impressions in search results
+      - name: position
+        type: ["null", "number"]
+        description: The average position in search results
+      - name: query
+        type: ["null", "string"]
+        description: The search query used by the user
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search conducted
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the website
+    - entity: search_analytics_keyword_site_report_by_site
+      x-airbyte-name: search_analytics_keyword_site_report_by_site
+      fields:
+      - name: clicks
+        type: ["null", "integer"]
+        description: The number of clicks on search results linking to the site
+      - name: country
+        type: ["null", "string"]
+        description: The country from which the search originated
+      - name: ctr
+        type: ["null", "number"]
+        description: Click-through rate
+      - name: date
+        type: ["null", "string"]
+        description: The date for which the search analytics data is recorded
+      - name: device
+        type: ["null", "string"]
+        description: The type of device used during the search
+      - name: impressions
+        type: ["null", "integer"]
+        description: The number of times the site was shown in search results
+      - name: position
+        type: ["null", "number"]
+        description: The average ranking position in search results
+      - name: query
+        type: ["null", "string"]
+        description: The search query used to find the site
+      - name: search_type
+        type: ["null", "string"]
+        description: The type of search that generated the analytics data
+      - name: site_url
+        type: ["null", "string"]
+        description: The URL of the site for which the data is recorded
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Google Search Console.
+    properties:
+      site_urls:
+        type: array
+        title: Website URL Property
+        description: >
+          The URLs of the website property attached to your GSC account.
+          Examples: https://example.com/ or sc-domain:example.com
+        items:
+          type: string
+      start_date:
+        type: string
+        title: Start Date
+        description: >
+          UTC date in the format YYYY-MM-DD. Any data before this date will not be replicated.
+        format: date
+    required:
+    - site_urls
+    replication_config_key_mapping:
+      site_urls: site_urls
+      start_date: start_date
+
+servers:
+- url: https://www.googleapis.com/webmasters/v3
+  description: Google Search Console API server
+
+security:
+- oauth2: []
+
+paths:
+  /sites:
+    get:
+      summary: List sites
+      description: Lists the user's Search Console sites.
+      operationId: listSites
+      x-airbyte-entity: sites
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.siteEntry
+      responses:
+        "200":
+          description: List of sites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SitesList"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}:
+    get:
+      summary: Get a site
+      description: Retrieves information about a specific site.
+      operationId: getSite
+      x-airbyte-entity: sites
+      x-airbyte-action: get
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: >
+          The URL of the property as defined in Search Console.
+          Examples: http://www.example.com/ (for a URL-prefix property) or sc-domain:example.com (for a Domain property)
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Site object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Site not found
+
+  /sites/{siteUrl}/sitemaps:
+    get:
+      summary: List sitemaps
+      description: Lists the sitemaps submitted for a site.
+      operationId: listSitemaps
+      x-airbyte-entity: sitemaps
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.sitemap
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: >
+          The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of sitemaps
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SitemapsList"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}/sitemaps/{feedpath}:
+    get:
+      summary: Get a sitemap
+      description: Retrieves information about a specific sitemap.
+      operationId: getSitemap
+      x-airbyte-entity: sitemaps
+      x-airbyte-action: get
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: >
+          The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      - name: feedpath
+        in: path
+        required: true
+        description: The URL of the sitemap.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Sitemap object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sitemap"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Sitemap not found
+
+  /sites/{siteUrl}/searchAnalytics/query:search_analytics_by_date:
+    post:
+      summary: Search analytics by date
+      description: >
+        Query search analytics data grouped by date. Returns clicks, impressions,
+        CTR, and average position for each date in the specified range.
+      operationId: listSearchAnalyticsByDate
+      x-airbyte-entity: search_analytics_by_date
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /sites/{siteUrl}/searchAnalytics/query
+      x-airbyte-record-extractor: $.rows
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchAnalyticsByDateRequest"
+      responses:
+        "200":
+          description: Search analytics data grouped by date
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}/searchAnalytics/query:search_analytics_by_country:
+    post:
+      summary: Search analytics by country
+      description: >
+        Query search analytics data grouped by date and country. Returns clicks,
+        impressions, CTR, and average position for each country.
+      operationId: listSearchAnalyticsByCountry
+      x-airbyte-entity: search_analytics_by_country
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /sites/{siteUrl}/searchAnalytics/query
+      x-airbyte-record-extractor: $.rows
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchAnalyticsByCountryRequest"
+      responses:
+        "200":
+          description: Search analytics data grouped by country
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}/searchAnalytics/query:search_analytics_by_device:
+    post:
+      summary: Search analytics by device
+      description: >
+        Query search analytics data grouped by date and device. Returns clicks,
+        impressions, CTR, and average position for each device type.
+      operationId: listSearchAnalyticsByDevice
+      x-airbyte-entity: search_analytics_by_device
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /sites/{siteUrl}/searchAnalytics/query
+      x-airbyte-record-extractor: $.rows
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchAnalyticsByDeviceRequest"
+      responses:
+        "200":
+          description: Search analytics data grouped by device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}/searchAnalytics/query:search_analytics_by_page:
+    post:
+      summary: Search analytics by page
+      description: >
+        Query search analytics data grouped by date and page. Returns clicks,
+        impressions, CTR, and average position for each page URL.
+      operationId: listSearchAnalyticsByPage
+      x-airbyte-entity: search_analytics_by_page
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /sites/{siteUrl}/searchAnalytics/query
+      x-airbyte-record-extractor: $.rows
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchAnalyticsByPageRequest"
+      responses:
+        "200":
+          description: Search analytics data grouped by page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}/searchAnalytics/query:search_analytics_by_query:
+    post:
+      summary: Search analytics by query
+      description: >
+        Query search analytics data grouped by date and query. Returns clicks,
+        impressions, CTR, and average position for each search query.
+      operationId: listSearchAnalyticsByQuery
+      x-airbyte-entity: search_analytics_by_query
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /sites/{siteUrl}/searchAnalytics/query
+      x-airbyte-record-extractor: $.rows
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchAnalyticsByQueryRequest"
+      responses:
+        "200":
+          description: Search analytics data grouped by query
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+  /sites/{siteUrl}/searchAnalytics/query:search_analytics_all_fields:
+    post:
+      summary: Search analytics all fields
+      description: >
+        Query search analytics data grouped by all dimensions (date, country,
+        device, page, query). Returns the most granular breakdown of search data.
+      operationId: listSearchAnalyticsAllFields
+      x-airbyte-entity: search_analytics_all_fields
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /sites/{siteUrl}/searchAnalytics/query
+      x-airbyte-record-extractor: $.rows
+      parameters:
+      - name: siteUrl
+        in: path
+        required: true
+        description: The URL of the property as defined in Search Console.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchAnalyticsAllFieldsRequest"
+      responses:
+        "200":
+          description: Search analytics data grouped by all dimensions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authentication for Google Search Console
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+          refreshUrl: https://oauth2.googleapis.com/token
+          scopes:
+            https://www.googleapis.com/auth/webmasters.readonly: Read-only access to Search Console data
+            https://www.googleapis.com/auth/webmasters: Full access to Search Console data
+      x-airbyte-auth-config:
+        title: OAuth2 Authentication
+        type: object
+        required:
+        - client_id
+        - client_secret
+        - refresh_token
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: The client ID of your Google Search Console developer application.
+          client_secret:
+            type: string
+            title: Client Secret
+            description: The client secret of your Google Search Console developer application.
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: The refresh token for obtaining new access tokens.
+        auth_mapping:
+          refresh_token: "${refresh_token}"
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+        replication_auth_key_mapping:
+          authorization.client_id: client_id
+          authorization.client_secret: client_secret
+          authorization.refresh_token: refresh_token
+        replication_auth_key_constants:
+          authorization.auth_type: Client
+
+  schemas:
+    Site:
+      type: object
+      x-airbyte-entity-name: sites
+      description: A Search Console site resource.
+      properties:
+        siteUrl:
+          type:
+          - "null"
+          - string
+          description: >
+            The URL of the property. Examples: http://www.example.com/ (for a URL-prefix property)
+            or sc-domain:example.com (for a Domain property).
+        permissionLevel:
+          type:
+          - "null"
+          - string
+          description: >
+            The user's permission level for the site.
+            Values: siteFullUser, siteOwner, siteRestrictedUser, siteUnverifiedUser.
+
+    SitesList:
+      type: object
+      description: Response containing a list of sites.
+      properties:
+        siteEntry:
+          type: array
+          items:
+            $ref: "#/components/schemas/Site"
+
+    SitemapContent:
+      type: object
+      description: Information about a specific content type in a sitemap.
+      properties:
+        type:
+          type:
+          - "null"
+          - string
+          description: >
+            The specific type of content in this sitemap.
+            Values: androidApp, image, iosApp, mobile, news, pattern, video, web.
+        submitted:
+          type:
+          - "null"
+          - string
+          description: The number of URLs in the sitemap of this content type.
+        indexed:
+          type:
+          - "null"
+          - string
+          description: Deprecated; do not use.
+
+    Sitemap:
+      type: object
+      x-airbyte-entity-name: sitemaps
+      description: A sitemap resource with details about a submitted sitemap.
+      properties:
+        path:
+          type:
+          - "null"
+          - string
+          description: The URL of the sitemap.
+        lastSubmitted:
+          type:
+          - "null"
+          - string
+          description: Date and time when this sitemap was last submitted (RFC 3339 format).
+        isPending:
+          type:
+          - "null"
+          - boolean
+          description: If true, the sitemap has not been processed yet.
+        isSitemapsIndex:
+          type:
+          - "null"
+          - boolean
+          description: If true, the sitemap is a collection of sitemaps.
+        type:
+          type:
+          - "null"
+          - string
+          description: >
+            The type of the sitemap.
+            Values: atomFeed, notSitemap, patternSitemap, rssFeed, sitemap, urlList.
+        lastDownloaded:
+          type:
+          - "null"
+          - string
+          description: Date and time when this sitemap was last downloaded (RFC 3339 format).
+        warnings:
+          type:
+          - "null"
+          - string
+          description: Number of warnings for the sitemap.
+        errors:
+          type:
+          - "null"
+          - string
+          description: Number of errors in the sitemap.
+        contents:
+          type:
+          - "null"
+          - array
+          items:
+            $ref: "#/components/schemas/SitemapContent"
+          description: The various content types in the sitemap.
+
+    SitemapsList:
+      type: object
+      description: Response containing a list of sitemaps.
+      properties:
+        sitemap:
+          type: array
+          items:
+            $ref: "#/components/schemas/Sitemap"
+
+    SearchAnalyticsByDateRequest:
+      type: object
+      description: Request body for search analytics query grouped by date.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          type: string
+          description: Start date of the requested date range, in YYYY-MM-DD format.
+        endDate:
+          type: string
+          description: End date of the requested date range, in YYYY-MM-DD format.
+        dimensions:
+          type: array
+          items:
+            type: string
+          default:
+          - date
+          description: Dimensions to group results by.
+        rowLimit:
+          type: integer
+          minimum: 1
+          maximum: 25000
+          default: 1000
+          description: The maximum number of rows to return.
+        startRow:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Zero-based index of the first row in the response.
+        type:
+          type: string
+          default: web
+          description: >
+            Filter results by type: web, discover, googleNews, news, image, video.
+        aggregationType:
+          type: string
+          default: auto
+          description: >
+            How data is aggregated: auto, byPage, byProperty, byNewsShowcasePanel.
+        dataState:
+          type: string
+          default: final
+          description: >
+            Data freshness: final (stable data only) or all (includes fresh data).
+
+    SearchAnalyticsByCountryRequest:
+      type: object
+      description: Request body for search analytics query grouped by date and country.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          type: string
+          description: Start date of the requested date range, in YYYY-MM-DD format.
+        endDate:
+          type: string
+          description: End date of the requested date range, in YYYY-MM-DD format.
+        dimensions:
+          type: array
+          items:
+            type: string
+          default:
+          - date
+          - country
+          description: Dimensions to group results by.
+        rowLimit:
+          type: integer
+          minimum: 1
+          maximum: 25000
+          default: 1000
+          description: The maximum number of rows to return.
+        startRow:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Zero-based index of the first row in the response.
+        type:
+          type: string
+          default: web
+          description: >
+            Filter results by type: web, discover, googleNews, news, image, video.
+        aggregationType:
+          type: string
+          default: auto
+          description: >
+            How data is aggregated: auto, byPage, byProperty.
+        dataState:
+          type: string
+          default: final
+          description: >
+            Data freshness: final (stable data only) or all (includes fresh data).
+
+    SearchAnalyticsByDeviceRequest:
+      type: object
+      description: Request body for search analytics query grouped by date and device.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          type: string
+          description: Start date of the requested date range, in YYYY-MM-DD format.
+        endDate:
+          type: string
+          description: End date of the requested date range, in YYYY-MM-DD format.
+        dimensions:
+          type: array
+          items:
+            type: string
+          default:
+          - date
+          - device
+          description: Dimensions to group results by.
+        rowLimit:
+          type: integer
+          minimum: 1
+          maximum: 25000
+          default: 1000
+          description: The maximum number of rows to return.
+        startRow:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Zero-based index of the first row in the response.
+        type:
+          type: string
+          default: web
+          description: >
+            Filter results by type: web, discover, googleNews, news, image, video.
+        aggregationType:
+          type: string
+          default: auto
+          description: >
+            How data is aggregated: auto, byPage, byProperty.
+        dataState:
+          type: string
+          default: final
+          description: >
+            Data freshness: final (stable data only) or all (includes fresh data).
+
+    SearchAnalyticsByPageRequest:
+      type: object
+      description: Request body for search analytics query grouped by date and page.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          type: string
+          description: Start date of the requested date range, in YYYY-MM-DD format.
+        endDate:
+          type: string
+          description: End date of the requested date range, in YYYY-MM-DD format.
+        dimensions:
+          type: array
+          items:
+            type: string
+          default:
+          - date
+          - page
+          description: Dimensions to group results by.
+        rowLimit:
+          type: integer
+          minimum: 1
+          maximum: 25000
+          default: 1000
+          description: The maximum number of rows to return.
+        startRow:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Zero-based index of the first row in the response.
+        type:
+          type: string
+          default: web
+          description: >
+            Filter results by type: web, discover, googleNews, news, image, video.
+        aggregationType:
+          type: string
+          default: auto
+          description: >
+            How data is aggregated: auto, byPage, byProperty.
+        dataState:
+          type: string
+          default: final
+          description: >
+            Data freshness: final (stable data only) or all (includes fresh data).
+
+    SearchAnalyticsByQueryRequest:
+      type: object
+      description: Request body for search analytics query grouped by date and query.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          type: string
+          description: Start date of the requested date range, in YYYY-MM-DD format.
+        endDate:
+          type: string
+          description: End date of the requested date range, in YYYY-MM-DD format.
+        dimensions:
+          type: array
+          items:
+            type: string
+          default:
+          - date
+          - query
+          description: Dimensions to group results by.
+        rowLimit:
+          type: integer
+          minimum: 1
+          maximum: 25000
+          default: 1000
+          description: The maximum number of rows to return.
+        startRow:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Zero-based index of the first row in the response.
+        type:
+          type: string
+          default: web
+          description: >
+            Filter results by type: web, discover, googleNews, news, image, video.
+        aggregationType:
+          type: string
+          default: auto
+          description: >
+            How data is aggregated: auto, byPage, byProperty.
+        dataState:
+          type: string
+          default: final
+          description: >
+            Data freshness: final (stable data only) or all (includes fresh data).
+
+    SearchAnalyticsAllFieldsRequest:
+      type: object
+      description: Request body for search analytics query grouped by all dimensions.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          type: string
+          description: Start date of the requested date range, in YYYY-MM-DD format.
+        endDate:
+          type: string
+          description: End date of the requested date range, in YYYY-MM-DD format.
+        dimensions:
+          type: array
+          items:
+            type: string
+          default:
+          - date
+          - country
+          - device
+          - page
+          - query
+          description: Dimensions to group results by.
+        rowLimit:
+          type: integer
+          minimum: 1
+          maximum: 25000
+          default: 1000
+          description: The maximum number of rows to return.
+        startRow:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Zero-based index of the first row in the response.
+        type:
+          type: string
+          default: web
+          description: >
+            Filter results by type: web, discover, googleNews, news, image, video.
+        aggregationType:
+          type: string
+          default: auto
+          description: >
+            How data is aggregated: auto, byPage, byProperty.
+        dataState:
+          type: string
+          default: final
+          description: >
+            Data freshness: final (stable data only) or all (includes fresh data).
+
+    SearchAnalyticsRow:
+      type: object
+      description: A row of search analytics data.
+      properties:
+        keys:
+          type:
+          - "null"
+          - array
+          items:
+            type: string
+          description: >
+            A list of dimension values for this row, in the order specified
+            in the dimensions field of the request.
+        clicks:
+          type:
+          - "null"
+          - number
+          description: Click count for the row.
+        impressions:
+          type:
+          - "null"
+          - number
+          description: Impression count for the row.
+        ctr:
+          type:
+          - "null"
+          - number
+          description: Click Through Rate (CTR) for the row. Values range from 0 to 1.0.
+        position:
+          type:
+          - "null"
+          - number
+          description: Average position in search results.
+
+    SearchAnalyticsResponse:
+      type: object
+      description: Response containing search analytics data.
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchAnalyticsRow"
+          description: List of rows grouped by the key values.
+        responseAggregationType:
+          type:
+          - "null"
+          - string
+          description: How the results were aggregated (auto, byPage, byProperty).

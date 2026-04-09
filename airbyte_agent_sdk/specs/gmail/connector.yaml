@@ -1,0 +1,1238 @@
+# Gmail API Connector
+# OpenAPI 3.1 specification with Airbyte extensions
+
+openapi: 3.1.0
+
+info:
+  title: Gmail API Connector
+  version: 0.1.4
+  description: |
+    Gmail is Google's email service that provides email sending, receiving, and organization
+    capabilities. This connector provides access to messages, threads, labels, drafts, and
+    user profile information. It supports read operations for listing and retrieving email
+    data, as well as write operations including sending messages, managing drafts, modifying
+    message labels, and creating or updating labels.
+  x-airbyte-connector-name: gmail
+  x-airbyte-connector-definition-id: f7833dac-fc18-4feb-a2a9-94b22001edc6
+  x-airbyte-replication-version: "0.0.49"
+  x-airbyte-replication-compatibility: ">=0.0.49, <1.0.0"
+  x-airbyte-skip-context-store: "File-based connector, no structured streams for caching"
+  x-airbyte-example-questions:
+    direct:
+      - "List my recent emails"
+      - "Show me unread messages in my inbox"
+      - "Get the details of a specific email"
+      - "List all my Gmail labels"
+      - "Show me details for a specific label"
+      - "List my email drafts"
+      - "Get the content of a specific draft"
+      - "List my email threads"
+      - "Show me the full thread for a conversation"
+      - "Get my Gmail profile information"
+      - "Send an email to someone"
+      - "Create a new email draft"
+      - "Archive a message by removing the INBOX label"
+      - "Mark a message as read"
+      - "Mark a message as unread"
+      - "Move a message to trash"
+      - "Create a new label"
+      - "Update a label name or settings"
+      - "Delete a label"
+    search:
+      - "Search for messages matching a query"
+      - "Find emails from a specific sender"
+      - "Show me emails with attachments"
+    unsupported:
+      - "Attach a file to an email"
+      - "Forward an email to someone"
+      - "Create a filter or rule"
+      - "Manage Gmail settings"
+      - "Access Google Calendar events"
+      - "Manage contacts"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Gmail API Reference
+      url: https://developers.google.com/gmail/api/reference/rest
+    - type: authentication_guide
+      title: Gmail Authentication
+      url: https://developers.google.com/gmail/api/auth/about-auth
+    - type: rate_limits
+      title: Gmail API Quotas
+      url: https://developers.google.com/gmail/api/reference/quota
+    - type: status_page
+      title: Google Workspace Status
+      url: https://www.google.com/appsstatus/
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Gmail.
+    properties:
+      include_spam_and_trash:
+        type: boolean
+        title: Include Spam & Trash
+        description: Include messages from SPAM and TRASH in the results. Defaults to false.
+    required: []
+    replication_config_key_mapping:
+      include_spam_and_trash: include_spam_and_trash
+
+servers:
+  - url: https://gmail.googleapis.com
+    description: Gmail API server
+
+security:
+  - oauth2: []
+
+paths:
+  # ============================================================================
+  # PROFILE
+  # ============================================================================
+
+  "/gmail/v1/users/me/profile":
+    get:
+      summary: Get user profile
+      description: Gets the current user's Gmail profile including email address and mailbox statistics
+      operationId: getProfile
+      x-airbyte-entity: profile
+      x-airbyte-action: get
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "401":
+          description: Unauthorized
+
+  # ============================================================================
+  # MESSAGES
+  # ============================================================================
+
+  "/gmail/v1/users/me/messages":
+    get:
+      summary: List messages
+      description: Lists the messages in the user's mailbox. Returns message IDs and thread IDs.
+      operationId: listMessages
+      x-airbyte-entity: messages
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.messages
+      x-airbyte-meta-extractor:
+        nextPageToken: $.nextPageToken
+        resultSizeEstimate: $.resultSizeEstimate
+      parameters:
+        - name: maxResults
+          in: query
+          description: Maximum number of messages to return (1-500)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: pageToken
+          in: query
+          description: Page token to retrieve a specific page of results
+          required: false
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Gmail search query (same format as Gmail search box, e.g. "from:user@example.com", "is:unread", "subject:hello")
+          required: false
+          schema:
+            type: string
+        - name: labelIds
+          in: query
+          description: Only return messages with labels matching all of the specified label IDs (comma-separated)
+          required: false
+          schema:
+            type: string
+        - name: includeSpamTrash
+          in: query
+          description: Include messages from SPAM and TRASH in the results
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessagesListResponse"
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/messages/{messageId}":
+    get:
+      summary: Get a message
+      description: Gets the full email message content including headers, body, and attachments metadata
+      operationId: getMessage
+      x-airbyte-entity: messages
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to retrieve
+          schema:
+            type: string
+        - name: format
+          in: query
+          description: "The format to return the message in (full, metadata, minimal, raw)"
+          required: false
+          schema:
+            type: string
+            enum:
+              - full
+              - metadata
+              - minimal
+              - raw
+            default: full
+        - name: metadataHeaders
+          in: query
+          description: When format is METADATA, only include headers specified (comma-separated)
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Message object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "404":
+          description: Message not found
+        "401":
+          description: Unauthorized
+
+  # ============================================================================
+  # LABELS
+  # ============================================================================
+
+  "/gmail/v1/users/me/labels":
+    get:
+      summary: List labels
+      description: Lists all labels in the user's mailbox including system and user-created labels
+      operationId: listLabels
+      x-airbyte-entity: labels
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.labels
+      responses:
+        "200":
+          description: List of labels
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LabelsListResponse"
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create a label
+      description: Creates a new label in the user's mailbox
+      operationId: createLabel
+      x-airbyte-entity: labels
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabelCreateParams"
+      responses:
+        "200":
+          description: Label created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Label"
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/labels/{labelId}":
+    get:
+      summary: Get a label
+      description: Gets a specific label by ID including message and thread counts
+      operationId: getLabel
+      x-airbyte-entity: labels
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: labelId
+          in: path
+          required: true
+          description: The ID of the label to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Label object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Label"
+        "404":
+          description: Label not found
+        "401":
+          description: Unauthorized
+
+    put:
+      summary: Update a label
+      description: Updates the specified label
+      operationId: updateLabel
+      x-airbyte-entity: labels
+      x-airbyte-action: update
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: labelId
+          in: path
+          required: true
+          description: The ID of the label to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabelUpdateParams"
+      responses:
+        "200":
+          description: Label updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Label"
+        "400":
+          description: Invalid input
+        "404":
+          description: Label not found
+        "401":
+          description: Unauthorized
+
+    delete:
+      summary: Delete a label
+      description: Deletes the specified label and removes it from any messages and threads
+      operationId: deleteLabel
+      x-airbyte-entity: labels
+      x-airbyte-action: delete
+      parameters:
+        - name: labelId
+          in: path
+          required: true
+          description: The ID of the label to delete
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Label deleted successfully
+        "404":
+          description: Label not found
+        "401":
+          description: Unauthorized
+
+  # ============================================================================
+  # DRAFTS
+  # ============================================================================
+
+  "/gmail/v1/users/me/drafts":
+    get:
+      summary: List drafts
+      description: Lists the drafts in the user's mailbox
+      operationId: listDrafts
+      x-airbyte-entity: drafts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.drafts
+      x-airbyte-meta-extractor:
+        nextPageToken: $.nextPageToken
+        resultSizeEstimate: $.resultSizeEstimate
+      parameters:
+        - name: maxResults
+          in: query
+          description: Maximum number of drafts to return (1-500)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: pageToken
+          in: query
+          description: Page token to retrieve a specific page of results
+          required: false
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Gmail search query to filter drafts
+          required: false
+          schema:
+            type: string
+        - name: includeSpamTrash
+          in: query
+          description: Include drafts from SPAM and TRASH in the results
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: List of drafts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DraftsListResponse"
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create a draft
+      description: Creates a new draft with the specified message content
+      operationId: createDraft
+      x-airbyte-entity: drafts
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DraftCreateParams"
+      responses:
+        "200":
+          description: Draft created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Draft"
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/drafts/{draftId}":
+    get:
+      summary: Get a draft
+      description: Gets the specified draft including its message content
+      operationId: getDraft
+      x-airbyte-entity: drafts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          description: The ID of the draft to retrieve
+          schema:
+            type: string
+        - name: format
+          in: query
+          description: "The format to return the draft message in (full, metadata, minimal, raw)"
+          required: false
+          schema:
+            type: string
+            enum:
+              - full
+              - metadata
+              - minimal
+              - raw
+            default: full
+      responses:
+        "200":
+          description: Draft object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Draft"
+        "404":
+          description: Draft not found
+        "401":
+          description: Unauthorized
+
+    put:
+      summary: Update a draft
+      description: Replaces a draft's content with the specified message content
+      operationId: updateDraft
+      x-airbyte-entity: drafts
+      x-airbyte-action: update
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          description: The ID of the draft to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DraftCreateParams"
+      responses:
+        "200":
+          description: Draft updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Draft"
+        "400":
+          description: Invalid input
+        "404":
+          description: Draft not found
+        "401":
+          description: Unauthorized
+
+    delete:
+      summary: Delete a draft
+      description: Immediately and permanently deletes the specified draft (does not move to trash)
+      operationId: deleteDraft
+      x-airbyte-entity: drafts
+      x-airbyte-action: delete
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          description: The ID of the draft to delete
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Draft deleted successfully
+        "404":
+          description: Draft not found
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/drafts/send":
+    post:
+      summary: Send a draft
+      description: Sends the specified existing draft to its recipients
+      operationId: sendDraft
+      x-airbyte-entity: drafts_send
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DraftSendParams"
+      responses:
+        "200":
+          description: Draft sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "400":
+          description: Invalid input
+        "404":
+          description: Draft not found
+        "401":
+          description: Unauthorized
+
+  # ============================================================================
+  # THREADS
+  # ============================================================================
+
+  "/gmail/v1/users/me/threads":
+    get:
+      summary: List threads
+      description: Lists the threads in the user's mailbox
+      operationId: listThreads
+      x-airbyte-entity: threads
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.threads
+      x-airbyte-meta-extractor:
+        nextPageToken: $.nextPageToken
+        resultSizeEstimate: $.resultSizeEstimate
+      parameters:
+        - name: maxResults
+          in: query
+          description: Maximum number of threads to return (1-500)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: pageToken
+          in: query
+          description: Page token to retrieve a specific page of results
+          required: false
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Gmail search query to filter threads
+          required: false
+          schema:
+            type: string
+        - name: labelIds
+          in: query
+          description: Only return threads with labels matching all of the specified label IDs (comma-separated)
+          required: false
+          schema:
+            type: string
+        - name: includeSpamTrash
+          in: query
+          description: Include threads from SPAM and TRASH in the results
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: List of threads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadsListResponse"
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/threads/{threadId}":
+    get:
+      summary: Get a thread
+      description: Gets the specified thread including all messages in the conversation
+      operationId: getThread
+      x-airbyte-entity: threads
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          description: The ID of the thread to retrieve
+          schema:
+            type: string
+        - name: format
+          in: query
+          description: "The format to return the messages in (full, metadata, minimal)"
+          required: false
+          schema:
+            type: string
+            enum:
+              - full
+              - metadata
+              - minimal
+            default: full
+        - name: metadataHeaders
+          in: query
+          description: When format is METADATA, only include headers specified (comma-separated)
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Thread object with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thread"
+        "404":
+          description: Thread not found
+        "401":
+          description: Unauthorized
+
+  # ============================================================================
+  # WRITE OPERATIONS
+  # ============================================================================
+
+  "/gmail/v1/users/me/messages/send":
+    post:
+      summary: Send a message
+      description: |
+        Sends a new email message. The message should be provided as a base64url-encoded
+        RFC 2822 formatted string in the 'raw' field.
+      operationId: sendMessage
+      x-airbyte-entity: messages
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageSendParams"
+      responses:
+        "200":
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "400":
+          description: Invalid message format
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/messages/{messageId}/modify":
+    post:
+      summary: Modify message labels
+      description: |
+        Modifies the labels on a message. Use this to archive (remove INBOX label),
+        mark as read (remove UNREAD label), mark as unread (add UNREAD label),
+        star (add STARRED label), or apply custom labels.
+      operationId: modifyMessage
+      x-airbyte-entity: messages
+      x-airbyte-action: update
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to modify
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageModifyParams"
+      responses:
+        "200":
+          description: Message modified successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "400":
+          description: Invalid input
+        "404":
+          description: Message not found
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/messages/{messageId}/trash":
+    post:
+      summary: Trash a message
+      description: Moves the specified message to the trash
+      operationId: trashMessage
+      x-airbyte-entity: messages_trash
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to trash
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Message trashed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "404":
+          description: Message not found
+        "401":
+          description: Unauthorized
+
+  "/gmail/v1/users/me/messages/{messageId}/untrash":
+    post:
+      summary: Untrash a message
+      description: Removes the specified message from the trash
+      operationId: untrashMessage
+      x-airbyte-entity: messages_untrash
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to untrash
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Message untrashed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "404":
+          description: Message not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Google OAuth 2.0 authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+          refreshUrl: https://oauth2.googleapis.com/token
+          scopes:
+            https://www.googleapis.com/auth/gmail.readonly: View your email messages and settings
+            https://www.googleapis.com/auth/gmail.modify: View and modify but not delete your email
+            https://www.googleapis.com/auth/gmail.compose: Manage drafts and send emails
+            https://www.googleapis.com/auth/gmail.labels: Manage mailbox labels
+            https://mail.google.com/: Full access to the account's mailboxes including permanent deletion
+      x-airbyte-auth-config:
+        title: "OAuth 2.0 Authentication"
+        type: object
+        required:
+          - refresh_token
+        properties:
+          access_token:
+            type: string
+            title: "Access Token"
+            description: "Your Google OAuth2 Access Token (optional, will be obtained via refresh)"
+          refresh_token:
+            type: string
+            title: "Refresh Token"
+            description: "Your Google OAuth2 Refresh Token"
+          client_id:
+            type: string
+            title: "Client ID"
+            description: "Your Google OAuth2 Client ID"
+          client_secret:
+            type: string
+            title: "Client Secret"
+            description: "Your Google OAuth2 Client Secret"
+        auth_mapping:
+          access_token: "${access_token}"
+          refresh_token: "${refresh_token}"
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+        replication_auth_key_mapping:
+          client_id: "client_id"
+          client_secret: "client_secret"
+          client_refresh_token: "refresh_token"
+
+  schemas:
+    # ========================================================================
+    # ENTITY SCHEMAS
+    # ========================================================================
+
+    Profile:
+      type: object
+      x-airbyte-entity-name: profile
+      description: Gmail user profile information
+      properties:
+        emailAddress:
+          type: [string, "null"]
+          description: The user's email address
+        messagesTotal:
+          type: [integer, "null"]
+          description: The total number of messages in the mailbox
+        threadsTotal:
+          type: [integer, "null"]
+          description: The total number of threads in the mailbox
+        historyId:
+          type: [string, "null"]
+          description: The ID of the mailbox's current history record
+
+    MessageHeader:
+      type: object
+      description: A single email header key-value pair
+      properties:
+        name:
+          type: [string, "null"]
+          description: The name of the header (e.g. From, To, Subject, Date)
+        value:
+          type: [string, "null"]
+          description: The value of the header
+
+    MessagePartBody:
+      type: object
+      description: The body data of a MIME message part
+      properties:
+        attachmentId:
+          type: [string, "null"]
+          description: The immutable ID of the attachment (present when body is an attachment)
+        size:
+          type: [integer, "null"]
+          description: Number of bytes for the message part data
+        data:
+          type: [string, "null"]
+          description: The body data of the message part (base64url encoded)
+
+    MessagePart:
+      type: object
+      description: A single MIME message part
+      properties:
+        partId:
+          type: [string, "null"]
+          description: The immutable ID of the message part
+        mimeType:
+          type: [string, "null"]
+          description: The MIME type of the message part
+        filename:
+          type: [string, "null"]
+          description: The filename of the attachment (if present)
+        headers:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/MessageHeader"
+          description: List of headers on this message part
+        body:
+          oneOf:
+            - $ref: "#/components/schemas/MessagePartBody"
+            - type: "null"
+          description: The message part body
+        parts:
+          type: [array, "null"]
+          items:
+            type: object
+          description: Child MIME message parts (for multipart messages)
+
+    Message:
+      type: object
+      x-airbyte-entity-name: messages
+      description: A Gmail email message
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the message
+        threadId:
+          type: [string, "null"]
+          description: The ID of the thread the message belongs to
+        labelIds:
+          type: [array, "null"]
+          items:
+            type: string
+          description: List of label IDs applied to this message
+        snippet:
+          type: [string, "null"]
+          description: A short part of the message text
+        historyId:
+          type: [string, "null"]
+          description: The ID of the last history record that modified this message
+        internalDate:
+          type: [string, "null"]
+          description: The internal message creation timestamp (epoch ms)
+        sizeEstimate:
+          type: [integer, "null"]
+          description: Estimated size in bytes of the message
+        raw:
+          type: [string, "null"]
+          description: The entire email message in RFC 2822 format (base64url encoded, only when format=raw)
+        payload:
+          oneOf:
+            - $ref: "#/components/schemas/MessagePart"
+            - type: "null"
+          description: The parsed email structure in the payload
+
+    MessageRef:
+      type: object
+      description: A lightweight reference to a message (used in list responses)
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the message
+        threadId:
+          type: [string, "null"]
+          description: The ID of the thread the message belongs to
+
+    MessagesListResponse:
+      type: object
+      description: Response from listing messages
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/MessageRef"
+          description: List of message references
+        nextPageToken:
+          type: [string, "null"]
+          description: Token to retrieve the next page of results
+        resultSizeEstimate:
+          type: [integer, "null"]
+          description: Estimated total number of results
+
+    LabelColor:
+      type: object
+      description: The color to assign to a label
+      properties:
+        textColor:
+          type: [string, "null"]
+          description: The text color of the label as a hex string (#RRGGBB)
+        backgroundColor:
+          type: [string, "null"]
+          description: The background color of the label as a hex string (#RRGGBB)
+
+    Label:
+      type: object
+      x-airbyte-entity-name: labels
+      description: A Gmail label used to organize messages and threads
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the label
+        name:
+          type: [string, "null"]
+          description: The display name of the label
+        type:
+          type: [string, "null"]
+          description: The owner type for the label (system or user)
+        messageListVisibility:
+          type: [string, "null"]
+          description: The visibility of messages with this label in the message list (show or hide)
+        labelListVisibility:
+          type: [string, "null"]
+          description: The visibility of the label in the label list (labelShow, labelShowIfUnread, labelHide)
+        messagesTotal:
+          type: [integer, "null"]
+          description: The total number of messages with the label
+        messagesUnread:
+          type: [integer, "null"]
+          description: The number of unread messages with the label
+        threadsTotal:
+          type: [integer, "null"]
+          description: The total number of threads with the label
+        threadsUnread:
+          type: [integer, "null"]
+          description: The number of unread threads with the label
+        color:
+          oneOf:
+            - $ref: "#/components/schemas/LabelColor"
+            - type: "null"
+          description: The color assigned to the label
+
+    LabelsListResponse:
+      type: object
+      description: Response from listing labels
+      properties:
+        labels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+          description: List of labels
+
+    DraftRef:
+      type: object
+      description: A lightweight reference to a draft (used in list responses)
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the draft
+        message:
+          oneOf:
+            - $ref: "#/components/schemas/MessageRef"
+            - type: "null"
+          description: The message content of the draft (lightweight reference)
+
+    Draft:
+      type: object
+      x-airbyte-entity-name: drafts
+      description: A Gmail draft message
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the draft
+        message:
+          oneOf:
+            - $ref: "#/components/schemas/Message"
+            - type: "null"
+          description: The message content of the draft
+
+    DraftsListResponse:
+      type: object
+      description: Response from listing drafts
+      properties:
+        drafts:
+          type: array
+          items:
+            $ref: "#/components/schemas/DraftRef"
+          description: List of draft references
+        nextPageToken:
+          type: [string, "null"]
+          description: Token to retrieve the next page of results
+        resultSizeEstimate:
+          type: [integer, "null"]
+          description: Estimated total number of results
+
+    ThreadRef:
+      type: object
+      description: A lightweight reference to a thread (used in list responses)
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the thread
+        snippet:
+          type: [string, "null"]
+          description: A short part of the message text
+        historyId:
+          type: [string, "null"]
+          description: The ID of the last history record that modified this thread
+
+    Thread:
+      type: object
+      x-airbyte-entity-name: threads
+      description: A Gmail thread (email conversation)
+      properties:
+        id:
+          type: string
+          description: The immutable ID of the thread
+        snippet:
+          type: [string, "null"]
+          description: A short part of the message text
+        historyId:
+          type: [string, "null"]
+          description: The ID of the last history record that modified this thread
+        messages:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/Message"
+          description: The list of messages in the thread
+
+    ThreadsListResponse:
+      type: object
+      description: Response from listing threads
+      properties:
+        threads:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThreadRef"
+          description: List of thread references
+        nextPageToken:
+          type: [string, "null"]
+          description: Token to retrieve the next page of results
+        resultSizeEstimate:
+          type: [integer, "null"]
+          description: Estimated total number of results
+
+    # ========================================================================
+    # WRITE OPERATION SCHEMAS
+    # ========================================================================
+
+    MessageSendParams:
+      type: object
+      description: Parameters for sending a message
+      required:
+        - raw
+      properties:
+        raw:
+          type: string
+          description: The entire email message in RFC 2822 format, base64url encoded
+        threadId:
+          type: string
+          description: The thread ID to reply to (for threading replies in a conversation)
+
+    MessageModifyParams:
+      type: object
+      description: Parameters for modifying message labels
+      properties:
+        addLabelIds:
+          type: array
+          items:
+            type: string
+          description: A list of label IDs to add to the message (e.g. STARRED, UNREAD, or custom label IDs)
+        removeLabelIds:
+          type: array
+          items:
+            type: string
+          description: A list of label IDs to remove from the message (e.g. INBOX to archive, UNREAD to mark as read)
+
+    LabelCreateParams:
+      type: object
+      description: Parameters for creating a label
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The display name of the label
+        messageListVisibility:
+          type: string
+          description: The visibility of messages with this label in the message list (show or hide)
+          enum:
+            - show
+            - hide
+        labelListVisibility:
+          type: string
+          description: The visibility of the label in the label list
+          enum:
+            - labelShow
+            - labelShowIfUnread
+            - labelHide
+        color:
+          type: object
+          description: The color to assign to the label
+          properties:
+            textColor:
+              type: string
+              description: The text color of the label as a hex string (#RRGGBB)
+            backgroundColor:
+              type: string
+              description: The background color of the label as a hex string (#RRGGBB)
+
+    LabelUpdateParams:
+      type: object
+      description: Parameters for updating a label
+      properties:
+        id:
+          type: string
+          description: The ID of the label (must match the path parameter)
+        name:
+          type: string
+          description: The new display name of the label
+        messageListVisibility:
+          type: string
+          description: The visibility of messages with this label in the message list
+          enum:
+            - show
+            - hide
+        labelListVisibility:
+          type: string
+          description: The visibility of the label in the label list
+          enum:
+            - labelShow
+            - labelShowIfUnread
+            - labelHide
+        color:
+          type: object
+          description: The color to assign to the label
+          properties:
+            textColor:
+              type: string
+              description: The text color of the label as a hex string (#RRGGBB)
+            backgroundColor:
+              type: string
+              description: The background color of the label as a hex string (#RRGGBB)
+
+    DraftCreateParams:
+      type: object
+      description: Parameters for creating or updating a draft
+      required:
+        - message
+      properties:
+        message:
+          type: object
+          description: The draft message content
+          required:
+            - raw
+          properties:
+            raw:
+              type: string
+              description: The draft message in RFC 2822 format, base64url encoded
+            threadId:
+              type: string
+              description: The thread ID for the draft (for threading in a conversation)
+
+    DraftSendParams:
+      type: object
+      description: Parameters for sending an existing draft
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The ID of the draft to send

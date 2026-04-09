@@ -1,0 +1,2773 @@
+openapi: 3.1.0
+
+info:
+  title: Zoho CRM API Connector
+  version: 1.0.3
+  description: >
+    Connector for the Zoho CRM API, providing access to CRM modules including
+    leads, contacts, accounts, deals, campaigns, tasks, events, calls, products,
+    quotes, and invoices. Supports OAuth 2.0 authentication with regional
+    data center support (US, EU, AU, IN, CN, JP). Read-only operations (list and
+    get) are supported for all entities.
+  x-airbyte-connector-name: zoho-crm
+  x-airbyte-connector-definition-id: 4942d392-c7b5-4271-91f9-3b4f4e51eb3e
+  x-airbyte-replication-version: "0.1.3"
+  x-airbyte-replication-compatibility: ">=0.1.3, <1.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Zoho CRM API Documentation
+      url: https://www.zoho.com/crm/developer/docs/api/v2/
+    - type: authentication_guide
+      title: Zoho OAuth 2.0
+      url: https://www.zoho.com/crm/developer/docs/api/v2/oauth-overview.html
+    - type: rate_limits
+      title: Zoho API Limits
+      url: https://www.zoho.com/crm/developer/docs/api/v2/api-limits.html
+  x-airbyte-example-questions:
+    direct:
+      - "List all leads"
+      - "Show me details for a specific lead"
+      - "List all contacts"
+      - "List all accounts"
+      - "List all open deals"
+      - "Show me details for a specific deal"
+      - "List all campaigns"
+      - "List all tasks"
+      - "List all events"
+      - "List recent calls"
+      - "List all products"
+      - "List all quotes"
+      - "List all invoices"
+    search:
+      - "Show me leads created in the last 30 days"
+      - "Which deals have the highest amount?"
+      - "List all contacts at a specific company"
+      - "What is the total revenue across all deals by stage?"
+      - "Show me overdue tasks"
+      - "Which campaigns generated the most leads?"
+      - "Summarize the deal pipeline by stage"
+      - "Show me accounts with the highest annual revenue"
+      - "List all events scheduled for this week"
+      - "What are the top-performing products by unit price?"
+      - "Show me all invoices that are past due"
+      - "Break down leads by source and industry"
+    unsupported:
+      - "Create a new lead in Zoho CRM"
+      - "Update a contact's email address"
+      - "Delete a deal record"
+      - "Send an email to a lead"
+      - "Convert a lead to a contact"
+      - "Merge duplicate contacts"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: leads
+        x-airbyte-name: Leads
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: First_Name
+            type: ["null", "string"]
+            description: Lead's first name
+          - name: Last_Name
+            type: ["null", "string"]
+            description: Lead's last name
+          - name: Full_Name
+            type: ["null", "string"]
+            description: Lead's full name
+          - name: Email
+            type: ["null", "string"]
+            description: Lead's email address
+          - name: Phone
+            type: ["null", "string"]
+            description: Lead's phone number
+          - name: Mobile
+            type: ["null", "string"]
+            description: Lead's mobile number
+          - name: Company
+            type: ["null", "string"]
+            description: Company the lead is associated with
+          - name: Title
+            type: ["null", "string"]
+            description: Lead's job title
+          - name: Lead_Source
+            type: ["null", "string"]
+            description: Source from which the lead was generated
+          - name: Industry
+            type: ["null", "string"]
+            description: Industry the lead belongs to
+          - name: Annual_Revenue
+            type: ["null", "number"]
+            description: Annual revenue of the lead's company
+          - name: No_of_Employees
+            type: ["null", "integer"]
+            description: Number of employees in the lead's company
+          - name: Rating
+            type: ["null", "string"]
+            description: Lead rating
+          - name: Lead_Status
+            type: ["null", "string"]
+            description: Current status of the lead
+          - name: Website
+            type: ["null", "string"]
+            description: Lead's website URL
+          - name: City
+            type: ["null", "string"]
+            description: Lead's city
+          - name: State
+            type: ["null", "string"]
+            description: Lead's state or province
+          - name: Country
+            type: ["null", "string"]
+            description: Lead's country
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the lead
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: contacts
+        x-airbyte-name: Contacts
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: First_Name
+            type: ["null", "string"]
+            description: Contact's first name
+          - name: Last_Name
+            type: ["null", "string"]
+            description: Contact's last name
+          - name: Full_Name
+            type: ["null", "string"]
+            description: Contact's full name
+          - name: Email
+            type: ["null", "string"]
+            description: Contact's email address
+          - name: Phone
+            type: ["null", "string"]
+            description: Contact's phone number
+          - name: Mobile
+            type: ["null", "string"]
+            description: Contact's mobile number
+          - name: Title
+            type: ["null", "string"]
+            description: Contact's job title
+          - name: Department
+            type: ["null", "string"]
+            description: Department the contact belongs to
+          - name: Lead_Source
+            type: ["null", "string"]
+            description: Source from which the contact was generated
+          - name: Date_of_Birth
+            type: ["null", "string"]
+            description: Contact's date of birth
+          - name: Mailing_City
+            type: ["null", "string"]
+            description: Mailing address city
+          - name: Mailing_State
+            type: ["null", "string"]
+            description: Mailing address state or province
+          - name: Mailing_Country
+            type: ["null", "string"]
+            description: Mailing address country
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the contact
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: accounts
+        x-airbyte-name: Accounts
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Account_Name
+            type: ["null", "string"]
+            description: Name of the account or company
+          - name: Account_Number
+            type: ["null", "string"]
+            description: Account number
+          - name: Account_Type
+            type: ["null", "string"]
+            description: Type of account (e.g., Analyst, Competitor, Customer)
+          - name: Industry
+            type: ["null", "string"]
+            description: Industry the account belongs to
+          - name: Annual_Revenue
+            type: ["null", "number"]
+            description: Annual revenue of the account
+          - name: Employees
+            type: ["null", "integer"]
+            description: Number of employees
+          - name: Phone
+            type: ["null", "string"]
+            description: Account phone number
+          - name: Website
+            type: ["null", "string"]
+            description: Account website URL
+          - name: Ownership
+            type: ["null", "string"]
+            description: Ownership type (e.g., Public, Private)
+          - name: Rating
+            type: ["null", "string"]
+            description: Account rating
+          - name: Billing_City
+            type: ["null", "string"]
+            description: Billing address city
+          - name: Billing_State
+            type: ["null", "string"]
+            description: Billing address state or province
+          - name: Billing_Country
+            type: ["null", "string"]
+            description: Billing address country
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the account
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: deals
+        x-airbyte-name: Deals
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Deal_Name
+            type: ["null", "string"]
+            description: Name of the deal
+          - name: Amount
+            type: ["null", "number"]
+            description: Monetary value of the deal
+          - name: Stage
+            type: ["null", "string"]
+            description: Current stage of the deal in the pipeline
+          - name: Probability
+            type: ["null", "integer"]
+            description: Probability of closing the deal (percentage)
+          - name: Closing_Date
+            type: ["null", "string"]
+            description: Expected closing date
+          - name: Type
+            type: ["null", "string"]
+            description: Type of deal (e.g., New Business, Existing Business)
+          - name: Next_Step
+            type: ["null", "string"]
+            description: Next step in the deal process
+          - name: Lead_Source
+            type: ["null", "string"]
+            description: Source from which the deal originated
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the deal
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: campaigns
+        x-airbyte-name: Campaigns
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Campaign_Name
+            type: ["null", "string"]
+            description: Name of the campaign
+          - name: Type
+            type: ["null", "string"]
+            description: Type of campaign (e.g., Email, Webinar, Conference)
+          - name: Status
+            type: ["null", "string"]
+            description: Current status of the campaign
+          - name: Start_Date
+            type: ["null", "string"]
+            description: Campaign start date
+          - name: End_Date
+            type: ["null", "string"]
+            description: Campaign end date
+          - name: Expected_Revenue
+            type: ["null", "number"]
+            description: Expected revenue from the campaign
+          - name: Budgeted_Cost
+            type: ["null", "number"]
+            description: Budget allocated for the campaign
+          - name: Actual_Cost
+            type: ["null", "number"]
+            description: Actual cost incurred
+          - name: Num_sent
+            type: ["null", "string"]
+            description: Number of campaign messages sent
+          - name: Expected_Response
+            type: ["null", "integer"]
+            description: Expected response count
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the campaign
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: tasks
+        x-airbyte-name: Tasks
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Subject
+            type: ["null", "string"]
+            description: Subject or title of the task
+          - name: Due_Date
+            type: ["null", "string"]
+            description: Due date for the task
+          - name: Status
+            type: ["null", "string"]
+            description: Current status (e.g., Not Started, In Progress, Completed)
+          - name: Priority
+            type: ["null", "string"]
+            description: Priority level (e.g., High, Highest, Low, Lowest, Normal)
+          - name: Send_Notification_Email
+            type: ["null", "boolean"]
+            description: Whether to send a notification email
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the task
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+          - name: Closed_Time
+            type: ["null", "string"]
+            description: Time the task was closed
+      - entity: events
+        x-airbyte-name: Events
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Event_Title
+            type: ["null", "string"]
+            description: Title of the event
+          - name: Start_DateTime
+            type: ["null", "string"]
+            description: Event start date and time
+          - name: End_DateTime
+            type: ["null", "string"]
+            description: Event end date and time
+          - name: All_day
+            type: ["null", "boolean"]
+            description: Whether this is an all-day event
+          - name: Location
+            type: ["null", "string"]
+            description: Event location
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the event
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: calls
+        x-airbyte-name: Calls
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Subject
+            type: ["null", "string"]
+            description: Subject of the call
+          - name: Call_Type
+            type: ["null", "string"]
+            description: Type of call (Inbound or Outbound)
+          - name: Call_Start_Time
+            type: ["null", "string"]
+            description: Start time of the call
+          - name: Call_Duration
+            type: ["null", "string"]
+            description: Duration of the call as a formatted string
+          - name: Call_Duration_in_seconds
+            type: ["null", "number"]
+            description: Duration of the call in seconds
+          - name: Call_Purpose
+            type: ["null", "string"]
+            description: Purpose of the call
+          - name: Call_Result
+            type: ["null", "string"]
+            description: Result or outcome of the call
+          - name: Caller_ID
+            type: ["null", "string"]
+            description: Caller ID number
+          - name: Outgoing_Call_Status
+            type: ["null", "string"]
+            description: Status of outgoing calls
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the call
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: products
+        x-airbyte-name: Products
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Product_Name
+            type: ["null", "string"]
+            description: Name of the product
+          - name: Product_Code
+            type: ["null", "string"]
+            description: Product code or SKU
+          - name: Product_Category
+            type: ["null", "string"]
+            description: Category of the product
+          - name: Product_Active
+            type: ["null", "boolean"]
+            description: Whether the product is active
+          - name: Unit_Price
+            type: ["null", "number"]
+            description: Unit price of the product
+          - name: Commission_Rate
+            type: ["null", "number"]
+            description: Commission rate for the product
+          - name: Manufacturer
+            type: ["null", "string"]
+            description: Product manufacturer
+          - name: Sales_Start_Date
+            type: ["null", "string"]
+            description: Date when sales begin
+          - name: Sales_End_Date
+            type: ["null", "string"]
+            description: Date when sales end
+          - name: Qty_in_Stock
+            type: ["null", "number"]
+            description: Quantity currently in stock
+          - name: Qty_in_Demand
+            type: ["null", "number"]
+            description: Quantity in demand
+          - name: Qty_Ordered
+            type: ["null", "number"]
+            description: Quantity on order
+          - name: Description
+            type: ["null", "string"]
+            description: Description of the product
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: quotes
+        x-airbyte-name: Quotes
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Subject
+            type: ["null", "string"]
+            description: Subject or title of the quote
+          - name: Quote_Stage
+            type: ["null", "string"]
+            description: Current stage of the quote
+          - name: Valid_Till
+            type: ["null", "string"]
+            description: Date until which the quote is valid
+          - name: Carrier
+            type: ["null", "string"]
+            description: Shipping carrier
+          - name: Sub_Total
+            type: ["null", "number"]
+            description: Subtotal before tax and adjustments
+          - name: Tax
+            type: ["null", "number"]
+            description: Tax amount
+          - name: Adjustment
+            type: ["null", "number"]
+            description: Adjustment amount
+          - name: Grand_Total
+            type: ["null", "number"]
+            description: Total amount including tax and adjustments
+          - name: Discount
+            type: ["null", "number"]
+            description: Discount amount
+          - name: Terms_and_Conditions
+            type: ["null", "string"]
+            description: Terms and conditions text
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the quote
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+      - entity: invoices
+        x-airbyte-name: Invoices
+        fields:
+          - name: id
+            type: ["string"]
+            description: Unique record identifier
+          - name: Subject
+            type: ["null", "string"]
+            description: Subject or title of the invoice
+          - name: Invoice_Number
+            type: ["null", "string"]
+            description: Invoice number
+          - name: Invoice_Date
+            type: ["null", "string"]
+            description: Date the invoice was issued
+          - name: Due_Date
+            type: ["null", "string"]
+            description: Payment due date
+          - name: Status
+            type: ["null", "string"]
+            description: Current status of the invoice
+          - name: Purchase_Order
+            type: ["null", "string"]
+            description: Associated purchase order number
+          - name: Sub_Total
+            type: ["null", "number"]
+            description: Subtotal before tax and adjustments
+          - name: Tax
+            type: ["null", "number"]
+            description: Tax amount
+          - name: Adjustment
+            type: ["null", "number"]
+            description: Adjustment amount
+          - name: Grand_Total
+            type: ["null", "number"]
+            description: Total amount including tax and adjustments
+          - name: Discount
+            type: ["null", "number"]
+            description: Discount amount
+          - name: Excise_Duty
+            type: ["null", "number"]
+            description: Excise duty amount
+          - name: Terms_and_Conditions
+            type: ["null", "string"]
+            description: Terms and conditions text
+          - name: Description
+            type: ["null", "string"]
+            description: Description or notes about the invoice
+          - name: Created_Time
+            type: ["null", "string"]
+            description: Time the record was created
+          - name: Modified_Time
+            type: ["null", "string"]
+            description: Time the record was last modified
+
+servers:
+  - url: "https://www.zohoapis.{dc_region}"
+    description: Zoho CRM API server (region-specific)
+    variables:
+      dc_region:
+        default: com
+        description: >
+          The Zoho data center region domain suffix:
+          - com (US)
+          - com.au (AU)
+          - eu (EU)
+          - in (IN)
+          - com.cn (CN)
+          - jp (JP)
+        enum:
+          - com
+          - com.au
+          - eu
+          - in
+          - com.cn
+          - jp
+    x-airbyte-replication-environment-mapping:
+      dc_region:
+        source: dc_region
+        format: >-
+          {{ 'com' if value|upper == 'US'
+              else 'com.au' if value|upper == 'AU'
+              else 'eu' if value|upper == 'EU'
+              else 'in' if value|upper == 'IN'
+              else 'com.cn' if value|upper == 'CN'
+              else 'jp' if value|upper == 'JP'
+              else 'com' }}
+    x-airbyte-replication-environment-constants:
+      edition: "Free"
+
+security:
+  - oauth2: []
+
+paths:
+  # ── Leads ──────────────────────────────────────────────────────────────
+  "/crm/v2/Leads":
+    get:
+      summary: List leads
+      description: Returns a paginated list of leads
+      operationId: listLeads
+      x-airbyte-entity: leads
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of leads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadsList"
+
+  "/crm/v2/Leads/{id}":
+    get:
+      summary: Get a lead
+      description: Get a single lead by ID
+      operationId: getLead
+      x-airbyte-entity: leads
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Lead ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lead object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadsList"
+        "404":
+          description: Lead not found
+
+  # ── Contacts ───────────────────────────────────────────────────────────
+  "/crm/v2/Contacts":
+    get:
+      summary: List contacts
+      description: Returns a paginated list of contacts
+      operationId: listContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactsList"
+
+  "/crm/v2/Contacts/{id}":
+    get:
+      summary: Get a contact
+      description: Get a single contact by ID
+      operationId: getContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Contact ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Contact object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactsList"
+        "404":
+          description: Contact not found
+
+  # ── Accounts ───────────────────────────────────────────────────────────
+  "/crm/v2/Accounts":
+    get:
+      summary: List accounts
+      description: Returns a paginated list of accounts
+      operationId: listAccounts
+      x-airbyte-entity: accounts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountsList"
+
+  "/crm/v2/Accounts/{id}":
+    get:
+      summary: Get an account
+      description: Get a single account by ID
+      operationId: getAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountsList"
+        "404":
+          description: Account not found
+
+  # ── Deals ──────────────────────────────────────────────────────────────
+  "/crm/v2/Deals":
+    get:
+      summary: List deals
+      description: Returns a paginated list of deals
+      operationId: listDeals
+      x-airbyte-entity: deals
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of deals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DealsList"
+
+  "/crm/v2/Deals/{id}":
+    get:
+      summary: Get a deal
+      description: Get a single deal by ID
+      operationId: getDeal
+      x-airbyte-entity: deals
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Deal ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deal object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DealsList"
+        "404":
+          description: Deal not found
+
+  # ── Campaigns ──────────────────────────────────────────────────────────
+  "/crm/v2/Campaigns":
+    get:
+      summary: List campaigns
+      description: Returns a paginated list of campaigns
+      operationId: listCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of campaigns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignsList"
+
+  "/crm/v2/Campaigns/{id}":
+    get:
+      summary: Get a campaign
+      description: Get a single campaign by ID
+      operationId: getCampaign
+      x-airbyte-entity: campaigns
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Campaign ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Campaign object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignsList"
+        "404":
+          description: Campaign not found
+
+  # ── Tasks ──────────────────────────────────────────────────────────────
+  "/crm/v2/Tasks":
+    get:
+      summary: List tasks
+      description: Returns a paginated list of tasks
+      operationId: listTasks
+      x-airbyte-entity: tasks
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksList"
+
+  "/crm/v2/Tasks/{id}":
+    get:
+      summary: Get a task
+      description: Get a single task by ID
+      operationId: getTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksList"
+        "404":
+          description: Task not found
+
+  # ── Events ─────────────────────────────────────────────────────────────
+  "/crm/v2/Events":
+    get:
+      summary: List events
+      description: Returns a paginated list of events (meetings/calendar events)
+      operationId: listEvents
+      x-airbyte-entity: events
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsList"
+
+  "/crm/v2/Events/{id}":
+    get:
+      summary: Get an event
+      description: Get a single event by ID
+      operationId: getEvent
+      x-airbyte-entity: events
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Event object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsList"
+        "404":
+          description: Event not found
+
+  # ── Calls ──────────────────────────────────────────────────────────────
+  "/crm/v2/Calls":
+    get:
+      summary: List calls
+      description: Returns a paginated list of calls
+      operationId: listCalls
+      x-airbyte-entity: calls
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of calls
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallsList"
+
+  "/crm/v2/Calls/{id}":
+    get:
+      summary: Get a call
+      description: Get a single call by ID
+      operationId: getCall
+      x-airbyte-entity: calls
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Call ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Call object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallsList"
+        "404":
+          description: Call not found
+
+  # ── Products ───────────────────────────────────────────────────────────
+  "/crm/v2/Products":
+    get:
+      summary: List products
+      description: Returns a paginated list of products
+      operationId: listProducts
+      x-airbyte-entity: products
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsList"
+
+  "/crm/v2/Products/{id}":
+    get:
+      summary: Get a product
+      description: Get a single product by ID
+      operationId: getProduct
+      x-airbyte-entity: products
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsList"
+        "404":
+          description: Product not found
+
+  # ── Quotes ─────────────────────────────────────────────────────────────
+  "/crm/v2/Quotes":
+    get:
+      summary: List quotes
+      description: Returns a paginated list of quotes
+      operationId: listQuotes
+      x-airbyte-entity: quotes
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of quotes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuotesList"
+
+  "/crm/v2/Quotes/{id}":
+    get:
+      summary: Get a quote
+      description: Get a single quote by ID
+      operationId: getQuote
+      x-airbyte-entity: quotes
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Quote ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Quote object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuotesList"
+        "404":
+          description: Quote not found
+
+  # ── Invoices ───────────────────────────────────────────────────────────
+  "/crm/v2/Invoices":
+    get:
+      summary: List invoices
+      description: Returns a paginated list of invoices
+      operationId: listInvoices
+      x-airbyte-entity: invoices
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        pagination: $.info
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of records per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+        - name: page_token
+          in: query
+          description: Page token for fetching beyond 2000 records
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoicesList"
+
+  "/crm/v2/Invoices/{id}":
+    get:
+      summary: Get an invoice
+      description: Get a single invoice by ID
+      operationId: getInvoice
+      x-airbyte-entity: invoices
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data[0]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invoice object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoicesList"
+        "404":
+          description: Invoice not found
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: >
+        Zoho CRM OAuth 2.0 authentication. Requires registering a client
+        application in the Zoho Developer Console. The access token uses
+        the format "Zoho-oauthtoken {token}" in the Authorization header,
+        but the SDK handles Bearer tokens natively.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.zoho.com/oauth/v2/auth
+          tokenUrl: https://accounts.zoho.com/oauth/v2/token
+          refreshUrl: https://accounts.zoho.com/oauth/v2/token
+          scopes:
+            ZohoCRM.modules.ALL: Access all CRM modules
+            ZohoCRM.settings.ALL: Access all CRM settings
+            ZohoCRM.users.ALL: Access all CRM users
+      x-airbyte-token-refresh:
+        auth_style: body
+        body_format: form
+      x-airbyte-auth-config:
+        title: "Zoho CRM OAuth 2.0"
+        type: object
+        required:
+          - client_id
+          - client_secret
+          - refresh_token
+        properties:
+          client_id:
+            type: string
+            title: "Client ID"
+            description: "OAuth 2.0 Client ID from Zoho Developer Console"
+          client_secret:
+            type: string
+            title: "Client Secret"
+            description: "OAuth 2.0 Client Secret from Zoho Developer Console"
+          refresh_token:
+            type: string
+            title: "Refresh Token"
+            description: "OAuth 2.0 Refresh Token (does not expire)"
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          refresh_token: "${refresh_token}"
+        additional_headers:
+          Authorization: "Zoho-oauthtoken {{ access_token }}"
+        replication_auth_key_mapping:
+          client_id: "client_id"
+          client_secret: "client_secret"
+          refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          environment: "Production"
+
+  schemas:
+    # ── Shared sub-schemas ─────────────────────────────────────────────
+    Owner:
+      type: object
+      description: Record owner reference
+      properties:
+        name:
+          type: string
+          description: Owner name
+        id:
+          type: string
+          description: Owner ID
+        email:
+          type: string
+          description: Owner email address
+
+    CreatedBy:
+      type: object
+      description: User who created the record
+      properties:
+        name:
+          type: string
+          description: User name
+        id:
+          type: string
+          description: User ID
+        email:
+          type: string
+          description: User email
+
+    ModifiedBy:
+      type: object
+      description: User who last modified the record
+      properties:
+        name:
+          type: string
+          description: User name
+        id:
+          type: string
+          description: User ID
+        email:
+          type: string
+          description: User email
+
+    LookupRef:
+      type: object
+      description: Lookup reference to another record
+      properties:
+        name:
+          type: string
+          description: Referenced record name
+        id:
+          type: string
+          description: Referenced record ID
+
+    PaginationInfo:
+      type: object
+      description: Pagination metadata
+      properties:
+        per_page:
+          type: integer
+          description: Records per page
+        count:
+          type: integer
+          description: Number of records in current page
+        page:
+          type: integer
+          description: Current page number
+        more_records:
+          type: boolean
+          description: Whether more records exist
+        sort_by:
+          type: string
+          description: Field sorted by
+        sort_order:
+          type: string
+          description: Sort direction
+
+    # ── Lead ───────────────────────────────────────────────────────────
+    Lead:
+      type: object
+      x-airbyte-entity-name: leads
+      description: Zoho CRM lead object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique lead identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Company:
+          type: ["null", "string"]
+          description: Company name
+        First_Name:
+          type: ["null", "string"]
+          description: First name
+        Last_Name:
+          type: ["null", "string"]
+          description: Last name
+        Full_Name:
+          type: ["null", "string"]
+          description: Full name
+        Email:
+          type: ["null", "string"]
+          description: Email address
+        Phone:
+          type: ["null", "string"]
+          description: Phone number
+        Mobile:
+          type: ["null", "string"]
+          description: Mobile number
+        Fax:
+          type: ["null", "string"]
+          description: Fax number
+        Title:
+          type: ["null", "string"]
+          description: Job title
+        Lead_Source:
+          type: ["null", "string"]
+          description: Lead source
+        Industry:
+          type: ["null", "string"]
+          description: Industry
+        Annual_Revenue:
+          type: ["null", "number"]
+          description: Annual revenue
+        No_of_Employees:
+          type: ["null", "integer"]
+          description: Number of employees
+        Rating:
+          type: ["null", "string"]
+          description: Lead rating
+        Lead_Status:
+          type: ["null", "string"]
+          description: Lead status
+        Website:
+          type: ["null", "string"]
+          description: Website URL
+        Street:
+          type: ["null", "string"]
+          description: Street address
+        City:
+          type: ["null", "string"]
+          description: City
+        State:
+          type: ["null", "string"]
+          description: State
+        Zip_Code:
+          type: ["null", "string"]
+          description: ZIP/postal code
+        Country:
+          type: ["null", "string"]
+          description: Country
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Converted_Detail:
+          type: ["null", "object"]
+          description: Conversion details if lead was converted
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    LeadsList:
+      type: object
+      description: Paginated list of leads
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lead"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Contact ────────────────────────────────────────────────────────
+    Contact:
+      type: object
+      x-airbyte-entity-name: contacts
+      description: Zoho CRM contact object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique contact identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        First_Name:
+          type: ["null", "string"]
+          description: First name
+        Last_Name:
+          type: ["null", "string"]
+          description: Last name
+        Full_Name:
+          type: ["null", "string"]
+          description: Full name
+        Email:
+          type: ["null", "string"]
+          description: Email address
+        Phone:
+          type: ["null", "string"]
+          description: Phone number
+        Mobile:
+          type: ["null", "string"]
+          description: Mobile number
+        Fax:
+          type: ["null", "string"]
+          description: Fax number
+        Title:
+          type: ["null", "string"]
+          description: Job title
+        Department:
+          type: ["null", "string"]
+          description: Department
+        Account_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Lead_Source:
+          type: ["null", "string"]
+          description: Lead source
+        Date_of_Birth:
+          type: ["null", "string"]
+          format: date
+          description: Date of birth
+        Mailing_Street:
+          type: ["null", "string"]
+          description: Mailing street address
+        Mailing_City:
+          type: ["null", "string"]
+          description: Mailing city
+        Mailing_State:
+          type: ["null", "string"]
+          description: Mailing state
+        Mailing_Zip:
+          type: ["null", "string"]
+          description: Mailing ZIP/postal code
+        Mailing_Country:
+          type: ["null", "string"]
+          description: Mailing country
+        Other_Street:
+          type: ["null", "string"]
+          description: Other street address
+        Other_City:
+          type: ["null", "string"]
+          description: Other city
+        Other_State:
+          type: ["null", "string"]
+          description: Other state
+        Other_Zip:
+          type: ["null", "string"]
+          description: Other ZIP/postal code
+        Other_Country:
+          type: ["null", "string"]
+          description: Other country
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    ContactsList:
+      type: object
+      description: Paginated list of contacts
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Contact"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Account ────────────────────────────────────────────────────────
+    Account:
+      type: object
+      x-airbyte-entity-name: accounts
+      description: Zoho CRM account (company) object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique account identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Account_Name:
+          type: ["null", "string"]
+          description: Account/company name
+        Account_Number:
+          type: ["null", "string"]
+          description: Account number
+        Account_Type:
+          type: ["null", "string"]
+          description: Account type
+        Industry:
+          type: ["null", "string"]
+          description: Industry
+        Annual_Revenue:
+          type: ["null", "number"]
+          description: Annual revenue
+        Employees:
+          type: ["null", "integer"]
+          description: Number of employees
+        Phone:
+          type: ["null", "string"]
+          description: Phone number
+        Fax:
+          type: ["null", "string"]
+          description: Fax number
+        Website:
+          type: ["null", "string"]
+          description: Website URL
+        Ownership:
+          type: ["null", "string"]
+          description: Ownership type
+        Rating:
+          type: ["null", "string"]
+          description: Account rating
+        SIC_Code:
+          type: ["null", "integer"]
+          description: SIC code
+        Ticker_Symbol:
+          type: ["null", "string"]
+          description: Ticker symbol
+        Parent_Account:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Billing_Street:
+          type: ["null", "string"]
+          description: Billing street address
+        Billing_City:
+          type: ["null", "string"]
+          description: Billing city
+        Billing_State:
+          type: ["null", "string"]
+          description: Billing state
+        Billing_Code:
+          type: ["null", "string"]
+          description: Billing ZIP/postal code
+        Billing_Country:
+          type: ["null", "string"]
+          description: Billing country
+        Shipping_Street:
+          type: ["null", "string"]
+          description: Shipping street address
+        Shipping_City:
+          type: ["null", "string"]
+          description: Shipping city
+        Shipping_State:
+          type: ["null", "string"]
+          description: Shipping state
+        Shipping_Code:
+          type: ["null", "string"]
+          description: Shipping ZIP/postal code
+        Shipping_Country:
+          type: ["null", "string"]
+          description: Shipping country
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    AccountsList:
+      type: object
+      description: Paginated list of accounts
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Deal ───────────────────────────────────────────────────────────
+    Deal:
+      type: object
+      x-airbyte-entity-name: deals
+      description: Zoho CRM deal (opportunity) object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique deal identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Deal_Name:
+          type: ["null", "string"]
+          description: Deal name
+        Amount:
+          type: ["null", "number"]
+          description: Deal amount
+        Stage:
+          type: ["null", "string"]
+          description: Deal stage
+        Probability:
+          type: ["null", "integer"]
+          description: Win probability percentage
+        Closing_Date:
+          type: ["null", "string"]
+          format: date
+          description: Expected closing date
+        Type:
+          type: ["null", "string"]
+          description: Deal type
+        Next_Step:
+          type: ["null", "string"]
+          description: Next step
+        Lead_Source:
+          type: ["null", "string"]
+          description: Lead source
+        Contact_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Account_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Campaign_Source:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Pipeline:
+          type: ["null", "object"]
+          description: Sales pipeline reference
+          properties:
+            name:
+              type: string
+            id:
+              type: string
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    DealsList:
+      type: object
+      description: Paginated list of deals
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Deal"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Campaign ───────────────────────────────────────────────────────
+    Campaign:
+      type: object
+      x-airbyte-entity-name: campaigns
+      description: Zoho CRM campaign object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique campaign identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Campaign_Name:
+          type: ["null", "string"]
+          description: Campaign name
+        Type:
+          type: ["null", "string"]
+          description: Campaign type
+        Status:
+          type: ["null", "string"]
+          description: Campaign status
+        Start_Date:
+          type: ["null", "string"]
+          format: date
+          description: Campaign start date
+        End_Date:
+          type: ["null", "string"]
+          format: date
+          description: Campaign end date
+        Expected_Revenue:
+          type: ["null", "number"]
+          description: Expected revenue
+        Budgeted_Cost:
+          type: ["null", "number"]
+          description: Budgeted cost
+        Actual_Cost:
+          type: ["null", "number"]
+          description: Actual cost
+        Num_sent:
+          type: ["null", "string"]
+          description: Number of messages sent
+        Expected_Response:
+          type: ["null", "integer"]
+          description: Expected response count
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    CampaignsList:
+      type: object
+      description: Paginated list of campaigns
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Campaign"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Task ───────────────────────────────────────────────────────────
+    Task:
+      type: object
+      x-airbyte-entity-name: tasks
+      description: Zoho CRM task object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique task identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Subject:
+          type: ["null", "string"]
+          description: Task subject
+        Due_Date:
+          type: ["null", "string"]
+          format: date
+          description: Due date
+        Status:
+          type: ["null", "string"]
+          description: Task status
+        Priority:
+          type: ["null", "string"]
+          description: Task priority
+        Send_Notification_Email:
+          type: ["null", "boolean"]
+          description: Whether to send notification email
+        Remind_At:
+          type: ["null", "object"]
+          description: Reminder settings
+        Who_Id:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        What_Id:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Recurring_Activity:
+          type: ["null", "object"]
+          description: Recurring activity settings
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+        Closed_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Time the task was closed
+
+    TasksList:
+      type: object
+      description: Paginated list of tasks
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Event ──────────────────────────────────────────────────────────
+    Event:
+      type: object
+      x-airbyte-entity-name: events
+      description: Zoho CRM event (meeting/calendar) object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique event identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Event_Title:
+          type: ["null", "string"]
+          description: Event title
+        Start_DateTime:
+          type: ["null", "string"]
+          format: date-time
+          description: Event start date and time
+        End_DateTime:
+          type: ["null", "string"]
+          format: date-time
+          description: Event end date and time
+        All_day:
+          type: ["null", "boolean"]
+          description: Whether this is an all-day event
+        Location:
+          type: ["null", "string"]
+          description: Event location
+        Participants:
+          type: ["null", "array"]
+          description: List of event participants
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              Email:
+                type: string
+              invited:
+                type: boolean
+              type:
+                type: string
+              participant:
+                type: string
+              status:
+                type: string
+        Who_Id:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        What_Id:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Remind_At:
+          type: ["null", "object"]
+          description: Reminder settings
+        Recurring_Activity:
+          type: ["null", "object"]
+          description: Recurring activity settings
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    EventsList:
+      type: object
+      description: Paginated list of events
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Call ────────────────────────────────────────────────────────────
+    Call:
+      type: object
+      x-airbyte-entity-name: calls
+      description: Zoho CRM call object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique call identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Subject:
+          type: ["null", "string"]
+          description: Call subject
+        Call_Type:
+          type: ["null", "string"]
+          description: Call type (Inbound/Outbound)
+        Call_Start_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Call start time
+        Call_Duration:
+          type: ["null", "string"]
+          description: Call duration
+        Call_Duration_in_seconds:
+          type: ["null", "number"]
+          description: Call duration in seconds
+        Call_Purpose:
+          type: ["null", "string"]
+          description: Call purpose
+        Call_Result:
+          type: ["null", "string"]
+          description: Call result
+        Who_Id:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        What_Id:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Caller_ID:
+          type: ["null", "string"]
+          description: Caller ID
+        Outgoing_Call_Status:
+          type: ["null", "string"]
+          description: Outgoing call status
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    CallsList:
+      type: object
+      description: Paginated list of calls
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Call"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Product ────────────────────────────────────────────────────────
+    Product:
+      type: object
+      x-airbyte-entity-name: products
+      description: Zoho CRM product object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique product identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Product_Name:
+          type: ["null", "string"]
+          description: Product name
+        Product_Code:
+          type: ["null", "string"]
+          description: Product code
+        Product_Category:
+          type: ["null", "string"]
+          description: Product category
+        Product_Active:
+          type: ["null", "boolean"]
+          description: Whether the product is active
+        Unit_Price:
+          type: ["null", "number"]
+          description: Unit price
+        Commission_Rate:
+          type: ["null", "number"]
+          description: Commission rate
+        Manufacturer:
+          type: ["null", "string"]
+          description: Manufacturer
+        Sales_Start_Date:
+          type: ["null", "string"]
+          format: date
+          description: Sales start date
+        Sales_End_Date:
+          type: ["null", "string"]
+          format: date
+          description: Sales end date
+        Support_Start_Date:
+          type: ["null", "string"]
+          format: date
+          description: Support start date
+        Support_Expiry_Date:
+          type: ["null", "string"]
+          format: date
+          description: Support expiry date
+        Qty_in_Stock:
+          type: ["null", "number"]
+          description: Quantity in stock
+        Qty_in_Demand:
+          type: ["null", "number"]
+          description: Quantity in demand
+        Qty_Ordered:
+          type: ["null", "number"]
+          description: Quantity ordered
+        Reorder_Level:
+          type: ["null", "number"]
+          description: Reorder level
+        Handler:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Tax:
+          type: ["null", "array"]
+          description: Tax list
+          items:
+            type: string
+        Vendor_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    ProductsList:
+      type: object
+      description: Paginated list of products
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Quote ──────────────────────────────────────────────────────────
+    Quote:
+      type: object
+      x-airbyte-entity-name: quotes
+      description: Zoho CRM quote object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique quote identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Subject:
+          type: ["null", "string"]
+          description: Quote subject
+        Quote_Stage:
+          type: ["null", "string"]
+          description: Quote stage
+        Valid_Till:
+          type: ["null", "string"]
+          format: date
+          description: Valid until date
+        Deal_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Contact_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Account_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Carrier:
+          type: ["null", "string"]
+          description: Shipping carrier
+        Shipping_Street:
+          type: ["null", "string"]
+          description: Shipping street address
+        Shipping_City:
+          type: ["null", "string"]
+          description: Shipping city
+        Shipping_State:
+          type: ["null", "string"]
+          description: Shipping state
+        Shipping_Code:
+          type: ["null", "string"]
+          description: Shipping ZIP/postal code
+        Shipping_Country:
+          type: ["null", "string"]
+          description: Shipping country
+        Billing_Street:
+          type: ["null", "string"]
+          description: Billing street address
+        Billing_City:
+          type: ["null", "string"]
+          description: Billing city
+        Billing_State:
+          type: ["null", "string"]
+          description: Billing state
+        Billing_Code:
+          type: ["null", "string"]
+          description: Billing ZIP/postal code
+        Billing_Country:
+          type: ["null", "string"]
+          description: Billing country
+        Sub_Total:
+          type: ["null", "number"]
+          description: Subtotal amount
+        Tax:
+          type: ["null", "number"]
+          description: Tax amount
+        Adjustment:
+          type: ["null", "number"]
+          description: Adjustment amount
+        Grand_Total:
+          type: ["null", "number"]
+          description: Grand total amount
+        Discount:
+          type: ["null", "number"]
+          description: Discount amount
+        Terms_and_Conditions:
+          type: ["null", "string"]
+          description: Terms and conditions
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    QuotesList:
+      type: object
+      description: Paginated list of quotes
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Quote"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"
+
+    # ── Invoice ────────────────────────────────────────────────────────
+    Invoice:
+      type: object
+      x-airbyte-entity-name: invoices
+      description: Zoho CRM invoice object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique invoice identifier
+        Owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        Subject:
+          type: ["null", "string"]
+          description: Invoice subject
+        Invoice_Number:
+          type: ["null", "string"]
+          description: Invoice number
+        Invoice_Date:
+          type: ["null", "string"]
+          format: date
+          description: Invoice date
+        Due_Date:
+          type: ["null", "string"]
+          format: date
+          description: Due date
+        Status:
+          type: ["null", "string"]
+          description: Invoice status
+        Sales_Order:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Contact_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Account_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Deal_Name:
+          oneOf:
+            - $ref: "#/components/schemas/LookupRef"
+            - type: "null"
+        Purchase_Order:
+          type: ["null", "string"]
+          description: Purchase order number
+        Excise_Duty:
+          type: ["null", "number"]
+          description: Excise duty amount
+        Billing_Street:
+          type: ["null", "string"]
+          description: Billing street address
+        Billing_City:
+          type: ["null", "string"]
+          description: Billing city
+        Billing_State:
+          type: ["null", "string"]
+          description: Billing state
+        Billing_Code:
+          type: ["null", "string"]
+          description: Billing ZIP/postal code
+        Billing_Country:
+          type: ["null", "string"]
+          description: Billing country
+        Shipping_Street:
+          type: ["null", "string"]
+          description: Shipping street address
+        Shipping_City:
+          type: ["null", "string"]
+          description: Shipping city
+        Shipping_State:
+          type: ["null", "string"]
+          description: Shipping state
+        Shipping_Code:
+          type: ["null", "string"]
+          description: Shipping ZIP/postal code
+        Shipping_Country:
+          type: ["null", "string"]
+          description: Shipping country
+        Sub_Total:
+          type: ["null", "number"]
+          description: Subtotal amount
+        Tax:
+          type: ["null", "number"]
+          description: Tax amount
+        Adjustment:
+          type: ["null", "number"]
+          description: Adjustment amount
+        Grand_Total:
+          type: ["null", "number"]
+          description: Grand total amount
+        Discount:
+          type: ["null", "number"]
+          description: Discount amount
+        Terms_and_Conditions:
+          type: ["null", "string"]
+          description: Terms and conditions
+        Description:
+          type: ["null", "string"]
+          description: Description
+        Created_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Record creation timestamp
+        Modified_Time:
+          type: ["null", "string"]
+          format: date-time
+          description: Last modification timestamp
+        Created_By:
+          oneOf:
+            - $ref: "#/components/schemas/CreatedBy"
+            - type: "null"
+        Modified_By:
+          oneOf:
+            - $ref: "#/components/schemas/ModifiedBy"
+            - type: "null"
+        Record_Status__s:
+          type: ["null", "string"]
+          description: Record status
+
+    InvoicesList:
+      type: object
+      description: Paginated list of invoices
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invoice"
+        info:
+          $ref: "#/components/schemas/PaginationInfo"

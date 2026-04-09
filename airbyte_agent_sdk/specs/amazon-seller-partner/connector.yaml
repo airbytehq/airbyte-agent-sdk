@@ -1,0 +1,1914 @@
+openapi: 3.1.0
+
+info:
+  title: Amazon Seller Partner API Connector
+  version: 1.0.5
+  description: >
+    Connector for the Amazon Selling Partner API (SP-API). Provides access to
+    seller orders and order items, financial events and event groups, catalog
+    item search and details, and report metadata. Supports OAuth 2.0
+    authentication via Login with Amazon (LWA) with automatic token refresh.
+  x-airbyte-connector-name: amazon-seller-partner
+  x-airbyte-connector-definition-id: e55879a8-0ef8-4557-abcf-ab34c53ec460
+  x-airbyte-replication-version: "5.6.0"
+  x-airbyte-replication-compatibility: ">=5.6.0, <6.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: SP-API Documentation
+      url: https://developer-docs.amazon.com/sp-api/
+    - type: api_deprecations
+      title: SP-API Deprecation Schedule
+      url: https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations
+    - type: api_release_history
+      title: SP-API Release Notes
+      url: https://developer-docs.amazon.com/sp-api/docs/sp-api-release-notes
+  x-airbyte-skip-auth-methods:
+    - customauthenticator
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Amazon Seller Partner.
+    properties:
+      replication_start_date:
+        type: string
+        title: Start Date
+        description: >-
+          UTC date and time in the format 2017-01-25T00:00:00Z. Any data before
+          this date will not be replicated.
+        format: date-time
+    required:
+      - replication_start_date
+    replication_config_key_mapping:
+      replication_start_date: replication_start_date
+  x-airbyte-entity-relationships:
+    - source_entity: order_items
+      target_entity: orders
+      foreign_key: orderId
+      target_key: AmazonOrderId
+      cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: orders
+        x-airbyte-name: Orders
+        fields:
+          - name: AmazonOrderId
+            type: ["null", "string"]
+            description: Unique identifier for the Amazon order
+          - name: AutomatedShippingSettings
+            type: ["null", "object"]
+            description: Settings related to automated shipping processes
+            properties:
+              HasAutomatedShippingSettings:
+                type: ["null", "boolean"]
+          - name: BuyerInfo
+            type: ["null", "object"]
+            description: Information about the buyer
+          - name: DefaultShipFromLocationAddress
+            type: ["null", "object"]
+            description: The default address from which orders are shipped
+            properties:
+              AddressLine1:
+                type: ["null", "string"]
+              City:
+                type: ["null", "string"]
+              CountryCode:
+                type: ["null", "string"]
+              Name:
+                type: ["null", "string"]
+              PostalCode:
+                type: ["null", "string"]
+              StateOrRegion:
+                type: ["null", "string"]
+          - name: EarliestDeliveryDate
+            type: ["null", "string"]
+            description: Earliest estimated delivery date of the order
+          - name: EarliestShipDate
+            type: ["null", "string"]
+            description: Earliest shipment date for the order
+          - name: FulfillmentChannel
+            type: ["null", "string"]
+            description: Channel through which the order is fulfilled
+          - name: HasRegulatedItems
+            type: ["null", "boolean"]
+            description: Indicates if the order has regulated items
+          - name: IsAccessPointOrder
+            type: ["null", "boolean"]
+            description: Indicates if the order is an Amazon Hub Counter order
+          - name: IsBusinessOrder
+            type: ["null", "boolean"]
+            description: Indicates if the order is a business order
+          - name: IsGlobalExpressEnabled
+            type: ["null", "boolean"]
+            description: Indicates if global express is enabled for the order
+          - name: IsISPU
+            type: ["null", "boolean"]
+            description: Indicates if the order is for In-Store Pickup
+          - name: IsPremiumOrder
+            type: ["null", "boolean"]
+            description: Indicates if the order is a premium order
+          - name: IsPrime
+            type: ["null", "boolean"]
+            description: Indicates if the order is a Prime order
+          - name: IsReplacementOrder
+            type: ["null", "string"]
+            description: Indicates if the order is a replacement order
+          - name: IsSoldByAB
+            type: ["null", "boolean"]
+            description: Indicates if the order is sold by Amazon Business
+          - name: LastUpdateDate
+            type: ["null", "string"]
+            description: Date and time when the order was last updated
+          - name: LatestDeliveryDate
+            type: ["null", "string"]
+            description: Latest estimated delivery date of the order
+          - name: LatestShipDate
+            type: ["null", "string"]
+            description: Latest shipment date for the order
+          - name: MarketplaceId
+            type: ["null", "string"]
+            description: Identifier for the marketplace where the order was placed
+          - name: NumberOfItemsShipped
+            type: ["null", "integer"]
+            description: Number of items shipped in the order
+          - name: NumberOfItemsUnshipped
+            type: ["null", "integer"]
+            description: Number of items yet to be shipped in the order
+          - name: OrderStatus
+            type: ["null", "string"]
+            description: Status of the order
+          - name: OrderTotal
+            type: ["null", "object"]
+            description: Total amount of the order
+            properties:
+              CurrencyCode:
+                type: ["null", "string"]
+              Amount:
+                type: ["null", "string"]
+          - name: OrderType
+            type: ["null", "string"]
+            description: Type of the order
+          - name: PaymentMethod
+            type: ["null", "string"]
+            description: Payment method used for the order
+          - name: PaymentMethodDetails
+            type: ["null", "array"]
+            description: Details of the payment method used for the order
+          - name: PurchaseDate
+            type: ["null", "string"]
+            description: Date and time when the order was purchased
+          - name: SalesChannel
+            type: ["null", "string"]
+            description: Channel through which the order was sold
+          - name: SellerOrderId
+            type: ["null", "string"]
+            description: Unique identifier given by the seller for the order
+          - name: ShipServiceLevel
+            type: ["null", "string"]
+            description: Service level for shipping the order
+          - name: ShipmentServiceLevelCategory
+            type: ["null", "string"]
+            description: Service level category for shipping the order
+          - name: ShippingAddress
+            type: ["null", "object"]
+            description: The address to which the order will be shipped
+            properties:
+              City:
+                type: ["null", "string"]
+              CountryCode:
+                type: ["null", "string"]
+              PostalCode:
+                type: ["null", "string"]
+              StateOrRegion:
+                type: ["null", "string"]
+          - name: seller_id
+            type: ["null", "string"]
+            description: Identifier for the seller associated with the order
+      - entity: order_items
+        x-airbyte-name: OrderItems
+        fields:
+          - name: ASIN
+            type: ["null", "string"]
+            description: Amazon Standard Identification Number of the product
+          - name: AmazonOrderId
+            type: ["null", "string"]
+            description: ID of the Amazon order
+          - name: BuyerInfo
+            type: ["null", "object"]
+            description: Information about the buyer
+          - name: BuyerRequestedCancel
+            type: ["null", "object"]
+            description: Information about buyer's request for cancellation
+          - name: CODFee
+            type: ["null", "object"]
+            description: Cash on delivery fee
+          - name: CODFeeDiscount
+            type: ["null", "object"]
+            description: Discount on cash on delivery fee
+          - name: ConditionId
+            type: ["null", "string"]
+            description: Condition ID of the product
+          - name: ConditionNote
+            type: ["null", "string"]
+            description: Additional notes on the condition of the product
+          - name: ConditionSubtypeId
+            type: ["null", "string"]
+            description: Subtype ID of the product condition
+          - name: DeemedResellerCategory
+            type: ["null", "string"]
+            description: Category indicating if the seller is considered a reseller
+          - name: IossNumber
+            type: ["null", "string"]
+            description: Import One Stop Shop number
+          - name: IsGift
+            type: ["null", "string"]
+            description: Flag indicating if the order is a gift
+          - name: IsTransparency
+            type: ["null", "boolean"]
+            description: Flag indicating if transparency is applied
+          - name: ItemPrice
+            type: ["null", "object"]
+            description: Price of the item
+          - name: ItemTax
+            type: ["null", "object"]
+            description: Tax applied on the item
+          - name: LastUpdateDate
+            type: ["null", "string"]
+            description: Date and time of the last update
+          - name: OrderItemId
+            type: ["null", "string"]
+            description: ID of the order item
+          - name: PointsGranted
+            type: ["null", "object"]
+            description: Points granted for the purchase
+          - name: PriceDesignation
+            type: ["null", "string"]
+            description: Designation of the price
+          - name: ProductInfo
+            type: ["null", "object"]
+            description: Information about the product
+          - name: PromotionDiscount
+            type: ["null", "object"]
+            description: Discount applied due to promotion
+          - name: PromotionDiscountTax
+            type: ["null", "object"]
+            description: Tax applied on the promotion discount
+          - name: PromotionIds
+            type: ["null", "array"]
+            description: IDs of promotions applied
+          - name: QuantityOrdered
+            type: ["null", "integer"]
+            description: Quantity of the item ordered
+          - name: QuantityShipped
+            type: ["null", "integer"]
+            description: Quantity of the item shipped
+          - name: ScheduledDeliveryEndDate
+            type: ["null", "string"]
+            description: End date for scheduled delivery
+          - name: ScheduledDeliveryStartDate
+            type: ["null", "string"]
+            description: Start date for scheduled delivery
+          - name: SellerSKU
+            type: ["null", "string"]
+            description: SKU of the seller
+          - name: SerialNumberRequired
+            type: ["null", "boolean"]
+            description: Flag indicating if serial number is required
+          - name: SerialNumbers
+            type: ["null", "array"]
+            description: List of serial numbers
+          - name: ShippingDiscount
+            type: ["null", "object"]
+            description: Discount applied on shipping
+          - name: ShippingDiscountTax
+            type: ["null", "object"]
+            description: Tax applied on the shipping discount
+          - name: ShippingPrice
+            type: ["null", "object"]
+            description: Price of shipping
+          - name: ShippingTax
+            type: ["null", "object"]
+            description: Tax applied on shipping
+          - name: StoreChainStoreId
+            type: ["null", "string"]
+            description: ID of the store chain
+          - name: TaxCollection
+            type: ["null", "object"]
+            description: Information about tax collection
+          - name: Title
+            type: ["null", "string"]
+            description: Title of the product
+      - entity: list_financial_event_groups
+        x-airbyte-name: ListFinancialEventGroups
+        fields:
+          - name: AccountTail
+            type: ["null", "string"]
+            description: The last digits of the account number
+          - name: BeginningBalance
+            type: ["null", "object"]
+            description: Beginning balance
+            properties:
+              CurrencyCode:
+                type: ["null", "string"]
+              CurrencyAmount:
+                type: ["null", "number"]
+          - name: ConvertedTotal
+            type: ["null", "object"]
+            description: Converted total
+            properties:
+              CurrencyCode:
+                type: ["null", "string"]
+              CurrencyAmount:
+                type: ["null", "number"]
+          - name: FinancialEventGroupEnd
+            type: ["null", "string"]
+            description: End datetime of the financial event group
+          - name: FinancialEventGroupId
+            type: ["null", "string"]
+            description: Unique identifier for the financial event group
+          - name: FinancialEventGroupStart
+            type: ["null", "string"]
+            description: Start datetime of the financial event group
+          - name: FundTransferDate
+            type: ["null", "string"]
+            description: Date the fund transfer occurred
+          - name: FundTransferStatus
+            type: ["null", "string"]
+            description: Status of the fund transfer
+          - name: OriginalTotal
+            type: ["null", "object"]
+            description: Original total amount
+            properties:
+              CurrencyCode:
+                type: ["null", "string"]
+              CurrencyAmount:
+                type: ["null", "number"]
+          - name: ProcessingStatus
+            type: ["null", "string"]
+            description: Processing status of the financial event group
+          - name: TraceId
+            type: ["null", "string"]
+            description: Unique identifier for tracing
+      - entity: list_financial_events
+        x-airbyte-name: ListFinancialEvents
+        fields:
+          - name: AdhocDisbursementEventList
+            type: ["null", "array"]
+            description: List of adhoc disbursement events
+          - name: AdjustmentEventList
+            type: ["null", "array"]
+            description: List of adjustment events
+          - name: AffordabilityExpenseEventList
+            type: ["null", "array"]
+            description: List of affordability expense events
+          - name: AffordabilityExpenseReversalEventList
+            type: ["null", "array"]
+            description: List of affordability expense reversal events
+          - name: CapacityReservationBillingEventList
+            type: ["null", "array"]
+            description: List of capacity reservation billing events
+          - name: ChargeRefundEventList
+            type: ["null", "array"]
+            description: List of charge refund events
+          - name: ChargebackEventList
+            type: ["null", "array"]
+            description: List of chargeback events
+          - name: CouponPaymentEventList
+            type: ["null", "array"]
+            description: List of coupon payment events
+          - name: DebtRecoveryEventList
+            type: ["null", "array"]
+            description: List of debt recovery events
+          - name: FBALiquidationEventList
+            type: ["null", "array"]
+            description: List of FBA liquidation events
+          - name: FailedAdhocDisbursementEventList
+            type: ["null", "array"]
+            description: List of failed adhoc disbursement events
+          - name: GuaranteeClaimEventList
+            type: ["null", "array"]
+            description: List of guarantee claim events
+          - name: ImagingServicesFeeEventList
+            type: ["null", "array"]
+            description: List of imaging services fee events
+          - name: LoanServicingEventList
+            type: ["null", "array"]
+            description: List of loan servicing events
+          - name: NetworkComminglingTransactionEventList
+            type: ["null", "array"]
+            description: List of network commingling events
+          - name: PayWithAmazonEventList
+            type: ["null", "array"]
+            description: List of Pay with Amazon events
+          - name: PerformanceBondRefundEventList
+            type: ["null", "array"]
+            description: List of performance bond refund events
+          - name: PostedBefore
+            type: ["null", "string"]
+            description: Date filter for events posted before
+          - name: ProductAdsPaymentEventList
+            type: ["null", "array"]
+            description: List of product ads payment events
+          - name: RefundEventList
+            type: ["null", "array"]
+            description: List of refund events
+          - name: RemovalShipmentAdjustmentEventList
+            type: ["null", "array"]
+            description: List of removal shipment adjustment events
+          - name: RemovalShipmentEventList
+            type: ["null", "array"]
+            description: List of removal shipment events
+          - name: RentalTransactionEventList
+            type: ["null", "array"]
+            description: List of rental transaction events
+          - name: RetrochargeEventList
+            type: ["null", "array"]
+            description: List of retrocharge events
+          - name: SAFETReimbursementEventList
+            type: ["null", "array"]
+            description: List of SAFET reimbursement events
+          - name: SellerDealPaymentEventList
+            type: ["null", "array"]
+            description: List of seller deal payment events
+          - name: SellerReviewEnrollmentPaymentEventList
+            type: ["null", "array"]
+            description: List of seller review enrollment events
+          - name: ServiceFeeEventList
+            type: ["null", "array"]
+            description: List of service fee events
+          - name: ServiceProviderCreditEventList
+            type: ["null", "array"]
+            description: List of service provider credit events
+          - name: ShipmentEventList
+            type: ["null", "array"]
+            description: List of shipment events
+          - name: ShipmentSettleEventList
+            type: ["null", "array"]
+            description: List of shipment settlement events
+          - name: TDSReimbursementEventList
+            type: ["null", "array"]
+            description: List of TDS reimbursement events
+          - name: TaxWithholdingEventList
+            type: ["null", "array"]
+            description: List of tax withholding events
+          - name: TrialShipmentEventList
+            type: ["null", "array"]
+            description: List of trial shipment events
+          - name: ValueAddedServiceChargeEventList
+            type: ["null", "array"]
+            description: List of value-added service charge events
+  x-airbyte-example-questions:
+    direct:
+      - "List all recent orders"
+      - "Show me order items for a specific order"
+      - "List financial event groups"
+      - "Show recent financial events"
+      - "Search catalog items by keyword"
+      - "List recent reports"
+    search:
+      - "What are my top-selling products by order volume?"
+      - "Show orders from the last 30 days with status Shipped"
+      - "Find financial events related to refunds"
+      - "Which orders have the highest total value?"
+    unsupported:
+      - "Create a new order"
+      - "Cancel an order"
+      - "Submit a new report request"
+      - "Update product listings"
+
+servers:
+  - url: "https://sellingpartnerapi-{region}.amazon.com"
+    description: Amazon SP-API regional endpoint (varies by seller marketplace)
+    variables:
+      region:
+        default: na
+        description: |
+          The SP-API endpoint URL based on seller region:
+          - NA (North America: US, CA, MX, BR): https://sellingpartnerapi-na.amazon.com
+          - EU (Europe/Middle East/Africa/India): https://sellingpartnerapi-eu.amazon.com
+          - FE (Far East: JP, AU, SG): https://sellingpartnerapi-fe.amazon.com
+        enum:
+          - US
+          - CA
+          - MX
+          - BR
+          - NA
+          - EU
+          - DE
+          - FR
+          - IT
+          - ES
+          - UK
+          - GB
+          - IN
+          - AE
+          - SA
+          - PL
+          - NL
+          - SE
+          - EG
+          - TR
+          - BE
+          - ZA
+          - JP
+          - AU
+          - SG
+          - FE
+    x-airbyte-replication-environment-mapping:
+      region:
+        source: region
+        format: >-
+          {{ 'na' if value|upper in ['US', 'CA', 'MX', 'BR', 'NA']
+              else 'eu' if value|upper in ['EU', 'DE', 'FR', 'IT', 'ES', 'UK', 'GB', 'IN', 'AE', 'SA', 'PL', 'NL', 'SE', 'EG', 'TR', 'BE', 'ZA']
+              else 'fe' if value|upper in ['JP', 'AU', 'SG', 'FE']
+              else 'na' }}
+    x-airbyte-replication-environment-constants:
+      aws_environment: "PRODUCTION"
+      account_type: "Seller"
+
+security:
+  - oauth2: []
+
+paths:
+  /orders/v0/orders:
+    get:
+      summary: List orders
+      description: Returns a list of orders based on the specified parameters.
+      operationId: listOrders
+      x-airbyte-entity: orders
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.payload.Orders
+      x-airbyte-meta-extractor:
+        next_token: $.payload.NextToken
+      parameters:
+        - name: MarketplaceIds
+          in: query
+          required: true
+          description: A list of MarketplaceId values. Used to select orders placed in the specified marketplaces.
+          schema:
+            type: string
+            default: ATVPDKIKX0DER
+        - name: CreatedAfter
+          in: query
+          description: A date used for selecting orders created after the specified date (ISO 8601 format). Required if LastUpdatedAfter is not set.
+          schema:
+            type: string
+            format: date-time
+        - name: CreatedBefore
+          in: query
+          description: A date used for selecting orders created before the specified date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: LastUpdatedAfter
+          in: query
+          description: A date used for selecting orders that were last updated after the specified date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: LastUpdatedBefore
+          in: query
+          description: A date used for selecting orders that were last updated before the specified date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: OrderStatuses
+          in: query
+          description: Filter by order status values.
+          schema:
+            type: string
+        - name: MaxResultsPerPage
+          in: query
+          description: Maximum number of results to return per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: NextToken
+          in: query
+          description: A string token returned in a previous response for pagination.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrdersList"
+
+  /orders/v0/orders/{orderId}:
+    get:
+      summary: Get an order
+      description: Returns the order indicated by the specified order ID.
+      operationId: getOrder
+      x-airbyte-entity: orders
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.payload
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: An Amazon order identifier in 3-7-7 format.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Order not found
+
+  /orders/v0/orders/{orderId}/orderItems:
+    get:
+      summary: List order items
+      description: Returns detailed order item information for the order indicated by the specified order ID.
+      operationId: listOrderItems
+      x-airbyte-entity: order_items
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.payload.OrderItems
+      x-airbyte-meta-extractor:
+        next_token: $.payload.NextToken
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: An Amazon order identifier in 3-7-7 format.
+          schema:
+            type: string
+        - name: NextToken
+          in: query
+          description: A string token returned in a previous response for pagination.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of order items
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderItemsList"
+
+  /finances/v0/financialEventGroups:
+    get:
+      summary: List financial event groups
+      description: Returns financial event groups for a given date range.
+      operationId: listFinancialEventGroups
+      x-airbyte-entity: list_financial_event_groups
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.payload.FinancialEventGroupList
+      x-airbyte-meta-extractor:
+        next_token: $.payload.NextToken
+      parameters:
+        - name: FinancialEventGroupStartedAfter
+          in: query
+          description: Return groups opened after this date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: FinancialEventGroupStartedBefore
+          in: query
+          description: Return groups opened before this date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: MaxResultsPerPage
+          in: query
+          description: Maximum number of results to return per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: NextToken
+          in: query
+          description: A string token returned in a previous response for pagination.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of financial event groups
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinancialEventGroupList"
+
+  /finances/v0/financialEvents:
+    get:
+      summary: List financial events
+      description: Returns financial events for a given date range.
+      operationId: listFinancialEvents
+      x-airbyte-entity: list_financial_events
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.payload.FinancialEvents
+      x-airbyte-meta-extractor:
+        next_token: $.payload.NextToken
+      parameters:
+        - name: PostedAfter
+          in: query
+          description: Return events posted after this date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: PostedBefore
+          in: query
+          description: Return events posted before this date (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: MaxResultsPerPage
+          in: query
+          description: Maximum number of results to return per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: NextToken
+          in: query
+          description: A string token returned in a previous response for pagination.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Financial events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinancialEventsResponse"
+
+  /catalog/2022-04-01/items:
+    get:
+      summary: Search catalog items
+      description: Search for items in the Amazon catalog by keywords or identifiers.
+      operationId: searchCatalogItems
+      x-airbyte-entity: catalog_items
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        next_token: $.pagination.nextToken
+        number_of_results: $.numberOfResults
+      parameters:
+        - name: marketplaceIds
+          in: query
+          required: true
+          description: A marketplace identifier.
+          schema:
+            type: string
+            default: ATVPDKIKX0DER
+        - name: keywords
+          in: query
+          description: Keywords to search for in the Amazon catalog.
+          schema:
+            type: string
+        - name: identifiers
+          in: query
+          description: Product identifiers to search for (ASIN, EAN, UPC, etc.).
+          schema:
+            type: string
+        - name: identifiersType
+          in: query
+          description: Type of identifiers (required when identifiers is set).
+          schema:
+            type: string
+            enum:
+              - ASIN
+              - EAN
+              - GTIN
+              - ISBN
+              - JAN
+              - MINSAN
+              - SKU
+              - UPC
+        - name: includedData
+          in: query
+          description: Data sets to include in the response.
+          schema:
+            type: string
+            default: summaries
+        - name: pageSize
+          in: query
+          description: Number of items to return per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 10
+        - name: pageToken
+          in: query
+          description: Token for pagination returned by a previous request.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Catalog items search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogItemsList"
+
+  /catalog/2022-04-01/items/{asin}:
+    get:
+      summary: Get a catalog item
+      description: Retrieves details for an item in the Amazon catalog by ASIN.
+      operationId: getCatalogItem
+      x-airbyte-entity: catalog_items
+      x-airbyte-action: get
+      parameters:
+        - name: asin
+          in: path
+          required: true
+          description: The Amazon Standard Identification Number (ASIN) of the item.
+          schema:
+            type: string
+        - name: marketplaceIds
+          in: query
+          required: true
+          description: A marketplace identifier.
+          schema:
+            type: string
+            default: ATVPDKIKX0DER
+        - name: includedData
+          in: query
+          description: Data sets to include in the response.
+          schema:
+            type: string
+            default: summaries
+      responses:
+        "200":
+          description: Catalog item details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogItem"
+        "404":
+          description: Catalog item not found
+
+  /reports/2021-06-30/reports:
+    get:
+      summary: List reports
+      description: Returns report details for the reports that match the specified filters.
+      operationId: listReports
+      x-airbyte-entity: reports
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.reports
+      x-airbyte-meta-extractor:
+        next_token: $.nextToken
+      parameters:
+        - name: reportTypes
+          in: query
+          description: A list of report types used to filter reports.
+          schema:
+            type: string
+        - name: processingStatuses
+          in: query
+          description: A list of processing statuses used to filter reports.
+          schema:
+            type: string
+        - name: marketplaceIds
+          in: query
+          description: A list of marketplace identifiers used to filter reports.
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: Maximum number of reports to return per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: createdSince
+          in: query
+          description: Earliest report creation date and time (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: createdUntil
+          in: query
+          description: Latest report creation date and time (ISO 8601 format).
+          schema:
+            type: string
+            format: date-time
+        - name: nextToken
+          in: query
+          description: A string token returned in a previous response for pagination.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of reports
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportsList"
+
+  /reports/2021-06-30/reports/{reportId}:
+    get:
+      summary: Get a report
+      description: Returns report details including status and report document ID for a specified report.
+      operationId: getReport
+      x-airbyte-entity: reports
+      x-airbyte-action: get
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: The identifier for the report.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Report details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Report"
+        "404":
+          description: Report not found
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authentication via Login with Amazon (LWA) with automatic token refresh.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://sellercentral.amazon.com/apps/authorize/consent
+          tokenUrl: https://api.amazon.com/auth/o2/token
+          refreshUrl: https://api.amazon.com/auth/o2/token
+          scopes: {}
+      x-airbyte-token-refresh:
+        auth_style: body
+        body_format: form
+      x-airbyte-auth-config:
+        title: "Login with Amazon OAuth 2.0"
+        type: object
+        required:
+          - lwa_app_id
+          - lwa_client_secret
+          - refresh_token
+        properties:
+          lwa_app_id:
+            type: string
+            title: "LWA Client ID"
+            description: "Your Login with Amazon Client ID."
+          lwa_client_secret:
+            type: string
+            title: "LWA Client Secret"
+            description: "Your Login with Amazon Client Secret."
+          refresh_token:
+            type: string
+            title: "Refresh Token"
+            description: "The Refresh Token obtained via the OAuth authorization flow."
+          access_token:
+            type: string
+            title: "Access Token"
+            description: "Access token (optional if refresh_token is provided)."
+        auth_mapping:
+          client_id: "${lwa_app_id}"
+          client_secret: "${lwa_client_secret}"
+          refresh_token: "${refresh_token}"
+          access_token: "${access_token}"
+        additional_headers:
+          x-amz-access-token: "{{ access_token }}"
+        replication_auth_key_mapping:
+          lwa_app_id: "lwa_app_id"
+          lwa_client_secret: "lwa_client_secret"
+          refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          auth_type: "oauth2.0"
+
+  schemas:
+    Order:
+      type: object
+      x-airbyte-entity-name: orders
+      x-airbyte-stream-name: Orders
+      description: Amazon order object
+      required:
+        - AmazonOrderId
+      properties:
+        AmazonOrderId:
+          type: string
+          description: Amazon's unique identifier for the order
+        SellerOrderId:
+          type: string
+          description: Seller-defined order identifier
+        PurchaseDate:
+          type: string
+          format: date-time
+          description: Date and time when the order was created
+        LastUpdateDate:
+          type: string
+          format: date-time
+          description: Date and time when the order was last updated
+        OrderStatus:
+          type: string
+          description: Current status of the order
+          enum:
+            - Pending
+            - Unshipped
+            - PartiallyShipped
+            - Shipped
+            - Canceled
+            - Unfulfillable
+            - InvoiceUnconfirmed
+            - PendingAvailability
+        FulfillmentChannel:
+          type: string
+          description: Fulfillment channel (AFN for FBA, MFN for seller-fulfilled)
+        SalesChannel:
+          type: string
+          description: Sales channel (e.g. Amazon.com)
+        ShipServiceLevel:
+          type: string
+          description: Shipping service level of the order
+        OrderTotal:
+          type: object
+          description: Total amount of the order
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        NumberOfItemsShipped:
+          type: integer
+          description: Number of items shipped
+        NumberOfItemsUnshipped:
+          type: integer
+          description: Number of items not yet shipped
+        PaymentMethod:
+          type: string
+          description: Payment method for the order
+        PaymentMethodDetails:
+          type: array
+          description: Payment method details
+          items:
+            type: string
+        MarketplaceId:
+          type: string
+          description: Identifier for the marketplace
+        ShipmentServiceLevelCategory:
+          type: string
+          description: Shipment service level category
+        OrderType:
+          type: string
+          description: Type of order
+        EarliestShipDate:
+          type: string
+          format: date-time
+          description: Earliest ship date
+        LatestShipDate:
+          type: string
+          format: date-time
+          description: Latest ship date
+        EarliestDeliveryDate:
+          type: string
+          format: date-time
+          description: Earliest delivery date
+        LatestDeliveryDate:
+          type: string
+          format: date-time
+          description: Latest delivery date
+        IsBusinessOrder:
+          type: boolean
+          description: Whether this is a business order
+        IsPrime:
+          type: boolean
+          description: Whether this is a Prime order
+        IsGlobalExpressEnabled:
+          type: boolean
+          description: Whether global express is enabled
+        IsPremiumOrder:
+          type: boolean
+          description: Whether this is a premium order
+        IsSoldByAB:
+          type: boolean
+          description: Whether sold by Amazon Business
+        IsReplacementOrder:
+          type: string
+          description: Whether this is a replacement order
+        IsISPU:
+          type: boolean
+          description: Whether this is an In-Store Pickup order
+        IsAccessPointOrder:
+          type: boolean
+          description: Whether this is an access point order
+        HasRegulatedItems:
+          type: boolean
+          description: Whether the order contains regulated items
+        ShippingAddress:
+          type: object
+          description: Shipping address for the order
+          properties:
+            City:
+              type: string
+            StateOrRegion:
+              type: string
+            PostalCode:
+              type: string
+            CountryCode:
+              type: string
+        DefaultShipFromLocationAddress:
+          type: object
+          description: Default ship-from address
+          properties:
+            Name:
+              type: string
+            AddressLine1:
+              type: string
+            City:
+              type: string
+            StateOrRegion:
+              type: string
+            PostalCode:
+              type: string
+            CountryCode:
+              type: string
+        AutomatedShippingSettings:
+          type: object
+          description: Automated shipping settings
+          properties:
+            HasAutomatedShippingSettings:
+              type: boolean
+        BuyerInfo:
+          type: object
+          description: Buyer information
+
+    OrdersList:
+      type: object
+      description: Paginated list of orders
+      properties:
+        payload:
+          type: object
+          properties:
+            Orders:
+              type: array
+              items:
+                $ref: "#/components/schemas/Order"
+            NextToken:
+              type: string
+              description: Pagination token for next page
+
+    OrderItem:
+      type: object
+      x-airbyte-entity-name: order_items
+      x-airbyte-stream-name: OrderItems
+      description: Amazon order item object
+      required:
+        - OrderItemId
+      properties:
+        OrderItemId:
+          type: string
+          description: Unique identifier for the order item
+        AmazonOrderId:
+          type: string
+          description: Amazon order identifier this item belongs to
+        ASIN:
+          type: string
+          description: Amazon Standard Identification Number
+        SellerSKU:
+          type: string
+          description: Seller's SKU for the item
+        Title:
+          type: string
+          description: Title of the item
+        QuantityOrdered:
+          type: integer
+          description: Quantity ordered
+        QuantityShipped:
+          type: integer
+          description: Quantity shipped
+        ItemPrice:
+          type: object
+          description: Item price
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        ItemTax:
+          type: object
+          description: Item tax
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        ShippingPrice:
+          type: object
+          description: Shipping price
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        ShippingTax:
+          type: object
+          description: Shipping tax
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        ShippingDiscount:
+          type: object
+          description: Shipping discount
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        ShippingDiscountTax:
+          type: object
+          description: Shipping discount tax
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        PromotionDiscount:
+          type: object
+          description: Promotion discount
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        PromotionDiscountTax:
+          type: object
+          description: Promotion discount tax
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        PromotionIds:
+          type: array
+          description: Promotion identifiers
+          items:
+            type: string
+        CODFee:
+          type: object
+          description: Cash on delivery fee
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        CODFeeDiscount:
+          type: object
+          description: Cash on delivery fee discount
+          properties:
+            CurrencyCode:
+              type: string
+            Amount:
+              type: string
+        IsGift:
+          type: string
+          description: Whether the item is a gift
+        ConditionId:
+          type: string
+          description: Condition of the item
+        ConditionSubtypeId:
+          type: string
+          description: Condition subtype
+        ConditionNote:
+          type: string
+          description: Note about the condition
+        IsTransparency:
+          type: boolean
+          description: Whether Transparency codes are required
+        SerialNumberRequired:
+          type: boolean
+          description: Whether serial number is required
+        IossNumber:
+          type: string
+          description: Import One Stop Shop number
+        DeemedResellerCategory:
+          type: string
+          description: Deemed reseller category (IOSS or UOSS)
+        StoreChainStoreId:
+          type: string
+          description: Store chain store identifier
+        ProductInfo:
+          type: object
+          description: Product information
+          properties:
+            NumberOfItems:
+              type: string
+        BuyerInfo:
+          type: object
+          description: Buyer information for the item
+          properties:
+            BuyerCustomizedInfo:
+              type: object
+              properties:
+                CustomizedURL:
+                  type: string
+            GiftMessageText:
+              type: string
+            GiftWrapPrice:
+              type: object
+              properties:
+                CurrencyCode:
+                  type: string
+                Amount:
+                  type: string
+            GiftWrapLevel:
+              type: string
+        BuyerRequestedCancel:
+          type: object
+          description: Buyer cancellation request information
+          properties:
+            IsBuyerRequestedCancel:
+              type: string
+            BuyerCancelReason:
+              type: string
+        PointsGranted:
+          type: object
+          description: Points granted for the purchase
+          properties:
+            PointsNumber:
+              type: integer
+            PointsMonetaryValue:
+              type: object
+              properties:
+                CurrencyCode:
+                  type: string
+                Amount:
+                  type: string
+        TaxCollection:
+          type: object
+          description: Tax collection information
+          properties:
+            Model:
+              type: string
+            ResponsibleParty:
+              type: string
+        PriceDesignation:
+          type: string
+          description: Price designation
+
+    OrderItemsList:
+      type: object
+      description: Paginated list of order items
+      properties:
+        payload:
+          type: object
+          properties:
+            AmazonOrderId:
+              type: string
+            OrderItems:
+              type: array
+              items:
+                $ref: "#/components/schemas/OrderItem"
+            NextToken:
+              type: string
+
+    FinancialEventGroup:
+      type: object
+      x-airbyte-entity-name: list_financial_event_groups
+      x-airbyte-stream-name: ListFinancialEventGroups
+      description: A financial event group
+      required:
+        - FinancialEventGroupId
+      properties:
+        FinancialEventGroupId:
+          type: string
+          description: Unique identifier for the financial event group
+        ProcessingStatus:
+          type: string
+          description: Processing status (Open or Closed)
+        FundTransferStatus:
+          type: string
+          description: Status of the fund transfer
+        OriginalTotal:
+          type: object
+          description: Original total in seller's currency
+          properties:
+            CurrencyCode:
+              type: string
+            CurrencyAmount:
+              type: number
+        ConvertedTotal:
+          type: object
+          description: Converted total
+          properties:
+            CurrencyCode:
+              type: string
+            CurrencyAmount:
+              type: number
+        FundTransferDate:
+          type: string
+          format: date-time
+          description: Date funds were transferred
+        TraceId:
+          type: string
+          description: Bank trace identifier
+        AccountTail:
+          type: string
+          description: Last digits of the account number
+        BeginningBalance:
+          type: object
+          description: Beginning balance
+          properties:
+            CurrencyCode:
+              type: string
+            CurrencyAmount:
+              type: number
+        FinancialEventGroupStart:
+          type: string
+          format: date-time
+          description: Start date of the event group
+        FinancialEventGroupEnd:
+          type: string
+          format: date-time
+          description: End date of the event group
+
+    FinancialEventGroupList:
+      type: object
+      description: Paginated list of financial event groups
+      properties:
+        payload:
+          type: object
+          properties:
+            FinancialEventGroupList:
+              type: array
+              items:
+                $ref: "#/components/schemas/FinancialEventGroup"
+            NextToken:
+              type: string
+
+    FinancialEventsResponse:
+      type: object
+      description: Response wrapper for financial events
+      properties:
+        payload:
+          type: object
+          properties:
+            FinancialEvents:
+              $ref: "#/components/schemas/FinancialEvents"
+            NextToken:
+              type: string
+
+    FinancialEvents:
+      type: object
+      x-airbyte-entity-name: list_financial_events
+      x-airbyte-stream-name: ListFinancialEvents
+      description: A collection of financial events grouped by type
+      properties:
+        ShipmentEventList:
+          type: array
+          description: Shipment events
+          items:
+            type: object
+        ShipmentSettleEventList:
+          type: array
+          description: Shipment settlement events
+          items:
+            type: object
+        RefundEventList:
+          type: array
+          description: Refund events
+          items:
+            type: object
+        GuaranteeClaimEventList:
+          type: array
+          description: Guarantee claim events
+          items:
+            type: object
+        ChargebackEventList:
+          type: array
+          description: Chargeback events
+          items:
+            type: object
+        ChargeRefundEventList:
+          type: array
+          description: Charge refund events
+          items:
+            type: object
+        PayWithAmazonEventList:
+          type: array
+          description: Pay with Amazon events
+          items:
+            type: object
+        ServiceProviderCreditEventList:
+          type: array
+          description: Service provider credit events
+          items:
+            type: object
+        RetrochargeEventList:
+          type: array
+          description: Retrocharge events
+          items:
+            type: object
+        RentalTransactionEventList:
+          type: array
+          description: Rental transaction events
+          items:
+            type: object
+        ProductAdsPaymentEventList:
+          type: array
+          description: Product ads payment events
+          items:
+            type: object
+        ServiceFeeEventList:
+          type: array
+          description: Service fee events
+          items:
+            type: object
+            properties:
+              FeeList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    FeeType:
+                      type: string
+                    FeeAmount:
+                      type: object
+                      properties:
+                        CurrencyCode:
+                          type: string
+                        CurrencyAmount:
+                          type: number
+        SellerDealPaymentEventList:
+          type: array
+          description: Seller deal payment events
+          items:
+            type: object
+        DebtRecoveryEventList:
+          type: array
+          description: Debt recovery events
+          items:
+            type: object
+            properties:
+              DebtRecoveryType:
+                type: string
+              RecoveryAmount:
+                type: object
+                properties:
+                  CurrencyCode:
+                    type: string
+                  CurrencyAmount:
+                    type: number
+              DebtRecoveryItemList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    RecoveryAmount:
+                      type: object
+                      properties:
+                        CurrencyCode:
+                          type: string
+                        CurrencyAmount:
+                          type: number
+                    OriginalAmount:
+                      type: object
+                      properties:
+                        CurrencyCode:
+                          type: string
+                        CurrencyAmount:
+                          type: number
+                    GroupBeginDate:
+                      type: string
+                    GroupEndDate:
+                      type: string
+              ChargeInstrumentList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Description:
+                      type: string
+                    Tail:
+                      type: string
+                    Amount:
+                      type: object
+                      properties:
+                        CurrencyCode:
+                          type: string
+                        CurrencyAmount:
+                          type: number
+        LoanServicingEventList:
+          type: array
+          description: Loan servicing events
+          items:
+            type: object
+        AdjustmentEventList:
+          type: array
+          description: Adjustment events
+          items:
+            type: object
+        SAFETReimbursementEventList:
+          type: array
+          description: SAFET reimbursement events
+          items:
+            type: object
+        SellerReviewEnrollmentPaymentEventList:
+          type: array
+          description: Seller review enrollment payment events
+          items:
+            type: object
+        FBALiquidationEventList:
+          type: array
+          description: FBA liquidation events
+          items:
+            type: object
+        CouponPaymentEventList:
+          type: array
+          description: Coupon payment events
+          items:
+            type: object
+        ImagingServicesFeeEventList:
+          type: array
+          description: Imaging services fee events
+          items:
+            type: object
+        NetworkComminglingTransactionEventList:
+          type: array
+          description: Network commingling transaction events
+          items:
+            type: object
+        AffordabilityExpenseEventList:
+          type: array
+          description: Affordability expense events
+          items:
+            type: object
+        AffordabilityExpenseReversalEventList:
+          type: array
+          description: Affordability expense reversal events
+          items:
+            type: object
+        TrialShipmentEventList:
+          type: array
+          description: Trial shipment events
+          items:
+            type: object
+        TDSReimbursementEventList:
+          type: array
+          description: TDS reimbursement events
+          items:
+            type: object
+        TaxWithholdingEventList:
+          type: array
+          description: Tax withholding events
+          items:
+            type: object
+        RemovalShipmentEventList:
+          type: array
+          description: Removal shipment events
+          items:
+            type: object
+        RemovalShipmentAdjustmentEventList:
+          type: array
+          description: Removal shipment adjustment events
+          items:
+            type: object
+        ValueAddedServiceChargeEventList:
+          type: array
+          description: Value-added service charge events
+          items:
+            type: object
+        CapacityReservationBillingEventList:
+          type: array
+          description: Capacity reservation billing events
+          items:
+            type: object
+        FailedAdhocDisbursementEventList:
+          type: array
+          description: Failed adhoc disbursement events
+          items:
+            type: object
+        AdhocDisbursementEventList:
+          type: array
+          description: Adhoc disbursement events
+          items:
+            type: object
+        PerformanceBondRefundEventList:
+          type: array
+          description: Performance bond refund events
+          items:
+            type: object
+        EBTRefundReimbursementOnlyEventList:
+          type: array
+          description: EBT refund reimbursement only events
+          items:
+            type: object
+
+    CatalogItem:
+      type: object
+      x-airbyte-entity-name: catalog_items
+      description: Amazon catalog item
+      required:
+        - asin
+      properties:
+        asin:
+          type: string
+          description: Amazon Standard Identification Number
+        attributes:
+          type: object
+          description: Item attributes
+        classifications:
+          type: array
+          description: Browse node classifications by marketplace
+          items:
+            type: object
+        dimensions:
+          type: array
+          description: Item and package dimensions by marketplace
+          items:
+            type: object
+        identifiers:
+          type: array
+          description: Product identifiers (EAN, UPC, etc.) by marketplace
+          items:
+            type: object
+        images:
+          type: array
+          description: Product images by marketplace
+          items:
+            type: object
+        productTypes:
+          type: array
+          description: Product types by marketplace
+          items:
+            type: object
+        relationships:
+          type: array
+          description: Variation and package relationships by marketplace
+          items:
+            type: object
+        salesRanks:
+          type: array
+          description: Sales rank information by marketplace
+          items:
+            type: object
+        summaries:
+          type: array
+          description: Summary information by marketplace
+          items:
+            type: object
+            properties:
+              marketplaceId:
+                type: string
+              adultProduct:
+                type: boolean
+              autographed:
+                type: boolean
+              brand:
+                type: string
+              browseClassification:
+                type: object
+                properties:
+                  displayName:
+                    type: string
+                  classificationId:
+                    type: string
+              color:
+                type: string
+              itemClassification:
+                type: string
+              itemName:
+                type: string
+              manufacturer:
+                type: string
+              memorabilia:
+                type: boolean
+              modelNumber:
+                type: string
+              packageQuantity:
+                type: integer
+              partNumber:
+                type: string
+              size:
+                type: string
+              style:
+                type: string
+              tradeInEligible:
+                type: boolean
+              websiteDisplayGroup:
+                type: string
+              websiteDisplayGroupName:
+                type: string
+        vendorDetails:
+          type: array
+          description: Vendor details by marketplace
+          items:
+            type: object
+
+    CatalogItemsList:
+      type: object
+      description: Catalog items search results
+      properties:
+        numberOfResults:
+          type: integer
+          description: Total number of matching items
+        pagination:
+          type: object
+          properties:
+            nextToken:
+              type: string
+            previousToken:
+              type: string
+        refinements:
+          type: object
+          properties:
+            brands:
+              type: array
+              items:
+                type: object
+                properties:
+                  numberOfResults:
+                    type: integer
+                  brandName:
+                    type: string
+            classifications:
+              type: array
+              items:
+                type: object
+                properties:
+                  numberOfResults:
+                    type: integer
+                  displayName:
+                    type: string
+                  classificationId:
+                    type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CatalogItem"
+
+    Report:
+      type: object
+      x-airbyte-entity-name: reports
+      description: Amazon SP-API report
+      required:
+        - reportId
+      properties:
+        reportId:
+          type: string
+          description: Unique identifier for the report
+        reportType:
+          type: string
+          description: The type of report
+        createdTime:
+          type: string
+          format: date-time
+          description: When the report was created
+        processingStatus:
+          type: string
+          description: Processing status of the report
+          enum:
+            - IN_QUEUE
+            - IN_PROGRESS
+            - DONE
+            - CANCELLED
+            - FATAL
+        dataStartTime:
+          type: string
+          format: date-time
+          description: Start of the report data date range
+        dataEndTime:
+          type: string
+          format: date-time
+          description: End of the report data date range
+        reportScheduleId:
+          type: string
+          description: Schedule that created this report
+        processingStartTime:
+          type: string
+          format: date-time
+          description: When processing started
+        processingEndTime:
+          type: string
+          format: date-time
+          description: When processing ended
+        reportDocumentId:
+          type: string
+          description: Document ID for downloading the report (available when DONE)
+        marketplaceIds:
+          type: array
+          description: Marketplaces the report covers
+          items:
+            type: string
+
+    ReportsList:
+      type: object
+      description: Paginated list of reports
+      properties:
+        reports:
+          type: array
+          items:
+            $ref: "#/components/schemas/Report"
+        nextToken:
+          type: string
+          description: Pagination token for next page

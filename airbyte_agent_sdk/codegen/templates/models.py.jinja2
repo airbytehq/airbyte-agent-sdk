@@ -1,0 +1,299 @@
+"""
+Pydantic models for {{ connector_name }} connector.
+
+This module contains Pydantic models used for authentication configuration
+and response envelope types.
+"""
+
+from __future__ import annotations
+
+from pydantic import BaseModel, ConfigDict, Field
+from typing import TypeVar, Generic, Union, Any
+{% set has_optional_fields = namespace(value=False) -%}
+{% if auth_config %}
+{%- for option in auth_config.options %}
+{%- for field in option.fields %}
+{%- if not field.required %}
+{%- set has_optional_fields.value = True %}
+{%- endif %}
+{%- endfor %}
+{%- endfor %}
+{% endif %}
+{% if replication_config %}
+{%- for field in replication_config.fields %}
+{%- if not field.required %}
+{%- set has_optional_fields.value = True %}
+{%- endif %}
+{%- endfor %}
+{% endif %}
+{% if has_optional_fields.value %}
+from typing import Optional
+{% endif %}
+
+{% if auth_config %}
+{% if auth_config.options|length > 1 %}
+# Authentication configuration - multiple options available
+{% for option in auth_config.options %}
+
+class {{ auth_config.base_name }}{{ option.type_suffix }}AuthConfig(BaseModel):
+{% if option.title or option.description %}
+    """{{ option.title }}{% if option.title and option.description %} - {{ option.description }}{% elif option.description %}{{ option.description }}{% endif %}"""
+{% endif %}
+
+    model_config = ConfigDict(extra="forbid")
+
+{% for field in option.fields %}
+{% if field.required %}
+    {{ field.name }}: {{ field.type }}
+{% else %}
+    {{ field.name }}: Optional[{{ field.type }}] = None
+{% endif %}
+{% if field.description %}
+    """{{ field.description }}"""
+{% elif field.title %}
+    """{{ field.title }}"""
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+{{ auth_config.type_name }} = {% for option in auth_config.options %}{{ auth_config.base_name }}{{ option.type_suffix }}AuthConfig{% if not loop.last %} | {% endif %}{% endfor %}
+
+{% else %}
+# Authentication configuration
+
+class {{ auth_config.type_name }}(BaseModel):
+{% if auth_config.options[0].title or auth_config.options[0].description %}
+    """{{ auth_config.options[0].title }}{% if auth_config.options[0].title and auth_config.options[0].description %} - {{ auth_config.options[0].description }}{% elif auth_config.options[0].description %}{{ auth_config.options[0].description }}{% endif %}"""
+{% endif %}
+
+    model_config = ConfigDict(extra="forbid")
+
+{% for field in auth_config.options[0].fields %}
+{% if field.required %}
+    {{ field.name }}: {{ field.type }}
+{% else %}
+    {{ field.name }}: Optional[{{ field.type }}] = None
+{% endif %}
+{% if field.description %}
+    """{{ field.description }}"""
+{% elif field.title %}
+    """{{ field.title }}"""
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% if oauth_credentials %}
+
+# OAuth credential override
+
+class {{ oauth_credentials.type_name }}(BaseModel):
+{% if oauth_credentials.title or oauth_credentials.description %}
+    """{{ oauth_credentials.title }}{% if oauth_credentials.title and oauth_credentials.description %} - {{ oauth_credentials.description }}{% elif oauth_credentials.description %}{{ oauth_credentials.description }}{% endif %}"""
+{% endif %}
+
+    model_config = ConfigDict(extra="forbid")
+
+{% for field in oauth_credentials.fields %}
+{% if field.required %}
+    {{ field.name }}: {{ field.type }}
+{% else %}
+    {{ field.name }}: Optional[{{ field.type }}] = None
+{% endif %}
+{% if field.description %}
+    """{{ field.description }}"""
+{% elif field.title %}
+    """{{ field.title }}"""
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if replication_config %}
+
+# Replication configuration
+
+class {{ replication_config.type_name }}(BaseModel):
+{% if replication_config.title or replication_config.description %}
+    """{{ replication_config.title }}{% if replication_config.title and replication_config.description %} - {{ replication_config.description }}{% elif replication_config.description %}{{ replication_config.description }}{% endif %}"""
+{% endif %}
+
+    model_config = ConfigDict(extra="forbid")
+
+{% for field in replication_config.fields %}
+{% if field.required %}
+    {{ field.name }}: {{ field.type }}
+{% else %}
+    {{ field.name }}: Optional[{{ field.type }}] = None
+{% endif %}
+{% if field.description %}
+    """{{ field.description }}"""
+{% elif field.title %}
+    """{{ field.title }}"""
+{% endif %}
+{% endfor %}
+{% endif %}
+
+# ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
+{% for schema in schemas.values() %}
+
+class {{ schema.name }}(BaseModel):
+    """{{ schema.description or schema.name + ' type definition' }}"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+{% if schema.fields %}
+{% for field in schema.fields -%}
+{%- set python_name = field.python_name | default(field.name | snake_case) %}
+{% if python_name != field.name %}
+    {{ python_name }}: Union[{{ field.type }}, Any] = Field(default=None, alias="{{ field.name }}"{% if field.description %}, description="{{ field.description }}"{% endif %})
+{% else %}
+    {{ python_name }}: Union[{{ field.type }}, Any] = Field(default=None{% if field.description %}, description="{{ field.description }}"{% endif %})
+{% endif %}
+{%- if field.description %}
+    """{{ field.description }}"""
+{% endif %}
+{% endfor %}
+{%- else %}
+    pass
+{% endif %}
+{%- endfor %}
+
+# ===== METADATA TYPE DEFINITIONS (PYDANTIC) =====
+# Meta types for operations that extract metadata (e.g., pagination info)
+{% if envelope_types %}
+{% for envelope in envelope_types %}
+{% if envelope.meta_fields %}
+
+class {{ envelope.name }}Meta(BaseModel):
+    """Metadata for {{ envelope.entity }}.{{ envelope.action }} operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+{% for field in envelope.meta_fields -%}
+{%- set python_name = field.python_name | default(field.name | snake_case) %}
+{% if python_name != field.name %}
+    {{ python_name }}: Union[{{ field.type }}, Any] = Field(default=None, alias="{{ field.name }}"{% if field.description %}, description="{{ field.description }}"{% endif %})
+{% else %}
+    {{ python_name }}: Union[{{ field.type }}, Any] = Field(default=None{% if field.description %}, description="{{ field.description }}"{% endif %})
+{% endif %}
+{%- if field.description %}
+    """{{ field.description }}"""
+{% endif %}
+{% endfor %}
+{% endif %}
+{%- endfor %}
+{% endif %}
+
+# ===== CHECK RESULT MODEL =====
+
+class {{ envelope_prefix }}CheckResult(BaseModel):
+    """Result of a health check operation.
+
+    Returned by the check() method to indicate connectivity and credential status.
+    """
+    model_config = ConfigDict(extra="forbid")
+
+    status: str
+    """Health check status: 'healthy' or 'unhealthy'."""
+    error: str | None = None
+    """Error message if status is 'unhealthy', None otherwise."""
+    checked_entity: str | None = None
+    """Entity name used for the health check."""
+    checked_action: str | None = None
+    """Action name used for the health check."""
+
+
+# ===== RESPONSE ENVELOPE MODELS =====
+
+# Type variables for generic envelope models
+T = TypeVar('T')
+S = TypeVar('S')
+
+
+class {{ envelope_prefix }}ExecuteResult(BaseModel, Generic[T]):
+    """Response envelope with data only.
+
+    Used for actions that return data without metadata.
+    """
+    model_config = ConfigDict(extra="forbid")
+
+    data: T
+    """Response data containing the result of the action."""
+
+
+class {{ envelope_prefix }}ExecuteResultWithMeta({{ envelope_prefix }}ExecuteResult[T], Generic[T, S]):
+    """Response envelope with data and metadata.
+
+    Used for actions that return both data and metadata (e.g., pagination info).
+    """
+    meta: S
+    """Metadata about the response (e.g., pagination cursors, record counts)."""
+
+{% if has_search_entities %}
+# ===== SEARCH DATA MODELS =====
+# Entity-specific Pydantic models for search result data
+
+# Type variable for search data generic
+D = TypeVar('D')
+
+{% for entity, schema in search_schemas.items() %}
+class {{ schema.data_type_name }}(BaseModel):
+    """Search result data for {{ entity }} entity."""
+    model_config = ConfigDict(extra="allow")
+
+{% for field in schema.fields %}
+    {{ field.python_name }}: {{ field.type }} = None
+    """{{ field.description }}"""
+{% endfor %}
+
+
+{% endfor %}
+# ===== GENERIC SEARCH RESULT TYPES =====
+
+class AirbyteSearchMeta(BaseModel):
+    """Pagination metadata for search responses."""
+    model_config = ConfigDict(extra="allow")
+
+    has_more: bool = False
+    """Whether more results are available."""
+    cursor: str | None = None
+    """Cursor for fetching the next page of results."""
+    took_ms: int | None = None
+    """Time taken to execute the search in milliseconds."""
+
+
+class AirbyteSearchResult(BaseModel, Generic[D]):
+    """Result from Airbyte cache search operations with typed records."""
+    model_config = ConfigDict(extra="allow")
+
+    data: list[D] = Field(default_factory=list)
+    """List of matching records."""
+    meta: AirbyteSearchMeta = Field(default_factory=AirbyteSearchMeta)
+    """Pagination metadata."""
+
+
+# ===== ENTITY-SPECIFIC SEARCH RESULT TYPE ALIASES =====
+
+{% for entity, schema in search_schemas.items() %}
+{{ schema.result_type_name }} = AirbyteSearchResult[{{ schema.data_type_name }}]
+"""Search result type for {{ entity }} entity."""
+
+{% endfor %}
+{% endif %}
+
+{% if operations %}
+
+# ===== OPERATION RESULT TYPE ALIASES =====
+
+# Concrete type aliases for each operation result.
+# These provide simpler, more readable type annotations than using the generic forms.
+
+{% for op in operations %}
+{% if op.needs_envelope %}
+{% if op.meta_fields %}
+{{ op.entity | pascal_case }}{{ op.action | pascal_case }}Result = {{ envelope_prefix }}ExecuteResultWithMeta[{{ op.record_type }}, {{ op.entity | pascal_case }}{{ op.action | pascal_case }}ResultMeta]
+"""Result type for {{ op.entity }}.{{ op.action }} operation with data and metadata."""
+{% else %}
+{{ op.entity | pascal_case }}{{ op.action | pascal_case }}Result = {{ envelope_prefix }}ExecuteResult[{{ op.record_type }}]
+"""Result type for {{ op.entity }}.{{ op.action }} operation."""
+{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

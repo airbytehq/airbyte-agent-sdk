@@ -1,0 +1,480 @@
+openapi: 3.1.0
+
+info:
+  title: Granola API Connector
+  version: 1.0.6
+  description: |
+    The Granola API connector provides read access to meeting notes from Granola,
+    an AI-powered meeting notes platform. This connector integrates with the Granola
+    Enterprise API to list and retrieve notes, including summaries, transcripts,
+    attendees, and calendar event details. Requires an Enterprise plan API key.
+  x-airbyte-connector-name: granola
+  x-airbyte-connector-definition-id: 9023923c-002f-4131-9554-3ebdf56540a4
+  x-airbyte-replication-version: "0.1.0"
+  x-airbyte-replication-compatibility: ">=0.1.0, <1.0.0"
+  x-airbyte-example-questions:
+    direct:
+      - "List all meeting notes from Granola"
+      - "Show me recent meeting notes"
+      - "Get the details of a specific note"
+      - "List notes created in the last week"
+    search:
+      - "Find meeting notes from last month"
+      - "Which meetings had the most attendees?"
+      - "Show me notes that mention budget reviews"
+      - "What meetings happened this quarter?"
+    unsupported:
+      - "Create a new meeting note"
+      - "Delete a meeting note"
+      - "Update an existing note"
+      - "Share a note with someone"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: notes
+        x-airbyte-name: detailed_notes
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - string
+            description: The unique identifier of the note.
+          - name: object
+            type:
+              - 'null'
+              - string
+            description: The object type, always "note".
+          - name: title
+            type:
+              - 'null'
+              - string
+            description: The title of the note.
+          - name: owner
+            type:
+              - 'null'
+              - object
+            description: The owner of the note.
+            properties:
+              name:
+                type:
+                  - 'null'
+                  - string
+              email:
+                type:
+                  - 'null'
+                  - string
+          - name: created_at
+            type:
+              - 'null'
+              - string
+            description: The creation time of the note in ISO 8601 format.
+          - name: updated_at
+            type:
+              - 'null'
+              - string
+            description: The last update time of the note in ISO 8601 format.
+          - name: summary_text
+            type:
+              - 'null'
+              - string
+            description: Plain text summary of the note.
+          - name: summary_markdown
+            type:
+              - 'null'
+              - string
+            description: Markdown formatted summary of the note.
+          - name: attendees
+            type:
+              - 'null'
+              - array
+            description: The attendees of the meeting.
+            properties:
+              name:
+                type:
+                  - 'null'
+                  - string
+              email:
+                type:
+                  - 'null'
+                  - string
+          - name: calendar_event
+            type:
+              - 'null'
+              - object
+            description: Associated calendar event details.
+            properties:
+              calendar_event_id:
+                type:
+                  - 'null'
+                  - string
+              event_title:
+                type:
+                  - 'null'
+                  - string
+              organiser:
+                type:
+                  - 'null'
+                  - string
+              invitees:
+                type:
+                  - 'null'
+                  - array
+                properties:
+                  email:
+                    type:
+                      - 'null'
+                      - string
+              scheduled_start_time:
+                type:
+                  - 'null'
+                  - string
+              scheduled_end_time:
+                type:
+                  - 'null'
+                  - string
+          - name: folder_membership
+            type:
+              - 'null'
+              - array
+            description: The folder membership of the note.
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - string
+              object:
+                type:
+                  - 'null'
+                  - string
+              name:
+                type:
+                  - 'null'
+                  - string
+          - name: transcript
+            type:
+              - 'null'
+              - array
+            description: Transcript of the meeting.
+            properties:
+              text:
+                type:
+                  - 'null'
+                  - string
+              speaker:
+                type:
+                  - 'null'
+                  - object
+                properties:
+                  source:
+                    type:
+                      - 'null'
+                      - string
+              start_time:
+                type:
+                  - 'null'
+                  - string
+              end_time:
+                type:
+                  - 'null'
+                  - string
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Granola API Documentation
+      url: https://docs.granola.ai/introduction
+
+servers:
+  - url: https://public-api.granola.ai
+    description: Granola API server
+
+security:
+  - bearerAuth: []
+
+paths:
+  "/v1/notes":
+    get:
+      summary: List notes
+      description: Returns a paginated list of meeting notes
+      operationId: listNotes
+      x-airbyte-entity: notes
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.notes
+      x-airbyte-meta-extractor:
+        cursor: $.cursor
+        has_more: $.hasMore
+      parameters:
+        - name: page_size
+          in: query
+          description: Maximum number of notes to return per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 30
+            default: 10
+        - name: cursor
+          in: query
+          description: Pagination cursor for next page
+          required: false
+          schema:
+            type: string
+        - name: created_before
+          in: query
+          description: Return notes created before this date (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: created_after
+          in: query
+          description: Return notes created after this date (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: List of notes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotesList"
+        "401":
+          description: Unauthorized
+        "429":
+          description: Rate limit exceeded
+
+  "/v1/notes/{note_id}":
+    get:
+      summary: Get a note
+      description: Get a single note by ID, including full details and optionally the transcript
+      operationId: getNote
+      x-airbyte-entity: notes
+      x-airbyte-action: get
+      parameters:
+        - name: note_id
+          in: path
+          required: true
+          description: The ID of the note
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: Include the note transcript in the response
+          required: false
+          schema:
+            type: string
+            enum:
+              - transcript
+      responses:
+        "200":
+          description: Note object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "404":
+          description: Note not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication using an Enterprise API key
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: Granola Enterprise API key generated from Settings > Workspaces > API tab
+        auth_mapping:
+          token: "${api_key}"
+        replication_auth_key_mapping:
+          api_key: api_key
+
+  schemas:
+    Owner:
+      type: object
+      description: The owner of the note
+      properties:
+        name:
+          type: [string, "null"]
+          description: Name of the note owner
+        email:
+          type: [string, "null"]
+          description: Email of the note owner
+
+    Attendee:
+      type: object
+      description: A meeting attendee
+      properties:
+        name:
+          type: [string, "null"]
+          description: Name of the attendee
+        email:
+          type: [string, "null"]
+          description: Email of the attendee
+
+    CalendarEventInvitee:
+      type: object
+      description: A calendar event invitee
+      properties:
+        email:
+          type: [string, "null"]
+          description: Email of the invitee
+
+    CalendarEvent:
+      type: object
+      description: Associated calendar event details
+      properties:
+        event_title:
+          type: [string, "null"]
+          description: Title of the calendar event
+        invitees:
+          type: [array, "null"]
+          description: List of invitees
+          items:
+            $ref: "#/components/schemas/CalendarEventInvitee"
+        organiser:
+          type: [string, "null"]
+          description: Email of the event organiser
+        calendar_event_id:
+          type: [string, "null"]
+          description: Calendar event identifier
+        scheduled_start_time:
+          type: [string, "null"]
+          format: date-time
+          description: Scheduled start time of the event
+        scheduled_end_time:
+          type: [string, "null"]
+          format: date-time
+          description: Scheduled end time of the event
+
+    FolderMembership:
+      type: object
+      description: Folder the note belongs to
+      properties:
+        id:
+          type: string
+          description: Unique folder identifier
+        object:
+          type: [string, "null"]
+          description: Object type (folder)
+        name:
+          type: [string, "null"]
+          description: Name of the folder
+
+    TranscriptSpeaker:
+      type: object
+      description: Speaker information in transcript
+      properties:
+        source:
+          type: [string, "null"]
+          description: Source of the speaker (microphone or speaker)
+
+    TranscriptEntry:
+      type: object
+      description: A single transcript entry
+      properties:
+        speaker:
+          oneOf:
+            - $ref: "#/components/schemas/TranscriptSpeaker"
+            - type: "null"
+        text:
+          type: [string, "null"]
+          description: Transcript text content
+        start_time:
+          type: [string, "null"]
+          format: date-time
+          description: Start time of the transcript segment
+        end_time:
+          type: [string, "null"]
+          format: date-time
+          description: End time of the transcript segment
+
+    Note:
+      type: object
+      x-airbyte-entity-name: notes
+      x-airbyte-stream-name: detailed_notes
+      x-airbyte-ai-hints:
+        summary: "Meeting notes, transcripts, and action items from Granola"
+        when_to_use: "Questions about what was discussed on a call, meeting decisions, or action items"
+        trigger_phrases: ["what was discussed", "meeting with", "call with", "action items from", "notes from"]
+        freshness: live
+        search_strategy: "Search across both title and summary_text for best results (use OR filter)"
+        example_questions:
+          - "What was discussed in the Scale Lite meeting?"
+          - "Show me notes that mention budget reviews"
+          - "What meetings happened this quarter?"
+      description: A Granola meeting note
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique note identifier
+        object:
+          type: [string, "null"]
+          description: Object type (note)
+        title:
+          type: [string, "null"]
+          description: Title of the note
+        owner:
+          oneOf:
+            - $ref: "#/components/schemas/Owner"
+            - type: "null"
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: Creation timestamp of the note
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+          description: Last updated timestamp of the note
+        calendar_event:
+          oneOf:
+            - $ref: "#/components/schemas/CalendarEvent"
+            - type: "null"
+        attendees:
+          type: [array, "null"]
+          description: List of meeting attendees
+          items:
+            $ref: "#/components/schemas/Attendee"
+        folder_membership:
+          type: [array, "null"]
+          description: Folders this note belongs to
+          items:
+            $ref: "#/components/schemas/FolderMembership"
+        summary_text:
+          type: [string, "null"]
+          description: Plain text summary of the note
+        summary_markdown:
+          type: [string, "null"]
+          description: Markdown formatted summary of the note
+        transcript:
+          type: [array, "null"]
+          description: Transcript of the meeting
+          items:
+            $ref: "#/components/schemas/TranscriptEntry"
+
+    NotesList:
+      type: object
+      description: Paginated list of notes
+      properties:
+        notes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
+        hasMore:
+          type: boolean
+          description: Whether there are more notes to fetch
+        cursor:
+          type: [string, "null"]
+          description: Cursor for fetching the next page

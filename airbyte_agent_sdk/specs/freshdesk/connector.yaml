@@ -1,0 +1,1529 @@
+openapi: 3.1.0
+
+info:
+  title: Freshdesk API Connector
+  version: 1.0.3
+  description: >
+    Connector for the Freshdesk customer support platform API (v2). Provides read access
+    to helpdesk data including tickets, contacts, agents, groups, companies, roles,
+    satisfaction ratings, surveys, time entries, and ticket fields. Freshdesk is a
+    cloud-based customer support solution that enables companies to manage customer
+    conversations across email, phone, chat, and social media.
+  x-airbyte-connector-name: freshdesk
+  x-airbyte-connector-definition-id: ec4b9503-13cb-48ab-a4ab-6ade4be46567
+  x-airbyte-replication-version: "3.2.11"
+  x-airbyte-replication-compatibility: ">=3.2.11, <4.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Freshdesk API Documentation
+      url: https://developers.freshdesk.com/api/
+  x-airbyte-example-questions:
+    direct:
+      - "List all open tickets in Freshdesk"
+      - "Show me all agents in the support team"
+      - "List all groups configured in Freshdesk"
+      - "Get the details of ticket #26"
+      - "Show me all companies in Freshdesk"
+      - "List all roles defined in the helpdesk"
+      - "Show me the ticket fields and their options"
+      - "List time entries for tickets"
+    search:
+      - "What are the high priority tickets from last week?"
+      - "Which tickets have breached their SLA due date?"
+      - "Show me tickets assigned to agent {agent_name}"
+      - "Find all tickets from company {company_name}"
+      - "How many tickets were created this month by status?"
+      - "What are the satisfaction ratings for resolved tickets?"
+    unsupported:
+      - "Create a new ticket in Freshdesk"
+      - "Update the status of ticket #{ticket_id}"
+      - "Delete a contact from Freshdesk"
+      - "Assign a ticket to a different agent"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: tickets
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique ticket ID
+          - name: subject
+            type: ["string", "null"]
+            description: Subject of the ticket
+          - name: description
+            type: ["string", "null"]
+            description: HTML content of the ticket
+          - name: description_text
+            type: ["string", "null"]
+            description: Plain text content of the ticket
+          - name: status
+            type: ["integer", "null"]
+            description: "Status: 2=Open, 3=Pending, 4=Resolved, 5=Closed"
+          - name: priority
+            type: ["integer", "null"]
+            description: "Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"
+          - name: source
+            type: ["integer", "null"]
+            description: "Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"
+          - name: type
+            type: ["string", "null"]
+            description: Ticket type
+          - name: requester_id
+            type: ["integer", "null"]
+            description: ID of the requester
+          - name: requester
+            type: ["object", "null"]
+            description: Requester details including name, email, and contact info
+          - name: responder_id
+            type: ["integer", "null"]
+            description: ID of the agent to whom the ticket is assigned
+          - name: group_id
+            type: ["integer", "null"]
+            description: ID of the group to which the ticket is assigned
+          - name: company_id
+            type: ["integer", "null"]
+            description: Company ID of the requester
+          - name: product_id
+            type: ["integer", "null"]
+            description: ID of the product associated with the ticket
+          - name: email_config_id
+            type: ["integer", "null"]
+            description: ID of the email config used for the ticket
+          - name: cc_emails
+            type: ["array", "null"]
+            description: CC email addresses
+          - name: ticket_cc_emails
+            type: ["array", "null"]
+            description: Ticket CC email addresses
+          - name: to_emails
+            type: ["array", "null"]
+            description: To email addresses
+          - name: fwd_emails
+            type: ["array", "null"]
+            description: Forwarded email addresses
+          - name: reply_cc_emails
+            type: ["array", "null"]
+            description: Reply CC email addresses
+          - name: tags
+            type: ["array", "null"]
+            description: Tags associated with the ticket
+          - name: custom_fields
+            type: ["object", "null"]
+            description: Custom fields associated with the ticket
+          - name: due_by
+            type: ["string", "null"]
+            description: Resolution due by timestamp
+          - name: fr_due_by
+            type: ["string", "null"]
+            description: First response due by timestamp
+          - name: fr_escalated
+            type: ["null", "boolean"]
+            description: Whether the first response time was breached
+          - name: is_escalated
+            type: ["boolean", "null"]
+            description: Whether the ticket is escalated
+          - name: nr_due_by
+            type: ["string", "null"]
+            description: Next response due by timestamp
+          - name: nr_escalated
+            type: ["boolean", "null"]
+            description: Whether the next response time was breached
+          - name: spam
+            type: ["null", "boolean"]
+            description: Whether the ticket is marked as spam
+          - name: association_type
+            type: ["integer", "null"]
+            description: Association type for parent/child tickets
+          - name: associated_tickets_count
+            type: ["integer", "null"]
+            description: Number of associated tickets
+          - name: stats
+            type: ["object", "null"]
+            description: Ticket statistics including response and resolution times
+          - name: created_at
+            type: ["string", "null"]
+            description: Ticket creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Ticket last update timestamp
+      - entity: agents
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique agent ID
+          - name: available
+            type: ["boolean", "null"]
+            description: Whether the agent is available
+          - name: available_since
+            type: ["string", "null"]
+            description: Timestamp since the agent has been available
+          - name: contact
+            type: ["null", "object"]
+            description: Contact details of the agent including name, email, phone, and job title
+          - name: occasional
+            type: ["boolean", "null"]
+            description: Whether the agent is an occasional agent
+          - name: signature
+            type: ["string", "null"]
+            description: Signature of the agent (HTML)
+          - name: ticket_scope
+            type: ["integer", "null"]
+            description: "Ticket scope: 1=Global, 2=Group, 3=Restricted"
+          - name: type
+            type: ["string", "null"]
+            description: "Agent type: support_agent, field_agent, collaborator"
+          - name: last_active_at
+            type: ["string", "null"]
+            description: Timestamp of last agent activity
+          - name: created_at
+            type: ["string", "null"]
+            description: Agent creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Agent last update timestamp
+      - entity: groups
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: Unique group ID
+          - name: name
+            type: ["null", "string"]
+            description: Name of the group
+          - name: description
+            type: ["null", "string"]
+            description: Description of the group
+          - name: auto_ticket_assign
+            type: ["integer", "null"]
+            description: "Auto ticket assignment: 0=Disabled, 1=Round Robin, 2=Skill Based, 3=Load Based"
+          - name: business_hour_id
+            type: ["integer", "null"]
+            description: ID of the associated business hour
+          - name: escalate_to
+            type: ["integer", "null"]
+            description: User ID for escalation
+          - name: group_type
+            type: ["null", "string"]
+            description: Type of the group (e.g., support_agent_group)
+          - name: unassigned_for
+            type: ["string", "null"]
+            description: Time after which escalation triggers
+          - name: created_at
+            type: ["null", "string"]
+            description: Group creation timestamp
+          - name: updated_at
+            type: ["null", "string"]
+            description: Group last update timestamp
+
+servers:
+  - url: https://{subdomain}.freshdesk.com/api/v2
+    description: Freshdesk API server
+    variables:
+      subdomain:
+        default: your-subdomain
+        description: Your Freshdesk subdomain (e.g., "acme" for acme.freshdesk.com)
+    x-airbyte-replication-environment-mapping:
+      domain:
+        source: subdomain
+        format: "{value}.freshdesk.com"
+
+security:
+  - basicAuth: []
+
+paths:
+  /tickets:
+    get:
+      summary: List all tickets
+      description: Returns a paginated list of tickets. By default returns tickets created in the past 30 days. Use updated_since to get older tickets.
+      operationId: listTickets
+      x-airbyte-entity: tickets
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: updated_since
+          in: query
+          description: Return tickets updated since this timestamp (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: order_by
+          in: query
+          description: Sort field
+          schema:
+            type: string
+            enum: [created_at, due_by, updated_at, status]
+            default: updated_at
+        - name: order_type
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        "200":
+          description: List of tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+        "401":
+          description: Unauthorized
+
+  /tickets/{id}:
+    get:
+      summary: View a ticket
+      description: Get a single ticket by ID
+      operationId: getTicket
+      x-airbyte-entity: tickets
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Ticket ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ticket object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "404":
+          description: Ticket not found
+        "401":
+          description: Unauthorized
+
+  /contacts:
+    get:
+      summary: List all contacts
+      description: Returns a paginated list of contacts
+      operationId: listContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: updated_since
+          in: query
+          description: Return contacts updated since this timestamp (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+        "401":
+          description: Unauthorized
+
+  /contacts/{id}:
+    get:
+      summary: View a contact
+      description: Get a single contact by ID
+      operationId: getContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Contact ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Contact object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+
+  /agents:
+    get:
+      summary: List all agents
+      description: Returns a paginated list of agents
+      operationId: listAgents
+      x-airbyte-entity: agents
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of agents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Agent"
+        "401":
+          description: Unauthorized
+
+  /agents/{id}:
+    get:
+      summary: View an agent
+      description: Get a single agent by ID
+      operationId: getAgent
+      x-airbyte-entity: agents
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Agent ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Agent object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Agent"
+        "404":
+          description: Agent not found
+        "401":
+          description: Unauthorized
+
+  /groups:
+    get:
+      summary: List all groups
+      description: Returns a paginated list of groups
+      operationId: listGroups
+      x-airbyte-entity: groups
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Group"
+        "401":
+          description: Unauthorized
+
+  /groups/{id}:
+    get:
+      summary: View a group
+      description: Get a single group by ID
+      operationId: getGroup
+      x-airbyte-entity: groups
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Group ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Group object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "404":
+          description: Group not found
+        "401":
+          description: Unauthorized
+
+  /companies:
+    get:
+      summary: List all companies
+      description: Returns a paginated list of companies
+      operationId: listCompanies
+      x-airbyte-entity: companies
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Company"
+        "401":
+          description: Unauthorized
+
+  /companies/{id}:
+    get:
+      summary: View a company
+      description: Get a single company by ID
+      operationId: getCompany
+      x-airbyte-entity: companies
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Company ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Company object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "404":
+          description: Company not found
+        "401":
+          description: Unauthorized
+
+  /roles:
+    get:
+      summary: List all roles
+      description: Returns a paginated list of roles
+      operationId: listRoles
+      x-airbyte-entity: roles
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Role"
+        "401":
+          description: Unauthorized
+
+  /roles/{id}:
+    get:
+      summary: View a role
+      description: Get a single role by ID
+      operationId: getRole
+      x-airbyte-entity: roles
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Role ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Role object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        "404":
+          description: Role not found
+        "401":
+          description: Unauthorized
+
+  /surveys/satisfaction_ratings:
+    get:
+      summary: List all satisfaction ratings
+      description: Returns a paginated list of satisfaction ratings
+      operationId: listSatisfactionRatings
+      x-airbyte-entity: satisfaction_ratings
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: created_since
+          in: query
+          description: Return ratings created since this timestamp (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of satisfaction ratings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SatisfactionRating"
+        "401":
+          description: Unauthorized
+
+  /surveys:
+    get:
+      summary: List all surveys
+      description: Returns a paginated list of surveys
+      operationId: listSurveys
+      x-airbyte-entity: surveys
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of surveys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Survey"
+        "401":
+          description: Unauthorized
+
+  /time_entries:
+    get:
+      summary: List all time entries
+      description: Returns a paginated list of time entries
+      operationId: listTimeEntries
+      x-airbyte-entity: time_entries
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of time entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeEntry"
+        "401":
+          description: Unauthorized
+
+  /ticket_fields:
+    get:
+      summary: List all ticket fields
+      description: Returns a list of all ticket fields
+      operationId: listTicketFields
+      x-airbyte-entity: ticket_fields
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of ticket fields
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TicketField"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >
+        Freshdesk uses HTTP Basic authentication. Use your Freshdesk API key as the
+        username and any dummy value (e.g., "X") as the password.
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: Your Freshdesk API key (found in Profile Settings)
+        auth_mapping:
+          username: "${api_key}"
+          password: "X"
+        replication_auth_key_mapping:
+          api_key: "api_key"
+
+  schemas:
+    Ticket:
+      type: object
+      x-airbyte-entity-name: tickets
+      description: A Freshdesk support ticket
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique ticket ID
+        subject:
+          type: ["null", "string"]
+          description: Subject of the ticket
+        description:
+          type: ["null", "string"]
+          description: HTML content of the ticket
+        description_text:
+          type: ["null", "string"]
+          description: Plain text content of the ticket
+        status:
+          type: ["null", "integer"]
+          description: "Status: 2=Open, 3=Pending, 4=Resolved, 5=Closed"
+        priority:
+          type: ["null", "integer"]
+          description: "Priority: 1=Low, 2=Medium, 3=High, 4=Urgent"
+        source:
+          type: ["null", "integer"]
+          description: "Source: 1=Email, 2=Portal, 3=Phone, 7=Chat, 9=Feedback Widget, 10=Outbound Email"
+        type:
+          type: ["null", "string"]
+          description: Ticket type
+        requester_id:
+          type: ["null", "integer"]
+          description: ID of the requester
+        responder_id:
+          type: ["null", "integer"]
+          description: ID of the agent to whom the ticket is assigned
+        company_id:
+          type: ["null", "integer"]
+          description: Company ID of the requester
+        group_id:
+          type: ["null", "integer"]
+          description: ID of the group to which the ticket is assigned
+        product_id:
+          type: ["null", "integer"]
+          description: ID of the product associated with the ticket
+        email_config_id:
+          type: ["null", "integer"]
+          description: ID of the email config used for the ticket
+        cc_emails:
+          type: ["null", "array"]
+          description: CC email addresses
+          items:
+            type: string
+        fwd_emails:
+          type: ["null", "array"]
+          description: Forwarded email addresses
+          items:
+            type: string
+        reply_cc_emails:
+          type: ["null", "array"]
+          description: Reply CC email addresses
+          items:
+            type: string
+        to_emails:
+          type: ["null", "array"]
+          description: To email addresses
+          items:
+            type: string
+        spam:
+          type: ["null", "boolean"]
+          description: Whether the ticket is marked as spam
+        deleted:
+          type: ["null", "boolean"]
+          description: Whether the ticket is deleted
+        fr_escalated:
+          type: ["null", "boolean"]
+          description: Whether the first response time was breached
+        is_escalated:
+          type: ["null", "boolean"]
+          description: Whether the ticket is escalated
+        fr_due_by:
+          type: ["null", "string"]
+          format: date-time
+          description: First response due by timestamp
+        due_by:
+          type: ["null", "string"]
+          format: date-time
+          description: Resolution due by timestamp
+        tags:
+          type: ["null", "array"]
+          description: Tags associated with the ticket
+          items:
+            type: string
+        custom_fields:
+          type: ["null", "object"]
+          description: Custom fields associated with the ticket
+        attachments:
+          type: ["null", "array"]
+          description: Ticket attachments
+          items:
+            type: object
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Ticket creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Ticket last update timestamp
+        association_type:
+          type: ["null", "integer"]
+          description: Association type for parent/child tickets
+        associated_tickets_count:
+          type: ["null", "integer"]
+          description: Number of associated tickets
+        ticket_cc_emails:
+          type: ["null", "array"]
+          description: Ticket CC email addresses
+          items:
+            type: string
+        ticket_bcc_emails:
+          type: ["null", "array"]
+          description: Ticket BCC email addresses
+          items:
+            type: string
+        support_email:
+          type: ["null", "string"]
+          description: Support email address used for the ticket
+        source_additional_info:
+          type: ["null", "object"]
+          description: Additional information about the ticket source
+        structured_description:
+          type: ["null", "object"]
+          description: Structured description of the ticket
+        form_id:
+          type: ["null", "integer"]
+          description: ID of the ticket form
+        nr_due_by:
+          type: ["null", "string"]
+          format: date-time
+          description: Next response due by timestamp
+        nr_escalated:
+          type: ["null", "boolean"]
+          description: Whether the next response time was breached
+
+    Contact:
+      type: object
+      x-airbyte-entity-name: contacts
+      description: A Freshdesk contact (customer)
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique contact ID
+        name:
+          type: ["null", "string"]
+          description: Name of the contact
+        email:
+          type: ["null", "string"]
+          description: Primary email address
+        phone:
+          type: ["null", "string"]
+          description: Phone number
+        mobile:
+          type: ["null", "string"]
+          description: Mobile number
+        active:
+          type: ["null", "boolean"]
+          description: Whether the contact has been verified
+        address:
+          type: ["null", "string"]
+          description: Address of the contact
+        avatar:
+          type: ["null", "object"]
+          description: Avatar of the contact
+        company_id:
+          type: ["null", "integer"]
+          description: ID of the primary company
+        view_all_tickets:
+          type: ["null", "boolean"]
+          description: Whether the contact can see all tickets from the company
+        custom_fields:
+          type: ["null", "object"]
+          description: Custom fields associated with the contact
+        deleted:
+          type: ["null", "boolean"]
+          description: Whether the contact is deleted
+        description:
+          type: ["null", "string"]
+          description: Description of the contact
+        job_title:
+          type: ["null", "string"]
+          description: Job title of the contact
+        language:
+          type: ["null", "string"]
+          description: Language of the contact
+        twitter_id:
+          type: ["null", "string"]
+          description: Twitter ID
+        unique_external_id:
+          type: ["null", "string"]
+          description: External ID of the contact
+        other_emails:
+          type: ["null", "array"]
+          description: Additional email addresses
+          items:
+            type: string
+        other_companies:
+          type: ["null", "array"]
+          description: Additional companies associated with the contact
+          items:
+            type: object
+        tags:
+          type: ["null", "array"]
+          description: Tags associated with the contact
+          items:
+            type: string
+        time_zone:
+          type: ["null", "string"]
+          description: Time zone of the contact
+        facebook_id:
+          type: ["null", "string"]
+          description: Facebook ID of the contact
+        csat_rating:
+          type: ["null", "integer"]
+          description: CSAT rating of the contact
+        preferred_source:
+          type: ["null", "string"]
+          description: Preferred contact source
+        first_name:
+          type: ["null", "string"]
+          description: First name of the contact
+        last_name:
+          type: ["null", "string"]
+          description: Last name of the contact
+        visitor_id:
+          type: ["null", "string"]
+          description: Visitor ID
+        org_contact_id:
+          type: ["null", "integer"]
+          description: Organization contact ID
+        org_contact_id_str:
+          type: ["null", "string"]
+          description: Organization contact ID as string
+        other_phone_numbers:
+          type: ["null", "array"]
+          description: Additional phone numbers
+          items:
+            type: string
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Contact creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Contact last update timestamp
+
+    Agent:
+      type: object
+      x-airbyte-entity-name: agents
+      description: A Freshdesk agent
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique agent ID
+        available:
+          type: ["null", "boolean"]
+          description: Whether the agent is available
+        available_since:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp since the agent has been available
+        occasional:
+          type: ["null", "boolean"]
+          description: Whether the agent is an occasional agent
+        signature:
+          type: ["null", "string"]
+          description: Signature of the agent (HTML)
+        ticket_scope:
+          type: ["null", "integer"]
+          description: "Ticket scope: 1=Global, 2=Group, 3=Restricted"
+        type:
+          type: ["null", "string"]
+          description: "Agent type: support_agent, field_agent, collaborator"
+        skill_ids:
+          type: ["null", "array"]
+          description: Skill IDs associated with the agent
+          items:
+            type: integer
+        group_ids:
+          type: ["null", "array"]
+          description: Group IDs the agent belongs to
+          items:
+            type: integer
+        role_ids:
+          type: ["null", "array"]
+          description: Role IDs assigned to the agent
+          items:
+            type: integer
+        focus_mode:
+          type: ["null", "boolean"]
+          description: Whether focus mode is enabled
+        contact:
+          type: ["null", "object"]
+          description: Contact details of the agent
+          properties:
+            active:
+              type: ["null", "boolean"]
+              description: Whether the contact is active
+            email:
+              type: ["null", "string"]
+              description: Email of the agent
+            job_title:
+              type: ["null", "string"]
+              description: Job title
+            language:
+              type: ["null", "string"]
+              description: Language
+            last_login_at:
+              type: ["null", "string"]
+              format: date-time
+              description: Last login timestamp
+            mobile:
+              type: ["null", "string"]
+              description: Mobile number
+            name:
+              type: ["null", "string"]
+              description: Name of the agent
+            phone:
+              type: ["null", "string"]
+              description: Phone number
+            time_zone:
+              type: ["null", "string"]
+              description: Time zone
+            created_at:
+              type: ["null", "string"]
+              format: date-time
+              description: Contact creation timestamp
+            updated_at:
+              type: ["null", "string"]
+              format: date-time
+              description: Contact update timestamp
+        last_active_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp of last agent activity
+        deactivated:
+          type: ["null", "boolean"]
+          description: Whether the agent is deactivated
+        agent_operational_status:
+          type: ["null", "string"]
+          description: Operational status of the agent
+        org_agent_id:
+          type: ["null", "string"]
+          description: Organization agent ID
+        org_group_ids:
+          type: ["null", "array"]
+          description: Organization group IDs
+          items:
+            type: string
+        contribution_group_ids:
+          type: ["null", "array"]
+          description: Contribution group IDs
+          items:
+            type: integer
+        org_contribution_group_ids:
+          type: ["null", "array"]
+          description: Organization contribution group IDs
+          items:
+            type: string
+        scope:
+          type: ["null", "integer", "object"]
+          description: Agent scope details (integer for scope level or object for detailed scope)
+        availability:
+          type: ["null", "array", "object"]
+          description: Agent availability details
+          items:
+            type: object
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Agent creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Agent last update timestamp
+
+    Group:
+      type: object
+      x-airbyte-entity-name: groups
+      description: A Freshdesk group
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique group ID
+        name:
+          type: ["null", "string"]
+          description: Name of the group
+        description:
+          type: ["null", "string"]
+          description: Description of the group
+        agent_ids:
+          type: ["null", "array"]
+          description: IDs of agents in the group
+          items:
+            type: integer
+        auto_ticket_assign:
+          type: ["null", "integer"]
+          description: "Auto ticket assignment: 0=Disabled, 1=Round Robin, 2=Skill Based, 3=Load Based"
+        business_hour_id:
+          type: ["null", "integer"]
+          description: ID of the associated business hour
+        escalate_to:
+          type: ["null", "integer"]
+          description: User ID for escalation
+        unassigned_for:
+          type: ["null", "string"]
+          description: Time after which escalation triggers
+        group_type:
+          type: ["null", "string"]
+          description: Type of the group (e.g., support_agent_group)
+        allow_agents_to_change_availability:
+          type: ["null", "boolean"]
+          description: Whether agents can change their availability
+        agent_availability_status:
+          type: ["null", "boolean"]
+          description: Whether agent availability status is enabled
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Group creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Group last update timestamp
+
+    Company:
+      type: object
+      x-airbyte-entity-name: companies
+      description: A Freshdesk company
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique company ID
+        name:
+          type: ["null", "string"]
+          description: Name of the company
+        description:
+          type: ["null", "string"]
+          description: Description of the company
+        domains:
+          type: ["null", "array"]
+          description: Email domains associated with the company
+          items:
+            type: string
+        note:
+          type: ["null", "string"]
+          description: Notes about the company
+        health_score:
+          type: ["null", "string"]
+          description: Health score of the company
+        account_tier:
+          type: ["null", "string"]
+          description: Account tier of the company
+        renewal_date:
+          type: ["null", "string"]
+          format: date
+          description: Renewal date
+        industry:
+          type: ["null", "string"]
+          description: Industry of the company
+        custom_fields:
+          type: ["null", "object"]
+          description: Custom fields associated with the company
+        org_company_id:
+          type: ["null", "integer", "string"]
+          description: Organization company ID
+        org_company_id_str:
+          type: ["null", "string"]
+          description: Organization company ID as string
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Company creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Company last update timestamp
+
+    Role:
+      type: object
+      x-airbyte-entity-name: roles
+      description: A Freshdesk role
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique role ID
+        name:
+          type: ["null", "string"]
+          description: Name of the role
+        description:
+          type: ["null", "string"]
+          description: Description of the role
+        default:
+          type: ["null", "boolean"]
+          description: Whether this is a default role
+        agent_type:
+          type: ["null", "integer"]
+          description: Agent type associated with the role
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Role creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Role last update timestamp
+
+    SatisfactionRating:
+      type: object
+      x-airbyte-entity-name: satisfaction_ratings
+      description: A Freshdesk satisfaction rating
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique satisfaction rating ID
+        survey_id:
+          type: ["null", "integer"]
+          description: ID of the survey
+        user_id:
+          type: ["null", "integer"]
+          description: ID of the user (requester)
+        agent_id:
+          type: ["null", "integer"]
+          description: ID of the agent
+        group_id:
+          type: ["null", "integer"]
+          description: ID of the group
+        ticket_id:
+          type: ["null", "integer"]
+          description: ID of the ticket
+        feedback:
+          type: ["null", "string"]
+          description: Feedback text
+        ratings:
+          type: ["null", "object"]
+          description: Rating values (question_id to rating mapping)
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Rating creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Rating last update timestamp
+
+    Survey:
+      type: object
+      x-airbyte-entity-name: surveys
+      description: A Freshdesk survey
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique survey ID
+        title:
+          type: ["null", "string"]
+          description: Title of the survey
+        active:
+          type: ["null", "boolean"]
+          description: Whether the survey is active
+        questions:
+          type: ["null", "array"]
+          description: Survey questions
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "string"]
+                description: Question ID
+              label:
+                type: ["null", "string"]
+                description: Question label
+              accepted_ratings:
+                type: ["null", "array"]
+                description: Accepted rating values
+                items:
+                  type: integer
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Survey creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Survey last update timestamp
+
+    TimeEntry:
+      type: object
+      x-airbyte-entity-name: time_entries
+      description: A Freshdesk time entry
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique time entry ID
+        agent_id:
+          type: ["null", "integer"]
+          description: ID of the agent
+        ticket_id:
+          type: ["null", "integer"]
+          description: ID of the associated ticket
+        company_id:
+          type: ["null", "integer"]
+          description: ID of the associated company
+        billable:
+          type: ["null", "boolean"]
+          description: Whether the time entry is billable
+        note:
+          type: ["null", "string"]
+          description: Description of the time entry
+        time_spent:
+          type: ["null", "string"]
+          description: "Time spent in hh:mm format"
+        timer_running:
+          type: ["null", "boolean"]
+          description: Whether the timer is running
+        executed_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Execution timestamp
+        start_time:
+          type: ["null", "string"]
+          format: date-time
+          description: Start time of the timer
+        time_spent_in_seconds:
+          type: ["null", "integer"]
+          description: Time spent in seconds
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Time entry creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Time entry last update timestamp
+
+    TicketField:
+      type: object
+      x-airbyte-entity-name: ticket_fields
+      description: A Freshdesk ticket field definition
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique ticket field ID
+        name:
+          type: ["null", "string"]
+          description: Name of the field
+        label:
+          type: ["null", "string"]
+          description: Display label for agents
+        label_for_customers:
+          type: ["null", "string"]
+          description: Display label in the customer portal
+        description:
+          type: ["null", "string"]
+          description: Description of the field
+        position:
+          type: ["null", "integer"]
+          description: Position of the field in the form
+        type:
+          type: ["null", "string"]
+          description: Field type (e.g., custom_dropdown, custom_text)
+        default:
+          type: ["null", "boolean"]
+          description: Whether this is a default (non-custom) field
+        required_for_closure:
+          type: ["null", "boolean"]
+          description: Whether the field is required for ticket closure
+        required_for_agents:
+          type: ["null", "boolean"]
+          description: Whether the field is required for agents
+        required_for_customers:
+          type: ["null", "boolean"]
+          description: Whether the field is required for customers
+        customers_can_edit:
+          type: ["null", "boolean"]
+          description: Whether customers can edit this field
+        displayed_to_customers:
+          type: ["null", "boolean"]
+          description: Whether the field is displayed to customers
+        customers_can_filter:
+          type: ["null", "boolean"]
+          description: Whether customers can use this field as a filter
+        portal_cc:
+          type: ["null", "boolean"]
+          description: Whether CC is enabled in the portal
+        portal_cc_to:
+          type: ["null", "string"]
+          description: CC recipients scope (all or company)
+        choices:
+          description: Available choices for dropdown fields
+          oneOf:
+            - type: "null"
+            - type: array
+              items:
+                type: ["string", "object"]
+            - type: object
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Field creation timestamp
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Field last update timestamp

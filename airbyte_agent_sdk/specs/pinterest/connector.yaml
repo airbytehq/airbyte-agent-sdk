@@ -1,0 +1,2449 @@
+openapi: 3.1.0
+
+info:
+  title: Pinterest API Connector
+  version: 0.1.4
+  description: >
+    Connector for the Pinterest API v5, enabling access to Pinterest advertising
+    and content management data. Supports reading ad accounts, boards, campaigns,
+    ad groups, ads, board sections, board pins, catalogs, catalog feeds,
+    catalog product groups, audiences, conversion tags, customer lists, and keywords.
+  x-airbyte-connector-name: pinterest
+  x-airbyte-connector-definition-id: 5cb7e5fe-38c2-11ec-8d3d-0242ac130003
+  x-airbyte-replication-version: "2.1.25"
+  x-airbyte-replication-compatibility: ">=2.1.25, <3.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Pinterest API v5 Reference
+    url: https://developers.pinterest.com/docs/api/v5/
+  - type: api_release_history
+    title: Pinterest API Changelog
+    url: https://developers.pinterest.com/docs/changelog/
+  x-airbyte-skip-suggested-streams:
+  - campaign_analytics
+  - ad_account_analytics
+  - ad_analytics
+  - user_account_analytics
+  - ad_group_analytics
+  x-airbyte-example-questions:
+    direct:
+    - "List all my Pinterest ad accounts"
+    - "List all my Pinterest boards"
+    - "Show me all campaigns in my ad account"
+    - "List all ads in my ad account"
+    - "Show me all ad groups in my ad account"
+    - "List all audiences for my ad account"
+    - "Show me my catalog feeds"
+    search:
+    - "Which campaigns are currently active?"
+    - "What are the top boards by pin count?"
+    - "Show me ads that have been rejected"
+    - "Find campaigns with the highest daily spend cap"
+    unsupported:
+    - "Create a new Pinterest board"
+    - "Update a campaign budget"
+    - "Delete an ad group"
+    - "Post a new pin"
+    - "Show me campaign analytics or performance metrics"
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Pinterest.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: A date in the format YYYY-MM-DD. If not set, defaults to 89 days ago.
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-entity-relationships:
+  - source_entity: campaigns
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: ad_groups
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: ads
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: board_sections
+    target_entity: boards
+    foreign_key: board_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: board_pins
+    target_entity: boards
+    foreign_key: board_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: audiences
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: conversion_tags
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: customer_lists
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: keywords
+    target_entity: ad_accounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: ad_accounts
+      fields:
+      - name: country
+        type: ["null", "string"]
+        description: Country associated with the ad account
+      - name: created_time
+        type: ["null", "integer"]
+        description: Timestamp when the ad account was created (Unix seconds)
+      - name: currency
+        type: ["null", "string"]
+        description: Currency used for billing
+      - name: id
+        type: ["null", "string"]
+        description: Unique identifier for the ad account
+      - name: name
+        type: ["null", "string"]
+        description: Name of the ad account
+      - name: owner
+        type: ["null", "object"]
+        description: Owner details of the ad account
+        properties:
+          id:
+            type: ["null", "string"]
+          username:
+            type: ["null", "string"]
+      - name: permissions
+        type: ["null", "array"]
+        description: Permissions assigned to the ad account
+      - name: updated_time
+        type: ["null", "integer"]
+        description: Timestamp when the ad account was last updated (Unix seconds)
+    - entity: boards
+      fields:
+      - name: board_pins_modified_at
+        type: ["null", "string"]
+        description: Timestamp when pins on the board were last modified
+      - name: collaborator_count
+        type: ["null", "integer"]
+        description: Number of collaborators
+      - name: created_at
+        type: ["null", "string"]
+        description: Timestamp when the board was created
+      - name: description
+        type: ["null", "string"]
+        description: Board description
+      - name: follower_count
+        type: ["null", "integer"]
+        description: Number of followers
+      - name: id
+        type: ["null", "string"]
+        description: Unique identifier for the board
+      - name: media
+        type: ["null", "object"]
+        description: Media content for the board
+      - name: name
+        type: ["null", "string"]
+        description: Board name
+      - name: owner
+        type: ["null", "object"]
+        description: Board owner details
+        properties:
+          username:
+            type: ["null", "string"]
+      - name: pin_count
+        type: ["null", "integer"]
+        description: Number of pins on the board
+      - name: privacy
+        type: ["null", "string"]
+        description: Board privacy setting
+    - entity: campaigns
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Ad account ID
+      - name: created_time
+        type: ["null", "integer"]
+        description: Creation timestamp (Unix seconds)
+      - name: daily_spend_cap
+        type: ["null", "integer"]
+        description: Maximum daily spend in microcurrency
+      - name: end_time
+        type: ["null", "integer"]
+        description: End timestamp (Unix seconds)
+      - name: id
+        type: ["null", "string"]
+        description: Campaign ID
+      - name: is_campaign_budget_optimization
+        type: ["null", "boolean"]
+        description: Whether CBO is enabled
+      - name: is_flexible_daily_budgets
+        type: ["null", "boolean"]
+        description: Whether flexible daily budgets are enabled
+      - name: lifetime_spend_cap
+        type: ["null", "integer"]
+        description: Maximum lifetime spend in microcurrency
+      - name: name
+        type: ["null", "string"]
+        description: Campaign name
+      - name: objective_type
+        type: ["null", "string"]
+        description: Campaign objective type
+      - name: order_line_id
+        type: ["null", "string"]
+        description: Order line ID on invoice
+      - name: start_time
+        type: ["null", "integer"]
+        description: Start timestamp (Unix seconds)
+      - name: status
+        type: ["null", "string"]
+        description: Entity status
+      - name: summary_status
+        type: ["null", "string"]
+        description: Summary status
+      - name: tracking_urls
+        type: ["null", "object"]
+        description: Third-party tracking URLs
+      - name: type
+        type: ["null", "string"]
+        description: Always 'campaign'
+      - name: updated_time
+        type: ["null", "integer"]
+        description: Last update timestamp (Unix seconds)
+    - entity: ad_groups
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Ad account ID
+      - name: auto_targeting_enabled
+        type: ["null", "boolean"]
+        description: Whether auto targeting is enabled
+      - name: bid_in_micro_currency
+        type: ["null", "number"]
+        description: Bid in microcurrency
+      - name: bid_strategy_type
+        type: ["null", "string"]
+        description: Bid strategy type
+      - name: billable_event
+        type: ["null", "string"]
+        description: Billable event type
+      - name: budget_in_micro_currency
+        type: ["null", "number"]
+        description: Budget in microcurrency
+      - name: budget_type
+        type: ["null", "string"]
+        description: Budget type
+      - name: campaign_id
+        type: ["null", "string"]
+        description: Parent campaign ID
+      - name: conversion_learning_mode_type
+        type: ["null", "string"]
+        description: oCPM learn mode type
+      - name: created_time
+        type: ["null", "number"]
+        description: Creation timestamp (Unix seconds)
+      - name: end_time
+        type: ["null", "number"]
+        description: End time (Unix seconds)
+      - name: feed_profile_id
+        type: ["null", "string"]
+        description: Feed profile ID
+      - name: id
+        type: ["null", "string"]
+        description: Ad group ID
+      - name: lifetime_frequency_cap
+        type: ["null", "number"]
+        description: Max impressions per user in 30 days
+      - name: name
+        type: ["null", "string"]
+        description: Ad group name
+      - name: optimization_goal_metadata
+        type: ["null", "object"]
+        description: Optimization goal metadata
+      - name: pacing_delivery_type
+        type: ["null", "string"]
+        description: Pacing delivery type
+      - name: placement_group
+        type: ["null", "string"]
+        description: Placement group
+      - name: start_time
+        type: ["null", "number"]
+        description: Start time (Unix seconds)
+      - name: status
+        type: ["null", "string"]
+        description: Entity status
+      - name: summary_status
+        type: ["null", "string"]
+        description: Summary status
+      - name: targeting_spec
+        type: ["null", "object"]
+        description: Targeting specifications
+      - name: tracking_urls
+        type: ["null", "object"]
+        description: Third-party tracking URLs
+      - name: type
+        type: ["null", "string"]
+        description: Always 'adgroup'
+      - name: updated_time
+        type: ["null", "number"]
+        description: Last update timestamp (Unix seconds)
+    - entity: ads
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Ad account ID
+      - name: ad_group_id
+        type: ["null", "string"]
+        description: Ad group ID
+      - name: android_deep_link
+        type: ["null", "string"]
+        description: Android deep link
+      - name: campaign_id
+        type: ["null", "string"]
+        description: Campaign ID
+      - name: carousel_android_deep_links
+        type: ["null", "array"]
+        description: Carousel Android deep links
+      - name: carousel_destination_urls
+        type: ["null", "array"]
+        description: Carousel destination URLs
+      - name: carousel_ios_deep_links
+        type: ["null", "array"]
+        description: Carousel iOS deep links
+      - name: click_tracking_url
+        type: ["null", "string"]
+        description: Click tracking URL
+      - name: collection_items_destination_url_template
+        type: ["null", "string"]
+        description: Template URL for collection items
+      - name: created_time
+        type: ["null", "integer"]
+        description: Creation timestamp (Unix seconds)
+      - name: creative_type
+        type: ["null", "string"]
+        description: Creative type
+      - name: destination_url
+        type: ["null", "string"]
+        description: Main destination URL
+      - name: id
+        type: ["null", "string"]
+        description: Unique ad ID
+      - name: ios_deep_link
+        type: ["null", "string"]
+        description: iOS deep link
+      - name: is_pin_deleted
+        type: ["null", "boolean"]
+        description: Whether the original pin is deleted
+      - name: is_removable
+        type: ["null", "boolean"]
+        description: Whether the ad is removable
+      - name: lead_form_id
+        type: ["null", "string"]
+        description: Lead form ID
+      - name: name
+        type: ["null", "string"]
+        description: Ad name
+      - name: pin_id
+        type: ["null", "string"]
+        description: Associated pin ID
+      - name: rejected_reasons
+        type: ["null", "array"]
+        description: Rejection reasons
+      - name: rejection_labels
+        type: ["null", "array"]
+        description: Rejection text labels
+      - name: review_status
+        type: ["null", "string"]
+        description: Review status
+      - name: status
+        type: ["null", "string"]
+        description: Entity status
+      - name: summary_status
+        type: ["null", "string"]
+        description: Summary status
+      - name: tracking_urls
+        type: ["null", "object"]
+        description: Third-party tracking URLs
+      - name: type
+        type: ["null", "string"]
+        description: Always 'pinpromotion'
+      - name: updated_time
+        type: ["null", "integer"]
+        description: Last update timestamp (Unix seconds)
+      - name: view_tracking_url
+        type: ["null", "string"]
+        description: View tracking URL
+    - entity: board_sections
+      fields:
+      - name: id
+        type: ["null", "string"]
+        description: Unique identifier for the board section
+      - name: name
+        type: ["null", "string"]
+        description: Name of the board section
+    - entity: board_pins
+      fields:
+      - name: alt_text
+        type: ["null", "string"]
+        description: Alternate text for accessibility
+      - name: board_id
+        type: ["null", "string"]
+        description: Board the pin belongs to
+      - name: board_owner
+        type: ["null", "object"]
+        description: Board owner info
+        properties:
+          username:
+            type: ["null", "string"]
+      - name: board_section_id
+        type: ["null", "string"]
+        description: Section within the board
+      - name: created_at
+        type: ["null", "string"]
+        description: Timestamp when the pin was created
+      - name: creative_type
+        type: ["null", "string"]
+        description: Creative type
+      - name: description
+        type: ["null", "string"]
+        description: Pin description
+      - name: dominant_color
+        type: ["null", "string"]
+        description: Dominant color from the pin image
+      - name: has_been_promoted
+        type: ["null", "boolean"]
+        description: Whether the pin has been promoted
+      - name: id
+        type: ["null", "string"]
+        description: Unique pin identifier
+      - name: is_owner
+        type: ["null", "boolean"]
+        description: Whether the current user is the owner
+      - name: is_standard
+        type: ["null", "boolean"]
+        description: Whether the pin is a standard pin
+      - name: link
+        type: ["null", "string"]
+        description: URL link associated with the pin
+      - name: media
+        type: ["null", "object"]
+        description: Media content
+      - name: parent_pin_id
+        type: ["null", "string"]
+        description: Parent pin ID if this is a repin
+      - name: pin_metrics
+        type: ["null", "object"]
+        description: Pin metrics data
+      - name: title
+        type: ["null", "string"]
+        description: Pin title
+    - entity: catalogs
+      fields:
+      - name: catalog_type
+        type: ["null", "string"]
+        description: Type of catalog
+      - name: created_at
+        type: ["null", "string"]
+        description: Timestamp when the catalog was created
+      - name: id
+        type: ["null", "string"]
+        description: Unique catalog identifier
+      - name: name
+        type: ["null", "string"]
+        description: Catalog name
+      - name: updated_at
+        type: ["null", "string"]
+        description: Timestamp when the catalog was last updated
+    - entity: catalogs_feeds
+      fields:
+      - name: catalog_type
+        type: ["null", "string"]
+        description: Type of catalog
+      - name: created_at
+        type: ["null", "string"]
+        description: Timestamp when the feed was created
+      - name: default_availability
+        type: ["null", "string"]
+        description: Default availability status
+      - name: default_country
+        type: ["null", "string"]
+        description: Default country
+      - name: default_currency
+        type: ["null", "string"]
+        description: Default currency for pricing
+      - name: default_locale
+        type: ["null", "string"]
+        description: Default locale
+      - name: format
+        type: ["null", "string"]
+        description: Feed format
+      - name: id
+        type: ["null", "string"]
+        description: Unique feed identifier
+      - name: location
+        type: ["null", "string"]
+        description: URL where the feed is available
+      - name: name
+        type: ["null", "string"]
+        description: Feed name
+      - name: preferred_processing_schedule
+        type: ["null", "object"]
+        description: Preferred processing schedule
+      - name: status
+        type: ["null", "string"]
+        description: Feed status
+      - name: updated_at
+        type: ["null", "string"]
+        description: Timestamp when the feed was last updated
+    - entity: catalogs_product_groups
+      fields:
+      - name: created_at
+        type: ["null", "integer"]
+        description: Creation timestamp (Unix seconds)
+      - name: description
+        type: ["null", "string"]
+        description: Product group description
+      - name: feed_id
+        type: ["null", "string"]
+        description: Associated feed ID
+      - name: id
+        type: ["null", "string"]
+        description: Unique product group identifier
+      - name: is_featured
+        type: ["null", "boolean"]
+        description: Whether the product group is featured
+      - name: name
+        type: ["null", "string"]
+        description: Product group name
+      - name: status
+        type: ["null", "string"]
+        description: Product group status
+      - name: type
+        type: ["null", "string"]
+        description: Product group type
+      - name: updated_at
+        type: ["null", "integer"]
+        description: Last update timestamp (Unix seconds)
+    - entity: audiences
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Ad account ID
+      - name: audience_type
+        type: ["null", "string"]
+        description: Audience type
+      - name: created_timestamp
+        type: ["null", "integer"]
+        description: Creation time (Unix seconds)
+      - name: description
+        type: ["null", "string"]
+        description: Audience description
+      - name: id
+        type: ["null", "string"]
+        description: Unique audience identifier
+      - name: name
+        type: ["null", "string"]
+        description: Audience name
+      - name: rule
+        type: ["null", "object"]
+        description: Audience targeting rules
+      - name: size
+        type: ["null", "integer"]
+        description: Estimated audience size
+      - name: status
+        type: ["null", "string"]
+        description: Audience status
+      - name: type
+        type: ["null", "string"]
+        description: Always 'audience'
+      - name: updated_timestamp
+        type: ["null", "integer"]
+        description: Last update time (Unix seconds)
+    - entity: conversion_tags
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Ad account ID
+      - name: code_snippet
+        type: ["null", "string"]
+        description: JavaScript code snippet for tracking
+      - name: configs
+        type: ["null", "object"]
+        description: Tag configurations
+      - name: enhanced_match_status
+        type: ["null", "string"]
+        description: Enhanced match status
+      - name: id
+        type: ["null", "string"]
+        description: Unique conversion tag identifier
+      - name: last_fired_time_ms
+        type: ["null", "integer"]
+        description: Timestamp of last event fired (milliseconds)
+      - name: name
+        type: ["null", "string"]
+        description: Conversion tag name
+      - name: status
+        type: ["null", "string"]
+        description: Status
+      - name: version
+        type: ["null", "string"]
+        description: Version number
+    - entity: customer_lists
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Associated ad account ID
+      - name: created_time
+        type: ["null", "integer"]
+        description: Creation time (Unix seconds)
+      - name: id
+        type: ["null", "string"]
+        description: Unique customer list identifier
+      - name: name
+        type: ["null", "string"]
+        description: Customer list name
+      - name: num_batches
+        type: ["null", "integer"]
+        description: Total number of list updates
+      - name: num_removed_user_records
+        type: ["null", "integer"]
+        description: Count of removed user records
+      - name: num_uploaded_user_records
+        type: ["null", "integer"]
+        description: Count of uploaded user records
+      - name: status
+        type: ["null", "string"]
+        description: Status
+      - name: type
+        type: ["null", "string"]
+        description: Always 'customerlist'
+      - name: updated_time
+        type: ["null", "integer"]
+        description: Last update time (Unix seconds)
+    - entity: keywords
+      fields:
+      - name: archived
+        type: ["null", "boolean"]
+        description: Whether the keyword is archived
+      - name: bid
+        type: ["null", "integer"]
+        description: Bid value in microcurrency
+      - name: id
+        type: ["null", "string"]
+        description: Unique keyword identifier
+      - name: match_type
+        type: ["null", "string"]
+        description: Match type
+      - name: parent_id
+        type: ["null", "string"]
+        description: Parent entity ID
+      - name: parent_type
+        type: ["null", "string"]
+        description: Parent entity type
+      - name: type
+        type: ["null", "string"]
+        description: Always 'keyword'
+      - name: value
+        type: ["null", "string"]
+        description: Keyword text value
+
+servers:
+- url: https://api.pinterest.com/v5
+  description: Pinterest API v5 server
+
+security:
+- oauth2: []
+
+paths:
+  /ad_accounts:
+    get:
+      summary: List ad accounts
+      description: Get a list of the ad accounts that the authenticated user has access to.
+      operationId: listAdAccounts
+      x-airbyte-entity: ad_accounts
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      - name: include_shared_accounts
+        in: query
+        description: Include shared ad accounts.
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        "200":
+          description: List of ad accounts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdAccountsList"
+
+  /ad_accounts/{ad_account_id}:
+    get:
+      summary: Get ad account
+      description: Get an ad account by ID.
+      operationId: getAdAccount
+      x-airbyte-entity: ad_accounts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ad account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdAccount"
+
+  /boards:
+    get:
+      summary: List boards
+      description: Get a list of the boards owned by the authenticated user.
+      operationId: listBoards
+      x-airbyte-entity: boards
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      - name: privacy
+        in: query
+        description: Filter by board privacy setting.
+        required: false
+        schema:
+          type: string
+          enum:
+          - PUBLIC
+          - PROTECTED
+          - SECRET
+      responses:
+        "200":
+          description: List of boards
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BoardsList"
+
+  /boards/{board_id}:
+    get:
+      summary: Get board
+      description: Get a board by ID.
+      operationId: getBoard
+      x-airbyte-entity: boards
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      parameters:
+      - name: board_id
+        in: path
+        required: true
+        description: Unique identifier of the board.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Board object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Board"
+
+  /ad_accounts/{ad_account_id}/campaigns:
+    get:
+      summary: List campaigns
+      description: Get a list of campaigns in the specified ad account.
+      operationId: listCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      - name: entity_statuses
+        in: query
+        description: Filter by entity status.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACTIVE
+            - PAUSED
+            - ARCHIVED
+            - DRAFT
+            - DELETED_DRAFT
+      - name: order
+        in: query
+        description: Sort order.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+      responses:
+        "200":
+          description: List of campaigns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignsList"
+
+  /ad_accounts/{ad_account_id}/ad_groups:
+    get:
+      summary: List ad groups
+      description: Get a list of ad groups in the specified ad account.
+      operationId: listAdGroups
+      x-airbyte-entity: ad_groups
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      - name: entity_statuses
+        in: query
+        description: Filter by entity status.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACTIVE
+            - PAUSED
+            - ARCHIVED
+            - DRAFT
+            - DELETED_DRAFT
+      - name: order
+        in: query
+        description: Sort order.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+      responses:
+        "200":
+          description: List of ad groups
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdGroupsList"
+
+  /ad_accounts/{ad_account_id}/ads:
+    get:
+      summary: List ads
+      description: Get a list of ads in the specified ad account.
+      operationId: listAds
+      x-airbyte-entity: ads
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      - name: entity_statuses
+        in: query
+        description: Filter by entity status.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACTIVE
+            - PAUSED
+            - ARCHIVED
+            - DRAFT
+            - DELETED_DRAFT
+      - name: order
+        in: query
+        description: Sort order.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+      responses:
+        "200":
+          description: List of ads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdsList"
+
+  /boards/{board_id}/sections:
+    get:
+      summary: List board sections
+      description: Get a list of sections for a specific board.
+      operationId: listBoardSections
+      x-airbyte-entity: board_sections
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: board_id
+        in: path
+        required: true
+        description: Unique identifier of the board.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of board sections
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BoardSectionsList"
+
+  /boards/{board_id}/pins:
+    get:
+      summary: List board pins
+      description: Get a list of pins on a specific board.
+      operationId: listBoardPins
+      x-airbyte-entity: board_pins
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: board_id
+        in: path
+        required: true
+        description: Unique identifier of the board.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of board pins
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BoardPinsList"
+
+  /catalogs:
+    get:
+      summary: List catalogs
+      description: Get a list of catalogs for the authenticated user.
+      operationId: listCatalogs
+      x-airbyte-entity: catalogs
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of catalogs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogsList"
+
+  /catalogs/feeds:
+    get:
+      summary: List catalog feeds
+      description: Get a list of catalog feeds for the authenticated user.
+      operationId: listCatalogsFeeds
+      x-airbyte-entity: catalogs_feeds
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of catalog feeds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogsFeedsList"
+
+  /catalogs/product_groups:
+    get:
+      summary: List catalog product groups
+      description: Get a list of catalog product groups for the authenticated user.
+      operationId: listCatalogsProductGroups
+      x-airbyte-entity: catalogs_product_groups
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of catalog product groups
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogsProductGroupsList"
+
+  /ad_accounts/{ad_account_id}/audiences:
+    get:
+      summary: List audiences
+      description: Get a list of audiences for the specified ad account.
+      operationId: listAudiences
+      x-airbyte-entity: audiences
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of audiences
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AudiencesList"
+
+  /ad_accounts/{ad_account_id}/conversion_tags:
+    get:
+      summary: List conversion tags
+      description: Get a list of conversion tags for the specified ad account.
+      operationId: listConversionTags
+      x-airbyte-entity: conversion_tags
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of conversion tags
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConversionTagsList"
+
+  /ad_accounts/{ad_account_id}/customer_lists:
+    get:
+      summary: List customer lists
+      description: Get a list of customer lists for the specified ad account.
+      operationId: listCustomerLists
+      x-airbyte-entity: customer_lists
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of customer lists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerListsList"
+
+  /ad_accounts/{ad_account_id}/keywords:
+    get:
+      summary: List keywords
+      description: Get a list of keywords for the specified ad account. Requires an ad_group_id filter.
+      operationId: listKeywords
+      x-airbyte-entity: keywords
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      x-airbyte-meta-extractor:
+        bookmark: $.bookmark
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Unique identifier of the ad account.
+        schema:
+          type: string
+      - name: ad_group_id
+        in: query
+        required: true
+        description: Ad group ID to filter keywords by.
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Maximum number of items to include in a single page of the response.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 25
+      - name: bookmark
+        in: query
+        description: Cursor value for paginating through results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of keywords
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeywordsList"
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authentication for Pinterest API
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.pinterest.com/oauth/
+          tokenUrl: https://api.pinterest.com/v5/oauth/token
+          refreshUrl: https://api.pinterest.com/v5/oauth/token
+          scopes:
+            ads:read: Read access to advertising data
+            boards:read: Read access to boards
+            catalogs:read: Read access to catalogs
+            user_accounts:read: Read access to user account info
+      x-airbyte-token-refresh:
+        auth_style: basic
+        body_format: form
+      x-airbyte-auth-config:
+        title: OAuth 2.0 Authentication
+        type: object
+        required:
+        - refresh_token
+        - client_id
+        - client_secret
+        properties:
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: Pinterest OAuth2 refresh token.
+          client_id:
+            type: string
+            title: Client ID
+            description: Pinterest OAuth2 client ID.
+          client_secret:
+            type: string
+            title: Client Secret
+            description: Pinterest OAuth2 client secret.
+        auth_mapping:
+          refresh_token: "${refresh_token}"
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+        replication_auth_key_mapping:
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          credentials.auth_method: "oauth2.0"
+
+  schemas:
+    AdAccount:
+      type: object
+      x-airbyte-entity-name: ad_accounts
+      x-airbyte-stream-name: ad_accounts
+      description: Pinterest ad account object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique identifier for the ad account
+        name:
+          type: ["null", "string"]
+          description: Name of the ad account
+        owner:
+          type: ["null", "object"]
+          description: Owner details of the ad account
+          properties:
+            id:
+              type: ["null", "string"]
+              description: Unique identifier of the owner
+            username:
+              type: ["null", "string"]
+              description: Username of the owner
+        country:
+          type: ["null", "string"]
+          description: Country associated with the ad account
+        currency:
+          type: ["null", "string"]
+          description: Currency used for billing
+        created_time:
+          type: ["null", "integer"]
+          description: Timestamp when the ad account was created (Unix seconds)
+        updated_time:
+          type: ["null", "integer"]
+          description: Timestamp when the ad account was last updated (Unix seconds)
+        permissions:
+          type: ["null", "array"]
+          description: Permissions assigned to the ad account
+          items:
+            type: ["null", "string"]
+
+    AdAccountsList:
+      type: object
+      description: Paginated list of ad accounts
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdAccount"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    Board:
+      type: object
+      x-airbyte-entity-name: boards
+      x-airbyte-stream-name: boards
+      description: Pinterest board object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique identifier for the board
+        name:
+          type: ["null", "string"]
+          description: Board name
+        description:
+          type: ["null", "string"]
+          description: Board description
+        owner:
+          type: ["null", "object"]
+          description: Board owner details
+          properties:
+            username:
+              type: ["null", "string"]
+              description: Username of the board owner
+        is_ads_only:
+          type: ["null", "boolean"]
+          description: Whether the board is exclusively for ads
+        privacy:
+          type: ["null", "string"]
+          description: Board privacy setting (PUBLIC, SECRET)
+        follower_count:
+          type: ["null", "integer"]
+          description: Number of followers
+        collaborator_count:
+          type: ["null", "integer"]
+          description: Number of collaborators
+        pin_count:
+          type: ["null", "integer"]
+          description: Number of pins on the board
+        media:
+          type: ["null", "object"]
+          description: Media content for the board
+          properties:
+            image_cover_url:
+              type: ["null", "string"]
+              description: Cover image URL
+            pin_thumbnail_urls:
+              type: ["null", "array"]
+              description: Thumbnail URLs of pins
+              items:
+                type: string
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the board was created
+        board_pins_modified_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when pins on the board were last modified
+
+    BoardsList:
+      type: object
+      description: Paginated list of boards
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Board"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    Campaign:
+      type: object
+      x-airbyte-entity-name: campaigns
+      x-airbyte-stream-name: campaigns
+      description: Pinterest campaign object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Campaign ID
+        ad_account_id:
+          type: ["null", "string"]
+          description: Ad account ID
+        name:
+          type: ["null", "string"]
+          description: Campaign name
+        status:
+          type: ["null", "string"]
+          description: Entity status (ACTIVE, PAUSED, ARCHIVED, DRAFT, DELETED_DRAFT)
+        lifetime_spend_cap:
+          type: ["null", "integer"]
+          description: Maximum lifetime spend in microcurrency
+        daily_spend_cap:
+          type: ["null", "integer"]
+          description: Maximum daily spend in microcurrency
+        order_line_id:
+          type: ["null", "string"]
+          description: Order line ID on invoice
+        tracking_urls:
+          type: ["null", "object"]
+          description: Third-party tracking URLs
+          properties:
+            impression:
+              type: ["null", "array"]
+              description: Impression tracking URLs
+              items:
+                type: string
+            click:
+              type: ["null", "array"]
+              description: Click tracking URLs
+              items:
+                type: string
+            engagement:
+              type: ["null", "array"]
+              description: Engagement tracking URLs
+              items:
+                type: string
+            buyable_button:
+              type: ["null", "array"]
+              description: Buyable button tracking URLs
+              items:
+                type: string
+            audience_verification:
+              type: ["null", "array"]
+              description: Audience verification tracking URLs
+              items:
+                type: string
+        objective_type:
+          type: ["null", "string"]
+          description: Campaign objective type
+        created_time:
+          type: ["null", "integer"]
+          description: Creation timestamp (Unix seconds)
+        updated_time:
+          type: ["null", "integer"]
+          description: Last update timestamp (Unix seconds)
+        type:
+          type: ["null", "string"]
+          description: Always 'campaign'
+        start_time:
+          type: ["null", "integer"]
+          description: Start timestamp (Unix seconds)
+        end_time:
+          type: ["null", "integer"]
+          description: End timestamp (Unix seconds)
+        summary_status:
+          type: ["null", "string"]
+          description: Summary status (RUNNING, PAUSED, NOT_STARTED, COMPLETED, ADVERTISER_DISABLED, ARCHIVED, DRAFT, DELETED_DRAFT)
+        is_campaign_budget_optimization:
+          type: ["null", "boolean"]
+          description: Whether campaign budget optimization is enabled
+        is_flexible_daily_budgets:
+          type: ["null", "boolean"]
+          description: Whether flexible daily budgets are enabled
+        is_performance_plus:
+          type: ["null", "boolean"]
+          description: Whether this is a Performance+ campaign
+        is_top_of_search:
+          type: ["null", "boolean"]
+          description: Whether top of search placement is enabled
+        is_automated_campaign:
+          type: ["null", "boolean"]
+          description: Whether this is an automated campaign
+        bid_options:
+          type: ["null", "object"]
+          description: Campaign bid options
+
+    CampaignsList:
+      type: object
+      description: Paginated list of campaigns
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Campaign"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    AdGroup:
+      type: object
+      x-airbyte-entity-name: ad_groups
+      x-airbyte-stream-name: ad_groups
+      description: Pinterest ad group object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Ad group ID
+        ad_account_id:
+          type: ["null", "string"]
+          description: Ad account ID
+        campaign_id:
+          type: ["null", "string"]
+          description: Parent campaign ID
+        name:
+          type: ["null", "string"]
+          description: Ad group name
+        status:
+          type: ["null", "string"]
+          description: Entity status
+        budget_in_micro_currency:
+          type: ["null", "number"]
+          description: Budget in microcurrency
+        bid_in_micro_currency:
+          type: ["null", "number"]
+          description: Bid in microcurrency
+        budget_type:
+          type: ["null", "string"]
+          description: Budget type (DAILY, LIFETIME, CBO_ADGROUP)
+        start_time:
+          type: ["null", "number"]
+          description: Start time (Unix seconds)
+        end_time:
+          type: ["null", "number"]
+          description: End time (Unix seconds)
+        targeting_spec:
+          type: ["null", "object"]
+          description: Targeting specifications
+        lifetime_frequency_cap:
+          type: ["null", "number"]
+          description: Maximum impressions per user in 30 days
+        tracking_urls:
+          type: ["null", "object"]
+          description: Third-party tracking URLs
+          properties:
+            impression:
+              type: ["null", "array"]
+              description: Impression tracking URLs
+              items:
+                type: string
+            click:
+              type: ["null", "array"]
+              description: Click tracking URLs
+              items:
+                type: string
+            engagement:
+              type: ["null", "array"]
+              description: Engagement tracking URLs
+              items:
+                type: string
+            buyable_button:
+              type: ["null", "array"]
+              description: Buyable button tracking URLs
+              items:
+                type: string
+            audience_verification:
+              type: ["null", "array"]
+              description: Audience verification tracking URLs
+              items:
+                type: string
+        auto_targeting_enabled:
+          type: ["null", "boolean"]
+          description: Whether auto targeting is enabled
+        placement_group:
+          type: ["null", "string"]
+          description: Placement group (ALL, SEARCH, BROWSE, OTHER)
+        pacing_delivery_type:
+          type: ["null", "string"]
+          description: Pacing delivery type (STANDARD, ACCELERATED)
+        conversion_learning_mode_type:
+          type: ["null", "string"]
+          description: oCPM learn mode type (NOT_ACTIVE, ACTIVE)
+        summary_status:
+          type: ["null", "string"]
+          description: Summary status
+        feed_profile_id:
+          type: ["null", "string"]
+          description: Feed profile ID
+        billable_event:
+          type: ["null", "string"]
+          description: Billable event type
+        type:
+          type: ["null", "string"]
+          description: Always 'adgroup'
+        created_time:
+          type: ["null", "number"]
+          description: Creation timestamp (Unix seconds)
+        updated_time:
+          type: ["null", "number"]
+          description: Last update timestamp (Unix seconds)
+        bid_strategy_type:
+          type: ["null", "string"]
+          description: Bid strategy type (AUTOMATIC_BID, MAX_BID, TARGET_AVG)
+        optimization_goal_metadata:
+          type: ["null", "object"]
+          description: Optimization goal metadata
+        placement_traffic_type:
+          type: ["null", "string"]
+          description: Traffic type for placement
+        targeting_template_ids:
+          type: ["null", "array"]
+          description: Targeting template IDs
+          items:
+            type: string
+        is_creative_optimization:
+          type: ["null", "boolean"]
+          description: Whether creative optimization is enabled
+        promotion_id:
+          type: ["null", "string"]
+          description: Promotion ID
+        promotion_ids:
+          type: ["null", "array"]
+          description: List of promotion IDs
+          items:
+            type: string
+        promotion_application_level:
+          type: ["null", "string"]
+          description: Promotion application level (NONE, ITEM, AD_GROUP)
+        bid_multiplier:
+          type: ["null", "number"]
+          description: Bid multiplier (0.1 to 10.0)
+
+    AdGroupsList:
+      type: object
+      description: Paginated list of ad groups
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdGroup"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    Ad:
+      type: object
+      x-airbyte-entity-name: ads
+      x-airbyte-stream-name: ads
+      description: Pinterest ad object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique ad ID
+        ad_group_id:
+          type: ["null", "string"]
+          description: Ad group ID
+        ad_account_id:
+          type: ["null", "string"]
+          description: Ad account ID
+        campaign_id:
+          type: ["null", "string"]
+          description: Campaign ID
+        pin_id:
+          type: ["null", "string"]
+          description: Associated pin ID
+        name:
+          type: ["null", "string"]
+          description: Ad name
+        status:
+          type: ["null", "string"]
+          description: Entity status
+        creative_type:
+          type: ["null", "string"]
+          description: Creative type (REGULAR, VIDEO, SHOPPING, CAROUSEL, etc.)
+        destination_url:
+          type: ["null", "string"]
+          description: Main destination URL
+        click_tracking_url:
+          type: ["null", "string"]
+          description: Click tracking URL
+        view_tracking_url:
+          type: ["null", "string"]
+          description: View tracking URL
+        android_deep_link:
+          type: ["null", "string"]
+          description: Android deep link
+        ios_deep_link:
+          type: ["null", "string"]
+          description: iOS deep link
+        carousel_android_deep_links:
+          type: ["null", "array"]
+          description: Carousel Android deep links
+          items:
+            type: string
+        carousel_destination_urls:
+          type: ["null", "array"]
+          description: Carousel destination URLs
+          items:
+            type: string
+        carousel_ios_deep_links:
+          type: ["null", "array"]
+          description: Carousel iOS deep links
+          items:
+            type: string
+        tracking_urls:
+          type: ["null", "object"]
+          description: Third-party tracking URLs
+          properties:
+            impression:
+              type: ["null", "array"]
+              description: Impression tracking URLs
+              items:
+                type: string
+            click:
+              type: ["null", "array"]
+              description: Click tracking URLs
+              items:
+                type: string
+            engagement:
+              type: ["null", "array"]
+              description: Engagement tracking URLs
+              items:
+                type: string
+            buyable_button:
+              type: ["null", "array"]
+              description: Buyable button tracking URLs
+              items:
+                type: string
+            audience_verification:
+              type: ["null", "array"]
+              description: Audience verification tracking URLs
+              items:
+                type: string
+        is_pin_deleted:
+          type: ["null", "boolean"]
+          description: Whether the original pin is deleted
+        is_removable:
+          type: ["null", "boolean"]
+          description: Whether the ad is removable
+        lead_form_id:
+          type: ["null", "string"]
+          description: Lead form ID
+        collection_items_destination_url_template:
+          type: ["null", "string"]
+          description: Template URL for collection items
+        created_time:
+          type: ["null", "integer"]
+          description: Creation timestamp (Unix seconds)
+        updated_time:
+          type: ["null", "integer"]
+          description: Last update timestamp (Unix seconds)
+        rejected_reasons:
+          type: ["null", "array"]
+          description: Rejection reasons
+          items:
+            type: string
+        rejection_labels:
+          type: ["null", "array"]
+          description: Rejection text labels
+          items:
+            type: string
+        review_status:
+          type: ["null", "string"]
+          description: Review status (OTHER, PENDING, REJECTED, APPROVED)
+        type:
+          type: ["null", "string"]
+          description: Always 'pinpromotion'
+        summary_status:
+          type: ["null", "string"]
+          description: Summary status
+        quiz_pin_data:
+          type: ["null", "object"]
+          description: Quiz pin data
+        grid_click_type:
+          type: ["null", "string"]
+          description: Grid click type
+        customizable_cta_type:
+          type: ["null", "string"]
+          description: Customizable CTA type (GET_OFFER, LEARN_MORE, SHOP_NOW, etc.)
+        disclosure_type:
+          type: ["null", "string"]
+          description: Disclosure type
+        disclosure_url:
+          type: ["null", "string"]
+          description: Pharmaceutical disclosure URL
+
+    AdsList:
+      type: object
+      description: Paginated list of ads
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ad"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    BoardSection:
+      type: object
+      x-airbyte-entity-name: board_sections
+      x-airbyte-stream-name: board_sections
+      description: Pinterest board section object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique identifier for the board section
+        name:
+          type: ["null", "string"]
+          description: Name of the board section
+
+    BoardSectionsList:
+      type: object
+      description: Paginated list of board sections
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BoardSection"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    BoardPin:
+      type: object
+      x-airbyte-entity-name: board_pins
+      x-airbyte-stream-name: board_pins
+      description: Pinterest pin on a board
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique pin identifier
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the pin was created
+        creative_type:
+          type: ["null", "string"]
+          description: Creative type (REGULAR, VIDEO, SHOPPING, CAROUSEL, etc.)
+        is_standard:
+          type: ["null", "boolean"]
+          description: Whether the pin is a standard pin
+        is_owner:
+          type: ["null", "boolean"]
+          description: Whether the current user is the owner
+        dominant_color:
+          type: ["null", "string"]
+          description: Dominant color from the pin image (hex)
+        parent_pin_id:
+          type: ["null", "string"]
+          description: Parent pin ID if this is a repin
+        link:
+          type: ["null", "string"]
+          description: URL link associated with the pin
+        title:
+          type: ["null", "string"]
+          description: Pin title
+        description:
+          type: ["null", "string"]
+          description: Pin description
+        alt_text:
+          type: ["null", "string"]
+          description: Alternate text for accessibility
+        board_id:
+          type: ["null", "string"]
+          description: Board the pin belongs to
+        board_section_id:
+          type: ["null", "string"]
+          description: Section within the board
+        board_owner:
+          type: ["null", "object"]
+          description: Board owner info
+          properties:
+            username:
+              type: ["null", "string"]
+              description: Username of the board owner
+        media:
+          type: ["null", "object"]
+          description: Media content
+          properties:
+            media_type:
+              type: ["null", "string"]
+              description: Type of media
+        pin_metrics:
+          type: ["null", "object"]
+          description: Pin metrics data
+        has_been_promoted:
+          type: ["null", "boolean"]
+          description: Whether the pin has been promoted
+        is_removable:
+          type: ["null", "boolean"]
+          description: Whether the pin can be removed
+        product_tags:
+          type: ["null", "array"]
+          description: Product tags associated with the pin
+          items:
+            type: object
+
+    BoardPinsList:
+      type: object
+      description: Paginated list of board pins
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BoardPin"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    Catalog:
+      type: object
+      x-airbyte-entity-name: catalogs
+      x-airbyte-stream-name: catalogs
+      description: Pinterest catalog object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique catalog identifier
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the catalog was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the catalog was last updated
+        name:
+          type: ["null", "string"]
+          description: Catalog name
+        catalog_type:
+          type: ["null", "string"]
+          description: Type of catalog (RETAIL, HOTEL, CREATIVE_ASSETS)
+
+    CatalogsList:
+      type: object
+      description: Paginated list of catalogs
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Catalog"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    CatalogsFeed:
+      type: object
+      x-airbyte-entity-name: catalogs_feeds
+      x-airbyte-stream-name: catalogs_feeds
+      description: Pinterest catalog feed object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique feed identifier
+        created_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the feed was created
+        updated_at:
+          type: ["null", "string"]
+          format: date-time
+          description: Timestamp when the feed was last updated
+        name:
+          type: ["null", "string"]
+          description: Feed name
+        format:
+          type: ["null", "string"]
+          description: Feed format (TSV, CSV, XML)
+        catalog_type:
+          type: ["null", "string"]
+          description: Type of catalog
+        location:
+          type: ["null", "string"]
+          description: URL where the feed is available
+        preferred_processing_schedule:
+          type: ["null", "object"]
+          description: Preferred processing schedule
+          properties:
+            time:
+              type: ["null", "string"]
+              description: Preferred processing time
+            timezone:
+              type: ["null", "string"]
+              description: Timezone for processing
+        status:
+          type: ["null", "string"]
+          description: Feed status (ACTIVE, INACTIVE)
+        default_currency:
+          type: ["null", "string"]
+          description: Default currency for pricing
+        default_locale:
+          type: ["null", "string"]
+          description: Default locale
+        default_country:
+          type: ["null", "string"]
+          description: Default country
+        default_availability:
+          type: ["null", "string"]
+          description: Default availability status
+
+    CatalogsFeedsList:
+      type: object
+      description: Paginated list of catalog feeds
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CatalogsFeed"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    CatalogsProductGroup:
+      type: object
+      x-airbyte-entity-name: catalogs_product_groups
+      x-airbyte-stream-name: catalogs_product_groups
+      description: Pinterest catalog product group object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique product group identifier
+        created_at:
+          type: ["null", "integer"]
+          description: Creation timestamp (Unix seconds)
+        updated_at:
+          type: ["null", "integer"]
+          description: Last update timestamp (Unix seconds)
+        name:
+          type: ["null", "string"]
+          description: Product group name
+        description:
+          type: ["null", "string"]
+          description: Product group description
+        feed_id:
+          type: ["null", "string"]
+          description: Associated feed ID
+        is_featured:
+          type: ["null", "boolean"]
+          description: Whether the product group is featured
+        status:
+          type: ["null", "string"]
+          description: Product group status
+        type:
+          type: ["null", "string"]
+          description: Product group type
+
+    CatalogsProductGroupsList:
+      type: object
+      description: Paginated list of catalog product groups
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CatalogsProductGroup"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    Audience:
+      type: object
+      x-airbyte-entity-name: audiences
+      x-airbyte-stream-name: audiences
+      description: Pinterest audience object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique audience identifier
+        ad_account_id:
+          type: ["null", "string"]
+          description: Ad account ID
+        name:
+          type: ["null", "string"]
+          description: Audience name
+        audience_type:
+          type: ["null", "string"]
+          description: Audience type (ACTALIKE, ENGAGEMENT, CUSTOMER_LIST, VISITOR)
+        description:
+          type: ["null", "string"]
+          description: Audience description
+        rule:
+          type: ["null", "object"]
+          description: Audience targeting rules
+          properties:
+            country:
+              type: ["null", "string"]
+              description: Country criteria
+            customer_list_id:
+              type: ["null", "string"]
+              description: Customer list ID
+            engagement_domain:
+              type: ["null", "array"]
+              description: Domains for engagement tracking
+              items:
+                type: string
+            engagement_type:
+              type: ["null", "string"]
+              description: Engagement type
+            event:
+              type: ["null", "string"]
+              description: Pinterest tag event
+            retention_days:
+              type: ["null", "integer"]
+              description: Days to retain audience data
+            visitor_source_id:
+              type: ["null", "string"]
+              description: Visitor source ID
+        size:
+          type: ["null", "integer"]
+          description: Estimated audience size
+        status:
+          type: ["null", "string"]
+          description: Audience status (READY, INITIALIZING, TOO_SMALL)
+        type:
+          type: ["null", "string"]
+          description: Always 'audience'
+        created_timestamp:
+          type: ["null", "integer"]
+          description: Creation time (Unix seconds)
+        updated_timestamp:
+          type: ["null", "integer"]
+          description: Last update time (Unix seconds)
+        created_by_company_name:
+          type: ["null", "string"]
+          description: Name of the company that created the audience
+
+    AudiencesList:
+      type: object
+      description: Paginated list of audiences
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Audience"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    ConversionTag:
+      type: object
+      x-airbyte-entity-name: conversion_tags
+      x-airbyte-stream-name: conversion_tags
+      description: Pinterest conversion tag object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique conversion tag identifier
+        ad_account_id:
+          type: ["null", "string"]
+          description: Ad account ID
+        name:
+          type: ["null", "string"]
+          description: Conversion tag name
+        code_snippet:
+          type: ["null", "string"]
+          description: JavaScript code snippet for tracking
+        enhanced_match_status:
+          type: ["null", "string"]
+          description: Enhanced match status
+        last_fired_time_ms:
+          type: ["null", "integer"]
+          description: Timestamp of last event fired (milliseconds)
+        status:
+          type: ["null", "string"]
+          description: Status (ACTIVE, PAUSED, ARCHIVED)
+        version:
+          type: ["null", "string"]
+          description: Version number
+        configs:
+          type: ["null", "object"]
+          description: Tag configurations
+          properties:
+            aem_enabled:
+              type: ["null", "boolean"]
+              description: AEM email integration enabled
+            md_frequency:
+              type: ["null", "number"]
+              description: Metadata ingestion frequency
+            aem_fnln_enabled:
+              type: ["null", "boolean"]
+              description: AEM name integration enabled
+            aem_ph_enabled:
+              type: ["null", "boolean"]
+              description: AEM phone integration enabled
+            aem_ge_enabled:
+              type: ["null", "boolean"]
+              description: AEM gender integration enabled
+            aem_db_enabled:
+              type: ["null", "boolean"]
+              description: AEM birthdate integration enabled
+            aem_loc_enabled:
+              type: ["null", "boolean"]
+              description: AEM location integration enabled
+
+    ConversionTagsList:
+      type: object
+      description: Paginated list of conversion tags
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConversionTag"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    CustomerList:
+      type: object
+      x-airbyte-entity-name: customer_lists
+      x-airbyte-stream-name: customer_lists
+      description: Pinterest customer list object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique customer list identifier
+        ad_account_id:
+          type: ["null", "string"]
+          description: Associated ad account ID
+        name:
+          type: ["null", "string"]
+          description: Customer list name
+        created_time:
+          type: ["null", "integer"]
+          description: Creation time (Unix seconds)
+        updated_time:
+          type: ["null", "integer"]
+          description: Last update time (Unix seconds)
+        num_batches:
+          type: ["null", "integer"]
+          description: Total number of list updates
+        num_removed_user_records:
+          type: ["null", "integer"]
+          description: Count of removed user records
+        num_uploaded_user_records:
+          type: ["null", "integer"]
+          description: Count of uploaded user records
+        status:
+          type: ["null", "string"]
+          description: Status (PROCESSING, READY, TOO_SMALL, UPLOADING)
+        type:
+          type: ["null", "string"]
+          description: Always 'customerlist'
+
+    CustomerListsList:
+      type: object
+      description: Paginated list of customer lists
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerList"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results
+
+    Keyword:
+      type: object
+      x-airbyte-entity-name: keywords
+      x-airbyte-stream-name: keywords
+      description: Pinterest keyword object
+      required:
+      - id
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Unique keyword identifier
+        archived:
+          type: ["null", "boolean"]
+          description: Whether the keyword is archived
+        parent_id:
+          type: ["null", "string"]
+          description: Parent entity ID
+        parent_type:
+          type: ["null", "string"]
+          description: Parent entity type
+        type:
+          type: ["null", "string"]
+          description: Always 'keyword'
+        bid:
+          type: ["null", "integer"]
+          description: Bid value in microcurrency
+        match_type:
+          type: ["null", "string"]
+          description: Match type (BROAD, PHRASE, EXACT, EXACT_NEGATIVE, PHRASE_NEGATIVE, BROAD_NEGATIVE)
+        value:
+          type: ["null", "string"]
+          description: Keyword text value
+
+    KeywordsList:
+      type: object
+      description: Paginated list of keywords
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Keyword"
+        bookmark:
+          type: ["null", "string"]
+          description: Cursor for next page of results

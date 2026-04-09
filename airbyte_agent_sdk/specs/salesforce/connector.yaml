@@ -1,0 +1,2935 @@
+# Salesforce CRM API Connector
+# OpenAPI 3.1 specification with Airbyte extensions
+
+openapi: 3.1.0
+
+info:
+  title: Salesforce CRM API Connector
+  version: 1.0.16
+  description: |
+    Salesforce is a cloud-based CRM platform that helps businesses manage customer
+    relationships, sales pipelines, and business operations. This connector provides
+    access to accounts, contacts, leads, opportunities, tasks, events, campaigns, cases,
+    notes, and attachments for sales analytics and customer relationship management.
+  x-airbyte-connector-name: salesforce
+  x-airbyte-connector-definition-id: b117307c-14b6-41aa-9422-947e34922962
+  x-airbyte-replication-version: "2.7.18"
+  x-airbyte-replication-compatibility: ">=2.7.18, <3.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Salesforce REST API Documentation
+      url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
+    - type: authentication_guide
+      title: Salesforce OAuth 2.0 Guide
+      url: https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_refresh_token_flow.htm
+    - type: rate_limits
+      title: API Request Limits
+      url: https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
+  x-airbyte-example-questions:
+    direct:
+      - "List recent contacts in my Salesforce account"
+      - "List open cases in my Salesforce account"
+      - "Show me the notes and attachments for a recent account"
+    search:
+      - "Show me my top 5 opportunities this month"
+      - "List all contacts from {company} in the last quarter"
+      - "Search for leads in the technology sector with revenue over $10M"
+      - "What trends can you identify in my recent sales pipeline?"
+      - "Summarize the open cases for my key accounts"
+      - "Find upcoming events related to my most important opportunities"
+      - "Analyze the performance of my recent marketing campaigns"
+      - "Identify the highest value opportunities I'm currently tracking"
+    unsupported:
+      - "Create a new lead for {person}"
+      - "Update the status of my sales opportunity"
+      - "Schedule a follow-up meeting with {customer}"
+      - "Delete this old contact record"
+      - "Send an email to all contacts in this campaign"
+  x-airbyte-skip-suggested-streams:
+    - Stage
+    - OpportunityStage
+    - User
+  x-airbyte-context-store:
+    disable_compaction: false
+    entities:
+      - entity: accounts
+        x-airbyte-name: Account
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the account record
+          - name: Name
+            type:
+              - "null"
+              - string
+            description: Name of the account or company
+          - name: AccountSource
+            type:
+              - "null"
+              - string
+            description: Source of the account record (e.g., Web, Referral)
+          - name: BillingAddress
+            type:
+              - "null"
+              - object
+            description: Complete billing address as a compound field
+          - name: BillingCity
+            type:
+              - "null"
+              - string
+            description: City portion of the billing address
+          - name: BillingCountry
+            type:
+              - "null"
+              - string
+            description: Country portion of the billing address
+          - name: BillingPostalCode
+            type:
+              - "null"
+              - string
+            description: Postal code portion of the billing address
+          - name: BillingState
+            type:
+              - "null"
+              - string
+            description: State or province portion of the billing address
+          - name: BillingStreet
+            type:
+              - "null"
+              - string
+            description: Street address portion of the billing address
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this account
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the account was created
+          - name: Description
+            type:
+              - "null"
+              - string
+            description: Text description of the account
+          - name: Industry
+            type:
+              - "null"
+              - string
+            description: Primary business industry of the account
+          - name: IsDeleted
+            type:
+              - "null"
+              - boolean
+            description: Whether the account has been moved to the Recycle Bin
+          - name: LastActivityDate
+            type:
+              - "null"
+              - string
+            description: Date of the last activity associated with this account
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this account
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the account was last modified
+          - name: NumberOfEmployees
+            type:
+              - "null"
+              - integer
+            description: Number of employees at the account
+          - name: OwnerId
+            type:
+              - "null"
+              - string
+            description: ID of the user who owns this account
+          - name: ParentId
+            type:
+              - "null"
+              - string
+            description: ID of the parent account, if this is a subsidiary
+          - name: Phone
+            type:
+              - "null"
+              - string
+            description: Primary phone number for the account
+          - name: ShippingAddress
+            type:
+              - "null"
+              - object
+            description: Complete shipping address as a compound field
+          - name: ShippingCity
+            type:
+              - "null"
+              - string
+            description: City portion of the shipping address
+          - name: ShippingCountry
+            type:
+              - "null"
+              - string
+            description: Country portion of the shipping address
+          - name: ShippingPostalCode
+            type:
+              - "null"
+              - string
+            description: Postal code portion of the shipping address
+          - name: ShippingState
+            type:
+              - "null"
+              - string
+            description: State or province portion of the shipping address
+          - name: ShippingStreet
+            type:
+              - "null"
+              - string
+            description: Street address portion of the shipping address
+          - name: Type
+            type:
+              - "null"
+              - string
+            description: Type of account (e.g., Customer, Partner, Competitor)
+          - name: Website
+            type:
+              - "null"
+              - string
+            description: Website URL for the account
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+      - entity: contacts
+        x-airbyte-name: Contact
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the contact record
+          - name: AccountId
+            type:
+              - "null"
+              - string
+            description: ID of the account this contact is associated with
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this contact
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the contact was created
+          - name: Department
+            type:
+              - "null"
+              - string
+            description: Department within the account where the contact works
+          - name: Email
+            type:
+              - "null"
+              - string
+            description: Email address of the contact
+          - name: FirstName
+            type:
+              - "null"
+              - string
+            description: First name of the contact
+          - name: IsDeleted
+            type:
+              - "null"
+              - boolean
+            description: Whether the contact has been moved to the Recycle Bin
+          - name: LastActivityDate
+            type:
+              - "null"
+              - string
+            description: Date of the last activity associated with this contact
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this contact
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the contact was last modified
+          - name: LastName
+            type:
+              - "null"
+              - string
+            description: Last name of the contact
+          - name: LeadSource
+            type:
+              - "null"
+              - string
+            description: Source from which this contact originated
+          - name: MailingAddress
+            type:
+              - "null"
+              - object
+            description: Complete mailing address as a compound field
+          - name: MailingCity
+            type:
+              - "null"
+              - string
+            description: City portion of the mailing address
+          - name: MailingCountry
+            type:
+              - "null"
+              - string
+            description: Country portion of the mailing address
+          - name: MailingPostalCode
+            type:
+              - "null"
+              - string
+            description: Postal code portion of the mailing address
+          - name: MailingState
+            type:
+              - "null"
+              - string
+            description: State or province portion of the mailing address
+          - name: MailingStreet
+            type:
+              - "null"
+              - string
+            description: Street address portion of the mailing address
+          - name: MobilePhone
+            type:
+              - "null"
+              - string
+            description: Mobile phone number of the contact
+          - name: Name
+            type:
+              - "null"
+              - string
+            description: Full name of the contact (read-only, concatenation of first and last name)
+          - name: OwnerId
+            type:
+              - "null"
+              - string
+            description: ID of the user who owns this contact
+          - name: Phone
+            type:
+              - "null"
+              - string
+            description: Business phone number of the contact
+          - name: ReportsToId
+            type:
+              - "null"
+              - string
+            description: ID of the contact this contact reports to
+          - name: Title
+            type:
+              - "null"
+              - string
+            description: Job title of the contact
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+      - entity: leads
+        x-airbyte-name: Lead
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the lead record
+          - name: Address
+            type:
+              - "null"
+              - object
+            description: Complete address as a compound field
+          - name: City
+            type:
+              - "null"
+              - string
+            description: City portion of the address
+          - name: Company
+            type:
+              - "null"
+              - string
+            description: Company or organization the lead works for
+          - name: ConvertedAccountId
+            type:
+              - "null"
+              - string
+            description: ID of the account created when lead was converted
+          - name: ConvertedContactId
+            type:
+              - "null"
+              - string
+            description: ID of the contact created when lead was converted
+          - name: ConvertedDate
+            type:
+              - "null"
+              - string
+            description: Date when the lead was converted
+          - name: ConvertedOpportunityId
+            type:
+              - "null"
+              - string
+            description: ID of the opportunity created when lead was converted
+          - name: Country
+            type:
+              - "null"
+              - string
+            description: Country portion of the address
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this lead
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the lead was created
+          - name: Email
+            type:
+              - "null"
+              - string
+            description: Email address of the lead
+          - name: FirstName
+            type:
+              - "null"
+              - string
+            description: First name of the lead
+          - name: Industry
+            type:
+              - "null"
+              - string
+            description: Industry the lead's company operates in
+          - name: IsConverted
+            type:
+              - "null"
+              - boolean
+            description: Whether the lead has been converted to an account, contact, and opportunity
+          - name: IsDeleted
+            type:
+              - "null"
+              - boolean
+            description: Whether the lead has been moved to the Recycle Bin
+          - name: LastActivityDate
+            type:
+              - "null"
+              - string
+            description: Date of the last activity associated with this lead
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this lead
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the lead was last modified
+          - name: LastName
+            type:
+              - "null"
+              - string
+            description: Last name of the lead
+          - name: LeadSource
+            type:
+              - "null"
+              - string
+            description: Source from which this lead originated
+          - name: MobilePhone
+            type:
+              - "null"
+              - string
+            description: Mobile phone number of the lead
+          - name: Name
+            type:
+              - "null"
+              - string
+            description: Full name of the lead (read-only, concatenation of first and last name)
+          - name: NumberOfEmployees
+            type:
+              - "null"
+              - integer
+            description: Number of employees at the lead's company
+          - name: OwnerId
+            type:
+              - "null"
+              - string
+            description: ID of the user who owns this lead
+          - name: Phone
+            type:
+              - "null"
+              - string
+            description: Phone number of the lead
+          - name: PostalCode
+            type:
+              - "null"
+              - string
+            description: Postal code portion of the address
+          - name: Rating
+            type:
+              - "null"
+              - string
+            description: Rating of the lead (e.g., Hot, Warm, Cold)
+          - name: State
+            type:
+              - "null"
+              - string
+            description: State or province portion of the address
+          - name: Status
+            type:
+              - "null"
+              - string
+            description: Current status of the lead in the sales process
+          - name: Street
+            type:
+              - "null"
+              - string
+            description: Street address portion of the address
+          - name: Title
+            type:
+              - "null"
+              - string
+            description: Job title of the lead
+          - name: Website
+            type:
+              - "null"
+              - string
+            description: Website URL for the lead's company
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+      - entity: opportunities
+        x-airbyte-name: Opportunity
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the opportunity record
+          - name: AccountId
+            type:
+              - "null"
+              - string
+            description: ID of the account associated with this opportunity
+          - name: Amount
+            type:
+              - "null"
+              - number
+            description: Estimated total sale amount
+          - name: CampaignId
+            type:
+              - "null"
+              - string
+            description: ID of the campaign that generated this opportunity
+          - name: CloseDate
+            type:
+              - "null"
+              - string
+            description: Expected close date for the opportunity
+          - name: ContactId
+            type:
+              - "null"
+              - string
+            description: ID of the primary contact for this opportunity
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this opportunity
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the opportunity was created
+          - name: Description
+            type:
+              - "null"
+              - string
+            description: Text description of the opportunity
+          - name: ExpectedRevenue
+            type:
+              - "null"
+              - number
+            description: Expected revenue based on amount and probability
+          - name: ForecastCategory
+            type:
+              - "null"
+              - string
+            description: Forecast category for this opportunity
+          - name: ForecastCategoryName
+            type:
+              - "null"
+              - string
+            description: Name of the forecast category
+          - name: IsClosed
+            type:
+              - "null"
+              - boolean
+            description: Whether the opportunity is closed
+          - name: IsDeleted
+            type:
+              - "null"
+              - boolean
+            description: Whether the opportunity has been moved to the Recycle Bin
+          - name: IsWon
+            type:
+              - "null"
+              - boolean
+            description: Whether the opportunity was won
+          - name: LastActivityDate
+            type:
+              - "null"
+              - string
+            description: Date of the last activity associated with this opportunity
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this opportunity
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the opportunity was last modified
+          - name: LeadSource
+            type:
+              - "null"
+              - string
+            description: Source from which this opportunity originated
+          - name: Name
+            type:
+              - "null"
+              - string
+            description: Name of the opportunity
+          - name: NextStep
+            type:
+              - "null"
+              - string
+            description: Description of the next step in closing the opportunity
+          - name: OwnerId
+            type:
+              - "null"
+              - string
+            description: ID of the user who owns this opportunity
+          - name: Probability
+            type:
+              - "null"
+              - number
+            description: Likelihood of closing the opportunity (percentage)
+          - name: StageName
+            type:
+              - "null"
+              - string
+            description: Current stage of the opportunity in the sales process
+          - name: Type
+            type:
+              - "null"
+              - string
+            description: Type of opportunity (e.g., New Business, Existing Business)
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+      - entity: tasks
+        x-airbyte-name: Task
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the task record
+          - name: AccountId
+            type:
+              - "null"
+              - string
+            description: ID of the account associated with this task
+          - name: ActivityDate
+            type:
+              - "null"
+              - string
+            description: Due date for the task
+          - name: CallDisposition
+            type:
+              - "null"
+              - string
+            description: Result of the call, if this task represents a call
+          - name: CallDurationInSeconds
+            type:
+              - "null"
+              - integer
+            description: Duration of the call in seconds
+          - name: CallType
+            type:
+              - "null"
+              - string
+            description: Type of call (Inbound, Outbound, Internal)
+          - name: CompletedDateTime
+            type:
+              - "null"
+              - string
+            description: Date and time when the task was completed
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this task
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the task was created
+          - name: Description
+            type:
+              - "null"
+              - string
+            description: Text description or notes about the task
+          - name: IsClosed
+            type:
+              - "null"
+              - boolean
+            description: Whether the task has been completed
+          - name: IsDeleted
+            type:
+              - "null"
+              - boolean
+            description: Whether the task has been moved to the Recycle Bin
+          - name: IsHighPriority
+            type:
+              - "null"
+              - boolean
+            description: Whether the task is marked as high priority
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this task
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the task was last modified
+          - name: OwnerId
+            type:
+              - "null"
+              - string
+            description: ID of the user who owns this task
+          - name: Priority
+            type:
+              - "null"
+              - string
+            description: Priority level of the task (High, Normal, Low)
+          - name: Status
+            type:
+              - "null"
+              - string
+            description: Current status of the task
+          - name: Subject
+            type:
+              - "null"
+              - string
+            description: Subject or title of the task
+          - name: TaskSubtype
+            type:
+              - "null"
+              - string
+            description: Subtype of the task (e.g., Call, Email, Task)
+          - name: Type
+            type:
+              - "null"
+              - string
+            description: Type of task
+          - name: WhatId
+            type:
+              - "null"
+              - string
+            description: ID of the related object (Account, Opportunity, etc.)
+          - name: WhoId
+            type:
+              - "null"
+              - string
+            description: ID of the related person (Contact or Lead)
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+      - entity: users
+        x-airbyte-name: User
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the user record
+          - name: AccountId
+            type:
+              - "null"
+              - string
+            description: ID of the account associated with this user (for portal users)
+          - name: Alias
+            type:
+              - "null"
+              - string
+            description: Short name used to identify the user in list views and reports
+          - name: City
+            type:
+              - "null"
+              - string
+            description: City portion of the user's address
+          - name: CompanyName
+            type:
+              - "null"
+              - string
+            description: Name of the user's company
+          - name: ContactId
+            type:
+              - "null"
+              - string
+            description: ID of the contact associated with this user (for portal users)
+          - name: Country
+            type:
+              - "null"
+              - string
+            description: Country portion of the user's address
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this user record
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the user was created
+          - name: Department
+            type:
+              - "null"
+              - string
+            description: Department within the organization
+          - name: Division
+            type:
+              - "null"
+              - string
+            description: Division within the organization
+          - name: Email
+            type:
+              - "null"
+              - string
+            description: Email address of the user
+          - name: EmployeeNumber
+            type:
+              - "null"
+              - string
+            description: Employee number or ID assigned by the organization
+          - name: FirstName
+            type:
+              - "null"
+              - string
+            description: First name of the user
+          - name: IsActive
+            type:
+              - "null"
+              - boolean
+            description: Whether the user is active and can log in
+          - name: LastLoginDate
+            type:
+              - "null"
+              - string
+            description: Date and time of the user's most recent login
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this user record
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the user was last modified
+          - name: LastName
+            type:
+              - "null"
+              - string
+            description: Last name of the user
+          - name: ManagerId
+            type:
+              - "null"
+              - string
+            description: ID of the user's manager
+          - name: MobilePhone
+            type:
+              - "null"
+              - string
+            description: Mobile phone number of the user
+          - name: Name
+            type:
+              - "null"
+              - string
+            description: Full name of the user
+          - name: Phone
+            type:
+              - "null"
+              - string
+            description: Business phone number of the user
+          - name: PostalCode
+            type:
+              - "null"
+              - string
+            description: Postal code portion of the user's address
+          - name: ProfileId
+            type:
+              - "null"
+              - string
+            description: ID of the user's profile
+          - name: State
+            type:
+              - "null"
+              - string
+            description: State or province portion of the user's address
+          - name: Street
+            type:
+              - "null"
+              - string
+            description: Street address of the user
+          - name: Title
+            type:
+              - "null"
+              - string
+            description: Job title of the user
+          - name: UserRoleId
+            type:
+              - "null"
+              - string
+            description: ID of the user's role in the organization
+          - name: UserType
+            type:
+              - "null"
+              - string
+            description: Type of user license (e.g., Standard, PowerPartner)
+          - name: Username
+            type:
+              - "null"
+              - string
+            description: Username for logging into Salesforce (unique across all orgs)
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+      - entity: opportunity_stages
+        x-airbyte-name: OpportunityStage
+        fields:
+          - name: Id
+            type:
+              - string
+            description: Unique identifier for the opportunity stage record
+          - name: ApiName
+            type:
+              - "null"
+              - string
+            description: API name of the stage used in code and integrations
+          - name: CreatedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who created this stage
+          - name: CreatedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the stage was created
+          - name: DefaultProbability
+            type:
+              - "null"
+              - number
+            description: Default probability percentage for opportunities at this stage
+          - name: Description
+            type:
+              - "null"
+              - string
+            description: Description of the stage
+          - name: ForecastCategory
+            type:
+              - "null"
+              - string
+            description: Forecast category for opportunities at this stage
+          - name: ForecastCategoryName
+            type:
+              - "null"
+              - string
+            description: Display name of the forecast category
+          - name: IsActive
+            type:
+              - "null"
+              - boolean
+            description: Whether the stage is currently active and can be used
+          - name: IsClosed
+            type:
+              - "null"
+              - boolean
+            description: Whether opportunities at this stage are considered closed
+          - name: IsWon
+            type:
+              - "null"
+              - boolean
+            description: Whether opportunities at this stage are considered won
+          - name: LastModifiedById
+            type:
+              - "null"
+              - string
+            description: ID of the user who last modified this stage
+          - name: LastModifiedDate
+            type:
+              - "null"
+              - string
+            description: Date and time when the stage was last modified
+          - name: MasterLabel
+            type:
+              - "null"
+              - string
+            description: Display label for the stage
+          - name: SortOrder
+            type:
+              - "null"
+              - integer
+            description: Order in which the stage appears in the sales process
+          - name: SystemModstamp
+            type:
+              - "null"
+              - string
+            description: System timestamp when the record was last modified
+
+servers:
+  - url: "{instance_url}/services/data/v59.0"
+    description: Salesforce REST API
+    variables:
+      instance_url:
+        default: https://login.salesforce.com
+        description: Your Salesforce instance URL (e.g., https://na1.salesforce.com)
+
+security:
+  - oauth2: []
+
+paths:
+  # ============================================
+  # HEALTH CHECK Resource
+  # ============================================
+  /sobjects:
+    get:
+      summary: List available Salesforce objects
+      description: |
+        Returns a list of all available Salesforce objects (sObjects) in the organization.
+        This endpoint is used for health checks to verify authentication and connectivity.
+      operationId: listSObjects
+      x-airbyte-entity: sobjects
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.sobjects
+      tags:
+        - Health Check
+      responses:
+        "200":
+          description: List of available Salesforce objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SObjectsResponse"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # ACCOUNTS Resource
+  # ============================================
+  /query:accounts:
+    get:
+      summary: List accounts
+      description: |
+        Returns a list of accounts via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listAccounts
+      x-airbyte-entity: accounts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Accounts
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for accounts. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Account ORDER BY LastModifiedDate DESC LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Account ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing accounts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Account/{id}:
+    get:
+      summary: Get an account
+      description: |
+        Get a single account by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: get
+      tags:
+        - Accounts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Account ID (18-character ID starting with '001')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Name,Industry,AnnualRevenue,Website"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        "404":
+          description: Account not found
+        "401":
+          description: Unauthorized
+
+  /search:accounts:
+    get:
+      summary: Search accounts
+      description: |
+        Search for accounts using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields and objects.
+        Use SOQL (list action) for structured queries with specific field conditions.
+      operationId: searchAccounts
+      x-airbyte-entity: accounts
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Accounts
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} IN scope RETURNING Object(fields) [LIMIT n]
+            Examples:
+            - "FIND {Acme} IN ALL FIELDS RETURNING Account(Id,Name)"
+            - "FIND {tech*} IN NAME FIELDS RETURNING Account(Id,Name,Industry) LIMIT 50"
+            - "FIND {\"exact phrase\"} RETURNING Account(Id,Name,Website)"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # CONTACTS Resource
+  # ============================================
+  /query:contacts:
+    get:
+      summary: List contacts
+      description: |
+        Returns a list of contacts via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Contacts
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for contacts. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Contact WHERE AccountId = '001xx...' LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Contact ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Contact/{id}:
+    get:
+      summary: Get a contact
+      description: |
+        Get a single contact by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: get
+      tags:
+        - Contacts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Contact ID (18-character ID starting with '003')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,FirstName,LastName,Email,Phone,AccountId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Contact object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+
+  /search:contacts:
+    get:
+      summary: Search contacts
+      description: |
+        Search for contacts using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Contacts
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Contact(fields) [LIMIT n]
+            Examples:
+            - "FIND {John} IN NAME FIELDS RETURNING Contact(Id,FirstName,LastName,Email)"
+            - "FIND {*@example.com} IN EMAIL FIELDS RETURNING Contact(Id,Name,Email) LIMIT 25"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # LEADS Resource
+  # ============================================
+  /query:leads:
+    get:
+      summary: List leads
+      description: |
+        Returns a list of leads via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listLeads
+      x-airbyte-entity: leads
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Leads
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for leads. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Lead WHERE Status = 'Open' LIMIT 100"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Lead ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing leads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Lead/{id}:
+    get:
+      summary: Get a lead
+      description: |
+        Get a single lead by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getLead
+      x-airbyte-entity: leads
+      x-airbyte-action: get
+      tags:
+        - Leads
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Lead ID (18-character ID starting with '00Q')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,FirstName,LastName,Email,Company,Status,LeadSource"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lead object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "404":
+          description: Lead not found
+        "401":
+          description: Unauthorized
+
+  /search:leads:
+    get:
+      summary: Search leads
+      description: |
+        Search for leads using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchLeads
+      x-airbyte-entity: leads
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Leads
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Lead(fields) [LIMIT n]
+            Examples:
+            - "FIND {Smith} IN NAME FIELDS RETURNING Lead(Id,FirstName,LastName,Company,Status)"
+            - "FIND {marketing} IN ALL FIELDS RETURNING Lead(Id,Name,LeadSource) LIMIT 50"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # OPPORTUNITIES Resource
+  # ============================================
+  /query:opportunities:
+    get:
+      summary: List opportunities
+      description: |
+        Returns a list of opportunities via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listOpportunities
+      x-airbyte-entity: opportunities
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Opportunities
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for opportunities. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Opportunity WHERE StageName = 'Closed Won' LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Opportunity ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing opportunities
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpportunityQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Opportunity/{id}:
+    get:
+      summary: Get an opportunity
+      description: |
+        Get a single opportunity by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getOpportunity
+      x-airbyte-entity: opportunities
+      x-airbyte-action: get
+      tags:
+        - Opportunities
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Opportunity ID (18-character ID starting with '006')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Name,Amount,StageName,CloseDate,AccountId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Opportunity object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Opportunity"
+        "404":
+          description: Opportunity not found
+        "401":
+          description: Unauthorized
+
+  /search:opportunities:
+    get:
+      summary: Search opportunities
+      description: |
+        Search for opportunities using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchOpportunities
+      x-airbyte-entity: opportunities
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Opportunities
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Opportunity(fields) [LIMIT n]
+            Examples:
+            - "FIND {Enterprise} IN NAME FIELDS RETURNING Opportunity(Id,Name,Amount,StageName)"
+            - "FIND {renewal} IN ALL FIELDS RETURNING Opportunity(Id,Name,CloseDate) LIMIT 25"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # TASKS Resource
+  # ============================================
+  /query:tasks:
+    get:
+      summary: List tasks
+      description: |
+        Returns a list of tasks via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listTasks
+      x-airbyte-entity: tasks
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Tasks
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for tasks. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Task WHERE Status = 'Not Started' LIMIT 100"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Task ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing tasks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Task/{id}:
+    get:
+      summary: Get a task
+      description: |
+        Get a single task by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: get
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Task ID (18-character ID starting with '00T')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Subject,Status,Priority,ActivityDate,WhoId,WhatId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Task not found
+        "401":
+          description: Unauthorized
+
+  /search:tasks:
+    get:
+      summary: Search tasks
+      description: |
+        Search for tasks using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchTasks
+      x-airbyte-entity: tasks
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Tasks
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Task(fields) [LIMIT n]
+            Examples:
+            - "FIND {follow up} IN ALL FIELDS RETURNING Task(Id,Subject,Status,Priority)"
+            - "FIND {call} IN NAME FIELDS RETURNING Task(Id,Subject,ActivityDate) LIMIT 50"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # EVENTS Resource
+  # ============================================
+  /query:events:
+    get:
+      summary: List events
+      description: |
+        Returns a list of events via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listEvents
+      x-airbyte-entity: events
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Events
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for events. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Event WHERE StartDateTime > TODAY LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Event ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Event/{id}:
+    get:
+      summary: Get an event
+      description: |
+        Get a single event by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getEvent
+      x-airbyte-entity: events
+      x-airbyte-action: get
+      tags:
+        - Events
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Event ID (18-character ID starting with '00U')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Subject,StartDateTime,EndDateTime,Location,WhoId,WhatId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Event object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "404":
+          description: Event not found
+        "401":
+          description: Unauthorized
+
+  /search:events:
+    get:
+      summary: Search events
+      description: |
+        Search for events using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchEvents
+      x-airbyte-entity: events
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Events
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Event(fields) [LIMIT n]
+            Examples:
+            - "FIND {meeting} IN ALL FIELDS RETURNING Event(Id,Subject,StartDateTime,Location)"
+            - "FIND {demo} IN NAME FIELDS RETURNING Event(Id,Subject,EndDateTime) LIMIT 25"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # CAMPAIGNS Resource
+  # ============================================
+  /query:campaigns:
+    get:
+      summary: List campaigns
+      description: |
+        Returns a list of campaigns via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Campaigns
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for campaigns. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Campaign WHERE IsActive = true LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Campaign ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing campaigns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Campaign/{id}:
+    get:
+      summary: Get a campaign
+      description: |
+        Get a single campaign by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getCampaign
+      x-airbyte-entity: campaigns
+      x-airbyte-action: get
+      tags:
+        - Campaigns
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Campaign ID (18-character ID starting with '701')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Name,Type,Status,StartDate,EndDate,IsActive"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Campaign object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Campaign"
+        "404":
+          description: Campaign not found
+        "401":
+          description: Unauthorized
+
+  /search:campaigns:
+    get:
+      summary: Search campaigns
+      description: |
+        Search for campaigns using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Campaigns
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Campaign(fields) [LIMIT n]
+            Examples:
+            - "FIND {webinar} IN ALL FIELDS RETURNING Campaign(Id,Name,Type,Status)"
+            - "FIND {2024} IN NAME FIELDS RETURNING Campaign(Id,Name,StartDate,IsActive) LIMIT 50"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # CASES Resource
+  # ============================================
+  /query:cases:
+    get:
+      summary: List cases
+      description: |
+        Returns a list of cases via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listCases
+      x-airbyte-entity: cases
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Cases
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for cases. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Case WHERE Status = 'New' LIMIT 100"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Case ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing cases
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Case/{id}:
+    get:
+      summary: Get a case
+      description: |
+        Get a single case by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getCase
+      x-airbyte-entity: cases
+      x-airbyte-action: get
+      tags:
+        - Cases
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Case ID (18-character ID starting with '500')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,CaseNumber,Subject,Status,Priority,ContactId,AccountId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Case object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "404":
+          description: Case not found
+        "401":
+          description: Unauthorized
+
+  /search:cases:
+    get:
+      summary: Search cases
+      description: |
+        Search for cases using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchCases
+      x-airbyte-entity: cases
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Cases
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Case(fields) [LIMIT n]
+            Examples:
+            - "FIND {login issue} IN ALL FIELDS RETURNING Case(Id,CaseNumber,Subject,Status)"
+            - "FIND {urgent} IN NAME FIELDS RETURNING Case(Id,Subject,Priority) LIMIT 25"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # NOTES Resource
+  # ============================================
+  /query:notes:
+    get:
+      summary: List notes
+      description: |
+        Returns a list of notes via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: listNotes
+      x-airbyte-entity: notes
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Notes
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for notes. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT FIELDS(STANDARD) FROM Note WHERE ParentId = '001xx...' LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT FIELDS(STANDARD) FROM Note ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing notes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoteQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Note/{id}:
+    get:
+      summary: Get a note
+      description: |
+        Get a single note by ID. Returns all accessible fields by default.
+        Use the `fields` parameter to retrieve only specific fields for better performance.
+      operationId: getNote
+      x-airbyte-entity: notes
+      x-airbyte-action: get
+      tags:
+        - Notes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Note ID (18-character ID starting with '002')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Title,Body,ParentId,OwnerId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Note object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "404":
+          description: Note not found
+        "401":
+          description: Unauthorized
+
+  /search:notes:
+    get:
+      summary: Search notes
+      description: |
+        Search for notes using SOSL (Salesforce Object Search Language).
+        SOSL is optimized for text-based searches across multiple fields.
+      operationId: searchNotes
+      x-airbyte-entity: notes
+      x-airbyte-action: api_search
+      x-airbyte-path-override:
+        path: /search
+      tags:
+        - Notes
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOSL search query. Format: FIND {searchTerm} RETURNING Note(fields) [LIMIT n]
+            Examples:
+            - "FIND {important} IN ALL FIELDS RETURNING Note(Id,Title,ParentId)"
+            - "FIND {action items} IN NAME FIELDS RETURNING Note(Id,Title,Body) LIMIT 50"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # CONTENT VERSIONS Resource (Salesforce Files)
+  # ============================================
+  /query:content_versions:
+    get:
+      summary: List content versions
+      description: |
+        Returns a list of content versions (file metadata) via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+        Note: ContentVersion does not support FIELDS(STANDARD), so specific fields must be listed.
+      operationId: listContentVersions
+      x-airbyte-entity: content_versions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Content Versions
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for content versions. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT Id, Title, FileExtension, ContentSize FROM ContentVersion WHERE IsLatest = true LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT Id, Title, FileExtension, ContentSize, ContentDocumentId, VersionNumber, IsLatest, CreatedDate, LastModifiedDate FROM ContentVersion ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing content versions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentVersionQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/ContentVersion/{id}:
+    get:
+      summary: Get a content version
+      description: |
+        Get a single content version's metadata by ID. Returns file metadata, not the file content.
+        Use the download action to retrieve the actual file binary.
+      operationId: getContentVersion
+      x-airbyte-entity: content_versions
+      x-airbyte-action: get
+      tags:
+        - Content Versions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce ContentVersion ID (18-character ID starting with '068')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Title,FileExtension,ContentSize,ContentDocumentId,IsLatest"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ContentVersion object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentVersion"
+        "404":
+          description: ContentVersion not found
+        "401":
+          description: Unauthorized
+
+  /sobjects/ContentVersion/{id}/VersionData:
+    get:
+      summary: Download content version file
+      description: |
+        Downloads the binary file content of a content version.
+        First use the list or get action to retrieve the ContentVersion ID and file metadata (size, type, etc.),
+        then use this action to download the actual file content.
+        The response is the raw binary file data.
+      operationId: downloadContentVersion
+      x-airbyte-entity: content_versions
+      x-airbyte-action: download
+      tags:
+        - Content Versions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: |
+            Salesforce ContentVersion ID (18-character ID starting with '068').
+            Obtain this ID from the list or get action.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Binary file content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: ContentVersion not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # ATTACHMENTS Resource (Legacy)
+  # ============================================
+  /query:attachments:
+    get:
+      summary: List attachments
+      description: |
+        Returns a list of attachments (legacy) via SOQL query. Default returns up to 200 records.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+        Note: Attachments are a legacy feature; consider using ContentVersion (Salesforce Files) for new implementations.
+      operationId: listAttachments
+      x-airbyte-entity: attachments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      x-airbyte-path-override:
+        path: /query
+      tags:
+        - Attachments
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query for attachments. Default returns up to 200 records.
+            To change the limit, provide your own query with a LIMIT clause.
+            Example: "SELECT Id, Name, ContentType, BodyLength, ParentId FROM Attachment WHERE ParentId = '001xx...' LIMIT 50"
+          schema:
+            type: string
+            default: "SELECT Id, Name, ContentType, BodyLength, ParentId, CreatedDate, LastModifiedDate FROM Attachment ORDER BY LastModifiedDate DESC LIMIT 200"
+      responses:
+        "200":
+          description: Query results containing attachments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachmentQueryResult"
+        "401":
+          description: Unauthorized
+
+  /sobjects/Attachment/{id}:
+    get:
+      summary: Get an attachment
+      description: |
+        Get a single attachment's metadata by ID. Returns file metadata, not the file content.
+        Use the download action to retrieve the actual file binary.
+        Note: Attachments are a legacy feature; consider using ContentVersion for new implementations.
+      operationId: getAttachment
+      x-airbyte-entity: attachments
+      x-airbyte-action: get
+      tags:
+        - Attachments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Salesforce Attachment ID (18-character ID starting with '00P')
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |
+            Comma-separated list of fields to retrieve. If omitted, returns all accessible fields.
+            Example: "Id,Name,ContentType,BodyLength,ParentId"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Attachment object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Attachment"
+        "404":
+          description: Attachment not found
+        "401":
+          description: Unauthorized
+
+  /sobjects/Attachment/{id}/Body:
+    get:
+      summary: Download attachment file
+      description: |
+        Downloads the binary file content of an attachment (legacy).
+        First use the list or get action to retrieve the Attachment ID and file metadata,
+        then use this action to download the actual file content.
+        Note: Attachments are a legacy feature; consider using ContentVersion for new implementations.
+      operationId: downloadAttachment
+      x-airbyte-entity: attachments
+      x-airbyte-action: download
+      tags:
+        - Attachments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: |
+            Salesforce Attachment ID (18-character ID starting with '00P').
+            Obtain this ID from the list or get action.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Binary file content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Attachment not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # GENERIC QUERY Resource
+  # ============================================
+  /query:
+    get:
+      summary: Execute SOQL query
+      description: |
+        Execute a custom SOQL query and return results. Use this for querying any Salesforce object.
+        For pagination, check the response: if `done` is false, use `nextRecordsUrl` to fetch the next page.
+      operationId: executeQuery
+      x-airbyte-entity: query
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      x-airbyte-meta-extractor:
+        done: $.done
+        nextRecordsUrl: $.nextRecordsUrl
+      tags:
+        - Query
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: |
+            SOQL query string. Include LIMIT clause to control the number of records returned.
+            Examples:
+            - "SELECT Id, Name FROM Account LIMIT 100"
+            - "SELECT FIELDS(STANDARD) FROM Contact WHERE AccountId = '001xx...' LIMIT 50"
+            - "SELECT Id, Subject, Status FROM Case WHERE CreatedDate = TODAY"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryResult"
+        "400":
+          description: Invalid query
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Salesforce OAuth 2.0 authentication via Connected App
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+          tokenUrl: https://login.salesforce.com/services/oauth2/token
+          refreshUrl: https://login.salesforce.com/services/oauth2/token
+          scopes:
+            api: Access and manage your data
+            refresh_token: Perform requests on your behalf at any time
+      x-airbyte-token-refresh:
+        auth_style: body
+        body_format: form
+      x-airbyte-token-extract:
+        - instance_url
+      x-airbyte-auth-config:
+        title: "Salesforce OAuth 2.0"
+        type: object
+        required:
+          - refresh_token
+        properties:
+          refresh_token:
+            type: string
+            title: "Refresh Token"
+            description: "OAuth refresh token for automatic token renewal"
+          client_id:
+            type: string
+            title: "Client ID"
+            description: "Connected App Consumer Key"
+          client_secret:
+            type: string
+            title: "Client Secret"
+            description: "Connected App Consumer Secret"
+        auth_mapping:
+          refresh_token: "${refresh_token}"
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+        replication_auth_key_mapping:
+          client_id: "client_id"
+          client_secret: "client_secret"
+          refresh_token: "refresh_token"
+
+  schemas:
+    # ============================================
+    # Health Check Schemas
+    # ============================================
+    SObject:
+      type: object
+      x-airbyte-entity-name: sobjects
+      description: Salesforce sObject metadata
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          description: API name of the sObject
+        label:
+          type:
+            - "null"
+            - string
+          description: User-friendly label for the sObject
+        labelPlural:
+          type:
+            - "null"
+            - string
+          description: Plural label for the sObject
+        keyPrefix:
+          type:
+            - "null"
+            - string
+          description: Three-character prefix for record IDs
+        custom:
+          type:
+            - "null"
+            - boolean
+          description: Whether this is a custom object
+        queryable:
+          type:
+            - "null"
+            - boolean
+          description: Whether the object can be queried
+        searchable:
+          type:
+            - "null"
+            - boolean
+          description: Whether the object can be searched
+        createable:
+          type:
+            - "null"
+            - boolean
+          description: Whether records can be created
+        updateable:
+          type:
+            - "null"
+            - boolean
+          description: Whether records can be updated
+        deletable:
+          type:
+            - "null"
+            - boolean
+          description: Whether records can be deleted
+        urls:
+          type:
+            - "null"
+            - object
+          description: URLs for various operations on this object
+
+    SObjectsResponse:
+      type: object
+      description: Response from the sobjects endpoint listing all available Salesforce objects
+      properties:
+        encoding:
+          type:
+            - "null"
+            - string
+          description: Character encoding used
+        maxBatchSize:
+          type:
+            - "null"
+            - integer
+          description: Maximum batch size for operations
+        sobjects:
+          type: array
+          description: List of available Salesforce objects
+          items:
+            $ref: "#/components/schemas/SObject"
+
+    # ============================================
+    # Account Schemas
+    # ============================================
+    Account:
+      type: object
+      x-airbyte-entity-name: accounts
+      description: Salesforce Account object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+          description: Unique identifier
+        Name:
+          type: string
+          description: Account name
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    AccountQueryResult:
+      type: object
+      description: SOQL query result for accounts
+      properties:
+        totalSize:
+          type: integer
+          description: Total number of records
+        done:
+          type: boolean
+          description: Whether all records have been returned
+        nextRecordsUrl:
+          type: string
+          description: URL to fetch next page of results
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+
+    # ============================================
+    # Contact Schemas
+    # ============================================
+    Contact:
+      type: object
+      x-airbyte-entity-name: contacts
+      description: Salesforce Contact object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    ContactQueryResult:
+      type: object
+      description: SOQL query result for contacts
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Contact"
+
+    # ============================================
+    # Lead Schemas
+    # ============================================
+    Lead:
+      type: object
+      x-airbyte-entity-name: leads
+      description: Salesforce Lead object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    LeadQueryResult:
+      type: object
+      description: SOQL query result for leads
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lead"
+
+    # ============================================
+    # Opportunity Schemas
+    # ============================================
+    Opportunity:
+      type: object
+      x-airbyte-entity-name: opportunities
+      description: Salesforce Opportunity object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    OpportunityQueryResult:
+      type: object
+      description: SOQL query result for opportunities
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Opportunity"
+
+    # ============================================
+    # Task Schemas
+    # ============================================
+    Task:
+      type: object
+      x-airbyte-entity-name: tasks
+      description: Salesforce Task object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Subject:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    TaskQueryResult:
+      type: object
+      description: SOQL query result for tasks
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+
+    # ============================================
+    # Event Schemas
+    # ============================================
+    Event:
+      type: object
+      x-airbyte-entity-name: events
+      description: Salesforce Event object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Subject:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    EventQueryResult:
+      type: object
+      description: SOQL query result for events
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+
+    # ============================================
+    # Campaign Schemas
+    # ============================================
+    Campaign:
+      type: object
+      x-airbyte-entity-name: campaigns
+      description: Salesforce Campaign object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    CampaignQueryResult:
+      type: object
+      description: SOQL query result for campaigns
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Campaign"
+
+    # ============================================
+    # Case Schemas
+    # ============================================
+    Case:
+      type: object
+      x-airbyte-entity-name: cases
+      description: Salesforce Case object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        CaseNumber:
+          type: string
+        Subject:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    CaseQueryResult:
+      type: object
+      description: SOQL query result for cases
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Case"
+
+    # ============================================
+    # Note Schemas
+    # ============================================
+    Note:
+      type: object
+      x-airbyte-entity-name: notes
+      description: Salesforce Note object - uses FIELDS(STANDARD) so all standard fields are returned
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+        Title:
+          type: string
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    NoteQueryResult:
+      type: object
+      description: SOQL query result for notes
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
+
+    # ============================================
+    # ContentVersion Schemas (Salesforce Files)
+    # ============================================
+    ContentVersion:
+      type: object
+      x-airbyte-entity-name: content_versions
+      description: Salesforce ContentVersion object - represents a file version in Salesforce Files
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+          description: Unique identifier
+        Title:
+          type: string
+          description: File title/name
+        FileExtension:
+          type: string
+          description: File extension (e.g., pdf, docx)
+        ContentSize:
+          type: integer
+          description: File size in bytes
+        ContentDocumentId:
+          type: string
+          description: ID of the parent ContentDocument
+        VersionNumber:
+          type: string
+          description: Version number of the file
+        IsLatest:
+          type: boolean
+          description: Whether this is the latest version
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    ContentVersionQueryResult:
+      type: object
+      description: SOQL query result for content versions
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContentVersion"
+
+    # ============================================
+    # Attachment Schemas (Legacy)
+    # ============================================
+    Attachment:
+      type: object
+      x-airbyte-entity-name: attachments
+      description: Salesforce Attachment object - legacy file attachment on a record
+      additionalProperties: true
+      properties:
+        Id:
+          type: string
+          description: Unique identifier
+        Name:
+          type: string
+          description: File name
+        ContentType:
+          type: string
+          description: MIME type of the file
+        BodyLength:
+          type: integer
+          description: File size in bytes
+        ParentId:
+          type: string
+          description: ID of the parent record this attachment is attached to
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+
+    AttachmentQueryResult:
+      type: object
+      description: SOQL query result for attachments
+      properties:
+        totalSize:
+          type: integer
+        done:
+          type: boolean
+        nextRecordsUrl:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+
+    # ============================================
+    # Generic Query Result
+    # ============================================
+    QueryResult:
+      type: object
+      x-airbyte-entity-name: query
+      description: Generic SOQL query result
+      properties:
+        totalSize:
+          type: integer
+          description: Total number of records matching the query
+        done:
+          type: boolean
+          description: Whether all records have been returned
+        nextRecordsUrl:
+          type: string
+          description: URL to fetch next page of results (if done is false)
+        records:
+          type: array
+          description: Array of record objects
+          items:
+            type: object
+            additionalProperties: true
+
+    # ============================================
+    # Search Result
+    # ============================================
+    SearchResult:
+      type: object
+      description: SOSL search result
+      properties:
+        searchRecords:
+          type: array
+          description: Array of search result records
+          items:
+            type: object
+            properties:
+              Id:
+                type: string
+              attributes:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  url:
+                    type: string
+            additionalProperties: true

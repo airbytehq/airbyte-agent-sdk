@@ -1,0 +1,2066 @@
+$defs:
+  AuthConfigSpec:
+    additionalProperties: false
+    description: 'Airbyte auth configuration extension (x-airbyte-auth-config).
+
+
+      Defines user-facing authentication configuration and how it maps to
+
+      the underlying OpenAPI security scheme.
+
+
+      For multiple authentication methods, define separate security schemes
+
+      rather than using oneOf within a single scheme.'
+    properties:
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      type:
+        anyOf:
+        - const: object
+          type: string
+        - type: 'null'
+        default: null
+        title: Type
+      required:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        title: Required
+      properties:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/AuthConfigFieldSpec'
+          type: object
+        - type: 'null'
+        default: null
+        title: Properties
+      auth_mapping:
+        anyOf:
+        - additionalProperties:
+            type: string
+          type: object
+        - type: 'null'
+        default: null
+        title: Auth Mapping
+      replication_auth_key_mapping:
+        anyOf:
+        - additionalProperties:
+            type: string
+          type: object
+        - type: 'null'
+        default: null
+        description: Mapping from source config paths (e.g., 'credentials.api_key')
+          to auth config keys for direct connectors
+        title: Replication Auth Key Mapping
+      additional_headers:
+        anyOf:
+        - additionalProperties:
+            type: string
+          type: object
+        - type: 'null'
+        default: null
+        description: 'Extra headers to inject with auth. Values support Jinja2 {{
+          variable }} template syntax to reference secrets. Example: {''Amazon-Advertising-API-ClientId'':
+          ''{{ client_id }}''}'
+        title: Additional Headers
+      replication_auth_key_constants:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        description: 'Constant values to always inject at source config paths (e.g.,
+          ''credentials.auth_type'': ''OAuth2.0'')'
+        title: Replication Auth Key Constants
+    title: AuthConfigSpec
+    type: object
+  AirbyteOAuthCredentials:
+    additionalProperties: false
+    description: 'Airbyte OAuth credentials extension (x-airbyte-oauth-credentials).
+
+
+      Describes what OAuth app credentials an organization needs to provide
+
+      to override the default Airbyte-managed OAuth app credentials.'
+    properties:
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      properties:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/AuthConfigFieldSpec'
+          type: object
+        - type: 'null'
+        default: null
+        title: Properties
+      required:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        title: Required
+    title: AirbyteOAuthCredentials
+    type: object
+  AuthConfigFieldSpec:
+    additionalProperties: false
+    description: 'Specification for a user-facing authentication config field.
+
+
+      This defines a single input field that users provide for authentication.'
+    properties:
+      type:
+        default: string
+        enum:
+        - string
+        - integer
+        - boolean
+        - number
+        title: Type
+        type: string
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      format:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Format
+      pattern:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Pattern
+      default:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Default
+    title: AuthConfigFieldSpec
+    type: object
+  CacheConfig:
+    additionalProperties: false
+    description: "Cache configuration extension (x-airbyte-context-store).\n\nDefines cache-enabled\
+      \ entities and their field mappings for api_search operations.\nSupports optional\
+      \ name aliasing via x-airbyte-name for both entities and fields,\nenabling bidirectional\
+      \ mapping between user-facing names and cache storage names.\n\nThis extension\
+      \ is added to the Info model and provides field-level mapping for\nsearch operations\
+      \ that use cached data.\n\nExample YAML usage:\n    info:\n      title: Stripe\
+      \ API\n      x-airbyte-context-store:\n        entities:\n          - entity: customers\n\
+      \            stream: customers\n            fields:\n              - name: email\n\
+      \                type: [\"null\", \"string\"]\n                description:\
+      \ \"Customer email address\"\n              - name: customer_name\n        \
+      \        x-airbyte-name: name\n                type: [\"null\", \"string\"]\n\
+      \                description: \"Customer full name\""
+    properties:
+      entities:
+        items:
+          $ref: '#/$defs/CacheEntityConfig'
+        title: Entities
+        type: array
+      disable_compaction:
+        default: false
+        description: When true, Athena compaction (OPTIMIZE + VACUUM) is skipped for
+          this connector type.
+        title: Disable Compaction
+        type: boolean
+    required:
+    - entities
+    title: CacheConfig
+    type: object
+  CacheEntityConfig:
+    additionalProperties: false
+    description: 'Entity configuration for cache mapping.
+
+
+      Defines a cache-enabled entity with its fields and optional name aliasing
+
+      to map between user-facing entity names and cache storage names.
+
+
+      Used in x-airbyte-context-store extension for api_search operations.'
+    properties:
+      entity:
+        title: Entity
+        type: string
+      x-airbyte-name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Name
+      fields:
+        items:
+          $ref: '#/$defs/CacheFieldConfig'
+        title: Fields
+        type: array
+    required:
+    - entity
+    - fields
+    title: CacheEntityConfig
+    type: object
+  CacheFieldConfig:
+    additionalProperties: false
+    description: 'Field configuration for cache mapping.
+
+
+      Defines a single field in a cache entity, with optional name aliasing
+
+      to map between user-facing field names and cache storage names.
+
+
+      For object-type fields, supports nested properties to define the internal structure
+
+      of complex nested schemas.
+
+
+      Used in x-airbyte-context-store extension for api_search operations.'
+    properties:
+      name:
+        title: Name
+        type: string
+      x-airbyte-name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Name
+      type:
+        anyOf:
+        - type: string
+        - items:
+            type: string
+          type: array
+        title: Type
+      description:
+        title: Description
+        type: string
+      properties:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/CacheFieldProperty'
+          type: object
+        - type: 'null'
+        default: null
+        title: Properties
+    required:
+    - name
+    - type
+    - description
+    title: CacheFieldConfig
+    type: object
+  CacheFieldProperty:
+    additionalProperties: false
+    description: "Nested property definition for object-type cache fields.\n\nSupports\
+      \ recursive nesting to represent complex nested schemas in cache field definitions.\n\
+      Used when a cache field has type 'object' and needs to define its internal structure.\n\
+      \nExample YAML usage:\n    - name: collaboration\n      type: ['null', 'object']\n\
+      \      description: \"Collaboration data\"\n      properties:\n        brief:\n\
+      \          type: ['null', 'string']\n        comments:\n          type: ['null',\
+      \ 'array']"
+    properties:
+      type:
+        anyOf:
+        - type: string
+        - items:
+            type: string
+          type: array
+        title: Type
+      properties:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/CacheFieldProperty'
+          type: object
+        - type: 'null'
+        default: null
+        title: Properties
+    required:
+    - type
+    title: CacheFieldProperty
+    type: object
+  Components:
+    additionalProperties: false
+    description: 'Reusable component definitions.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#components-object'
+    properties:
+      schemas:
+        additionalProperties:
+          $ref: '#/$defs/Schema'
+        title: Schemas
+        type: object
+      responses:
+        additionalProperties:
+          $ref: '#/$defs/Response'
+        title: Responses
+        type: object
+      parameters:
+        additionalProperties:
+          $ref: '#/$defs/Parameter'
+        title: Parameters
+        type: object
+      examples:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Examples
+      requestBodies:
+        additionalProperties:
+          $ref: '#/$defs/RequestBody'
+        title: Requestbodies
+        type: object
+      headers:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/Header'
+          type: object
+        - type: 'null'
+        default: null
+        title: Headers
+      securitySchemes:
+        additionalProperties:
+          $ref: '#/$defs/SecurityScheme'
+        title: Securityschemes
+        type: object
+      links:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Links
+      callbacks:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Callbacks
+    title: Components
+    type: object
+  Contact:
+    additionalProperties: false
+    description: 'Contact information for the API.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#contact-object'
+    properties:
+      name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Name
+      url:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Url
+      email:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Email
+    title: Contact
+    type: object
+  DocUrl:
+    additionalProperties: false
+    properties:
+      url:
+        title: Url
+        type: string
+      type:
+        $ref: '#/$defs/DocUrlType'
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+    required:
+    - url
+    - type
+    title: DocUrl
+    type: object
+  DocUrlType:
+    enum:
+    - api_deprecations
+    - api_reference
+    - api_release_history
+    - authentication_guide
+    - changelog
+    - data_model_reference
+    - developer_community
+    - migration_guide
+    - openapi_spec
+    - other
+    - permissions_scopes
+    - rate_limits
+    - sql_reference
+    - status_page
+    title: DocUrlType
+    type: string
+  EntityRelationshipConfig:
+    additionalProperties: false
+    description: "Entity relationship declaration for cross-entity navigation.\n\n\
+      Defines a foreign-key relationship between two entities, enabling\nthe runtime\
+      \ to resolve parent-child dependencies and provide\nrelationship metadata to\
+      \ agents.\n\nUsed in x-airbyte-entity-relationships extension in the Info object.\n\
+      \nExample YAML usage:\n    info:\n      title: My API\n      x-airbyte-entity-relationships:\n\
+      \        - source_entity: contacts\n          target_entity: accounts\n    \
+      \      foreign_key: account_id\n          cardinality: many_to_one\n       \
+      \   description: \"Contact belongs to an account\""
+    properties:
+      source_entity:
+        description: Entity that holds the foreign key
+        title: Source Entity
+        type: string
+      target_entity:
+        description: Entity being referenced
+        title: Target Entity
+        type: string
+      foreign_key:
+        description: Field on source_entity that references target_entity
+        title: Foreign Key
+        type: string
+      target_key:
+        default: id
+        description: Field on target_entity being referenced
+        title: Target Key
+        type: string
+      cardinality:
+        anyOf:
+        - enum:
+          - one_to_one
+          - one_to_many
+          - many_to_one
+          - many_to_many
+          type: string
+        - type: 'null'
+        default: null
+        description: Optional relationship cardinality
+        title: Cardinality
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Human-readable description of the relationship
+        title: Description
+    required:
+    - source_entity
+    - target_entity
+    - foreign_key
+    title: EntityRelationshipConfig
+    type: object
+  EnvironmentMappingTransform:
+    additionalProperties: false
+    description: "Structured transform for environment mapping values.\n\nAllows transforming\
+      \ environment values before storing in source_config.\n\nExample:\n    source:\
+      \ subdomain\n    format: \"{value}.atlassian.net\"\n\nThe format string uses\
+      \ {value} as a placeholder for the source value."
+    properties:
+      source:
+        description: The environment config key to read the value from
+        title: Source
+        type: string
+      format:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Optional format string to transform the value. Use {value} as
+          placeholder.
+        title: Format
+    required:
+    - source
+    title: EnvironmentMappingTransform
+    type: object
+  ExampleQuestions:
+    additionalProperties: false
+    description: 'Example questions for AI connector documentation.
+
+
+      Used to generate supported_questions.md and unsupported_questions.md files
+
+      that appear in the connector''s README.'
+    properties:
+      direct:
+        description: Example questions answerable via direct API operations
+        items:
+          type: string
+        title: Direct
+        type: array
+      context_store_search:
+        description: Example questions requiring cached context store search operations
+        items:
+          type: string
+        title: Context Store Search
+        type: array
+      search:
+        description: Deprecated alias for context_store_search example questions
+        items:
+          type: string
+        title: Search
+        type: array
+      unsupported:
+        description: Example questions the connector cannot handle
+        items:
+          type: string
+        title: Unsupported
+        type: array
+    title: ExampleQuestions
+    type: object
+  ExternalDocs:
+    additionalProperties: false
+    description: 'External documentation reference.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#external-documentation-object'
+    properties:
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      url:
+        title: Url
+        type: string
+    required:
+    - url
+    title: ExternalDocs
+    type: object
+  GraphQLBodyConfig:
+    additionalProperties: false
+    description: 'GraphQL body type configuration for x-airbyte-body-type extension.
+
+
+      Used when x-airbyte-body-type.type = "graphql"'
+    properties:
+      type:
+        const: graphql
+        description: Body type identifier (must be 'graphql')
+        title: Type
+        type: string
+      query:
+        description: GraphQL query or mutation string with optional template placeholders
+          (e.g., {{ variable }})
+        title: Query
+        type: string
+      variables:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        description: Variables to substitute in the GraphQL query using template syntax
+          (e.g., {{ param_name }})
+        title: Variables
+      operationName:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Operation name for queries with multiple operations
+        title: Operationname
+      default_fields:
+        anyOf:
+        - type: string
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        description: Default fields to select if not provided in request parameters.
+          Can be a string or array of field names.
+        title: Default Fields
+      x-airbyte-nullable-variables:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        description: Variable names that can be explicitly set to null (e.g., to unassign
+          a user)
+        title: X-Airbyte-Nullable-Variables
+    required:
+    - type
+    - query
+    title: GraphQLBodyConfig
+    type: object
+  Header:
+    additionalProperties: false
+    description: 'Header definition.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#header-object'
+    properties:
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      required:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Required
+      deprecated:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Deprecated
+      schema:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Schema
+      example:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Example
+    title: Header
+    type: object
+  Info:
+    additionalProperties: false
+    description: 'API metadata information.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#info-object
+
+
+      Extensions:
+
+      - x-airbyte-connector-name: Name of the connector (Airbyte extension)
+
+      - x-airbyte-connector-definition-id: UUID of the connector (Airbyte extension)
+
+      - x-airbyte-external-documentation-urls: List of external documentation URLs
+      (Airbyte extension)
+
+      - x-airbyte-retry-config: Retry configuration for transient errors (Airbyte
+      extension)
+
+      - x-airbyte-example-questions: Example questions for AI connector README (Airbyte
+      extension)
+
+      - x-airbyte-context-store: Cache configuration for field mapping between API and cache
+      schemas (Airbyte extension)
+
+      - x-airbyte-replication-config: Replication configuration for MULTI mode connectors
+      (Airbyte extension)
+
+      - x-airbyte-entity-relationships: Entity relationship declarations (Airbyte
+      extension)
+
+      - x-airbyte-scoping: Scoping parameter resolution from config (Airbyte extension)'
+    properties:
+      title:
+        title: Title
+        type: string
+      version:
+        title: Version
+        type: string
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      termsOfService:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Termsofservice
+      contact:
+        anyOf:
+        - $ref: '#/$defs/Contact'
+        - type: 'null'
+        default: null
+      license:
+        anyOf:
+        - $ref: '#/$defs/License'
+        - type: 'null'
+        default: null
+      x-airbyte-connector-name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Connector-Name
+      x-airbyte-connector-definition-id:
+        anyOf:
+        - format: uuid
+          type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Connector-Definition-Id
+      x-airbyte-external-documentation-urls:
+        items:
+          $ref: '#/$defs/DocUrl'
+        title: X-Airbyte-External-Documentation-Urls
+        type: array
+      x-airbyte-retry-config:
+        anyOf:
+        - $ref: '#/$defs/RetryConfig'
+        - type: 'null'
+        default: null
+      x-airbyte-example-questions:
+        anyOf:
+        - $ref: '#/$defs/ExampleQuestions'
+        - type: 'null'
+        default: null
+      x-airbyte-context-store:
+        anyOf:
+        - $ref: '#/$defs/CacheConfig'
+        - type: 'null'
+        default: null
+      x-airbyte-entity-relationships:
+        items:
+          $ref: '#/$defs/EntityRelationshipConfig'
+        title: X-Airbyte-Entity-Relationships
+        type: array
+      x-airbyte-scoping:
+        items:
+          $ref: '#/$defs/ScopingParamConfig'
+        title: X-Airbyte-Scoping
+        type: array
+      x-airbyte-replication-config:
+        anyOf:
+        - $ref: '#/$defs/ReplicationConfig'
+        - type: 'null'
+        default: null
+      x-airbyte-replication-version:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Airbyte replication connector version this connector was validated
+          against
+        title: X-Airbyte-Replication-Version
+      x-airbyte-replication-compatibility:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Semver range of compatible replication connector versions
+        title: X-Airbyte-Replication-Compatibility
+      x-airbyte-skip-suggested-streams:
+        description: List of Airbyte suggested streams to skip when validating cache
+          entity coverage
+        items:
+          type: string
+        title: X-Airbyte-Skip-Suggested-Streams
+        type: array
+      x-airbyte-skip-auth-methods:
+        description: List of Airbyte auth methods to skip when validating auth compatibility.
+          Use the SelectiveAuthenticator option key (e.g., 'Private App Credentials',
+          'oauth2.0')
+        items:
+          type: string
+        title: X-Airbyte-Skip-Auth-Methods
+        type: array
+      x-airbyte-skip-context-store:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Reason why this connector does not define x-airbyte-context-store. Connectors
+          must have either x-airbyte-context-store or x-airbyte-skip-context-store with a justification.
+        title: X-Airbyte-Skip-Context-Store
+    required:
+    - title
+    - version
+    - x-airbyte-external-documentation-urls
+    title: Info
+    type: object
+  License:
+    additionalProperties: false
+    description: 'License information for the API.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#license-object'
+    properties:
+      name:
+        title: Name
+        type: string
+      url:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Url
+    required:
+    - name
+    title: License
+    type: object
+  MediaType:
+    additionalProperties: false
+    description: 'Media type object for request/response content.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#media-type-object'
+    properties:
+      schema:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Schema
+      example:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Example
+      examples:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Examples
+      encoding:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Encoding
+    title: MediaType
+    type: object
+  OAuth2Flow:
+    additionalProperties: false
+    description: 'OAuth 2.0 flow configuration.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#oauth-flow-object'
+    properties:
+      authorizationUrl:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Authorizationurl
+      tokenUrl:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Tokenurl
+      refreshUrl:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Refreshurl
+      scopes:
+        additionalProperties:
+          type: string
+        title: Scopes
+        type: object
+    title: OAuth2Flow
+    type: object
+  OAuth2Flows:
+    additionalProperties: false
+    description: 'Collection of OAuth 2.0 flows.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#oauth-flows-object'
+    properties:
+      implicit:
+        anyOf:
+        - $ref: '#/$defs/OAuth2Flow'
+        - type: 'null'
+        default: null
+      password:
+        anyOf:
+        - $ref: '#/$defs/OAuth2Flow'
+        - type: 'null'
+        default: null
+      clientCredentials:
+        anyOf:
+        - $ref: '#/$defs/OAuth2Flow'
+        - type: 'null'
+        default: null
+      authorizationCode:
+        anyOf:
+        - $ref: '#/$defs/OAuth2Flow'
+        - type: 'null'
+        default: null
+    title: OAuth2Flows
+    type: object
+  Operation:
+    additionalProperties: false
+    description: 'Single API operation (GET, POST, PUT, PATCH, DELETE, etc.).
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#operation-object
+
+
+      Extensions:
+
+      - x-airbyte-entity: Entity name (Airbyte extension)
+
+      - x-airbyte-action: Semantic action (Airbyte extension)
+
+      - x-airbyte-path-override: Path override (Airbyte extension)
+
+      - x-airbyte-record-extractor: JSONPath to extract records from response (Airbyte
+      extension)'
+    properties:
+      tags:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        title: Tags
+      summary:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Summary
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      externalDocs:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Externaldocs
+      operationId:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Operationid
+      parameters:
+        anyOf:
+        - items:
+            $ref: '#/$defs/Parameter'
+          type: array
+        - type: 'null'
+        default: null
+        title: Parameters
+      requestBody:
+        anyOf:
+        - $ref: '#/$defs/RequestBody'
+        - type: 'null'
+        default: null
+      responses:
+        additionalProperties:
+          $ref: '#/$defs/Response'
+        title: Responses
+        type: object
+      callbacks:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Callbacks
+      deprecated:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Deprecated
+      security:
+        anyOf:
+        - items:
+            additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          type: array
+        - type: 'null'
+        default: null
+        title: Security
+      servers:
+        anyOf:
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Servers
+      x-airbyte-entity:
+        title: X-Airbyte-Entity
+        type: string
+      x-airbyte-action:
+        enum:
+        - get
+        - list
+        - create
+        - update
+        - delete
+        - api_search
+        - download
+        title: X-Airbyte-Action
+        type: string
+      x-airbyte-path-override:
+        anyOf:
+        - $ref: '#/$defs/PathOverrideConfig'
+        - type: 'null'
+        default: null
+        description: Override path for HTTP requests when OpenAPI path differs from
+          actual endpoint
+      x-airbyte-record-extractor:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: JSONPath expression to extract records from API response envelopes.
+          When specified, executor extracts data at this path instead of returning
+          full response. Returns array for list/api_search actions, single record
+          for get/create/update/delete actions.
+        title: X-Airbyte-Record-Extractor
+      x-airbyte-meta-extractor:
+        anyOf:
+        - additionalProperties:
+            type: string
+          type: object
+        - type: 'null'
+        default: null
+        description: 'Dictionary mapping field names to JSONPath expressions for extracting
+          metadata (pagination info, request IDs, etc.) from API response envelopes.
+          Each key becomes a field in ExecutionResult.meta with the value extracted
+          using the corresponding JSONPath expression. Example: {''pagination'': ''$.pagination'',
+          ''request_id'': ''$.requestId''}'
+        title: X-Airbyte-Meta-Extractor
+      x-airbyte-file-url:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-File-Url
+      x-airbyte-untested:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        description: Mark operation as untested to skip cassette validation in readiness
+          checks. Use this for operations that cannot be recorded (e.g., webhooks,
+          real-time streams). Validation will generate a warning instead of an error
+          when cassettes are missing.
+        title: X-Airbyte-Untested
+      x-airbyte-preferred-for-check:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        description: Mark this operation as the preferred operation for health checks.
+          When the CHECK action is executed, this operation will be used instead of
+          falling back to the first available list operation. The operation's actual
+          action type (get, list, etc.) will be respected. Choose a lightweight, always-available
+          endpoint (e.g., users, accounts).
+        title: X-Airbyte-Preferred-For-Check
+      x-airbyte-upload-file-param:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Parameter name containing base64-encoded file content for multipart/related
+          uploads. When set, the executor builds a multipart/related body with JSON
+          metadata and binary file content.
+        title: X-Airbyte-Upload-File-Param
+    required:
+    - x-airbyte-entity
+    - x-airbyte-action
+    title: Operation
+    type: object
+  Parameter:
+    additionalProperties: false
+    description: 'Operation parameter definition.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#parameter-object'
+    properties:
+      name:
+        title: Name
+        type: string
+      in:
+        enum:
+        - query
+        - header
+        - path
+        - cookie
+        title: In
+        type: string
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      required:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Required
+      deprecated:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Deprecated
+      allowEmptyValue:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Allowemptyvalue
+      schema:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Schema
+      style:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Style
+      explode:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Explode
+      example:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Example
+      examples:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Examples
+    required:
+    - name
+    - in
+    title: Parameter
+    type: object
+  PathItem:
+    additionalProperties: false
+    description: 'Path item containing operations for different HTTP methods.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#path-item-object'
+    properties:
+      summary:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Summary
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      servers:
+        anyOf:
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Servers
+      parameters:
+        anyOf:
+        - items:
+            $ref: '#/$defs/Parameter'
+          type: array
+        - type: 'null'
+        default: null
+        title: Parameters
+      get:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      put:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      post:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      delete:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      options:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      head:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      patch:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      trace:
+        anyOf:
+        - $ref: '#/$defs/Operation'
+        - type: 'null'
+        default: null
+      $ref:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: $Ref
+    title: PathItem
+    type: object
+  PathOverrideConfig:
+    additionalProperties: false
+    description: "Path override configuration for x-airbyte-path-override extension.\n\
+      \nUsed when the OpenAPI path differs from the actual HTTP endpoint path.\nCommon\
+      \ for GraphQL APIs where multiple resources share the same endpoint (e.g., /graphql).\n\
+      \nExample:\n    OpenAPI path: /graphql:repositories (for uniqueness)\n    Actual\
+      \ HTTP path: /graphql (configured here)"
+    properties:
+      path:
+        description: Actual HTTP path to use for requests (e.g., '/graphql'). Must
+          start with '/'
+        title: Path
+        type: string
+    required:
+    - path
+    title: PathOverrideConfig
+    type: object
+  ReplicationConfig:
+    additionalProperties: false
+    description: "Replication configuration extension (x-airbyte-replication-config).\n\
+      \nDefines replication-specific settings for MULTI mode connectors that need\n\
+      to configure the underlying replication connector. This allows users who\nuse\
+      \ the direct-style API (credentials + environment) to also specify\nreplication\
+      \ settings like start_date, lookback_window, etc.\n\nThis extension is added\
+      \ to the Info model and provides field definitions\nfor replication configuration\
+      \ that gets merged into the source config\nwhen creating sources.\n\nExample\
+      \ YAML usage:\n    info:\n      title: HubSpot API\n      x-airbyte-replication-config:\n\
+      \        title: Replication Configuration\n        description: Settings for\
+      \ data replication\n        properties:\n          start_date:\n           \
+      \ type: string\n            title: Start Date\n            description: UTC\
+      \ date and time from which to replicate data\n            format: date-time\n\
+      \        required:\n          - start_date\n        replication_config_key_mapping:\n\
+      \          start_date: start_date"
+    properties:
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      properties:
+        type: object
+        additionalProperties:
+          $ref: '#/$defs/ReplicationConfigProperty'
+        title: Properties
+      required:
+        items:
+          type: string
+        title: Required
+        type: array
+      replication_config_key_mapping:
+        additionalProperties:
+          type: string
+        description: Mapping from replication_config field names to source_config
+          field names
+        title: Replication Config Key Mapping
+        type: object
+    title: ReplicationConfig
+    type: object
+  ReplicationConfigProperty:
+    additionalProperties: false
+    description: "Property definition for replication configuration fields.\n\nDefines\
+      \ a single field in the replication configuration with its type,\ndescription,\
+      \ and optional default value. Supports both simple types\n(string, integer,\
+      \ boolean) and array types.\n\nExample YAML usage:\n    x-airbyte-replication-config:\n\
+      \      properties:\n        start_date:\n          type: string\n          title:\
+      \ Start Date\n          description: UTC date and time from which to replicate\
+      \ data\n          format: date-time\n        account_ids:\n          type: array\n\
+      \          title: Account IDs\n          description: List of account IDs to\
+      \ replicate\n          items:\n            type: string"
+    properties:
+      type:
+        title: Type
+        type: string
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      format:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Format
+      default:
+        anyOf:
+        - type: string
+        - type: integer
+        - type: number
+        - type: boolean
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Default
+      enum:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        title: Enum
+      items:
+        anyOf:
+        - $ref: '#/$defs/ReplicationConfigPropertyItems'
+        - type: 'null'
+        default: null
+    required:
+    - type
+    title: ReplicationConfigProperty
+    type: object
+  ReplicationConfigPropertyItems:
+    additionalProperties: false
+    description: 'Items definition for array-type replication configuration fields.
+
+
+      Defines the schema for items in an array-type replication config property.'
+    properties:
+      type:
+        title: Type
+        type: string
+    required:
+    - type
+    title: ReplicationConfigPropertyItems
+    type: object
+  RequestBody:
+    additionalProperties: false
+    description: 'Request body definition.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#request-body-object
+
+
+      Airbyte Extensions:
+
+      See connector_sdk.extensions for documentation:
+
+      - AIRBYTE_BODY_TYPE: Body type and configuration (nested structure)'
+    properties:
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      content:
+        additionalProperties:
+          $ref: '#/$defs/MediaType'
+        title: Content
+        type: object
+      required:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Required
+      x-airbyte-body-type:
+        anyOf:
+        - $ref: '#/$defs/GraphQLBodyConfig'
+        - type: 'null'
+        default: null
+        description: Body type and configuration. Contains 'type' field (e.g., 'graphql')
+          and type-specific configuration (query, variables, etc.).
+    title: RequestBody
+    type: object
+  Response:
+    additionalProperties: false
+    description: 'Response definition.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#response-object'
+    properties:
+      description:
+        title: Description
+        type: string
+      headers:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/Header'
+          type: object
+        - type: 'null'
+        default: null
+        title: Headers
+      content:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/MediaType'
+          type: object
+        - type: 'null'
+        default: null
+        title: Content
+      links:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Links
+    required:
+    - description
+    title: Response
+    type: object
+  RetryConfig:
+    additionalProperties: false
+    description: "Configuration for retry strategy with exponential backoff.\n\nUsed\
+      \ to configure automatic retries for transient errors (429, 5xx, timeouts, network\
+      \ errors).\nCan be specified at the connector level via x-airbyte-retry-config\
+      \ in the OpenAPI spec's info section.\n\nBy default, retries are enabled with\
+      \ max_attempts=3. To disable retries, set max_attempts=1\nin your connector's\
+      \ x-airbyte-retry-config.\n\nExample YAML usage:\n    info:\n      title: My\
+      \ API\n      x-airbyte-retry-config:\n        max_attempts: 5\n        initial_delay_seconds:\
+      \ 2.0\n        retry_after_header: \"X-RateLimit-Reset\"\n        retry_after_format:\
+      \ \"unix_timestamp\""
+    properties:
+      max_attempts:
+        default: 3
+        title: Max Attempts
+        type: integer
+      initial_delay_seconds:
+        default: 1.0
+        title: Initial Delay Seconds
+        type: number
+      max_delay_seconds:
+        default: 60.0
+        title: Max Delay Seconds
+        type: number
+      exponential_base:
+        default: 2.0
+        title: Exponential Base
+        type: number
+      jitter:
+        default: true
+        title: Jitter
+        type: boolean
+      retry_on_status_codes:
+        default:
+        - 429
+        - 500
+        - 502
+        - 503
+        - 504
+        items:
+          type: integer
+        title: Retry On Status Codes
+        type: array
+      retry_on_timeout:
+        default: true
+        title: Retry On Timeout
+        type: boolean
+      retry_on_network_error:
+        default: true
+        title: Retry On Network Error
+        type: boolean
+      retry_after_header:
+        default: Retry-After
+        title: Retry After Header
+        type: string
+      retry_after_format:
+        default: seconds
+        enum:
+        - seconds
+        - milliseconds
+        - unix_timestamp
+        title: Retry After Format
+        type: string
+    title: RetryConfig
+    type: object
+  Schema:
+    additionalProperties: false
+    description: 'JSON Schema definition for data models.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#schema-object
+
+
+      Note: Uses Dict[str, Any] for properties to support nested schemas and $ref.
+
+      Reference resolution happens at runtime in config_loader.py.
+
+
+      Extensions:
+
+      - x-airbyte-resource-name: Name of the resource this schema represents (Airbyte
+      extension)'
+    properties:
+      type:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Type
+      format:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Format
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      default:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Default
+      example:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Example
+      properties:
+        type: object
+        additionalProperties: true
+        title: Properties
+      required:
+        items:
+          type: string
+        title: Required
+        type: array
+      additionalProperties:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Additionalproperties
+      items:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Items
+      enum:
+        anyOf:
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Enum
+      minLength:
+        anyOf:
+        - type: integer
+        - type: 'null'
+        default: null
+        title: Minlength
+      maxLength:
+        anyOf:
+        - type: integer
+        - type: 'null'
+        default: null
+        title: Maxlength
+      minimum:
+        anyOf:
+        - type: number
+        - type: 'null'
+        default: null
+        title: Minimum
+      maximum:
+        anyOf:
+        - type: number
+        - type: 'null'
+        default: null
+        title: Maximum
+      pattern:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Pattern
+      allOf:
+        anyOf:
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Allof
+      anyOf:
+        anyOf:
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Anyof
+      oneOf:
+        anyOf:
+        - items: {}
+          type: array
+        - type: 'null'
+        default: null
+        title: Oneof
+      not:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Not
+      nullable:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        deprecated: true
+        title: Nullable
+      readOnly:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Readonly
+      writeOnly:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Writeonly
+      deprecated:
+        anyOf:
+        - type: boolean
+        - type: 'null'
+        default: null
+        title: Deprecated
+      x-airbyte-entity-name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Entity-Name
+      x-airbyte-stream-name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Stream-Name
+    title: Schema
+    type: object
+  ScopingParamConfig:
+    additionalProperties: false
+    description: "Scoping parameter resolution from connector configuration.\n\nDeclares\
+      \ a path parameter that should be resolved from the connector's\nconfig values\
+      \ at runtime, rather than being supplied per-request.\n\nUsed in x-airbyte-scoping\
+      \ extension in the Info object.\n\nExample YAML usage:\n    info:\n      title:\
+      \ My API\n      x-airbyte-scoping:\n        - param: account_id\n          config_key:\
+      \ account_id"
+    properties:
+      param:
+        description: Path parameter name to resolve from config
+        title: Param
+        type: string
+      config_key:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Config key to read. Defaults to param name if omitted.
+        title: Config Key
+    required:
+    - param
+    title: ScopingParamConfig
+    type: object
+  SecurityScheme:
+    additionalProperties: true
+    description: 'Security scheme definition.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#security-scheme-object
+
+
+      Supported Types:
+
+      - apiKey: API key in header/query/cookie
+
+      - http: HTTP authentication (basic, bearer, digest, etc.)
+
+      - oauth2: OAuth 2.0 flows
+
+
+      Extensions:
+
+      - x-airbyte-token-path: JSON path to extract token from auth response (Airbyte
+      extension)
+
+      - x-airbyte-token-refresh: OAuth2 token refresh configuration (dict with auth_style,
+      body_format)
+
+      - x-airbyte-auth-config: User-facing authentication configuration (Airbyte extension)
+
+      - x-airbyte-oauth-credentials: OAuth app credential override specification (Airbyte
+      extension)
+
+
+      Future extensions (not yet active):
+
+      - x-grant-type: OAuth grant type for refresh tokens
+
+      - x-refresh-endpoint: Custom refresh endpoint URL'
+    properties:
+      type:
+        enum:
+        - apiKey
+        - http
+        - oauth2
+        - openIdConnect
+        title: Type
+        type: string
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Name
+      in:
+        anyOf:
+        - enum:
+          - query
+          - header
+          - cookie
+          type: string
+        - type: 'null'
+        default: null
+        title: In
+      scheme:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Scheme
+      bearerFormat:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Bearerformat
+      flows:
+        anyOf:
+        - $ref: '#/$defs/OAuth2Flows'
+        - type: 'null'
+        default: null
+      openIdConnectUrl:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Openidconnecturl
+      x-airbyte-token-path:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Token-Path
+      x-airbyte-token-refresh:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Token-Refresh
+      x-airbyte-auth-config:
+        anyOf:
+        - $ref: '#/$defs/AuthConfigSpec'
+        - type: 'null'
+        default: null
+      x-airbyte-token-extract:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        description: List of fields to extract from OAuth2 token responses and use
+          as server variables
+        title: X-Airbyte-Token-Extract
+      x-airbyte-oauth-credentials:
+        anyOf:
+        - $ref: '#/$defs/AirbyteOAuthCredentials'
+        - type: 'null'
+        default: null
+        description: Describes what OAuth app credentials an organization needs to
+          provide for credential override
+      x-airbyte-untested:
+        default: false
+        description: Mark this auth scheme as untested to skip cassette coverage validation
+        title: X-Airbyte-Untested
+        type: boolean
+    required:
+    - type
+    title: SecurityScheme
+    type: object
+  Server:
+    additionalProperties: false
+    description: 'Server URL and variable definitions.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#server-object'
+    properties:
+      url:
+        title: Url
+        type: string
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      variables:
+        additionalProperties:
+          $ref: '#/$defs/ServerVariable'
+        title: Variables
+        type: object
+      x-airbyte-replication-environment-mapping:
+        anyOf:
+        - additionalProperties:
+            anyOf:
+            - type: string
+            - $ref: '#/$defs/EnvironmentMappingTransform'
+          type: object
+        - type: 'null'
+        default: null
+        title: X-Airbyte-Replication-Environment-Mapping
+      x-airbyte-replication-environment-constants:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        description: 'Constant values to always inject at environment config paths
+          (e.g., ''region'': ''us-east-1'')'
+        title: X-Airbyte-Replication-Environment-Constants
+    required:
+    - url
+    title: Server
+    type: object
+  ServerVariable:
+    additionalProperties: false
+    description: 'Variable for server URL templating.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#server-variable-object'
+    properties:
+      enum:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        title: Enum
+      default:
+        type: string
+        title: Default
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+    required:
+    - default
+    title: ServerVariable
+    type: object
+  Tag:
+    additionalProperties: false
+    description: 'Tag metadata for grouping operations.
+
+
+      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#tag-object'
+    properties:
+      name:
+        title: Name
+        type: string
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      externalDocs:
+        anyOf:
+        - additionalProperties: true
+          type: object
+        - type: 'null'
+        default: null
+        title: Externaldocs
+    required:
+    - name
+    title: Tag
+    type: object
+additionalProperties: false
+description: OpenAPI 3.0 specification extended with Airbyte-specific fields for defining
+  connectors with type-safe operations.
+properties:
+  openapi:
+    title: Openapi
+    type: string
+  info:
+    $ref: '#/$defs/Info'
+  paths:
+    additionalProperties:
+      $ref: '#/$defs/PathItem'
+    title: Paths
+    type: object
+  servers:
+    items:
+      $ref: '#/$defs/Server'
+    title: Servers
+    type: array
+  components:
+    anyOf:
+    - $ref: '#/$defs/Components'
+    - type: 'null'
+    default: null
+  security:
+    anyOf:
+    - items:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        type: object
+      type: array
+    - type: 'null'
+    default: null
+    title: Security
+  tags:
+    anyOf:
+    - items:
+        $ref: '#/$defs/Tag'
+      type: array
+    - type: 'null'
+    default: null
+    title: Tags
+  externalDocs:
+    anyOf:
+    - $ref: '#/$defs/ExternalDocs'
+    - type: 'null'
+    default: null
+required:
+- openapi
+- info
+title: Airbyte OpenAPI Connector Specification
+type: object
+$id: https://airbyte.io/schemas/openapi-connector-v1.yaml
+$schema: https://json-schema.org/draft/2020-12/schema

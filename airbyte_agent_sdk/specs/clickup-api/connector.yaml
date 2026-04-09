@@ -1,0 +1,2428 @@
+openapi: 3.1.0
+
+info:
+  title: ClickUp API Connector
+  version: 0.1.5
+  description: |
+    ClickUp is a productivity platform that provides project management, task tracking, docs, goals,
+    and time tracking for teams. This connector provides access to workspaces, spaces, folders, lists,
+    tasks (including workspace-wide search), comments, goals, views, time tracking, members, and docs.
+  x-airbyte-connector-name: clickup-api
+  x-airbyte-connector-definition-id: 311a7a27-3fb5-4f7e-8265-5e4afe258b66
+  x-airbyte-replication-version: "0.3.43"
+  x-airbyte-replication-compatibility: ">=0.3.43, <1.0.0"
+  x-airbyte-skip-context-store: "No suggested streams in Airbyte registry for this connector"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: ClickUp API v2 Reference
+    url: https://developer.clickup.com/reference
+  - type: authentication_guide
+    title: ClickUp API Authentication
+    url: https://developer.clickup.com/docs/authentication
+  x-airbyte-example-questions:
+    direct:
+    - "List all workspaces I have access to"
+    - "Show me the spaces in my workspace"
+    - "List the folders in a space"
+    - "Show me the lists in a folder"
+    - "Get the tasks in a list"
+    - "Get details for a specific task"
+    - "Search for tasks containing 'bug' across my workspace"
+    - "Find all urgent priority tasks in my workspace"
+    - "Show me tasks assigned to a specific user"
+    - "List comments on a task"
+    - "Get threaded replies on a comment"
+    - "Create a comment on a task"
+    - "Update a comment to mark it resolved"
+    - "List all goals in my workspace"
+    - "Get details for a specific goal"
+    - "Show me all workspace-level views"
+    - "Get tasks matching a saved view"
+    - "List time entries for my workspace this week"
+    - "Get details for a specific time entry"
+    - "Show me the members assigned to a task"
+    - "List all docs in my workspace"
+    - "Get details for a specific doc"
+    search:
+    - "What tasks are overdue in my workspace?"
+    - "Which tasks were updated in the last 24 hours?"
+    - "Show me all high-priority tasks across all projects"
+    - "How much time has been tracked this week?"
+    - "What are the most commented tasks?"
+    unsupported:
+    - "Delete a task"
+    - "Delete a comment"
+    - "Delete a goal"
+
+  x-airbyte-entity-relationships:
+  - source_entity: spaces
+    target_entity: teams
+    foreign_key: team_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: folders
+    target_entity: spaces
+    foreign_key: space_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: lists
+    target_entity: folders
+    foreign_key: folder_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: tasks
+    target_entity: lists
+    foreign_key: list_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: comments
+    target_entity: tasks
+    foreign_key: task_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: goals
+    target_entity: teams
+    foreign_key: team_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: views
+    target_entity: teams
+    foreign_key: team_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: view_tasks
+    target_entity: views
+    foreign_key: view_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: time_tracking
+    target_entity: teams
+    foreign_key: team_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: members
+    target_entity: tasks
+    foreign_key: task_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: docs
+    target_entity: teams
+    foreign_key: workspace_id
+    target_key: id
+    cardinality: many_to_one
+servers:
+- url: https://api.clickup.com
+  description: ClickUp API server
+
+security:
+- apiKeyAuth: []
+
+paths:
+  # ── User ──
+  "/api/v2/user":
+    get:
+      summary: Get authorized user
+      description: View the details of the authenticated user's ClickUp account
+      operationId: getAuthorizedUser
+      x-airbyte-entity: user
+      x-airbyte-action: get
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.user
+      responses:
+        "200":
+          description: Authorized user details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Teams (Workspaces) ──
+  "/api/v2/team":
+    get:
+      summary: List authorized workspaces
+      description: Get the workspaces (teams) available to the authenticated user
+      operationId: listTeams
+      x-airbyte-entity: teams
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.teams
+      responses:
+        "200":
+          description: List of workspaces
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamsListResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Spaces ──
+  "/api/v2/team/{team_id}/space":
+    get:
+      summary: List spaces
+      description: Get the spaces available in a workspace
+      operationId: listSpaces
+      x-airbyte-entity: spaces
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.spaces
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of spaces
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpacesListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/space/{space_id}":
+    get:
+      summary: Get a space
+      description: Get a single space by ID
+      operationId: getSpace
+      x-airbyte-entity: spaces
+      x-airbyte-action: get
+      parameters:
+      - name: space_id
+        in: path
+        required: true
+        description: The ID of the space
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Space details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Space"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Space not found
+
+  # ── Folders ──
+  "/api/v2/space/{space_id}/folder":
+    get:
+      summary: List folders
+      description: Get the folders in a space
+      operationId: listFolders
+      x-airbyte-entity: folders
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.folders
+      parameters:
+      - name: space_id
+        in: path
+        required: true
+        description: The ID of the space
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of folders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FoldersListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/folder/{folder_id}":
+    get:
+      summary: Get a folder
+      description: Get a single folder by ID
+      operationId: getFolder
+      x-airbyte-entity: folders
+      x-airbyte-action: get
+      parameters:
+      - name: folder_id
+        in: path
+        required: true
+        description: The ID of the folder
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Folder details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Folder"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Folder not found
+
+  # ── Lists ──
+  "/api/v2/folder/{folder_id}/list":
+    get:
+      summary: List lists in a folder
+      description: Get the lists in a folder
+      operationId: listLists
+      x-airbyte-entity: lists
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.lists
+      parameters:
+      - name: folder_id
+        in: path
+        required: true
+        description: The ID of the folder
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of lists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListsListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/list/{list_id}":
+    get:
+      summary: Get a list
+      description: Get a single list by ID
+      operationId: getList
+      x-airbyte-entity: lists
+      x-airbyte-action: get
+      parameters:
+      - name: list_id
+        in: path
+        required: true
+        description: The ID of the list
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List"
+        "401":
+          description: Unauthorized
+        "404":
+          description: List not found
+
+  # ── Tasks ──
+  "/api/v2/list/{list_id}/task":
+    get:
+      summary: List tasks
+      description: Get the tasks in a list
+      operationId: listTasks
+      x-airbyte-entity: tasks
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.tasks
+      parameters:
+      - name: list_id
+        in: path
+        required: true
+        description: The ID of the list
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number (0-indexed)
+        schema:
+          type: integer
+          default: 0
+      responses:
+        "200":
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/task/{task_id}":
+    get:
+      summary: Get a task
+      description: Get a single task by ID
+      operationId: getTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: get
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The ID of the task
+        schema:
+          type: string
+      - name: custom_task_ids
+        in: query
+        description: Set to true to use a custom task ID
+        schema:
+          type: boolean
+      - name: include_subtasks
+        in: query
+        description: Include subtasks
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Task not found
+
+  # ── Tasks: api_search (Workspace-Wide Filtered Tasks) ──
+  "/api/v2/team/{team_id}/task":
+    get:
+      summary: Search tasks across workspace
+      description: |
+        View the tasks that meet specific criteria from a workspace. Supports free-text search
+        and structured filters including status, assignee, tags, priority, and date ranges.
+        Responses are limited to 100 tasks per page.
+      operationId: searchTasks
+      x-airbyte-entity: tasks
+      x-airbyte-action: api_search
+      x-airbyte-record-extractor: $.tasks
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        description: The workspace ID to search within
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Free-text search across task name, description, and custom field text
+        schema:
+          type: string
+      - name: statuses[]
+        in: query
+        description: Filter by status names (e.g. "in progress", "done")
+        schema:
+          type: array
+          items:
+            type: string
+      - name: assignees[]
+        in: query
+        description: Filter by user IDs
+        schema:
+          type: array
+          items:
+            type: string
+      - name: tags[]
+        in: query
+        description: Filter by tag names
+        schema:
+          type: array
+          items:
+            type: string
+      - name: priority
+        in: query
+        description: "Filter by priority: 1=Urgent, 2=High, 3=Normal, 4=Low"
+        schema:
+          type: integer
+      - name: due_date_gt
+        in: query
+        description: Due date after (Unix ms)
+        schema:
+          type: integer
+      - name: due_date_lt
+        in: query
+        description: Due date before (Unix ms)
+        schema:
+          type: integer
+      - name: date_created_gt
+        in: query
+        description: Created after (Unix ms)
+        schema:
+          type: integer
+      - name: date_created_lt
+        in: query
+        description: Created before (Unix ms)
+        schema:
+          type: integer
+      - name: date_updated_gt
+        in: query
+        description: Updated after (Unix ms)
+        schema:
+          type: integer
+      - name: date_updated_lt
+        in: query
+        description: Updated before (Unix ms)
+        schema:
+          type: integer
+      - name: custom_fields
+        in: query
+        description: |
+          JSON array of custom field filters. Each object: {"field_id": "<UUID>", "operator": "<OP>", "value": "<DATA>"}.
+          Operators: = (contains), == (exact), <, <=, >, >=, !=, !==, IS NULL, IS NOT NULL, RANGE, ANY, ALL, NOT ANY, NOT ALL
+        schema:
+          type: array
+          items:
+            type: object
+      - name: include_closed
+        in: query
+        description: Include closed tasks (excluded by default)
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        description: Page number (0-indexed), results capped at 100/page
+        schema:
+          type: integer
+          default: 0
+      responses:
+        "200":
+          description: Filtered tasks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksListResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Comments ──
+  "/api/v2/task/{task_id}/comment":
+    get:
+      summary: List task comments
+      description: Get the comments on a task
+      operationId: listTaskComments
+      x-airbyte-entity: comments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.comments
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The ID of the task
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentsListResponse"
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create a task comment
+      description: Create a comment on a task
+      operationId: createTaskComment
+      x-airbyte-entity: comments
+      x-airbyte-action: create
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The ID of the task
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentCreateParams"
+      responses:
+        "200":
+          description: Comment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentCreateResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/comment/{comment_id}/reply":
+    get:
+      summary: Get threaded replies
+      description: Get threaded replies on a comment
+      operationId: getThreadedComments
+      x-airbyte-entity: comments
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.comments
+      parameters:
+      - name: comment_id
+        in: path
+        required: true
+        description: The ID of the comment
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Threaded replies
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentsListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/comment/{comment_id}":
+    put:
+      summary: Update a comment
+      description: Update an existing comment
+      operationId: updateComment
+      x-airbyte-entity: comments
+      x-airbyte-action: update
+      parameters:
+      - name: comment_id
+        in: path
+        required: true
+        description: The ID of the comment
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentUpdateParams"
+      responses:
+        "200":
+          description: Comment updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentUpdateResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Goals ──
+  "/api/v2/team/{team_id}/goal":
+    get:
+      summary: List goals
+      description: Get the goals in a workspace
+      operationId: listGoals
+      x-airbyte-entity: goals
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.goals
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of goals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalsListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/goal/{goal_id}":
+    get:
+      summary: Get a goal
+      description: Get a single goal by ID
+      operationId: getGoal
+      x-airbyte-entity: goals
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.goal
+      parameters:
+      - name: goal_id
+        in: path
+        required: true
+        description: The ID of the goal
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Goal details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Goal not found
+
+  # ── Views ──
+  "/api/v2/team/{team_id}/view":
+    get:
+      summary: List workspace views
+      description: Get the workspace-level (Everything level) views
+      operationId: listWorkspaceViews
+      x-airbyte-entity: views
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.views
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of views
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewsListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/view/{view_id}":
+    get:
+      summary: Get a view
+      description: Get a single view by ID
+      operationId: getView
+      x-airbyte-entity: views
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.view
+      parameters:
+      - name: view_id
+        in: path
+        required: true
+        description: The ID of the view
+        schema:
+          type: string
+      responses:
+        "200":
+          description: View details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: View not found
+
+  "/api/v2/view/{view_id}/task":
+    get:
+      summary: List view tasks
+      description: Get tasks matching a view's pre-configured filters — useful as a secondary search mechanism
+      operationId: getViewTasks
+      x-airbyte-entity: view_tasks
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.tasks
+      parameters:
+      - name: view_id
+        in: path
+        required: true
+        description: The ID of the view
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number (0-indexed)
+        schema:
+          type: integer
+          default: 0
+      responses:
+        "200":
+          description: Tasks matching the view
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksListResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Time Tracking ──
+  "/api/v2/team/{team_id}/time_entries":
+    get:
+      summary: List time entries
+      description: Get time entries within a date range for a workspace
+      operationId: listTimeEntries
+      x-airbyte-entity: time_tracking
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: Start date (Unix ms)
+        schema:
+          type: integer
+      - name: end_date
+        in: query
+        description: End date (Unix ms)
+        schema:
+          type: integer
+      - name: assignee
+        in: query
+        description: Filter by user ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of time entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntriesListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v2/team/{team_id}/time_entries/{time_entry_id}":
+    get:
+      summary: Get a time entry
+      description: Get a single time entry by ID
+      operationId: getTimeEntry
+      x-airbyte-entity: time_tracking
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: team_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      - name: time_entry_id
+        in: path
+        required: true
+        description: The ID of the time entry
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Time entry details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntryResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Time entry not found
+
+  # ── Members ──
+  "/api/v2/task/{task_id}/member":
+    get:
+      summary: List task members
+      description: Get the members assigned to a task
+      operationId: listTaskMembers
+      x-airbyte-entity: members
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.members
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The ID of the task
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of task members
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MembersListResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Docs (v3 API) ──
+  "/api/v3/workspaces/{workspace_id}/docs":
+    get:
+      summary: Search docs
+      description: Search for docs in a workspace
+      operationId: listDocs
+      x-airbyte-entity: docs
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.docs
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of docs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocsListResponse"
+        "401":
+          description: Unauthorized
+
+  "/api/v3/workspaces/{workspace_id}/docs/{doc_id}":
+    get:
+      summary: Get a doc
+      description: Fetch a single doc by ID
+      operationId: getDoc
+      x-airbyte-entity: docs
+      x-airbyte-action: get
+      parameters:
+      - name: workspace_id
+        in: path
+        required: true
+        description: The ID of the workspace
+        schema:
+          type: string
+      - name: doc_id
+        in: path
+        required: true
+        description: The ID of the doc
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Doc details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Doc"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Doc not found
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: ClickUp API key authentication
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+        - api_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: Your ClickUp personal API token
+        auth_mapping:
+          api_key: "${api_key}"
+        replication_auth_key_mapping:
+          api_token: api_key
+
+  schemas:
+    # ── User ──
+    User:
+      type: object
+      x-airbyte-entity-name: user
+      properties:
+        id:
+          type: integer
+          description: User ID
+        username:
+          type: string
+          description: Username
+        email:
+          type: string
+          description: Email address
+        color:
+          type:
+          - string
+          - "null"
+          description: User avatar color
+        profilePicture:
+          type:
+          - string
+          - "null"
+          description: Profile picture URL
+        initials:
+          type:
+          - string
+          - "null"
+          description: User initials
+        week_start_day:
+          type:
+          - integer
+          - "null"
+          description: Week start day preference
+        global_font_support:
+          type:
+          - boolean
+          - "null"
+          description: Global font support enabled
+        timezone:
+          type:
+          - string
+          - "null"
+          description: User timezone
+
+    UserResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+
+    # ── Teams ──
+    Team:
+      type: object
+      x-airbyte-entity-name: teams
+      properties:
+        id:
+          type: string
+          description: Workspace ID
+        name:
+          type: string
+          description: Workspace name
+        color:
+          type:
+          - string
+          - "null"
+          description: Workspace color
+        avatar:
+          type:
+          - string
+          - "null"
+          description: Workspace avatar URL
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              user:
+                type: object
+                description: Member user details
+                properties:
+                  id:
+                    type: integer
+                    description: User ID
+                  username:
+                    type: string
+                    description: Username
+                  email:
+                    type: string
+                    description: Email address
+                  color:
+                    type:
+                    - string
+                    - "null"
+                    description: Avatar color
+                  profilePicture:
+                    type:
+                    - string
+                    - "null"
+                    description: Profile picture URL
+                  initials:
+                    type:
+                    - string
+                    - "null"
+                    description: User initials
+                  role:
+                    type:
+                    - integer
+                    - "null"
+                    description: User role ID
+                  role_subtype:
+                    type:
+                    - integer
+                    - "null"
+                    description: User role subtype
+                  role_key:
+                    type:
+                    - string
+                    - "null"
+                    description: Role key name
+                  custom_role:
+                    type:
+                    - object
+                    - "null"
+                    description: Custom role details
+                  last_active:
+                    type:
+                    - string
+                    - "null"
+                    description: Last active timestamp (Unix ms)
+                  date_joined:
+                    type:
+                    - string
+                    - "null"
+                    description: Date joined (Unix ms)
+                  date_invited:
+                    type:
+                    - string
+                    - "null"
+                    description: Date invited (Unix ms)
+          description: List of workspace members
+
+    TeamsListResponse:
+      type: object
+      properties:
+        teams:
+          type: array
+          items:
+            $ref: "#/components/schemas/Team"
+
+    # ── Spaces ──
+    Space:
+      type: object
+      x-airbyte-entity-name: spaces
+      properties:
+        id:
+          type: string
+          description: Space ID
+        name:
+          type: string
+          description: Space name
+        private:
+          type: boolean
+          description: Whether the space is private
+        color:
+          type:
+          - string
+          - "null"
+          description: Space color
+        avatar:
+          type:
+          - string
+          - "null"
+          description: Space avatar URL
+        admin_can_manage:
+          type:
+          - boolean
+          - "null"
+          description: Whether admins can manage
+        statuses:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Status ID
+              status:
+                type: string
+                description: Status name
+              type:
+                type: string
+                description: Status type (open, custom, closed)
+              orderindex:
+                type: integer
+                description: Status order index
+              color:
+                type: string
+                description: Status color hex code
+          description: Space statuses
+        multiple_assignees:
+          type: boolean
+          description: Multiple assignees enabled
+        features:
+          type: object
+          description: Feature flags for the space
+          properties:
+            due_dates:
+              type: object
+              description: Due dates feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether due dates are enabled
+                start_date:
+                  type: boolean
+                  description: Whether start dates are enabled
+                remap_due_dates:
+                  type: boolean
+                  description: Whether due dates are remapped
+                remap_closed_due_date:
+                  type: boolean
+                  description: Whether closed due dates are remapped
+            sprints:
+              type: object
+              description: Sprints feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether sprints are enabled
+            time_tracking:
+              type: object
+              description: Time tracking feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether time tracking is enabled
+                harvest:
+                  type: boolean
+                  description: Whether Harvest integration is enabled
+                rollup:
+                  type: boolean
+                  description: Whether time rollup is enabled
+                default_to_billable:
+                  type:
+                  - integer
+                  - "null"
+                  description: Default billable setting
+            points:
+              type: object
+              description: Points feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether points are enabled
+            custom_items:
+              type: object
+              description: Custom items feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether custom items are enabled
+            priorities:
+              type: object
+              description: Priorities feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether priorities are enabled
+                priorities:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      color:
+                        type: string
+                        description: Priority color hex code
+                      id:
+                        type: string
+                        description: Priority ID
+                      orderindex:
+                        type: string
+                        description: Priority order index
+                      priority:
+                        type: string
+                        description: Priority name
+                  description: Priority levels
+            tags:
+              type: object
+              description: Tags feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether tags are enabled
+            time_estimates:
+              type: object
+              description: Time estimates feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether time estimates are enabled
+                rollup:
+                  type: boolean
+                  description: Whether time estimate rollup is enabled
+                per_assignee:
+                  type: boolean
+                  description: Whether per-assignee estimates are enabled
+            check_unresolved:
+              type: object
+              description: Check unresolved feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether check unresolved is enabled
+                subtasks:
+                  type:
+                  - boolean
+                  - "null"
+                  description: Check unresolved subtasks
+                checklists:
+                  type:
+                  - boolean
+                  - "null"
+                  description: Check unresolved checklists
+                comments:
+                  type:
+                  - boolean
+                  - "null"
+                  description: Check unresolved comments
+            milestones:
+              type: object
+              description: Milestones feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether milestones are enabled
+            custom_fields:
+              type: object
+              description: Custom fields feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether custom fields are enabled
+            remap_dependencies:
+              type: object
+              description: Remap dependencies feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether remap dependencies is enabled
+            dependency_warning:
+              type: object
+              description: Dependency warning feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether dependency warnings are enabled
+            status_pies:
+              type: object
+              description: Status pies feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether status pies are enabled
+            multiple_assignees:
+              type: object
+              description: Multiple assignees feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether multiple assignees are enabled
+            emails:
+              type: object
+              description: Emails feature settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether emails are enabled
+            scheduler_enabled:
+              type: boolean
+              description: Whether scheduler is enabled
+            dependency_type_enabled:
+              type: boolean
+              description: Whether dependency types are enabled
+            dependency_enforcement:
+              type: object
+              description: Dependency enforcement settings
+              properties:
+                enforcement_enabled:
+                  type: boolean
+                  description: Whether enforcement is enabled
+                enforcement_mode:
+                  type:
+                  - integer
+                  - "null"
+                  description: Enforcement mode
+            reschedule_closed_dependencies:
+              type: object
+              description: Reschedule closed dependencies settings
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether rescheduling closed dependencies is enabled
+        archived:
+          type: boolean
+          description: Whether the space is archived
+
+    SpacesListResponse:
+      type: object
+      properties:
+        spaces:
+          type: array
+          items:
+            $ref: "#/components/schemas/Space"
+
+    # ── Folders ──
+    Folder:
+      type: object
+      x-airbyte-entity-name: folders
+      properties:
+        id:
+          type: string
+          description: Folder ID
+        name:
+          type: string
+          description: Folder name
+        orderindex:
+          type:
+          - integer
+          - "null"
+          description: Sort order index
+        override_statuses:
+          type: boolean
+          description: Whether folder overrides space statuses
+        hidden:
+          type: boolean
+          description: Whether the folder is hidden
+        space:
+          type: object
+          description: Parent space reference
+          properties:
+            id:
+              type: string
+              description: Space ID
+            name:
+              type: string
+              description: Space name
+            access:
+              type:
+              - boolean
+              - "null"
+              description: Whether user has access
+        task_count:
+          type:
+          - string
+          - "null"
+          description: Number of tasks in the folder
+        archived:
+          type: boolean
+          description: Whether the folder is archived
+        statuses:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Status ID
+              status:
+                type: string
+                description: Status name
+              type:
+                type: string
+                description: Status type (open, custom, closed)
+              orderindex:
+                type: integer
+                description: Status order index
+              color:
+                type: string
+                description: Status color hex code
+          description: Folder statuses
+        deleted:
+          type:
+          - boolean
+          - "null"
+          description: Whether the folder is deleted
+        lists:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: List ID
+              name:
+                type: string
+                description: List name
+              orderindex:
+                type:
+                - integer
+                - "null"
+                description: Sort order index
+              content:
+                type:
+                - string
+                - "null"
+                description: List description
+              status:
+                type:
+                - object
+                - "null"
+                description: List status
+              priority:
+                type:
+                - object
+                - "null"
+                description: List priority
+              assignee:
+                type:
+                - object
+                - "null"
+                description: List assignee
+              task_count:
+                type:
+                - integer
+                - "null"
+                description: Number of tasks
+              due_date:
+                type:
+                - string
+                - "null"
+                description: Due date (Unix ms)
+              start_date:
+                type:
+                - string
+                - "null"
+                description: Start date (Unix ms)
+              space:
+                type:
+                - object
+                - "null"
+                description: Parent space reference
+              archived:
+                type:
+                - boolean
+                - "null"
+                description: Whether the list is archived
+              override_statuses:
+                type:
+                - boolean
+                - "null"
+                description: Whether list overrides statuses
+              statuses:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Status ID
+                    status:
+                      type: string
+                      description: Status name
+                    type:
+                      type: string
+                      description: Status type (open, custom, closed)
+                    orderindex:
+                      type: integer
+                      description: Status order index
+                    color:
+                      type: string
+                      description: Status color hex code
+                    status_group:
+                      type:
+                      - string
+                      - "null"
+                      description: Status group identifier
+                description: List statuses
+              permission_level:
+                type:
+                - string
+                - "null"
+                description: User permission level
+          description: Lists in the folder
+        permission_level:
+          type:
+          - string
+          - "null"
+          description: User permission level
+
+    FoldersListResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Folder"
+
+    # ── Lists ──
+    List:
+      type: object
+      x-airbyte-entity-name: lists
+      properties:
+        id:
+          type: string
+          description: List ID
+        name:
+          type: string
+          description: List name
+        orderindex:
+          type:
+          - integer
+          - "null"
+          description: Sort order index
+        status:
+          type:
+          - object
+          - "null"
+          description: List status
+        priority:
+          type:
+          - object
+          - "null"
+          description: List priority
+        assignee:
+          type:
+          - object
+          - "null"
+          description: List assignee
+        task_count:
+          type:
+          - integer
+          - "null"
+          description: Number of tasks
+        due_date:
+          type:
+          - string
+          - "null"
+          description: Due date (Unix ms)
+        start_date:
+          type:
+          - string
+          - "null"
+          description: Start date (Unix ms)
+        folder:
+          type: object
+          description: Parent folder reference
+          properties:
+            id:
+              type: string
+              description: Folder ID
+            name:
+              type: string
+              description: Folder name
+            hidden:
+              type:
+              - boolean
+              - "null"
+              description: Whether the folder is hidden
+            access:
+              type:
+              - boolean
+              - "null"
+              description: Whether user has access
+        space:
+          type: object
+          description: Parent space reference
+          properties:
+            id:
+              type: string
+              description: Space ID
+            name:
+              type: string
+              description: Space name
+            access:
+              type:
+              - boolean
+              - "null"
+              description: Whether user has access
+        archived:
+          type: boolean
+          description: Whether the list is archived
+        override_statuses:
+          type:
+          - boolean
+          - "null"
+          description: Whether list overrides folder/space statuses
+        content:
+          type:
+          - string
+          - "null"
+          description: List description
+        deleted:
+          type:
+          - boolean
+          - "null"
+          description: Whether the list is deleted
+        inbound_address:
+          type:
+          - string
+          - "null"
+          description: Email address for inbound task creation
+        statuses:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Status ID
+              status:
+                type: string
+                description: Status name
+              type:
+                type: string
+                description: Status type (open, custom, closed)
+              orderindex:
+                type: integer
+                description: Status order index
+              color:
+                type: string
+                description: Status color hex code
+              status_group:
+                type:
+                - string
+                - "null"
+                description: Status group identifier
+          description: List statuses
+        permission_level:
+          type:
+          - string
+          - "null"
+          description: User permission level
+
+    ListsListResponse:
+      type: object
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: "#/components/schemas/List"
+
+    # ── Tasks ──
+    Task:
+      type: object
+      x-airbyte-entity-name: tasks
+      properties:
+        id:
+          type: string
+          description: Task ID
+        custom_id:
+          type:
+          - string
+          - "null"
+          description: Custom task ID
+        custom_item_id:
+          type:
+          - integer
+          - "null"
+          description: Custom item type identifier
+        name:
+          type: string
+          description: Task name
+        text_content:
+          type:
+          - string
+          - "null"
+          description: Plain text content
+        description:
+          type:
+          - string
+          - "null"
+          description: Task description
+        status:
+          type: object
+          description: Task status
+          properties:
+            id:
+              type: string
+              description: Status ID
+            status:
+              type: string
+              description: Status name
+            color:
+              type:
+              - string
+              - "null"
+              description: Status color hex code
+            type:
+              type: string
+              description: Status type (open, custom, closed)
+            orderindex:
+              type: integer
+              description: Status order index
+        orderindex:
+          type:
+          - string
+          - "null"
+          description: Sort order
+        date_created:
+          type:
+          - string
+          - "null"
+          description: Created date (Unix ms)
+        date_updated:
+          type:
+          - string
+          - "null"
+          description: Updated date (Unix ms)
+        date_closed:
+          type:
+          - string
+          - "null"
+          description: Closed date (Unix ms)
+        date_done:
+          type:
+          - string
+          - "null"
+          description: Done date (Unix ms)
+        archived:
+          type: boolean
+          description: Whether the task is archived
+        creator:
+          type: object
+          description: Task creator
+          properties:
+            id:
+              type: integer
+              description: Creator user ID
+            username:
+              type: string
+              description: Creator username
+            color:
+              type:
+              - string
+              - "null"
+              description: Creator avatar color
+            email:
+              type: string
+              description: Creator email
+            profilePicture:
+              type:
+              - string
+              - "null"
+              description: Creator profile picture URL
+        assignees:
+          type: array
+          items:
+            type: object
+          description: Assigned users
+        group_assignees:
+          type: array
+          items:
+            type: object
+          description: Group assignees
+        watchers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Watcher user ID
+              username:
+                type: string
+                description: Watcher username
+              color:
+                type:
+                - string
+                - "null"
+                description: Watcher avatar color
+              initials:
+                type:
+                - string
+                - "null"
+                description: Watcher initials
+              email:
+                type: string
+                description: Watcher email
+              profilePicture:
+                type:
+                - string
+                - "null"
+                description: Watcher profile picture URL
+          description: Task watchers
+        checklists:
+          type: array
+          items:
+            type: object
+          description: Task checklists
+        tags:
+          type: array
+          items:
+            type: object
+          description: Task tags
+        parent:
+          type:
+          - string
+          - "null"
+          description: Parent task ID
+        priority:
+          type:
+          - object
+          - "null"
+          description: Task priority
+        due_date:
+          type:
+          - string
+          - "null"
+          description: Due date (Unix ms)
+        start_date:
+          type:
+          - string
+          - "null"
+          description: Start date (Unix ms)
+        points:
+          type:
+          - number
+          - "null"
+          description: Sprint points
+        time_estimate:
+          type:
+          - integer
+          - "null"
+          description: Time estimate (ms)
+        time_spent:
+          type:
+          - integer
+          - "null"
+          description: Time spent (ms)
+        custom_fields:
+          type: array
+          items:
+            type: object
+          description: Custom fields
+        dependencies:
+          type: array
+          items:
+            type: object
+          description: Task dependencies
+        linked_tasks:
+          type: array
+          items:
+            type: object
+          description: Linked tasks
+        team_id:
+          type:
+          - string
+          - "null"
+          description: Workspace ID
+        url:
+          type: string
+          description: Task URL
+        list:
+          type:
+          - object
+          - "null"
+          description: Parent list reference
+        project:
+          type:
+          - object
+          - "null"
+          description: Parent project reference
+        folder:
+          type:
+          - object
+          - "null"
+          description: Parent folder reference
+        space:
+          type:
+          - object
+          - "null"
+          description: Parent space reference
+        top_level_parent:
+          type:
+          - string
+          - "null"
+          description: Top-level parent task ID
+        locations:
+          type: array
+          items:
+            type: object
+          description: Task locations
+        sharing:
+          type:
+          - object
+          - "null"
+          description: Task sharing settings
+        permission_level:
+          type:
+          - string
+          - "null"
+          description: User permission level for this task
+        attachments:
+          type: array
+          items:
+            type: object
+          description: Task attachments
+
+    TasksListResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+        last_page:
+          type:
+          - boolean
+          - "null"
+          description: Whether this is the last page of results
+
+    # ── Comments ──
+    Comment:
+      type: object
+      x-airbyte-entity-name: comments
+      properties:
+        id:
+          type: string
+          description: Comment ID
+        comment:
+          type: array
+          items:
+            type: object
+          description: Comment content blocks
+        comment_text:
+          type: string
+          description: Plain text comment
+        user:
+          type: object
+          description: Comment author
+        resolved:
+          type: boolean
+          description: Whether the comment is resolved
+        assignee:
+          type:
+          - object
+          - "null"
+          description: Assigned user
+        assigned_by:
+          type:
+          - object
+          - "null"
+          description: User who assigned
+        reactions:
+          type: array
+          items:
+            type: object
+          description: Comment reactions
+        date:
+          type: string
+          description: Comment date (Unix ms)
+
+    CommentsListResponse:
+      type: object
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+
+    CommentCreateParams:
+      type: object
+      required:
+      - comment_text
+      properties:
+        comment_text:
+          type: string
+          description: The comment text
+        assignee:
+          type: integer
+          description: User ID to assign
+        notify_all:
+          type: boolean
+          description: Notify all assignees and watchers
+
+    CommentCreateResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: New comment ID
+        hist_id:
+          type: string
+          description: History ID
+        date:
+          type: integer
+          description: Comment date (Unix ms)
+        version:
+          type:
+          - object
+          - "null"
+          description: Version metadata for the comment operation
+
+    CommentUpdateParams:
+      type: object
+      properties:
+        comment_text:
+          type: string
+          description: Updated comment text
+        assignee:
+          type: integer
+          description: User ID to assign
+        resolved:
+          type: boolean
+          description: Whether the comment is resolved
+
+    CommentUpdateResponse:
+      type: object
+      properties: {}
+
+    # ── Goals ──
+    Goal:
+      type: object
+      x-airbyte-entity-name: goals
+      properties:
+        id:
+          type: string
+          description: Goal ID
+        pretty_id:
+          type:
+          - string
+          - "null"
+          description: Human-readable goal ID
+        name:
+          type: string
+          description: Goal name
+        team_id:
+          type: string
+          description: Workspace ID
+        creator:
+          type:
+          - integer
+          - "null"
+          description: Creator user ID
+        owner:
+          type:
+          - object
+          - "null"
+          description: Goal owner
+        color:
+          type: string
+          description: Goal color
+        date_created:
+          type:
+          - string
+          - "null"
+          description: Created date (Unix ms)
+        start_date:
+          type:
+          - string
+          - "null"
+          description: Start date (Unix ms)
+        due_date:
+          type:
+          - string
+          - "null"
+          description: Due date (Unix ms)
+        description:
+          type:
+          - string
+          - "null"
+          description: Goal description
+        private:
+          type: boolean
+          description: Whether the goal is private
+        archived:
+          type: boolean
+          description: Whether the goal is archived
+        multiple_owners:
+          type: boolean
+          description: Multiple owners allowed
+        members:
+          type: array
+          items:
+            type: object
+          description: Goal members
+        key_results:
+          type: array
+          items:
+            type: object
+          description: Key results
+        percent_completed:
+          type:
+          - integer
+          - "null"
+          description: Completion percentage
+        history:
+          type: array
+          items:
+            type: object
+          description: Goal history
+        pretty_url:
+          type:
+          - string
+          - "null"
+          description: Goal URL
+
+    GoalsListResponse:
+      type: object
+      properties:
+        goals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Goal"
+        folders:
+          type: array
+          items:
+            type: object
+          description: Goal folders
+
+    GoalResponse:
+      type: object
+      properties:
+        goal:
+          $ref: "#/components/schemas/Goal"
+
+    # ── Views ──
+    View:
+      type: object
+      x-airbyte-entity-name: views
+      properties:
+        id:
+          type: string
+          description: View ID
+        name:
+          type: string
+          description: View name
+        type:
+          type: string
+          description: View type (list, board, calendar, gantt, etc.)
+        parent:
+          type: object
+          description: Parent reference
+          properties:
+            id:
+              type:
+              - string
+              - integer
+              description: Parent entity ID
+            type:
+              type:
+              - string
+              - integer
+              description: Parent entity type
+        grouping:
+          type: object
+          description: Grouping settings
+        divide:
+          type: object
+          description: Division settings
+        sorting:
+          type: object
+          description: Sorting settings
+        filters:
+          type: object
+          description: Filter settings
+        columns:
+          type: object
+          description: Column settings
+        team_sidebar:
+          type: object
+          description: Team sidebar settings
+        settings:
+          type: object
+          description: View settings
+        date_created:
+          type:
+          - string
+          - "null"
+          description: Created date (Unix ms)
+        creator:
+          type:
+          - integer
+          - "null"
+          description: Creator user ID
+        visibility:
+          type:
+          - string
+          - "null"
+          description: View visibility
+        protected:
+          type:
+          - boolean
+          - "null"
+          description: Whether the view is protected
+        protected_note:
+          type:
+          - string
+          - "null"
+          description: Note associated with protection
+        protected_by:
+          type:
+          - integer
+          - "null"
+          description: User ID who protected the view
+        date_protected:
+          type:
+          - string
+          - "null"
+          description: Date the view was protected (Unix ms or null)
+        orderindex:
+          type: integer
+          description: View order index
+        public:
+          type: boolean
+          description: Whether the view is public
+
+    ViewsListResponse:
+      type: object
+      properties:
+        views:
+          type: array
+          items:
+            $ref: "#/components/schemas/View"
+        required_views:
+          type:
+          - object
+          - "null"
+          description: Required views configuration by type
+        default_view:
+          type:
+          - object
+          - "null"
+          description: Default view configuration
+
+    ViewResponse:
+      type: object
+      properties:
+        view:
+          $ref: "#/components/schemas/View"
+
+    # ── Time Tracking ──
+    TimeEntry:
+      type: object
+      x-airbyte-entity-name: time_tracking
+      properties:
+        id:
+          type: string
+          description: Time entry ID
+        task:
+          type:
+          - object
+          - "null"
+          description: Associated task
+        wid:
+          type:
+          - string
+          - "null"
+          description: Workspace ID
+        user:
+          type: object
+          description: User who tracked time
+        billable:
+          type: boolean
+          description: Whether the entry is billable
+        start:
+          type: string
+          description: Start time (Unix ms)
+        end:
+          type:
+          - string
+          - "null"
+          description: End time (Unix ms)
+        duration:
+          type: string
+          description: Duration in milliseconds
+        description:
+          type:
+          - string
+          - "null"
+          description: Time entry description
+        tags:
+          type: array
+          items:
+            type: object
+          description: Time entry tags
+        at:
+          type:
+          - string
+          - "null"
+          description: Last updated (Unix ms)
+
+    TimeEntriesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeEntry"
+
+    TimeEntryResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/TimeEntry"
+
+    # ── Members ──
+    Member:
+      type: object
+      x-airbyte-entity-name: members
+      properties:
+        id:
+          type: integer
+          description: Member user ID
+        username:
+          type: string
+          description: Username
+        email:
+          type: string
+          description: Email address
+        color:
+          type:
+          - string
+          - "null"
+          description: Avatar color
+        profilePicture:
+          type:
+          - string
+          - "null"
+          description: Profile picture URL
+        initials:
+          type:
+          - string
+          - "null"
+          description: User initials
+
+    MembersListResponse:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/Member"
+
+    # ── Docs (v3) ──
+    Doc:
+      type: object
+      x-airbyte-entity-name: docs
+      properties:
+        id:
+          type: string
+          description: Doc ID
+        name:
+          type: string
+          description: Doc name
+        type:
+          type:
+          - integer
+          - "null"
+          description: Doc type
+        parent:
+          type:
+          - object
+          - "null"
+          description: Parent reference
+        creator:
+          type:
+          - integer
+          - "null"
+          description: Creator user ID
+        deleted:
+          type:
+          - boolean
+          - "null"
+          description: Whether the doc is deleted
+        public:
+          type:
+          - boolean
+          - "null"
+          description: Whether the doc is public
+        date_created:
+          type:
+          - integer
+          - "null"
+          description: Created date (Unix ms)
+        date_updated:
+          type:
+          - integer
+          - "null"
+          description: Last updated date (Unix ms)
+        workspace_id:
+          type:
+          - integer
+          - "null"
+          description: Workspace ID
+        content:
+          type:
+          - string
+          - "null"
+          description: Doc content
+
+    DocsListResponse:
+      type: object
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Doc"
+        next_cursor:
+          type:
+          - string
+          - "null"
+          description: Cursor for pagination to the next page of results

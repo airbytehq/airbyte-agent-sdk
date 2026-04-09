@@ -1,0 +1,2378 @@
+openapi: 3.1.0
+
+info:
+  title: Twilio API Connector
+  version: 1.0.4
+  description: >
+    Connector for the Twilio REST API. Provides read access to core Twilio resources
+    including accounts, calls, messages, recordings, conferences, incoming phone numbers,
+    usage records, addresses, queues, transcriptions, and outgoing caller IDs.
+    Uses HTTP Basic authentication with Account SID and Auth Token.
+  x-airbyte-connector-name: twilio
+  x-airbyte-connector-definition-id: b9dc6155-672e-42ea-b10d-9f1f1fb95ab1
+  x-airbyte-replication-version: "0.17.4"
+  x-airbyte-replication-compatibility: ">=0.17.4, <1.0.0"
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Twilio.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: >
+          UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ.
+          Any data before this date will not be replicated.
+        format: date-time
+    required:
+    - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Twilio API Documentation
+    url: https://www.twilio.com/docs/usage/api
+  x-airbyte-example-questions:
+    direct:
+    - "List all calls from the last 7 days"
+    - "Show me recent inbound SMS messages"
+    - "List all active phone numbers on my account"
+    - "Show me details for a specific call"
+    - "List all recordings"
+    - "Show me conference calls"
+    - "List usage records for my account"
+    - "Show me all queues"
+    - "List outgoing caller IDs"
+    - "Show me addresses on my account"
+    - "List transcriptions"
+    search:
+    - "What are my top 10 most expensive calls this month?"
+    - "How many SMS messages did I send vs receive in the last 30 days?"
+    - "Summarize my usage costs by category"
+    - "Which phone numbers have the most incoming calls?"
+    - "Show me all failed messages and their error codes"
+    - "What is the average call duration for outbound calls?"
+    unsupported:
+    - "Send a new SMS message"
+    - "Make a phone call"
+    - "Purchase a new phone number"
+    - "Delete a recording"
+    - "Create a new queue"
+  x-airbyte-entity-relationships:
+  - source_entity: calls
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: messages
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: incoming_phone_numbers
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: recordings
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: conferences
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: usage_records
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: addresses
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: queues
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: transcriptions
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  - source_entity: outgoing_caller_ids
+    target_entity: accounts
+    foreign_key: AccountSid
+    target_key: sid
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: accounts
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for the account
+      - name: friendly_name
+        type:
+        - "null"
+        - "string"
+        description: A user-defined friendly name for the account
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: The current status of the account
+      - name: type
+        type:
+        - "null"
+        - "string"
+        description: The type of the account
+      - name: owner_account_sid
+        type:
+        - "null"
+        - "string"
+        description: The SID of the owner account
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: The timestamp when the account was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: The timestamp when the account was last updated
+      - name: uri
+        type:
+        - "null"
+        - "string"
+        description: The URI for accessing the account resource
+    - entity: calls
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for the call
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for the account associated with the call
+      - name: to
+        type:
+        - "null"
+        - "string"
+        description: The phone number that received the call
+      - name: from
+        type:
+        - "null"
+        - "string"
+        description: The phone number that made the call
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: The current status of the call
+      - name: direction
+        type:
+        - "null"
+        - "string"
+        description: The direction of the call (inbound or outbound)
+      - name: duration
+        type:
+        - "null"
+        - "string"
+        description: The duration of the call in seconds
+      - name: price
+        type:
+        - "null"
+        - "string"
+        description: The cost of the call
+      - name: price_unit
+        type:
+        - "null"
+        - "string"
+        description: The currency unit of the call cost
+      - name: start_time
+        type:
+        - "null"
+        - "string"
+        description: The date and time when the call started
+      - name: end_time
+        type:
+        - "null"
+        - "string"
+        description: The date and time when the call ended
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: The date and time when the call record was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: The date and time when the call record was last updated
+    - entity: messages
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for this message
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for the account associated with this message
+      - name: to
+        type:
+        - "null"
+        - "string"
+        description: The phone number or recipient ID the message was sent to
+      - name: from
+        type:
+        - "null"
+        - "string"
+        description: The phone number or sender ID that sent the message
+      - name: body
+        type:
+        - "null"
+        - "string"
+        description: The text body of the message
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: The status of the message
+      - name: direction
+        type:
+        - "null"
+        - "string"
+        description: The direction of the message
+      - name: price
+        type:
+        - "null"
+        - "string"
+        description: The cost of the message
+      - name: price_unit
+        type:
+        - "null"
+        - "string"
+        description: The currency unit used for pricing
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: The date and time when the message was created
+      - name: date_sent
+        type:
+        - "null"
+        - "string"
+        description: The date and time when the message was sent
+      - name: error_code
+        type:
+        - "null"
+        - "string"
+        description: The error code associated with the message if any
+      - name: error_message
+        type:
+        - "null"
+        - "string"
+        description: The error message description if the message failed
+      - name: num_segments
+        type:
+        - "null"
+        - "string"
+        description: The number of message segments
+      - name: num_media
+        type:
+        - "null"
+        - "string"
+        description: The number of media files included in the message
+    - entity: incoming_phone_numbers
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The SID of this phone number
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The SID of the account that owns this phone number
+      - name: phone_number
+        type:
+        - "null"
+        - "string"
+        description: The phone number in E.164 format
+      - name: friendly_name
+        type:
+        - "null"
+        - "string"
+        description: A user-assigned friendly name for this phone number
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: Status of the phone number
+      - name: capabilities
+        type:
+        - "null"
+        - "object"
+        description: Capabilities of this phone number
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: When the phone number was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: When the phone number was last updated
+    - entity: recordings
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier of the recording
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID that owns the recording
+      - name: call_sid
+        type:
+        - "null"
+        - "string"
+        description: The SID of the associated call
+      - name: duration
+        type:
+        - "null"
+        - "string"
+        description: Duration in seconds
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: The status of the recording
+      - name: channels
+        type:
+        - "null"
+        - "integer"
+        description: Number of audio channels
+      - name: price
+        type:
+        - "null"
+        - "string"
+        description: The cost of storing the recording
+      - name: price_unit
+        type:
+        - "null"
+        - "string"
+        description: The currency unit
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: When the recording was created
+      - name: start_time
+        type:
+        - "null"
+        - "string"
+        description: When the recording started
+    - entity: conferences
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier of the conference
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID associated with the conference
+      - name: friendly_name
+        type:
+        - "null"
+        - "string"
+        description: A friendly name for the conference
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: The current status of the conference
+      - name: region
+        type:
+        - "null"
+        - "string"
+        description: The region where the conference is hosted
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: When the conference was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: When the conference was last updated
+    - entity: usage_records
+      fields:
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID associated with this usage record
+      - name: category
+        type:
+        - "null"
+        - "string"
+        description: The usage category (calls, SMS, recordings, etc.)
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: A description of the usage record
+      - name: usage
+        type:
+        - "null"
+        - "string"
+        description: The total usage value
+      - name: usage_unit
+        type:
+        - "null"
+        - "string"
+        description: The unit of measurement for usage
+      - name: count
+        type:
+        - "null"
+        - "string"
+        description: The number of units consumed
+      - name: count_unit
+        type:
+        - "null"
+        - "string"
+        description: The unit of measurement for count
+      - name: price
+        type:
+        - "null"
+        - "string"
+        description: The total price for consumed units
+      - name: price_unit
+        type:
+        - "null"
+        - "string"
+        description: The currency unit
+      - name: start_date
+        type:
+        - "null"
+        - "string"
+        description: The start date of the usage period
+      - name: end_date
+        type:
+        - "null"
+        - "string"
+        description: The end date of the usage period
+    - entity: addresses
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier of the address
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID associated with this address
+      - name: customer_name
+        type:
+        - "null"
+        - "string"
+        description: The customer name associated with this address
+      - name: friendly_name
+        type:
+        - "null"
+        - "string"
+        description: A friendly name for the address
+      - name: street
+        type:
+        - "null"
+        - "string"
+        description: The street address
+      - name: city
+        type:
+        - "null"
+        - "string"
+        description: The city of the address
+      - name: region
+        type:
+        - "null"
+        - "string"
+        description: The region or state
+      - name: postal_code
+        type:
+        - "null"
+        - "string"
+        description: The postal code
+      - name: iso_country
+        type:
+        - "null"
+        - "string"
+        description: The ISO 3166-1 alpha-2 country code
+      - name: validated
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the address has been validated
+      - name: verified
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the address has been verified
+    - entity: queues
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for the queue
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID that owns this queue
+      - name: friendly_name
+        type:
+        - "null"
+        - "string"
+        description: A friendly name for the queue
+      - name: current_size
+        type:
+        - "null"
+        - "integer"
+        description: Current number of callers waiting
+      - name: max_size
+        type:
+        - "null"
+        - "integer"
+        description: Maximum number of callers allowed
+      - name: average_wait_time
+        type:
+        - "null"
+        - "integer"
+        description: Average wait time in seconds
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: When the queue was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: When the queue was last updated
+    - entity: transcriptions
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier for the transcription
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID
+      - name: recording_sid
+        type:
+        - "null"
+        - "string"
+        description: The SID of the associated recording
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: The status of the transcription
+      - name: duration
+        type:
+        - "null"
+        - "string"
+        description: Duration of the audio recording in seconds
+      - name: price
+        type:
+        - "null"
+        - "string"
+        description: The cost of the transcription
+      - name: price_unit
+        type:
+        - "null"
+        - "string"
+        description: The currency unit
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: When the transcription was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: When the transcription was last updated
+    - entity: outgoing_caller_ids
+      fields:
+      - name: sid
+        type:
+        - "null"
+        - "string"
+        description: The unique identifier
+      - name: account_sid
+        type:
+        - "null"
+        - "string"
+        description: The account SID
+      - name: phone_number
+        type:
+        - "null"
+        - "string"
+        description: The phone number
+      - name: friendly_name
+        type:
+        - "null"
+        - "string"
+        description: A friendly name
+      - name: date_created
+        type:
+        - "null"
+        - "string"
+        description: When the outgoing caller ID was created
+      - name: date_updated
+        type:
+        - "null"
+        - "string"
+        description: When the outgoing caller ID was last updated
+
+servers:
+- url: https://api.twilio.com/2010-04-01
+  description: Twilio REST API
+
+security:
+- basicAuth: []
+
+paths:
+  # ==================== ACCOUNTS ====================
+  /Accounts.json:
+    get:
+      summary: List accounts
+      description: Returns a list of accounts associated with the authenticated account
+      operationId: listAccounts
+      x-airbyte-entity: accounts
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.accounts
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountsList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{sid}.json":
+    get:
+      summary: Get an account
+      description: Get a single account by SID
+      operationId: getAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: get
+      parameters:
+      - name: sid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        "404":
+          description: Account not found
+        "401":
+          description: Unauthorized
+
+  # ==================== CALLS ====================
+  "/Accounts/{AccountSid}/Calls.json":
+    get:
+      summary: List calls
+      description: Returns a list of calls made to and from an account
+      operationId: listCalls
+      x-airbyte-entity: calls
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.calls
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of calls
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallsList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Calls/{sid}.json":
+    get:
+      summary: Get a call
+      description: Get a single call by SID
+      operationId: getCall
+      x-airbyte-entity: calls
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Call SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Call object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Call"
+        "404":
+          description: Call not found
+        "401":
+          description: Unauthorized
+
+  # ==================== MESSAGES ====================
+  "/Accounts/{AccountSid}/Messages.json":
+    get:
+      summary: List messages
+      description: Returns a list of messages associated with an account
+      operationId: listMessages
+      x-airbyte-entity: messages
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.messages
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessagesList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Messages/{sid}.json":
+    get:
+      summary: Get a message
+      description: Get a single message by SID
+      operationId: getMessage
+      x-airbyte-entity: messages
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Message SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Message object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "404":
+          description: Message not found
+        "401":
+          description: Unauthorized
+
+  # ==================== INCOMING PHONE NUMBERS ====================
+  "/Accounts/{AccountSid}/IncomingPhoneNumbers.json":
+    get:
+      summary: List incoming phone numbers
+      description: Returns a list of incoming phone numbers for an account
+      operationId: listIncomingPhoneNumbers
+      x-airbyte-entity: incoming_phone_numbers
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.incoming_phone_numbers
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of incoming phone numbers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomingPhoneNumbersList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/IncomingPhoneNumbers/{sid}.json":
+    get:
+      summary: Get an incoming phone number
+      description: Get a single incoming phone number by SID
+      operationId: getIncomingPhoneNumber
+      x-airbyte-entity: incoming_phone_numbers
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Incoming phone number SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Incoming phone number object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomingPhoneNumber"
+        "404":
+          description: Incoming phone number not found
+        "401":
+          description: Unauthorized
+
+  # ==================== RECORDINGS ====================
+  "/Accounts/{AccountSid}/Recordings.json":
+    get:
+      summary: List recordings
+      description: Returns a list of recordings for an account
+      operationId: listRecordings
+      x-airbyte-entity: recordings
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.recordings
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of recordings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordingsList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Recordings/{sid}.json":
+    get:
+      summary: Get a recording
+      description: Get a single recording by SID
+      operationId: getRecording
+      x-airbyte-entity: recordings
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Recording SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Recording object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recording"
+        "404":
+          description: Recording not found
+        "401":
+          description: Unauthorized
+
+  # ==================== CONFERENCES ====================
+  "/Accounts/{AccountSid}/Conferences.json":
+    get:
+      summary: List conferences
+      description: Returns a list of conferences for an account
+      operationId: listConferences
+      x-airbyte-entity: conferences
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.conferences
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of conferences
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConferencesList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Conferences/{sid}.json":
+    get:
+      summary: Get a conference
+      description: Get a single conference by SID
+      operationId: getConference
+      x-airbyte-entity: conferences
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Conference SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Conference object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conference"
+        "404":
+          description: Conference not found
+        "401":
+          description: Unauthorized
+
+  # ==================== USAGE RECORDS ====================
+  "/Accounts/{AccountSid}/Usage/Records.json":
+    get:
+      summary: List usage records
+      description: Returns a list of usage records for an account
+      operationId: listUsageRecords
+      x-airbyte-entity: usage_records
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.usage_records
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of usage records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsageRecordsList"
+        "401":
+          description: Unauthorized
+
+  # ==================== ADDRESSES ====================
+  "/Accounts/{AccountSid}/Addresses.json":
+    get:
+      summary: List addresses
+      description: Returns a list of addresses for an account
+      operationId: listAddresses
+      x-airbyte-entity: addresses
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.addresses
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of addresses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressesList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Addresses/{sid}.json":
+    get:
+      summary: Get an address
+      description: Get a single address by SID
+      operationId: getAddress
+      x-airbyte-entity: addresses
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Address SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Address object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Address"
+        "404":
+          description: Address not found
+        "401":
+          description: Unauthorized
+
+  # ==================== QUEUES ====================
+  "/Accounts/{AccountSid}/Queues.json":
+    get:
+      summary: List queues
+      description: Returns a list of queues for an account
+      operationId: listQueues
+      x-airbyte-entity: queues
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.queues
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of queues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueuesList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Queues/{sid}.json":
+    get:
+      summary: Get a queue
+      description: Get a single queue by SID
+      operationId: getQueue
+      x-airbyte-entity: queues
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Queue SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Queue object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Queue"
+        "404":
+          description: Queue not found
+        "401":
+          description: Unauthorized
+
+  # ==================== TRANSCRIPTIONS ====================
+  "/Accounts/{AccountSid}/Transcriptions.json":
+    get:
+      summary: List transcriptions
+      description: Returns a list of transcriptions for an account
+      operationId: listTranscriptions
+      x-airbyte-entity: transcriptions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.transcriptions
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of transcriptions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TranscriptionsList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/Transcriptions/{sid}.json":
+    get:
+      summary: Get a transcription
+      description: Get a single transcription by SID
+      operationId: getTranscription
+      x-airbyte-entity: transcriptions
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Transcription SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Transcription object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transcription"
+        "404":
+          description: Transcription not found
+        "401":
+          description: Unauthorized
+
+  # ==================== OUTGOING CALLER IDS ====================
+  "/Accounts/{AccountSid}/OutgoingCallerIds.json":
+    get:
+      summary: List outgoing caller IDs
+      description: Returns a list of outgoing caller IDs for an account
+      operationId: listOutgoingCallerIds
+      x-airbyte-entity: outgoing_caller_ids
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.outgoing_caller_ids
+      x-airbyte-meta-extractor:
+        next_page_uri: $.next_page_uri
+        first_page_uri: $.first_page_uri
+        page: $.page
+        page_size: $.page_size
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: PageSize
+        in: query
+        description: Number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+      responses:
+        "200":
+          description: List of outgoing caller IDs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutgoingCallerIdsList"
+        "401":
+          description: Unauthorized
+
+  "/Accounts/{AccountSid}/OutgoingCallerIds/{sid}.json":
+    get:
+      summary: Get an outgoing caller ID
+      description: Get a single outgoing caller ID by SID
+      operationId: getOutgoingCallerId
+      x-airbyte-entity: outgoing_caller_ids
+      x-airbyte-action: get
+      parameters:
+      - name: AccountSid
+        in: path
+        required: true
+        description: Account SID
+        schema:
+          type: string
+      - name: sid
+        in: path
+        required: true
+        description: Outgoing caller ID SID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Outgoing caller ID object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutgoingCallerId"
+        "404":
+          description: Outgoing caller ID not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using Twilio Account SID and Auth Token
+      x-airbyte-auth-config:
+        title: Twilio Authentication
+        type: object
+        required:
+        - account_sid
+        - auth_token
+        properties:
+          account_sid:
+            type: string
+            title: Account SID
+            description: Your Twilio Account SID (starts with AC)
+            pattern: "^AC"
+          auth_token:
+            type: string
+            title: Auth Token
+            description: Your Twilio Auth Token
+        auth_mapping:
+          username: "${account_sid}"
+          password: "${auth_token}"
+        replication_auth_key_mapping:
+          account_sid: "account_sid"
+          auth_token: "auth_token"
+
+  schemas:
+    # ==================== ACCOUNT SCHEMAS ====================
+    Account:
+      type: object
+      x-airbyte-entity-name: accounts
+      x-airbyte-stream-name: accounts
+      description: A Twilio account
+      required:
+      - sid
+      properties:
+        auth_token:
+          type: ["null", "string"]
+          description: The authentication token for the account
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: The timestamp when the account was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: The timestamp when the account was last updated
+        friendly_name:
+          type: ["null", "string"]
+          description: A user-defined friendly name for the account
+        owner_account_sid:
+          type: ["null", "string"]
+          description: The SID of the owner account
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier for the account
+        status:
+          type: ["null", "string"]
+          description: The current status of the account
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for accessing various subresources related to the account
+          additionalProperties: true
+        type:
+          type: ["null", "string"]
+          description: The type of the account
+        uri:
+          type: ["null", "string"]
+          description: The URI for accessing the account resource
+
+    AccountsList:
+      type: object
+      description: Paginated list of accounts
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== CALL SCHEMAS ====================
+    Call:
+      type: object
+      x-airbyte-entity-name: calls
+      x-airbyte-stream-name: calls
+      description: A Twilio call
+      required:
+      - sid
+      properties:
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier for the call
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the call record was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the call record was last updated
+        parent_call_sid:
+          type: ["null", "string"]
+          description: The SID of the parent call if this is a child call
+        account_sid:
+          type: ["null", "string"]
+          description: The unique identifier for the account associated with the call
+        to:
+          type: ["null", "string"]
+          description: The phone number that received the call
+        to_formatted:
+          type: ["null", "string"]
+          description: The formatted version of the to phone number
+        from:
+          type: ["null", "string"]
+          description: The phone number that made the call
+        from_formatted:
+          type: ["null", "string"]
+          description: The formatted version of the from phone number
+        phone_number_sid:
+          type: ["null", "string"]
+          description: The SID of the phone number used for the call
+        status:
+          type: ["null", "string"]
+          description: The current status of the call
+        start_time:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the call started
+        end_time:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the call ended
+        duration:
+          type: ["null", "string"]
+          description: The duration of the call in seconds
+        price:
+          type: ["null", "string"]
+          description: The cost of the call
+        price_unit:
+          type: ["null", "string"]
+          description: The currency unit of the call cost
+        direction:
+          type: ["null", "string"]
+          description: The direction of the call (inbound or outbound)
+        answered_by:
+          type: ["null", "string"]
+          description: The entity that answered the call
+        annotation:
+          type: ["null", "string"]
+          description: Any additional notes added to the call
+        api_version:
+          type: ["null", "string"]
+          description: The version of the Twilio API used for this call
+        forwarded_from:
+          type: ["null", "string"]
+          description: The phone number that initiated call forwarding
+        group_sid:
+          type: ["null", "string"]
+          description: The unique identifier of the call group
+        caller_name:
+          type: ["null", "string"]
+          description: The name of the caller as supplied by caller ID
+        queue_time:
+          type: ["null", "string"]
+          description: The time the call spent in a queue
+        trunk_sid:
+          type: ["null", "string"]
+          description: The unique identifier of the trunk used for the call
+        uri:
+          type: ["null", "string"]
+          description: The URI for this call record
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for related subresources
+          additionalProperties: true
+
+    CallsList:
+      type: object
+      description: Paginated list of calls
+      properties:
+        calls:
+          type: array
+          items:
+            $ref: "#/components/schemas/Call"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== MESSAGE SCHEMAS ====================
+    Message:
+      type: object
+      x-airbyte-entity-name: messages
+      x-airbyte-stream-name: messages
+      description: A Twilio message
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The unique identifier for the account associated with this message
+        api_version:
+          type: ["null", "string"]
+          description: The version of the Twilio API used
+        body:
+          type: ["null", "string"]
+          description: The text body of the message
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the message was created
+        date_sent:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the message was sent
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: The date and time when the message was last updated
+        direction:
+          type: ["null", "string"]
+          description: The direction of the message
+        error_code:
+          type: ["null", "string"]
+          description: The error code associated with the message if any
+        error_message:
+          type: ["null", "string"]
+          description: The error message description if the message failed
+        from:
+          type: ["null", "string"]
+          description: The phone number or sender ID that sent the message
+        messaging_service_sid:
+          type: ["null", "string"]
+          description: The unique identifier for the messaging service
+        num_media:
+          type: ["null", "string"]
+          description: The number of media files included in the message
+        num_segments:
+          type: ["null", "string"]
+          description: The number of message segments
+        price:
+          type: ["null", "string"]
+          description: The cost of the message
+        price_unit:
+          type: ["null", "string"]
+          description: The currency unit used for pricing
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier for this message
+        status:
+          type: ["null", "string"]
+          description: The status of the message
+        subresource_uris:
+          type: ["null", "object"]
+          description: Links to subresources related to the message
+          additionalProperties: true
+        to:
+          type: ["null", "string"]
+          description: The phone number or recipient ID the message was sent to
+        uri:
+          type: ["null", "string"]
+          description: The URI for this message
+
+    MessagesList:
+      type: object
+      description: Paginated list of messages
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== INCOMING PHONE NUMBER SCHEMAS ====================
+    IncomingPhoneNumber:
+      type: object
+      x-airbyte-entity-name: incoming_phone_numbers
+      x-airbyte-stream-name: incoming_phone_numbers
+      description: A Twilio incoming phone number
+      required:
+      - sid
+      properties:
+        sid:
+          type: ["null", "string"]
+          description: The SID of this phone number
+        account_sid:
+          type: ["null", "string"]
+          description: The SID of the account that owns this phone number
+        friendly_name:
+          type: ["null", "string"]
+          description: A user-assigned friendly name for this phone number
+        phone_number:
+          type: ["null", "string"]
+          description: The phone number in E.164 format
+        voice_url:
+          type: ["null", "string"]
+          description: URL for incoming voice calls
+        voice_method:
+          type: ["null", "string"]
+          description: HTTP method for voice URL
+        voice_fallback_url:
+          type: ["null", "string"]
+          description: Fallback URL for voice call errors
+        voice_fallback_method:
+          type: ["null", "string"]
+          description: HTTP method for voice fallback URL
+        voice_caller_id_lookup:
+          type: ["null", "boolean"]
+          description: Caller ID lookup setting
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the phone number was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the phone number was last updated
+        sms_url:
+          type: ["null", "string"]
+          description: URL for incoming SMS messages
+        sms_method:
+          type: ["null", "string"]
+          description: HTTP method for SMS URL
+        sms_fallback_url:
+          type: ["null", "string"]
+          description: Fallback URL for SMS errors
+        sms_fallback_method:
+          type: ["null", "string"]
+          description: HTTP method for SMS fallback URL
+        address_requirements:
+          type: ["null", "string"]
+          description: Address requirements for this phone number
+        beta:
+          type: ["null", "boolean"]
+          description: Whether the phone number is in beta
+        capabilities:
+          type: ["null", "object"]
+          description: Capabilities of this phone number
+          additionalProperties: true
+          properties:
+            voice:
+              type: ["null", "boolean"]
+            sms:
+              type: ["null", "boolean"]
+            mms:
+              type: ["null", "boolean"]
+            fax:
+              type: ["null", "boolean"]
+        voice_receive_mode:
+          type: ["null", "string"]
+          description: Receive mode setting
+        status_callback:
+          type: ["null", "string"]
+          description: Status callback URL
+        status_callback_method:
+          type: ["null", "string"]
+          description: HTTP method for status callback
+        api_version:
+          type: ["null", "string"]
+          description: The Twilio API version
+        voice_application_sid:
+          type: ["null", "string"]
+          description: SID of the voice application
+        sms_application_sid:
+          type: ["null", "string"]
+          description: SID of the SMS application
+        origin:
+          type: ["null", "string"]
+          description: Origin of this phone number
+        trunk_sid:
+          type: ["null", "string"]
+          description: SID of the associated trunk
+        emergency_status:
+          type: ["null", "string"]
+          description: Emergency status
+        emergency_address_sid:
+          type: ["null", "string"]
+          description: SID of the emergency address
+        emergency_address_status:
+          type: ["null", "string"]
+          description: Status of the emergency address
+        address_sid:
+          type: ["null", "string"]
+          description: SID of the associated address
+        identity_sid:
+          type: ["null", "string"]
+          description: SID of the identity
+        bundle_sid:
+          type: ["null", "string"]
+          description: SID of the bundle
+        uri:
+          type: ["null", "string"]
+          description: The URI of this phone number
+        status:
+          type: ["null", "string"]
+          description: Status of the phone number
+        type:
+          type: ["null", "string"]
+          description: The type of the phone number
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for related sub-resources
+          additionalProperties: true
+
+    IncomingPhoneNumbersList:
+      type: object
+      description: Paginated list of incoming phone numbers
+      properties:
+        incoming_phone_numbers:
+          type: array
+          items:
+            $ref: "#/components/schemas/IncomingPhoneNumber"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== RECORDING SCHEMAS ====================
+    Recording:
+      type: object
+      x-airbyte-entity-name: recordings
+      x-airbyte-stream-name: recordings
+      description: A Twilio recording
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID that owns the recording
+        api_version:
+          type: ["null", "string"]
+          description: The API version used when the recording was created
+        call_sid:
+          type: ["null", "string"]
+          description: The SID of the associated call
+        conference_sid:
+          type: ["null", "string"]
+          description: The SID of the associated conference
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the recording was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the recording was last updated
+        start_time:
+          type: ["null", "string"]
+          format: date-time
+          description: When the recording started
+        duration:
+          type: ["null", "string"]
+          description: Duration in seconds
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier of the recording
+        price:
+          type: ["null", "string"]
+          description: The cost of storing the recording
+        price_unit:
+          type: ["null", "string"]
+          description: The currency unit
+        status:
+          type: ["null", "string"]
+          description: The status of the recording
+        channels:
+          type: ["null", "integer"]
+          description: Number of audio channels
+        source:
+          type: ["null", "string"]
+          description: The source of the recording
+        error_code:
+          type: ["null", "string"]
+          description: The error code if any
+        media_url:
+          type: ["null", "string"]
+          description: URL to the recording audio file
+        uri:
+          type: ["null", "string"]
+          description: The URI of the recording resource
+        encryption_details:
+          type: ["null", "object"]
+          description: Encryption details for the recording
+          additionalProperties: true
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for subresources
+          additionalProperties: true
+
+    RecordingsList:
+      type: object
+      description: Paginated list of recordings
+      properties:
+        recordings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Recording"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== CONFERENCE SCHEMAS ====================
+    Conference:
+      type: object
+      x-airbyte-entity-name: conferences
+      x-airbyte-stream-name: conferences
+      description: A Twilio conference
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID associated with the conference
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the conference was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the conference was last updated
+        api_version:
+          type: ["null", "string"]
+          description: The Twilio API version used
+        friendly_name:
+          type: ["null", "string"]
+          description: A friendly name for the conference
+        region:
+          type: ["null", "string"]
+          description: The region where the conference is hosted
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier of the conference
+        status:
+          type: ["null", "string"]
+          description: The current status of the conference
+        uri:
+          type: ["null", "string"]
+          description: The URI of the conference resource
+        reason_conference_ended:
+          type: ["null", "string"]
+          description: The reason for the conference ending
+        call_sid_ending_conference:
+          type: ["null", "string"]
+          description: The SID of the call that ended the conference
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for related subresources
+          additionalProperties: true
+
+    ConferencesList:
+      type: object
+      description: Paginated list of conferences
+      properties:
+        conferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/Conference"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== USAGE RECORD SCHEMAS ====================
+    UsageRecord:
+      type: object
+      x-airbyte-entity-name: usage_records
+      x-airbyte-stream-name: usage_records
+      description: A Twilio usage record
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID associated with this usage record
+        api_version:
+          type: ["null", "string"]
+          description: The Twilio API version used
+        as_of:
+          type: ["null", "string"]
+          description: The timestamp indicating data accuracy cutoff
+        category:
+          type: ["null", "string"]
+          description: The usage category (calls, SMS, recordings, etc.)
+        count:
+          type: ["null", "string"]
+          description: The number of units consumed
+        count_unit:
+          type: ["null", "string"]
+          description: The unit of measurement for count
+        description:
+          type: ["null", "string"]
+          description: A description of the usage record
+        end_date:
+          type: ["null", "string"]
+          description: The end date of the usage period
+        price:
+          type: ["null", "string"]
+          description: The total price for consumed units
+        price_unit:
+          type: ["null", "string"]
+          description: The currency unit
+        start_date:
+          type: ["null", "string"]
+          description: The start date of the usage period
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for subresources
+          additionalProperties: true
+        usage:
+          type: ["null", "string"]
+          description: The total usage value
+        usage_unit:
+          type: ["null", "string"]
+          description: The unit of measurement for usage
+        uri:
+          type: ["null", "string"]
+          description: The URI of the usage record
+
+    UsageRecordsList:
+      type: object
+      description: Paginated list of usage records
+      properties:
+        usage_records:
+          type: array
+          items:
+            $ref: "#/components/schemas/UsageRecord"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== ADDRESS SCHEMAS ====================
+    Address:
+      type: object
+      x-airbyte-entity-name: addresses
+      x-airbyte-stream-name: addresses
+      description: A Twilio address
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID associated with this address
+        city:
+          type: ["null", "string"]
+          description: The city of the address
+        customer_name:
+          type: ["null", "string"]
+          description: The customer name associated with this address
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the address was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the address was last updated
+        emergency_enabled:
+          type: ["null", "boolean"]
+          description: Whether emergency services are enabled
+        friendly_name:
+          type: ["null", "string"]
+          description: A friendly name for the address
+        iso_country:
+          type: ["null", "string"]
+          description: The ISO 3166-1 alpha-2 country code
+        postal_code:
+          type: ["null", "string"]
+          description: The postal code
+        region:
+          type: ["null", "string"]
+          description: The region or state
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier of the address
+        street:
+          type: ["null", "string"]
+          description: The street address
+        street_secondary:
+          type: ["null", "string"]
+          description: Additional street information (suite number, etc.)
+        validated:
+          type: ["null", "boolean"]
+          description: Whether the address has been validated
+        verified:
+          type: ["null", "boolean"]
+          description: Whether the address has been verified
+        uri:
+          type: ["null", "string"]
+          description: The URI of the address resource
+
+    AddressesList:
+      type: object
+      description: Paginated list of addresses
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== QUEUE SCHEMAS ====================
+    Queue:
+      type: object
+      x-airbyte-entity-name: queues
+      x-airbyte-stream-name: queues
+      description: A Twilio queue
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID that owns this queue
+        average_wait_time:
+          type: ["null", "integer"]
+          description: Average wait time in seconds
+        current_size:
+          type: ["null", "integer"]
+          description: Current number of callers waiting
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the queue was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the queue was last updated
+        friendly_name:
+          type: ["null", "string"]
+          description: A friendly name for the queue
+        max_size:
+          type: ["null", "integer"]
+          description: Maximum number of callers allowed
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier for the queue
+        uri:
+          type: ["null", "string"]
+          description: The URI for this queue resource
+        subresource_uris:
+          type: ["null", "object"]
+          description: URIs for related subresources
+          additionalProperties: true
+
+    QueuesList:
+      type: object
+      description: Paginated list of queues
+      properties:
+        queues:
+          type: array
+          items:
+            $ref: "#/components/schemas/Queue"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== TRANSCRIPTION SCHEMAS ====================
+    Transcription:
+      type: object
+      x-airbyte-entity-name: transcriptions
+      x-airbyte-stream-name: transcriptions
+      description: A Twilio transcription
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID
+        api_version:
+          type: ["null", "string"]
+          description: The API version used
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the transcription was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the transcription was last updated
+        duration:
+          type: ["null", "string"]
+          description: Duration of the audio recording in seconds
+        price:
+          type: ["null", "string"]
+          description: The cost of the transcription
+        price_unit:
+          type: ["null", "string"]
+          description: The currency unit
+        recording_sid:
+          type: ["null", "string"]
+          description: The SID of the associated recording
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier for the transcription
+        status:
+          type: ["null", "string"]
+          description: The status of the transcription
+        transcription_text:
+          type: ["null", "string"]
+          description: The text content of the transcription
+        type:
+          type: ["null", "string"]
+          description: The type of transcription
+        uri:
+          type: ["null", "string"]
+          description: The URI of the transcription
+
+    TranscriptionsList:
+      type: object
+      description: Paginated list of transcriptions
+      properties:
+        transcriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transcription"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]
+
+    # ==================== OUTGOING CALLER ID SCHEMAS ====================
+    OutgoingCallerId:
+      type: object
+      x-airbyte-entity-name: outgoing_caller_ids
+      x-airbyte-stream-name: outgoing_caller_ids
+      description: A Twilio outgoing caller ID
+      required:
+      - sid
+      properties:
+        account_sid:
+          type: ["null", "string"]
+          description: The account SID
+        date_created:
+          type: ["null", "string"]
+          format: date-time
+          description: When the outgoing caller ID was created
+        date_updated:
+          type: ["null", "string"]
+          format: date-time
+          description: When the outgoing caller ID was last updated
+        friendly_name:
+          type: ["null", "string"]
+          description: A friendly name
+        phone_number:
+          type: ["null", "string"]
+          description: The phone number
+        sid:
+          type: ["null", "string"]
+          description: The unique identifier
+        uri:
+          type: ["null", "string"]
+          description: The URI of the resource
+
+    OutgoingCallerIdsList:
+      type: object
+      description: Paginated list of outgoing caller IDs
+      properties:
+        outgoing_caller_ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/OutgoingCallerId"
+        first_page_uri:
+          type: ["null", "string"]
+        next_page_uri:
+          type: ["null", "string"]
+        previous_page_uri:
+          type: ["null", "string"]
+        page:
+          type: ["null", "integer"]
+        page_size:
+          type: ["null", "integer"]
+        uri:
+          type: ["null", "string"]

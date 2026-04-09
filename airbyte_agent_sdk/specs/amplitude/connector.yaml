@@ -1,0 +1,1119 @@
+openapi: 3.1.0
+
+info:
+  title: Amplitude API Connector
+  version: 1.0.3
+  description: >
+    Connector for the Amplitude Analytics API. Provides access to core analytics
+    data including event exports, cohort definitions, chart annotations, event
+    type listings, active user counts, and average session length metrics.
+    Authentication uses HTTP Basic with your Amplitude API key and secret key.
+  x-airbyte-connector-name: amplitude
+  x-airbyte-connector-definition-id: fa9f58c6-2d03-4237-aaa4-07d75e0c1396
+  x-airbyte-replication-version: "0.7.29"
+  x-airbyte-replication-compatibility: ">=0.7.29, <1.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Amplitude Analytics APIs
+      url: https://www.docs.developers.amplitude.com/analytics/apis/
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: annotations
+        fields:
+          - name: date
+            type: ["null", "string"]
+            description: The date when the annotation was made
+          - name: details
+            type: ["null", "string"]
+            description: Additional details or information related to the annotation
+          - name: id
+            type: ["null", "integer"]
+            description: The unique identifier for the annotation
+          - name: label
+            type: ["null", "string"]
+            description: The label assigned to the annotation
+      - entity: cohorts
+        fields:
+          - name: appId
+            type: ["null", "integer"]
+            description: The unique identifier of the application
+          - name: archived
+            type: ["null", "boolean"]
+            description: Indicates if the cohort data is archived
+          - name: chart_id
+            type: ["null", "string"]
+            description: The identifier of the chart associated with the cohort
+          - name: createdAt
+            type: ["null", "integer"]
+            description: The timestamp when the cohort was created
+          - name: definition
+            type: ["null", "object"]
+            description: The specific definition or criteria for the cohort
+          - name: description
+            type: ["null", "string"]
+            description: A brief explanation or summary of the cohort
+          - name: edit_id
+            type: ["null", "string"]
+            description: The ID for editing purposes or version control
+          - name: finished
+            type: ["null", "boolean"]
+            description: Indicates if the cohort data has been finalized
+          - name: hidden
+            type: ["null", "boolean"]
+            description: Flag to determine if the cohort is hidden from view
+          - name: id
+            type: ["null", "string"]
+            description: The unique identifier for the cohort
+          - name: is_official_content
+            type: ["null", "boolean"]
+            description: Indicates if the cohort data is official content
+          - name: is_predictive
+            type: ["null", "boolean"]
+            description: Flag to indicate if the cohort is predictive
+          - name: lastComputed
+            type: ["null", "integer"]
+            description: Timestamp of the last computation of cohort data
+          - name: lastMod
+            type: ["null", "integer"]
+            description: Timestamp of the last modification made to the cohort
+          - name: last_viewed
+            type: ["null", "integer"]
+            description: Timestamp when the cohort was last viewed
+          - name: location_id
+            type: ["null", "string"]
+            description: Identifier of the location associated with the cohort
+          - name: metadata
+            type: ["null", "array"]
+            description: Additional information or data related to the cohort
+          - name: name
+            type: ["null", "string"]
+            description: The name or title of the cohort
+          - name: owners
+            type: ["null", "array"]
+            description: The owners or administrators of the cohort
+          - name: popularity
+            type: ["null", "integer"]
+            description: Popularity rank or score of the cohort
+          - name: published
+            type: ["null", "boolean"]
+            description: Status indicating if the cohort data is published
+          - name: shortcut_ids
+            type: ["null", "array"]
+            description: Identifiers of any shortcuts associated with the cohort
+          - name: size
+            type: ["null", "integer"]
+            description: Size or scale of the cohort data
+          - name: type
+            type: ["null", "string"]
+            description: The type or category of the cohort
+          - name: view_count
+            type: ["null", "integer"]
+            description: The total count of views on the cohort data
+          - name: viewers
+            type: ["null", "array"]
+            description: Users or viewers who have access to the cohort data
+      - entity: events_list
+        fields:
+          - name: autohidden
+            type: ["null", "boolean"]
+            description: Whether the event is auto-hidden
+          - name: clusters_hidden
+            type: ["null", "boolean"]
+            description: Whether the event is hidden from clusters
+          - name: deleted
+            type: ["null", "boolean"]
+            description: Whether the event is deleted
+          - name: display
+            type: ["null", "string"]
+            description: Display name of the event
+          - name: flow_hidden
+            type: ["null", "boolean"]
+            description: Whether the event is hidden from Pathfinder
+          - name: hidden
+            type: ["null", "boolean"]
+            description: Whether the event is hidden
+          - name: id
+            type: ["null", "number"]
+            description: Unique identifier for the event type
+          - name: in_waitroom
+            type: ["null", "boolean"]
+            description: Whether the event is in the waitroom
+          - name: name
+            type: ["null", "string"]
+            description: Name of the event type
+          - name: non_active
+            type: ["null", "boolean"]
+            description: Whether the event is marked as inactive
+          - name: timeline_hidden
+            type: ["null", "boolean", "number"]
+            description: Whether the event is hidden from the timeline
+          - name: totals
+            type: ["null", "number"]
+            description: Total number of times the event occurred this week
+          - name: totals_delta
+            type: ["null", "number"]
+            description: Change in totals from the previous period
+          - name: value
+            type: ["null", "string"]
+            description: Raw event name in the data
+      - entity: active_users
+        fields:
+          - name: date
+            type: ["null", "string"]
+            description: The date for which the active user data is reported
+          - name: statistics
+            type: ["null", "object"]
+            description: The statistics related to the active users for the given date
+      - entity: events
+        fields:
+          - name: $insert_id
+            type: ["null", "string"]
+            description: Unique identifier for each event insertion
+          - name: adid
+            type: ["null", "string"]
+            description: The advertising identifier associated with the device
+          - name: amplitude_attribution_ids
+            type: ["null", "string"]
+            description: Attribution IDs for ad network conversions
+          - name: amplitude_event_type
+            type: ["null", "string"]
+            description: Amplitude-specific event type
+          - name: amplitude_id
+            type: ["null", "integer"]
+            description: Amplitude-assigned unique identifier
+          - name: app
+            type: ["null", "integer"]
+            description: Application identifier
+          - name: city
+            type: ["null", "string"]
+            description: City where the event occurred
+          - name: client_event_time
+            type: ["null", "string"]
+            description: Client-side timestamp of the event
+          - name: client_upload_time
+            type: ["null", "string"]
+            description: Timestamp when the event was uploaded from the client
+          - name: country
+            type: ["null", "string"]
+            description: Country where the event occurred
+          - name: data
+            type: ["null", "object"]
+            description: Custom data associated with the event
+          - name: data_type
+            type: ["null", "string"]
+            description: Type of data associated with the event
+          - name: device_brand
+            type: ["null", "string"]
+            description: Device brand
+          - name: device_carrier
+            type: ["null", "string"]
+            description: Mobile carrier used by the device
+          - name: device_family
+            type: ["null", "string"]
+            description: Device family
+          - name: device_id
+            type: ["null", "string"]
+            description: Unique device identifier
+          - name: device_manufacturer
+            type: ["null", "string"]
+            description: Device manufacturer
+          - name: device_model
+            type: ["null", "string"]
+            description: Device model
+          - name: device_type
+            type: ["null", "string"]
+            description: Device type
+          - name: dma
+            type: ["null", "string"]
+            description: Designated Market Area
+          - name: event_id
+            type: ["null", "integer"]
+            description: Unique event identifier
+          - name: event_properties
+            type: ["null", "object"]
+            description: Event-specific properties
+          - name: event_time
+            type: ["null", "string"]
+            description: Timestamp when the event occurred
+          - name: event_type
+            type: ["null", "string"]
+            description: The type/category of the event
+          - name: global_user_properties
+            type: ["null", "object"]
+            description: Global user properties
+          - name: group_properties
+            type: ["null", "object"]
+            description: Properties related to grouping events
+          - name: groups
+            type: ["null", "object"]
+            description: Groups the event belongs to
+          - name: idfa
+            type: ["null", "string"]
+            description: Identifier for Advertisers
+          - name: ip_address
+            type: ["null", "string"]
+            description: IP address the event was triggered from
+          - name: is_attribution_event
+            type: ["null", "boolean"]
+            description: Whether this is an attribution event
+          - name: language
+            type: ["null", "string"]
+            description: Language set on the device
+          - name: library
+            type: ["null", "string"]
+            description: Library/version used for event tracking
+          - name: location_lat
+            type: ["null", "number"]
+            description: Latitude coordinate
+          - name: location_lng
+            type: ["null", "number"]
+            description: Longitude coordinate
+          - name: os_name
+            type: ["null", "string"]
+            description: Operating system name
+          - name: os_version
+            type: ["null", "string"]
+            description: Operating system version
+          - name: partner_id
+            type: ["null", "string"]
+            description: Partner identifier
+          - name: paying
+            type: ["null", "boolean"]
+            description: Whether the user is a paying customer
+          - name: plan
+            type: ["null", "object"]
+            description: User's plan information
+            properties:
+              branch:
+                type: ["null", "string"]
+              source:
+                type: ["null", "string"]
+              version:
+                type: ["null", "string"]
+          - name: platform
+            type: ["null", "string"]
+            description: Platform (iOS, Android, Web)
+          - name: processed_time
+            type: ["null", "string"]
+            description: Timestamp when the event was processed
+          - name: region
+            type: ["null", "string"]
+            description: Region where the event occurred
+          - name: sample_rate
+            type: ["null", "string", "number"]
+            description: Sampling rate for the event data
+          - name: server_received_time
+            type: ["null", "string"]
+            description: Timestamp when the event was received by the server
+          - name: server_upload_time
+            type: ["null", "string"]
+            description: Timestamp when the event was uploaded to the server
+          - name: session_id
+            type: ["null", "number"]
+            description: Session identifier
+          - name: source_id
+            type: ["null", "string"]
+            description: Event source identifier
+          - name: start_version
+            type: ["null", "string"]
+            description: Version when the user started using the app
+          - name: user_creation_time
+            type: ["null", "string"]
+            description: Timestamp when the user account was created
+          - name: user_id
+            type: ["null", "string"]
+            description: Unique user identifier
+          - name: user_properties
+            type: ["null", "object"]
+            description: User properties at the time of the event
+          - name: uuid
+            type: ["null", "string"]
+            description: Universally unique identifier for the event
+          - name: version_name
+            type: ["null", "string"]
+            description: Version name associated with the event
+      - entity: average_session_length
+        fields:
+          - name: date
+            type: ["null", "string"]
+            description: The date on which the session occurred
+          - name: length
+            type: ["null", "number"]
+            description: The duration of the session in seconds
+  x-airbyte-skip-suggested-streams:
+    - events
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Amplitude.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: >
+          UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ. Any data
+          before this date will not be replicated.
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-example-questions:
+    direct:
+      - "List all chart annotations in Amplitude"
+      - "Show me all cohorts"
+      - "List all event types"
+    search:
+      - "Which cohorts have more than 1000 users?"
+      - "What are the most popular event types by total count?"
+      - "Show me annotations created in the last month"
+    unsupported:
+      - "Create a new annotation"
+      - "Delete a cohort"
+      - "Export raw event data"
+
+servers:
+  - url: https://amplitude.com/api
+    description: Amplitude Standard Server
+
+security:
+  - basicAuth: []
+
+paths:
+  /2/annotations:
+    get:
+      summary: List annotations
+      description: Returns all chart annotations for the project.
+      operationId: listAnnotations
+      x-airbyte-entity: annotations
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.data
+      responses:
+        "200":
+          description: List of annotations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnnotationsList"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /3/annotations/{annotation_id}:
+    get:
+      summary: Get an annotation
+      description: Retrieves a single chart annotation by ID.
+      operationId: getAnnotation
+      x-airbyte-entity: annotations
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: annotation_id
+          in: path
+          required: true
+          description: The ID of the annotation to retrieve
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Annotation object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnnotationGetResponse"
+        "400":
+          description: Invalid annotation ID
+        "401":
+          description: Unauthorized
+        "404":
+          description: Annotation not found
+
+  /3/cohorts:
+    get:
+      summary: List cohorts
+      description: Returns all cohorts for the project.
+      operationId: listCohorts
+      x-airbyte-entity: cohorts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.cohorts
+      responses:
+        "200":
+          description: List of cohorts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CohortsList"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /3/cohorts/{cohort_id}:
+    get:
+      summary: Get a cohort
+      description: Retrieves a single cohort by ID.
+      operationId: getCohort
+      x-airbyte-entity: cohorts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.cohort
+      parameters:
+        - name: cohort_id
+          in: path
+          required: true
+          description: The ID of the cohort to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Cohort object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CohortGetResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Cohort not found
+
+  /2/events/list:
+    get:
+      summary: List event types
+      description: >
+        Returns the list of event types with the current week's totals,
+        unique users, and percentage of DAU.
+      operationId: listEventTypes
+      x-airbyte-entity: events_list
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      responses:
+        "200":
+          description: List of event types
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsListResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /2/users:
+    get:
+      summary: List active users
+      description: >
+        Returns the number of active or new users for each day in the
+        specified date range.
+      operationId: listActiveUsers
+      x-airbyte-entity: active_users
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: start
+          in: query
+          required: true
+          description: "First date included in data series, formatted YYYYMMDD (e.g. 20220101)"
+          schema:
+            type: string
+        - name: end
+          in: query
+          required: true
+          description: "Last date included in data series, formatted YYYYMMDD (e.g. 20220131)"
+          schema:
+            type: string
+        - name: m
+          in: query
+          description: "Either 'new' or 'active' to get the desired count. Defaults to 'active'."
+          schema:
+            type: string
+            enum:
+              - active
+              - new
+            default: active
+        - name: i
+          in: query
+          description: "Either 1, 7, or 30 for daily, weekly, and monthly counts. Defaults to 1."
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 7
+              - 30
+            default: 1
+        - name: g
+          in: query
+          description: "The property to group by (e.g. country, city, platform)."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Active user counts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActiveUsersResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /2/sessions/average:
+    get:
+      summary: List average session length
+      description: >
+        Returns the average session length (in seconds) for each day in the
+        specified date range.
+      operationId: listAverageSessionLength
+      x-airbyte-entity: average_session_length
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: start
+          in: query
+          required: true
+          description: "First date included in data series, formatted YYYYMMDD (e.g. 20220101)"
+          schema:
+            type: string
+        - name: end
+          in: query
+          required: true
+          description: "Last date included in data series, formatted YYYYMMDD (e.g. 20220131)"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Average session length data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AverageSessionLengthResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >
+        Amplitude uses HTTP Basic authentication. Use your project API key
+        as the username and your secret key as the password.
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+          - api_key
+          - secret_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: >
+              Your Amplitude project API key. Find it in Settings > Projects
+              in your Amplitude account.
+          secret_key:
+            type: string
+            title: Secret Key
+            description: >
+              Your Amplitude project secret key. Find it in Settings > Projects
+              in your Amplitude account.
+        auth_mapping:
+          username: "${api_key}"
+          password: "${secret_key}"
+        replication_auth_key_mapping:
+          api_key: "api_key"
+          secret_key: "secret_key"
+
+  schemas:
+    Annotation:
+      type: object
+      x-airbyte-entity-name: annotations
+      x-airbyte-stream-name: annotations
+      description: A chart annotation object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the annotation
+        date:
+          type:
+            - "null"
+            - string
+          format: date
+          description: The date of the annotation
+        details:
+          type:
+            - "null"
+            - string
+          description: Additional details or information about the annotation
+        label:
+          type:
+            - "null"
+            - string
+          description: The label or title of the annotation
+
+    AnnotationV3:
+      type: object
+      description: A chart annotation object (v3 API format)
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the annotation
+        start:
+          type:
+            - "null"
+            - string
+          description: Start timestamp in ISO 8601 format
+        end:
+          type:
+            - "null"
+            - string
+          description: End timestamp in ISO 8601 format
+        label:
+          type:
+            - "null"
+            - string
+          description: The label or title of the annotation
+        details:
+          type:
+            - "null"
+            - string
+          description: Additional details about the annotation
+        category:
+          type:
+            - "null"
+            - object
+          description: The annotation category
+          properties:
+            id:
+              type: integer
+              description: Category ID
+            category:
+              type: string
+              description: Category name
+        chart_id:
+          type:
+            - "null"
+            - string
+          description: The chart ID this annotation is associated with
+
+    AnnotationsList:
+      type: object
+      description: List of annotations
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Annotation"
+
+    AnnotationGetResponse:
+      type: object
+      description: Single annotation response
+      properties:
+        data:
+          $ref: "#/components/schemas/AnnotationV3"
+
+    Cohort:
+      type: object
+      x-airbyte-entity-name: cohorts
+      x-airbyte-stream-name: cohorts
+      description: A user cohort object
+      required:
+        - id
+      properties:
+        appId:
+          type:
+            - "null"
+            - integer
+          description: The unique identifier of the application
+        archived:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort is archived
+        chart_id:
+          type:
+            - "null"
+            - string
+          description: The chart ID associated with the cohort
+        createdAt:
+          type:
+            - "null"
+            - integer
+          description: Timestamp when the cohort was created
+        definition:
+          type:
+            - "null"
+            - object
+          description: The definition or criteria for the cohort
+        description:
+          type:
+            - "null"
+            - string
+          description: A description of the cohort
+        edit_id:
+          type:
+            - "null"
+            - string
+          description: The edit ID for version control
+        finished:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort computation has finished
+        hidden:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort is hidden from view
+        id:
+          type:
+            - "null"
+            - string
+          description: Unique identifier for the cohort
+        is_official_content:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort is official content
+        is_predictive:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort is predictive
+        lastComputed:
+          type:
+            - "null"
+            - integer
+          description: Timestamp of the last computation
+        lastMod:
+          type:
+            - "null"
+            - integer
+          description: Timestamp of the last modification
+        last_viewed:
+          type:
+            - "null"
+            - integer
+          description: Timestamp when the cohort was last viewed
+        location_id:
+          type:
+            - "null"
+            - string
+          description: Location identifier
+        metadata:
+          type:
+            - "null"
+            - array
+          description: Additional metadata
+          items:
+            type: string
+        name:
+          type:
+            - "null"
+            - string
+          description: The name of the cohort
+        owners:
+          type:
+            - "null"
+            - array
+          description: The owners of the cohort
+          items:
+            type: string
+        popularity:
+          type:
+            - "null"
+            - integer
+          description: Popularity score of the cohort
+        published:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort is published
+        shortcut_ids:
+          type:
+            - "null"
+            - array
+          description: Shortcut identifiers
+          items:
+            type: string
+        size:
+          type:
+            - "null"
+            - integer
+          description: Number of users in the cohort
+        type:
+          type:
+            - "null"
+            - string
+          description: The type of cohort
+        view_count:
+          type:
+            - "null"
+            - integer
+          description: Number of views
+        viewers:
+          type:
+            - "null"
+            - array
+          description: Users who have viewed the cohort
+          items:
+            type: string
+        include_data_app_types:
+          type:
+            - "null"
+            - array
+          description: Data app types to include
+          items:
+            type: string
+        per_app_metadata:
+          type:
+            - "null"
+            - object
+          description: Per-application metadata
+        cohort_definition_type:
+          type:
+            - "null"
+            - string
+          description: Type of cohort definition
+        cohort_output_type:
+          type:
+            - "null"
+            - string
+          description: Output type for the cohort
+        is_generated_content:
+          type:
+            - "null"
+            - boolean
+          description: Whether the cohort is generated content
+
+    CohortGetResponse:
+      type: object
+      description: Single cohort response wrapper
+      properties:
+        cohort:
+          $ref: "#/components/schemas/Cohort"
+
+    CohortsList:
+      type: object
+      description: List of cohorts
+      properties:
+        cohorts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Cohort"
+
+    EventType:
+      type: object
+      x-airbyte-entity-name: events_list
+      x-airbyte-stream-name: events_list
+      description: An event type definition with weekly totals
+      required:
+        - id
+      properties:
+        autohidden:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is auto-hidden
+        clusters_hidden:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is hidden from clusters
+        deleted:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is deleted
+        display:
+          type:
+            - "null"
+            - string
+          description: Display name of the event
+        flow_hidden:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is hidden from Pathfinder
+        hidden:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is hidden
+        id:
+          type: number
+          description: Unique identifier for the event type
+        in_waitroom:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is in the waitroom
+        name:
+          type:
+            - "null"
+            - string
+          description: Name of the event type
+        non_active:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is marked as inactive
+        timeline_hidden:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event is hidden from the timeline
+        totals:
+          type:
+            - "null"
+            - number
+          description: Total number of times the event occurred this week
+        totals_delta:
+          type:
+            - "null"
+            - number
+          description: Change in totals from the previous period
+        value:
+          type:
+            - "null"
+            - string
+          description: Raw event name in the data
+        waitroom_approved:
+          type:
+            - "null"
+            - boolean
+          description: Whether the event has been approved from the waitroom
+
+    EventsListResponse:
+      type: object
+      description: List of event types
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventType"
+
+    ActiveUsersData:
+      type: object
+      x-airbyte-entity-name: active_users
+      x-airbyte-stream-name: active_users
+      description: Active or new user count data
+      properties:
+        series:
+          type:
+            - "null"
+            - array
+          description: >
+            An array with one element for each group, where each element
+            is an array of metric values per date in xValues.
+          items:
+            type: array
+            items:
+              type: number
+        seriesCollapsed:
+          type:
+            - "null"
+            - array
+          description: Collapsed series values
+          items:
+            type: array
+            items:
+              type: number
+        seriesLabels:
+          type:
+            - "null"
+            - array
+          description: Labels for each series group
+          items:
+            type:
+              - string
+              - integer
+        seriesMeta:
+          type:
+            - "null"
+            - array
+          description: Metadata for each segment
+          items:
+            type: object
+            properties:
+              segmentIndex:
+                type: integer
+        xValues:
+          type:
+            - "null"
+            - array
+          description: Array of dates in YYYY-MM-DD format
+          items:
+            type: string
+
+    ActiveUsersResponse:
+      type: object
+      description: Active users response wrapper
+      properties:
+        data:
+          $ref: "#/components/schemas/ActiveUsersData"
+
+    AverageSessionLengthData:
+      type: object
+      x-airbyte-entity-name: average_session_length
+      x-airbyte-stream-name: average_session_length
+      description: Average session length data
+      properties:
+        series:
+          type:
+            - "null"
+            - array
+          description: >
+            An array with one element which is an array of average session
+            lengths (in seconds) for each day.
+          items:
+            type: array
+            items:
+              type: number
+        seriesCollapsed:
+          type:
+            - "null"
+            - array
+          description: Collapsed series values
+          items:
+            type: array
+            items:
+              type: object
+              properties:
+                setId:
+                  type: string
+                value:
+                  type: number
+        seriesMeta:
+          type:
+            - "null"
+            - array
+          description: Labels for each segment
+          items:
+            type: object
+            properties:
+              segmentIndex:
+                type: integer
+              sessionIndex:
+                type: integer
+        xValues:
+          type:
+            - "null"
+            - array
+          description: Array of dates in YYYY-MM-DD format
+          items:
+            type: string
+
+    AverageSessionLengthResponse:
+      type: object
+      description: Average session length response wrapper
+      properties:
+        data:
+          $ref: "#/components/schemas/AverageSessionLengthData"
+
+

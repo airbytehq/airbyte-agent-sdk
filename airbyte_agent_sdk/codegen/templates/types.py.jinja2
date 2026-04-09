@@ -1,0 +1,249 @@
+"""
+Type definitions for {{ connector_name }} connector.
+"""
+from __future__ import annotations
+
+{# Calculate if Any is needed in any type annotation #}
+{%- set needs_any = [] %}
+{%- for schema in schemas.values() %}
+{%- for field in schema.fields %}
+{%- if 'Any' in field.type %}{% set _ = needs_any.append(1) %}{% endif %}
+{%- endfor %}
+{%- endfor %}
+{%- for op in operations %}
+{%- for param in op.parameters %}
+{%- if 'Any' in param.type %}{% set _ = needs_any.append(1) %}{% endif %}
+{%- endfor %}
+{%- endfor %}
+{# Search types always need Any #}
+{%- if has_search_entities %}{% set _ = needs_any.append(1) %}{% endif %}
+{# Calculate if Literal is needed (for search types) #}
+{%- set needs_literal = has_search_entities %}
+{# Calculate if NotRequired is needed (for optional fields in TypedDicts) #}
+{%- set needs_not_required = [] %}
+{%- for schema in schemas.values() %}
+{%- for field in schema.fields %}
+{%- if not field.required %}{% set _ = needs_not_required.append(1) %}{% endif %}
+{%- endfor %}
+{%- endfor %}
+{%- for op in operations %}
+{%- for param in op.parameters %}
+{%- if not param.required %}{% set _ = needs_not_required.append(1) %}{% endif %}
+{%- endfor %}
+{%- endfor %}
+from airbyte_agent_sdk.types import AirbyteAuthConfig  # noqa: F401
+
+# Use typing_extensions.TypedDict for Pydantic compatibility
+try:
+    from typing_extensions import TypedDict{% if needs_not_required %}, NotRequired{% endif %}
+
+except ImportError:
+    from typing import TypedDict{% if needs_not_required %}, NotRequired{% endif %}  # type: ignore[attr-defined]
+
+{% if needs_any or needs_literal %}
+from typing import {% if needs_any %}Any{% endif %}{% if needs_any and needs_literal %}, {% endif %}{% if needs_literal %}Literal{% endif %}
+
+{% endif %}
+
+{# Import response types from models if they're referenced by parameter schemas #}
+{% if response_type_names_for_params %}
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .models import (
+{% for type_name in response_type_names_for_params %}
+        {{ type_name }},
+{% endfor %}
+    )
+{% endif %}
+
+# ===== NESTED PARAM TYPE DEFINITIONS =====
+# Nested parameter schemas discovered during parameter extraction
+{% for schema in schemas.values() %}
+
+class {{ schema.name }}(TypedDict):
+    """{{ schema.description or schema.name + ' type definition' }}"""
+{% if schema.fields %}
+{% for field in schema.fields %}
+{%- if field.required %}
+    {{ field.name }}: {{ field.type }}
+{% else %}
+    {{ field.name }}: NotRequired[{{ field.type }}]
+{% endif %}
+{%- endfor %}
+{%- else %}
+    pass
+{% endif %}
+{%- endfor %}
+
+# ===== OPERATION PARAMS TYPE DEFINITIONS =====
+{% for op in operations %}
+
+class {{ op.params_type_name }}(TypedDict):
+    """Parameters for {{ op.entity }}.{{ op.action }} operation"""
+{% if op.parameters %}
+{% for param in op.parameters %}
+{%- if param.required %}
+    {{ param.python_name }}: {{ param.type }}
+{% else %}
+    {{ param.python_name }}: NotRequired[{{ param.type }}]
+{% endif %}
+{%- endfor %}
+{%- else %}
+    pass
+{% endif %}
+{%- endfor %}
+
+{% if has_search_entities %}
+# ===== SEARCH TYPES =====
+
+# Sort specification
+AirbyteSortOrder = Literal["asc", "desc"]
+
+{% for entity, schema in search_schemas.items() %}
+# ===== {{ entity | upper }} SEARCH TYPES =====
+
+class {{ schema.filter_type_name }}(TypedDict, total=False):
+    """Available fields for filtering {{ entity }} search queries."""
+{% for field in schema.fields %}
+    {{ field.python_name }}: {{ field.type }}
+    """{{ field.description }}"""
+{% endfor %}
+
+
+class {{ schema.in_filter_type_name }}(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+{% for field in schema.fields %}
+{%- set base_type = field.type | replace(" | None", "") %}
+    {{ field.python_name }}: list[{{ base_type }}]
+    """{{ field.description }}"""
+{% endfor %}
+
+
+class {{ schema.any_value_filter_type_name }}(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+{% for field in schema.fields %}
+    {{ field.python_name }}: Any
+    """{{ field.description }}"""
+{% endfor %}
+
+
+class {{ schema.string_filter_type_name }}(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+{% for field in schema.fields %}
+    {{ field.python_name }}: str
+    """{{ field.description }}"""
+{% endfor %}
+
+
+class {{ schema.sort_filter_type_name }}(TypedDict, total=False):
+    """Available fields for sorting {{ entity }} search results."""
+{% for field in schema.fields %}
+    {{ field.python_name }}: AirbyteSortOrder
+    """{{ field.description }}"""
+{% endfor %}
+
+
+# Entity-specific condition types for {{ entity }}
+class {{ schema.condition_prefix }}EqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: {{ schema.filter_type_name }}
+
+
+class {{ schema.condition_prefix }}NeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: {{ schema.filter_type_name }}
+
+
+class {{ schema.condition_prefix }}GtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: {{ schema.filter_type_name }}
+
+
+class {{ schema.condition_prefix }}GteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: {{ schema.filter_type_name }}
+
+
+class {{ schema.condition_prefix }}LtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: {{ schema.filter_type_name }}
+
+
+class {{ schema.condition_prefix }}LteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: {{ schema.filter_type_name }}
+
+
+class {{ schema.condition_prefix }}LikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: {{ schema.string_filter_type_name }}
+
+
+class {{ schema.condition_prefix }}FuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: {{ schema.string_filter_type_name }}
+
+
+class {{ schema.condition_prefix }}KeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: {{ schema.string_filter_type_name }}
+
+
+class {{ schema.condition_prefix }}ContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: {{ schema.any_value_filter_type_name }}
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+{{ schema.condition_prefix }}InCondition = TypedDict("{{ schema.condition_prefix }}InCondition", {"in": {{ schema.in_filter_type_name }}}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+{{ schema.condition_prefix }}NotCondition = TypedDict("{{ schema.condition_prefix }}NotCondition", {"not": "{{ schema.condition_type_name }}"}, total=False)
+"""Negates the nested condition."""
+
+{{ schema.condition_prefix }}AndCondition = TypedDict("{{ schema.condition_prefix }}AndCondition", {"and": "list[{{ schema.condition_type_name }}]"}, total=False)
+"""True if all nested conditions are true."""
+
+{{ schema.condition_prefix }}OrCondition = TypedDict("{{ schema.condition_prefix }}OrCondition", {"or": "list[{{ schema.condition_type_name }}]"}, total=False)
+"""True if any nested condition is true."""
+
+{{ schema.condition_prefix }}AnyCondition = TypedDict("{{ schema.condition_prefix }}AnyCondition", {"any": {{ schema.any_value_filter_type_name }}}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all {{ entity }} condition types
+{{ schema.condition_type_name }} = (
+    {{ schema.condition_prefix }}EqCondition
+    | {{ schema.condition_prefix }}NeqCondition
+    | {{ schema.condition_prefix }}GtCondition
+    | {{ schema.condition_prefix }}GteCondition
+    | {{ schema.condition_prefix }}LtCondition
+    | {{ schema.condition_prefix }}LteCondition
+    | {{ schema.condition_prefix }}InCondition
+    | {{ schema.condition_prefix }}LikeCondition
+    | {{ schema.condition_prefix }}FuzzyCondition
+    | {{ schema.condition_prefix }}KeywordCondition
+    | {{ schema.condition_prefix }}ContainsCondition
+    | {{ schema.condition_prefix }}NotCondition
+    | {{ schema.condition_prefix }}AndCondition
+    | {{ schema.condition_prefix }}OrCondition
+    | {{ schema.condition_prefix }}AnyCondition
+)
+
+
+class {{ schema.query_type_name }}(TypedDict, total=False):
+    """Search query for {{ entity }} entity."""
+    filter: {{ schema.condition_type_name }}
+    sort: list[{{ schema.sort_filter_type_name }}]
+
+
+{% endfor %}
+
+# ===== SEARCH PARAMS =====
+
+class AirbyteSearchParams(TypedDict, total=False):
+    """Parameters for Airbyte cache search operations (generic, use entity-specific query types for better type hints)."""
+    query: dict[str, Any]
+    limit: int
+    cursor: str
+    fields: list[list[str]]
+{% endif %}

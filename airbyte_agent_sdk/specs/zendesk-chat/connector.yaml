@@ -1,0 +1,1878 @@
+openapi: 3.1.0
+info:
+  title: Zendesk Chat API Connector
+  version: 0.1.10
+  description: |
+    Zendesk Chat enables real-time customer support through live chat. This connector
+    provides access to chat transcripts, agents, departments, shortcuts, triggers,
+    and other chat configuration data for analytics and support insights.
+
+    ## Supported Entities
+    - **accounts**: Account information and billing details
+    - **agents**: Chat agents with roles and department assignments
+    - **agent_timeline**: Agent activity timeline (incremental export)
+    - **bans**: Banned visitors (IP and visitor-based)
+    - **chats**: Chat transcripts with full conversation history (incremental export)
+    - **departments**: Chat departments for routing
+    - **goals**: Conversion goals for tracking
+    - **roles**: Agent role definitions
+    - **routing_settings**: Account-level routing configuration
+    - **shortcuts**: Canned responses for agents
+    - **skills**: Agent skills for skill-based routing
+    - **triggers**: Automated chat triggers
+
+    ## Rate Limits
+    Zendesk Chat API uses the `Retry-After` header for rate limit backoff.
+    The connector handles this automatically.
+
+  x-airbyte-connector-name: zendesk-chat
+  x-airbyte-connector-definition-id: 40d24d0f-b8f9-4fe0-9e6c-b06c0f3f45e4
+  x-airbyte-replication-version: "1.3.5"
+  x-airbyte-replication-compatibility: ">=1.3.5, <2.0.0"
+
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Zendesk Chat API Documentation
+      url: https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/
+    - type: authentication_guide
+      title: Zendesk Chat Authentication
+      url: https://developer.zendesk.com/api-reference/live-chat/chat-api/oauth/
+    - type: api_reference
+      title: Agents API Reference
+      url: https://developer.zendesk.com/rest_api/docs/chat/agents
+    - type: api_reference
+      title: Chats Incremental Export API
+      url: https://developer.zendesk.com/api-reference/live-chat/chat-api/incremental_export/
+
+  x-airbyte-example-questions:
+    direct:
+      - "List all banned visitors"
+      - "List all departments with their settings"
+    search:
+      - "Show me all chats from last week"
+      - "List all agents in the support department"
+      - "What are the most used chat shortcuts?"
+      - "Show chat volume by department"
+      - "What triggers are currently active?"
+      - "Show agent activity timeline for today"
+    unsupported:
+      - "Start a new chat session"
+      - "Send a message to a visitor"
+      - "Create a new agent"
+      - "Update department settings"
+      - "Delete a shortcut"
+
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Zendesk Chat.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: The date from which to start replicating data, in the format YYYY-MM-DDT00:00:00Z.
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: agents
+        fields:
+          - name: id
+            type: integer
+            description: Unique agent identifier
+          - name: email
+            type:
+              - "null"
+              - string
+            description: Agent email address
+          - name: display_name
+            type:
+              - "null"
+              - string
+            description: Agent display name
+          - name: first_name
+            type:
+              - "null"
+              - string
+            description: Agent first name
+          - name: last_name
+            type:
+              - "null"
+              - string
+            description: Agent last name
+          - name: enabled
+            type:
+              - "null"
+              - boolean
+            description: Whether agent is enabled
+          - name: role_id
+            type:
+              - "null"
+              - integer
+            description: Agent role ID
+          - name: departments
+            type:
+              - "null"
+              - array
+            description: Department IDs agent belongs to
+          - name: create_date
+            type:
+              - "null"
+              - string
+            description: When agent was created
+
+      - entity: chats
+        fields:
+          - name: id
+            type: string
+            description: Unique chat identifier
+          - name: timestamp
+            type:
+              - "null"
+              - string
+            description: Chat start timestamp
+          - name: update_timestamp
+            type:
+              - "null"
+              - string
+            description: Last update timestamp
+          - name: department_id
+            type:
+              - "null"
+              - integer
+            description: Department ID
+          - name: department_name
+            type:
+              - "null"
+              - string
+            description: Department name
+          - name: duration
+            type:
+              - "null"
+              - integer
+            description: Chat duration in seconds
+          - name: rating
+            type:
+              - "null"
+              - string
+            description: Satisfaction rating
+          - name: missed
+            type:
+              - "null"
+              - boolean
+            description: Whether chat was missed
+          - name: agent_ids
+            type:
+              - "null"
+              - array
+            description: IDs of agents in chat
+
+      - entity: departments
+        fields:
+          - name: id
+            type: integer
+            description: Department ID
+          - name: name
+            type:
+              - "null"
+              - string
+            description: Department name
+          - name: enabled
+            type:
+              - "null"
+              - boolean
+            description: Whether department is enabled
+          - name: members
+            type:
+              - "null"
+              - array
+            description: Agent IDs in department
+
+      - entity: shortcuts
+        fields:
+          - name: id
+            type: integer
+            description: Shortcut ID
+          - name: name
+            type:
+              - "null"
+              - string
+            description: Shortcut name/trigger
+          - name: message
+            type:
+              - "null"
+              - string
+            description: Shortcut message content
+          - name: tags
+            type:
+              - "null"
+              - array
+            description: Tags applied when shortcut is used
+
+      - entity: triggers
+        fields:
+          - name: id
+            type: integer
+            description: Trigger ID
+          - name: name
+            type:
+              - "null"
+              - string
+            description: Trigger name
+          - name: enabled
+            type:
+              - "null"
+              - boolean
+            description: Whether trigger is enabled
+
+servers:
+  - url: https://{subdomain}.zendesk.com/api/v2/chat
+    description: Zendesk Chat API Server
+    variables:
+      subdomain:
+        default: your-subdomain
+        description: Your Zendesk subdomain (the part before .zendesk.com in your Zendesk URL)
+    x-airbyte-replication-environment-mapping:
+      subdomain: subdomain
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        Zendesk Chat OAuth 2.0 Bearer Token authentication.
+
+        To obtain an access token:
+        1. Go to Zendesk Admin Center
+        2. Navigate to Apps and integrations > APIs > Zendesk API
+        3. Create an OAuth client or use an existing one
+        4. Generate an access token with chat:read scope
+
+      x-airbyte-auth-config:
+        type: object
+        title: OAuth 2.0 Access Token
+        description: Authenticate using an OAuth 2.0 access token from Zendesk
+        required:
+          - access_token
+        properties:
+          access_token:
+            type: string
+            title: Access Token
+            description: Your Zendesk Chat OAuth 2.0 access token
+        auth_mapping:
+          token: "${access_token}"
+        replication_auth_key_mapping:
+          credentials.access_token: "access_token"
+        replication_auth_key_constants:
+          credentials.credentials: "access_token"
+
+  schemas:
+    # ==================== ACCOUNTS ====================
+    Account:
+      type: object
+      x-airbyte-entity-name: accounts
+      description: Zendesk Chat account information
+      properties:
+        account_key:
+          type: string
+          description: Unique account key identifier
+        status:
+          type:
+            - string
+            - "null"
+          description: Account status
+        create_date:
+          type:
+            - string
+            - "null"
+          format: date-time
+          description: When the account was created
+        billing:
+          oneOf:
+            - $ref: "#/components/schemas/Billing"
+            - type: "null"
+          description: Billing information
+        plan:
+          oneOf:
+            - $ref: "#/components/schemas/Plan"
+            - type: "null"
+          description: Account plan details
+      required:
+        - account_key
+
+    Billing:
+      type: object
+      description: Account billing information
+      properties:
+        company:
+          type:
+            - string
+            - "null"
+        first_name:
+          type:
+            - string
+            - "null"
+        last_name:
+          type:
+            - string
+            - "null"
+        email:
+          type:
+            - string
+            - "null"
+        phone:
+          type:
+            - string
+            - "null"
+        address1:
+          type:
+            - string
+            - "null"
+        address2:
+          type:
+            - string
+            - "null"
+        city:
+          type:
+            - string
+            - "null"
+        state:
+          type:
+            - string
+            - "null"
+        postal_code:
+          type:
+            - string
+            - "null"
+        country_code:
+          type:
+            - string
+            - "null"
+        additional_info:
+          type:
+            - string
+            - "null"
+        cycle:
+          type:
+            - integer
+            - "null"
+
+    Plan:
+      type: object
+      description: Account plan details
+      properties:
+        name:
+          type:
+            - string
+            - "null"
+        price:
+          type:
+            - number
+            - "null"
+        max_agents:
+          type:
+            - integer
+            - "null"
+        max_departments:
+          type:
+            - string
+            - "null"
+        max_concurrent_chats:
+          type:
+            - string
+            - "null"
+        max_history_search_days:
+          type:
+            - string
+            - "null"
+        max_advanced_triggers:
+          type:
+            - string
+            - "null"
+        max_basic_triggers:
+          type:
+            - string
+            - "null"
+        analytics:
+          type:
+            - boolean
+            - "null"
+        file_upload:
+          type:
+            - boolean
+            - "null"
+        rest_api:
+          type:
+            - boolean
+            - "null"
+        goals:
+          type:
+            - integer
+            - "null"
+        high_load:
+          type:
+            - boolean
+            - "null"
+        integrations:
+          type:
+            - boolean
+            - "null"
+        ip_restriction:
+          type:
+            - boolean
+            - "null"
+        monitoring:
+          type:
+            - boolean
+            - "null"
+        operating_hours:
+          type:
+            - boolean
+            - "null"
+        sla:
+          type:
+            - boolean
+            - "null"
+        support:
+          type:
+            - boolean
+            - "null"
+        unbranding:
+          type:
+            - boolean
+            - "null"
+        agent_leaderboard:
+          type:
+            - boolean
+            - "null"
+        agent_reports:
+          type:
+            - boolean
+            - "null"
+        chat_reports:
+          type:
+            - boolean
+            - "null"
+        daily_reports:
+          type:
+            - boolean
+            - "null"
+        email_reports:
+          type:
+            - boolean
+            - "null"
+        widget_customization:
+          type:
+            - string
+            - "null"
+        long_desc:
+          type:
+            - string
+            - "null"
+        short_desc:
+          type:
+            - string
+            - "null"
+
+    # ==================== AGENTS ====================
+    Agent:
+      type: object
+      x-airbyte-entity-name: agents
+      description: Zendesk Chat agent
+      properties:
+        id:
+          type: integer
+          description: Unique agent identifier
+        email:
+          type:
+            - string
+            - "null"
+          description: Agent email address
+        display_name:
+          type:
+            - string
+            - "null"
+          description: Agent display name shown in chat
+        first_name:
+          type:
+            - string
+            - "null"
+          description: Agent first name
+        last_name:
+          type:
+            - string
+            - "null"
+          description: Agent last name
+        enabled:
+          type:
+            - boolean
+            - "null"
+          description: Whether agent is enabled for chat
+        role_id:
+          type:
+            - integer
+            - "null"
+          description: Agent role ID
+        roles:
+          oneOf:
+            - $ref: "#/components/schemas/AgentRoles"
+            - type: "null"
+          description: Agent role flags
+        departments:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+          description: Department IDs agent belongs to
+        enabled_departments:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+          description: Department IDs where agent is enabled
+        skills:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+          description: Skill IDs assigned to agent
+        scope:
+          type:
+            - string
+            - "null"
+          description: Agent scope
+        create_date:
+          type:
+            - string
+            - "null"
+          format: date-time
+          description: When agent was created
+        last_login:
+          type:
+            - string
+            - "null"
+          format: date-time
+          description: Last login timestamp
+        login_count:
+          type:
+            - integer
+            - "null"
+          description: Total login count
+      required:
+        - id
+
+    AgentRoles:
+      type: object
+      description: Agent role flags
+      properties:
+        administrator:
+          type:
+            - boolean
+            - "null"
+        owner:
+          type:
+            - boolean
+            - "null"
+
+    # ==================== AGENT TIMELINE ====================
+    AgentTimeline:
+      type: object
+      x-airbyte-entity-name: agent_timeline
+      description: Agent activity timeline entry
+      properties:
+        agent_id:
+          type: integer
+          description: Agent identifier
+        start_time:
+          type:
+            - string
+            - "null"
+          format: date-time
+        status:
+          type:
+            - string
+            - "null"
+        duration:
+          type:
+            - number
+            - "null"
+        engagement_count:
+          type:
+            - integer
+            - "null"
+      required:
+        - agent_id
+
+    # ==================== BANS ====================
+    Ban:
+      type: object
+      x-airbyte-entity-name: bans
+      description: Banned visitor
+      properties:
+        id:
+          type: integer
+          description: Unique ban identifier
+        type:
+          type:
+            - string
+            - "null"
+          description: Ban type (ip_address or visitor)
+        ip_address:
+          type:
+            - string
+            - "null"
+        visitor_id:
+          type:
+            - string
+            - "null"
+        visitor_name:
+          type:
+            - string
+            - "null"
+        reason:
+          type:
+            - string
+            - "null"
+        created_at:
+          type:
+            - string
+            - "null"
+          format: date-time
+      required:
+        - id
+
+    # ==================== CHATS ====================
+    Chat:
+      type: object
+      x-airbyte-entity-name: chats
+      description: Chat conversation transcript
+      properties:
+        id:
+          type: string
+          description: Unique chat identifier
+        type:
+          type:
+            - string
+            - "null"
+        timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+        update_timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+        duration:
+          type:
+            - integer
+            - "null"
+        department_id:
+          type:
+            - integer
+            - "null"
+        department_name:
+          type:
+            - string
+            - "null"
+        agent_ids:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        agent_names:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        visitor:
+          oneOf:
+            - $ref: "#/components/schemas/Visitor"
+            - type: "null"
+        session:
+          oneOf:
+            - $ref: "#/components/schemas/ChatSession"
+            - type: "null"
+        history:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/ChatHistoryItem"
+        engagements:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/ChatEngagement"
+        conversions:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/ChatConversion"
+        count:
+          oneOf:
+            - $ref: "#/components/schemas/MessageCount"
+            - type: "null"
+        response_time:
+          oneOf:
+            - $ref: "#/components/schemas/ResponseTime"
+            - type: "null"
+        rating:
+          type:
+            - string
+            - "null"
+        comment:
+          type:
+            - string
+            - "null"
+        tags:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        started_by:
+          type:
+            - string
+            - "null"
+        triggered:
+          type:
+            - boolean
+            - "null"
+        triggered_response:
+          type:
+            - boolean
+            - "null"
+        missed:
+          type:
+            - boolean
+            - "null"
+        unread:
+          type:
+            - boolean
+            - "null"
+        deleted:
+          type:
+            - boolean
+            - "null"
+        message:
+          type:
+            - string
+            - "null"
+        webpath:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/WebpathItem"
+        zendesk_ticket_id:
+          type:
+            - integer
+            - "null"
+          description: Associated Zendesk Support ticket ID
+      required:
+        - id
+
+    Visitor:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - "null"
+        name:
+          type:
+            - string
+            - "null"
+        email:
+          type:
+            - string
+            - "null"
+        phone:
+          type:
+            - string
+            - "null"
+        notes:
+          type:
+            - string
+            - "null"
+
+    ChatSession:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - "null"
+        browser:
+          type:
+            - string
+            - "null"
+        platform:
+          type:
+            - string
+            - "null"
+        user_agent:
+          type:
+            - string
+            - "null"
+        ip:
+          type:
+            - string
+            - "null"
+        city:
+          type:
+            - string
+            - "null"
+        region:
+          type:
+            - string
+            - "null"
+        country_code:
+          type:
+            - string
+            - "null"
+        country_name:
+          type:
+            - string
+            - "null"
+        start_date:
+          type:
+            - string
+            - "null"
+          format: date-time
+        end_date:
+          type:
+            - string
+            - "null"
+          format: date-time
+
+    ChatHistoryItem:
+      type: object
+      properties:
+        type:
+          type:
+            - string
+            - "null"
+        timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+        name:
+          type:
+            - string
+            - "null"
+        nick:
+          type:
+            - string
+            - "null"
+        msg:
+          type:
+            - string
+            - "null"
+        msg_id:
+          type:
+            - string
+            - "null"
+        channel:
+          type:
+            - string
+            - "null"
+        department_id:
+          type:
+            - integer
+            - "null"
+        department_name:
+          type:
+            - string
+            - "null"
+        rating:
+          type:
+            - string
+            - "null"
+        new_rating:
+          type:
+            - string
+            - "null"
+        tags:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        new_tags:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        options:
+          type:
+            - string
+            - "null"
+
+    ChatEngagement:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - "null"
+        agent_id:
+          type:
+            - string
+            - "null"
+        agent_name:
+          type:
+            - string
+            - "null"
+        agent_full_name:
+          type:
+            - string
+            - "null"
+        department_id:
+          type:
+            - integer
+            - "null"
+        timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+        duration:
+          type:
+            - number
+            - "null"
+        accepted:
+          type:
+            - boolean
+            - "null"
+        assigned:
+          type:
+            - boolean
+            - "null"
+        started_by:
+          type:
+            - string
+            - "null"
+        rating:
+          type:
+            - string
+            - "null"
+        comment:
+          type:
+            - string
+            - "null"
+        count:
+          oneOf:
+            - $ref: "#/components/schemas/MessageCount"
+            - type: "null"
+        response_time:
+          oneOf:
+            - $ref: "#/components/schemas/ResponseTime"
+            - type: "null"
+        skills_requested:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+        skills_fulfilled:
+          type:
+            - boolean
+            - "null"
+
+    ChatConversion:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - "null"
+        goal_id:
+          type:
+            - integer
+            - "null"
+        goal_name:
+          type:
+            - string
+            - "null"
+        timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+        attribution:
+          oneOf:
+            - $ref: "#/components/schemas/ConversionAttribution"
+            - type: "null"
+
+    ConversionAttribution:
+      type: object
+      properties:
+        agent_id:
+          type:
+            - integer
+            - "null"
+        agent_name:
+          type:
+            - string
+            - "null"
+        department_id:
+          type:
+            - integer
+            - "null"
+        department_name:
+          type:
+            - string
+            - "null"
+        chat_timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+
+    MessageCount:
+      type: object
+      properties:
+        total:
+          type:
+            - integer
+            - "null"
+        agent:
+          type:
+            - integer
+            - "null"
+        visitor:
+          type:
+            - integer
+            - "null"
+
+    ResponseTime:
+      type: object
+      properties:
+        first:
+          type:
+            - integer
+            - "null"
+        avg:
+          type:
+            - number
+            - "null"
+        max:
+          type:
+            - integer
+            - "null"
+
+    WebpathItem:
+      type: object
+      properties:
+        from:
+          type:
+            - string
+            - "null"
+        timestamp:
+          type:
+            - string
+            - "null"
+          format: date-time
+
+    # ==================== DEPARTMENTS ====================
+    Department:
+      type: object
+      x-airbyte-entity-name: departments
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+            - string
+            - "null"
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type:
+            - boolean
+            - "null"
+        members:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+        settings:
+          oneOf:
+            - $ref: "#/components/schemas/DepartmentSettings"
+            - type: "null"
+      required:
+        - id
+
+    DepartmentSettings:
+      type: object
+      properties:
+        chat_limit:
+          type:
+            - integer
+            - "null"
+
+    # ==================== GOALS ====================
+    Goal:
+      type: object
+      x-airbyte-entity-name: goals
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+            - string
+            - "null"
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type:
+            - boolean
+            - "null"
+        attribution_model:
+          type:
+            - string
+            - "null"
+        attribution_window:
+          type:
+            - integer
+            - "null"
+        attribution_period:
+          type:
+            - integer
+            - "null"
+        settings:
+          type:
+            - object
+            - "null"
+      required:
+        - id
+
+    # ==================== ROLES ====================
+    Role:
+      type: object
+      x-airbyte-entity-name: roles
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+            - string
+            - "null"
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type:
+            - boolean
+            - "null"
+        permissions:
+          type:
+            - object
+            - "null"
+        members_count:
+          type:
+            - integer
+            - "null"
+      required:
+        - id
+
+    # ==================== ROUTING SETTINGS ====================
+    RoutingSettings:
+      type: object
+      x-airbyte-entity-name: routing_settings
+      properties:
+        routing_mode:
+          type:
+            - string
+            - "null"
+        chat_limit:
+          type:
+            - object
+            - "null"
+        skill_routing:
+          type:
+            - object
+            - "null"
+        reassignment:
+          type:
+            - object
+            - "null"
+        auto_idle:
+          type:
+            - object
+            - "null"
+        auto_accept:
+          type:
+            - object
+            - "null"
+
+    # ==================== SHORTCUTS ====================
+    Shortcut:
+      type: object
+      x-airbyte-entity-name: shortcuts
+      properties:
+        id:
+          type: string
+          description: Shortcut name/identifier
+        name:
+          type:
+            - string
+            - "null"
+        message:
+          type:
+            - string
+            - "null"
+        options:
+          type:
+            - string
+            - "null"
+        tags:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        departments:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+        agents:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+        scope:
+          type:
+            - string
+            - "null"
+      required:
+        - id
+
+    # ==================== SKILLS ====================
+    Skill:
+      type: object
+      x-airbyte-entity-name: skills
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+            - string
+            - "null"
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type:
+            - boolean
+            - "null"
+        members:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+      required:
+        - id
+
+    # ==================== TRIGGERS ====================
+    Trigger:
+      type: object
+      x-airbyte-entity-name: triggers
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+            - string
+            - "null"
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type:
+            - boolean
+            - "null"
+        run_once:
+          type:
+            - boolean
+            - "null"
+        conditions:
+          type:
+            - array
+            - "null"
+          items:
+            type: object
+        actions:
+          type:
+            - array
+            - "null"
+          items:
+            type: object
+        departments:
+          type:
+            - array
+            - "null"
+          items:
+            type: integer
+        definition:
+          type:
+            - object
+            - "null"
+          description: Trigger definition with conditions, events, and actions
+      required:
+        - id
+
+paths:
+  # ==================== ACCOUNTS ====================
+  /account:
+    get:
+      summary: Get account information
+      description: Returns the account information for the authenticated user
+      operationId: GetAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Accounts
+      responses:
+        "200":
+          description: Account information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+
+  # ==================== AGENTS ====================
+  /agents:
+    get:
+      summary: List all agents
+      operationId: ListAgents
+      x-airbyte-entity: agents
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $
+      tags:
+        - Agents
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+            maximum: 100
+        - name: since_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of agents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Agent"
+
+  /agents/{agent_id}:
+    get:
+      summary: Get an agent
+      operationId: GetAgent
+      x-airbyte-entity: agents
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Agents
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Agent"
+
+  # ==================== AGENT TIMELINE ====================
+  /incremental/agent_timeline:
+    get:
+      summary: List agent timeline (incremental export)
+      operationId: ListAgentTimeline
+      x-airbyte-entity: agent_timeline
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.agent_timeline
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        count: $.count
+      tags:
+        - Agent Timeline
+      parameters:
+        - name: start_time
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 1000
+            maximum: 1000
+        - name: fields
+          in: query
+          schema:
+            type: string
+            default: "agent_timeline(*)"
+      responses:
+        "200":
+          description: List of agent timeline entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agent_timeline:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AgentTimeline"
+                  next_page:
+                    type:
+                      - string
+                      - "null"
+                  count:
+                    type: integer
+                  end_time:
+                    type:
+                      - integer
+                      - "null"
+
+  # ==================== BANS ====================
+  /bans:
+    get:
+      summary: List all bans
+      operationId: ListBans
+      x-airbyte-entity: bans
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $[*][*]
+      tags:
+        - Bans
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+            maximum: 100
+        - name: since_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of bans (grouped by type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ip_address:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Ban"
+                  visitor:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Ban"
+
+  /bans/{ban_id}:
+    get:
+      summary: Get a ban
+      operationId: GetBan
+      x-airbyte-entity: bans
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Bans
+      parameters:
+        - name: ban_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ban details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ban"
+
+  # ==================== CHATS ====================
+  /incremental/chats:
+    get:
+      summary: List chats (incremental export)
+      operationId: ListChats
+      x-airbyte-entity: chats
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.chats
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        count: $.count
+      tags:
+        - Chats
+      parameters:
+        - name: start_time
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 1000
+            maximum: 1000
+        - name: fields
+          in: query
+          schema:
+            type: string
+            default: "chats(*)"
+      responses:
+        "200":
+          description: List of chats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chats:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Chat"
+                  next_page:
+                    type:
+                      - string
+                      - "null"
+                  count:
+                    type: integer
+                  end_id:
+                    type:
+                      - string
+                      - "null"
+                  end_time:
+                    type:
+                      - integer
+                      - "null"
+
+  /chats/{chat_id}:
+    get:
+      summary: Get a chat
+      operationId: GetChat
+      x-airbyte-entity: chats
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Chats
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Chat details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+
+  # ==================== DEPARTMENTS ====================
+  /departments:
+    get:
+      summary: List all departments
+      operationId: ListDepartments
+      x-airbyte-entity: departments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $
+      tags:
+        - Departments
+      responses:
+        "200":
+          description: List of departments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Department"
+
+  /departments/{department_id}:
+    get:
+      summary: Get a department
+      operationId: GetDepartment
+      x-airbyte-entity: departments
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Departments
+      parameters:
+        - name: department_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Department details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Department"
+
+  # ==================== GOALS ====================
+  /goals:
+    get:
+      summary: List all goals
+      operationId: ListGoals
+      x-airbyte-entity: goals
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $
+      tags:
+        - Goals
+      responses:
+        "200":
+          description: List of goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Goal"
+
+  /goals/{goal_id}:
+    get:
+      summary: Get a goal
+      operationId: GetGoal
+      x-airbyte-entity: goals
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Goals
+      parameters:
+        - name: goal_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Goal details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+  # ==================== ROLES ====================
+  /roles:
+    get:
+      summary: List all roles
+      operationId: ListRoles
+      x-airbyte-entity: roles
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $
+      tags:
+        - Roles
+      responses:
+        "200":
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Role"
+
+  /roles/{role_id}:
+    get:
+      summary: Get a role
+      operationId: GetRole
+      x-airbyte-entity: roles
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Roles
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Role details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+
+  # ==================== ROUTING SETTINGS ====================
+  /routing_settings/account:
+    get:
+      summary: Get routing settings
+      operationId: GetRoutingSettings
+      x-airbyte-entity: routing_settings
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      tags:
+        - Routing Settings
+      responses:
+        "200":
+          description: Routing settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/RoutingSettings"
+
+  # ==================== SHORTCUTS ====================
+  /shortcuts:
+    get:
+      summary: List all shortcuts
+      operationId: ListShortcuts
+      x-airbyte-entity: shortcuts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $
+      tags:
+        - Shortcuts
+      responses:
+        "200":
+          description: List of shortcuts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Shortcut"
+
+  /shortcuts/{shortcut_id}:
+    get:
+      summary: Get a shortcut
+      operationId: GetShortcut
+      x-airbyte-entity: shortcuts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Shortcuts
+      parameters:
+        - name: shortcut_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Shortcut details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shortcut"
+
+  # ==================== SKILLS ====================
+  /skills:
+    get:
+      summary: List all skills
+      operationId: ListSkills
+      x-airbyte-entity: skills
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $
+      tags:
+        - Skills
+      responses:
+        "200":
+          description: List of skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Skill"
+
+  /skills/{skill_id}:
+    get:
+      summary: Get a skill
+      operationId: GetSkill
+      x-airbyte-entity: skills
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $
+      tags:
+        - Skills
+      parameters:
+        - name: skill_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Skill details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+
+  # ==================== TRIGGERS ====================
+  /triggers:
+    get:
+      summary: List all triggers
+      operationId: ListTriggers
+      x-airbyte-entity: triggers
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $
+      tags:
+        - Triggers
+      responses:
+        "200":
+          description: List of triggers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Trigger"

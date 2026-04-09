@@ -1,0 +1,1168 @@
+openapi: 3.1.0
+
+info:
+  title: Google Analytics Data API Connector
+  version: 1.0.5
+  description: |
+    Google Analytics 4 (GA4) Data API connector for accessing website and app analytics data.
+    This connector provides access to pre-configured analytics reports including website overview,
+    active users, traffic sources, page performance, device breakdowns, and geographic locations.
+    Reports are retrieved via the GA4 Data API v1beta using configurable date ranges and
+    property IDs. Requires OAuth2 authentication with Google Analytics read-only scope.
+  x-airbyte-connector-name: google-analytics-data-api
+  x-airbyte-connector-definition-id: 3cc2eafd-84aa-4dca-93af-322d9dfeec1a
+  x-airbyte-replication-version: "2.9.26"
+  x-airbyte-replication-compatibility: ">=2.9.26, <3.0.0"
+  x-airbyte-example-questions:
+    direct:
+      - "Show me the website overview report"
+      - "List daily active users"
+      - "Show weekly active user trends"
+      - "Get the four-weekly active users report"
+      - "List traffic sources"
+      - "Show me page performance metrics"
+      - "Get device breakdown data"
+      - "List user locations"
+    search:
+      - "What are the top traffic sources by sessions?"
+      - "Which pages have the highest bounce rate?"
+      - "What devices do most users browse from?"
+      - "Which countries send the most traffic?"
+      - "How has daily active users changed over the last month?"
+    unsupported:
+      - "Create a new GA4 property"
+      - "Delete analytics data"
+      - "Modify tracking configurations"
+      - "Run a custom report with arbitrary dimensions"
+      - "Access real-time analytics data"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Google Analytics Data API Reference
+      url: https://developers.google.com/analytics/devguides/reporting/data/v1/rest
+    - type: api_release_history
+      title: Data API Changelog
+      url: https://developers.google.com/analytics/devguides/reporting/data/v1/changelog
+  x-airbyte-skip-suggested-streams:
+    - sessions
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Google Analytics.
+    properties:
+      property_ids:
+        type: array
+        title: Property IDs
+        description: A list of GA4 Property IDs to replicate data from.
+    required:
+      - property_ids
+    replication_config_key_mapping:
+      property_ids: property_ids
+  x-airbyte-scoping:
+    - param: property_id
+      config_key: property_id
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: website_overview
+        fields:
+          - name: averageSessionDuration
+            type: ["null", "number"]
+            description: Average duration of sessions in seconds
+          - name: bounceRate
+            type: ["null", "number"]
+            description: Percentage of sessions that were single-page with no interaction
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: newUsers
+            type: ["null", "integer"]
+            description: Number of first-time users
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: screenPageViews
+            type: ["null", "integer"]
+            description: Total number of screen or page views
+          - name: screenPageViewsPerSession
+            type: ["null", "number"]
+            description: Average page views per session
+          - name: sessions
+            type: ["null", "integer"]
+            description: Total number of sessions
+          - name: sessionsPerUser
+            type: ["null", "number"]
+            description: Average number of sessions per user
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+          - name: totalUsers
+            type: ["null", "integer"]
+            description: Total number of unique users
+      - entity: daily_active_users
+        fields:
+          - name: active1DayUsers
+            type: ["null", "integer"]
+            description: Number of distinct users active in the last 1 day
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+      - entity: weekly_active_users
+        fields:
+          - name: active7DayUsers
+            type: ["null", "integer"]
+            description: Number of distinct users active in the last 7 days
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+      - entity: four_weekly_active_users
+        fields:
+          - name: active28DayUsers
+            type: ["null", "integer"]
+            description: Number of distinct users active in the last 28 days
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+      - entity: traffic_sources
+        fields:
+          - name: averageSessionDuration
+            type: ["null", "number"]
+            description: Average duration of sessions in seconds
+          - name: bounceRate
+            type: ["null", "number"]
+            description: Percentage of sessions that were single-page with no interaction
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: newUsers
+            type: ["null", "integer"]
+            description: Number of first-time users
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: screenPageViews
+            type: ["null", "integer"]
+            description: Total number of screen or page views
+          - name: screenPageViewsPerSession
+            type: ["null", "number"]
+            description: Average page views per session
+          - name: sessionMedium
+            type: ["null", "string"]
+            description: The medium of the traffic source (e.g., organic, cpc, referral)
+          - name: sessionSource
+            type: ["null", "string"]
+            description: The source of the traffic (e.g., google, direct)
+          - name: sessions
+            type: ["null", "integer"]
+            description: Total number of sessions
+          - name: sessionsPerUser
+            type: ["null", "number"]
+            description: Average number of sessions per user
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+          - name: totalUsers
+            type: ["null", "integer"]
+            description: Total number of unique users
+      - entity: pages
+        fields:
+          - name: bounceRate
+            type: ["null", "number"]
+            description: Percentage of sessions that were single-page with no interaction
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: hostName
+            type: ["null", "string"]
+            description: The hostname of the page
+          - name: pagePathPlusQueryString
+            type: ["null", "string"]
+            description: The page path and query string
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: screenPageViews
+            type: ["null", "integer"]
+            description: Total number of screen or page views
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+      - entity: devices
+        fields:
+          - name: averageSessionDuration
+            type: ["null", "number"]
+            description: Average duration of sessions in seconds
+          - name: bounceRate
+            type: ["null", "number"]
+            description: Percentage of sessions that were single-page with no interaction
+          - name: browser
+            type: ["null", "string"]
+            description: The web browser used (e.g., Chrome, Safari, Firefox)
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: deviceCategory
+            type: ["null", "string"]
+            description: The device category (desktop, mobile, tablet)
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: newUsers
+            type: ["null", "integer"]
+            description: Number of first-time users
+          - name: operatingSystem
+            type: ["null", "string"]
+            description: The operating system used (e.g., Windows, iOS, Android)
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: screenPageViews
+            type: ["null", "integer"]
+            description: Total number of screen or page views
+          - name: screenPageViewsPerSession
+            type: ["null", "number"]
+            description: Average page views per session
+          - name: sessions
+            type: ["null", "integer"]
+            description: Total number of sessions
+          - name: sessionsPerUser
+            type: ["null", "number"]
+            description: Average number of sessions per user
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+          - name: totalUsers
+            type: ["null", "integer"]
+            description: Total number of unique users
+      - entity: locations
+        fields:
+          - name: averageSessionDuration
+            type: ["null", "number"]
+            description: Average duration of sessions in seconds
+          - name: bounceRate
+            type: ["null", "number"]
+            description: Percentage of sessions that were single-page with no interaction
+          - name: city
+            type: ["null", "string"]
+            description: The city of the user
+          - name: country
+            type: ["null", "string"]
+            description: The country of the user
+          - name: date
+            type: ["null", "string"]
+            description: Date of the report row in YYYYMMDD format
+          - name: endDate
+            type: ["null", "string"]
+            description: End date of the reporting period
+          - name: newUsers
+            type: ["null", "integer"]
+            description: Number of first-time users
+          - name: property_id
+            type: ["string"]
+            description: GA4 property ID
+          - name: region
+            type: ["null", "string"]
+            description: The region (state/province) of the user
+          - name: screenPageViews
+            type: ["null", "integer"]
+            description: Total number of screen or page views
+          - name: screenPageViewsPerSession
+            type: ["null", "number"]
+            description: Average page views per session
+          - name: sessions
+            type: ["null", "integer"]
+            description: Total number of sessions
+          - name: sessionsPerUser
+            type: ["null", "number"]
+            description: Average number of sessions per user
+          - name: startDate
+            type: ["null", "string"]
+            description: Start date of the reporting period
+          - name: totalUsers
+            type: ["null", "integer"]
+            description: Total number of unique users
+
+servers:
+  - url: https://analyticsdata.googleapis.com/v1beta
+    description: Google Analytics Data API v1beta
+
+security:
+  - oauth2: []
+
+paths:
+  "/properties/{property_id}:runReport:website_overview":
+    post:
+      summary: List website overview report
+      description: Returns website overview metrics including total users, new users, sessions, bounce rate, page views, and average session duration by date.
+      operationId: listWebsiteOverview
+      x-airbyte-entity: website_overview
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebsiteOverviewRequest"
+      responses:
+        "200":
+          description: Website overview report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden - insufficient permissions
+
+  "/properties/{property_id}:runReport:daily_active_users":
+    post:
+      summary: List daily active users
+      description: Returns daily active user counts (1-day active users) by date.
+      operationId: listDailyActiveUsers
+      x-airbyte-entity: daily_active_users
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DailyActiveUsersRequest"
+      responses:
+        "200":
+          description: Daily active users report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+  "/properties/{property_id}:runReport:weekly_active_users":
+    post:
+      summary: List weekly active users
+      description: Returns weekly active user counts (7-day active users) by date.
+      operationId: listWeeklyActiveUsers
+      x-airbyte-entity: weekly_active_users
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WeeklyActiveUsersRequest"
+      responses:
+        "200":
+          description: Weekly active users report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+  "/properties/{property_id}:runReport:four_weekly_active_users":
+    post:
+      summary: List four-weekly active users
+      description: Returns 28-day active user counts by date.
+      operationId: listFourWeeklyActiveUsers
+      x-airbyte-entity: four_weekly_active_users
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FourWeeklyActiveUsersRequest"
+      responses:
+        "200":
+          description: Four-weekly active users report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+  "/properties/{property_id}:runReport:traffic_sources":
+    post:
+      summary: List traffic sources
+      description: Returns traffic source metrics broken down by session source, session medium, and date, including users, sessions, bounce rate, and page views.
+      operationId: listTrafficSources
+      x-airbyte-entity: traffic_sources
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrafficSourcesRequest"
+      responses:
+        "200":
+          description: Traffic sources report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+  "/properties/{property_id}:runReport:pages":
+    post:
+      summary: List page metrics
+      description: Returns page-level metrics including page views and bounce rate, broken down by host name, page path, and date.
+      operationId: listPages
+      x-airbyte-entity: pages
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PagesRequest"
+      responses:
+        "200":
+          description: Pages report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+  "/properties/{property_id}:runReport:devices":
+    post:
+      summary: List device metrics
+      description: Returns device-related metrics broken down by device category, operating system, browser, and date, including users, sessions, and page views.
+      operationId: listDevices
+      x-airbyte-entity: devices
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DevicesRequest"
+      responses:
+        "200":
+          description: Devices report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+  "/properties/{property_id}:runReport:locations":
+    post:
+      summary: List location metrics
+      description: Returns geographic metrics broken down by region, country, city, and date, including users, sessions, bounce rate, and page views.
+      operationId: listLocations
+      x-airbyte-entity: locations
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: "/properties/{property_id}:runReport"
+      x-airbyte-record-extractor: $.rows
+      parameters:
+        - name: property_id
+          in: path
+          required: true
+          description: GA4 property ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationsRequest"
+      responses:
+        "200":
+          description: Locations report data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunReportResponse"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authentication for Google Analytics
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+          refreshUrl: https://oauth2.googleapis.com/token
+          scopes:
+            https://www.googleapis.com/auth/analytics.readonly: Read-only access to Google Analytics data
+      x-airbyte-auth-config:
+        title: OAuth 2.0 Authentication
+        type: object
+        required:
+          - client_id
+          - client_secret
+          - refresh_token
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: OAuth 2.0 Client ID from Google Cloud Console
+          client_secret:
+            type: string
+            title: Client Secret
+            description: OAuth 2.0 Client Secret from Google Cloud Console
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: OAuth 2.0 Refresh Token for obtaining new access tokens
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          refresh_token: "${refresh_token}"
+        replication_auth_key_mapping:
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          credentials.auth_type: "Client"
+
+  schemas:
+    DimensionValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The dimension value
+
+    MetricValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The metric value
+
+    Row:
+      type: object
+      properties:
+        dimensionValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/DimensionValue"
+          description: Dimension values for this row
+        metricValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricValue"
+          description: Metric values for this row
+
+    DimensionHeader:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The dimension name
+
+    MetricHeader:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The metric name
+        type:
+          type: string
+          description: The metric data type
+
+    RunReportResponse:
+      type: object
+      description: Response from the runReport endpoint
+      properties:
+        dimensionHeaders:
+          type: array
+          items:
+            $ref: "#/components/schemas/DimensionHeader"
+          description: Column headers for dimensions
+        metricHeaders:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricHeader"
+          description: Column headers for metrics
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/Row"
+          description: Report data rows
+        rowCount:
+          type: integer
+          description: Total number of rows in the query result
+        metadata:
+          type: object
+          properties:
+            currencyCode:
+              type: string
+              description: The currency code used in this report
+            timeZone:
+              type: string
+              description: The property's current timezone
+        propertyQuota:
+          type: object
+          description: Quota status for this Analytics property
+          properties:
+            tokensPerDay:
+              type: object
+              properties:
+                consumed:
+                  type: integer
+                remaining:
+                  type: integer
+            tokensPerHour:
+              type: object
+              properties:
+                consumed:
+                  type: integer
+                remaining:
+                  type: integer
+            concurrentRequests:
+              type: object
+              properties:
+                consumed:
+                  type: integer
+                remaining:
+                  type: integer
+            serverErrorsPerProjectPerHour:
+              type: object
+              properties:
+                consumed:
+                  type: integer
+                remaining:
+                  type: integer
+            potentiallyThresholdedRequestsPerHour:
+              type: object
+              properties:
+                consumed:
+                  type: integer
+                remaining:
+                  type: integer
+            tokensPerProjectPerHour:
+              type: object
+              properties:
+                consumed:
+                  type: integer
+                remaining:
+                  type: integer
+        kind:
+          type: string
+          description: Resource type identifier
+
+    WebsiteOverviewRequest:
+      type: object
+      description: Request body for website overview report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: totalUsers
+            - name: newUsers
+            - name: sessions
+            - name: sessionsPerUser
+            - name: averageSessionDuration
+            - name: screenPageViews
+            - name: screenPageViewsPerSession
+            - name: bounceRate
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    DailyActiveUsersRequest:
+      type: object
+      description: Request body for daily active users report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: active1DayUsers
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    WeeklyActiveUsersRequest:
+      type: object
+      description: Request body for weekly active users report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: active7DayUsers
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    FourWeeklyActiveUsersRequest:
+      type: object
+      description: Request body for four-weekly active users report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: active28DayUsers
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    TrafficSourcesRequest:
+      type: object
+      description: Request body for traffic sources report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+            - name: sessionSource
+            - name: sessionMedium
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: totalUsers
+            - name: newUsers
+            - name: sessions
+            - name: sessionsPerUser
+            - name: averageSessionDuration
+            - name: screenPageViews
+            - name: screenPageViewsPerSession
+            - name: bounceRate
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    PagesRequest:
+      type: object
+      description: Request body for pages report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+            - name: hostName
+            - name: pagePathPlusQueryString
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: screenPageViews
+            - name: bounceRate
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    DevicesRequest:
+      type: object
+      description: Request body for devices report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: date
+            - name: deviceCategory
+            - name: operatingSystem
+            - name: browser
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: totalUsers
+            - name: newUsers
+            - name: sessions
+            - name: sessionsPerUser
+            - name: averageSessionDuration
+            - name: screenPageViews
+            - name: screenPageViewsPerSession
+            - name: bounceRate
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000
+
+    LocationsRequest:
+      type: object
+      description: Request body for locations report
+      properties:
+        dateRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: Start date in YYYY-MM-DD format or relative (e.g., 30daysAgo)
+              endDate:
+                type: string
+                description: End date in YYYY-MM-DD format or relative (e.g., today)
+          default:
+            - startDate: "30daysAgo"
+              endDate: "today"
+        dimensions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: region
+            - name: country
+            - name: city
+            - name: date
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          default:
+            - name: totalUsers
+            - name: newUsers
+            - name: sessions
+            - name: sessionsPerUser
+            - name: averageSessionDuration
+            - name: screenPageViews
+            - name: screenPageViewsPerSession
+            - name: bounceRate
+        keepEmptyRows:
+          type: boolean
+          default: false
+        returnPropertyQuota:
+          type: boolean
+          default: true
+        limit:
+          type: integer
+          default: 100000

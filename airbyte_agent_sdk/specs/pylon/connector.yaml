@@ -1,0 +1,2683 @@
+openapi: 3.1.0
+
+info:
+  title: Pylon API Connector
+  version: 0.1.9
+  description: |
+    Pylon is a customer support platform that helps B2B companies manage customer interactions
+    across Slack, email, chat widgets, and other channels. This connector provides access to
+    issues, accounts, contacts, teams, tags, users, custom fields, ticket forms, and user roles
+    for customer support analytics and account intelligence insights.
+  x-airbyte-connector-name: pylon
+  x-airbyte-connector-definition-id: f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6
+  x-airbyte-replication-version: "0.0.3"
+  x-airbyte-replication-compatibility: ">=0.0.3, <1.0.0"
+  x-airbyte-skip-context-store: "No Airbyte streams found for this connector"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Pylon API Reference
+    url: https://docs.usepylon.com/pylon-docs/developer/api/api-reference
+  - type: authentication_guide
+    title: Pylon API Authentication
+    url: https://docs.usepylon.com/pylon-docs/developer/api
+  x-airbyte-example-questions:
+    direct:
+    - "List all open issues in Pylon"
+    - "Show me all accounts in Pylon"
+    - "List all contacts in Pylon"
+    - "What teams are configured in my Pylon workspace?"
+    - "Show me all tags used in Pylon"
+    - "List all users in my Pylon account"
+    - "Show me the custom fields configured for issues"
+    - "List all ticket forms in Pylon"
+    - "What user roles are available in Pylon?"
+    - "Show me details for a specific issue"
+    - "Get details for a specific account"
+    - "Show me details for a specific contact"
+    search:
+    - "What are the most common issue sources this month?"
+    - "Show me issues assigned to a specific team"
+    - "Which accounts have the most open issues?"
+    - "Analyze issue resolution times over the last 30 days"
+    - "List contacts associated with a specific account"
+    unsupported:
+    - "Delete an issue"
+    - "Delete an account"
+    - "Send a message to a customer"
+    - "Schedule a meeting with a contact"
+
+  x-airbyte-entity-relationships:
+  - source_entity: messages
+    target_entity: issues
+    foreign_key: id
+    target_key: id
+    cardinality: many_to_one
+servers:
+- url: https://api.usepylon.com
+  description: Pylon API server
+
+security:
+- bearerAuth: []
+
+paths:
+  "/issues":
+    get:
+      summary: List issues
+      description: Get a list of issues within a time range
+      operationId: listIssues
+      x-airbyte-entity: issues
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: start_time
+        in: query
+        description: The start time (RFC3339) of the time range to get issues for.
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: end_time
+        in: query
+        description: The end time (RFC3339) of the time range to get issues for.
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssuesResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create an issue
+      description: Create a new issue
+      operationId: createIssue
+      x-airbyte-entity: issues
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueCreateParams"
+      responses:
+        "200":
+          description: Issue created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/issues/{id}":
+    get:
+      summary: Get an issue
+      description: Get a single issue by ID
+      operationId: getIssue
+      x-airbyte-entity: issues
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the issue
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Issue object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueResponse"
+        "404":
+          description: Issue not found
+        "401":
+          description: Unauthorized
+
+    patch:
+      summary: Update an issue
+      description: Update an existing issue by ID
+      operationId: updateIssue
+      x-airbyte-entity: issues
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the issue to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueUpdateParams"
+      responses:
+        "200":
+          description: Issue updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Issue not found
+        "401":
+          description: Unauthorized
+
+  "/issues/{id}/messages":
+    get:
+      summary: List issue messages
+      description: Returns all messages on an issue (customer-facing replies and internal notes)
+      operationId: listIssueMessages
+      x-airbyte-entity: messages
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the issue to fetch messages for
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessagesResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Issue not found
+        "401":
+          description: Unauthorized
+
+  "/issues/{id}/note":
+    post:
+      summary: Create an issue note
+      description: Create an internal note on an issue
+      operationId: createIssueNote
+      x-airbyte-entity: issue_notes
+      x-airbyte-action: create
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the issue to add a note to
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueNoteCreateParams"
+      responses:
+        "200":
+          description: Note created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueNoteResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Issue not found
+        "401":
+          description: Unauthorized
+
+  "/issues/{id}/threads":
+    post:
+      summary: Create an issue thread
+      description: Create a new thread on an issue
+      operationId: createIssueThread
+      x-airbyte-entity: issue_threads
+      x-airbyte-action: create
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the issue to create a thread on
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueThreadCreateParams"
+      responses:
+        "200":
+          description: Thread created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueThreadResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Issue not found
+        "401":
+          description: Unauthorized
+
+  "/accounts":
+    get:
+      summary: List accounts
+      description: Get a list of accounts
+      operationId: listAccounts
+      x-airbyte-entity: accounts
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+    post:
+      summary: Create an account
+      description: Create a new account
+      operationId: createAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountCreateParams"
+      responses:
+        "200":
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/accounts/{id}":
+    get:
+      summary: Get an account
+      description: Get a single account by ID
+      operationId: getAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the account
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "404":
+          description: Account not found
+        "401":
+          description: Unauthorized
+    patch:
+      summary: Update an account
+      description: Update an existing account by ID
+      operationId: updateAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the account to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountUpdateParams"
+      responses:
+        "200":
+          description: Account updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Account not found
+        "401":
+          description: Unauthorized
+
+  "/contacts":
+    get:
+      summary: List contacts
+      description: Get a list of contacts
+      operationId: listContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create a contact
+      description: Create a new contact
+      operationId: createContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactCreateParams"
+      responses:
+        "200":
+          description: Contact created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/contacts/{id}":
+    get:
+      summary: Get a contact
+      description: Get a single contact by ID
+      operationId: getContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the contact
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Contact object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+    patch:
+      summary: Update a contact
+      description: Update an existing contact by ID
+      operationId: updateContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the contact to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactUpdateParams"
+      responses:
+        "200":
+          description: Contact updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+
+  "/teams":
+    get:
+      summary: List teams
+      description: Get a list of teams
+      operationId: listTeams
+      x-airbyte-entity: teams
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create a team
+      description: Create a new team
+      operationId: createTeam
+      x-airbyte-entity: teams
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamCreateParams"
+      responses:
+        "200":
+          description: Team created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/teams/{id}":
+    get:
+      summary: Get a team
+      description: Get a single team by ID
+      operationId: getTeam
+      x-airbyte-entity: teams
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the team
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Team object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamResponse"
+        "404":
+          description: Team not found
+        "401":
+          description: Unauthorized
+    patch:
+      summary: Update a team
+      description: Update an existing team by ID
+      operationId: updateTeam
+      x-airbyte-entity: teams
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the team to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamUpdateParams"
+      responses:
+        "200":
+          description: Team updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Team not found
+        "401":
+          description: Unauthorized
+
+  "/tags":
+    get:
+      summary: List tags
+      description: Get all tags
+      operationId: listTags
+      x-airbyte-entity: tags
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+    post:
+      summary: Create a tag
+      description: Create a new tag
+      operationId: createTag
+      x-airbyte-entity: tags
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TagCreateParams"
+      responses:
+        "200":
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/tags/{id}":
+    get:
+      summary: Get a tag
+      description: Get a tag by its ID
+      operationId: getTag
+      x-airbyte-entity: tags
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the tag
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Tag object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagResponse"
+        "404":
+          description: Tag not found
+        "401":
+          description: Unauthorized
+    patch:
+      summary: Update a tag
+      description: Update an existing tag by ID
+      operationId: updateTag
+      x-airbyte-entity: tags
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the tag to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TagUpdateParams"
+      responses:
+        "200":
+          description: Tag updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Tag not found
+        "401":
+          description: Unauthorized
+
+  "/users":
+    get:
+      summary: List users
+      description: Get a list of users
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/users/{id}":
+    get:
+      summary: Get a user
+      description: Get a single user by ID
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the user
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: User not found
+        "401":
+          description: Unauthorized
+
+  "/custom-fields":
+    get:
+      summary: List custom fields
+      description: Get all custom fields for a given object type
+      operationId: listCustomFields
+      x-airbyte-entity: custom_fields
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: object_type
+        in: query
+        description: 'The object type of the custom fields. Can be "account", "issue", or "contact".'
+        required: true
+        schema:
+          type: string
+          enum:
+          - account
+          - issue
+          - contact
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of custom fields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomFieldsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/custom-fields/{id}":
+    get:
+      summary: Get a custom field
+      description: Get a custom field by its ID
+      operationId: getCustomField
+      x-airbyte-entity: custom_fields
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the custom field
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Custom field object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomFieldResponse"
+        "404":
+          description: Custom field not found
+        "401":
+          description: Unauthorized
+
+  "/ticket-forms":
+    get:
+      summary: List ticket forms
+      description: Get a list of ticket forms
+      operationId: listTicketForms
+      x-airbyte-entity: ticket_forms
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of ticket forms
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TicketFormsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/user-roles":
+    get:
+      summary: List user roles
+      description: Get a list of all user roles
+      operationId: listUserRoles
+      x-airbyte-entity: user_roles
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_cursor: $.pagination.cursor
+        has_next_page: $.pagination.has_next_page
+      parameters:
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of user roles
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRolesResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/tasks":
+    post:
+      summary: Create a task
+      description: Create a new task
+      operationId: createTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateParams"
+      responses:
+        "200":
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/tasks/{id}":
+    patch:
+      summary: Update a task
+      description: Update an existing task by ID
+      operationId: updateTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the task to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdateParams"
+      responses:
+        "200":
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Task not found
+        "401":
+          description: Unauthorized
+
+  "/projects":
+    post:
+      summary: Create a project
+      description: Create a new project
+      operationId: createProject
+      x-airbyte-entity: projects
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectCreateParams"
+      responses:
+        "200":
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/projects/{id}":
+    patch:
+      summary: Update a project
+      description: Update an existing project by ID
+      operationId: updateProject
+      x-airbyte-entity: projects
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the project to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdateParams"
+      responses:
+        "200":
+          description: Project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Project not found
+        "401":
+          description: Unauthorized
+
+  "/milestones":
+    post:
+      summary: Create a milestone
+      description: Create a new milestone
+      operationId: createMilestone
+      x-airbyte-entity: milestones
+      x-airbyte-action: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MilestoneCreateParams"
+      responses:
+        "200":
+          description: Milestone created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MilestoneResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/milestones/{id}":
+    patch:
+      summary: Update a milestone
+      description: Update an existing milestone by ID
+      operationId: updateMilestone
+      x-airbyte-entity: milestones
+      x-airbyte-action: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the milestone to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MilestoneUpdateParams"
+      responses:
+        "200":
+          description: Milestone updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MilestoneResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Milestone not found
+        "401":
+          description: Unauthorized
+
+  "/knowledge-bases/{kb_id}/articles":
+    post:
+      summary: Create an article
+      description: Create a new article in a knowledge base
+      operationId: createArticle
+      x-airbyte-entity: articles
+      x-airbyte-action: create
+      parameters:
+      - name: kb_id
+        in: path
+        required: true
+        description: The ID of the knowledge base
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleCreateParams"
+      responses:
+        "200":
+          description: Article created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArticleResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/knowledge-bases/{kb_id}/articles/{article_id}":
+    patch:
+      summary: Update an article
+      description: Update an existing article in a knowledge base
+      operationId: updateArticle
+      x-airbyte-entity: articles
+      x-airbyte-action: update
+      parameters:
+      - name: kb_id
+        in: path
+        required: true
+        description: The ID of the knowledge base
+        schema:
+          type: string
+      - name: article_id
+        in: path
+        required: true
+        description: The ID of the article to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleUpdateParams"
+      responses:
+        "200":
+          description: Article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArticleResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Article not found
+        "401":
+          description: Unauthorized
+
+  "/knowledge-bases/{kb_id}/collections":
+    post:
+      summary: Create a collection
+      description: Create a new collection in a knowledge base
+      operationId: createCollection
+      x-airbyte-entity: collections
+      x-airbyte-action: create
+      parameters:
+      - name: kb_id
+        in: path
+        required: true
+        description: The ID of the knowledge base
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionCreateParams"
+      responses:
+        "200":
+          description: Collection created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  "/me":
+    get:
+      summary: Get current user
+      description: Get the currently authenticated user
+      operationId: getMe
+      x-airbyte-entity: me
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      responses:
+        "200":
+          description: Current user object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MeResponse"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: "Bearer token authentication. Create an API token in Pylon settings."
+      x-airbyte-auth-config:
+        title: "API Token Authentication"
+        type: object
+        required:
+        - api_token
+        properties:
+          api_token:
+            type: string
+            title: "API Token"
+            description: "Your Pylon API token. Only admin users can create API tokens."
+        auth_mapping:
+          token: "${api_token}"
+        replication_auth_key_mapping:
+          api_token: "api_token"
+
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        cursor:
+          type: [string, "null"]
+          description: The cursor for the next page of results
+        has_next_page:
+          type: boolean
+          description: Indicates if there is a next page of results
+
+    MiniAccount:
+      type: object
+      properties:
+        id:
+          type: [string, "null"]
+          description: The ID of the account
+
+    MiniUser:
+      type: object
+      properties:
+        email:
+          type: [string, "null"]
+          description: The email of the user
+        id:
+          type: [string, "null"]
+          description: The ID of the user
+
+    MiniContact:
+      type: object
+      properties:
+        email:
+          type: [string, "null"]
+          description: The email of the contact
+        id:
+          type: [string, "null"]
+          description: The ID of the contact
+
+    MiniTeam:
+      type: object
+      properties:
+        id:
+          type: [string, "null"]
+          description: The ID of the team
+
+    SlackInfo:
+      type: object
+      properties:
+        channel_id:
+          type: [string, "null"]
+          description: The Slack channel ID associated with the issue
+        message_ts:
+          type: [string, "null"]
+          description: The root message ID of Slack message that started issue
+        workspace_id:
+          type: [string, "null"]
+          description: The Slack workspace ID associated with the issue
+
+    IssueChatWidgetInfo:
+      type: object
+      properties:
+        page_url:
+          type: [string, "null"]
+          description: The URL of the page the user was on when starting the chat widget issue
+
+    CSATResponse:
+      type: object
+      properties:
+        comment:
+          type: [string, "null"]
+          description: The comment of the CSAT response
+        score:
+          type: [integer, "null"]
+          description: The score of the CSAT response
+
+    CustomFieldValue:
+      type: object
+      properties:
+        slug:
+          type: [string, "null"]
+          description: The slug of the custom field
+        value:
+          type: [string, "null"]
+          description: The value of the custom field
+        values:
+          type: [array, "null"]
+          items:
+            type: string
+          description: The values for multi-valued custom fields
+
+    ExternalIssue:
+      type: object
+      properties:
+        external_id:
+          type: [string, "null"]
+          description: The external ID of the external issue
+        link:
+          type: [string, "null"]
+          description: Link to the product issue
+        source:
+          type: [string, "null"]
+          description: The source of the external issue
+
+    Issue:
+      type: object
+      x-airbyte-entity-name: issues
+      x-airbyte-ai-hints:
+        summary: "Customer support threads, open issues, response timelines, and who replied"
+        when_to_use: "Support issue or customer response questions"
+        trigger_phrases: ["did they get back", "support issue", "ticket for", "open issues", "did someone follow up"]
+        freshness: live
+        search_strategy: "Search by title. If no results, try resolving by account name."
+        example_questions:
+          - "Did Marathon get back to us on the integration issue?"
+          - "What are the open support tickets for Acme?"
+          - "Who last replied to the billing thread?"
+      properties:
+        id:
+          type: string
+          description: The ID of the issue
+        account:
+          oneOf:
+          - $ref: "#/components/schemas/MiniAccount"
+          - type: "null"
+        assignee:
+          oneOf:
+          - $ref: "#/components/schemas/MiniUser"
+          - type: "null"
+        attachment_urls:
+          type: [array, "null"]
+          items:
+            type: string
+          description: The attachment URLs attached to this issue
+        author_unverified:
+          type: [boolean, "null"]
+          description: Whether any message on the issue has an unverified author identity
+        body_html:
+          type: [string, "null"]
+          description: The body of the issue in HTML format
+        business_hours_first_response_seconds:
+          type: [integer, "null"]
+          description: Business hours time in seconds for first response
+        business_hours_resolution_seconds:
+          type: [integer, "null"]
+          description: Business hours time in seconds for resolution
+        chat_widget_info:
+          oneOf:
+          - $ref: "#/components/schemas/IssueChatWidgetInfo"
+          - type: "null"
+        created_at:
+          type: [string, "null"]
+          description: The time the issue was created
+        csat_responses:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/CSATResponse"
+          description: The CSAT responses of the issue
+        custom_fields:
+          type: [object, "null"]
+          additionalProperties:
+            $ref: "#/components/schemas/CustomFieldValue"
+          description: Custom field values associated with the issue
+        customer_portal_visible:
+          type: [boolean, "null"]
+          description: Whether the issue is visible in the customer portal
+        external_issues:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/ExternalIssue"
+          description: The external issues associated with the issue
+        first_response_seconds:
+          type: [integer, "null"]
+          description: Time in seconds for first response
+        first_response_time:
+          type: [string, "null"]
+          description: The time of the first response
+        latest_message_time:
+          type: [string, "null"]
+          description: The time of the latest message in the issue
+        link:
+          type: [string, "null"]
+          description: The link to the issue in Pylon
+        number:
+          type: [integer, "null"]
+          description: The number of the issue
+        number_of_touches:
+          type: [integer, "null"]
+          description: The number of times the issue has been touched
+        requester:
+          oneOf:
+          - $ref: "#/components/schemas/MiniContact"
+          - type: "null"
+        resolution_seconds:
+          type: [integer, "null"]
+          description: Time in seconds for resolution
+        resolution_time:
+          type: [string, "null"]
+          description: The time of the resolution
+        slack:
+          oneOf:
+          - $ref: "#/components/schemas/SlackInfo"
+          - type: "null"
+        snoozed_until_time:
+          type: [string, "null"]
+          description: The time the issue was snoozed until
+        source:
+          oneOf:
+          - type: string
+            enum:
+            - slack
+            - microsoft_teams
+            - microsoft_teams_chat
+            - chat_widget
+            - email
+            - manual
+            - form
+            - discord
+            - whatsapp
+            - sms
+            - telegram
+          - type: "null"
+        state:
+          type: [string, "null"]
+          description: The state of the issue
+        tags:
+          type: [array, "null"]
+          items:
+            type: string
+          description: Tags associated with the issue
+        team:
+          oneOf:
+          - $ref: "#/components/schemas/MiniTeam"
+          - type: "null"
+        title:
+          type: [string, "null"]
+          description: The title of the issue
+        type:
+          oneOf:
+          - type: string
+            enum:
+            - Conversation
+            - Ticket
+          - type: "null"
+
+    IssuesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Issue"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    IssueResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Issue"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    MessageAuthor:
+      type: object
+      properties:
+        avatar_url:
+          type: [string, "null"]
+        contact:
+          oneOf:
+          - $ref: "#/components/schemas/MiniContact"
+          - type: "null"
+        name:
+          type: [string, "null"]
+        user:
+          oneOf:
+          - $ref: "#/components/schemas/MiniUser"
+          - type: "null"
+
+    EmailMessageInfo:
+      type: object
+      properties:
+        bcc_emails:
+          type: [array, "null"]
+          items:
+            type: string
+          description: BCC email addresses
+        cc_emails:
+          type: [array, "null"]
+          items:
+            type: string
+          description: CC email addresses
+        from_email:
+          type: [string, "null"]
+          description: Sender email address
+        message_id:
+          type: [string, "null"]
+          description: RFC 5322 Message-ID header value
+        to_emails:
+          type: [array, "null"]
+          items:
+            type: string
+          description: Recipient email addresses
+
+    Message:
+      type: object
+      x-airbyte-entity-name: messages
+      properties:
+        id:
+          type: string
+          description: The ID of the message
+        author:
+          oneOf:
+          - $ref: "#/components/schemas/MessageAuthor"
+          - type: "null"
+        email_info:
+          oneOf:
+          - $ref: "#/components/schemas/EmailMessageInfo"
+          - type: "null"
+        file_urls:
+          type: [array, "null"]
+          items:
+            type: string
+          description: The URLs of the files in the message
+        is_private:
+          type: [boolean, "null"]
+          description: Indicates if the message is private
+        message_html:
+          type: [string, "null"]
+          description: The HTML body of the message
+        source:
+          type: [string, "null"]
+          description: The source of the message
+        thread_id:
+          type: [string, "null"]
+          description: The ID of the thread the message belongs to
+        timestamp:
+          type: [string, "null"]
+          description: The time at which the message was created
+
+    MessagesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    AccountChannel:
+      type: object
+      properties:
+        channel_id:
+          type: [string, "null"]
+          description: The channel identifier
+        source:
+          type: [string, "null"]
+          description: The source of the channel
+        is_primary:
+          type: [boolean, "null"]
+          description: Whether this is the primary channel
+
+    Account:
+      type: object
+      x-airbyte-entity-name: accounts
+      properties:
+        id:
+          type: string
+          description: The ID of the account
+        channels:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/AccountChannel"
+          description: The channels associated with the account
+        created_at:
+          type: [string, "null"]
+          description: The time the account was created
+        custom_fields:
+          type: [object, "null"]
+          additionalProperties: true
+          description: Custom field values associated with the account
+        domain:
+          type: [string, "null"]
+          description: The domain of the account
+        domains:
+          type: [array, "null"]
+          items:
+            type: string
+          description: The domains associated with the account
+        external_ids:
+          type: [object, "null"]
+          additionalProperties: true
+          description: External IDs associated with the account
+        is_disabled:
+          type: [boolean, "null"]
+          description: Whether the account is disabled
+        latest_customer_activity_time:
+          type: [string, "null"]
+          description: The time of the latest customer activity
+        name:
+          type: [string, "null"]
+          description: The name of the account
+        owner:
+          oneOf:
+          - $ref: "#/components/schemas/MiniUser"
+          - type: "null"
+        primary_domain:
+          type: [string, "null"]
+          description: The primary domain of the account
+        tags:
+          type: [array, "null"]
+          items:
+            type: string
+          description: Tags associated with the account
+        type:
+          type: [string, "null"]
+          description: The type of the account
+
+    AccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    AccountResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Account"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    AccountCreateParams:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name of the account
+        domains:
+          type: array
+          items:
+            type: string
+          description: The domains of the account (e.g. stripe.com)
+        primary_domain:
+          type: string
+          description: Must be in the list of domains. If there are any domains, there must be exactly one primary domain.
+        owner_id:
+          type: string
+          description: The ID of the owner of the account
+        logo_url:
+          type: string
+          description: The logo URL of the account. Must be a square .png, .jpg or .jpeg.
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to associate with the account
+
+    AccountUpdateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the account
+        domains:
+          type: array
+          items:
+            type: string
+          description: Domains of the account. Must specify one domain as primary.
+        primary_domain:
+          type: string
+          description: Must be in the list of domains. If there are any domains, there must be exactly one primary domain.
+        owner_id:
+          type: string
+          description: The ID of the owner of the account. If empty string is passed in, the owner will be removed.
+        logo_url:
+          type: string
+          description: Logo URL of the account
+        is_disabled:
+          type: boolean
+          description: Whether the account is disabled
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to associate with the account
+
+    IntegrationUserId:
+      type: object
+      properties:
+        id:
+          type: [string, "null"]
+          description: The integration user ID
+        source:
+          type: [string, "null"]
+          description: The source of the integration
+
+    Contact:
+      type: object
+      x-airbyte-entity-name: contacts
+      properties:
+        id:
+          type: string
+          description: The ID of the contact
+        account:
+          oneOf:
+          - $ref: "#/components/schemas/MiniAccount"
+          - type: "null"
+        avatar_url:
+          type: [string, "null"]
+          description: The URL of the contact's avatar
+        custom_fields:
+          type: [object, "null"]
+          additionalProperties: true
+          description: Custom field values associated with the contact
+        email:
+          type: [string, "null"]
+          description: The primary email address of the contact
+        emails:
+          type: [array, "null"]
+          items:
+            type: string
+          description: All email addresses of the contact
+        integration_user_ids:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/IntegrationUserId"
+          description: Integration user IDs associated with the contact
+        name:
+          type: [string, "null"]
+          description: The name of the contact
+        phone_numbers:
+          type: [array, "null"]
+          items:
+            type: string
+          description: Phone numbers of the contact
+        portal_role:
+          type: [string, "null"]
+          description: The portal role of the contact
+        portal_role_id:
+          type: [string, "null"]
+          description: The portal role ID of the contact
+
+    ContactsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Contact"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    ContactResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Contact"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    Team:
+      type: object
+      x-airbyte-entity-name: teams
+      properties:
+        id:
+          type: string
+          description: The ID of the team
+        name:
+          type: [string, "null"]
+          description: The name of the team
+        users:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/MiniUser"
+          description: The users in the team
+
+    TeamsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Team"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    TeamResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Team"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    Tag:
+      type: object
+      x-airbyte-entity-name: tags
+      properties:
+        id:
+          type: string
+          description: The ID of the tag
+        hex_color:
+          type: [string, "null"]
+          description: The hex code of the tag's color
+        object_type:
+          type: [string, "null"]
+          description: The object type of the associated object
+        value:
+          type: [string, "null"]
+          description: The tag value
+
+    TagsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    TagResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Tag"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      properties:
+        id:
+          type: string
+          description: The ID of the user
+        avatar_url:
+          type: [string, "null"]
+          description: The URL of the user's avatar
+        email:
+          type: [string, "null"]
+          description: The primary email address of the user
+        emails:
+          type: [array, "null"]
+          items:
+            type: string
+          description: All email addresses of the user
+        name:
+          type: [string, "null"]
+          description: The name of the user
+        role_id:
+          type: [string, "null"]
+          description: The ID of the user's role
+        status:
+          type: [string, "null"]
+          description: The status of the user
+
+    UsersResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    SelectOption:
+      type: object
+      properties:
+        label:
+          type: [string, "null"]
+          description: The label of the select option
+        slug:
+          type: [string, "null"]
+          description: The slug of the select option
+
+    NumberMetadata:
+      type: object
+      properties:
+        currency:
+          type: [string, "null"]
+          description: Currency code
+        decimal_places:
+          type: [integer, "null"]
+          description: Number of decimal places
+        format:
+          type: [string, "null"]
+          description: Number format
+
+    SelectMetadata:
+      type: object
+      properties:
+        options:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/SelectOption"
+          description: The options for the select field
+
+    CustomField:
+      type: object
+      x-airbyte-entity-name: custom_fields
+      properties:
+        id:
+          type: string
+          description: The ID of the custom field
+        created_at:
+          type: [string, "null"]
+          description: The time the custom field was created
+        default_value:
+          type: [string, "null"]
+          description: The default value for single-valued custom fields
+        default_values:
+          type: [array, "null"]
+          items:
+            type: string
+          description: The default values for multi-valued custom fields
+        description:
+          type: [string, "null"]
+          description: The description of the custom field
+        is_read_only:
+          type: [boolean, "null"]
+          description: Whether the custom field is read-only
+        label:
+          type: [string, "null"]
+          description: The label of the custom field
+        number_metadata:
+          oneOf:
+          - $ref: "#/components/schemas/NumberMetadata"
+          - type: "null"
+        object_type:
+          type: [string, "null"]
+          description: The object type of the custom field
+        select_metadata:
+          oneOf:
+          - $ref: "#/components/schemas/SelectMetadata"
+          - type: "null"
+        slug:
+          type: [string, "null"]
+          description: The slug of the custom field
+        source:
+          type: [string, "null"]
+          description: The source of the custom field
+        type:
+          type: [string, "null"]
+          description: The type of the custom field
+        updated_at:
+          type: [string, "null"]
+          description: The time the custom field was last updated
+
+    CustomFieldsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomField"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    CustomFieldResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/CustomField"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    TicketFormField:
+      type: object
+      properties:
+        description_html:
+          type: [string, "null"]
+          description: The HTML description of the field
+        name:
+          type: [string, "null"]
+          description: The name of the field
+        slug:
+          type: [string, "null"]
+          description: The slug of the field
+        type:
+          type: [string, "null"]
+          description: The type of the field
+
+    TicketForm:
+      type: object
+      x-airbyte-entity-name: ticket_forms
+      properties:
+        id:
+          type: string
+          description: The ID of the ticket form
+        description_html:
+          type: [string, "null"]
+          description: The HTML description of the ticket form
+        fields:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/TicketFormField"
+          description: The fields of the ticket form
+        is_public:
+          type: [boolean, "null"]
+          description: Whether the ticket form is public
+        name:
+          type: [string, "null"]
+          description: The name of the ticket form
+        slug:
+          type: [string, "null"]
+          description: The slug of the ticket form
+        url:
+          type: [string, "null"]
+          description: The URL of the ticket form
+
+    TicketFormsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TicketForm"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    UserRole:
+      type: object
+      x-airbyte-entity-name: user_roles
+      properties:
+        id:
+          type: string
+          description: The ID of the user role
+        name:
+          type: [string, "null"]
+          description: The name of the user role
+        slug:
+          type: [string, "null"]
+          description: The slug of the user role
+
+    UserRolesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserRole"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    MeResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    IssueCreateParams:
+      type: object
+      required:
+      - title
+      - body_html
+      properties:
+        title:
+          type: string
+          description: The title of the issue
+        body_html:
+          type: string
+          description: The HTML content of the body of the issue
+        priority:
+          type: string
+          description: "The priority of the issue (urgent, high, medium, low)"
+        requester_email:
+          type: string
+          description: The email of the requester
+        requester_name:
+          type: string
+          description: The full name of the requester
+        account_id:
+          type: string
+          description: The account that this issue belongs to
+        assignee_id:
+          type: string
+          description: The user the issue should be assigned to
+        team_id:
+          type: string
+          description: The ID of the team this issue should be assigned to
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to associate with the issue
+
+    IssueUpdateParams:
+      type: object
+      properties:
+        state:
+          type: string
+          description: "The state of the issue (open, snoozed, closed)"
+        assignee_id:
+          type: string
+          description: The user the issue should be assigned to
+        team_id:
+          type: string
+          description: The ID of the team this issue should be assigned to
+        account_id:
+          type: string
+          description: The account that this issue belongs to
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to associate with the issue
+
+    IssueNoteCreateParams:
+      type: object
+      required:
+      - body_html
+      properties:
+        body_html:
+          type: string
+          description: The HTML content of the note
+        thread_id:
+          type: string
+          description: The ID of the thread to add the note to
+        message_id:
+          type: string
+          description: The ID of the message to add the note to
+
+    IssueNote:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the note message
+        body_html:
+          type: [string, "null"]
+          description: The HTML content of the note
+        timestamp:
+          type: [string, "null"]
+          description: The time the note was created
+
+    IssueNoteResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/IssueNote"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    IssueThreadCreateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the thread
+
+    IssueThread:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the thread
+        name:
+          type: [string, "null"]
+          description: The name of the thread
+
+    IssueThreadResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/IssueThread"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    ContactCreateParams:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name of the contact
+        email:
+          type: string
+          description: The email address of the contact
+        account_id:
+          type: string
+          description: The ID of the account to associate this contact with
+        avatar_url:
+          type: string
+          description: The URL of the contact's avatar
+
+    ContactUpdateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the contact
+        email:
+          type: string
+          description: The email address of the contact
+        account_id:
+          type: string
+          description: The ID of the account to associate this contact with
+
+    TeamCreateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the team
+
+    TeamUpdateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the team
+
+    TagCreateParams:
+      type: object
+      required:
+      - value
+      - object_type
+      properties:
+        value:
+          type: string
+          description: The tag value
+        object_type:
+          type: string
+          description: "The object type (issue, account, contact)"
+        hex_color:
+          type: string
+          description: The hex color code of the tag
+
+    TagUpdateParams:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The tag value
+        hex_color:
+          type: string
+          description: The hex color code of the tag
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the task
+        title:
+          type: [string, "null"]
+          description: The title of the task
+        body_html:
+          type: [string, "null"]
+          description: The body HTML of the task
+        status:
+          type: [string, "null"]
+          description: The status of the task
+        assignee_id:
+          type: [string, "null"]
+          description: The assignee ID of the task
+        project_id:
+          type: [string, "null"]
+          description: The project ID of the task
+        milestone_id:
+          type: [string, "null"]
+          description: The milestone ID of the task
+        due_date:
+          type: [string, "null"]
+          description: The due date of the task
+        created_at:
+          type: [string, "null"]
+          description: The time the task was created
+        updated_at:
+          type: [string, "null"]
+          description: The time the task was last updated
+
+    TaskCreateParams:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+          description: The title of the task
+        body_html:
+          type: string
+          description: The body HTML of the task
+        status:
+          type: string
+          description: "The status of the task (not_started, in_progress, completed)"
+        assignee_id:
+          type: string
+          description: The assignee ID for the task
+        project_id:
+          type: string
+          description: The project ID for the task
+        milestone_id:
+          type: string
+          description: The milestone ID for the task
+        due_date:
+          type: string
+          description: The due date for the task (RFC3339)
+
+    TaskUpdateParams:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the task
+        body_html:
+          type: string
+          description: The body HTML of the task
+        status:
+          type: string
+          description: "The status of the task (not_started, in_progress, completed)"
+        assignee_id:
+          type: string
+          description: The assignee ID for the task
+
+    TaskResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Task"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the project
+        name:
+          type: [string, "null"]
+          description: The name of the project
+        description_html:
+          type: [string, "null"]
+          description: The HTML description of the project
+        account_id:
+          type: [string, "null"]
+          description: The account ID of the project
+        owner_id:
+          type: [string, "null"]
+          description: The owner ID of the project
+        start_date:
+          type: [string, "null"]
+          description: The start date of the project
+        end_date:
+          type: [string, "null"]
+          description: The end date of the project
+        is_archived:
+          type: [boolean, "null"]
+          description: Whether the project is archived
+        created_at:
+          type: [string, "null"]
+          description: The time the project was created
+        updated_at:
+          type: [string, "null"]
+          description: The time the project was last updated
+
+    ProjectCreateParams:
+      type: object
+      required:
+      - name
+      - account_id
+      properties:
+        name:
+          type: string
+          description: The name of the project
+        account_id:
+          type: string
+          description: The account ID for the project
+        description_html:
+          type: string
+          description: The HTML description of the project
+        start_date:
+          type: string
+          description: The start date of the project (RFC3339)
+        end_date:
+          type: string
+          description: The end date of the project (RFC3339)
+
+    ProjectUpdateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the project
+        description_html:
+          type: string
+          description: The HTML description of the project
+        is_archived:
+          type: boolean
+          description: Whether the project is archived
+
+    ProjectResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Project"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    Milestone:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the milestone
+        name:
+          type: [string, "null"]
+          description: The name of the milestone
+        project_id:
+          type: [string, "null"]
+          description: The project ID of the milestone
+        due_date:
+          type: [string, "null"]
+          description: The due date of the milestone
+        created_at:
+          type: [string, "null"]
+          description: The time the milestone was created
+        updated_at:
+          type: [string, "null"]
+          description: The time the milestone was last updated
+
+    MilestoneCreateParams:
+      type: object
+      required:
+      - name
+      - project_id
+      properties:
+        name:
+          type: string
+          description: The name of the milestone
+        project_id:
+          type: string
+          description: The project ID for the milestone
+        due_date:
+          type: string
+          description: The due date of the milestone (RFC3339)
+
+    MilestoneUpdateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the milestone
+        due_date:
+          type: string
+          description: The due date of the milestone (RFC3339)
+
+    MilestoneResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Milestone"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the article
+        title:
+          type: [string, "null"]
+          description: The title of the article
+        body_html:
+          type: [string, "null"]
+          description: The HTML body of the article
+        slug:
+          type: [string, "null"]
+          description: The slug of the article
+        is_published:
+          type: [boolean, "null"]
+          description: Whether the article is published
+        author_user_id:
+          type: [string, "null"]
+          description: The author user ID
+        created_at:
+          type: [string, "null"]
+          description: The time the article was created
+        updated_at:
+          type: [string, "null"]
+          description: The time the article was last updated
+
+    ArticleCreateParams:
+      type: object
+      required:
+      - title
+      - body_html
+      - author_user_id
+      properties:
+        title:
+          type: string
+          description: The title of the article
+        body_html:
+          type: string
+          description: The HTML body of the article
+        author_user_id:
+          type: string
+          description: The ID of the user attributed as the author
+        slug:
+          type: string
+          description: The slug of the article
+        is_published:
+          type: boolean
+          description: Whether the article should be published
+
+    ArticleUpdateParams:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the article
+        body_html:
+          type: string
+          description: The HTML body of the article
+
+    ArticleResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Article"
+        request_id:
+          type: string
+          description: The request ID for tracking
+
+    Collection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the collection
+        title:
+          type: [string, "null"]
+          description: The title of the collection
+        description:
+          type: [string, "null"]
+          description: The description of the collection
+        slug:
+          type: [string, "null"]
+          description: The slug of the collection
+        created_at:
+          type: [string, "null"]
+          description: The time the collection was created
+
+    CollectionCreateParams:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+          description: The title of the collection
+        description:
+          type: string
+          description: The description of the collection
+        slug:
+          type: string
+          description: The slug of the collection
+
+    CollectionResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Collection"
+        request_id:
+          type: string
+          description: The request ID for tracking

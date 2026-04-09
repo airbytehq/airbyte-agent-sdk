@@ -1,0 +1,1902 @@
+openapi: 3.1.0
+
+info:
+  title: Snapchat Marketing API Connector
+  version: 1.0.4
+  description: >
+    Connector for the Snapchat Marketing API (Ads API). Provides access to
+    Snapchat advertising entities including organizations, ad accounts,
+    campaigns, ad squads, ads, creatives, media, and audience segments.
+    Supports OAuth2 authentication with automatic token refresh.
+  x-airbyte-connector-name: snapchat-marketing
+  x-airbyte-connector-definition-id: 200330b2-ea62-4d11-ac6d-cfe3e3f8ab2b
+  x-airbyte-replication-version: "1.5.31"
+  x-airbyte-replication-compatibility: ">=1.5.31, <2.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Snapchat Marketing API Documentation
+    url: https://developers.snap.com/api/marketing-api/Ads-API/introduction
+  x-airbyte-example-questions:
+    direct:
+    - "List all organizations I belong to"
+    - "Show me all ad accounts for my organization"
+    - "List all campaigns in my ad account"
+    - "Show me the ad squads for my ad account"
+    - "List all ads in my ad account"
+    - "Show me the creatives for my ad account"
+    - "List all media files in my ad account"
+    - "Show me the audience segments in my ad account"
+    search:
+    - "Which campaigns are currently active?"
+    - "What ad squads have the highest daily budget?"
+    - "Show me ads that are pending review"
+    - "Find campaigns created in the last month"
+    unsupported:
+    - "Create a new campaign"
+    - "Update an ad's status"
+    - "Delete a creative"
+    - "Show me ad performance statistics"
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Snapchat Marketing.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: Date in YYYY-MM-DD format. Data before this date will not be replicated.
+        format: date
+    required:
+    - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-entity-relationships:
+  - source_entity: adaccounts
+    target_entity: organizations
+    foreign_key: organization_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: campaigns
+    target_entity: adaccounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: adsquads
+    target_entity: adaccounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: ads
+    target_entity: adaccounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: creatives
+    target_entity: adaccounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: media
+    target_entity: adaccounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: segments
+    target_entity: adaccounts
+    foreign_key: ad_account_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: organizations
+      fields:
+      - name: accepted_term_version
+        type: ["null", "string"]
+        description: Version of accepted terms
+      - name: address_line_1
+        type: ["null", "string"]
+        description: Street address
+      - name: administrative_district_level_1
+        type: ["null", "string"]
+        description: State or province
+      - name: configuration_settings
+        type: ["null", "object"]
+        description: Organization configuration settings
+        properties:
+          notifications_enabled:
+            type: ["null", "boolean"]
+      - name: contact_email
+        type: ["null", "string"]
+        description: Contact email address
+      - name: contact_name
+        type: ["null", "string"]
+        description: Contact person name
+      - name: contact_phone
+        type: ["null", "string"]
+        description: Contact phone number
+      - name: contact_phone_optin
+        type: ["null", "boolean"]
+        description: Whether the contact opted in for phone communications
+      - name: country
+        type: ["null", "string"]
+        description: Country code
+      - name: createdByCaller
+        type: ["null", "boolean"]
+        description: Whether the organization was created by the caller
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: id
+        type: ["null", "string"]
+        description: Unique organization identifier
+      - name: locality
+        type: ["null", "string"]
+        description: City or locality
+      - name: my_display_name
+        type: ["null", "string"]
+        description: Display name of the authenticated user in the organization
+      - name: my_invited_email
+        type: ["null", "string"]
+        description: Email used to invite the authenticated user
+      - name: my_member_id
+        type: ["null", "string"]
+        description: Member ID of the authenticated user
+      - name: name
+        type: ["null", "string"]
+        description: Organization name
+      - name: postal_code
+        type: ["null", "string"]
+        description: Postal code
+      - name: roles
+        type: ["null", "array"]
+        description: Roles of the authenticated user in this organization
+      - name: state
+        type: ["null", "string"]
+        description: Organization state
+      - name: type
+        type: ["null", "string"]
+        description: Organization type
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+    - entity: adaccounts
+      fields:
+      - name: advertiser_organization_id
+        type: ["null", "string"]
+        description: Advertiser organization ID
+      - name: agency_representing_client
+        type: ["null", "boolean"]
+        description: Whether the account is managed by an agency
+      - name: billing_center_id
+        type: ["null", "string"]
+        description: Billing center ID
+      - name: billing_type
+        type: ["null", "string"]
+        description: Billing type
+      - name: client_paying_invoices
+        type: ["null", "boolean"]
+        description: Whether the client pays invoices directly
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: currency
+        type: ["null", "string"]
+        description: Account currency code
+      - name: funding_source_ids
+        type: ["null", "array"]
+        description: Associated funding source IDs
+      - name: id
+        type: ["null", "string"]
+        description: Unique ad account identifier
+      - name: name
+        type: ["null", "string"]
+        description: Ad account name
+      - name: organization_id
+        type: ["null", "string"]
+        description: Parent organization ID
+      - name: regulations
+        type: ["null", "object"]
+        description: Regulatory settings
+        properties:
+          restricted_delivery_signals:
+            type: ["null", "boolean"]
+      - name: status
+        type: ["null", "string"]
+        description: Ad account status
+      - name: timezone
+        type: ["null", "string"]
+        description: Account timezone
+      - name: type
+        type: ["null", "string"]
+        description: Ad account type
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+    - entity: campaigns
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Parent ad account ID
+      - name: buy_model
+        type: ["null", "string"]
+        description: Buy model type
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: creation_state
+        type: ["null", "string"]
+        description: Creation state
+      - name: delivery_status
+        type: ["null", "array"]
+        description: Delivery status messages
+      - name: id
+        type: ["null", "string"]
+        description: Unique campaign identifier
+      - name: name
+        type: ["null", "string"]
+        description: Campaign name
+      - name: objective
+        type: ["null", "string"]
+        description: Campaign objective
+      - name: start_time
+        type: ["null", "string"]
+        description: Campaign start time
+      - name: status
+        type: ["null", "string"]
+        description: Campaign status
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+    - entity: adsquads
+      fields:
+      - name: auto_bid
+        type: ["null", "boolean"]
+        description: Whether auto bidding is enabled
+      - name: bid_strategy
+        type: ["null", "string"]
+        description: Bid strategy
+      - name: billing_event
+        type: ["null", "string"]
+        description: Billing event type
+      - name: campaign_id
+        type: ["null", "string"]
+        description: Parent campaign ID
+      - name: child_ad_type
+        type: ["null", "string"]
+        description: Child ad type
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: creation_state
+        type: ["null", "string"]
+        description: Creation state
+      - name: daily_budget_micro
+        type: ["null", "integer"]
+        description: Daily budget in micro-currency
+      - name: delivery_constraint
+        type: ["null", "string"]
+        description: Delivery constraint
+      - name: delivery_properties_version
+        type: ["null", "integer"]
+        description: Delivery properties version
+      - name: delivery_status
+        type: ["null", "array"]
+        description: Delivery status messages
+      - name: end_time
+        type: ["null", "string"]
+        description: Ad squad end time
+      - name: event_sources
+        type: ["null", "object"]
+        description: Event sources configuration
+        properties:
+          PLACE:
+            type: ["null", "array"]
+      - name: forced_view_setting
+        type: ["null", "string"]
+        description: Forced view setting
+      - name: id
+        type: ["null", "string"]
+        description: Unique ad squad identifier
+      - name: lifetime_budget_micro
+        type: ["null", "integer"]
+        description: Lifetime budget in micro-currency
+      - name: name
+        type: ["null", "string"]
+        description: Ad squad name
+      - name: optimization_goal
+        type: ["null", "string"]
+        description: Optimization goal
+      - name: pacing_type
+        type: ["null", "string"]
+        description: Pacing type
+      - name: placement
+        type: ["null", "string"]
+        description: Placement type
+      - name: skadnetwork_properties
+        type: ["null", "object"]
+        description: SKAdNetwork properties
+        properties:
+          ecid_enrollment_status:
+            type: ["null", "string"]
+          enable_skoverlay:
+            type: ["null", "boolean"]
+          status:
+            type: ["null", "string"]
+      - name: start_time
+        type: ["null", "string"]
+        description: Ad squad start time
+      - name: status
+        type: ["null", "string"]
+        description: Ad squad status
+      - name: target_bid
+        type: ["null", "boolean"]
+        description: Whether target bid is enabled
+      - name: targeting
+        type: ["null", "object"]
+        description: Targeting specification
+        properties:
+          auto_expansion_options:
+            type: ["null", "object"]
+            properties:
+              interest_expansion_option:
+                type: ["null", "object"]
+                properties:
+                  enabled:
+                    type: ["null", "boolean"]
+          demographics:
+            type: ["null", "array"]
+          enable_targeting_expansion:
+            type: ["null", "boolean"]
+          geos:
+            type: ["null", "array"]
+          interests:
+            type: ["null", "array"]
+          locations:
+            type: ["null", "array"]
+          regulated_content:
+            type: ["null", "boolean"]
+      - name: targeting_reach_status
+        type: ["null", "string"]
+        description: Targeting reach status
+      - name: type
+        type: ["null", "string"]
+        description: Ad squad type
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+    - entity: ads
+      fields:
+      - name: ad_squad_id
+        type: ["null", "string"]
+        description: Parent ad squad ID
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: creative_id
+        type: ["null", "string"]
+        description: Associated creative ID
+      - name: delivery_status
+        type: ["null", "array"]
+        description: Delivery status messages
+      - name: id
+        type: ["null", "string"]
+        description: Unique ad identifier
+      - name: name
+        type: ["null", "string"]
+        description: Ad name
+      - name: render_type
+        type: ["null", "string"]
+        description: Render type
+      - name: review_status
+        type: ["null", "string"]
+        description: Review status
+      - name: review_status_reasons
+        type: ["null", "array"]
+        description: Reasons for review status
+      - name: status
+        type: ["null", "string"]
+        description: Ad status
+      - name: type
+        type: ["null", "string"]
+        description: Ad type
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+    - entity: creatives
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Parent ad account ID
+      - name: ad_product
+        type: ["null", "string"]
+        description: Ad product type
+      - name: ad_to_place_properties
+        type: ["null", "object"]
+        description: Ad-to-place properties
+        properties:
+          place_id:
+            type: ["null", "string"]
+      - name: brand_name
+        type: ["null", "string"]
+        description: Brand name displayed in the creative
+      - name: call_to_action
+        type: ["null", "string"]
+        description: Call to action text
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: forced_view_eligibility
+        type: ["null", "string"]
+        description: Forced view eligibility status
+      - name: headline
+        type: ["null", "string"]
+        description: Creative headline
+      - name: id
+        type: ["null", "string"]
+        description: Unique creative identifier
+      - name: name
+        type: ["null", "string"]
+        description: Creative name
+      - name: packaging_status
+        type: ["null", "string"]
+        description: Packaging status
+      - name: render_type
+        type: ["null", "string"]
+        description: Render type
+      - name: review_status
+        type: ["null", "string"]
+        description: Review status
+      - name: review_status_details
+        type: ["null", "string"]
+        description: Details about the review status
+      - name: shareable
+        type: ["null", "boolean"]
+        description: Whether the creative is shareable
+      - name: top_snap_crop_position
+        type: ["null", "string"]
+        description: Top snap crop position
+      - name: top_snap_media_id
+        type: ["null", "string"]
+        description: Top snap media ID
+      - name: type
+        type: ["null", "string"]
+        description: Creative type
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+      - name: web_view_properties
+        type: ["null", "object"]
+        description: Web view properties
+        properties:
+          allow_snap_javascript_sdk:
+            type: ["null", "boolean"]
+          block_preload:
+            type: ["null", "boolean"]
+          deep_link_urls:
+            type: ["null", "array"]
+          url:
+            type: ["null", "string"]
+          use_immersive_mode:
+            type: ["null", "boolean"]
+    - entity: media
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Parent ad account ID
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: download_link
+        type: ["null", "string"]
+        description: Download URL for the media
+      - name: duration_in_seconds
+        type: ["null", "number"]
+        description: Duration in seconds for video media
+      - name: file_name
+        type: ["null", "string"]
+        description: Original file name
+      - name: file_size_in_bytes
+        type: ["null", "integer"]
+        description: File size in bytes
+      - name: hash
+        type: ["null", "string"]
+        description: Media file hash
+      - name: id
+        type: ["null", "string"]
+        description: Unique media identifier
+      - name: image_metadata
+        type: ["null", "object"]
+        description: Image-specific metadata
+        properties:
+          height_px:
+            type: ["null", "integer"]
+          width_px:
+            type: ["null", "integer"]
+          image_format:
+            type: ["null", "string"]
+      - name: is_demo_media
+        type: ["null", "boolean"]
+        description: Whether this is demo media
+      - name: media_status
+        type: ["null", "string"]
+        description: Media processing status
+      - name: media_usages
+        type: ["null", "array"]
+        description: Where the media is used
+      - name: name
+        type: ["null", "string"]
+        description: Media name
+      - name: type
+        type: ["null", "string"]
+        description: Media type
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+      - name: video_metadata
+        type: ["null", "object"]
+        description: Video-specific metadata
+      - name: visibility
+        type: ["null", "string"]
+        description: Media visibility setting
+    - entity: segments
+      fields:
+      - name: ad_account_id
+        type: ["null", "string"]
+        description: Parent ad account ID
+      - name: approximate_number_users
+        type: ["null", "integer"]
+        description: Approximate number of users in the segment
+      - name: created_at
+        type: ["null", "string"]
+        description: Creation timestamp
+      - name: description
+        type: ["null", "string"]
+        description: Segment description
+      - name: id
+        type: ["null", "string"]
+        description: Unique segment identifier
+      - name: name
+        type: ["null", "string"]
+        description: Segment name
+      - name: organization_id
+        type: ["null", "string"]
+        description: Parent organization ID
+      - name: retention_in_days
+        type: ["null", "integer"]
+        description: Data retention period in days
+      - name: source_type
+        type: ["null", "string"]
+        description: Segment source type
+      - name: status
+        type: ["null", "string"]
+        description: Segment status
+      - name: targetable_status
+        type: ["null", "string"]
+        description: Whether the segment is targetable
+      - name: updated_at
+        type: ["null", "string"]
+        description: Last update timestamp
+      - name: upload_status
+        type: ["null", "string"]
+        description: Upload processing status
+      - name: visible_to
+        type: ["null", "array"]
+        description: Visibility settings
+
+servers:
+- url: https://adsapi.snapchat.com/v1
+  description: Snapchat Marketing API server
+
+security:
+- oauth2: []
+
+paths:
+  /me/organizations:
+    get:
+      summary: List organizations
+      description: Returns the organizations the authenticated user belongs to
+      operationId: listOrganizations
+      x-airbyte-entity: organizations
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.organizations[*].organization
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      responses:
+        "200":
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  organizations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        organization:
+                          $ref: "#/components/schemas/Organization"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /organizations/{id}:
+    get:
+      summary: Get an organization
+      description: Get a single organization by ID
+      operationId: getOrganization
+      x-airbyte-entity: organizations
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.organizations[0].organization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Organization ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Organization object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  organizations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        organization:
+                          $ref: "#/components/schemas/Organization"
+        "404":
+          description: Organization not found
+        "401":
+          description: Unauthorized
+
+  /organizations/{organization_id}/adaccounts:
+    get:
+      summary: List ad accounts
+      description: Returns ad accounts belonging to an organization
+      operationId: listAdAccounts
+      x-airbyte-entity: adaccounts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.adaccounts[*].adaccount
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        description: Organization ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of ad accounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  adaccounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        adaccount:
+                          $ref: "#/components/schemas/AdAccount"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{id}:
+    get:
+      summary: Get an ad account
+      description: Get a single ad account by ID
+      operationId: getAdAccount
+      x-airbyte-entity: adaccounts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.adaccounts[0].adaccount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ad account object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  adaccounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        adaccount:
+                          $ref: "#/components/schemas/AdAccount"
+        "404":
+          description: Ad account not found
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{ad_account_id}/campaigns:
+    get:
+      summary: List campaigns
+      description: Returns campaigns belonging to an ad account
+      operationId: listCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.campaigns[*].campaign
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of campaigns
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  campaigns:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        campaign:
+                          $ref: "#/components/schemas/Campaign"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /campaigns/{id}:
+    get:
+      summary: Get a campaign
+      description: Get a single campaign by ID
+      operationId: getCampaign
+      x-airbyte-entity: campaigns
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.campaigns[0].campaign
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Campaign ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Campaign object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  campaigns:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        campaign:
+                          $ref: "#/components/schemas/Campaign"
+        "404":
+          description: Campaign not found
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{ad_account_id}/adsquads:
+    get:
+      summary: List ad squads
+      description: Returns ad squads belonging to an ad account
+      operationId: listAdSquads
+      x-airbyte-entity: adsquads
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.adsquads[*].adsquad
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of ad squads
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  adsquads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        adsquad:
+                          $ref: "#/components/schemas/AdSquad"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /adsquads/{id}:
+    get:
+      summary: Get an ad squad
+      description: Get a single ad squad by ID
+      operationId: getAdSquad
+      x-airbyte-entity: adsquads
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.adsquads[0].adsquad
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Ad Squad ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ad squad object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  adsquads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        adsquad:
+                          $ref: "#/components/schemas/AdSquad"
+        "404":
+          description: Ad squad not found
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{ad_account_id}/ads:
+    get:
+      summary: List ads
+      description: Returns ads belonging to an ad account
+      operationId: listAds
+      x-airbyte-entity: ads
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.ads[*].ad
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of ads
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  ads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        ad:
+                          $ref: "#/components/schemas/Ad"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /ads/{id}:
+    get:
+      summary: Get an ad
+      description: Get a single ad by ID
+      operationId: getAd
+      x-airbyte-entity: ads
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.ads[0].ad
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Ad ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ad object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  ads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        ad:
+                          $ref: "#/components/schemas/Ad"
+        "404":
+          description: Ad not found
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{ad_account_id}/creatives:
+    get:
+      summary: List creatives
+      description: Returns creatives belonging to an ad account
+      operationId: listCreatives
+      x-airbyte-entity: creatives
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.creatives[*].creative
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of creatives
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  creatives:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        creative:
+                          $ref: "#/components/schemas/Creative"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /creatives/{id}:
+    get:
+      summary: Get a creative
+      description: Get a single creative by ID
+      operationId: getCreative
+      x-airbyte-entity: creatives
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.creatives[0].creative
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Creative ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Creative object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  creatives:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        creative:
+                          $ref: "#/components/schemas/Creative"
+        "404":
+          description: Creative not found
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{ad_account_id}/media:
+    get:
+      summary: List media
+      description: Returns media belonging to an ad account
+      operationId: listMedia
+      x-airbyte-entity: media
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.media[*].media
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of media
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  media:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        media:
+                          $ref: "#/components/schemas/Media"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /media/{id}:
+    get:
+      summary: Get a media item
+      description: Get a single media item by ID
+      operationId: getMedia
+      x-airbyte-entity: media
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.media[0].media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Media ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Media object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  media:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        media:
+                          $ref: "#/components/schemas/Media"
+        "404":
+          description: Media not found
+        "401":
+          description: Unauthorized
+
+  /adaccounts/{ad_account_id}/segments:
+    get:
+      summary: List segments
+      description: Returns audience segments belonging to an ad account
+      operationId: listSegments
+      x-airbyte-entity: segments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.segments[*].segment
+      x-airbyte-meta-extractor:
+        next_link: $.paging.next_link
+      parameters:
+      - name: ad_account_id
+        in: path
+        required: true
+        description: Ad Account ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of segments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  segments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        segment:
+                          $ref: "#/components/schemas/Segment"
+                  paging:
+                    type: object
+                    properties:
+                      next_link:
+                        type: string
+        "401":
+          description: Unauthorized
+
+  /segments/{id}:
+    get:
+      summary: Get a segment
+      description: Get a single audience segment by ID
+      operationId: getSegment
+      x-airbyte-entity: segments
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.segments[0].segment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Segment ID
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Segment object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_status:
+                    type: string
+                  request_id:
+                    type: string
+                  segments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sub_request_status:
+                          type: string
+                        segment:
+                          $ref: "#/components/schemas/Segment"
+        "404":
+          description: Segment not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authentication with Snapchat
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.snapchat.com/login/oauth2/authorize
+          tokenUrl: https://accounts.snapchat.com/login/oauth2/access_token
+          refreshUrl: https://accounts.snapchat.com/login/oauth2/access_token
+          scopes:
+            snapchat-marketing-api: Read and write access to Snapchat Marketing APIs
+      x-airbyte-auth-config:
+        type: object
+        required:
+        - client_id
+        - client_secret
+        - refresh_token
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: The Client ID of your Snapchat developer application
+          client_secret:
+            type: string
+            title: Client Secret
+            description: The Client Secret of your Snapchat developer application
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: Refresh Token to renew the expired Access Token
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          refresh_token: "${refresh_token}"
+        replication_auth_key_mapping:
+          client_id: "client_id"
+          client_secret: "client_secret"
+          refresh_token: "refresh_token"
+
+  schemas:
+    Organization:
+      type: object
+      x-airbyte-entity-name: organizations
+      description: Snapchat organization object
+      properties:
+        id:
+          type: string
+          description: Unique organization identifier
+        name:
+          type: string
+          description: Organization name
+        type:
+          type: string
+          description: Organization type
+        state:
+          type: string
+          description: Organization state
+        address_line_1:
+          type: string
+          description: Street address
+        administrative_district_level_1:
+          type: string
+          description: State or province
+        locality:
+          type: string
+          description: City or locality
+        postal_code:
+          type: string
+          description: Postal code
+        country:
+          type: string
+          description: Country code
+        contact_name:
+          type: string
+          description: Contact person name
+        contact_email:
+          type: string
+          description: Contact email address
+        contact_phone:
+          type: string
+          description: Contact phone number
+        contact_phone_optin:
+          type: boolean
+          description: Whether the contact opted in for phone communications
+        accepted_term_version:
+          type: string
+          description: Version of accepted terms
+        configuration_settings:
+          type: object
+          description: Organization configuration settings
+          properties:
+            notifications_enabled:
+              type: boolean
+              description: Whether notifications are enabled
+        my_display_name:
+          type: string
+          description: Display name of the authenticated user in the organization
+        my_invited_email:
+          type: string
+          description: Email used to invite the authenticated user
+        my_member_id:
+          type: string
+          description: Member ID of the authenticated user
+        roles:
+          type: array
+          description: Roles of the authenticated user in this organization
+          items:
+            type: string
+        createdByCaller:
+          type: boolean
+          description: Whether the organization was created by the caller
+        is_agency:
+          type: boolean
+          description: Whether the organization is an agency
+        verification_request_id:
+          type: string
+          description: Verification request identifier
+        demand_source:
+          type: string
+          description: Demand source for the organization
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    AdAccount:
+      type: object
+      x-airbyte-entity-name: adaccounts
+      description: Snapchat ad account object
+      properties:
+        id:
+          type: string
+          description: Unique ad account identifier
+        name:
+          type: string
+          description: Ad account name
+        type:
+          type: string
+          description: Ad account type
+        status:
+          type: string
+          description: Ad account status
+        organization_id:
+          type: string
+          description: Parent organization ID
+        advertiser_organization_id:
+          type: string
+          description: Advertiser organization ID
+        currency:
+          type: string
+          description: Account currency code
+        timezone:
+          type: string
+          description: Account timezone
+        billing_type:
+          type: string
+          description: Billing type
+        billing_center_id:
+          type: string
+          description: Billing center ID
+        agency_representing_client:
+          type: boolean
+          description: Whether the account is managed by an agency
+        client_paying_invoices:
+          type: boolean
+          description: Whether the client pays invoices directly
+        funding_source_ids:
+          type: array
+          description: Associated funding source IDs
+          items:
+            type: string
+        regulations:
+          type: object
+          description: Regulatory settings
+          properties:
+            restricted_delivery_signals:
+              type: boolean
+              description: Whether restricted delivery signals are enabled
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    Campaign:
+      type: object
+      x-airbyte-entity-name: campaigns
+      description: Snapchat campaign object
+      properties:
+        id:
+          type: string
+          description: Unique campaign identifier
+        name:
+          type: string
+          description: Campaign name
+        ad_account_id:
+          type: string
+          description: Parent ad account ID
+        status:
+          type: string
+          description: Campaign status
+        objective:
+          type: string
+          description: Campaign objective
+        buy_model:
+          type: string
+          description: Buy model type
+        creation_state:
+          type: string
+          description: Creation state
+        start_time:
+          type: string
+          description: Campaign start time
+        delivery_status:
+          type: array
+          description: Delivery status messages
+          items:
+            type: string
+        objective_v2_properties:
+          type: object
+          description: Objective V2 properties for the campaign
+          properties:
+            objective_v2_type:
+              type: string
+            is_auto_generated:
+              type: boolean
+        pacing_properties_version:
+          type: integer
+          description: Pacing properties version
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    AdSquad:
+      type: object
+      x-airbyte-entity-name: adsquads
+      description: Snapchat ad squad object
+      properties:
+        id:
+          type: string
+          description: Unique ad squad identifier
+        name:
+          type: string
+          description: Ad squad name
+        type:
+          type: string
+          description: Ad squad type
+        campaign_id:
+          type: string
+          description: Parent campaign ID
+        status:
+          type: string
+          description: Ad squad status
+        auto_bid:
+          type: boolean
+          description: Whether auto bidding is enabled
+        bid_strategy:
+          type: string
+          description: Bid strategy
+        billing_event:
+          type: string
+          description: Billing event type
+        child_ad_type:
+          type: string
+          description: Child ad type
+        creation_state:
+          type: string
+          description: Creation state
+        daily_budget_micro:
+          type: integer
+          description: Daily budget in micro-currency
+        lifetime_budget_micro:
+          type: integer
+          description: Lifetime budget in micro-currency
+        delivery_constraint:
+          type: string
+          description: Delivery constraint
+        delivery_properties_version:
+          type: integer
+          description: Delivery properties version
+        delivery_status:
+          type: array
+          description: Delivery status messages
+          items:
+            type: string
+        end_time:
+          type: string
+          description: Ad squad end time
+        start_time:
+          type: string
+          description: Ad squad start time
+        forced_view_setting:
+          type: string
+          description: Forced view setting
+        optimization_goal:
+          type: string
+          description: Optimization goal
+        pacing_type:
+          type: string
+          description: Pacing type
+        placement:
+          type: string
+          description: Placement type
+        target_bid:
+          type: boolean
+          description: Whether target bid is enabled
+        targeting:
+          type: object
+          description: Targeting specification
+          properties:
+            regulated_content:
+              type: boolean
+            geos:
+              type: array
+              items:
+                type: object
+                properties:
+                  country_code:
+                    type: string
+                  operation:
+                    type: string
+            enable_targeting_expansion:
+              type: boolean
+            auto_expansion_options:
+              type: object
+              properties:
+                interest_expansion_option:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+            demographics:
+              type: array
+              items:
+                type: object
+            interests:
+              type: array
+              items:
+                type: object
+            locations:
+              type: array
+              items:
+                type: object
+        targeting_reach_status:
+          type: string
+          description: Targeting reach status
+        skadnetwork_properties:
+          type: object
+          description: SKAdNetwork properties
+          properties:
+            ecid_enrollment_status:
+              type: string
+            enable_skoverlay:
+              type: boolean
+            status:
+              type: string
+        event_sources:
+          type: object
+          description: Event sources configuration
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    Ad:
+      type: object
+      x-airbyte-entity-name: ads
+      description: Snapchat ad object
+      properties:
+        id:
+          type: string
+          description: Unique ad identifier
+        name:
+          type: string
+          description: Ad name
+        type:
+          type: string
+          description: Ad type
+        ad_squad_id:
+          type: string
+          description: Parent ad squad ID
+        creative_id:
+          type: string
+          description: Associated creative ID
+        status:
+          type: string
+          description: Ad status
+        render_type:
+          type: string
+          description: Render type
+        review_status:
+          type: string
+          description: Review status
+        review_status_reasons:
+          type: array
+          description: Reasons for review status
+          items:
+            type: string
+        delivery_status:
+          type: array
+          description: Delivery status messages
+          items:
+            type: string
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    Creative:
+      type: object
+      x-airbyte-entity-name: creatives
+      description: Snapchat creative object
+      properties:
+        id:
+          type: string
+          description: Unique creative identifier
+        name:
+          type: string
+          description: Creative name
+        type:
+          type: string
+          description: Creative type
+        ad_account_id:
+          type: string
+          description: Parent ad account ID
+        ad_product:
+          type: string
+          description: Ad product type
+        brand_name:
+          type: string
+          description: Brand name displayed in the creative
+        call_to_action:
+          type: string
+          description: Call to action text
+        headline:
+          type: string
+          description: Creative headline
+        render_type:
+          type: string
+          description: Render type
+        review_status:
+          type: string
+          description: Review status
+        review_status_details:
+          type: string
+          description: Details about the review status
+        shareable:
+          type: boolean
+          description: Whether the creative is shareable
+        forced_view_eligibility:
+          type: string
+          description: Forced view eligibility status
+        packaging_status:
+          type: string
+          description: Packaging status
+        top_snap_crop_position:
+          type: string
+          description: Top snap crop position
+        top_snap_media_id:
+          type: string
+          description: Top snap media ID
+        ad_to_place_properties:
+          type: object
+          description: Ad-to-place properties
+          properties:
+            place_id:
+              type: string
+        web_view_properties:
+          type: object
+          description: Web view properties
+          properties:
+            allow_snap_javascript_sdk:
+              type: boolean
+            block_preload:
+              type: boolean
+            deep_link_urls:
+              type: array
+              items:
+                type: string
+            url:
+              type: string
+            use_immersive_mode:
+              type: boolean
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    Media:
+      type: object
+      x-airbyte-entity-name: media
+      description: Snapchat media object
+      properties:
+        id:
+          type: string
+          description: Unique media identifier
+        name:
+          type: string
+          description: Media name
+        type:
+          type: string
+          description: Media type
+        ad_account_id:
+          type: string
+          description: Parent ad account ID
+        media_status:
+          type: string
+          description: Media processing status
+        file_name:
+          type: string
+          description: Original file name
+        file_size_in_bytes:
+          type: integer
+          description: File size in bytes
+        duration_in_seconds:
+          type: number
+          description: Duration in seconds for video media
+        hash:
+          type: string
+          description: Media file hash
+        download_link:
+          type: string
+          description: Download URL for the media
+        is_demo_media:
+          type: boolean
+          description: Whether this is demo media
+        visibility:
+          type: string
+          description: Media visibility setting
+        media_usages:
+          type: array
+          description: Where the media is used
+          items:
+            type: string
+        image_metadata:
+          type: object
+          description: Image-specific metadata
+          properties:
+            height_px:
+              type: integer
+            width_px:
+              type: integer
+            image_format:
+              type: string
+        video_metadata:
+          type: object
+          description: Video-specific metadata
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp
+
+    Segment:
+      type: object
+      x-airbyte-entity-name: segments
+      description: Snapchat audience segment object
+      properties:
+        id:
+          type: string
+          description: Unique segment identifier
+        name:
+          type: string
+          description: Segment name
+        description:
+          type: string
+          description: Segment description
+        ad_account_id:
+          type: string
+          description: Parent ad account ID
+        source_ad_account_id:
+          type: string
+          description: Source ad account ID for the segment
+        organization_id:
+          type: string
+          description: Parent organization ID
+        status:
+          type: string
+          description: Segment status
+        source_type:
+          type: string
+          description: Segment source type
+        targetable_status:
+          type: string
+          description: Whether the segment is targetable
+        upload_status:
+          type: string
+          description: Upload processing status
+        retention_in_days:
+          type: integer
+          description: Data retention period in days
+        approximate_number_users:
+          type: integer
+          description: Approximate number of users in the segment
+        visible_to:
+          type: array
+          description: Visibility settings
+          items:
+            type: string
+        created_at:
+          type: string
+          description: Creation timestamp
+        updated_at:
+          type: string
+          description: Last update timestamp

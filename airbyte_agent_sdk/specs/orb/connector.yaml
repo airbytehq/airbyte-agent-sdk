@@ -1,0 +1,1012 @@
+openapi: 3.1.0
+info:
+  title: Orb API Connector
+  version: 0.1.7
+  description: |
+    Orb is a usage-based billing platform that enables businesses to implement flexible pricing models,
+    track customer usage, and manage subscriptions. This connector provides access to customers,
+    subscriptions, plans, and invoices for billing analytics and customer management.
+  x-airbyte-connector-name: orb
+  x-airbyte-connector-definition-id: 7f0455fb-4518-4ec0-b7a3-d808bf8081cc
+  x-airbyte-replication-version: "2.1.22"
+  x-airbyte-replication-compatibility: ">=2.1.22, <3.0.0"
+  x-airbyte-external-documentation-urls:
+    - title: Orb API Reference documentation
+      type: api_reference
+      url: "https://docs.withorb.com/api-reference"
+    - title: Orb API Overview documentation
+      type: other
+      url: "https://docs.withorb.com/overview"
+  x-airbyte-example-questions:
+    direct:
+      - "Show me all my customers in Orb"
+      - "List all active subscriptions"
+      - "What plans are available?"
+      - "Show me recent invoices"
+      - "Show me details for a recent customer"
+      - "What is the status of a recent subscription?"
+      - "Show me the pricing details for a plan"
+      - "Confirm the Stripe ID linked to a customer"
+      - "What is the payment provider ID for a customer?"
+    search:
+      - "List all invoices for a specific customer"
+      - "List all subscriptions for customer XYZ"
+      - "Show all active subscriptions for a specific customer"
+      - "What subscriptions does customer {external_customer_id} have?"
+      - "Pull all invoices from the last month"
+      - "Show invoices created after {date}"
+      - "List all paid invoices for customer {customer_id}"
+      - "What invoices are in draft status?"
+      - "Show all issued invoices for subscription {subscription_id}"
+    unsupported:
+      - "Create a new customer in Orb"
+      - "Update subscription details"
+      - "Delete a customer record"
+      - "Send an invoice to a customer"
+      - "Filter subscriptions by plan name (must filter client-side after listing)"
+      - "Pull customers billed for specific products (must examine invoice line_items client-side)"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: customers
+        fields:
+          - name: id
+            type: string
+            description: The unique identifier of the customer
+          - name: external_customer_id
+            type: [string, "null"]
+            description: The ID of the customer in an external system
+          - name: name
+            type: [string, "null"]
+            description: The name of the customer
+          - name: email
+            type: [string, "null"]
+            description: The email address of the customer
+          - name: created_at
+            type: [string, "null"]
+            description: The date and time when the customer was created
+          - name: payment_provider
+            type: [string, "null"]
+            description: The payment provider used by the customer
+          - name: payment_provider_id
+            type: [string, "null"]
+            description: The ID of the customer in the payment provider's system
+          - name: timezone
+            type: [string, "null"]
+            description: The timezone setting of the customer
+          - name: shipping_address
+            type: [object, "null"]
+            description: The shipping address of the customer
+          - name: billing_address
+            type: [object, "null"]
+            description: The billing address of the customer
+      - entity: subscriptions
+        fields:
+          - name: id
+            type: string
+            description: The unique identifier of the subscription
+          - name: created_at
+            type: [string, "null"]
+            description: The date and time when the subscription was created
+          - name: start_date
+            type: [string, "null"]
+            description: The date and time when the subscription starts
+          - name: end_date
+            type: [string, "null"]
+            description: The date and time when the subscription ends
+          - name: status
+            type: [string, "null"]
+            description: The current status of the subscription
+      - entity: plans
+        fields:
+          - name: id
+            type: string
+            description: The unique identifier of the plan
+          - name: created_at
+            type: [string, "null"]
+            description: The date and time when the plan was created
+          - name: name
+            type: [string, "null"]
+            description: The name of the plan
+          - name: description
+            type: [string, "null"]
+            description: A description of the plan
+          - name: prices
+            type: [array, "null"]
+            description: The pricing options for the plan
+          - name: product
+            type: [object, "null"]
+            description: The product associated with the plan
+      - entity: invoices
+        fields:
+          - name: id
+            type: string
+            description: The unique identifier of the invoice
+          - name: created_at
+            type: [string, "null"]
+            description: The date and time when the invoice was created
+          - name: invoice_date
+            type: [string, "null"]
+            description: The date of the invoice
+          - name: due_date
+            type: [string, "null"]
+            description: The due date for the invoice
+          - name: invoice_pdf
+            type: [string, "null"]
+            description: The URL to download the PDF version of the invoice
+          - name: subtotal
+            type: [string, "null"]
+            description: The subtotal amount of the invoice
+          - name: total
+            type: [string, "null"]
+            description: The total amount of the invoice
+          - name: amount_due
+            type: [string, "null"]
+            description: The amount due on the invoice
+          - name: status
+            type: [string, "null"]
+            description: The current status of the invoice
+          - name: memo
+            type: [string, "null"]
+            description: Any additional notes or comments on the invoice
+          - name: paid_at
+            type: [string, "null"]
+            description: The date and time when the invoice was paid
+          - name: issued_at
+            type: [string, "null"]
+            description: The date and time when the invoice was issued
+          - name: hosted_invoice_url
+            type: [string, "null"]
+            description: The URL to view the hosted invoice
+          - name: line_items
+            type: [array, "null"]
+            description: The line items on the invoice
+          - name: subscription
+            type: [object, "null"]
+            description: The subscription associated with the invoice
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Orb.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        format: date-time
+        description: "UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data."
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+
+servers:
+  - url: https://api.billwithorb.com/v1
+    description: Orb API server
+
+security:
+  - bearerAuth: []
+
+paths:
+  "/customers":
+    get:
+      summary: List customers
+      description: Returns a paginated list of customers
+      operationId: listCustomers
+      x-airbyte-entity: customers
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.data"
+      x-airbyte-meta-extractor:
+        next_cursor: "$.pagination_metadata.next_cursor"
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomersList"
+        "401":
+          description: Unauthorized
+
+  "/customers/{customer_id}":
+    get:
+      summary: Get a customer
+      description: Get a single customer by ID
+      operationId: getCustomer
+      x-airbyte-entity: customers
+      x-airbyte-action: get
+      parameters:
+        - name: customer_id
+          in: path
+          required: true
+          description: Customer ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Customer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: Customer not found
+        "401":
+          description: Unauthorized
+
+  "/subscriptions":
+    get:
+      summary: List subscriptions
+      description: Returns a paginated list of subscriptions
+      operationId: listSubscriptions
+      x-airbyte-entity: subscriptions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.data"
+      x-airbyte-meta-extractor:
+        next_cursor: "$.pagination_metadata.next_cursor"
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+        - name: customer_id
+          in: query
+          description: Filter subscriptions by customer ID
+          schema:
+            type: string
+        - name: external_customer_id
+          in: query
+          description: Filter subscriptions by external customer ID
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter subscriptions by status
+          schema:
+            type: string
+            enum:
+              - active
+              - ended
+              - upcoming
+      responses:
+        "200":
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionsList"
+        "401":
+          description: Unauthorized
+
+  "/subscriptions/{subscription_id}":
+    get:
+      summary: Get a subscription
+      description: Get a single subscription by ID
+      operationId: getSubscription
+      x-airbyte-entity: subscriptions
+      x-airbyte-action: get
+      parameters:
+        - name: subscription_id
+          in: path
+          required: true
+          description: Subscription ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Subscription object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "404":
+          description: Subscription not found
+        "401":
+          description: Unauthorized
+
+  "/plans":
+    get:
+      summary: List plans
+      description: Returns a paginated list of plans
+      operationId: listPlans
+      x-airbyte-entity: plans
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.data"
+      x-airbyte-meta-extractor:
+        next_cursor: "$.pagination_metadata.next_cursor"
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of plans
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlansList"
+        "401":
+          description: Unauthorized
+
+  "/plans/{plan_id}":
+    get:
+      summary: Get a plan
+      description: Get a single plan by ID
+      operationId: getPlan
+      x-airbyte-entity: plans
+      x-airbyte-action: get
+      parameters:
+        - name: plan_id
+          in: path
+          required: true
+          description: Plan ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Plan object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plan"
+        "404":
+          description: Plan not found
+        "401":
+          description: Unauthorized
+
+  "/invoices":
+    get:
+      summary: List invoices
+      description: Returns a paginated list of invoices
+      operationId: listInvoices
+      x-airbyte-entity: invoices
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: "$.data"
+      x-airbyte-meta-extractor:
+        next_cursor: "$.pagination_metadata.next_cursor"
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+        - name: customer_id
+          in: query
+          description: Filter invoices by customer ID
+          schema:
+            type: string
+        - name: external_customer_id
+          in: query
+          description: Filter invoices by external customer ID
+          schema:
+            type: string
+        - name: subscription_id
+          in: query
+          description: Filter invoices by subscription ID
+          schema:
+            type: string
+        - name: invoice_date_gt
+          in: query
+          description: Filter invoices with invoice date greater than this value (ISO 8601 format)
+          schema:
+            type: string
+            format: date-time
+        - name: invoice_date_gte
+          in: query
+          description: Filter invoices with invoice date greater than or equal to this value (ISO 8601 format)
+          schema:
+            type: string
+            format: date-time
+        - name: invoice_date_lt
+          in: query
+          description: Filter invoices with invoice date less than this value (ISO 8601 format)
+          schema:
+            type: string
+            format: date-time
+        - name: invoice_date_lte
+          in: query
+          description: Filter invoices with invoice date less than or equal to this value (ISO 8601 format)
+          schema:
+            type: string
+            format: date-time
+        - name: status
+          in: query
+          description: Filter invoices by status
+          schema:
+            type: string
+            enum:
+              - draft
+              - issued
+              - paid
+              - synced
+              - void
+      responses:
+        "200":
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoicesList"
+        "401":
+          description: Unauthorized
+
+  "/invoices/{invoice_id}":
+    get:
+      summary: Get an invoice
+      description: Get a single invoice by ID
+      operationId: getInvoice
+      x-airbyte-entity: invoices
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      parameters:
+        - name: invoice_id
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invoice object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "404":
+          description: Invoice not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Orb API Key authentication
+      x-airbyte-auth-config:
+        title: "API Key Authentication"
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: "API Key"
+            description: "Your Orb API key"
+        auth_mapping:
+          token: "${api_key}"
+        replication_auth_key_mapping:
+          api_key: "api_key"
+
+  schemas:
+    Address:
+      type: object
+      description: Address object
+      properties:
+        city:
+          type: [string, "null"]
+          description: The city of the address
+        country:
+          type: [string, "null"]
+          description: The country of the address
+        line1:
+          type: [string, "null"]
+          description: The first line of the address
+        line2:
+          type: [string, "null"]
+          description: The second line of the address
+        postal_code:
+          type: [string, "null"]
+          description: The postal code of the address
+        state:
+          type: [string, "null"]
+          description: The state or region of the address
+
+    Customer:
+      type: object
+      x-airbyte-entity-name: customers
+      x-airbyte-stream-name: customers
+      description: Customer object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the customer
+        external_customer_id:
+          type: [string, "null"]
+          description: The ID of the customer in an external system
+        name:
+          type: [string, "null"]
+          description: The name of the customer
+        email:
+          type: [string, "null"]
+          description: The email address of the customer
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the customer was created
+        payment_provider:
+          type: [string, "null"]
+          description: The payment provider used by the customer
+        payment_provider_id:
+          type: [string, "null"]
+          description: The ID of the customer in the payment provider's system
+        timezone:
+          type: [string, "null"]
+          description: The timezone setting of the customer
+        shipping_address:
+          oneOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+          description: The shipping address of the customer
+        billing_address:
+          oneOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+          description: The billing address of the customer
+        balance:
+          type: [string, "null"]
+          description: The current balance of the customer
+        currency:
+          type: [string, "null"]
+          description: The currency of the customer
+        tax_id:
+          type: [object, "null"]
+          description: Tax identification information
+          properties:
+            type:
+              type: [string, "null"]
+              description: The type of tax ID
+            value:
+              type: [string, "null"]
+              description: The value of the tax ID
+            country:
+              type: [string, "null"]
+              description: The country of the tax ID
+        auto_collection:
+          type: [boolean, "null"]
+          description: Whether auto collection is enabled
+        metadata:
+          type: [object, "null"]
+          description: Additional metadata for the customer
+          additionalProperties: true
+
+    CustomersList:
+      type: object
+      description: Paginated list of customers
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+        pagination_metadata:
+          $ref: "#/components/schemas/PaginationMetadata"
+
+    Subscription:
+      type: object
+      x-airbyte-entity-name: subscriptions
+      x-airbyte-stream-name: subscriptions
+      description: Subscription object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the subscription
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the subscription was created
+        start_date:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the subscription starts
+        end_date:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the subscription ends
+        status:
+          type: [string, "null"]
+          description: The current status of the subscription
+        customer:
+          type: [object, "null"]
+          description: The customer associated with the subscription
+          properties:
+            id:
+              type: [string, "null"]
+              description: The customer ID
+            external_customer_id:
+              type: [string, "null"]
+              description: The external customer ID
+        plan:
+          type: [object, "null"]
+          description: The plan associated with the subscription
+          properties:
+            id:
+              type: [string, "null"]
+              description: The plan ID
+            name:
+              type: [string, "null"]
+              description: The plan name
+        current_billing_period_start_date:
+          type: [string, "null"]
+          format: date-time
+          description: The start date of the current billing period
+        current_billing_period_end_date:
+          type: [string, "null"]
+          format: date-time
+          description: The end date of the current billing period
+        active_plan_phase_order:
+          type: [integer, "null"]
+          description: The order of the active plan phase
+        fixed_fee_quantity_schedule:
+          type: [array, "null"]
+          description: The fixed fee quantity schedule
+          items:
+            type: object
+        price_intervals:
+          type: [array, "null"]
+          description: The price intervals for the subscription
+          items:
+            type: object
+        redeemed_coupon:
+          type: [object, "null"]
+          description: The redeemed coupon for the subscription
+        default_invoice_memo:
+          type: [string, "null"]
+          description: The default invoice memo
+        auto_collection:
+          type: [boolean, "null"]
+          description: Whether auto collection is enabled
+        net_terms:
+          type: [integer, "null"]
+          description: The net terms for the subscription
+        invoicing_threshold:
+          type: [string, "null"]
+          description: The invoicing threshold
+        metadata:
+          type: [object, "null"]
+          description: Additional metadata for the subscription
+          additionalProperties: true
+
+    SubscriptionsList:
+      type: object
+      description: Paginated list of subscriptions
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subscription"
+        pagination_metadata:
+          $ref: "#/components/schemas/PaginationMetadata"
+
+    Plan:
+      type: object
+      x-airbyte-entity-name: plans
+      x-airbyte-stream-name: plans
+      description: Plan object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the plan
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the plan was created
+        name:
+          type: [string, "null"]
+          description: The name of the plan
+        description:
+          type: [string, "null"]
+          description: A description of the plan
+        status:
+          type: [string, "null"]
+          description: The status of the plan
+        default_invoice_memo:
+          type: [string, "null"]
+          description: The default invoice memo for the plan
+        net_terms:
+          type: [integer, "null"]
+          description: The net terms for the plan
+        currency:
+          type: [string, "null"]
+          description: The currency of the plan
+        prices:
+          type: [array, "null"]
+          description: The pricing options for the plan
+          items:
+            type: object
+            properties:
+              id:
+                type: [string, "null"]
+                description: The unique identifier of the price
+              name:
+                type: [string, "null"]
+                description: The name of the price
+              price_type:
+                type: [string, "null"]
+                description: The type of price
+              model_type:
+                type: [string, "null"]
+                description: The model type of the price
+              currency:
+                type: [string, "null"]
+                description: The currency of the price
+        product:
+          type: [object, "null"]
+          description: The product associated with the plan
+          properties:
+            id:
+              type: [string, "null"]
+              description: The product ID
+            name:
+              type: [string, "null"]
+              description: The product name
+        minimum:
+          type: [object, "null"]
+          description: The minimum configuration for the plan
+        maximum:
+          type: [object, "null"]
+          description: The maximum configuration for the plan
+        discount:
+          type: [object, "null"]
+          description: The discount configuration for the plan
+        trial_config:
+          type: [object, "null"]
+          description: The trial configuration for the plan
+        plan_phases:
+          type: [array, "null"]
+          description: The phases of the plan
+          items:
+            type: object
+        external_plan_id:
+          type: [string, "null"]
+          description: The external plan ID
+        invoicing_currency:
+          type: [string, "null"]
+          description: The invoicing currency
+        metadata:
+          type: [object, "null"]
+          description: Additional metadata for the plan
+          additionalProperties: true
+
+    PlansList:
+      type: object
+      description: Paginated list of plans
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Plan"
+        pagination_metadata:
+          $ref: "#/components/schemas/PaginationMetadata"
+
+    Invoice:
+      type: object
+      x-airbyte-entity-name: invoices
+      x-airbyte-stream-name: invoices
+      description: Invoice object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the invoice
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the invoice was created
+        invoice_date:
+          type: [string, "null"]
+          format: date-time
+          description: The date of the invoice
+        due_date:
+          type: [string, "null"]
+          format: date-time
+          description: The due date for the invoice
+        invoice_pdf:
+          type: [string, "null"]
+          description: The URL to download the PDF version of the invoice
+        subtotal:
+          type: [string, "null"]
+          description: The subtotal amount of the invoice
+        total:
+          type: [string, "null"]
+          description: The total amount of the invoice
+        amount_due:
+          type: [string, "null"]
+          description: The amount due on the invoice
+        status:
+          type: [string, "null"]
+          description: The current status of the invoice
+        memo:
+          type: [string, "null"]
+          description: Any additional notes or comments on the invoice
+        issue_failed_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when issuing the invoice failed
+        sync_failed_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when syncing the invoice failed
+        payment_failed_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when payment failed
+        payment_started_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when payment started
+        voided_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the invoice was voided
+        paid_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the invoice was paid
+        issued_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date and time when the invoice was issued
+        hosted_invoice_url:
+          type: [string, "null"]
+          description: The URL to view the hosted invoice
+        line_items:
+          type: [array, "null"]
+          description: The line items on the invoice
+          items:
+            type: object
+            properties:
+              id:
+                type: [string, "null"]
+                description: The unique identifier of the line item
+              quantity:
+                type: [number, "null"]
+                description: The quantity of the line item
+              amount:
+                type: [string, "null"]
+                description: The amount of the line item
+              name:
+                type: [string, "null"]
+                description: The name of the line item
+              start_date:
+                type: [string, "null"]
+                format: date-time
+                description: The start date of the line item
+              end_date:
+                type: [string, "null"]
+                format: date-time
+                description: The end date of the line item
+        subscription:
+          type: [object, "null"]
+          description: The subscription associated with the invoice
+          properties:
+            id:
+              type: [string, "null"]
+              description: The subscription ID
+        customer:
+          type: [object, "null"]
+          description: The customer associated with the invoice
+          properties:
+            id:
+              type: [string, "null"]
+              description: The customer ID
+            external_customer_id:
+              type: [string, "null"]
+              description: The external customer ID
+        currency:
+          type: [string, "null"]
+          description: The currency of the invoice
+        discount:
+          type: [object, "null"]
+          description: The discount applied to the invoice
+        minimum:
+          type: [object, "null"]
+          description: The minimum configuration for the invoice
+        maximum:
+          type: [object, "null"]
+          description: The maximum configuration for the invoice
+        credit_notes:
+          type: [array, "null"]
+          description: Credit notes associated with the invoice
+          items:
+            type: object
+        will_auto_issue:
+          type: [boolean, "null"]
+          description: Whether the invoice will auto issue
+        eligible_to_issue_at:
+          type: [string, "null"]
+          format: date-time
+          description: The date when the invoice is eligible to issue
+        customer_balance_transactions:
+          type: [array, "null"]
+          description: Customer balance transactions
+          items:
+            type: object
+        auto_collection:
+          type: [object, "null"]
+          description: Auto collection settings
+        invoice_number:
+          type: [string, "null"]
+          description: The invoice number
+        billing_address:
+          oneOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+          description: The billing address on the invoice
+        shipping_address:
+          oneOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+          description: The shipping address on the invoice
+        metadata:
+          type: [object, "null"]
+          description: Additional metadata for the invoice
+          additionalProperties: true
+
+    InvoicesList:
+      type: object
+      description: Paginated list of invoices
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invoice"
+        pagination_metadata:
+          $ref: "#/components/schemas/PaginationMetadata"
+
+    PaginationMetadata:
+      type: object
+      description: Pagination metadata
+      properties:
+        has_more:
+          type: [boolean, "null"]
+          description: Whether there are more results
+        next_cursor:
+          type: [string, "null"]
+          description: Cursor for the next page

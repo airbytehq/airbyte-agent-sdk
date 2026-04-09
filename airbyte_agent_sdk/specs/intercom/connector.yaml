@@ -1,0 +1,3344 @@
+# Intercom API Connector
+# OpenAPI 3.1 specification with Airbyte extensions
+
+openapi: 3.1.0
+
+info:
+  title: Intercom API Connector
+  version: 0.1.10
+  description: |
+    Intercom is a customer messaging platform that enables businesses to communicate with
+    customers through chat, email, and in-app messaging. This connector provides access
+    to core Intercom entities including contacts, conversations, companies, teams,
+    admins, tags, and segments for customer support analytics and insights. It also supports
+    creating and updating contacts, creating notes, creating internal articles, creating
+    and updating companies, and creating tags.
+  x-airbyte-connector-name: intercom
+  x-airbyte-connector-definition-id: d8313939-3782-41b0-be29-b3ca20d8dd3a
+  x-airbyte-replication-version: "0.13.15"
+  x-airbyte-replication-compatibility: ">=0.13.15, <1.0.0"
+  x-airbyte-example-questions:
+    direct:
+      - "List all contacts in my Intercom workspace"
+      - "List all companies in Intercom"
+      - "What teams are configured in my workspace?"
+      - "Show me all admins in my Intercom account"
+      - "List all tags used in Intercom"
+      - "Show me all customer segments"
+      - "Show me details for a recent contact"
+      - "Show me details for a recent company"
+      - "Show me details for a recent conversation"
+      - "Create a new lead contact named 'Jane Smith' with email jane@example.com"
+      - "Create an internal article titled 'Onboarding Guide' with instructions for new team members"
+      - "Create a company named 'Acme Corp' with company_id 'acme-001'"
+      - "Create a tag named 'VIP Customer'"
+    search:
+      - "Update the name of contact {id} to 'John Updated'"
+      - "Add a note to contact {id} saying 'Followed up on support request'"
+      - "Show me conversations from the last week"
+      - "List conversations assigned to team {team_id}"
+      - "Show me open conversations"
+    unsupported:
+      - "Send a message to a customer"
+      - "Delete a conversation"
+      - "Delete a contact"
+      - "Delete a company"
+      - "Assign a conversation to an admin"
+  x-airbyte-skip-suggested-streams:
+    - conversation_parts
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Intercom API Documentation
+      url: https://developers.intercom.com/docs/references/rest-api/api.intercom.io
+    - type: api_release_history
+      title: Intercom API Changelog
+      url: https://developers.intercom.com/docs/references/changelog
+
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Intercom.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data.
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: companies
+        fields:
+          - name: app_id
+            type:
+              - "null"
+              - "string"
+            description: "The ID of the application associated with the company"
+          - name: company_id
+            type:
+              - "null"
+              - "string"
+            description: "The unique identifier of the company"
+          - name: created_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the company was created"
+          - name: custom_attributes
+            type:
+              - "null"
+              - "object"
+            description: "Custom attributes specific to the company"
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "The ID of the company"
+          - name: industry
+            type:
+              - "null"
+              - "string"
+            description: "The industry in which the company operates"
+          - name: monthly_spend
+            type:
+              - "null"
+              - "number"
+            description: "The monthly spend of the company"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "The name of the company"
+          - name: plan
+            type:
+              - "null"
+              - "object"
+            description: "Details of the company's subscription plan"
+            properties:
+              id:
+                type:
+                  - "null"
+                  - "string"
+              name:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: remote_created_at
+            type:
+              - "null"
+              - "integer"
+            description: "The remote date and time when the company was created"
+          - name: segments
+            type:
+              - "null"
+              - "object"
+            description: "Segments associated with the company"
+            properties:
+              segments:
+                type:
+                  - "null"
+                  - "array"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: session_count
+            type:
+              - "null"
+              - "integer"
+            description: "The number of sessions related to the company"
+          - name: size
+            type:
+              - "null"
+              - "integer"
+            description: "The size of the company"
+          - name: tags
+            type:
+              - "null"
+              - "object"
+            description: "Tags associated with the company"
+            properties:
+              tags:
+                type:
+                  - "null"
+                  - "array"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "The type of the company"
+          - name: updated_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the company was last updated"
+          - name: user_count
+            type:
+              - "null"
+              - "integer"
+            description: "The number of users associated with the company"
+          - name: website
+            type:
+              - "null"
+              - "string"
+            description: "The website of the company"
+      - entity: contacts
+        fields:
+          - name: android_app_name
+            type:
+              - "null"
+              - "string"
+            description: "The name of the Android app associated with the contact."
+          - name: android_app_version
+            type:
+              - "null"
+              - "string"
+            description: "The version of the Android app associated with the contact."
+          - name: android_device
+            type:
+              - "null"
+              - "string"
+            description: "The device used by the contact for Android."
+          - name: android_last_seen_at
+            type:
+              - "null"
+              - "string"
+            description: "The date and time when the contact was last seen on Android."
+          - name: android_os_version
+            type:
+              - "null"
+              - "string"
+            description: "The operating system version of the Android device."
+          - name: android_sdk_version
+            type:
+              - "null"
+              - "string"
+            description: "The SDK version of the Android device."
+          - name: avatar
+            type:
+              - "null"
+              - "string"
+            description: "URL pointing to the contact's avatar image."
+          - name: browser
+            type:
+              - "null"
+              - "string"
+            description: "The browser used by the contact."
+          - name: browser_language
+            type:
+              - "null"
+              - "string"
+            description: "The language preference set in the contact's browser."
+          - name: browser_version
+            type:
+              - "null"
+              - "string"
+            description: "The version of the browser used by the contact."
+          - name: companies
+            type:
+              - "null"
+              - "object"
+            description: "Companies associated with the contact."
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              has_more:
+                type:
+                  - "null"
+                  - "boolean"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: created_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact was created."
+          - name: custom_attributes
+            type:
+              - "null"
+              - "object"
+            description: "Custom attributes defined for the contact."
+            properties:
+          - name: email
+            type:
+              - "null"
+              - "string"
+            description: "The email address of the contact."
+          - name: external_id
+            type:
+              - "null"
+              - "string"
+            description: "External identifier for the contact."
+          - name: has_hard_bounced
+            type:
+              - "null"
+              - "boolean"
+            description: "Flag indicating if the contact has hard bounced."
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "The unique identifier of the contact."
+          - name: ios_app_name
+            type:
+              - "null"
+              - "string"
+            description: "The name of the iOS app associated with the contact."
+          - name: ios_app_version
+            type:
+              - "null"
+              - "string"
+            description: "The version of the iOS app associated with the contact."
+          - name: ios_device
+            type:
+              - "null"
+              - "string"
+            description: "The device used by the contact for iOS."
+          - name: ios_last_seen_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact was last seen on iOS."
+          - name: ios_os_version
+            type:
+              - "null"
+              - "string"
+            description: "The operating system version of the iOS device."
+          - name: ios_sdk_version
+            type:
+              - "null"
+              - "string"
+            description: "The SDK version of the iOS device."
+          - name: language_override
+            type:
+              - "null"
+              - "string"
+            description: "Language override set for the contact."
+          - name: last_contacted_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact was last contacted."
+          - name: last_email_clicked_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact last clicked an email."
+          - name: last_email_opened_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact last opened an email."
+          - name: last_replied_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact last replied."
+          - name: last_seen_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact was last seen overall."
+          - name: location
+            type:
+              - "null"
+              - "object"
+            description: "Location details of the contact."
+            properties:
+              city:
+                type:
+                  - "null"
+                  - "string"
+              continent_code:
+                type:
+                  - "null"
+                  - "string"
+              country:
+                type:
+                  - "null"
+                  - "string"
+              country_code:
+                type:
+                  - "null"
+                  - "string"
+              region:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: marked_email_as_spam
+            type:
+              - "null"
+              - "boolean"
+            description: "Flag indicating if the contact's email was marked as spam."
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "The name of the contact."
+          - name: notes
+            type:
+              - "null"
+              - "object"
+            description: "Notes associated with the contact."
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              has_more:
+                type:
+                  - "null"
+                  - "boolean"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: opted_in_subscription_types
+            type:
+              - "null"
+              - "object"
+            description: "Subscription types the contact opted into."
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              has_more:
+                type:
+                  - "null"
+                  - "boolean"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: opted_out_subscription_types
+            type:
+              - "null"
+              - "object"
+            description: "Subscription types the contact opted out from."
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              has_more:
+                type:
+                  - "null"
+                  - "boolean"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: os
+            type:
+              - "null"
+              - "string"
+            description: "Operating system of the contact's device."
+          - name: owner_id
+            type:
+              - "null"
+              - "integer"
+            description: "The unique identifier of the contact's owner."
+          - name: phone
+            type:
+              - "null"
+              - "string"
+            description: "The phone number of the contact."
+          - name: referrer
+            type:
+              - "null"
+              - "string"
+            description: "Referrer information related to the contact."
+          - name: role
+            type:
+              - "null"
+              - "string"
+            description: "Role or position of the contact."
+          - name: signed_up_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact signed up."
+          - name: sms_consent
+            type:
+              - "null"
+              - "boolean"
+            description: "Consent status for SMS communication."
+          - name: social_profiles
+            type:
+              - "null"
+              - "object"
+            description: "Social profiles associated with the contact."
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: tags
+            type:
+              - "null"
+              - "object"
+            description: "Tags associated with the contact."
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              has_more:
+                type:
+                  - "null"
+                  - "boolean"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "Type of contact."
+          - name: unsubscribed_from_emails
+            type:
+              - "null"
+              - "boolean"
+            description: "Flag indicating if the contact unsubscribed from emails."
+          - name: unsubscribed_from_sms
+            type:
+              - "null"
+              - "boolean"
+            description: "Flag indicating if the contact unsubscribed from SMS."
+          - name: updated_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the contact was last updated."
+          - name: utm_campaign
+            type:
+              - "null"
+              - "string"
+            description: "Campaign data from UTM parameters."
+          - name: utm_content
+            type:
+              - "null"
+              - "string"
+            description: "Content data from UTM parameters."
+          - name: utm_medium
+            type:
+              - "null"
+              - "string"
+            description: "Medium data from UTM parameters."
+          - name: utm_source
+            type:
+              - "null"
+              - "string"
+            description: "Source data from UTM parameters."
+          - name: utm_term
+            type:
+              - "null"
+              - "string"
+            description: "Term data from UTM parameters."
+          - name: workspace_id
+            type:
+              - "null"
+              - "string"
+            description: "The unique identifier of the workspace associated with the contact."
+      - entity: conversation_parts
+        fields:
+          - name: assigned_to
+            type:
+              - "object"
+              - "string"
+              - "null"
+            description: "The user or team member who is assigned to handle this conversation part."
+          - name: attachments
+            type:
+              - "null"
+              - "array"
+            description: "Represents the attachments associated with the conversation part."
+          - name: author
+            type:
+              - "null"
+              - "object"
+            description: "Represents the author of the conversation part."
+            properties:
+              email:
+                type:
+                  - "null"
+                  - "string"
+              id:
+                type:
+                  - "null"
+                  - "string"
+              name:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: body
+            type:
+              - "null"
+              - "string"
+            description: "The main content or message body of the conversation part."
+          - name: conversation_created_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the conversation was created."
+          - name: conversation_id
+            type:
+              - "null"
+              - "integer"
+            description: "The unique identifier of the conversation."
+          - name: conversation_total_parts
+            type:
+              - "null"
+              - "integer"
+            description: "The total number of parts in the conversation."
+          - name: conversation_updated_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the conversation was last updated."
+          - name: created_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the conversation part was created."
+          - name: external_id
+            type:
+              - "null"
+              - "string"
+            description: "An external identifier associated with the conversation part."
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "The unique identifier of the conversation part."
+          - name: notified_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the conversation part was last notified."
+          - name: part_type
+            type:
+              - "null"
+              - "string"
+            description: "The type or category of the conversation part."
+          - name: redacted
+            type:
+              - "null"
+              - "boolean"
+            description: "Indicates if the conversation part has been redacted or censored."
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "The type of conversation part, such as message or note."
+          - name: updated_at
+            type:
+              - "null"
+              - "integer"
+            description: "The date and time when the conversation part was last updated."
+      - entity: conversations
+        fields:
+          - name: admin_assignee_id
+            type:
+              - "null"
+              - "integer"
+            description: "The ID of the administrator assigned to the conversation"
+          - name: ai_agent
+            type:
+              - "null"
+              - "object"
+            description: "Data related to AI Agent involvement in the conversation"
+            properties:
+              content_sources:
+                type:
+                  - "null"
+                  - "object"
+              last_answer_type:
+                type:
+                  - "null"
+                  - "string"
+              rating:
+                type:
+                  - "null"
+                  - "integer"
+              rating_remark:
+                type:
+                  - "null"
+                  - "string"
+              resolution_state:
+                type:
+                  - "null"
+                  - "string"
+              source_id:
+                type:
+                  - "null"
+                  - "string"
+              source_title:
+                type:
+                  - "null"
+                  - "string"
+              source_type:
+                type:
+                  - "null"
+                  - "string"
+              triggered_at:
+                type:
+                  - "null"
+                  - "integer"
+          - name: ai_agent_participated
+            type:
+              - "null"
+              - "boolean"
+            description: "Indicates whether AI Agent participated in the conversation"
+          - name: assignee
+            type:
+              - "null"
+              - "object"
+            description: "The assigned user responsible for the conversation."
+            properties:
+              email:
+                type:
+                  - "null"
+                  - "string"
+              id:
+                type:
+                  - "null"
+                  - "string"
+              name:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: contacts
+            type:
+              - "null"
+              - "object"
+            description: "List of contacts involved in the conversation."
+          - name: conversation_message
+            type:
+              - "null"
+              - "object"
+            description: "The main message content of the conversation."
+            properties:
+              attachments:
+                type:
+                  - "array"
+                  - "null"
+              author:
+                type:
+                  - "null"
+                  - "object"
+              body:
+                type:
+                  - "null"
+                  - "string"
+              delivered_as:
+                type:
+                  - "null"
+                  - "string"
+              id:
+                type:
+                  - "null"
+                  - "string"
+              subject:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: conversation_rating
+            type:
+              - "null"
+              - "object"
+            description: "Ratings given to the conversation by the customer and teammate."
+            properties:
+              created_at:
+                type:
+                  - "null"
+                  - "integer"
+              customer:
+                type:
+                  - "null"
+                  - "object"
+              rating:
+                type:
+                  - "null"
+                  - "integer"
+              remark:
+                type:
+                  - "null"
+                  - "string"
+              teammate:
+                type:
+                  - "null"
+                  - "object"
+          - name: created_at
+            type:
+              - "null"
+              - "integer"
+            description: "The timestamp when the conversation was created"
+          - name: custom_attributes
+            type:
+              - "null"
+              - "object"
+            description: "Custom attributes associated with the conversation"
+          - name: customer_first_reply
+            type:
+              - "null"
+              - "object"
+            description: "Timestamp indicating when the customer first replied."
+            properties:
+              created_at:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: customers
+            type:
+              - "array"
+              - "null"
+            description: "List of customers involved in the conversation"
+          - name: first_contact_reply
+            type:
+              - "null"
+              - "object"
+            description: "Timestamp indicating when the first contact replied."
+            properties:
+              created_at:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "The unique ID of the conversation"
+          - name: linked_objects
+            type:
+              - "null"
+              - "object"
+            description: "Linked objects associated with the conversation"
+            properties:
+              data:
+                type:
+                  - "null"
+                  - "array"
+              has_more:
+                type:
+                  - "null"
+                  - "boolean"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: open
+            type:
+              - "null"
+              - "boolean"
+            description: "Indicates if the conversation is open or closed"
+          - name: priority
+            type:
+              - "null"
+              - "string"
+            description: "The priority level of the conversation"
+          - name: read
+            type:
+              - "null"
+              - "boolean"
+            description: "Indicates if the conversation has been read"
+          - name: redacted
+            type:
+              - "null"
+              - "boolean"
+            description: "Indicates if the conversation is redacted"
+          - name: sent_at
+            type:
+              - "null"
+              - "integer"
+            description: "The timestamp when the conversation was sent"
+          - name: sla_applied
+            type:
+              - "null"
+              - "object"
+            description: "Service Level Agreement details applied to the conversation."
+            properties:
+              sla_name:
+                type:
+                  - "null"
+                  - "string"
+              sla_status:
+                type:
+                  - "null"
+                  - "string"
+          - name: snoozed_until
+            type:
+              - "null"
+              - "integer"
+            description: "Timestamp until the conversation is snoozed"
+          - name: source
+            type:
+              - "null"
+              - "object"
+            description: "Source details of the conversation."
+            properties:
+              attachments:
+                type:
+                  - "null"
+                  - "array"
+              author:
+                type:
+                  - "null"
+                  - "object"
+              body:
+                type:
+                  - "null"
+                  - "string"
+              delivered_as:
+                type:
+                  - "null"
+                  - "string"
+              id:
+                type:
+                  - "null"
+                  - "string"
+              redacted:
+                type:
+                  - "null"
+                  - "boolean"
+              subject:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+              url:
+                type:
+                  - "null"
+                  - "string"
+          - name: state
+            type:
+              - "null"
+              - "string"
+            description: "The state of the conversation (e.g., new, in progress)"
+          - name: statistics
+            type:
+              - "null"
+              - "object"
+            description: "Statistics related to the conversation."
+            properties:
+              count_assignments:
+                type:
+                  - "null"
+                  - "integer"
+              count_conversation_parts:
+                type:
+                  - "null"
+                  - "integer"
+              count_reopens:
+                type:
+                  - "null"
+                  - "integer"
+              first_admin_reply_at:
+                type:
+                  - "null"
+                  - "integer"
+              first_assignment_at:
+                type:
+                  - "null"
+                  - "integer"
+              first_close_at:
+                type:
+                  - "null"
+                  - "integer"
+              first_contact_reply_at:
+                type:
+                  - "null"
+                  - "integer"
+              last_admin_reply_at:
+                type:
+                  - "null"
+                  - "integer"
+              last_assignment_admin_reply_at:
+                type:
+                  - "null"
+                  - "integer"
+              last_assignment_at:
+                type:
+                  - "null"
+                  - "integer"
+              last_close_at:
+                type:
+                  - "null"
+                  - "integer"
+              last_closed_by_id:
+                type:
+                  - "null"
+                  - "integer"
+              last_contact_reply_at:
+                type:
+                  - "null"
+                  - "integer"
+              median_time_to_reply:
+                type:
+                  - "null"
+                  - "integer"
+              time_to_admin_reply:
+                type:
+                  - "null"
+                  - "integer"
+              time_to_assignment:
+                type:
+                  - "null"
+                  - "integer"
+              time_to_first_close:
+                type:
+                  - "null"
+                  - "integer"
+              time_to_last_close:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: tags
+            type:
+              - "null"
+              - "object"
+            description: "Tags applied to the conversation."
+          - name: team_assignee_id
+            type:
+              - "null"
+              - "integer"
+            description: "The ID of the team assigned to the conversation"
+          - name: teammates
+            type:
+              - "null"
+              - "object"
+            description: "List of teammates involved in the conversation."
+            properties:
+              admins:
+                type:
+                  - "null"
+                  - "array"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: title
+            type:
+              - "null"
+              - "string"
+            description: "The title of the conversation"
+          - name: topics
+            type:
+              - "null"
+              - "object"
+            description: "Topics associated with the conversation."
+            properties:
+              topics:
+                type:
+                  - "null"
+                  - "array"
+              total_count:
+                type:
+                  - "null"
+                  - "integer"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "The type of the conversation"
+          - name: updated_at
+            type:
+              - "null"
+              - "integer"
+            description: "The timestamp when the conversation was last updated"
+          - name: user
+            type:
+              - "null"
+              - "object"
+            description: "The user related to the conversation."
+            properties:
+              id:
+                type:
+                  - "null"
+                  - "string"
+              type:
+                type:
+                  - "null"
+                  - "string"
+          - name: waiting_since
+            type:
+              - "null"
+              - "integer"
+            description: "Timestamp since waiting for a response"
+      - entity: teams
+        fields:
+          - name: admin_ids
+            type:
+              - "array"
+              - "null"
+            description: "Array of user IDs representing the admins of the team."
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the team."
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the team."
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "Type of team (e.g., 'internal', 'external')."
+
+servers:
+  - url: https://api.intercom.io
+    description: Intercom API server (US)
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ============================================
+  # CONTACTS ENTITY
+  # ============================================
+  "/contacts":
+    post:
+      summary: Create a contact
+      description: Create a new contact (user or lead)
+      operationId: Contact_Create
+      x-airbyte-entity: contacts
+      x-airbyte-action: create
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactCreateParams"
+      responses:
+        "200":
+          description: Contact created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "401":
+          description: Unauthorized
+    get:
+      summary: List contacts
+      description: Returns a paginated list of contacts in the workspace
+      operationId: listContacts
+      x-airbyte-entity: contacts
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_page: $.pages.next.starting_after
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of contacts to return per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 50
+        - name: starting_after
+          in: query
+          description: Cursor for pagination - get contacts after this ID
+          required: false
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactsList"
+        "401":
+          description: Unauthorized
+
+  "/contacts/{id}":
+    get:
+      summary: Get a contact
+      description: Get a single contact by ID
+      operationId: getContact
+      x-airbyte-entity: contacts
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Contact ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Contact object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+    put:
+      summary: Update a contact
+      description: Update an existing contact by ID
+      operationId: Contact_Update
+      x-airbyte-entity: contacts
+      x-airbyte-action: update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Contact ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactUpdateParams"
+      responses:
+        "200":
+          description: Contact updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # CONVERSATIONS ENTITY
+  # ============================================
+  "/conversations":
+    get:
+      summary: List conversations
+      description: Returns a paginated list of conversations
+      operationId: listConversations
+      x-airbyte-entity: conversations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.conversations
+      x-airbyte-meta-extractor:
+        next_page: $.pages.next.starting_after
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of conversations to return per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 20
+        - name: starting_after
+          in: query
+          description: Cursor for pagination
+          required: false
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConversationsList"
+        "401":
+          description: Unauthorized
+
+  "/conversations/{id}":
+    get:
+      summary: Get a conversation
+      description: Get a single conversation by ID
+      operationId: getConversation
+      x-airbyte-entity: conversations
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Conversation ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Conversation object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conversation"
+        "404":
+          description: Conversation not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # COMPANIES ENTITY
+  # ============================================
+  "/companies":
+    get:
+      summary: List companies
+      description: Returns a paginated list of companies
+      operationId: listCompanies
+      x-airbyte-entity: companies
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      x-airbyte-meta-extractor:
+        next_page: $.pages.next.starting_after
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of companies to return per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 50
+        - name: starting_after
+          in: query
+          description: Cursor for pagination
+          required: false
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of companies
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompaniesList"
+        "401":
+          description: Unauthorized
+    post:
+      summary: Create or update a company
+      description: Create a new company or update an existing one by company_id
+      operationId: Company_Create
+      x-airbyte-entity: companies
+      x-airbyte-action: create
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyCreateParams"
+      responses:
+        "200":
+          description: Company created or updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "401":
+          description: Unauthorized
+
+  "/companies/{id}":
+    get:
+      summary: Get a company
+      description: Get a single company by ID
+      operationId: getCompany
+      x-airbyte-entity: companies
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Company ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Company object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "404":
+          description: Company not found
+        "401":
+          description: Unauthorized
+    put:
+      summary: Update a company
+      description: Update an existing company by ID
+      operationId: Company_Update
+      x-airbyte-entity: companies
+      x-airbyte-action: update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Company ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyUpdateParams"
+      responses:
+        "200":
+          description: Company updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "404":
+          description: Company not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # TEAMS ENTITY
+  # ============================================
+  "/teams":
+    get:
+      summary: List teams
+      description: Returns a list of all teams in the workspace
+      operationId: listTeams
+      x-airbyte-entity: teams
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.teams
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamsList"
+        "401":
+          description: Unauthorized
+
+  "/teams/{id}":
+    get:
+      summary: Get a team
+      description: Get a single team by ID
+      operationId: getTeam
+      x-airbyte-entity: teams
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Team ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Team object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "404":
+          description: Team not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # ADMINS ENTITY
+  # ============================================
+  "/admins":
+    get:
+      summary: List admins
+      description: Returns a list of all admins in the workspace
+      operationId: listAdmins
+      x-airbyte-entity: admins
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.admins
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of admins
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminsList"
+        "401":
+          description: Unauthorized
+
+  "/admins/{id}":
+    get:
+      summary: Get an admin
+      description: Get a single admin by ID
+      operationId: getAdmin
+      x-airbyte-entity: admins
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Admin ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Admin object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Admin"
+        "404":
+          description: Admin not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # TAGS ENTITY
+  # ============================================
+  "/tags":
+    get:
+      summary: List tags
+      description: Returns a list of all tags in the workspace
+      operationId: listTags
+      x-airbyte-entity: tags
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagsList"
+        "401":
+          description: Unauthorized
+    post:
+      summary: Create or update a tag
+      description: Create a new tag or update an existing one
+      operationId: Tag_Create
+      x-airbyte-entity: tags
+      x-airbyte-action: create
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TagCreateParams"
+      responses:
+        "200":
+          description: Tag created or updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+        "401":
+          description: Unauthorized
+
+  "/tags/{id}":
+    get:
+      summary: Get a tag
+      description: Get a single tag by ID
+      operationId: getTag
+      x-airbyte-entity: tags
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Tag ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Tag object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+        "404":
+          description: Tag not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # NOTES ENTITY (Write-only)
+  # ============================================
+  "/contacts/{contact_id}/notes":
+    post:
+      summary: Create a note on a contact
+      description: Create a note on an existing contact
+      operationId: Note_Create
+      x-airbyte-entity: notes
+      x-airbyte-action: create
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          description: Contact ID to add note to
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteCreateParams"
+      responses:
+        "200":
+          description: Note created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "404":
+          description: Contact not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # SEGMENTS ENTITY
+  # ============================================
+  "/segments":
+    get:
+      summary: List segments
+      description: Returns a list of all segments in the workspace
+      operationId: listSegments
+      x-airbyte-entity: segments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.segments
+      parameters:
+        - name: include_count
+          in: query
+          description: Include count of contacts in each segment
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: List of segments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SegmentsList"
+        "401":
+          description: Unauthorized
+
+  "/segments/{id}":
+    get:
+      summary: Get a segment
+      description: Get a single segment by ID
+      operationId: getSegment
+      x-airbyte-entity: segments
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Segment ID
+          schema:
+            type: string
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "2.11"
+      responses:
+        "200":
+          description: Segment object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Segment"
+        "404":
+          description: Segment not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
+  # INTERNAL ARTICLES - WRITE OPERATIONS
+  # ============================================
+  "/internal_articles":
+    post:
+      summary: Create an internal article
+      description: Create a new internal article in the workspace
+      operationId: InternalArticle_Create
+      x-airbyte-entity: internal_articles
+      x-airbyte-action: create
+      parameters:
+        - name: Intercom-Version
+          in: header
+          description: API version
+          required: false
+          schema:
+            type: string
+            default: "Unstable"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InternalArticleCreateParams"
+      responses:
+        "200":
+          description: Internal article created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalArticle"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Intercom API Access Token authentication
+      x-airbyte-auth-config:
+        title: "Access Token Authentication"
+        type: object
+        required:
+          - access_token
+        properties:
+          access_token:
+            type: string
+            title: "Access Token"
+            description: "Your Intercom API Access Token"
+        auth_mapping:
+          token: "${access_token}"
+        replication_auth_key_mapping:
+          access_token: "access_token"
+
+  schemas:
+    # ============================================
+    # PAGINATION
+    # ============================================
+    Pages:
+      type: object
+      description: Pagination metadata
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of pagination
+        page:
+          type: [integer, "null"]
+          description: Current page number
+        per_page:
+          type: [integer, "null"]
+          description: Number of items per page
+        total_pages:
+          type: [integer, "null"]
+          description: Total number of pages
+        next:
+          type: [object, "null"]
+          description: Cursor for next page
+          properties:
+            page:
+              type: [integer, "null"]
+              description: Next page number
+            starting_after:
+              type: [string, "null"]
+              description: Cursor for next page
+
+    # ============================================
+    # CONTACT SCHEMAS
+    # ============================================
+    Contact:
+      type: object
+      x-airbyte-entity-name: contacts
+      description: Contact object representing a user or lead
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (contact)
+        id:
+          type: string
+          description: Unique contact identifier
+        workspace_id:
+          type: [string, "null"]
+          description: Workspace ID
+        external_id:
+          type: [string, "null"]
+          description: External ID from your system
+        role:
+          type: [string, "null"]
+          description: Role of the contact (user or lead)
+        email:
+          type: [string, "null"]
+          description: Email address
+        phone:
+          type: [string, "null"]
+          description: Phone number
+        name:
+          type: [string, "null"]
+          description: Full name
+        avatar:
+          type: [string, "null"]
+          description: Avatar URL
+        owner_id:
+          type: [integer, "null"]
+          description: Owner admin ID
+        social_profiles:
+          oneOf:
+            - $ref: "#/components/schemas/SocialProfiles"
+            - type: "null"
+        has_hard_bounced:
+          type: [boolean, "null"]
+          description: Whether email has hard bounced
+        marked_email_as_spam:
+          type: [boolean, "null"]
+          description: Whether contact marked email as spam
+        unsubscribed_from_emails:
+          type: [boolean, "null"]
+          description: Whether contact unsubscribed from emails
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        updated_at:
+          type: [integer, "null"]
+          description: Last update timestamp (Unix)
+        signed_up_at:
+          type: [integer, "null"]
+          description: Sign up timestamp (Unix)
+        last_seen_at:
+          type: [integer, "null"]
+          description: Last seen timestamp (Unix)
+        last_replied_at:
+          type: [integer, "null"]
+          description: Last reply timestamp (Unix)
+        last_contacted_at:
+          type: [integer, "null"]
+          description: Last contacted timestamp (Unix)
+        last_email_opened_at:
+          type: [integer, "null"]
+          description: Last email opened timestamp (Unix)
+        last_email_clicked_at:
+          type: [integer, "null"]
+          description: Last email clicked timestamp (Unix)
+        language_override:
+          type: [string, "null"]
+          description: Language override
+        browser:
+          type: [string, "null"]
+          description: Browser used
+        browser_version:
+          type: [string, "null"]
+          description: Browser version
+        browser_language:
+          type: [string, "null"]
+          description: Browser language
+        os:
+          type: [string, "null"]
+          description: Operating system
+        location:
+          oneOf:
+            - $ref: "#/components/schemas/Location"
+            - type: "null"
+        android_app_name:
+          type: [string, "null"]
+          description: Android app name
+        android_app_version:
+          type: [string, "null"]
+          description: Android app version
+        android_device:
+          type: [string, "null"]
+          description: Android device
+        android_os_version:
+          type: [string, "null"]
+          description: Android OS version
+        android_sdk_version:
+          type: [string, "null"]
+          description: Android SDK version
+        android_last_seen_at:
+          type: [integer, "null"]
+          description: Android last seen timestamp
+        ios_app_name:
+          type: [string, "null"]
+          description: iOS app name
+        ios_app_version:
+          type: [string, "null"]
+          description: iOS app version
+        ios_device:
+          type: [string, "null"]
+          description: iOS device
+        ios_os_version:
+          type: [string, "null"]
+          description: iOS OS version
+        ios_sdk_version:
+          type: [string, "null"]
+          description: iOS SDK version
+        ios_last_seen_at:
+          type: [integer, "null"]
+          description: iOS last seen timestamp
+        custom_attributes:
+          type: [object, "null"]
+          description: Custom attributes
+          additionalProperties: true
+        tags:
+          oneOf:
+            - $ref: "#/components/schemas/ContactTags"
+            - type: "null"
+        notes:
+          oneOf:
+            - $ref: "#/components/schemas/ContactNotes"
+            - type: "null"
+        companies:
+          oneOf:
+            - $ref: "#/components/schemas/ContactCompanies"
+            - type: "null"
+
+    SocialProfiles:
+      type: object
+      description: Social profiles
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SocialProfile"
+
+    SocialProfile:
+      type: object
+      description: Social profile
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of social profile
+        name:
+          type: [string, "null"]
+          description: Social network name
+        url:
+          type: [string, "null"]
+          description: Profile URL
+
+    Location:
+      type: object
+      description: Location information
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of location
+        country:
+          type: [string, "null"]
+          description: Country
+        region:
+          type: [string, "null"]
+          description: Region/state
+        city:
+          type: [string, "null"]
+          description: City
+        country_code:
+          type: [string, "null"]
+          description: Country code
+        continent_code:
+          type: [string, "null"]
+          description: Continent code
+
+    ContactTags:
+      type: object
+      description: Tags associated with contact
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagReference"
+
+    TagReference:
+      type: object
+      description: Tag reference
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: [string, "null"]
+          description: Tag ID
+        url:
+          type: [string, "null"]
+          description: Tag URL
+
+    ContactNotes:
+      type: object
+      description: Notes associated with contact
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoteReference"
+
+    NoteReference:
+      type: object
+      description: Note reference
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: [string, "null"]
+          description: Note ID
+        url:
+          type: [string, "null"]
+          description: Note URL
+
+    ContactCompanies:
+      type: object
+      description: Companies associated with contact
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanyReference"
+
+    CompanyReference:
+      type: object
+      description: Company reference
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: [string, "null"]
+          description: Company ID
+        url:
+          type: [string, "null"]
+          description: Company URL
+
+    ContactsList:
+      type: object
+      description: Paginated list of contacts
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Contact"
+        total_count:
+          type: [integer, "null"]
+          description: Total number of contacts
+        pages:
+          type: [object, "null"]
+          description: Pagination metadata
+          properties:
+            type:
+              type: [string, "null"]
+              description: Type of pagination
+            page:
+              type: [integer, "null"]
+              description: Current page number
+            per_page:
+              type: [integer, "null"]
+              description: Number of items per page
+            total_pages:
+              type: [integer, "null"]
+              description: Total number of pages
+            next:
+              type: [object, "null"]
+              description: Cursor for next page
+              properties:
+                page:
+                  type: [integer, "null"]
+                  description: Next page number
+                starting_after:
+                  type: [string, "null"]
+                  description: Cursor for next page
+
+    # ============================================
+    # CONVERSATION SCHEMAS
+    # ============================================
+    Conversation:
+      type: object
+      x-airbyte-entity-name: conversations
+      description: Conversation object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (conversation)
+        id:
+          type: string
+          description: Unique conversation identifier
+        title:
+          type: [string, "null"]
+          description: Conversation title
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        updated_at:
+          type: [integer, "null"]
+          description: Last update timestamp (Unix)
+        waiting_since:
+          type: [integer, "null"]
+          description: Waiting since timestamp (Unix)
+        snoozed_until:
+          type: [integer, "null"]
+          description: Snoozed until timestamp (Unix)
+        open:
+          type: [boolean, "null"]
+          description: Whether conversation is open
+        state:
+          type: [string, "null"]
+          description: Conversation state (open, closed, snoozed)
+        read:
+          type: [boolean, "null"]
+          description: Whether conversation has been read
+        priority:
+          type: [string, "null"]
+          description: Conversation priority
+        admin_assignee_id:
+          type: [integer, "null"]
+          description: Assigned admin ID
+        team_assignee_id:
+          type: [string, "null"]
+          description: Assigned team ID
+        tags:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationTags"
+            - type: "null"
+        conversation_rating:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationRating"
+            - type: "null"
+        source:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationSource"
+            - type: "null"
+        contacts:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationContacts"
+            - type: "null"
+        teammates:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationTeammates"
+            - type: "null"
+        first_contact_reply:
+          oneOf:
+            - $ref: "#/components/schemas/FirstContactReply"
+            - type: "null"
+        sla_applied:
+          oneOf:
+            - $ref: "#/components/schemas/SlaApplied"
+            - type: "null"
+        statistics:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationStatistics"
+            - type: "null"
+        conversation_parts:
+          oneOf:
+            - $ref: "#/components/schemas/ConversationPartsReference"
+            - type: "null"
+        custom_attributes:
+          type: [object, "null"]
+          description: Custom attributes
+          additionalProperties: true
+
+    ConversationTags:
+      type: object
+      description: Tags on conversation
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+
+    ConversationRating:
+      type: object
+      description: Conversation rating
+      properties:
+        rating:
+          type: [integer, "null"]
+          description: Rating value
+        remark:
+          type: [string, "null"]
+          description: Rating remark
+        created_at:
+          type: [integer, "null"]
+          description: Rating timestamp
+        contact:
+          oneOf:
+            - $ref: "#/components/schemas/ContactReference"
+            - type: "null"
+        teammate:
+          oneOf:
+            - $ref: "#/components/schemas/AdminReference"
+            - type: "null"
+
+    ContactReference:
+      type: object
+      description: Contact reference
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: [string, "null"]
+          description: Contact ID
+
+    AdminReference:
+      type: object
+      description: Admin reference
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: [string, "null"]
+          description: Admin ID
+
+    ConversationSource:
+      type: object
+      description: Conversation source
+      properties:
+        type:
+          type: [string, "null"]
+          description: Source type
+        id:
+          type: [string, "null"]
+          description: Source ID
+        delivered_as:
+          type: [string, "null"]
+          description: How it was delivered
+        subject:
+          type: [string, "null"]
+          description: Subject line
+        body:
+          type: [string, "null"]
+          description: Message body
+        author:
+          oneOf:
+            - $ref: "#/components/schemas/Author"
+            - type: "null"
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+        url:
+          type: [string, "null"]
+          description: Source URL
+        redacted:
+          type: [boolean, "null"]
+          description: Whether content is redacted
+
+    Author:
+      type: object
+      description: Message author
+      properties:
+        type:
+          type: [string, "null"]
+          description: Author type (admin, user, bot)
+        id:
+          type: [string, "null"]
+          description: Author ID
+        name:
+          type: [string, "null"]
+          description: Author name
+        email:
+          type: [string, "null"]
+          description: Author email
+
+    Attachment:
+      type: object
+      description: Message attachment
+      properties:
+        type:
+          type: [string, "null"]
+          description: Attachment type
+        name:
+          type: [string, "null"]
+          description: File name
+        url:
+          type: [string, "null"]
+          description: File URL
+        content_type:
+          type: [string, "null"]
+          description: MIME type
+        filesize:
+          type: [integer, "null"]
+          description: File size in bytes
+        width:
+          type: [integer, "null"]
+          description: Image width
+        height:
+          type: [integer, "null"]
+          description: Image height
+
+    ConversationContacts:
+      type: object
+      description: Contacts in conversation
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        contacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactReference"
+
+    ConversationTeammates:
+      type: object
+      description: Teammates in conversation
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        admins:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdminReference"
+
+    FirstContactReply:
+      type: object
+      description: First contact reply info
+      properties:
+        created_at:
+          type: [integer, "null"]
+          description: Reply timestamp
+        type:
+          type: [string, "null"]
+          description: Reply type
+        url:
+          type: [string, "null"]
+          description: Reply URL
+
+    SlaApplied:
+      type: object
+      description: SLA applied to conversation
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        sla_name:
+          type: [string, "null"]
+          description: SLA name
+        sla_status:
+          type: [string, "null"]
+          description: SLA status
+
+    ConversationStatistics:
+      type: object
+      description: Conversation statistics
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        time_to_assignment:
+          type: [integer, "null"]
+          description: Time to assignment in seconds
+        time_to_admin_reply:
+          type: [integer, "null"]
+          description: Time to admin reply in seconds
+        time_to_first_close:
+          type: [integer, "null"]
+          description: Time to first close in seconds
+        time_to_last_close:
+          type: [integer, "null"]
+          description: Time to last close in seconds
+        median_time_to_reply:
+          type: [integer, "null"]
+          description: Median time to reply in seconds
+        first_contact_reply_at:
+          type: [integer, "null"]
+          description: First contact reply timestamp
+        first_assignment_at:
+          type: [integer, "null"]
+          description: First assignment timestamp
+        first_admin_reply_at:
+          type: [integer, "null"]
+          description: First admin reply timestamp
+        first_close_at:
+          type: [integer, "null"]
+          description: First close timestamp
+        last_assignment_at:
+          type: [integer, "null"]
+          description: Last assignment timestamp
+        last_assignment_admin_reply_at:
+          type: [integer, "null"]
+          description: Last assignment admin reply timestamp
+        last_contact_reply_at:
+          type: [integer, "null"]
+          description: Last contact reply timestamp
+        last_admin_reply_at:
+          type: [integer, "null"]
+          description: Last admin reply timestamp
+        last_close_at:
+          type: [integer, "null"]
+          description: Last close timestamp
+        last_closed_by_id:
+          type: [string, "null"]
+          description: ID of admin who last closed
+        count_reopens:
+          type: [integer, "null"]
+          description: Number of reopens
+        count_assignments:
+          type: [integer, "null"]
+          description: Number of assignments
+        count_conversation_parts:
+          type: [integer, "null"]
+          description: Number of conversation parts
+
+    ConversationPartsReference:
+      type: object
+      description: Reference to conversation parts
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        conversation_parts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConversationPart"
+        total_count:
+          type: [integer, "null"]
+          description: Total number of parts
+
+    ConversationsList:
+      type: object
+      description: Paginated list of conversations
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        conversations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Conversation"
+        total_count:
+          type: [integer, "null"]
+          description: Total number of conversations
+        pages:
+          type: [object, "null"]
+          description: Pagination metadata
+          properties:
+            type:
+              type: [string, "null"]
+              description: Type of pagination
+            page:
+              type: [integer, "null"]
+              description: Current page number
+            per_page:
+              type: [integer, "null"]
+              description: Number of items per page
+            total_pages:
+              type: [integer, "null"]
+              description: Total number of pages
+            next:
+              type: [object, "null"]
+              description: Cursor for next page
+              properties:
+                page:
+                  type: [integer, "null"]
+                  description: Next page number
+                starting_after:
+                  type: [string, "null"]
+                  description: Cursor for next page
+
+    # ============================================
+    # CONVERSATION PART SCHEMAS
+    # ============================================
+    ConversationPart:
+      type: object
+      x-airbyte-entity-name: conversation_parts
+      description: Conversation part (message, note, action)
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: string
+          description: Unique part identifier
+        part_type:
+          type: [string, "null"]
+          description: Type of part (comment, note, assignment, etc.)
+        body:
+          type: [string, "null"]
+          description: Part body content
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        updated_at:
+          type: [integer, "null"]
+          description: Update timestamp (Unix)
+        notified_at:
+          type: [integer, "null"]
+          description: Notification timestamp (Unix)
+        assigned_to:
+          oneOf:
+            - $ref: "#/components/schemas/AdminReference"
+            - type: "null"
+        author:
+          oneOf:
+            - $ref: "#/components/schemas/Author"
+            - type: "null"
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+        external_id:
+          type: [string, "null"]
+          description: External ID
+        redacted:
+          type: [boolean, "null"]
+          description: Whether content is redacted
+
+    # ============================================
+    # COMPANY SCHEMAS
+    # ============================================
+    Company:
+      type: object
+      x-airbyte-entity-name: companies
+      description: Company object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (company)
+        id:
+          type: string
+          description: Unique company identifier
+        app_id:
+          type: [string, "null"]
+          description: The ID of the application associated with the company
+        name:
+          type: [string, "null"]
+          description: Company name
+        company_id:
+          type: [string, "null"]
+          description: External company ID
+        plan:
+          oneOf:
+            - $ref: "#/components/schemas/CompanyPlan"
+            - type: "null"
+        size:
+          type: [integer, "null"]
+          description: Company size
+        industry:
+          type: [string, "null"]
+          description: Industry
+        website:
+          type: [string, "null"]
+          description: Website URL
+        remote_created_at:
+          type: [integer, "null"]
+          description: Remote creation timestamp
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        updated_at:
+          type: [integer, "null"]
+          description: Last update timestamp (Unix)
+        last_request_at:
+          type: [integer, "null"]
+          description: Last request timestamp (Unix)
+        session_count:
+          type: [integer, "null"]
+          description: Number of sessions
+        monthly_spend:
+          type: [number, "null"]
+          description: Monthly spend
+        user_count:
+          type: [integer, "null"]
+          description: Number of users
+        tags:
+          oneOf:
+            - $ref: "#/components/schemas/CompanyTags"
+            - type: "null"
+        segments:
+          oneOf:
+            - $ref: "#/components/schemas/CompanySegments"
+            - type: "null"
+        custom_attributes:
+          type: [object, "null"]
+          description: Custom attributes
+          additionalProperties: true
+
+    CompanyPlan:
+      type: object
+      description: Company plan
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        id:
+          type: [string, "null"]
+          description: Plan ID
+        name:
+          type: [string, "null"]
+          description: Plan name
+
+    CompanyTags:
+      type: object
+      description: Tags on company
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+
+    CompanySegments:
+      type: object
+      description: Segments for company
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        segments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Segment"
+
+    CompaniesList:
+      type: object
+      description: Paginated list of companies
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Company"
+        total_count:
+          type: [integer, "null"]
+          description: Total number of companies
+        pages:
+          type: [object, "null"]
+          description: Pagination metadata
+          properties:
+            type:
+              type: [string, "null"]
+              description: Type of pagination
+            page:
+              type: [integer, "null"]
+              description: Current page number
+            per_page:
+              type: [integer, "null"]
+              description: Number of items per page
+            total_pages:
+              type: [integer, "null"]
+              description: Total number of pages
+            next:
+              type: [object, "null"]
+              description: Cursor for next page
+              properties:
+                page:
+                  type: [integer, "null"]
+                  description: Next page number
+                starting_after:
+                  type: [string, "null"]
+                  description: Cursor for next page
+
+    # ============================================
+    # TEAM SCHEMAS
+    # ============================================
+    Team:
+      type: object
+      x-airbyte-entity-name: teams
+      description: Team object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (team)
+        id:
+          type: string
+          description: Unique team identifier
+        name:
+          type: [string, "null"]
+          description: Team name
+        admin_ids:
+          type: array
+          items:
+            type: integer
+          description: List of admin IDs in the team
+        admin_priority_level:
+          oneOf:
+            - $ref: "#/components/schemas/AdminPriorityLevel"
+            - type: "null"
+
+    AdminPriorityLevel:
+      type: object
+      description: Admin priority level settings
+      properties:
+        primary_admin_ids:
+          type: array
+          items:
+            type: integer
+          description: Primary admin IDs
+        secondary_admin_ids:
+          type: array
+          items:
+            type: integer
+          description: Secondary admin IDs
+
+    TeamsList:
+      type: object
+      description: List of teams
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        teams:
+          type: array
+          items:
+            $ref: "#/components/schemas/Team"
+
+    # ============================================
+    # ADMIN SCHEMAS
+    # ============================================
+    Admin:
+      type: object
+      x-airbyte-entity-name: admins
+      description: Admin object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (admin)
+        id:
+          type: string
+          description: Unique admin identifier
+        name:
+          type: [string, "null"]
+          description: Admin name
+        email:
+          type: [string, "null"]
+          description: Admin email
+        email_verified:
+          type: [boolean, "null"]
+          description: Whether email is verified
+        job_title:
+          type: [string, "null"]
+          description: Job title
+        away_mode_enabled:
+          type: [boolean, "null"]
+          description: Whether away mode is enabled
+        away_mode_reassign:
+          type: [boolean, "null"]
+          description: Whether to reassign when away
+        has_inbox_seat:
+          type: [boolean, "null"]
+          description: Whether admin has inbox seat
+        team_ids:
+          type: array
+          items:
+            type: integer
+          description: List of team IDs
+        avatar:
+          oneOf:
+            - $ref: "#/components/schemas/Avatar"
+            - type: "null"
+
+    Avatar:
+      type: object
+      description: Avatar image
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object
+        image_url:
+          type: [string, "null"]
+          description: Avatar image URL
+
+    AdminsList:
+      type: object
+      description: List of admins
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        admins:
+          type: array
+          items:
+            $ref: "#/components/schemas/Admin"
+
+    # ============================================
+    # TAG SCHEMAS
+    # ============================================
+    Tag:
+      type: object
+      x-airbyte-entity-name: tags
+      description: Tag object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (tag)
+        id:
+          type: string
+          description: Unique tag identifier
+        name:
+          type: [string, "null"]
+          description: Tag name
+        applied_at:
+          type: [integer, "null"]
+          description: Applied timestamp (Unix)
+        applied_by:
+          oneOf:
+            - $ref: "#/components/schemas/AdminReference"
+            - type: "null"
+
+    TagsList:
+      type: object
+      description: List of tags
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+
+    # ============================================
+    # SEGMENT SCHEMAS
+    # ============================================
+    Segment:
+      type: object
+      x-airbyte-entity-name: segments
+      description: Segment object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (segment)
+        id:
+          type: string
+          description: Unique segment identifier
+        name:
+          type: [string, "null"]
+          description: Segment name
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        updated_at:
+          type: [integer, "null"]
+          description: Last update timestamp (Unix)
+        person_type:
+          type: [string, "null"]
+          description: Person type (user, lead, contact)
+        count:
+          type: [integer, "null"]
+          description: Number of contacts in segment
+
+    SegmentsList:
+      type: object
+      description: List of segments
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of list
+        segments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Segment"
+
+    # ============================================
+    # WRITE OPERATION REQUEST SCHEMAS
+    # ============================================
+    ContactCreateParams:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          description: The role of the contact (user or lead)
+        external_id:
+          type: string
+          description: A unique identifier for the contact from your system
+        email:
+          type: string
+          description: The contact's email address
+        phone:
+          type: string
+          description: The contact's phone number
+        name:
+          type: string
+          description: The contact's full name
+        avatar:
+          type: string
+          description: An image URL for the contact's avatar
+        signed_up_at:
+          type: integer
+          description: Sign up timestamp (Unix)
+        last_seen_at:
+          type: integer
+          description: Last seen timestamp (Unix)
+        owner_id:
+          type: integer
+          description: The ID of the admin assigned as owner
+        unsubscribed_from_emails:
+          type: boolean
+          description: Whether the contact is unsubscribed from emails
+        custom_attributes:
+          type: object
+          description: Custom attributes for the contact
+          additionalProperties: true
+
+    ContactUpdateParams:
+      type: object
+      properties:
+        role:
+          type: string
+          description: The role of the contact (user or lead)
+        external_id:
+          type: string
+          description: A unique identifier for the contact from your system
+        email:
+          type: string
+          description: The contact's email address
+        phone:
+          type: string
+          description: The contact's phone number
+        name:
+          type: string
+          description: The contact's full name
+        avatar:
+          type: string
+          description: An image URL for the contact's avatar
+        signed_up_at:
+          type: integer
+          description: Sign up timestamp (Unix)
+        last_seen_at:
+          type: integer
+          description: Last seen timestamp (Unix)
+        owner_id:
+          type: integer
+          description: The ID of the admin assigned as owner
+        unsubscribed_from_emails:
+          type: boolean
+          description: Whether the contact is unsubscribed from emails
+        custom_attributes:
+          type: object
+          description: Custom attributes for the contact
+          additionalProperties: true
+
+    CompanyCreateParams:
+      type: object
+      required:
+        - company_id
+      properties:
+        company_id:
+          type: string
+          description: A unique identifier for the company from your system
+        name:
+          type: string
+          description: The name of the company
+        plan:
+          type: string
+          description: The name of the plan the company is on
+        monthly_spend:
+          type: number
+          description: The monthly spend of the company
+        size:
+          type: integer
+          description: The number of employees in the company
+        website:
+          type: string
+          description: The URL of the company website
+        industry:
+          type: string
+          description: The industry the company operates in
+        custom_attributes:
+          type: object
+          description: Custom attributes for the company
+          additionalProperties: true
+
+    CompanyUpdateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the company
+        plan:
+          type: string
+          description: The name of the plan the company is on
+        monthly_spend:
+          type: number
+          description: The monthly spend of the company
+        size:
+          type: integer
+          description: The number of employees in the company
+        website:
+          type: string
+          description: The URL of the company website
+        industry:
+          type: string
+          description: The industry the company operates in
+        custom_attributes:
+          type: object
+          description: Custom attributes for the company
+          additionalProperties: true
+
+    TagCreateParams:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the tag
+
+    NoteCreateParams:
+      type: object
+      required:
+        - body
+      properties:
+        body:
+          type: string
+          description: The body of the note in HTML format
+        admin_id:
+          type: string
+          description: The ID of the admin creating the note
+
+    # ============================================
+    # NOTE RESPONSE SCHEMA
+    # ============================================
+    Note:
+      type: object
+      x-airbyte-entity-name: notes
+      description: Note object on a contact
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of object (note)
+        id:
+          type: string
+          description: Unique note identifier
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        contact:
+          oneOf:
+            - $ref: "#/components/schemas/ContactReference"
+            - type: "null"
+        author:
+          oneOf:
+            - $ref: "#/components/schemas/Author"
+            - type: "null"
+        body:
+          type: [string, "null"]
+          description: The body of the note
+
+    # ============================================
+    # INTERNAL ARTICLE REQUEST SCHEMA
+    # ============================================
+    InternalArticleCreateParams:
+      type: object
+      required:
+        - title
+        - owner_id
+        - author_id
+      properties:
+        title:
+          type: string
+          description: The title of the article
+        body:
+          type: string
+          description: The content of the article in HTML
+        owner_id:
+          type: integer
+          description: The ID of the owner of the article
+        author_id:
+          type: integer
+          description: The ID of the author of the article
+
+    # ============================================
+    # INTERNAL ARTICLE RESPONSE SCHEMA
+    # ============================================
+    InternalArticle:
+      type: object
+      x-airbyte-entity-name: internal_articles
+      description: Internal article object
+      properties:
+        id:
+          type: [integer, string]
+          description: The unique identifier for the article
+        title:
+          type: [string, "null"]
+          description: The title of the article
+        body:
+          type: [string, "null"]
+          description: The body of the article in HTML
+        owner_id:
+          type: [integer, "null"]
+          description: The ID of the owner of the article
+        author_id:
+          type: [integer, "null"]
+          description: The ID of the author of the article
+        created_at:
+          type: [integer, "null"]
+          description: Creation timestamp (Unix)
+        updated_at:
+          type: [integer, "null"]
+          description: Last update timestamp (Unix)
+        locale:
+          type: [string, "null"]
+          description: The default locale of the article

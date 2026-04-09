@@ -1,0 +1,3849 @@
+openapi: 3.1.0
+
+info:
+  title: WooCommerce API Connector
+  version: 1.0.4
+  description: |
+    Connector for the WooCommerce REST API (v3). Provides read access to a WooCommerce store's
+    customers, orders, products, coupons, product categories, tags, reviews, attributes,
+    variations, order notes, refunds, payment gateways, shipping methods, shipping zones,
+    tax rates, and tax classes. Requires a WooCommerce store URL and REST API consumer
+    key / consumer secret for authentication.
+  x-airbyte-connector-name: woocommerce
+  x-airbyte-connector-definition-id: 2a2552ca-9f78-4c1c-9eb7-4d0dc66d72df
+  x-airbyte-replication-version: "0.5.32"
+  x-airbyte-replication-compatibility: ">=0.5.32, <1.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: WooCommerce REST API Documentation
+    url: https://woocommerce.github.io/woocommerce-rest-api-docs/
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from WooCommerce.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data.
+        format: date-time
+    required:
+    - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-example-questions:
+    direct:
+    - "List all customers in WooCommerce"
+    - "Show me all orders"
+    - "List all products"
+    - "Show me all coupons"
+    - "List all product categories"
+    - "Show me the product reviews"
+    - "List all shipping zones"
+    - "Show me the tax rates"
+    - "List all payment gateways"
+    search:
+    - "Find orders placed this month"
+    - "What are the top-selling products?"
+    - "Show me customers who have made purchases"
+    - "Find all coupons expiring this year"
+    - "What orders are still processing?"
+    unsupported:
+    - "Create a new product"
+    - "Update an order status"
+    - "Delete a customer"
+    - "Apply a coupon to an order"
+    - "Process a refund"
+  x-airbyte-entity-relationships:
+  - source_entity: product_variations
+    target_entity: products
+    foreign_key: product_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: order_notes
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: refunds
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: customers
+      fields:
+      - name: avatar_url
+        type: ["null", "string"]
+        description: Avatar URL
+      - name: billing
+        type: ["null", "object"]
+        description: List of billing address data
+        properties:
+          address_1:
+            type: ["null", "string"]
+          address_2:
+            type: ["null", "string"]
+          city:
+            type: ["null", "string"]
+          company:
+            type: ["null", "string"]
+          country:
+            type: ["null", "string"]
+          email:
+            type: ["null", "string"]
+          first_name:
+            type: ["null", "string"]
+          last_name:
+            type: ["null", "string"]
+          phone:
+            type: ["null", "string"]
+          postcode:
+            type: ["null", "string"]
+          state:
+            type: ["null", "string"]
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the customer was created, in the site's timezone
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the customer was created, as GMT
+      - name: date_modified
+        type: ["null", "string"]
+        description: The date the customer was last modified, in the site's timezone
+      - name: date_modified_gmt
+        type: ["null", "string"]
+        description: The date the customer was last modified, as GMT
+      - name: email
+        type: ["null", "string"]
+        description: The email address for the customer
+      - name: first_name
+        type: ["null", "string"]
+        description: Customer first name
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier for the resource
+      - name: is_paying_customer
+        type: ["null", "boolean"]
+        description: Is the customer a paying customer
+      - name: last_name
+        type: ["null", "string"]
+        description: Customer last name
+      - name: meta_data
+        type: ["null", "array"]
+        description: Meta data
+      - name: role
+        type: ["null", "string"]
+        description: Customer role
+      - name: shipping
+        type: ["null", "object"]
+        description: List of shipping address data
+        properties:
+          address_1:
+            type: ["null", "string"]
+          address_2:
+            type: ["null", "string"]
+          city:
+            type: ["null", "string"]
+          company:
+            type: ["null", "string"]
+          country:
+            type: ["null", "string"]
+          first_name:
+            type: ["null", "string"]
+          last_name:
+            type: ["null", "string"]
+          postcode:
+            type: ["null", "string"]
+          state:
+            type: ["null", "string"]
+      - name: username
+        type: ["null", "string"]
+        description: Customer login name
+    - entity: orders
+      fields:
+      - name: billing
+        type: ["null", "object"]
+        description: Billing address
+      - name: cart_hash
+        type: ["null", "string"]
+        description: MD5 hash of cart items to ensure orders are not modified
+      - name: cart_tax
+        type: ["null", "string"]
+        description: Sum of line item taxes only
+      - name: coupon_lines
+        type: ["null", "array"]
+        description: Coupons line data
+      - name: created_via
+        type: ["null", "string"]
+        description: Shows where the order was created
+      - name: currency
+        type: ["null", "string"]
+        description: Currency the order was created with, in ISO format
+      - name: customer_id
+        type: ["null", "integer"]
+        description: User ID who owns the order (0 for guests)
+      - name: customer_ip_address
+        type: ["null", "string"]
+        description: Customer's IP address
+      - name: customer_note
+        type: ["null", "string"]
+        description: Note left by the customer during checkout
+      - name: customer_user_agent
+        type: ["null", "string"]
+        description: User agent of the customer
+      - name: date_completed
+        type: ["null", "string"]
+        description: The date the order was completed, in the site's timezone
+      - name: date_completed_gmt
+        type: ["null", "string"]
+        description: The date the order was completed, as GMT
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the order was created, in the site's timezone
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the order was created, as GMT
+      - name: date_modified
+        type: ["null", "string"]
+        description: The date the order was last modified, in the site's timezone
+      - name: date_modified_gmt
+        type: ["null", "string"]
+        description: The date the order was last modified, as GMT
+      - name: date_paid
+        type: ["null", "string"]
+        description: The date the order was paid, in the site's timezone
+      - name: date_paid_gmt
+        type: ["null", "string"]
+        description: The date the order was paid, as GMT
+      - name: discount_tax
+        type: ["null", "string"]
+        description: Total discount tax amount for the order
+      - name: discount_total
+        type: ["null", "string"]
+        description: Total discount amount for the order
+      - name: fee_lines
+        type: ["null", "array"]
+        description: Fee lines data
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier for the resource
+      - name: line_items
+        type: ["null", "array"]
+        description: Line items data
+      - name: meta_data
+        type: ["null", "array"]
+        description: Meta data
+      - name: number
+        type: ["null", "string"]
+        description: Order number
+      - name: order_key
+        type: ["null", "string"]
+        description: Order key
+      - name: parent_id
+        type: ["null", "integer"]
+        description: Parent order ID
+      - name: payment_method
+        type: ["null", "string"]
+        description: Payment method ID
+      - name: payment_method_title
+        type: ["null", "string"]
+        description: Payment method title
+      - name: prices_include_tax
+        type: ["null", "boolean"]
+        description: True if the prices included tax during checkout
+      - name: refunds
+        type: ["null", "array"]
+        description: List of refunds
+      - name: shipping
+        type: ["null", "object"]
+        description: Shipping address
+      - name: shipping_lines
+        type: ["null", "array"]
+        description: Shipping lines data
+      - name: shipping_tax
+        type: ["null", "string"]
+        description: Total shipping tax amount for the order
+      - name: shipping_total
+        type: ["null", "string"]
+        description: Total shipping amount for the order
+      - name: status
+        type: ["null", "string"]
+        description: Order status
+      - name: tax_lines
+        type: ["null", "array"]
+        description: Tax lines data
+      - name: total
+        type: ["null", "string"]
+        description: Grand total
+      - name: total_tax
+        type: ["null", "string"]
+        description: Sum of all taxes
+      - name: transaction_id
+        type: ["null", "string"]
+        description: Unique transaction ID
+      - name: version
+        type: ["null", "string"]
+        description: Version of WooCommerce which last updated the order
+    - entity: products
+      fields:
+      - name: attributes
+        type: ["null", "array"]
+        description: List of attributes
+      - name: average_rating
+        type: ["null", "string"]
+        description: Reviews average rating
+      - name: backordered
+        type: ["null", "boolean"]
+        description: Shows if the product is on backordered
+      - name: backorders
+        type: ["null", "string"]
+        description: If managing stock, this controls if backorders are allowed
+      - name: backorders_allowed
+        type: ["null", "boolean"]
+        description: Shows if backorders are allowed
+      - name: button_text
+        type: ["null", "string"]
+        description: Product external button text
+      - name: catalog_visibility
+        type: ["null", "string"]
+        description: Catalog visibility
+      - name: categories
+        type: ["null", "array"]
+        description: List of categories
+      - name: cross_sell_ids
+        type: ["null", "array"]
+        description: List of cross-sell products IDs
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the product was created
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the product was created, as GMT
+      - name: date_modified
+        type: ["null", "string"]
+        description: The date the product was last modified
+      - name: date_modified_gmt
+        type: ["null", "string"]
+        description: The date the product was last modified, as GMT
+      - name: date_on_sale_from
+        type: ["null", "string"]
+        description: Start date of sale price
+      - name: date_on_sale_from_gmt
+        type: ["null", "string"]
+        description: Start date of sale price, as GMT
+      - name: date_on_sale_to
+        type: ["null", "string"]
+        description: End date of sale price
+      - name: date_on_sale_to_gmt
+        type: ["null", "string"]
+        description: End date of sale price, as GMT
+      - name: default_attributes
+        type: ["null", "array"]
+        description: Defaults variation attributes
+      - name: description
+        type: ["null", "string"]
+        description: Product description
+      - name: dimensions
+        type: ["null", "object"]
+        description: Product dimensions
+      - name: download_expiry
+        type: ["null", "integer"]
+        description: Number of days until access to downloadable files expires
+      - name: download_limit
+        type: ["null", "integer"]
+        description: Number of times downloadable files can be downloaded
+      - name: downloadable
+        type: ["null", "boolean"]
+        description: If the product is downloadable
+      - name: downloads
+        type: ["null", "array"]
+        description: List of downloadable files
+      - name: external_url
+        type: ["null", "string"]
+        description: Product external URL
+      - name: grouped_products
+        type: ["null", "array"]
+        description: List of grouped products ID
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier for the resource
+      - name: images
+        type: ["null", "array"]
+        description: List of images
+      - name: manage_stock
+        type: ["null", "boolean"]
+        description: Stock management at product level
+      - name: menu_order
+        type: ["null", "integer"]
+        description: Menu order
+      - name: meta_data
+        type: ["null", "array"]
+        description: Meta data
+      - name: name
+        type: ["null", "string"]
+        description: Product name
+      - name: on_sale
+        type: ["null", "boolean"]
+        description: Shows if the product is on sale
+      - name: parent_id
+        type: ["null", "integer"]
+        description: Product parent ID
+      - name: permalink
+        type: ["null", "string"]
+        description: Product URL
+      - name: price
+        type: ["null", "string"]
+        description: Current product price
+      - name: price_html
+        type: ["null", "string"]
+        description: Price formatted in HTML
+      - name: purchasable
+        type: ["null", "boolean"]
+        description: Shows if the product can be bought
+      - name: purchase_note
+        type: ["null", "string"]
+        description: Note to send customer after purchase
+      - name: rating_count
+        type: ["null", "integer"]
+        description: Amount of reviews
+      - name: regular_price
+        type: ["null", "string"]
+        description: Product regular price
+      - name: related_ids
+        type: ["null", "array"]
+        description: List of related products IDs
+      - name: reviews_allowed
+        type: ["null", "boolean"]
+        description: Allow reviews
+      - name: sale_price
+        type: ["null", "string"]
+        description: Product sale price
+      - name: shipping_class
+        type: ["null", "string"]
+        description: Shipping class slug
+      - name: shipping_class_id
+        type: ["null", "integer"]
+        description: Shipping class ID
+      - name: shipping_required
+        type: ["null", "boolean"]
+        description: Shows if the product needs to be shipped
+      - name: shipping_taxable
+        type: ["null", "boolean"]
+        description: Shows if product shipping is taxable
+      - name: short_description
+        type: ["null", "string"]
+        description: Product short description
+      - name: sku
+        type: ["null", "string"]
+        description: Unique identifier (SKU)
+      - name: slug
+        type: ["null", "string"]
+        description: Product slug
+      - name: sold_individually
+        type: ["null", "boolean"]
+        description: Allow one item per order
+      - name: status
+        type: ["null", "string"]
+        description: Product status
+      - name: stock_quantity
+        type: ["null", "integer"]
+        description: Stock quantity
+      - name: stock_status
+        type: ["null", "string"]
+        description: Controls the stock status
+      - name: tags
+        type: ["null", "array"]
+        description: List of tags
+      - name: tax_class
+        type: ["null", "string"]
+        description: Tax class
+      - name: tax_status
+        type: ["null", "string"]
+        description: Tax status
+      - name: total_sales
+        type: ["null", "integer"]
+        description: Amount of sales
+      - name: type
+        type: ["null", "string"]
+        description: Product type
+      - name: upsell_ids
+        type: ["null", "array"]
+        description: List of up-sell products IDs
+      - name: variations
+        type: ["null", "array"]
+        description: List of variations IDs
+      - name: virtual
+        type: ["null", "boolean"]
+        description: If the product is virtual
+      - name: weight
+        type: ["null", "string"]
+        description: Product weight
+    - entity: coupons
+      fields:
+      - name: amount
+        type: ["null", "string"]
+        description: The amount of discount
+      - name: code
+        type: ["null", "string"]
+        description: Coupon code
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the coupon was created
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the coupon was created, as GMT
+      - name: date_expires
+        type: ["null", "string"]
+        description: The date the coupon expires
+      - name: date_expires_gmt
+        type: ["null", "string"]
+        description: The date the coupon expires, as GMT
+      - name: date_modified
+        type: ["null", "string"]
+        description: The date the coupon was last modified
+      - name: date_modified_gmt
+        type: ["null", "string"]
+        description: The date the coupon was last modified, as GMT
+      - name: description
+        type: ["null", "string"]
+        description: Coupon description
+      - name: discount_type
+        type: ["null", "string"]
+        description: Determines the type of discount
+      - name: email_restrictions
+        type: ["null", "array"]
+        description: List of email addresses that can use this coupon
+      - name: exclude_sale_items
+        type: ["null", "boolean"]
+        description: If true, not applied to sale items
+      - name: excluded_product_categories
+        type: ["null", "array"]
+        description: Excluded category IDs
+      - name: excluded_product_ids
+        type: ["null", "array"]
+        description: Excluded product IDs
+      - name: free_shipping
+        type: ["null", "boolean"]
+        description: Enables free shipping
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: individual_use
+        type: ["null", "boolean"]
+        description: Can only be used individually
+      - name: limit_usage_to_x_items
+        type: ["null", "integer"]
+        description: Max cart items coupon applies to
+      - name: maximum_amount
+        type: ["null", "string"]
+        description: Maximum order amount
+      - name: meta_data
+        type: ["null", "array"]
+        description: Meta data
+      - name: minimum_amount
+        type: ["null", "string"]
+        description: Minimum order amount
+      - name: product_categories
+        type: ["null", "array"]
+        description: Applicable category IDs
+      - name: product_ids
+        type: ["null", "array"]
+        description: Applicable product IDs
+      - name: usage_count
+        type: ["null", "integer"]
+        description: Times used
+      - name: usage_limit
+        type: ["null", "integer"]
+        description: Total usage limit
+      - name: usage_limit_per_user
+        type: ["null", "integer"]
+        description: Per-customer usage limit
+      - name: used_by
+        type: ["null", "array"]
+        description: Users who have used the coupon
+    - entity: product_categories
+      fields:
+      - name: count
+        type: ["null", "integer"]
+        description: Number of published products for the resource
+      - name: description
+        type: ["null", "string"]
+        description: HTML description of the resource
+      - name: display
+        type: ["null", "string"]
+        description: Category archive display type
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier for the resource
+      - name: image
+        type: ["null", "array"]
+        description: Image data
+      - name: menu_order
+        type: ["null", "integer"]
+        description: Menu order
+      - name: name
+        type: ["null", "string"]
+        description: Category name
+      - name: parent
+        type: ["null", "integer"]
+        description: The ID for the parent of the resource
+      - name: slug
+        type: ["null", "string"]
+        description: An alphanumeric identifier
+    - entity: product_tags
+      fields:
+      - name: count
+        type: ["null", "integer"]
+        description: Number of published products
+      - name: description
+        type: ["null", "string"]
+        description: HTML description
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: name
+        type: ["null", "string"]
+        description: Tag name
+      - name: slug
+        type: ["null", "string"]
+        description: Alphanumeric identifier
+    - entity: product_reviews
+      fields:
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the review was created
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the review was created, as GMT
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: product_id
+        type: ["null", "integer"]
+        description: Product the review belongs to
+      - name: rating
+        type: ["null", "integer"]
+        description: Review rating (0 to 5)
+      - name: review
+        type: ["null", "string"]
+        description: The content of the review
+      - name: reviewer
+        type: ["null", "string"]
+        description: Reviewer name
+      - name: reviewer_email
+        type: ["null", "string"]
+        description: Reviewer email
+      - name: status
+        type: ["null", "string"]
+        description: Status of the review
+      - name: verified
+        type: ["null", "boolean"]
+        description: Shows if the reviewer bought the product
+    - entity: product_attributes
+      fields:
+      - name: has_archives
+        type: ["null", "boolean"]
+        description: Enable/Disable attribute archives
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: name
+        type: ["null", "string"]
+        description: Attribute name
+      - name: order_by
+        type: ["null", "string"]
+        description: Default sort order
+      - name: slug
+        type: ["null", "string"]
+        description: Alphanumeric identifier
+      - name: type
+        type: ["null", "string"]
+        description: Type of attribute
+    - entity: product_variations
+      fields:
+      - name: attributes
+        type: ["null", "array"]
+        description: List of attributes
+      - name: backordered
+        type: ["null", "boolean"]
+        description: On backordered
+      - name: backorders
+        type: ["null", "string"]
+        description: Backorders allowed setting
+      - name: backorders_allowed
+        type: ["null", "boolean"]
+        description: Shows if backorders are allowed
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the variation was created
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the variation was created, as GMT
+      - name: date_modified
+        type: ["null", "string"]
+        description: The date the variation was last modified
+      - name: date_modified_gmt
+        type: ["null", "string"]
+        description: The date the variation was last modified, as GMT
+      - name: date_on_sale_from
+        type: ["null", "string"]
+        description: Start date of sale price
+      - name: date_on_sale_from_gmt
+        type: ["null", "string"]
+        description: Start date of sale price, as GMT
+      - name: date_on_sale_to
+        type: ["null", "string"]
+        description: End date of sale price
+      - name: date_on_sale_to_gmt
+        type: ["null", "string"]
+        description: End date of sale price, as GMT
+      - name: description
+        type: ["null", "string"]
+        description: Variation description
+      - name: dimensions
+        type: ["null", "object"]
+        description: Variation dimensions
+      - name: download_expiry
+        type: ["null", "integer"]
+        description: Days until access expires
+      - name: download_limit
+        type: ["null", "integer"]
+        description: Download limit
+      - name: downloadable
+        type: ["null", "boolean"]
+        description: If downloadable
+      - name: downloads
+        type: ["null", "array"]
+        description: Downloadable files
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: image
+        type: ["null", "array"]
+        description: Variation image data
+      - name: manage_stock
+        type: ["null", "string"]
+        description: Stock management at variation level
+      - name: menu_order
+        type: ["null", "integer"]
+        description: Menu order
+      - name: meta_data
+        type: ["null", "array"]
+        description: Meta data
+      - name: on_sale
+        type: ["null", "boolean"]
+        description: Shows if on sale
+      - name: permalink
+        type: ["null", "string"]
+        description: Variation URL
+      - name: price
+        type: ["null", "string"]
+        description: Current variation price
+      - name: purchasable
+        type: ["null", "boolean"]
+        description: Can be bought
+      - name: regular_price
+        type: ["null", "string"]
+        description: Variation regular price
+      - name: sale_price
+        type: ["null", "string"]
+        description: Variation sale price
+      - name: shipping_class
+        type: ["null", "string"]
+        description: Shipping class slug
+      - name: shipping_class_id
+        type: ["null", "integer"]
+        description: Shipping class ID
+      - name: sku
+        type: ["null", "string"]
+        description: Unique identifier (SKU)
+      - name: status
+        type: ["null", "string"]
+        description: Variation status
+      - name: stock_quantity
+        type: ["null", "integer"]
+        description: Stock quantity
+      - name: stock_status
+        type: ["null", "string"]
+        description: Controls the stock status
+      - name: tax_class
+        type: ["null", "string"]
+        description: Tax class
+      - name: tax_status
+        type: ["null", "string"]
+        description: Tax status
+      - name: virtual
+        type: ["null", "boolean"]
+        description: If virtual
+      - name: weight
+        type: ["null", "string"]
+        description: Variation weight
+    - entity: order_notes
+      fields:
+      - name: author
+        type: ["null", "string"]
+        description: Order note author
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the order note was created
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the order note was created, as GMT
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: note
+        type: ["null", "string"]
+        description: Order note content
+    - entity: refunds
+      fields:
+      - name: amount
+        type: ["null", "string"]
+        description: Refund amount
+      - name: date_created
+        type: ["null", "string"]
+        description: The date the refund was created
+      - name: date_created_gmt
+        type: ["null", "string"]
+        description: The date the refund was created, as GMT
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: line_items
+        type: ["null", "array"]
+        description: Line items data
+      - name: meta_data
+        type: ["null", "array"]
+        description: Meta data
+      - name: reason
+        type: ["null", "string"]
+        description: Reason for refund
+      - name: refunded_by
+        type: ["null", "integer"]
+        description: User ID of user who created the refund
+      - name: refunded_payment
+        type: ["null", "boolean"]
+        description: If the payment was refunded via the API
+    - entity: payment_gateways
+      fields:
+      - name: description
+        type: ["null", "string"]
+        description: Payment gateway description on checkout
+      - name: enabled
+        type: ["null", "boolean"]
+        description: Payment gateway enabled status
+      - name: id
+        type: ["null", "string"]
+        description: Payment gateway ID
+      - name: method_description
+        type: ["null", "string"]
+        description: Payment gateway method description
+      - name: method_supports
+        type: ["null", "array"]
+        description: Supported features
+      - name: method_title
+        type: ["null", "string"]
+        description: Payment gateway method title
+      - name: order
+        type: ["null", "string", "integer"]
+        description: Payment gateway sort order
+      - name: settings
+        type: ["null", "object"]
+        description: Payment gateway settings
+      - name: title
+        type: ["null", "string"]
+        description: Payment gateway title on checkout
+    - entity: shipping_methods
+      fields:
+      - name: description
+        type: ["null", "string"]
+        description: Shipping method description
+      - name: id
+        type: ["null", "string"]
+        description: Method ID
+      - name: title
+        type: ["null", "string"]
+        description: Shipping method title
+    - entity: shipping_zones
+      fields:
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: name
+        type: ["null", "string"]
+        description: Shipping zone name
+      - name: order
+        type: ["null", "integer"]
+        description: Shipping zone order
+    - entity: tax_rates
+      fields:
+      - name: cities
+        type: ["null", "array"]
+        description: City names
+      - name: city
+        type: ["null", "string"]
+        description: City name
+      - name: class
+        type: ["null", "string"]
+        description: Tax class
+      - name: compound
+        type: ["null", "boolean"]
+        description: Whether this is a compound rate
+      - name: country
+        type: ["null", "string"]
+        description: Country ISO 3166 code
+      - name: id
+        type: ["null", "integer"]
+        description: Unique identifier
+      - name: name
+        type: ["null", "string"]
+        description: Tax rate name
+      - name: order
+        type: ["null", "integer"]
+        description: Order in queries
+      - name: postcode
+        type: ["null", "string"]
+        description: Postcode/ZIP
+      - name: postcodes
+        type: ["null", "array"]
+        description: Postcodes/ZIPs
+      - name: priority
+        type: ["null", "integer"]
+        description: Tax priority
+      - name: rate
+        type: ["null", "string"]
+        description: Tax rate
+      - name: shipping
+        type: ["null", "boolean"]
+        description: Applied to shipping
+      - name: state
+        type: ["null", "string"]
+        description: State code
+    - entity: tax_classes
+      fields:
+      - name: name
+        type: ["null", "string"]
+        description: Tax class name
+      - name: slug
+        type: ["null", "string"]
+        description: Unique identifier
+
+servers:
+- url: https://{shop}/wp-json/wc/v3
+  description: WooCommerce store API
+  variables:
+    shop:
+      default: example.com
+      description: The WooCommerce store domain (e.g., mystore.com)
+  x-airbyte-replication-environment-mapping:
+    shop: shop
+
+security:
+- basicAuth: []
+
+paths:
+  # ──────────────────────────────────────────────
+  # Customers
+  # ──────────────────────────────────────────────
+  /customers:
+    get:
+      summary: List customers
+      operationId: listCustomers
+      x-airbyte-entity: customers
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [id, include, name, registered_date]
+          default: name
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: email
+        in: query
+        description: Limit result set to resources with a specific email
+        schema:
+          type: string
+      - name: role
+        in: query
+        description: Limit result set to resources with a specific role
+        schema:
+          type: string
+          enum: [all, administrator, editor, author, contributor, subscriber, customer, shop_manager]
+          default: customer
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+
+  /customers/{id}:
+    get:
+      summary: Retrieve a customer
+      operationId: getCustomer
+      x-airbyte-entity: customers
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the customer
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Customer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: Customer not found
+
+  # ──────────────────────────────────────────────
+  # Orders
+  # ──────────────────────────────────────────────
+  /orders:
+    get:
+      summary: List orders
+      operationId: listOrders
+      x-airbyte-entity: orders
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Limit response to resources published after a given ISO8601 date
+        schema:
+          type: string
+      - name: before
+        in: query
+        description: Limit response to resources published before a given ISO8601 date
+        schema:
+          type: string
+      - name: modified_after
+        in: query
+        description: Limit response to resources modified after a given ISO8601 date
+        schema:
+          type: string
+      - name: modified_before
+        in: query
+        description: Limit response to resources modified before a given ISO8601 date
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Limit result set to orders with a specific status
+        schema:
+          type: string
+          enum: [any, pending, processing, on-hold, completed, cancelled, refunded, failed, trash]
+          default: any
+      - name: customer
+        in: query
+        description: Limit result set to orders assigned to a specific customer ID
+        schema:
+          type: integer
+      - name: product
+        in: query
+        description: Limit result set to orders that include a specific product ID
+        schema:
+          type: integer
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [date, id, include, title, slug, modified]
+          default: date
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+
+  /orders/{id}:
+    get:
+      summary: Retrieve an order
+      operationId: getOrder
+      x-airbyte-entity: orders
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the order
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Order object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Order not found
+
+  # ──────────────────────────────────────────────
+  # Products
+  # ──────────────────────────────────────────────
+  /products:
+    get:
+      summary: List products
+      operationId: listProducts
+      x-airbyte-entity: products
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Limit response to resources published after a given ISO8601 date
+        schema:
+          type: string
+      - name: before
+        in: query
+        description: Limit response to resources published before a given ISO8601 date
+        schema:
+          type: string
+      - name: modified_after
+        in: query
+        description: Limit response to resources modified after a given ISO8601 date
+        schema:
+          type: string
+      - name: modified_before
+        in: query
+        description: Limit response to resources modified before a given ISO8601 date
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Limit result set to products with a specific status
+        schema:
+          type: string
+          enum: [any, draft, pending, private, publish]
+          default: any
+      - name: type
+        in: query
+        description: Limit result set to products with a specific type
+        schema:
+          type: string
+          enum: [simple, grouped, external, variable]
+      - name: sku
+        in: query
+        description: Limit result set to products with a specific SKU
+        schema:
+          type: string
+      - name: featured
+        in: query
+        description: Limit result set to featured products
+        schema:
+          type: boolean
+      - name: category
+        in: query
+        description: Limit result set to products assigned a specific category ID
+        schema:
+          type: string
+      - name: tag
+        in: query
+        description: Limit result set to products assigned a specific tag ID
+        schema:
+          type: string
+      - name: on_sale
+        in: query
+        description: Limit result set to products on sale
+        schema:
+          type: boolean
+      - name: min_price
+        in: query
+        description: Limit result set to products based on a minimum price
+        schema:
+          type: string
+      - name: max_price
+        in: query
+        description: Limit result set to products based on a maximum price
+        schema:
+          type: string
+      - name: stock_status
+        in: query
+        description: Limit result set to products with specified stock status
+        schema:
+          type: string
+          enum: [instock, outofstock, onbackorder]
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [date, id, include, title, slug, price, popularity, rating, menu_order, modified]
+          default: date
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      summary: Retrieve a product
+      operationId: getProduct
+      x-airbyte-entity: products
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the product
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+
+  # ──────────────────────────────────────────────
+  # Coupons
+  # ──────────────────────────────────────────────
+  /coupons:
+    get:
+      summary: List coupons
+      operationId: listCoupons
+      x-airbyte-entity: coupons
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Limit response to resources published after a given ISO8601 date
+        schema:
+          type: string
+      - name: before
+        in: query
+        description: Limit response to resources published before a given ISO8601 date
+        schema:
+          type: string
+      - name: modified_after
+        in: query
+        description: Limit response to resources modified after a given ISO8601 date
+        schema:
+          type: string
+      - name: modified_before
+        in: query
+        description: Limit response to resources modified before a given ISO8601 date
+        schema:
+          type: string
+      - name: code
+        in: query
+        description: Limit result set to resources with a specific code
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [date, id, include, title, slug, modified]
+          default: date
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+      responses:
+        "200":
+          description: List of coupons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Coupon"
+
+  /coupons/{id}:
+    get:
+      summary: Retrieve a coupon
+      operationId: getCoupon
+      x-airbyte-entity: coupons
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the coupon
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Coupon object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Coupon"
+        "404":
+          description: Coupon not found
+
+  # ──────────────────────────────────────────────
+  # Product Categories
+  # ──────────────────────────────────────────────
+  /products/categories:
+    get:
+      summary: List product categories
+      operationId: listProductCategories
+      x-airbyte-entity: product_categories
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [id, include, name, slug, term_group, description, count]
+          default: name
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: hide_empty
+        in: query
+        description: Whether to hide categories not assigned to any products
+        schema:
+          type: boolean
+          default: false
+      - name: parent
+        in: query
+        description: Limit result set to categories assigned a specific parent
+        schema:
+          type: integer
+      - name: product
+        in: query
+        description: Limit result set to categories assigned to a specific product
+        schema:
+          type: integer
+      - name: slug
+        in: query
+        description: Limit result set to categories with a specific slug
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of product categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductCategory"
+
+  /products/categories/{id}:
+    get:
+      summary: Retrieve a product category
+      operationId: getProductCategory
+      x-airbyte-entity: product_categories
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the category
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product category object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductCategory"
+        "404":
+          description: Category not found
+
+  # ──────────────────────────────────────────────
+  # Product Tags
+  # ──────────────────────────────────────────────
+  /products/tags:
+    get:
+      summary: List product tags
+      operationId: listProductTags
+      x-airbyte-entity: product_tags
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [id, include, name, slug, term_group, description, count]
+          default: name
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: hide_empty
+        in: query
+        description: Whether to hide tags not assigned to any products
+        schema:
+          type: boolean
+          default: false
+      - name: product
+        in: query
+        description: Limit result set to tags assigned to a specific product
+        schema:
+          type: integer
+      - name: slug
+        in: query
+        description: Limit result set to tags with a specific slug
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of product tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductTag"
+
+  /products/tags/{id}:
+    get:
+      summary: Retrieve a product tag
+      operationId: getProductTag
+      x-airbyte-entity: product_tags
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the tag
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product tag object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductTag"
+        "404":
+          description: Tag not found
+
+  # ──────────────────────────────────────────────
+  # Product Reviews
+  # ──────────────────────────────────────────────
+  /products/reviews:
+    get:
+      summary: List product reviews
+      operationId: listProductReviews
+      x-airbyte-entity: product_reviews
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Limit response to reviews published after a given ISO8601 date
+        schema:
+          type: string
+      - name: before
+        in: query
+        description: Limit response to reviews published before a given ISO8601 date
+        schema:
+          type: string
+      - name: product
+        in: query
+        description: Limit result set to reviews assigned to specific product IDs
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: status
+        in: query
+        description: Limit result set to reviews assigned a specific status
+        schema:
+          type: string
+          enum: [all, hold, approved, spam, trash]
+          default: approved
+      responses:
+        "200":
+          description: List of product reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductReview"
+
+  /products/reviews/{id}:
+    get:
+      summary: Retrieve a product review
+      operationId: getProductReview
+      x-airbyte-entity: product_reviews
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the review
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product review object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductReview"
+        "404":
+          description: Review not found
+
+  # ──────────────────────────────────────────────
+  # Product Attributes
+  # ──────────────────────────────────────────────
+  /products/attributes:
+    get:
+      summary: List product attributes
+      operationId: listProductAttributes
+      x-airbyte-entity: product_attributes
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      responses:
+        "200":
+          description: List of product attributes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductAttribute"
+
+  /products/attributes/{id}:
+    get:
+      summary: Retrieve a product attribute
+      operationId: getProductAttribute
+      x-airbyte-entity: product_attributes
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the attribute
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product attribute object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductAttribute"
+        "404":
+          description: Attribute not found
+
+  # ──────────────────────────────────────────────
+  # Product Variations
+  # ──────────────────────────────────────────────
+  /products/{product_id}/variations:
+    get:
+      summary: List product variations
+      operationId: listProductVariations
+      x-airbyte-entity: product_variations
+      x-airbyte-action: list
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: Unique identifier for the parent product
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: search
+        in: query
+        description: Limit results to those matching a string
+        schema:
+          type: string
+      - name: sku
+        in: query
+        description: Limit result set to variations with a specific SKU
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Limit result set to variations with a specific status
+        schema:
+          type: string
+          enum: [any, draft, pending, private, publish]
+          default: any
+      - name: stock_status
+        in: query
+        description: Limit result set to variations with specified stock status
+        schema:
+          type: string
+          enum: [instock, outofstock, onbackorder]
+      - name: on_sale
+        in: query
+        description: Limit result set to variations on sale
+        schema:
+          type: boolean
+      - name: min_price
+        in: query
+        description: Limit result set to variations based on a minimum price
+        schema:
+          type: string
+      - name: max_price
+        in: query
+        description: Limit result set to variations based on a maximum price
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [date, id, include, title, slug, menu_order, modified]
+          default: date
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: desc
+      responses:
+        "200":
+          description: List of product variations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductVariation"
+
+  /products/{product_id}/variations/{id}:
+    get:
+      summary: Retrieve a product variation
+      operationId: getProductVariation
+      x-airbyte-entity: product_variations
+      x-airbyte-action: get
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: Unique identifier for the parent product
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the variation
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product variation object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductVariation"
+        "404":
+          description: Variation not found
+
+  # ──────────────────────────────────────────────
+  # Order Notes
+  # ──────────────────────────────────────────────
+  /orders/{order_id}/notes:
+    get:
+      summary: List order notes
+      operationId: listOrderNotes
+      x-airbyte-entity: order_notes
+      x-airbyte-action: list
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Unique identifier for the order
+        schema:
+          type: integer
+      - name: type
+        in: query
+        description: Limit result set to a specific note type
+        schema:
+          type: string
+          enum: [any, customer, internal]
+          default: any
+      responses:
+        "200":
+          description: List of order notes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderNote"
+
+  /orders/{order_id}/notes/{id}:
+    get:
+      summary: Retrieve an order note
+      operationId: getOrderNote
+      x-airbyte-entity: order_notes
+      x-airbyte-action: get
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Unique identifier for the order
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the note
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Order note object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderNote"
+        "404":
+          description: Note not found
+
+  # ──────────────────────────────────────────────
+  # Order Refunds
+  # ──────────────────────────────────────────────
+  /orders/{order_id}/refunds:
+    get:
+      summary: List order refunds
+      operationId: listRefunds
+      x-airbyte-entity: refunds
+      x-airbyte-action: list
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Unique identifier for the order
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      responses:
+        "200":
+          description: List of refunds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Refund"
+
+  /orders/{order_id}/refunds/{id}:
+    get:
+      summary: Retrieve a refund
+      operationId: getRefund
+      x-airbyte-entity: refunds
+      x-airbyte-action: get
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Unique identifier for the order
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the refund
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Refund object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Refund"
+        "404":
+          description: Refund not found
+
+  # ──────────────────────────────────────────────
+  # Payment Gateways
+  # ──────────────────────────────────────────────
+  /payment_gateways:
+    get:
+      summary: List payment gateways
+      operationId: listPaymentGateways
+      x-airbyte-entity: payment_gateways
+      x-airbyte-action: list
+      responses:
+        "200":
+          description: List of payment gateways
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentGateway"
+
+  /payment_gateways/{id}:
+    get:
+      summary: Retrieve a payment gateway
+      operationId: getPaymentGateway
+      x-airbyte-entity: payment_gateways
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the payment gateway
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Payment gateway object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentGateway"
+        "404":
+          description: Payment gateway not found
+
+  # ──────────────────────────────────────────────
+  # Shipping Methods
+  # ──────────────────────────────────────────────
+  /shipping_methods:
+    get:
+      summary: List shipping methods
+      operationId: listShippingMethods
+      x-airbyte-entity: shipping_methods
+      x-airbyte-action: list
+      responses:
+        "200":
+          description: List of shipping methods
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ShippingMethod"
+
+  /shipping_methods/{id}:
+    get:
+      summary: Retrieve a shipping method
+      operationId: getShippingMethod
+      x-airbyte-entity: shipping_methods
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the shipping method
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Shipping method object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShippingMethod"
+        "404":
+          description: Shipping method not found
+
+  # ──────────────────────────────────────────────
+  # Shipping Zones
+  # ──────────────────────────────────────────────
+  /shipping/zones:
+    get:
+      summary: List shipping zones
+      operationId: listShippingZones
+      x-airbyte-entity: shipping_zones
+      x-airbyte-action: list
+      responses:
+        "200":
+          description: List of shipping zones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ShippingZone"
+
+  /shipping/zones/{id}:
+    get:
+      summary: Retrieve a shipping zone
+      operationId: getShippingZone
+      x-airbyte-entity: shipping_zones
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the shipping zone
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Shipping zone object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShippingZone"
+        "404":
+          description: Shipping zone not found
+
+  # ──────────────────────────────────────────────
+  # Tax Rates
+  # ──────────────────────────────────────────────
+  /taxes:
+    get:
+      summary: List tax rates
+      operationId: listTaxRates
+      x-airbyte-entity: tax_rates
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Current page of the collection
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to return per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: class
+        in: query
+        description: Sort by tax class
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Sort collection by attribute
+        schema:
+          type: string
+          enum: [id, order, priority]
+          default: order
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      responses:
+        "200":
+          description: List of tax rates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaxRate"
+
+  /taxes/{id}:
+    get:
+      summary: Retrieve a tax rate
+      operationId: getTaxRate
+      x-airbyte-entity: tax_rates
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the tax rate
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Tax rate object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaxRate"
+        "404":
+          description: Tax rate not found
+
+  # ──────────────────────────────────────────────
+  # Tax Classes
+  # ──────────────────────────────────────────────
+  /taxes/classes:
+    get:
+      summary: List tax classes
+      operationId: listTaxClasses
+      x-airbyte-entity: tax_classes
+      x-airbyte-action: list
+      responses:
+        "200":
+          description: List of tax classes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaxClass"
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: WooCommerce REST API authentication using consumer key and consumer secret
+      x-airbyte-auth-config:
+        title: WooCommerce API Key Authentication
+        type: object
+        required:
+        - api_key
+        - api_secret
+        properties:
+          api_key:
+            type: string
+            title: Consumer Key
+            description: WooCommerce REST API consumer key (starts with ck_)
+          api_secret:
+            type: string
+            title: Consumer Secret
+            description: WooCommerce REST API consumer secret (starts with cs_)
+        auth_mapping:
+          username: "${api_key}"
+          password: "${api_secret}"
+        replication_auth_key_mapping:
+          api_key: "api_key"
+          api_secret: "api_secret"
+
+  schemas:
+    # ──────────────────────────────────────────────
+    # Customer
+    # ──────────────────────────────────────────────
+    Customer:
+      type: object
+      x-airbyte-entity-name: customers
+      x-airbyte-stream-name: customers
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        date_created:
+          type: ["null", "string"]
+          description: The date the customer was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the customer was created, as GMT
+        date_modified:
+          type: ["null", "string"]
+          description: The date the customer was last modified, in the site's timezone
+        date_modified_gmt:
+          type: ["null", "string"]
+          description: The date the customer was last modified, as GMT
+        email:
+          type: ["null", "string"]
+          description: The email address for the customer
+        first_name:
+          type: ["null", "string"]
+          description: Customer first name
+        last_name:
+          type: ["null", "string"]
+          description: Customer last name
+        role:
+          type: ["null", "string"]
+          description: Customer role
+        username:
+          type: ["null", "string"]
+          description: Customer login name
+        billing:
+          type: ["null", "object"]
+          description: List of billing address data
+          properties:
+            first_name:
+              type: ["null", "string"]
+            last_name:
+              type: ["null", "string"]
+            company:
+              type: ["null", "string"]
+            address_1:
+              type: ["null", "string"]
+            address_2:
+              type: ["null", "string"]
+            city:
+              type: ["null", "string"]
+            state:
+              type: ["null", "string"]
+            postcode:
+              type: ["null", "string"]
+            country:
+              type: ["null", "string"]
+            email:
+              type: ["null", "string"]
+            phone:
+              type: ["null", "string"]
+        shipping:
+          type: ["null", "object"]
+          description: List of shipping address data
+          properties:
+            first_name:
+              type: ["null", "string"]
+            last_name:
+              type: ["null", "string"]
+            company:
+              type: ["null", "string"]
+            address_1:
+              type: ["null", "string"]
+            address_2:
+              type: ["null", "string"]
+            city:
+              type: ["null", "string"]
+            state:
+              type: ["null", "string"]
+            postcode:
+              type: ["null", "string"]
+            country:
+              type: ["null", "string"]
+        is_paying_customer:
+          type: ["null", "boolean"]
+          description: Is the customer a paying customer
+        avatar_url:
+          type: ["null", "string"]
+          description: Avatar URL
+        meta_data:
+          type: ["null", "array"]
+          description: Meta data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              key:
+                type: ["null", "string"]
+              value:
+                type: ["null", "string"]
+
+    # ──────────────────────────────────────────────
+    # Order
+    # ──────────────────────────────────────────────
+    Order:
+      type: object
+      x-airbyte-entity-name: orders
+      x-airbyte-stream-name: orders
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        parent_id:
+          type: ["null", "integer"]
+          description: Parent order ID
+        number:
+          type: ["null", "string"]
+          description: Order number
+        order_key:
+          type: ["null", "string"]
+          description: Order key
+        created_via:
+          type: ["null", "string"]
+          description: Shows where the order was created
+        version:
+          type: ["null", "string"]
+          description: Version of WooCommerce which last updated the order
+        status:
+          type: ["null", "string"]
+          description: Order status
+        currency:
+          type: ["null", "string"]
+          description: Currency the order was created with, in ISO format
+        currency_symbol:
+          type: ["null", "string"]
+          description: Currency symbol
+        date_created:
+          type: ["null", "string"]
+          description: The date the order was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the order was created, as GMT
+        date_modified:
+          type: ["null", "string"]
+          description: The date the order was last modified, in the site's timezone
+        date_modified_gmt:
+          type: ["null", "string"]
+          description: The date the order was last modified, as GMT
+        discount_total:
+          type: ["null", "string"]
+          description: Total discount amount for the order
+        discount_tax:
+          type: ["null", "string"]
+          description: Total discount tax amount for the order
+        shipping_total:
+          type: ["null", "string"]
+          description: Total shipping amount for the order
+        shipping_tax:
+          type: ["null", "string"]
+          description: Total shipping tax amount for the order
+        cart_tax:
+          type: ["null", "string"]
+          description: Sum of line item taxes only
+        total:
+          type: ["null", "string"]
+          description: Grand total
+        total_tax:
+          type: ["null", "string"]
+          description: Sum of all taxes
+        prices_include_tax:
+          type: ["null", "boolean"]
+          description: True if the prices included tax during checkout
+        customer_id:
+          type: ["null", "integer"]
+          description: User ID who owns the order (0 for guests)
+        customer_ip_address:
+          type: ["null", "string"]
+          description: Customer's IP address
+        customer_user_agent:
+          type: ["null", "string"]
+          description: User agent of the customer
+        customer_note:
+          type: ["null", "string"]
+          description: Note left by the customer during checkout
+        billing:
+          type: ["null", "object"]
+          description: Billing address
+          properties:
+            first_name:
+              type: ["null", "string"]
+            last_name:
+              type: ["null", "string"]
+            company:
+              type: ["null", "string"]
+            address_1:
+              type: ["null", "string"]
+            address_2:
+              type: ["null", "string"]
+            city:
+              type: ["null", "string"]
+            state:
+              type: ["null", "string"]
+            postcode:
+              type: ["null", "string"]
+            country:
+              type: ["null", "string"]
+            email:
+              type: ["null", "string"]
+            phone:
+              type: ["null", "string"]
+        shipping:
+          type: ["null", "object"]
+          description: Shipping address
+          properties:
+            first_name:
+              type: ["null", "string"]
+            last_name:
+              type: ["null", "string"]
+            company:
+              type: ["null", "string"]
+            address_1:
+              type: ["null", "string"]
+            address_2:
+              type: ["null", "string"]
+            city:
+              type: ["null", "string"]
+            state:
+              type: ["null", "string"]
+            postcode:
+              type: ["null", "string"]
+            country:
+              type: ["null", "string"]
+        payment_method:
+          type: ["null", "string"]
+          description: Payment method ID
+        payment_method_title:
+          type: ["null", "string"]
+          description: Payment method title
+        transaction_id:
+          type: ["null", "string"]
+          description: Unique transaction ID
+        date_paid:
+          type: ["null", "string"]
+          description: The date the order was paid, in the site's timezone
+        date_paid_gmt:
+          type: ["null", "string"]
+          description: The date the order was paid, as GMT
+        date_completed:
+          type: ["null", "string"]
+          description: The date the order was completed, in the site's timezone
+        date_completed_gmt:
+          type: ["null", "string"]
+          description: The date the order was completed, as GMT
+        cart_hash:
+          type: ["null", "string"]
+          description: MD5 hash of cart items to ensure orders are not modified
+        meta_data:
+          type: ["null", "array"]
+          description: Meta data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              key:
+                type: ["null", "string"]
+              value: {}
+        line_items:
+          type: ["null", "array"]
+          description: Line items data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              product_id:
+                type: ["null", "integer"]
+              variation_id:
+                type: ["null", "integer"]
+              quantity:
+                type: ["null", "integer"]
+              tax_class:
+                type: ["null", "string"]
+              subtotal:
+                type: ["null", "string"]
+              subtotal_tax:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+              total_tax:
+                type: ["null", "string"]
+              taxes:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    total:
+                      type: ["null", "string"]
+                    subtotal:
+                      type: ["null", "string"]
+              meta_data:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    key:
+                      type: ["null", "string"]
+                    value: {}
+                    display_key:
+                      type: ["null", "string"]
+                    display_value:
+                      type: ["null", "string"]
+              sku:
+                type: ["null", "string"]
+              price:
+                type: ["null", "number"]
+              image:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "integer", "string"]
+                  src:
+                    type: ["null", "string"]
+              parent_name:
+                type: ["null", "string"]
+        tax_lines:
+          type: ["null", "array"]
+          description: Tax lines data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              rate_code:
+                type: ["null", "string"]
+              rate_id:
+                type: ["null", "integer"]
+              label:
+                type: ["null", "string"]
+              compound:
+                type: ["null", "boolean"]
+              tax_total:
+                type: ["null", "string"]
+              shipping_tax_total:
+                type: ["null", "string"]
+              meta_data:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    key:
+                      type: ["null", "string"]
+                    value: {}
+        shipping_lines:
+          type: ["null", "array"]
+          description: Shipping lines data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              method_title:
+                type: ["null", "string"]
+              method_id:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+              total_tax:
+                type: ["null", "string"]
+              taxes:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    total:
+                      type: ["null", "string"]
+                    subtotal:
+                      type: ["null", "string"]
+              meta_data:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    key:
+                      type: ["null", "string"]
+                    value: {}
+        fee_lines:
+          type: ["null", "array"]
+          description: Fee lines data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              tax_class:
+                type: ["null", "string"]
+              tax_status:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+              total_tax:
+                type: ["null", "string"]
+              taxes:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    total:
+                      type: ["null", "string"]
+                    subtotal:
+                      type: ["null", "string"]
+              meta_data:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    key:
+                      type: ["null", "string"]
+                    value: {}
+        coupon_lines:
+          type: ["null", "array"]
+          description: Coupons line data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              code:
+                type: ["null", "string"]
+              discount:
+                type: ["null", "string"]
+              discount_tax:
+                type: ["null", "string"]
+              meta_data:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    key:
+                      type: ["null", "string"]
+                    value: {}
+        refunds:
+          type: ["null", "array"]
+          description: List of refunds
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              reason:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+        payment_url:
+          type: ["null", "string"]
+          description: URL to the payment page for the order
+        is_editable:
+          type: ["null", "boolean"]
+          description: Whether the order is editable
+        needs_payment:
+          type: ["null", "boolean"]
+          description: Whether the order needs payment
+        needs_processing:
+          type: ["null", "boolean"]
+          description: Whether the order needs processing
+
+    # ──────────────────────────────────────────────
+    # Product
+    # ──────────────────────────────────────────────
+    Product:
+      type: object
+      x-airbyte-entity-name: products
+      x-airbyte-stream-name: products
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        name:
+          type: ["null", "string"]
+          description: Product name
+        slug:
+          type: ["null", "string"]
+          description: Product slug
+        permalink:
+          type: ["null", "string"]
+          description: Product URL
+        date_created:
+          type: ["null", "string"]
+          description: The date the product was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the product was created, as GMT
+        date_modified:
+          type: ["null", "string"]
+          description: The date the product was last modified, in the site's timezone
+        date_modified_gmt:
+          type: ["null", "string"]
+          description: The date the product was last modified, as GMT
+        type:
+          type: ["null", "string"]
+          description: Product type (simple, grouped, external, variable)
+        status:
+          type: ["null", "string"]
+          description: Product status (draft, pending, private, publish)
+        featured:
+          type: ["null", "boolean"]
+          description: Featured product
+        catalog_visibility:
+          type: ["null", "string"]
+          description: Catalog visibility (visible, catalog, search, hidden)
+        description:
+          type: ["null", "string"]
+          description: Product description
+        short_description:
+          type: ["null", "string"]
+          description: Product short description
+        sku:
+          type: ["null", "string"]
+          description: Unique identifier (SKU)
+        price:
+          type: ["null", "string"]
+          description: Current product price
+        regular_price:
+          type: ["null", "string"]
+          description: Product regular price
+        sale_price:
+          type: ["null", "string"]
+          description: Product sale price
+        date_on_sale_from:
+          type: ["null", "string"]
+          description: Start date of sale price, in the site's timezone
+        date_on_sale_from_gmt:
+          type: ["null", "string"]
+          description: Start date of sale price, as GMT
+        date_on_sale_to:
+          type: ["null", "string"]
+          description: End date of sale price, in the site's timezone
+        date_on_sale_to_gmt:
+          type: ["null", "string"]
+          description: End date of sale price, as GMT
+        price_html:
+          type: ["null", "string"]
+          description: Price formatted in HTML
+        on_sale:
+          type: ["null", "boolean"]
+          description: Shows if the product is on sale
+        purchasable:
+          type: ["null", "boolean"]
+          description: Shows if the product can be bought
+        total_sales:
+          type: ["null", "integer"]
+          description: Amount of sales
+        virtual:
+          type: ["null", "boolean"]
+          description: If the product is virtual
+        downloadable:
+          type: ["null", "boolean"]
+          description: If the product is downloadable
+        downloads:
+          type: ["null", "array"]
+          description: List of downloadable files
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              file:
+                type: ["null", "string"]
+        download_limit:
+          type: ["null", "integer"]
+          description: Number of times downloadable files can be downloaded after purchase
+        download_expiry:
+          type: ["null", "integer"]
+          description: Number of days until access to downloadable files expires
+        external_url:
+          type: ["null", "string"]
+          description: Product external URL (only for external products)
+        button_text:
+          type: ["null", "string"]
+          description: Product external button text (only for external products)
+        tax_status:
+          type: ["null", "string"]
+          description: Tax status (taxable, shipping, none)
+        tax_class:
+          type: ["null", "string"]
+          description: Tax class
+        manage_stock:
+          type: ["null", "boolean"]
+          description: Stock management at product level
+        stock_quantity:
+          type: ["null", "integer"]
+          description: Stock quantity
+        stock_status:
+          type: ["null", "string"]
+          description: Controls the stock status of the product
+        backorders:
+          type: ["null", "string"]
+          description: If managing stock, this controls if backorders are allowed
+        backorders_allowed:
+          type: ["null", "boolean"]
+          description: Shows if backorders are allowed
+        backordered:
+          type: ["null", "boolean"]
+          description: Shows if the product is on backordered
+        sold_individually:
+          type: ["null", "boolean"]
+          description: Allow one item to be bought in a single order
+        weight:
+          type: ["null", "string"]
+          description: Product weight
+        dimensions:
+          type: ["null", "object"]
+          description: Product dimensions
+          properties:
+            length:
+              type: ["null", "string"]
+            width:
+              type: ["null", "string"]
+            height:
+              type: ["null", "string"]
+        shipping_required:
+          type: ["null", "boolean"]
+          description: Shows if the product needs to be shipped
+        shipping_taxable:
+          type: ["null", "boolean"]
+          description: Shows whether or not the product shipping is taxable
+        shipping_class:
+          type: ["null", "string"]
+          description: Shipping class slug
+        shipping_class_id:
+          type: ["null", "integer"]
+          description: Shipping class ID
+        reviews_allowed:
+          type: ["null", "boolean"]
+          description: Allow reviews
+        average_rating:
+          type: ["null", "string"]
+          description: Reviews average rating
+        rating_count:
+          type: ["null", "integer"]
+          description: Amount of reviews that the product has
+        related_ids:
+          type: ["null", "array"]
+          description: List of related products IDs
+          items:
+            type: ["null", "integer"]
+        upsell_ids:
+          type: ["null", "array"]
+          description: List of up-sell products IDs
+          items:
+            type: ["null", "integer"]
+        cross_sell_ids:
+          type: ["null", "array"]
+          description: List of cross-sell products IDs
+          items:
+            type: ["null", "integer"]
+        parent_id:
+          type: ["null", "integer"]
+          description: Product parent ID
+        purchase_note:
+          type: ["null", "string"]
+          description: Optional note to send the customer after purchase
+        categories:
+          type: ["null", "array"]
+          description: List of categories
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              slug:
+                type: ["null", "string"]
+        tags:
+          type: ["null", "array"]
+          description: List of tags
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              slug:
+                type: ["null", "string"]
+        images:
+          type: ["null", "array"]
+          description: List of images
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              date_created:
+                type: ["null", "string"]
+              date_created_gmt:
+                type: ["null", "string"]
+              date_modified:
+                type: ["null", "string"]
+              date_modified_gmt:
+                type: ["null", "string"]
+              src:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              alt:
+                type: ["null", "string"]
+        attributes:
+          type: ["null", "array"]
+          description: List of attributes
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              position:
+                type: ["null", "integer"]
+              visible:
+                type: ["null", "boolean"]
+              variation:
+                type: ["null", "boolean"]
+              options:
+                type: ["null", "array"]
+                items:
+                  type: ["null", "string"]
+        default_attributes:
+          type: ["null", "array"]
+          description: Defaults variation attributes
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              option:
+                type: ["null", "string"]
+        variations:
+          type: ["null", "array"]
+          description: List of variations IDs
+          items:
+            type: ["null", "integer"]
+        grouped_products:
+          type: ["null", "array"]
+          description: List of grouped products ID
+          items:
+            type: ["null", "integer"]
+        menu_order:
+          type: ["null", "integer"]
+          description: Menu order, used to custom sort products
+        meta_data:
+          type: ["null", "array"]
+          description: Meta data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              key:
+                type: ["null", "string"]
+              value: {}
+        low_stock_amount:
+          type: ["null", "integer"]
+          description: Low stock amount threshold
+        brands:
+          type: ["null", "array"]
+          description: List of product brands
+          items:
+            type: object
+        has_options:
+          type: ["null", "boolean"]
+          description: Whether the product has options
+        post_password:
+          type: ["null", "string"]
+          description: Post password
+        global_unique_id:
+          type: ["null", "string"]
+          description: GTIN, UPC, EAN or ISBN
+
+    # ──────────────────────────────────────────────
+    # Coupon
+    # ──────────────────────────────────────────────
+    Coupon:
+      type: object
+      x-airbyte-entity-name: coupons
+      x-airbyte-stream-name: coupons
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the object
+        code:
+          type: ["null", "string"]
+          description: Coupon code
+        amount:
+          type: ["null", "string"]
+          description: The amount of discount
+        date_created:
+          type: ["null", "string"]
+          description: The date the coupon was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the coupon was created, as GMT
+        date_modified:
+          type: ["null", "string"]
+          description: The date the coupon was last modified, in the site's timezone
+        date_modified_gmt:
+          type: ["null", "string"]
+          description: The date the coupon was last modified, as GMT
+        discount_type:
+          type: ["null", "string"]
+          description: Determines the type of discount that will be applied
+        description:
+          type: ["null", "string"]
+          description: Coupon description
+        date_expires:
+          type: ["null", "string"]
+          description: The date the coupon expires, in the site's timezone
+        date_expires_gmt:
+          type: ["null", "string"]
+          description: The date the coupon expires, as GMT
+        usage_count:
+          type: ["null", "integer"]
+          description: Number of times the coupon has been used already
+        individual_use:
+          type: ["null", "boolean"]
+          description: If true, the coupon can only be used individually
+        product_ids:
+          type: ["null", "array"]
+          description: List of product IDs the coupon can be used on
+          items:
+            type: ["null", "integer"]
+        excluded_product_ids:
+          type: ["null", "array"]
+          description: List of product IDs the coupon cannot be used on
+          items:
+            type: ["null", "integer"]
+        usage_limit:
+          type: ["null", "integer"]
+          description: How many times the coupon can be used in total
+        usage_limit_per_user:
+          type: ["null", "integer"]
+          description: How many times the coupon can be used per customer
+        limit_usage_to_x_items:
+          type: ["null", "integer"]
+          description: Max number of items in the cart the coupon can be applied to
+        free_shipping:
+          type: ["null", "boolean"]
+          description: If true and if the free shipping method requires a coupon, this coupon will enable free shipping
+        product_categories:
+          type: ["null", "array"]
+          description: List of category IDs the coupon applies to
+          items:
+            type: ["null", "integer"]
+        excluded_product_categories:
+          type: ["null", "array"]
+          description: List of category IDs the coupon does not apply to
+          items:
+            type: ["null", "integer"]
+        exclude_sale_items:
+          type: ["null", "boolean"]
+          description: If true, this coupon will not be applied to items that have sale prices
+        minimum_amount:
+          type: ["null", "string"]
+          description: Minimum order amount that needs to be in the cart before coupon applies
+        maximum_amount:
+          type: ["null", "string"]
+          description: Maximum order amount allowed when using the coupon
+        email_restrictions:
+          type: ["null", "array"]
+          description: List of email addresses that can use this coupon
+          items:
+            type: ["null", "string"]
+        used_by:
+          type: ["null", "array"]
+          description: List of user IDs (or guest emails) that have used the coupon
+          items:
+            type: ["null", "string"]
+        meta_data:
+          type: ["null", "array"]
+          description: Meta data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              key:
+                type: ["null", "string"]
+              value: {}
+        status:
+          type: ["null", "string"]
+          description: Coupon status (publish, draft, pending, trash)
+
+    # ──────────────────────────────────────────────
+    # Product Category
+    # ──────────────────────────────────────────────
+    ProductCategory:
+      type: object
+      x-airbyte-entity-name: product_categories
+      x-airbyte-stream-name: product_categories
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        name:
+          type: ["null", "string"]
+          description: Category name
+        slug:
+          type: ["null", "string"]
+          description: An alphanumeric identifier for the resource unique to its type
+        parent:
+          type: ["null", "integer"]
+          description: The ID for the parent of the resource
+        description:
+          type: ["null", "string"]
+          description: HTML description of the resource
+        display:
+          type: ["null", "string"]
+          description: Category archive display type
+        image:
+          type: ["null", "object"]
+          description: Image data
+          properties:
+            id:
+              type: ["null", "integer"]
+            date_created:
+              type: ["null", "string"]
+            date_created_gmt:
+              type: ["null", "string"]
+            date_modified:
+              type: ["null", "string"]
+            date_modified_gmt:
+              type: ["null", "string"]
+            src:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            alt:
+              type: ["null", "string"]
+        menu_order:
+          type: ["null", "integer"]
+          description: Menu order, used to custom sort the resource
+        count:
+          type: ["null", "integer"]
+          description: Number of published products for the resource
+
+    # ──────────────────────────────────────────────
+    # Product Tag
+    # ──────────────────────────────────────────────
+    ProductTag:
+      type: object
+      x-airbyte-entity-name: product_tags
+      x-airbyte-stream-name: product_tags
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        name:
+          type: ["null", "string"]
+          description: Tag name
+        slug:
+          type: ["null", "string"]
+          description: An alphanumeric identifier for the resource unique to its type
+        description:
+          type: ["null", "string"]
+          description: HTML description of the resource
+        count:
+          type: ["null", "integer"]
+          description: Number of published products for the resource
+
+    # ──────────────────────────────────────────────
+    # Product Review
+    # ──────────────────────────────────────────────
+    ProductReview:
+      type: object
+      x-airbyte-entity-name: product_reviews
+      x-airbyte-stream-name: product_reviews
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        date_created:
+          type: ["null", "string"]
+          description: The date the review was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the review was created, as GMT
+        product_id:
+          type: ["null", "integer"]
+          description: Unique identifier for the product that the review belongs to
+        product_name:
+          type: ["null", "string"]
+          description: Product name
+        product_permalink:
+          type: ["null", "string"]
+          description: Product permalink
+        status:
+          type: ["null", "string"]
+          description: Status of the review (approved, hold, spam, unspam, trash, untrash)
+        reviewer:
+          type: ["null", "string"]
+          description: Reviewer name
+        reviewer_email:
+          type: ["null", "string"]
+          description: Reviewer email
+        review:
+          type: ["null", "string"]
+          description: The content of the review
+        rating:
+          type: ["null", "integer"]
+          description: Review rating (0 to 5)
+        verified:
+          type: ["null", "boolean"]
+          description: Shows if the reviewer bought the product or not
+        reviewer_avatar_urls:
+          type: ["null", "object"]
+          description: Avatar URLs for the reviewer
+          additionalProperties:
+            type: ["null", "string"]
+
+    # ──────────────────────────────────────────────
+    # Product Attribute
+    # ──────────────────────────────────────────────
+    ProductAttribute:
+      type: object
+      x-airbyte-entity-name: product_attributes
+      x-airbyte-stream-name: product_attributes
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        name:
+          type: ["null", "string"]
+          description: Attribute name
+        slug:
+          type: ["null", "string"]
+          description: An alphanumeric identifier for the resource unique to its type
+        type:
+          type: ["null", "string"]
+          description: Type of attribute (select)
+        order_by:
+          type: ["null", "string"]
+          description: Default sort order (menu_order, name, name_num, id)
+        has_archives:
+          type: ["null", "boolean"]
+          description: Enable/Disable attribute archives
+
+    # ──────────────────────────────────────────────
+    # Product Variation
+    # ──────────────────────────────────────────────
+    ProductVariation:
+      type: object
+      x-airbyte-entity-name: product_variations
+      x-airbyte-stream-name: product_variations
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        date_created:
+          type: ["null", "string"]
+          description: The date the variation was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the variation was created, as GMT
+        date_modified:
+          type: ["null", "string"]
+          description: The date the variation was last modified, in the site's timezone
+        date_modified_gmt:
+          type: ["null", "string"]
+          description: The date the variation was last modified, as GMT
+        description:
+          type: ["null", "string"]
+          description: Variation description
+        permalink:
+          type: ["null", "string"]
+          description: Variation URL
+        sku:
+          type: ["null", "string"]
+          description: Unique identifier (SKU)
+        price:
+          type: ["null", "string"]
+          description: Current variation price
+        regular_price:
+          type: ["null", "string"]
+          description: Variation regular price
+        sale_price:
+          type: ["null", "string"]
+          description: Variation sale price
+        date_on_sale_from:
+          type: ["null", "string"]
+          description: Start date of sale price
+        date_on_sale_from_gmt:
+          type: ["null", "string"]
+          description: Start date of sale price, as GMT
+        date_on_sale_to:
+          type: ["null", "string"]
+          description: End date of sale price
+        date_on_sale_to_gmt:
+          type: ["null", "string"]
+          description: End date of sale price, as GMT
+        on_sale:
+          type: ["null", "boolean"]
+          description: Shows if the variation is on sale
+        status:
+          type: ["null", "string"]
+          description: Variation status
+        purchasable:
+          type: ["null", "boolean"]
+          description: Shows if the variation can be bought
+        virtual:
+          type: ["null", "boolean"]
+          description: If the variation is virtual
+        downloadable:
+          type: ["null", "boolean"]
+          description: If the variation is downloadable
+        downloads:
+          type: ["null", "array"]
+          description: List of downloadable files
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              file:
+                type: ["null", "string"]
+        download_limit:
+          type: ["null", "integer"]
+          description: Number of times downloadable files can be downloaded after purchase
+        download_expiry:
+          type: ["null", "integer"]
+          description: Number of days until access to downloadable files expires
+        tax_status:
+          type: ["null", "string"]
+          description: Tax status (taxable, shipping, none)
+        tax_class:
+          type: ["null", "string"]
+          description: Tax class
+        manage_stock:
+          type: ["null", "boolean"]
+          description: Stock management at variation level
+        stock_quantity:
+          type: ["null", "integer"]
+          description: Stock quantity
+        stock_status:
+          type: ["null", "string"]
+          description: Controls the stock status of the variation
+        backorders:
+          type: ["null", "string"]
+          description: If managing stock, this controls if backorders are allowed
+        backorders_allowed:
+          type: ["null", "boolean"]
+          description: Shows if backorders are allowed
+        backordered:
+          type: ["null", "boolean"]
+          description: Shows if the variation is on backordered
+        weight:
+          type: ["null", "string"]
+          description: Variation weight
+        dimensions:
+          type: ["null", "object"]
+          description: Variation dimensions
+          properties:
+            length:
+              type: ["null", "string"]
+            width:
+              type: ["null", "string"]
+            height:
+              type: ["null", "string"]
+        shipping_class:
+          type: ["null", "string"]
+          description: Shipping class slug
+        shipping_class_id:
+          type: ["null", "integer"]
+          description: Shipping class ID
+        image:
+          type: ["null", "object"]
+          description: Variation image data
+          properties:
+            id:
+              type: ["null", "integer"]
+            date_created:
+              type: ["null", "string"]
+            date_created_gmt:
+              type: ["null", "string"]
+            date_modified:
+              type: ["null", "string"]
+            date_modified_gmt:
+              type: ["null", "string"]
+            src:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            alt:
+              type: ["null", "string"]
+        attributes:
+          type: ["null", "array"]
+          description: List of attributes
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              option:
+                type: ["null", "string"]
+        menu_order:
+          type: ["null", "integer"]
+          description: Menu order, used to custom sort the resource
+        meta_data:
+          type: ["null", "array"]
+          description: Meta data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              key:
+                type: ["null", "string"]
+              value: {}
+        type:
+          type: ["null", "string"]
+          description: Variation type
+        global_unique_id:
+          type: ["null", "string"]
+          description: GTIN, UPC, EAN or ISBN
+        low_stock_amount:
+          type: ["null", "integer"]
+          description: Low stock amount threshold
+        name:
+          type: ["null", "string"]
+          description: Variation name
+        parent_id:
+          type: ["null", "integer"]
+          description: Parent product ID
+
+    # ──────────────────────────────────────────────
+    # Order Note
+    # ──────────────────────────────────────────────
+    OrderNote:
+      type: object
+      x-airbyte-entity-name: order_notes
+      x-airbyte-stream-name: order_notes
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        author:
+          type: ["null", "string"]
+          description: Order note author
+        date_created:
+          type: ["null", "string"]
+          description: The date the order note was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the order note was created, as GMT
+        note:
+          type: ["null", "string"]
+          description: Order note content
+        customer_note:
+          type: ["null", "boolean"]
+          description: If true, the note will be shown to customers
+
+    # ──────────────────────────────────────────────
+    # Refund
+    # ──────────────────────────────────────────────
+    Refund:
+      type: object
+      x-airbyte-entity-name: refunds
+      x-airbyte-stream-name: refunds
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        date_created:
+          type: ["null", "string"]
+          description: The date the refund was created, in the site's timezone
+        date_created_gmt:
+          type: ["null", "string"]
+          description: The date the refund was created, as GMT
+        amount:
+          type: ["null", "string"]
+          description: Refund amount
+        reason:
+          type: ["null", "string"]
+          description: Reason for refund
+        refunded_by:
+          type: ["null", "integer"]
+          description: User ID of user who created the refund
+        refunded_payment:
+          type: ["null", "boolean"]
+          description: If the payment was refunded via the API
+        meta_data:
+          type: ["null", "array"]
+          description: Meta data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              key:
+                type: ["null", "string"]
+              value: {}
+        line_items:
+          type: ["null", "array"]
+          description: Line items data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              product_id:
+                type: ["null", "integer"]
+              variation_id:
+                type: ["null", "integer"]
+              quantity:
+                type: ["null", "integer"]
+              tax_class:
+                type: ["null", "string"]
+              subtotal:
+                type: ["null", "string"]
+              subtotal_tax:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+              total_tax:
+                type: ["null", "string"]
+              taxes:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    total:
+                      type: ["null", "string"]
+                    subtotal:
+                      type: ["null", "string"]
+              meta_data:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    key:
+                      type: ["null", "string"]
+                    value: {}
+              sku:
+                type: ["null", "string"]
+              price:
+                type: ["null", "number"]
+        shipping_lines:
+          type: ["null", "array"]
+          description: Shipping lines data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              method_title:
+                type: ["null", "string"]
+              method_id:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+              total_tax:
+                type: ["null", "string"]
+        tax_lines:
+          type: ["null", "array"]
+          description: Tax lines data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              rate_code:
+                type: ["null", "string"]
+              rate_id:
+                type: ["null", "integer"]
+              label:
+                type: ["null", "string"]
+              compound:
+                type: ["null", "boolean"]
+              tax_total:
+                type: ["null", "string"]
+              shipping_tax_total:
+                type: ["null", "string"]
+        fee_lines:
+          type: ["null", "array"]
+          description: Fee lines data
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              tax_class:
+                type: ["null", "string"]
+              tax_status:
+                type: ["null", "string"]
+              total:
+                type: ["null", "string"]
+              total_tax:
+                type: ["null", "string"]
+
+    # ──────────────────────────────────────────────
+    # Payment Gateway
+    # ──────────────────────────────────────────────
+    PaymentGateway:
+      type: object
+      x-airbyte-entity-name: payment_gateways
+      x-airbyte-stream-name: payment_gateways
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Payment gateway ID
+        title:
+          type: ["null", "string"]
+          description: Payment gateway title on checkout
+        description:
+          type: ["null", "string"]
+          description: Payment gateway description on checkout
+        order:
+          type: ["null", "integer"]
+          description: Payment gateway sort order
+        enabled:
+          type: ["null", "boolean"]
+          description: Payment gateway enabled status
+        method_title:
+          type: ["null", "string"]
+          description: Payment gateway method title
+        method_description:
+          type: ["null", "string"]
+          description: Payment gateway method description
+        method_supports:
+          type: ["null", "array"]
+          description: Supported features for this payment gateway
+          items:
+            type: ["null", "string"]
+        settings:
+          type: ["null", "object"]
+          description: Payment gateway settings
+          additionalProperties: true
+        needs_setup:
+          type: ["null", "boolean"]
+          description: Whether the payment gateway needs setup
+        post_install_scripts:
+          type: ["null", "array"]
+          description: Post install scripts
+          items:
+            type: ["null", "string"]
+        settings_url:
+          type: ["null", "string"]
+          description: URL to the gateway settings page
+        connection_url:
+          type: ["null", "string"]
+          description: URL for the gateway connection
+        setup_help_text:
+          type: ["null", "string"]
+          description: Help text for setting up the gateway
+        required_settings_keys:
+          type: ["null", "array"]
+          description: Required settings keys
+          items:
+            type: ["null", "string"]
+
+    # ──────────────────────────────────────────────
+    # Shipping Method
+    # ──────────────────────────────────────────────
+    ShippingMethod:
+      type: object
+      x-airbyte-entity-name: shipping_methods
+      x-airbyte-stream-name: shipping_methods
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Method ID
+        title:
+          type: ["null", "string"]
+          description: Shipping method title
+        description:
+          type: ["null", "string"]
+          description: Shipping method description
+
+    # ──────────────────────────────────────────────
+    # Shipping Zone
+    # ──────────────────────────────────────────────
+    ShippingZone:
+      type: object
+      x-airbyte-entity-name: shipping_zones
+      x-airbyte-stream-name: shipping_zones
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        name:
+          type: ["null", "string"]
+          description: Shipping zone name
+        order:
+          type: ["null", "integer"]
+          description: Shipping zone order
+
+    # ──────────────────────────────────────────────
+    # Tax Rate
+    # ──────────────────────────────────────────────
+    TaxRate:
+      type: object
+      x-airbyte-entity-name: tax_rates
+      x-airbyte-stream-name: tax_rates
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique identifier for the resource
+        country:
+          type: ["null", "string"]
+          description: Country ISO 3166 code
+        state:
+          type: ["null", "string"]
+          description: State code
+        postcode:
+          type: ["null", "string"]
+          description: Postcode/ZIP
+        city:
+          type: ["null", "string"]
+          description: City name
+        postcodes:
+          type: ["null", "array"]
+          description: Postcodes/ZIPs
+          items:
+            type: ["null", "string"]
+        cities:
+          type: ["null", "array"]
+          description: City names
+          items:
+            type: ["null", "string"]
+        rate:
+          type: ["null", "string"]
+          description: Tax rate
+        name:
+          type: ["null", "string"]
+          description: Tax rate name
+        priority:
+          type: ["null", "integer"]
+          description: Tax priority
+        compound:
+          type: ["null", "boolean"]
+          description: Whether or not this is a compound rate
+        shipping:
+          type: ["null", "boolean"]
+          description: Whether or not this tax rate also gets applied to shipping
+        order:
+          type: ["null", "integer"]
+          description: Indicates the order that will appear in queries
+        class:
+          type: ["null", "string"]
+          description: Tax class
+
+    # ──────────────────────────────────────────────
+    # Tax Class
+    # ──────────────────────────────────────────────
+    TaxClass:
+      type: object
+      x-airbyte-entity-name: tax_classes
+      x-airbyte-stream-name: tax_classes
+      properties:
+        slug:
+          type: ["null", "string"]
+          description: Unique identifier for the resource
+        name:
+          type: ["null", "string"]
+          description: Tax class name

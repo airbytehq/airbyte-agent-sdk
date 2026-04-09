@@ -1,0 +1,1690 @@
+openapi: 3.1.0
+
+info:
+  title: Notion API Connector
+  version: 0.1.11
+  description: |
+    Notion is an all-in-one workspace for notes, docs, wikis, projects, and collaboration.
+    This connector provides read access to Notion workspaces including users, pages, data sources,
+    blocks, and comments through the Notion REST API (version 2025-09-03). It enables querying
+    workspace structure, page content, data source schemas, and collaboration data for productivity
+    analysis and content management insights.
+  x-airbyte-connector-name: notion
+  x-airbyte-connector-definition-id: 6e00b415-b02e-4160-bf02-58176a0ae687
+  x-airbyte-replication-version: "4.0.2"
+  x-airbyte-replication-compatibility: ">=4.0.1, <5.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Notion API Documentation
+      url: https://developers.notion.com/reference/intro
+    - type: authentication_guide
+      title: Notion Authentication Guide
+      url: https://developers.notion.com/reference/authentication
+  x-airbyte-skip-suggested-streams:
+    - databases
+  x-airbyte-entity-relationships:
+  - source_entity: blocks
+    target_entity: pages
+    foreign_key: block_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: comments
+    target_entity: pages
+    foreign_key: block_id
+    target_key: id
+    cardinality: many_to_one
+
+  x-airbyte-context-store:
+    disable_compaction: false
+    entities:
+      - entity: pages
+        fields:
+          - name: archived
+            type:
+              - 'null'
+              - boolean
+            description: Indicates whether the page is archived or not.
+          - name: cover
+            type:
+              - 'null'
+              - object
+            description: URL or reference to the page cover image.
+          - name: created_by
+            type:
+              - 'null'
+              - object
+            description: User ID or name of the creator of the page.
+          - name: created_time
+            type:
+              - 'null'
+              - string
+            description: Date and time when the page was created.
+          - name: icon
+            type:
+              - 'null'
+              - object
+            description: URL or reference to the page icon.
+          - name: id
+            type:
+              - 'null'
+              - string
+            description: Unique identifier of the page.
+          - name: in_trash
+            type:
+              - 'null'
+              - boolean
+            description: Indicates whether the page is in trash or not.
+          - name: last_edited_by
+            type:
+              - 'null'
+              - object
+            description: User ID or name of the last editor of the page.
+          - name: last_edited_time
+            type:
+              - 'null'
+              - string
+            description: Date and time when the page was last edited.
+          - name: object
+            type:
+              - 'null'
+              - object
+            description: Type or category of the page object.
+          - name: parent
+            type:
+              - 'null'
+              - object
+            description: ID or reference to the parent page.
+          - name: properties
+            type:
+              - 'null'
+              - array
+            description: Custom properties associated with the page.
+          - name: public_url
+            type:
+              - 'null'
+              - string
+            description: Publicly accessible URL of the page.
+          - name: url
+            type:
+              - 'null'
+              - string
+            description: URL of the page within the service.
+      - entity: users
+        fields:
+          - name: avatar_url
+            type:
+              - 'null'
+              - string
+            description: URL of the user's avatar
+          - name: bot
+            type:
+              - 'null'
+              - object
+            description: Bot-specific data
+          - name: id
+            type:
+              - 'null'
+              - string
+            description: Unique identifier for the user
+          - name: name
+            type:
+              - 'null'
+              - string
+            description: User's display name
+          - name: object
+            type:
+              - 'null'
+              - object
+            description: Always user
+          - name: person
+            type:
+              - 'null'
+              - object
+            description: Person-specific data
+          - name: type
+            type:
+              - 'null'
+              - object
+            description: Type of user (person or bot)
+      - entity: data_sources
+        fields:
+          - name: archived
+            type:
+              - 'null'
+              - boolean
+            description: Indicates if the data source is archived or not.
+          - name: cover
+            type:
+              - 'null'
+              - object
+            description: URL or reference to the cover image of the data source.
+          - name: created_by
+            type:
+              - 'null'
+              - object
+            description: The user who created the data source.
+          - name: created_time
+            type:
+              - 'null'
+              - string
+            description: The timestamp when the data source was created.
+          - name: database_parent
+            type:
+              - 'null'
+              - object
+            description: The grandparent of the data source (parent of the database).
+          - name: description
+            type:
+              - 'null'
+              - array
+            description: Description text associated with the data source.
+          - name: icon
+            type:
+              - 'null'
+              - object
+            description: URL or reference to the icon of the data source.
+          - name: id
+            type:
+              - 'null'
+              - string
+            description: Unique identifier of the data source.
+          - name: is_inline
+            type:
+              - 'null'
+              - boolean
+            description: Indicates if the data source is displayed inline.
+          - name: last_edited_by
+            type:
+              - 'null'
+              - object
+            description: The user who last edited the data source.
+          - name: last_edited_time
+            type:
+              - 'null'
+              - string
+            description: The timestamp when the data source was last edited.
+          - name: object
+            type:
+              - 'null'
+              - object
+            description: The type of object (data_source).
+          - name: parent
+            type:
+              - 'null'
+              - object
+            description: The parent database of the data source.
+          - name: properties
+            type:
+              - 'null'
+              - array
+            description: Schema of properties for the data source.
+          - name: public_url
+            type:
+              - 'null'
+              - string
+            description: Public URL to access the data source.
+          - name: title
+            type:
+              - 'null'
+              - array
+            description: Title or name of the data source.
+          - name: url
+            type:
+              - 'null'
+              - string
+            description: URL or reference to access the data source.
+      - entity: blocks
+        fields:
+          - name: archived
+            type:
+              - 'null'
+              - boolean
+            description: Indicates if the block is archived or not.
+          - name: bookmark
+            type:
+              - 'null'
+              - object
+            description: Represents a bookmark within the block
+          - name: breadcrumb
+            type:
+              - 'null'
+              - object
+            description: Represents a breadcrumb block.
+          - name: bulleted_list_item
+            type:
+              - 'null'
+              - object
+            description: Represents an item in a bulleted list.
+          - name: callout
+            type:
+              - 'null'
+              - object
+            description: Describes a callout message or content in the block
+          - name: child_database
+            type:
+              - 'null'
+              - object
+            description: Represents a child database block.
+          - name: child_page
+            type:
+              - 'null'
+              - object
+            description: Represents a child page block.
+          - name: code
+            type:
+              - 'null'
+              - object
+            description: Contains code snippets or blocks in the block content
+          - name: column
+            type:
+              - 'null'
+              - object
+            description: Represents a column block.
+          - name: column_list
+            type:
+              - 'null'
+              - object
+            description: Represents a list of columns.
+          - name: created_by
+            type:
+              - 'null'
+              - object
+            description: The user who created the block.
+          - name: created_time
+            type:
+              - 'null'
+              - string
+            description: The timestamp when the block was created.
+          - name: divider
+            type:
+              - 'null'
+              - object
+            description: Represents a divider block.
+          - name: embed
+            type:
+              - 'null'
+              - object
+            description: Contains embedded content such as videos, tweets, etc.
+          - name: equation
+            type:
+              - 'null'
+              - object
+            description: Represents an equation or mathematical formula in the block
+          - name: file
+            type:
+              - 'null'
+              - object
+            description: Represents a file block.
+          - name: has_children
+            type:
+              - 'null'
+              - boolean
+            description: Indicates if the block has children or not.
+          - name: heading_1
+            type:
+              - 'null'
+              - object
+            description: Represents a level 1 heading.
+          - name: heading_2
+            type:
+              - 'null'
+              - object
+            description: Represents a level 2 heading.
+          - name: heading_3
+            type:
+              - 'null'
+              - object
+            description: Represents a level 3 heading.
+          - name: id
+            type:
+              - 'null'
+              - string
+            description: The unique identifier of the block.
+          - name: image
+            type:
+              - 'null'
+              - object
+            description: Represents an image block.
+          - name: last_edited_by
+            type:
+              - 'null'
+              - object
+            description: The user who last edited the block.
+          - name: last_edited_time
+            type:
+              - 'null'
+              - string
+            description: The timestamp when the block was last edited.
+          - name: link_preview
+            type:
+              - 'null'
+              - object
+            description: Displays a preview of an external link within the block
+          - name: link_to_page
+            type:
+              - 'null'
+              - object
+            description: Provides a link to another page within the block
+          - name: numbered_list_item
+            type:
+              - 'null'
+              - object
+            description: Represents an item in a numbered list.
+          - name: object
+            type:
+              - 'null'
+              - object
+            description: Represents an object block.
+          - name: paragraph
+            type:
+              - 'null'
+              - object
+            description: Represents a paragraph block.
+          - name: parent
+            type:
+              - 'null'
+              - object
+            description: The parent block of the current block.
+          - name: pdf
+            type:
+              - 'null'
+              - object
+            description: Represents a PDF document block.
+          - name: quote
+            type:
+              - 'null'
+              - object
+            description: Represents a quote block.
+          - name: synced_block
+            type:
+              - 'null'
+              - object
+            description: Represents a block synced from another source
+          - name: table
+            type:
+              - 'null'
+              - object
+            description: Represents a table within the block
+          - name: table_of_contents
+            type:
+              - 'null'
+              - object
+            description: Contains information regarding the table of contents
+          - name: table_row
+            type:
+              - 'null'
+              - object
+            description: Represents a row in a table within the block
+          - name: template
+            type:
+              - 'null'
+              - object
+            description: Specifies a template used within the block
+          - name: to_do
+            type:
+              - 'null'
+              - object
+            description: Represents a to-do list or task content
+          - name: toggle
+            type:
+              - 'null'
+              - object
+            description: Represents a toggle block.
+          - name: type
+            type:
+              - 'null'
+              - object
+            description: The type of the block.
+          - name: unsupported
+            type:
+              - 'null'
+              - object
+            description: Represents an unsupported block.
+          - name: video
+            type:
+              - 'null'
+              - object
+            description: Represents a video block.
+  x-airbyte-example-questions:
+    direct:
+      - "List all users in my Notion workspace"
+      - "Show me all pages in my Notion workspace"
+      - "What data sources exist in my Notion workspace?"
+      - "Get the details of a specific page by ID"
+      - "List child blocks of a specific page"
+      - "Show me comments on a specific page"
+      - "What is the schema of a specific data source?"
+      - "Who are the bot users in my workspace?"
+    search:
+      - "Find pages created in the last week"
+      - "List data sources that have been recently edited"
+      - "Show me all archived pages"
+    unsupported:
+      - "Create a new page in Notion"
+      - "Update a data source property"
+      - "Delete a block"
+      - "Add a comment to a page"
+
+servers:
+  - url: https://api.notion.com
+    description: Notion API server
+
+security:
+  - notionOAuth: []
+  - notionBearerToken: []
+
+paths:
+  "/v1/users":
+    get:
+      summary: List users
+      description: Returns a paginated list of users for the workspace
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_cursor: $.next_cursor
+        has_more: $.has_more
+      parameters:
+        - name: start_cursor
+          in: query
+          description: Pagination cursor for next page
+          required: false
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          description: Number of items per page (max 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersListResponse"
+        "401":
+          description: Unauthorized
+
+  "/v1/users/{user_id}":
+    get:
+      summary: Get a user
+      description: Retrieves a single user by ID
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+        "401":
+          description: Unauthorized
+
+  "/v1/search:pages":
+    post:
+      summary: List pages
+      description: Returns pages shared with the integration using the search endpoint
+      operationId: listPages
+      x-airbyte-entity: pages
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /v1/search
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_cursor: $.next_cursor
+        has_more: $.has_more
+      parameters:
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter:
+                  type: object
+                  properties:
+                    property:
+                      type: string
+                      default: "object"
+                    value:
+                      type: string
+                      default: "page"
+                sort:
+                  type: object
+                  properties:
+                    direction:
+                      type: string
+                      default: "descending"
+                    timestamp:
+                      type: string
+                      default: "last_edited_time"
+                start_cursor:
+                  type: string
+                  description: Pagination cursor
+                page_size:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 100
+      responses:
+        "200":
+          description: List of pages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagesListResponse"
+        "401":
+          description: Unauthorized
+
+  "/v1/pages/{page_id}":
+    get:
+      summary: Get a page
+      description: Retrieves a page object using the ID specified
+      operationId: getPage
+      x-airbyte-entity: pages
+      x-airbyte-action: get
+      parameters:
+        - name: page_id
+          in: path
+          required: true
+          description: Page ID
+          schema:
+            type: string
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: Page object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "404":
+          description: Page not found
+        "401":
+          description: Unauthorized
+
+  "/v1/search:data_sources":
+    post:
+      summary: List data sources
+      description: Returns data sources shared with the integration using the search endpoint
+      operationId: listDataSources
+      x-airbyte-entity: data_sources
+      x-airbyte-action: list
+      x-airbyte-path-override:
+        path: /v1/search
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_cursor: $.next_cursor
+        has_more: $.has_more
+      parameters:
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter:
+                  type: object
+                  properties:
+                    property:
+                      type: string
+                      default: "object"
+                    value:
+                      type: string
+                      default: "data_source"
+                sort:
+                  type: object
+                  properties:
+                    direction:
+                      type: string
+                      default: "descending"
+                    timestamp:
+                      type: string
+                      default: "last_edited_time"
+                start_cursor:
+                  type: string
+                  description: Pagination cursor
+                page_size:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 100
+      responses:
+        "200":
+          description: List of data sources
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataSourcesListResponse"
+        "401":
+          description: Unauthorized
+
+  "/v1/data_sources/{data_source_id}":
+    get:
+      summary: Get a data source
+      description: Retrieves a data source object using the ID specified
+      operationId: getDataSource
+      x-airbyte-entity: data_sources
+      x-airbyte-action: get
+      parameters:
+        - name: data_source_id
+          in: path
+          required: true
+          description: Data Source ID
+          schema:
+            type: string
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: Data source object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataSource"
+        "404":
+          description: Data source not found
+        "401":
+          description: Unauthorized
+
+  "/v1/blocks/{block_id}/children":
+    get:
+      summary: List block children
+      description: Returns a paginated list of child blocks for the specified block
+      operationId: listBlockChildren
+      x-airbyte-entity: blocks
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_cursor: $.next_cursor
+        has_more: $.has_more
+      parameters:
+        - name: block_id
+          in: path
+          required: true
+          description: Block or page ID
+          schema:
+            type: string
+        - name: start_cursor
+          in: query
+          description: Pagination cursor for next page
+          required: false
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          description: Number of items per page (max 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: List of block children
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlocksListResponse"
+        "404":
+          description: Block not found
+        "401":
+          description: Unauthorized
+
+  "/v1/blocks/{block_id}":
+    get:
+      summary: Get a block
+      description: Retrieves a block object using the ID specified
+      operationId: getBlock
+      x-airbyte-entity: blocks
+      x-airbyte-action: get
+      parameters:
+        - name: block_id
+          in: path
+          required: true
+          description: Block ID
+          schema:
+            type: string
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: Block object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Block"
+        "404":
+          description: Block not found
+        "401":
+          description: Unauthorized
+
+  "/v1/comments":
+    get:
+      summary: List comments
+      description: Returns a list of comments for a specified block or page
+      operationId: listComments
+      x-airbyte-entity: comments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next_cursor: $.next_cursor
+        has_more: $.has_more
+      parameters:
+        - name: block_id
+          in: query
+          required: true
+          description: Block or page ID to retrieve comments for
+          schema:
+            type: string
+        - name: start_cursor
+          in: query
+          description: Pagination cursor for next page
+          required: false
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          description: Number of items per page (max 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: Notion-Version
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "2025-09-03"
+      responses:
+        "200":
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentsListResponse"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    notionOAuth:
+      type: oauth2
+      description: Notion OAuth 2.0 authentication for public integrations
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.notion.com/v1/oauth/authorize
+          tokenUrl: https://api.notion.com/v1/oauth/token
+          refreshUrl: https://api.notion.com/v1/oauth/token
+          scopes: {}
+      x-airbyte-token-refresh:
+        auth_style: basic
+        body_format: json
+      x-airbyte-oauth-credentials:
+        title: Notion OAuth App Credentials
+        description: Provide your own Notion OAuth app credentials to override the default Airbyte-managed ones.
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: Your Notion OAuth integration's client ID
+          client_secret:
+            type: string
+            title: Client Secret
+            description: Your Notion OAuth integration's client secret
+        required:
+          - client_id
+          - client_secret
+      x-airbyte-auth-config:
+        title: "OAuth2.0"
+        type: object
+        required:
+          - access_token
+          - client_id
+          - client_secret
+        properties:
+          client_id:
+            type: string
+            title: "Client ID"
+            description: "Your Notion OAuth integration's client ID"
+          client_secret:
+            type: string
+            title: "Client Secret"
+            description: "Your Notion OAuth integration's client secret"
+          access_token:
+            type: string
+            title: "Access Token"
+            description: "OAuth access token obtained through the Notion authorization flow"
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          access_token: "${access_token}"
+        replication_auth_key_mapping:
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.access_token: "access_token"
+        replication_auth_key_constants:
+          credentials.auth_type: "OAuth2.0"
+
+    notionBearerToken:
+      type: http
+      scheme: bearer
+      description: Notion internal integration token authentication
+      x-airbyte-auth-config:
+        title: "Access Token"
+        type: object
+        required:
+          - token
+        properties:
+          token:
+            type: string
+            title: "Integration Token"
+            description: "Notion internal integration token (starts with ntn_ or secret_)"
+        auth_mapping:
+          token: "${token}"
+        replication_auth_key_mapping:
+          credentials.token: "token"
+        replication_auth_key_constants:
+          credentials.auth_type: "token"
+
+  schemas:
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
+      description: A Notion user object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        object:
+          type: [string, "null"]
+          description: Always user
+        type:
+          type: [string, "null"]
+          description: Type of user (person or bot)
+        name:
+          type: [string, "null"]
+          description: User's display name
+        avatar_url:
+          type: [string, "null"]
+          description: URL of the user's avatar
+        person:
+          type: [object, "null"]
+          description: Person-specific data
+          properties:
+            email:
+              type: [string, "null"]
+              description: Person's email address
+        bot:
+          type: [object, "null"]
+          description: Bot-specific data
+          properties:
+            owner:
+              type: [object, "null"]
+              description: Bot owner information
+            workspace_name:
+              type: [string, "null"]
+              description: Name of the workspace the bot belongs to
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    UsersListResponse:
+      type: object
+      description: Paginated list of users
+      properties:
+        object:
+          type: [string, "null"]
+          description: Always list
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        next_cursor:
+          type: [string, "null"]
+          description: Cursor for next page
+        has_more:
+          type: [boolean, "null"]
+          description: Whether more results exist
+        type:
+          type: [string, "null"]
+          description: Type of results
+        user:
+          type: [object, "null"]
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    RichText:
+      type: object
+      description: A rich text object
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of rich text (text, mention, equation)
+        text:
+          type: [object, "null"]
+          description: Text content
+          properties:
+            content:
+              type: [string, "null"]
+              description: Plain text content
+            link:
+              type: [object, "null"]
+              description: Link object
+        annotations:
+          type: [object, "null"]
+          description: Text annotations (bold, italic, etc.)
+          properties:
+            bold:
+              type: [boolean, "null"]
+            italic:
+              type: [boolean, "null"]
+            strikethrough:
+              type: [boolean, "null"]
+            underline:
+              type: [boolean, "null"]
+            code:
+              type: [boolean, "null"]
+            color:
+              type: [string, "null"]
+        plain_text:
+          type: [string, "null"]
+          description: Plain text without annotations
+        href:
+          type: [string, "null"]
+          description: URL if the text is a link
+
+    Parent:
+      type: object
+      description: Parent object reference
+      properties:
+        type:
+          type: [string, "null"]
+          description: Type of parent (database_id, page_id, block_id, workspace)
+        database_id:
+          type: [string, "null"]
+          description: Database parent ID
+        data_source_id:
+          type: [string, "null"]
+          description: Data source parent ID
+        page_id:
+          type: [string, "null"]
+          description: Page parent ID
+        block_id:
+          type: [string, "null"]
+          description: Block parent ID
+        workspace:
+          type: [boolean, "null"]
+          description: Whether parent is workspace
+
+    Page:
+      type: object
+      x-airbyte-entity-name: pages
+      x-airbyte-stream-name: pages
+      x-airbyte-ai-hints:
+        summary: "Internal documentation, wiki pages, databases, and company knowledge"
+        when_to_use: "Questions about internal docs, company policies, processes, or wiki content"
+        trigger_phrases: ["is there a doc for", "Notion page about", "where is the doc", "company policy on", "internal wiki"]
+        freshness: live
+        search_strategy: "Pages have no title field — search the url field which contains the title slug. For multi-word queries, split into separate OR conditions on url."
+        example_questions:
+          - "Is there a doc for the connector setup process?"
+          - "Find the Notion page about onboarding"
+          - "What does the internal wiki say about release process?"
+      description: A Notion page object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the page
+        object:
+          type: [string, "null"]
+          description: Always page
+        created_time:
+          type: [string, "null"]
+          description: Date and time when the page was created
+        last_edited_time:
+          type: [string, "null"]
+          description: Date and time when the page was last edited
+        created_by:
+          type: [object, "null"]
+          description: User who created the page
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        last_edited_by:
+          type: [object, "null"]
+          description: User who last edited the page
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        cover:
+          type: [object, "null"]
+          description: Page cover image
+        icon:
+          type: [object, "null"]
+          description: Page icon
+        parent:
+          oneOf:
+            - $ref: "#/components/schemas/Parent"
+            - type: "null"
+          description: Parent of the page
+        archived:
+          type: [boolean, "null"]
+          description: Whether the page is archived
+        in_trash:
+          type: [boolean, "null"]
+          description: Whether the page is in trash
+        is_archived:
+          type: [boolean, "null"]
+          description: Whether the page is archived (alias for archived)
+        is_locked:
+          type: [boolean, "null"]
+          description: Whether the page is locked
+        properties:
+          type: [object, "null"]
+          description: Property values of the page
+          additionalProperties: true
+        url:
+          type: [string, "null"]
+          description: URL of the page
+        public_url:
+          type: [string, "null"]
+          description: Public URL of the page if published
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    PagesListResponse:
+      type: object
+      description: Paginated list of pages
+      properties:
+        object:
+          type: [string, "null"]
+          description: Always list
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Page"
+        next_cursor:
+          type: [string, "null"]
+          description: Cursor for next page
+        has_more:
+          type: [boolean, "null"]
+          description: Whether more results exist
+        type:
+          type: [string, "null"]
+          description: Type of results
+        page_or_data_source:
+          type: [object, "null"]
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    DataSource:
+      type: object
+      x-airbyte-entity-name: data_sources
+      x-airbyte-stream-name: data_sources
+      description: A Notion data source object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the data source
+        object:
+          type: [string, "null"]
+          description: Always data_source
+        created_time:
+          type: [string, "null"]
+          description: Date and time when the data source was created
+        last_edited_time:
+          type: [string, "null"]
+          description: Date and time when the data source was last edited
+        created_by:
+          type: [object, "null"]
+          description: User who created the data source
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        last_edited_by:
+          type: [object, "null"]
+          description: User who last edited the data source
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        title:
+          type: [array, "null"]
+          description: Title of the data source as rich text
+          items:
+            $ref: "#/components/schemas/RichText"
+        description:
+          type: [array, "null"]
+          description: Description of the data source as rich text
+          items:
+            $ref: "#/components/schemas/RichText"
+        icon:
+          type: [object, "null"]
+          description: Data source icon
+        cover:
+          type: [object, "null"]
+          description: Data source cover image
+        properties:
+          type: [object, "null"]
+          description: Schema of properties for the data source
+          additionalProperties: true
+        parent:
+          oneOf:
+            - $ref: "#/components/schemas/Parent"
+            - type: "null"
+          description: Parent database of the data source
+        database_parent:
+          oneOf:
+            - $ref: "#/components/schemas/Parent"
+            - type: "null"
+          description: Grandparent of the data source (parent of the database)
+        url:
+          type: [string, "null"]
+          description: URL of the data source
+        public_url:
+          type: [string, "null"]
+          description: Public URL if published
+        archived:
+          type: [boolean, "null"]
+          description: Whether the data source is archived
+        in_trash:
+          type: [boolean, "null"]
+          description: Whether the data source is in trash
+        is_archived:
+          type: [boolean, "null"]
+          description: Whether the data source is archived (alias for archived)
+        is_inline:
+          type: [boolean, "null"]
+          description: Whether the data source is inline
+        is_locked:
+          type: [boolean, "null"]
+          description: Whether the data source is locked
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    DataSourcesListResponse:
+      type: object
+      description: Paginated list of data sources
+      properties:
+        object:
+          type: [string, "null"]
+          description: Always list
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/DataSource"
+        next_cursor:
+          type: [string, "null"]
+          description: Cursor for next page
+        has_more:
+          type: [boolean, "null"]
+          description: Whether more results exist
+        type:
+          type: [string, "null"]
+          description: Type of results
+        page_or_data_source:
+          type: [object, "null"]
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    Block:
+      type: object
+      x-airbyte-entity-name: blocks
+      x-airbyte-stream-name: blocks
+      description: A Notion block object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the block
+        object:
+          type: [string, "null"]
+          description: Always block
+        type:
+          type: [string, "null"]
+          description: Type of block (paragraph, heading_1, to_do, etc.)
+        created_time:
+          type: [string, "null"]
+          description: Date and time when the block was created
+        last_edited_time:
+          type: [string, "null"]
+          description: Date and time when the block was last edited
+        created_by:
+          type: [object, "null"]
+          description: User who created the block
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        last_edited_by:
+          type: [object, "null"]
+          description: User who last edited the block
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        has_children:
+          type: [boolean, "null"]
+          description: Whether the block has child blocks
+        archived:
+          type: [boolean, "null"]
+          description: Whether the block is archived
+        in_trash:
+          type: [boolean, "null"]
+          description: Whether the block is in trash
+        parent:
+          oneOf:
+            - $ref: "#/components/schemas/Parent"
+            - type: "null"
+          description: Parent of the block
+        paragraph:
+          type: [object, "null"]
+          description: Paragraph block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+        heading_1:
+          type: [object, "null"]
+          description: Heading 1 block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+            is_toggleable:
+              type: [boolean, "null"]
+        heading_2:
+          type: [object, "null"]
+          description: Heading 2 block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+            is_toggleable:
+              type: [boolean, "null"]
+        heading_3:
+          type: [object, "null"]
+          description: Heading 3 block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+            is_toggleable:
+              type: [boolean, "null"]
+        bulleted_list_item:
+          type: [object, "null"]
+          description: Bulleted list item content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+        numbered_list_item:
+          type: [object, "null"]
+          description: Numbered list item content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+        to_do:
+          type: [object, "null"]
+          description: To-do block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            checked:
+              type: [boolean, "null"]
+            color:
+              type: [string, "null"]
+        toggle:
+          type: [object, "null"]
+          description: Toggle block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+        code:
+          type: [object, "null"]
+          description: Code block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            caption:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            language:
+              type: [string, "null"]
+        child_page:
+          type: [object, "null"]
+          description: Child page block
+          properties:
+            title:
+              type: [string, "null"]
+        child_database:
+          type: [object, "null"]
+          description: Child database block
+          properties:
+            title:
+              type: [string, "null"]
+        callout:
+          type: [object, "null"]
+          description: Callout block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            icon:
+              type: [object, "null"]
+            color:
+              type: [string, "null"]
+        quote:
+          type: [object, "null"]
+          description: Quote block content
+          properties:
+            rich_text:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            color:
+              type: [string, "null"]
+        divider:
+          type: [object, "null"]
+          description: Divider block
+        table_of_contents:
+          type: [object, "null"]
+          description: Table of contents block
+          properties:
+            color:
+              type: [string, "null"]
+        bookmark:
+          type: [object, "null"]
+          description: Bookmark block
+          properties:
+            caption:
+              type: [array, "null"]
+              items:
+                $ref: "#/components/schemas/RichText"
+            url:
+              type: [string, "null"]
+        image:
+          type: [object, "null"]
+          description: Image block
+        video:
+          type: [object, "null"]
+          description: Video block
+        file:
+          type: [object, "null"]
+          description: File block
+        pdf:
+          type: [object, "null"]
+          description: PDF block
+        embed:
+          type: [object, "null"]
+          description: Embed block
+          properties:
+            url:
+              type: [string, "null"]
+        equation:
+          type: [object, "null"]
+          description: Equation block
+          properties:
+            expression:
+              type: [string, "null"]
+        table:
+          type: [object, "null"]
+          description: Table block
+          properties:
+            table_width:
+              type: [integer, "null"]
+            has_column_header:
+              type: [boolean, "null"]
+            has_row_header:
+              type: [boolean, "null"]
+        table_row:
+          type: [object, "null"]
+          description: Table row block
+          properties:
+            cells:
+              type: [array, "null"]
+        column:
+          type: [object, "null"]
+          description: Column block
+          properties:
+            width_ratio:
+              type: [number, "null"]
+        column_list:
+          type: [object, "null"]
+          description: Column list block
+        synced_block:
+          type: [object, "null"]
+          description: Synced block content
+        template:
+          type: [object, "null"]
+          description: Template block
+        link_preview:
+          type: [object, "null"]
+          description: Link preview block
+          properties:
+            url:
+              type: [string, "null"]
+        link_to_page:
+          type: [object, "null"]
+          description: Link to page block
+        breadcrumb:
+          type: [object, "null"]
+          description: Breadcrumb block
+        unsupported:
+          type: [object, "null"]
+          description: Unsupported block type
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    BlocksListResponse:
+      type: object
+      description: Paginated list of blocks
+      properties:
+        object:
+          type: [string, "null"]
+          description: Always list
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Block"
+        next_cursor:
+          type: [string, "null"]
+          description: Cursor for next page
+        has_more:
+          type: [boolean, "null"]
+          description: Whether more results exist
+        type:
+          type: [string, "null"]
+          description: Type of results
+        block:
+          type: [object, "null"]
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging
+
+    Comment:
+      type: object
+      x-airbyte-entity-name: comments
+      x-airbyte-stream-name: comments
+      description: A Notion comment object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the comment
+        object:
+          type: [string, "null"]
+          description: Always comment
+        parent:
+          oneOf:
+            - $ref: "#/components/schemas/Parent"
+            - type: "null"
+          description: Parent of the comment
+        discussion_id:
+          type: [string, "null"]
+          description: Discussion thread ID
+        created_time:
+          type: [string, "null"]
+          description: Date and time when the comment was created
+        last_edited_time:
+          type: [string, "null"]
+          description: Date and time when the comment was last edited
+        created_by:
+          type: [object, "null"]
+          description: User who created the comment
+          properties:
+            object:
+              type: [string, "null"]
+            id:
+              type: [string, "null"]
+        rich_text:
+          type: [array, "null"]
+          description: Content of the comment as rich text
+          items:
+            $ref: "#/components/schemas/RichText"
+
+    CommentsListResponse:
+      type: object
+      description: Paginated list of comments
+      properties:
+        object:
+          type: [string, "null"]
+          description: Always list
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+        next_cursor:
+          type: [string, "null"]
+          description: Cursor for next page
+        has_more:
+          type: [boolean, "null"]
+          description: Whether more results exist
+        type:
+          type: [string, "null"]
+          description: Type of results
+        comment:
+          type: [object, "null"]
+        request_id:
+          type: [string, "null"]
+          description: Request ID for debugging

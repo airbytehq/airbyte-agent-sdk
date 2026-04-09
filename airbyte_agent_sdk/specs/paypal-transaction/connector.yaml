@@ -1,0 +1,1738 @@
+openapi: 3.1.0
+
+info:
+  title: PayPal Transaction API Connector
+  version: 1.0.2
+  description: >
+    Connector for the PayPal Transaction Search API. Provides access to
+    transaction history, account balances, payments, disputes, catalog
+    products, and invoices for a PayPal account. Uses OAuth2 client
+    credentials for authentication.
+  x-airbyte-connector-name: paypal-transaction
+  x-airbyte-connector-definition-id: d913b0f2-cc51-4e55-a44c-8ba1697b9239
+  x-airbyte-replication-version: "2.6.28"
+  x-airbyte-replication-compatibility: ">=2.6.28, <3.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: PayPal Transaction Search API Documentation
+      url: https://developer.paypal.com/docs/api/transaction-search/v1/
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: transactions
+        fields:
+          - name: auction_info
+            type: ["null", "object"]
+            description: Information related to an auction
+            properties:
+              auction_buyer_id:
+                type: ["null", "string"]
+              auction_closing_date:
+                type: ["null", "string"]
+              auction_item_site:
+                type: ["null", "string"]
+              auction_site:
+                type: ["null", "string"]
+          - name: cart_info
+            type: ["null", "object"]
+            description: Details of items in the cart
+            properties:
+              item_details:
+                type: ["null", "array"]
+          - name: incentive_info
+            type: ["null", "object"]
+            description: Details of any incentives applied
+            properties:
+              incentive_details:
+                type: ["null", "array"]
+          - name: payer_info
+            type: ["null", "object"]
+            description: Information about the payer
+            properties:
+              account_id:
+                type: ["null", "string"]
+              address_status:
+                type: ["null", "string"]
+              country_code:
+                type: ["null", "string"]
+              email_address:
+                type: ["null", "string"]
+              payer_name:
+                type: ["null", "object"]
+                properties:
+                  alternate_full_name:
+                    type: ["null", "string"]
+                  given_name:
+                    type: ["null", "string"]
+                  surname:
+                    type: ["null", "string"]
+              payer_status:
+                type: ["null", "string"]
+          - name: shipping_info
+            type: ["null", "object"]
+            description: Shipping information
+            properties:
+              address:
+                type: ["null", "object"]
+                properties:
+                  city:
+                    type: ["null", "string"]
+                  country_code:
+                    type: ["null", "string"]
+                  line1:
+                    type: ["null", "string"]
+                  line2:
+                    type: ["null", "string"]
+                  postal_code:
+                    type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+          - name: store_info
+            type: ["null", "object"]
+            description: Information about the store
+            properties:
+              store_id:
+                type: ["null", "string"]
+              terminal_id:
+                type: ["null", "string"]
+          - name: transaction_id
+            type: ["null", "string"]
+            description: Unique ID of the transaction
+          - name: transaction_info
+            type: ["null", "object"]
+            description: Detailed information about the transaction
+            properties:
+              custom_field:
+                type: ["null", "string"]
+              fee_amount:
+                type: ["null", "object"]
+                properties:
+                  currency_code:
+                    type: ["null", "string"]
+                  value:
+                    type: ["null", "string"]
+              insurance_amount:
+                type: ["null", "object"]
+                properties:
+                  currency_code:
+                    type: ["null", "string"]
+                  value:
+                    type: ["null", "string"]
+              invoice_id:
+                type: ["null", "string"]
+              paypal_account_id:
+                type: ["null", "string"]
+              paypal_reference_id:
+                type: ["null", "string"]
+              paypal_reference_id_type:
+                type: ["null", "string"]
+              protection_eligibility:
+                type: ["null", "string"]
+              shipping_amount:
+                type: ["null", "object"]
+                properties:
+                  currency_code:
+                    type: ["null", "string"]
+                  value:
+                    type: ["null", "string"]
+              shipping_discount_amount:
+                type: ["null", "object"]
+                properties:
+                  currency_code:
+                    type: ["null", "string"]
+                  value:
+                    type: ["null", "string"]
+              transaction_amount:
+                type: ["null", "object"]
+                properties:
+                  currency_code:
+                    type: ["null", "string"]
+                  value:
+                    type: ["null", "string"]
+              transaction_event_code:
+                type: ["null", "string"]
+              transaction_id:
+                type: ["null", "string"]
+              transaction_initiation_date:
+                type: ["null", "string"]
+              transaction_note:
+                type: ["null", "string"]
+              transaction_status:
+                type: ["null", "string"]
+              transaction_subject:
+                type: ["null", "string"]
+              transaction_updated_date:
+                type: ["null", "string"]
+          - name: transaction_initiation_date
+            type: ["null", "string"]
+            description: Date and time when the transaction was initiated
+          - name: transaction_updated_date
+            type: ["null", "string"]
+            description: Date and time when the transaction was last updated
+      - entity: balances
+        fields:
+          - name: account_id
+            type: ["null", "string"]
+            description: The unique identifier of the account.
+          - name: as_of_time
+            type: ["null", "string"]
+            description: The timestamp when the balances data was reported.
+          - name: balances
+            type: ["null", "array"]
+            description: Object containing information about the account balances.
+          - name: last_refresh_time
+            type: ["null", "string"]
+            description: The timestamp when the balances data was last refreshed.
+      - entity: list_products
+        fields:
+          - name: create_time
+            type: ["null", "string"]
+            description: The time when the product was created
+          - name: description
+            type: ["null", "string"]
+            description: Detailed information or features of the product
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the product
+          - name: links
+            type: ["null", "array"]
+            description: List of links related to the fetched products.
+          - name: name
+            type: ["null", "string"]
+            description: The name or title of the product
+      - entity: show_product_details
+        fields:
+          - name: category
+            type: ["null", "string"]
+            description: The category to which the product belongs
+          - name: create_time
+            type: ["null", "string"]
+            description: The date and time when the product was created
+          - name: description
+            type: ["null", "string"]
+            description: The detailed description of the product
+          - name: home_url
+            type: ["null", "string"]
+            description: The URL for the home page of the product
+          - name: id
+            type: ["null", "string"]
+            description: The unique identifier for the product
+          - name: image_url
+            type: ["null", "string"]
+            description: The URL to the image representing the product
+          - name: links
+            type: ["null", "array"]
+            description: Contains links related to the product details.
+          - name: name
+            type: ["null", "string"]
+            description: The name of the product
+          - name: type
+            type: ["null", "string"]
+            description: The type or category of the product
+          - name: update_time
+            type: ["null", "string"]
+            description: The date and time when the product was last updated
+      - entity: list_disputes
+        fields:
+          - name: create_time
+            type: ["null", "string"]
+            description: The timestamp when the dispute was created.
+          - name: dispute_amount
+            type: ["null", "object"]
+            description: Details about the disputed amount.
+            properties:
+              currency_code:
+                type: ["null", "string"]
+              value:
+                type: ["null", "string"]
+          - name: dispute_channel
+            type: ["null", "string"]
+            description: The channel through which the dispute was initiated.
+          - name: dispute_id
+            type: ["null", "string"]
+            description: The unique identifier for the dispute.
+          - name: dispute_life_cycle_stage
+            type: ["null", "string"]
+            description: The stage in the life cycle of the dispute.
+          - name: dispute_state
+            type: ["null", "string"]
+            description: The current state of the dispute.
+          - name: disputed_transactions
+            type: ["null", "array"]
+            description: Details of transactions involved in the dispute.
+          - name: links
+            type: ["null", "array"]
+            description: Links related to the dispute.
+          - name: outcome
+            type: ["null", "string"]
+            description: The outcome of the dispute resolution.
+          - name: reason
+            type: ["null", "string"]
+            description: The reason for the dispute.
+          - name: status
+            type: ["null", "string"]
+            description: The current status of the dispute.
+          - name: update_time
+            type: ["null", "string"]
+            description: The timestamp when the dispute was last updated.
+          - name: updated_time_cut
+            type: ["null", "string"]
+            description: The cut-off timestamp for the last update.
+      - entity: search_invoices
+        fields:
+          - name: additional_recipients
+            type: ["null", "array"]
+            description: List of additional recipients associated with the invoice
+          - name: amount
+            type: ["null", "object"]
+            description: Detailed breakdown of the invoice amount
+            properties:
+              breakdown:
+                type: ["null", "object"]
+              currency_code:
+                type: ["null", "string"]
+              value:
+                type: ["null", "string"]
+          - name: configuration
+            type: ["null", "object"]
+            description: Configuration settings related to the invoice
+          - name: detail
+            type: ["null", "object"]
+            description: Detailed information about the invoice
+          - name: due_amount
+            type: ["null", "object"]
+            description: Due amount remaining to be paid for the invoice
+            properties:
+              currency_code:
+                type: ["null", "string"]
+              value:
+                type: ["null", "string"]
+          - name: gratuity
+            type: ["null", "object"]
+            description: Gratuity amount included in the invoice
+            properties:
+              currency_code:
+                type: ["null", "string"]
+              value:
+                type: ["null", "string"]
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier of the invoice
+          - name: invoicer
+            type: ["null", "object"]
+            description: Information about the invoicer associated with the invoice
+          - name: last_update_time
+            type: ["null", "string"]
+            description: Date and time of the last update made to the invoice
+          - name: links
+            type: ["null", "array"]
+            description: Links associated with the invoice
+          - name: payments
+            type: ["null", "object"]
+            description: Payment transactions associated with the invoice
+          - name: primary_recipients
+            type: ["null", "array"]
+            description: Primary recipients associated with the invoice
+          - name: refunds
+            type: ["null", "object"]
+            description: Refund transactions associated with the invoice
+          - name: status
+            type: ["null", "string"]
+            description: Current status of the invoice
+      - entity: list_payments
+        fields:
+          - name: cart
+            type: ["null", "string"]
+            description: Details of the cart associated with the payment.
+          - name: create_time
+            type: ["null", "string"]
+            description: The date and time when the payment was created.
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the payment.
+          - name: intent
+            type: ["null", "string"]
+            description: The intention or purpose behind the payment.
+          - name: links
+            type: ["null", "array"]
+            description: Collection of links related to the payment
+          - name: payer
+            type: ["null", "object"]
+            description: Details of the payer who made the payment
+            properties:
+              payer_info:
+                type: ["null", "object"]
+                properties:
+                  country_code:
+                    type: ["null", "string"]
+                  email:
+                    type: ["null", "string"]
+                  first_name:
+                    type: ["null", "string"]
+                  last_name:
+                    type: ["null", "string"]
+                  payer_id:
+                    type: ["null", "string"]
+              payment_method:
+                type: ["null", "string"]
+              status:
+                type: ["null", "string"]
+          - name: state
+            type: ["null", "string"]
+            description: The state of the payment.
+          - name: transactions
+            type: ["null", "array"]
+            description: List of transactions associated with the payment
+          - name: update_time
+            type: ["null", "string"]
+            description: The date and time when the payment was last updated.
+  x-airbyte-example-questions:
+    direct:
+      - "List all balances for my PayPal account"
+      - "Show recent transactions from the last 7 days"
+      - "List all catalog products"
+      - "Show details for a specific product"
+      - "List all disputes"
+      - "Show recent payments"
+    search:
+      - "What transactions had the highest amounts last month?"
+      - "Find all declined transactions"
+      - "Show disputes grouped by status"
+      - "What is the total balance across all currencies?"
+    unsupported:
+      - "Create a new payment"
+      - "Refund a transaction"
+      - "Delete a dispute"
+      - "Update product details"
+  x-airbyte-skip-auth-methods:
+    - customauthenticator
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from PayPal.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: >
+          Start date for data extraction in ISO 8601 format. Date must be
+          in range from 3 years till 12 hours before present time.
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+
+servers:
+  - url: https://api-m.sandbox.paypal.com
+    description: PayPal Sandbox API
+
+security:
+  - oauth2: []
+
+paths:
+  /v1/reporting/balances:
+    get:
+      summary: List all balances
+      description: >
+        List all balances for a PayPal account. Specify date time to list
+        balances for that time. It takes a maximum of three hours for
+        balances to appear. Lists balances up to the previous three years.
+      operationId: listBalances
+      x-airbyte-entity: balances
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      parameters:
+        - name: as_of_time
+          in: query
+          description: >
+            List balances at the date time provided in ISO 8601 format.
+            Returns the last refreshed balance when not provided.
+          required: false
+          schema:
+            type: string
+        - name: currency_code
+          in: query
+          description: >
+            Three-character ISO-4217 currency code to filter balances.
+          required: false
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 3
+      responses:
+        "200":
+          description: Successful balance listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BalancesResponse"
+        "401":
+          description: Unauthorized
+
+  /v1/reporting/transactions:
+    get:
+      summary: List transactions
+      description: >
+        Lists transactions for a PayPal account. Specify one or more query
+        parameters to filter the transactions. Requires start_date and
+        end_date parameters. The maximum supported date range is 31 days.
+        It takes a maximum of three hours for executed transactions to appear.
+      operationId: listTransactions
+      x-airbyte-entity: transactions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.transaction_details
+      x-airbyte-meta-extractor:
+        total_items: $.total_items
+        total_pages: $.total_pages
+        page: $.page
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          description: >
+            Start date and time in ISO 8601 format. Seconds are required.
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: true
+          description: >
+            End date and time in ISO 8601 format. Seconds are required.
+            Maximum supported range is 31 days.
+          schema:
+            type: string
+        - name: transaction_id
+          in: query
+          required: false
+          description: Filters by PayPal transaction ID (17-19 characters).
+          schema:
+            type: string
+            minLength: 17
+            maxLength: 19
+        - name: transaction_type
+          in: query
+          required: false
+          description: Filters by PayPal transaction event code.
+          schema:
+            type: string
+        - name: transaction_status
+          in: query
+          required: false
+          description: >
+            Filters by PayPal transaction status code. D=Denied, P=Pending,
+            S=Successful, V=Reversed.
+          schema:
+            type: string
+            enum: ["D", "P", "S", "V"]
+        - name: transaction_currency
+          in: query
+          required: false
+          description: Three-character ISO-4217 currency code.
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 3
+        - name: fields
+          in: query
+          required: false
+          description: >
+            Fields to include in the response. Comma-separated list.
+            Use 'all' to include all fields. Default is transaction_info.
+          schema:
+            type: string
+            default: all
+        - name: page_size
+          in: query
+          required: false
+          description: Number of items per page (1-500).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          required: false
+          description: Page number to return.
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: balance_affecting_records_only
+          in: query
+          required: false
+          description: >
+            Y to include only balance-impacting transactions (default).
+            N to include all transactions.
+          schema:
+            type: string
+            enum: ["Y", "N"]
+            default: "Y"
+      responses:
+        "200":
+          description: Successful transaction listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionsList"
+        "401":
+          description: Unauthorized
+
+  /v1/payments/payment:
+    get:
+      summary: List payments
+      description: >
+        Lists payments for the PayPal account. Supports filtering by
+        start and end times.
+      operationId: listPayments
+      x-airbyte-entity: list_payments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.payments
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start time in ISO 8601 format.
+          schema:
+            type: string
+        - name: end_time
+          in: query
+          required: false
+          description: End time in ISO 8601 format.
+          schema:
+            type: string
+        - name: count
+          in: query
+          required: false
+          description: Number of items per page (max 20).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 10
+        - name: start_id
+          in: query
+          required: false
+          description: Starting resource ID for pagination.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful payment listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentsList"
+        "401":
+          description: Unauthorized
+
+  /v1/customer/disputes:
+    get:
+      summary: List disputes
+      description: >
+        Lists disputes for the PayPal account. Supports filtering by
+        update time range.
+      operationId: listDisputes
+      x-airbyte-entity: list_disputes
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      parameters:
+        - name: update_time_after
+          in: query
+          required: false
+          description: Filter disputes updated after this time in ISO 8601 format.
+          schema:
+            type: string
+        - name: update_time_before
+          in: query
+          required: false
+          description: Filter disputes updated before this time in ISO 8601 format.
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          required: false
+          description: Number of items per page (max 50).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - name: next_page_token
+          in: query
+          required: false
+          description: Token for retrieving the next page of results.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful dispute listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DisputesList"
+        "401":
+          description: Unauthorized
+
+  /v1/catalogs/products:
+    get:
+      summary: List products
+      description: Lists all catalog products for the PayPal account.
+      operationId: listProducts
+      x-airbyte-entity: list_products
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.products
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: Number of items per page (max 20).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 10
+        - name: page
+          in: query
+          required: false
+          description: Page number starting from 1.
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: Successful product listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsList"
+        "401":
+          description: Unauthorized
+
+  /v1/catalogs/products/{id}:
+    get:
+      summary: Get product details
+      description: Shows details for a catalog product by ID.
+      operationId: getProductDetails
+      x-airbyte-entity: show_product_details
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful product details retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDetails"
+        "404":
+          description: Product not found
+        "401":
+          description: Unauthorized
+
+  /v2/invoicing/search-invoices:
+    post:
+      summary: Search invoices
+      description: >
+        Searches for invoices matching the specified criteria. Uses POST
+        with a JSON body for filtering.
+      operationId: searchInvoices
+      x-airbyte-entity: search_invoices
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.items
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: Number of items per page (max 100).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page
+          in: query
+          required: false
+          description: Page number starting from 1.
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InvoiceSearchParams"
+      responses:
+        "200":
+          description: Successful invoice search
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoicesList"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: >
+        OAuth 2.0 Client Credentials authentication. Obtain client_id and
+        client_secret from the PayPal Developer Dashboard. The SDK uses
+        these to obtain and refresh access tokens automatically.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.paypal.com/signin/authorize
+          tokenUrl: https://api-m.sandbox.paypal.com/v1/oauth2/token
+          refreshUrl: https://api-m.sandbox.paypal.com/v1/oauth2/token
+          scopes: {}
+      x-airbyte-auth-config:
+        title: PayPal OAuth2 Authentication
+        type: object
+        required:
+          - client_id
+          - client_secret
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: The Client ID of your PayPal developer application.
+          client_secret:
+            type: string
+            title: Client Secret
+            description: The Client Secret of your PayPal developer application.
+          access_token:
+            type: string
+            title: Access Token
+            description: >
+              OAuth2 access token obtained via client credentials grant.
+              Use the PayPal token endpoint with your client_id and
+              client_secret to obtain this.
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          access_token: "${access_token}"
+        replication_auth_key_mapping:
+          client_id: client_id
+          client_secret: client_secret
+      x-airbyte-token-refresh:
+        auth_style: basic
+        body_format: form
+
+  schemas:
+    Money:
+      type: object
+      description: Currency amount with code and value.
+      properties:
+        currency_code:
+          type: string
+          description: Three-character ISO-4217 currency code.
+          minLength: 3
+          maxLength: 3
+        value:
+          type: string
+          description: Monetary value as a string.
+
+    BalanceDetail:
+      type: object
+      description: Balance information for a single currency.
+      properties:
+        primary:
+          type: boolean
+          description: Whether this is the primary currency balance.
+        currency:
+          type: string
+          description: Currency code for this balance.
+        total_balance:
+          $ref: "#/components/schemas/Money"
+        available_balance:
+          $ref: "#/components/schemas/Money"
+        withheld_balance:
+          $ref: "#/components/schemas/Money"
+
+    BalancesResponse:
+      type: object
+      x-airbyte-entity-name: balances
+      x-airbyte-stream-name: balances
+      description: Balances response with account balance details.
+      properties:
+        balances:
+          type: array
+          description: Array of balance detail objects.
+          items:
+            $ref: "#/components/schemas/BalanceDetail"
+        account_id:
+          type: string
+          description: PayPal payer ID for the account.
+        as_of_time:
+          type: string
+          description: Timestamp when balances were reported.
+        last_refresh_time:
+          type: string
+          description: Timestamp when balances were last refreshed.
+
+    PayerName:
+      type: object
+      description: Payer name details.
+      properties:
+        given_name:
+          type: string
+          description: Given name of the payer.
+        surname:
+          type: string
+          description: Surname of the payer.
+        alternate_full_name:
+          type: string
+          description: Alternate full name.
+
+    PayerInfo:
+      type: object
+      description: Information about the payer.
+      properties:
+        account_id:
+          type: string
+          description: Payer account ID.
+        email_address:
+          type: string
+          description: Payer email address.
+        address_status:
+          type: string
+          description: Status of the payer address.
+        payer_status:
+          type: string
+          description: Status of the payer.
+        payer_name:
+          $ref: "#/components/schemas/PayerName"
+        country_code:
+          type: string
+          description: Country code of the payer.
+
+    TransactionInfo:
+      type: object
+      description: Detailed transaction information.
+      properties:
+        paypal_account_id:
+          type: string
+          description: PayPal account ID for the transaction.
+        transaction_id:
+          type: string
+          description: Unique transaction ID.
+        paypal_reference_id:
+          type: string
+          description: PayPal reference ID.
+        paypal_reference_id_type:
+          type: string
+          description: Type of PayPal reference ID.
+        transaction_event_code:
+          type: string
+          description: Transaction event code.
+        transaction_initiation_date:
+          type: string
+          format: date-time
+          description: Date and time the transaction was initiated.
+        transaction_updated_date:
+          type: string
+          format: date-time
+          description: Date and time the transaction was last updated.
+        transaction_amount:
+          $ref: "#/components/schemas/Money"
+        fee_amount:
+          $ref: "#/components/schemas/Money"
+        insurance_amount:
+          $ref: "#/components/schemas/Money"
+        shipping_amount:
+          $ref: "#/components/schemas/Money"
+        shipping_discount_amount:
+          $ref: "#/components/schemas/Money"
+        transaction_status:
+          type: string
+          description: "Transaction status: D=Denied, P=Pending, S=Success, V=Reversed."
+        transaction_subject:
+          type: string
+          description: Subject or purpose of the transaction.
+        transaction_note:
+          type: string
+          description: Note or comment on the transaction.
+        invoice_id:
+          type: string
+          description: Invoice ID associated with the transaction.
+        custom_field:
+          type: string
+          description: Custom field associated with the transaction.
+        protection_eligibility:
+          type: string
+          description: Protection eligibility status.
+
+    ShippingAddress:
+      type: object
+      description: Shipping address details.
+      properties:
+        line1:
+          type: string
+          description: First line of the address.
+        line2:
+          type: string
+          description: Second line of the address.
+        city:
+          type: string
+          description: City.
+        country_code:
+          type: string
+          description: Country code.
+        postal_code:
+          type: string
+          description: Postal code.
+
+    ShippingInfo:
+      type: object
+      description: Shipping information for the transaction.
+      properties:
+        name:
+          type: string
+          description: Recipient name.
+        address:
+          $ref: "#/components/schemas/ShippingAddress"
+
+    ItemDetail:
+      type: object
+      description: Details for a single cart item.
+      properties:
+        item_code:
+          type: string
+          description: Item code.
+        item_name:
+          type: string
+          description: Item name.
+        item_description:
+          type: string
+          description: Item description.
+        item_quantity:
+          type: string
+          description: Item quantity.
+        item_unit_price:
+          $ref: "#/components/schemas/Money"
+        item_amount:
+          $ref: "#/components/schemas/Money"
+        total_item_amount:
+          $ref: "#/components/schemas/Money"
+        tax_amounts:
+          type: array
+          items:
+            type: object
+            properties:
+              tax_amount:
+                $ref: "#/components/schemas/Money"
+        invoice_number:
+          type: string
+          description: Invoice number for the item.
+
+    CartInfo:
+      type: object
+      description: Cart information for the transaction.
+      properties:
+        item_details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemDetail"
+        tax_inclusive:
+          type: boolean
+          description: Whether item amounts include tax.
+        paypal_invoice_id:
+          type: string
+          description: PayPal-generated invoice ID.
+
+    AuctionInfo:
+      type: object
+      description: Auction information.
+      properties:
+        auction_site:
+          type: string
+          description: Name of the auction site.
+        auction_item_site:
+          type: string
+          description: Auction item URL.
+        auction_buyer_id:
+          type: string
+          description: Buyer ID in the auction.
+        auction_closing_date:
+          type: string
+          format: date-time
+          description: Auction closing date.
+
+    IncentiveDetail:
+      type: object
+      description: Incentive detail.
+      properties:
+        incentive_type:
+          type: string
+          description: Type of incentive.
+        incentive_code:
+          type: string
+          description: Incentive code.
+        incentive_amount:
+          $ref: "#/components/schemas/Money"
+        incentive_program_code:
+          type: string
+          description: Incentive program code.
+
+    IncentiveInfo:
+      type: object
+      description: Incentive information.
+      properties:
+        incentive_details:
+          type: array
+          items:
+            $ref: "#/components/schemas/IncentiveDetail"
+
+    StoreInfo:
+      type: object
+      description: Store information.
+      properties:
+        store_id:
+          type: string
+          description: Store ID.
+        terminal_id:
+          type: string
+          description: Terminal ID.
+
+    Transaction:
+      type: object
+      x-airbyte-entity-name: transactions
+      x-airbyte-stream-name: transactions
+      description: A single PayPal transaction with full details.
+      properties:
+        transaction_info:
+          $ref: "#/components/schemas/TransactionInfo"
+        payer_info:
+          $ref: "#/components/schemas/PayerInfo"
+        shipping_info:
+          $ref: "#/components/schemas/ShippingInfo"
+        cart_info:
+          $ref: "#/components/schemas/CartInfo"
+        auction_info:
+          $ref: "#/components/schemas/AuctionInfo"
+        incentive_info:
+          $ref: "#/components/schemas/IncentiveInfo"
+        store_info:
+          $ref: "#/components/schemas/StoreInfo"
+        transaction_id:
+          type: string
+          description: Top-level transaction ID.
+        transaction_updated_date:
+          type: string
+          format: date-time
+          description: Top-level transaction updated date.
+
+    TransactionsList:
+      type: object
+      description: Paginated list of transactions.
+      properties:
+        transaction_details:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        account_number:
+          type: string
+          description: Encrypted account number for the PayPal account.
+        start_date:
+          type: string
+          description: Start date of the query range.
+        end_date:
+          type: string
+          description: End date of the query range.
+        last_refreshed_datetime:
+          type: string
+          description: Last data refresh timestamp.
+        page:
+          type: integer
+          description: Current page number.
+        total_items:
+          type: integer
+          description: Total number of items.
+        total_pages:
+          type: integer
+          description: Total number of pages.
+        links:
+          type: array
+          description: HATEOAS links for pagination.
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    Payment:
+      type: object
+      x-airbyte-entity-name: list_payments
+      x-airbyte-stream-name: list_payments
+      description: A PayPal payment object.
+      properties:
+        id:
+          type: string
+          description: Payment ID.
+        intent:
+          type: string
+          description: Payment intent (sale, authorize, order).
+        state:
+          type: string
+          description: Payment state.
+        cart:
+          type: string
+          description: Cart ID.
+        payer:
+          type: object
+          description: Payer information.
+          properties:
+            payment_method:
+              type: string
+              description: Payment method.
+            status:
+              type: string
+              description: Payer status.
+            payer_info:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Payer email.
+                first_name:
+                  type: string
+                  description: Payer first name.
+                last_name:
+                  type: string
+                  description: Payer last name.
+                payer_id:
+                  type: string
+                  description: Payer ID.
+                country_code:
+                  type: string
+                  description: Payer country code.
+        transactions:
+          type: array
+          description: Array of transaction objects within the payment.
+          items:
+            type: object
+            properties:
+              amount:
+                type: object
+                properties:
+                  total:
+                    type: string
+                    description: Total amount.
+                  currency:
+                    type: string
+                    description: Currency code.
+                  details:
+                    type: object
+                    properties:
+                      subtotal:
+                        type: string
+                      shipping:
+                        type: string
+                      insurance:
+                        type: string
+                      handling_fee:
+                        type: string
+                      shipping_discount:
+                        type: string
+              description:
+                type: string
+                description: Transaction description.
+              related_resources:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+        create_time:
+          type: string
+          format: date-time
+          description: Payment creation time.
+        update_time:
+          type: string
+          format: date-time
+          description: Payment last update time.
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    PaymentsList:
+      type: object
+      description: List of payments.
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Payment"
+        count:
+          type: integer
+          description: Number of payments returned.
+        next_id:
+          type: string
+          description: Next payment ID for pagination.
+
+    Dispute:
+      type: object
+      x-airbyte-entity-name: list_disputes
+      x-airbyte-stream-name: list_disputes
+      description: A PayPal dispute object.
+      properties:
+        dispute_id:
+          type: string
+          description: Unique dispute identifier.
+        create_time:
+          type: string
+          format: date-time
+          description: Dispute creation time.
+        update_time:
+          type: string
+          format: date-time
+          description: Dispute last update time.
+        status:
+          type: string
+          description: Current dispute status.
+        reason:
+          type: string
+          description: Reason for the dispute.
+        dispute_state:
+          type: string
+          description: Current state of the dispute.
+        dispute_life_cycle_stage:
+          type: string
+          description: Life cycle stage of the dispute.
+        dispute_channel:
+          type: string
+          description: Channel through which the dispute was initiated.
+        dispute_amount:
+          $ref: "#/components/schemas/Money"
+        outcome:
+          type: string
+          description: Outcome of the dispute resolution.
+        disputed_transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              buyer_transaction_id:
+                type: string
+                description: Buyer's transaction ID.
+              seller:
+                type: object
+                properties:
+                  merchant_id:
+                    type: string
+                    description: Seller's merchant ID.
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    DisputesList:
+      type: object
+      description: List of disputes.
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Dispute"
+        links:
+          type: array
+          description: HATEOAS links for pagination.
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    Product:
+      type: object
+      x-airbyte-entity-name: list_products
+      x-airbyte-stream-name: list_products
+      description: A PayPal catalog product (summary).
+      properties:
+        id:
+          type: string
+          description: Product ID.
+        name:
+          type: string
+          description: Product name.
+        description:
+          type: string
+          description: Product description.
+        create_time:
+          type: string
+          format: date-time
+          description: Product creation time.
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    ProductsList:
+      type: object
+      description: List of catalog products.
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        links:
+          type: array
+          description: HATEOAS links for pagination.
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    ProductDetails:
+      type: object
+      x-airbyte-entity-name: show_product_details
+      x-airbyte-stream-name: show_product_details
+      description: Detailed catalog product information.
+      properties:
+        id:
+          type: string
+          description: Product ID.
+        name:
+          type: string
+          description: Product name.
+        description:
+          type: string
+          description: Product description.
+        type:
+          type: string
+          description: Product type.
+        category:
+          type: string
+          description: Product category.
+        image_url:
+          type: string
+          description: Product image URL.
+        home_url:
+          type: string
+          description: Product home URL.
+        create_time:
+          type: string
+          format: date-time
+          description: Product creation time.
+        update_time:
+          type: string
+          format: date-time
+          description: Product last update time.
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    InvoiceSearchParams:
+      type: object
+      description: Parameters for searching invoices.
+      properties:
+        creation_date_range:
+          type: object
+          description: Filter by invoice creation date range.
+          properties:
+            start:
+              type: string
+              description: Start date in ISO 8601 format.
+            end:
+              type: string
+              description: End date in ISO 8601 format.
+
+    Invoice:
+      type: object
+      x-airbyte-entity-name: search_invoices
+      x-airbyte-stream-name: search_invoices
+      description: A PayPal invoice object.
+      properties:
+        id:
+          type: string
+          description: Invoice ID.
+        status:
+          type: string
+          description: Invoice status.
+        detail:
+          type: object
+          description: Invoice detail information.
+          properties:
+            reference:
+              type: string
+              description: Reference for the invoice.
+            currency_code:
+              type: string
+              description: Currency code.
+            note:
+              type: string
+              description: Note to the recipient.
+            terms_and_conditions:
+              type: string
+              description: Terms and conditions.
+            memo:
+              type: string
+              description: Memo for the invoice.
+            invoice_number:
+              type: string
+              description: Invoice number.
+            invoice_date:
+              type: string
+              description: Invoice date.
+            payment_term:
+              type: object
+              properties:
+                term_type:
+                  type: string
+                  description: Payment term type.
+                due_date:
+                  type: string
+                  description: Due date.
+            metadata:
+              type: object
+              properties:
+                create_time:
+                  type: string
+                  format: date-time
+                  description: Invoice creation time.
+                created_by:
+                  type: string
+                  description: Creator of the invoice.
+                last_update_time:
+                  type: string
+                  format: date-time
+                  description: Last update time.
+                last_updated_by:
+                  type: string
+                  description: Last updater.
+                first_sent_time:
+                  type: string
+                  format: date-time
+                  description: First sent time.
+                last_sent_time:
+                  type: string
+                  format: date-time
+                  description: Last sent time.
+                created_by_flow:
+                  type: string
+                  description: Flow that created the invoice.
+                invoicer_view_url:
+                  type: string
+                  description: Invoicer view URL.
+                recipient_view_url:
+                  type: string
+                  description: Recipient view URL.
+                cancel_time:
+                  type: string
+                  format: date-time
+                  description: Cancellation time.
+                cancelled_by:
+                  type: string
+                  description: Canceller.
+        invoicer:
+          type: object
+          description: Invoicer details.
+          properties:
+            name:
+              type: object
+              properties:
+                given_name:
+                  type: string
+                surname:
+                  type: string
+                full_name:
+                  type: string
+            address:
+              type: object
+              additionalProperties: true
+            email_address:
+              type: string
+              description: Invoicer email.
+        primary_recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              billing_info:
+                type: object
+                properties:
+                  name:
+                    type: object
+                    properties:
+                      given_name:
+                        type: string
+                      surname:
+                        type: string
+                      full_name:
+                        type: string
+                  email_address:
+                    type: string
+                  additional_info_value:
+                    type: string
+        additional_recipients:
+          type: array
+          items:
+            type: string
+        items:
+          type: array
+          description: Line items on the invoice.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              quantity:
+                type: string
+              unit_amount:
+                $ref: "#/components/schemas/Money"
+              tax:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  percent:
+                    type: string
+                  amount:
+                    $ref: "#/components/schemas/Money"
+              unit_of_measure:
+                type: string
+        amount:
+          type: object
+          description: Total invoice amount.
+          properties:
+            currency_code:
+              type: string
+            value:
+              type: string
+            breakdown:
+              type: object
+              properties:
+                item_total:
+                  $ref: "#/components/schemas/Money"
+                discount:
+                  type: object
+                  additionalProperties: true
+                tax_total:
+                  $ref: "#/components/schemas/Money"
+                shipping:
+                  $ref: "#/components/schemas/Money"
+                custom:
+                  type: object
+                  additionalProperties: true
+        configuration:
+          type: object
+          description: Invoice configuration.
+          properties:
+            tax_calculated_after_discount:
+              type: string
+            tax_inclusive:
+              type: string
+            allow_tip:
+              type: string
+            template_id:
+              type: string
+            partial_payment:
+              type: object
+              properties:
+                allow_partial_payment:
+                  type: string
+                minimum_amount_due:
+                  $ref: "#/components/schemas/Money"
+        due_amount:
+          $ref: "#/components/schemas/Money"
+        payments:
+          type: object
+          description: Payment records for this invoice.
+          properties:
+            paid_amount:
+              $ref: "#/components/schemas/Money"
+            transactions:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+        refunds:
+          type: object
+          description: Refund records for this invoice.
+          properties:
+            refund_amount:
+              $ref: "#/components/schemas/Money"
+            transactions:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              rel:
+                type: string
+              method:
+                type: string
+
+    InvoicesList:
+      type: object
+      description: Paginated list of invoices from search.
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invoice"
+        total_items:
+          type: integer
+          description: Total number of matching invoices.
+        total_pages:
+          type: integer
+          description: Total number of pages.

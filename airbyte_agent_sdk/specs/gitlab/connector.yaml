@@ -1,0 +1,4841 @@
+openapi: 3.1.0
+info:
+  title: GitLab API Connector
+  version: 1.0.4
+  description: 'Connector for the GitLab REST API (v4). Provides access to projects, issues, merge requests, commits, pipelines, groups, branches, releases, tags, members, milestones, and users. Supports both Personal Access Token and OAuth2 authentication.
+
+    '
+  x-airbyte-connector-name: gitlab
+  x-airbyte-connector-definition-id: 5e6175e5-68e1-4c17-bff9-56103bbb0d80
+  x-airbyte-replication-version: 4.4.22
+  x-airbyte-replication-compatibility: '>=4.4.22, <5.0.0'
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: GitLab REST API Documentation
+    url: https://docs.gitlab.com/ee/api/rest/
+  x-airbyte-example-questions:
+    direct:
+    - List all projects I have access to
+    - Get the details of a specific project
+    - List all open issues in a project
+    - Show merge requests for a project
+    - List all groups I belong to
+    - Show recent commits in a project
+    - List pipelines for a project
+    - Show all branches in a project
+    search:
+    - Find issues updated in the last week
+    - What are the most active projects?
+    - Show merge requests that are still open
+    - List projects with the most commits
+    unsupported:
+    - Create a new project
+    - Delete an issue
+    - Merge a merge request
+    - Trigger a pipeline
+  x-airbyte-entity-relationships:
+  - source_entity: issues
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: merge_requests
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: commits
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: branches
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: pipelines
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: group_members
+    target_entity: groups
+    foreign_key: group_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: project_members
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: releases
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: tags
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: group_milestones
+    target_entity: groups
+    foreign_key: group_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: project_milestones
+    target_entity: projects
+    foreign_key: project_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: projects
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the project
+      - name: description_html
+        type:
+        - 'null'
+        - string
+        description: HTML-rendered description of the project
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Name of the project
+      - name: name_with_namespace
+        type:
+        - 'null'
+        - string
+        description: Full name including namespace
+      - name: path
+        type:
+        - 'null'
+        - string
+        description: URL path of the project
+      - name: path_with_namespace
+        type:
+        - 'null'
+        - string
+        description: Full path including namespace
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the project was created
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the project was last updated
+      - name: default_branch
+        type:
+        - 'null'
+        - string
+        description: Default branch of the project
+      - name: tag_list
+        type:
+        - 'null'
+        - array
+        description: List of tags for the project
+      - name: topics
+        type:
+        - 'null'
+        - array
+        description: List of topics for the project
+      - name: ssh_url_to_repo
+        type:
+        - 'null'
+        - string
+        description: SSH URL to the repository
+      - name: http_url_to_repo
+        type:
+        - 'null'
+        - string
+        description: HTTP URL to the repository
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the project
+      - name: readme_url
+        type:
+        - 'null'
+        - string
+        description: URL to the project README
+      - name: avatar_url
+        type:
+        - 'null'
+        - string
+        description: URL of the project avatar
+      - name: forks_count
+        type:
+        - 'null'
+        - integer
+        description: Number of forks
+      - name: star_count
+        type:
+        - 'null'
+        - integer
+        description: Number of stars
+      - name: last_activity_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp of last activity
+      - name: namespace
+        type:
+        - 'null'
+        - object
+        description: Namespace the project belongs to
+      - name: container_registry_image_prefix
+        type:
+        - 'null'
+        - string
+        description: Prefix for container registry images
+      - name: _links
+        type:
+        - 'null'
+        - object
+        description: Related resource links
+      - name: packages_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether packages are enabled
+      - name: empty_repo
+        type:
+        - 'null'
+        - boolean
+        description: Whether the repository is empty
+      - name: archived
+        type:
+        - 'null'
+        - boolean
+        description: Whether the project is archived
+      - name: visibility
+        type:
+        - 'null'
+        - string
+        description: Visibility level of the project
+      - name: resolve_outdated_diff_discussions
+        type:
+        - 'null'
+        - boolean
+        description: Whether outdated diff discussions are auto-resolved
+      - name: container_registry_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether container registry is enabled
+      - name: container_expiration_policy
+        type:
+        - 'null'
+        - object
+        description: Container expiration policy settings
+      - name: issues_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether issues are enabled
+      - name: merge_requests_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether merge requests are enabled
+      - name: wiki_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether wiki is enabled
+      - name: jobs_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether jobs are enabled
+      - name: snippets_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether snippets are enabled
+      - name: service_desk_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether service desk is enabled
+      - name: service_desk_address
+        type:
+        - 'null'
+        - string
+        description: Email address for the service desk
+      - name: can_create_merge_request_in
+        type:
+        - 'null'
+        - boolean
+        description: Whether user can create merge requests
+      - name: issues_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for issues
+      - name: repository_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for the repository
+      - name: merge_requests_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for merge requests
+      - name: forking_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for forking
+      - name: wiki_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for the wiki
+      - name: builds_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for builds
+      - name: snippets_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for snippets
+      - name: pages_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for pages
+      - name: operations_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for operations
+      - name: analytics_access_level
+        type:
+        - 'null'
+        - string
+        description: Access level for analytics
+      - name: emails_disabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether emails are disabled
+      - name: shared_runners_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether shared runners are enabled
+      - name: lfs_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether Git LFS is enabled
+      - name: creator_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project creator
+      - name: import_status
+        type:
+        - 'null'
+        - string
+        description: Import status of the project
+      - name: open_issues_count
+        type:
+        - 'null'
+        - integer
+        description: Number of open issues
+      - name: ci_default_git_depth
+        type:
+        - 'null'
+        - integer
+        description: Default git depth for CI pipelines
+      - name: ci_forward_deployment_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether CI forward deployment is enabled
+      - name: public_jobs
+        type:
+        - 'null'
+        - boolean
+        description: Whether jobs are public
+      - name: build_timeout
+        type:
+        - 'null'
+        - integer
+        description: Build timeout in seconds
+      - name: auto_cancel_pending_pipelines
+        type:
+        - 'null'
+        - string
+        description: Auto-cancel pending pipelines setting
+      - name: ci_config_path
+        type:
+        - 'null'
+        - string
+        description: Path to the CI configuration file
+      - name: shared_with_groups
+        type:
+        - 'null'
+        - array
+        description: Groups the project is shared with
+      - name: only_allow_merge_if_pipeline_succeeds
+        type:
+        - 'null'
+        - boolean
+        description: Whether merge requires pipeline success
+      - name: allow_merge_on_skipped_pipeline
+        type:
+        - 'null'
+        - boolean
+        description: Whether merge is allowed on skipped pipeline
+      - name: restrict_user_defined_variables
+        type:
+        - 'null'
+        - boolean
+        description: Whether user-defined variables are restricted
+      - name: request_access_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether access requests are enabled
+      - name: only_allow_merge_if_all_discussions_are_resolved
+        type:
+        - 'null'
+        - boolean
+        description: Whether merge requires all discussions resolved
+      - name: remove_source_branch_after_merge
+        type:
+        - 'null'
+        - boolean
+        description: Whether source branch is removed after merge
+      - name: printing_merge_request_link_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether MR link printing is enabled
+      - name: merge_method
+        type:
+        - 'null'
+        - string
+        description: Merge method used for the project
+      - name: statistics
+        type:
+        - 'null'
+        - object
+        description: Project statistics
+      - name: auto_devops_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether Auto DevOps is enabled
+      - name: auto_devops_deploy_strategy
+        type:
+        - 'null'
+        - string
+        description: Auto DevOps deployment strategy
+      - name: autoclose_referenced_issues
+        type:
+        - 'null'
+        - boolean
+        description: Whether referenced issues are auto-closed
+      - name: external_authorization_classification_label
+        type:
+        - 'null'
+        - string
+        description: External authorization classification label
+      - name: requirements_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether requirements are enabled
+      - name: security_and_compliance_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether security and compliance is enabled
+      - name: compliance_frameworks
+        type:
+        - 'null'
+        - array
+        description: Compliance frameworks for the project
+      - name: permissions
+        type:
+        - 'null'
+        - object
+        description: User permissions for the project
+      - name: keep_latest_artifact
+        type:
+        - 'null'
+        - boolean
+        description: Whether the latest artifact is kept
+    - entity: issues
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the issue
+      - name: iid
+        type:
+        - 'null'
+        - integer
+        description: Internal ID of the issue within the project
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project the issue belongs to
+      - name: title
+        type:
+        - 'null'
+        - string
+        description: Title of the issue
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the issue
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the issue
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the issue was created
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the issue was last updated
+      - name: closed_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the issue was closed
+      - name: labels
+        type:
+        - 'null'
+        - array
+        description: Labels assigned to the issue
+      - name: assignees
+        type:
+        - 'null'
+        - array
+        description: Users assigned to the issue
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: Type of the issue
+      - name: user_notes_count
+        type:
+        - 'null'
+        - integer
+        description: Number of user notes on the issue
+      - name: merge_requests_count
+        type:
+        - 'null'
+        - integer
+        description: Number of related merge requests
+      - name: upvotes
+        type:
+        - 'null'
+        - integer
+        description: Number of upvotes
+      - name: downvotes
+        type:
+        - 'null'
+        - integer
+        description: Number of downvotes
+      - name: due_date
+        type:
+        - 'null'
+        - string
+        description: Due date for the issue
+      - name: confidential
+        type:
+        - 'null'
+        - boolean
+        description: Whether the issue is confidential
+      - name: discussion_locked
+        type:
+        - 'null'
+        - boolean
+        description: Whether discussion is locked
+      - name: issue_type
+        type:
+        - 'null'
+        - string
+        description: Type classification of the issue
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the issue
+      - name: time_stats
+        type:
+        - 'null'
+        - object
+        description: Time tracking statistics
+      - name: task_completion_status
+        type:
+        - 'null'
+        - object
+        description: Task completion status
+      - name: blocking_issues_count
+        type:
+        - 'null'
+        - integer
+        description: Number of blocking issues
+      - name: has_tasks
+        type:
+        - 'null'
+        - boolean
+        description: Whether the issue has tasks
+      - name: _links
+        type:
+        - 'null'
+        - object
+        description: Related resource links
+      - name: references
+        type:
+        - 'null'
+        - object
+        description: Issue references
+      - name: author
+        type:
+        - 'null'
+        - object
+        description: Author of the issue
+      - name: author_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the author
+      - name: assignee
+        type:
+        - 'null'
+        - object
+        description: Primary assignee of the issue
+      - name: assignee_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the primary assignee
+      - name: closed_by
+        type:
+        - 'null'
+        - object
+        description: User who closed the issue
+      - name: closed_by_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the user who closed the issue
+      - name: milestone
+        type:
+        - 'null'
+        - object
+        description: Milestone the issue belongs to
+      - name: milestone_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the milestone
+      - name: weight
+        type:
+        - 'null'
+        - integer
+        description: Weight of the issue
+      - name: severity
+        type:
+        - 'null'
+        - string
+        description: Severity level of the issue
+    - entity: merge_requests
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the merge request
+      - name: iid
+        type:
+        - 'null'
+        - integer
+        description: Internal ID of the merge request within the project
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+      - name: title
+        type:
+        - 'null'
+        - string
+        description: Title of the merge request
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the merge request
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the merge request
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the merge request was created
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the merge request was last updated
+      - name: merged_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the merge request was merged
+      - name: closed_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the merge request was closed
+      - name: target_branch
+        type:
+        - 'null'
+        - string
+        description: Target branch for the merge request
+      - name: source_branch
+        type:
+        - 'null'
+        - string
+        description: Source branch for the merge request
+      - name: user_notes_count
+        type:
+        - 'null'
+        - integer
+        description: Number of user notes
+      - name: upvotes
+        type:
+        - 'null'
+        - integer
+        description: Number of upvotes
+      - name: downvotes
+        type:
+        - 'null'
+        - integer
+        description: Number of downvotes
+      - name: assignees
+        type:
+        - 'null'
+        - array
+        description: Users assigned to the merge request
+      - name: reviewers
+        type:
+        - 'null'
+        - array
+        description: Users assigned as reviewers
+      - name: source_project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the source project
+      - name: target_project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the target project
+      - name: labels
+        type:
+        - 'null'
+        - array
+        description: Labels assigned to the merge request
+      - name: work_in_progress
+        type:
+        - 'null'
+        - boolean
+        description: Whether the merge request is a work in progress
+      - name: merge_when_pipeline_succeeds
+        type:
+        - 'null'
+        - boolean
+        description: Whether to merge when pipeline succeeds
+      - name: merge_status
+        type:
+        - 'null'
+        - string
+        description: Merge status of the merge request
+      - name: sha
+        type:
+        - 'null'
+        - string
+        description: SHA of the head commit
+      - name: merge_commit_sha
+        type:
+        - 'null'
+        - string
+        description: SHA of the merge commit
+      - name: squash_commit_sha
+        type:
+        - 'null'
+        - string
+        description: SHA of the squash commit
+      - name: discussion_locked
+        type:
+        - 'null'
+        - boolean
+        description: Whether discussion is locked
+      - name: should_remove_source_branch
+        type:
+        - 'null'
+        - boolean
+        description: Whether source branch should be removed
+      - name: force_remove_source_branch
+        type:
+        - 'null'
+        - boolean
+        description: Whether to force remove source branch
+      - name: reference
+        type:
+        - 'null'
+        - string
+        description: Short reference for the merge request
+      - name: references
+        type:
+        - 'null'
+        - object
+        description: Merge request references
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the merge request
+      - name: time_stats
+        type:
+        - 'null'
+        - object
+        description: Time tracking statistics
+      - name: squash
+        type:
+        - 'null'
+        - boolean
+        description: Whether to squash commits on merge
+      - name: task_completion_status
+        type:
+        - 'null'
+        - object
+        description: Task completion status
+      - name: has_conflicts
+        type:
+        - 'null'
+        - boolean
+        description: Whether the merge request has conflicts
+      - name: blocking_discussions_resolved
+        type:
+        - 'null'
+        - boolean
+        description: Whether blocking discussions are resolved
+      - name: author
+        type:
+        - 'null'
+        - object
+        description: Author of the merge request
+      - name: author_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the author
+      - name: assignee
+        type:
+        - 'null'
+        - object
+        description: Primary assignee of the merge request
+      - name: assignee_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the primary assignee
+      - name: closed_by
+        type:
+        - 'null'
+        - object
+        description: User who closed the merge request
+      - name: closed_by_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the user who closed it
+      - name: milestone
+        type:
+        - 'null'
+        - object
+        description: Milestone the merge request belongs to
+      - name: milestone_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the milestone
+      - name: merged_by
+        type:
+        - 'null'
+        - object
+        description: User who merged the merge request
+      - name: merged_by_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the user who merged it
+      - name: draft
+        type:
+        - 'null'
+        - boolean
+        description: Whether the merge request is a draft
+      - name: detailed_merge_status
+        type:
+        - 'null'
+        - string
+        description: Detailed merge status
+      - name: merge_user
+        type:
+        - 'null'
+        - object
+        description: User who performed the merge
+    - entity: users
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the user
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Full name of the user
+      - name: username
+        type:
+        - 'null'
+        - string
+        description: Username of the user
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the user account
+      - name: avatar_url
+        type:
+        - 'null'
+        - string
+        description: URL of the user avatar
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the user profile
+      - name: locked
+        type:
+        - 'null'
+        - boolean
+        description: Whether the user account is locked
+    - entity: commits
+      fields:
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project the commit belongs to
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: SHA of the commit
+      - name: short_id
+        type:
+        - 'null'
+        - string
+        description: Short SHA of the commit
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the commit was created
+      - name: parent_ids
+        type:
+        - 'null'
+        - array
+        description: SHAs of parent commits
+      - name: title
+        type:
+        - 'null'
+        - string
+        description: Title of the commit
+      - name: message
+        type:
+        - 'null'
+        - string
+        description: Full commit message
+      - name: author_name
+        type:
+        - 'null'
+        - string
+        description: Name of the commit author
+      - name: author_email
+        type:
+        - 'null'
+        - string
+        description: Email of the commit author
+      - name: authored_date
+        type:
+        - 'null'
+        - string
+        description: Date the commit was authored
+      - name: committer_name
+        type:
+        - 'null'
+        - string
+        description: Name of the committer
+      - name: committer_email
+        type:
+        - 'null'
+        - string
+        description: Email of the committer
+      - name: committed_date
+        type:
+        - 'null'
+        - string
+        description: Date the commit was committed
+      - name: trailers
+        type:
+        - 'null'
+        - object
+        description: Git trailers for the commit
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the commit
+      - name: stats
+        type:
+        - 'null'
+        - object
+        description: Commit statistics
+    - entity: groups
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the group
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the group
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Name of the group
+      - name: path
+        type:
+        - 'null'
+        - string
+        description: URL path of the group
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the group
+      - name: visibility
+        type:
+        - 'null'
+        - string
+        description: Visibility level of the group
+      - name: share_with_group_lock
+        type:
+        - 'null'
+        - boolean
+        description: Whether sharing with other groups is locked
+      - name: require_two_factor_authentication
+        type:
+        - 'null'
+        - boolean
+        description: Whether two-factor authentication is required
+      - name: two_factor_grace_period
+        type:
+        - 'null'
+        - integer
+        description: Grace period for two-factor authentication
+      - name: project_creation_level
+        type:
+        - 'null'
+        - string
+        description: Level required to create projects
+      - name: auto_devops_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether Auto DevOps is enabled
+      - name: subgroup_creation_level
+        type:
+        - 'null'
+        - string
+        description: Level required to create subgroups
+      - name: emails_disabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether emails are disabled
+      - name: emails_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether emails are enabled
+      - name: mentions_disabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether mentions are disabled
+      - name: lfs_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether Git LFS is enabled
+      - name: default_branch_protection
+        type:
+        - 'null'
+        - integer
+        description: Default branch protection level
+      - name: avatar_url
+        type:
+        - 'null'
+        - string
+        description: URL of the group avatar
+      - name: request_access_enabled
+        type:
+        - 'null'
+        - boolean
+        description: Whether access requests are enabled
+      - name: full_name
+        type:
+        - 'null'
+        - string
+        description: Full name of the group
+      - name: full_path
+        type:
+        - 'null'
+        - string
+        description: Full path of the group
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the group was created
+      - name: parent_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the parent group
+      - name: shared_with_groups
+        type:
+        - 'null'
+        - array
+        description: Groups this group is shared with
+      - name: projects
+        type:
+        - 'null'
+        - array
+        description: Projects in the group
+    - entity: branches
+      fields:
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project the branch belongs to
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Name of the branch
+      - name: merged
+        type:
+        - 'null'
+        - boolean
+        description: Whether the branch is merged
+      - name: protected
+        type:
+        - 'null'
+        - boolean
+        description: Whether the branch is protected
+      - name: developers_can_push
+        type:
+        - 'null'
+        - boolean
+        description: Whether developers can push to the branch
+      - name: developers_can_merge
+        type:
+        - 'null'
+        - boolean
+        description: Whether developers can merge into the branch
+      - name: can_push
+        type:
+        - 'null'
+        - boolean
+        description: Whether the current user can push
+      - name: default
+        type:
+        - 'null'
+        - boolean
+        description: Whether this is the default branch
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the branch
+      - name: commit_id
+        type:
+        - 'null'
+        - string
+        description: SHA of the head commit
+      - name: commit
+        type:
+        - 'null'
+        - object
+        description: Head commit details
+    - entity: pipelines
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the pipeline
+      - name: iid
+        type:
+        - 'null'
+        - integer
+        description: Internal ID of the pipeline within the project
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+      - name: sha
+        type:
+        - 'null'
+        - string
+        description: SHA of the commit that triggered the pipeline
+      - name: source
+        type:
+        - 'null'
+        - string
+        description: Source that triggered the pipeline
+      - name: ref
+        type:
+        - 'null'
+        - string
+        description: Branch or tag that triggered the pipeline
+      - name: status
+        type:
+        - 'null'
+        - string
+        description: Status of the pipeline
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the pipeline was created
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the pipeline was last updated
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the pipeline
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Name of the pipeline
+    - entity: group_members
+      fields:
+      - name: group_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the group
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the member
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Full name of the member
+      - name: username
+        type:
+        - 'null'
+        - string
+        description: Username of the member
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the member account
+      - name: membership_state
+        type:
+        - 'null'
+        - string
+        description: State of the membership
+      - name: avatar_url
+        type:
+        - 'null'
+        - string
+        description: URL of the member avatar
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the member profile
+      - name: access_level
+        type:
+        - 'null'
+        - integer
+        description: Access level of the member
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the member was added
+      - name: expires_at
+        type:
+        - 'null'
+        - string
+        description: Expiration date of the membership
+      - name: created_by
+        type:
+        - 'null'
+        - object
+        description: User who added the member
+      - name: locked
+        type:
+        - 'null'
+        - boolean
+        description: Whether the member account is locked
+    - entity: project_members
+      fields:
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the member
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Full name of the member
+      - name: username
+        type:
+        - 'null'
+        - string
+        description: Username of the member
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the member account
+      - name: membership_state
+        type:
+        - 'null'
+        - string
+        description: State of the membership
+      - name: avatar_url
+        type:
+        - 'null'
+        - string
+        description: URL of the member avatar
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the member profile
+      - name: access_level
+        type:
+        - 'null'
+        - integer
+        description: Access level of the member
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the member was added
+      - name: expires_at
+        type:
+        - 'null'
+        - string
+        description: Expiration date of the membership
+      - name: created_by
+        type:
+        - 'null'
+        - object
+        description: User who added the member
+      - name: locked
+        type:
+        - 'null'
+        - boolean
+        description: Whether the member account is locked
+    - entity: releases
+      fields:
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Name of the release
+      - name: tag_name
+        type:
+        - 'null'
+        - string
+        description: Tag name associated with the release
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the release
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the release was created
+      - name: released_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the release was published
+      - name: upcoming_release
+        type:
+        - 'null'
+        - boolean
+        description: Whether this is an upcoming release
+      - name: milestones
+        type:
+        - 'null'
+        - array
+        description: Milestones associated with the release
+      - name: commit_path
+        type:
+        - 'null'
+        - string
+        description: Path to the release commit
+      - name: tag_path
+        type:
+        - 'null'
+        - string
+        description: Path to the release tag
+      - name: assets
+        type:
+        - 'null'
+        - object
+        description: Assets attached to the release
+      - name: evidences
+        type:
+        - 'null'
+        - array
+        description: Evidences collected for the release
+      - name: _links
+        type:
+        - 'null'
+        - object
+        description: Related resource links
+      - name: author
+        type:
+        - 'null'
+        - object
+        description: Author of the release
+      - name: author_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the author
+      - name: commit
+        type:
+        - 'null'
+        - object
+        description: Commit associated with the release
+      - name: commit_id
+        type:
+        - 'null'
+        - string
+        description: SHA of the associated commit
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+    - entity: tags
+      fields:
+      - name: name
+        type:
+        - 'null'
+        - string
+        description: Name of the tag
+      - name: message
+        type:
+        - 'null'
+        - string
+        description: Annotation message of the tag
+      - name: target
+        type:
+        - 'null'
+        - string
+        description: SHA the tag points to
+      - name: release
+        type:
+        - 'null'
+        - object
+        description: Release associated with the tag
+      - name: protected
+        type:
+        - 'null'
+        - boolean
+        description: Whether the tag is protected
+      - name: commit
+        type:
+        - 'null'
+        - object
+        description: Commit the tag points to
+      - name: commit_id
+        type:
+        - 'null'
+        - string
+        description: SHA of the tagged commit
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+    - entity: group_milestones
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the milestone
+      - name: iid
+        type:
+        - 'null'
+        - integer
+        description: Internal ID of the milestone within the group
+      - name: group_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the group
+      - name: title
+        type:
+        - 'null'
+        - string
+        description: Title of the milestone
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the milestone
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the milestone
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the milestone was created
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the milestone was last updated
+      - name: due_date
+        type:
+        - 'null'
+        - string
+        description: Due date of the milestone
+      - name: start_date
+        type:
+        - 'null'
+        - string
+        description: Start date of the milestone
+      - name: expired
+        type:
+        - 'null'
+        - boolean
+        description: Whether the milestone is expired
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the milestone
+    - entity: project_milestones
+      fields:
+      - name: id
+        type:
+        - 'null'
+        - integer
+        description: ID of the milestone
+      - name: iid
+        type:
+        - 'null'
+        - integer
+        description: Internal ID of the milestone within the project
+      - name: project_id
+        type:
+        - 'null'
+        - integer
+        description: ID of the project
+      - name: title
+        type:
+        - 'null'
+        - string
+        description: Title of the milestone
+      - name: description
+        type:
+        - 'null'
+        - string
+        description: Description of the milestone
+      - name: state
+        type:
+        - 'null'
+        - string
+        description: State of the milestone
+      - name: created_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the milestone was created
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: Timestamp when the milestone was last updated
+      - name: due_date
+        type:
+        - 'null'
+        - string
+        description: Due date of the milestone
+      - name: start_date
+        type:
+        - 'null'
+        - string
+        description: Start date of the milestone
+      - name: expired
+        type:
+        - 'null'
+        - boolean
+        description: Whether the milestone is expired
+      - name: web_url
+        type:
+        - 'null'
+        - string
+        description: Web URL of the milestone
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from GitLab.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data. If not set, all data will be replicated.
+        format: date-time
+    required: []
+    replication_config_key_mapping:
+      start_date: start_date
+servers:
+- url: https://{api_url}/api/v4
+  description: GitLab API server
+  variables:
+    api_url:
+      default: gitlab.com
+      description: GitLab instance hostname
+  x-airbyte-replication-environment-mapping:
+    api_url: api_url
+security:
+- gitlabPAT: []
+- gitlabOAuth: []
+paths:
+  /projects:
+    get:
+      summary: List projects
+      description: Get a list of all visible projects across GitLab for the authenticated user.
+      operationId: listProjects
+      x-airbyte-entity: projects
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      parameters:
+      - name: page
+        in: query
+        description: Page number (1-indexed)
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page (max 100)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: membership
+        in: query
+        description: Limit by projects that the current user is a member of
+        schema:
+          type: boolean
+      - name: owned
+        in: query
+        description: Limit by projects explicitly owned by the current user
+        schema:
+          type: boolean
+      - name: search
+        in: query
+        description: Return list of projects matching the search criteria
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Return projects ordered by field
+        schema:
+          type: string
+          enum:
+          - id
+          - name
+          - path
+          - created_at
+          - updated_at
+          - last_activity_at
+          - similarity
+          - star_count
+      - name: sort
+        in: query
+        description: Return projects sorted in asc or desc order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          description: Unauthorized
+  /projects/{id}:
+    get:
+      summary: Get a project
+      description: Get a specific project by ID.
+      operationId: getProject
+      x-airbyte-entity: projects
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: statistics
+        in: query
+        description: Include project statistics
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '404':
+          description: Project not found
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/issues:
+    get:
+      summary: List project issues
+      description: Get a list of a project's issues.
+      operationId: listIssues
+      x-airbyte-entity: issues
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: state
+        in: query
+        description: Filter issues by state
+        schema:
+          type: string
+          enum:
+          - opened
+          - closed
+          - all
+      - name: scope
+        in: query
+        description: Filter issues by scope
+        schema:
+          type: string
+          enum:
+          - created_by_me
+          - assigned_to_me
+          - all
+      - name: order_by
+        in: query
+        description: Return issues ordered by field
+        schema:
+          type: string
+          enum:
+          - created_at
+          - updated_at
+          - priority
+          - due_date
+          - relative_position
+          - label_priority
+          - milestone_due
+          - popularity
+          - weight
+      - name: sort
+        in: query
+        description: Return issues sorted in asc or desc order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: created_after
+        in: query
+        description: Return issues created on or after the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_before
+        in: query
+        description: Return issues created on or before the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_after
+        in: query
+        description: Return issues updated on or after the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_before
+        in: query
+        description: Return issues updated on or before the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: List of issues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/issues/{issue_iid}:
+    get:
+      summary: Get an issue
+      description: Get a single project issue.
+      operationId: getIssue
+      x-airbyte-entity: issues
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: issue_iid
+        in: path
+        required: true
+        description: The internal ID of a project's issue
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Issue details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '404':
+          description: Issue not found
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/merge_requests:
+    get:
+      summary: List merge requests
+      description: Get all merge requests for a project.
+      operationId: listMergeRequests
+      x-airbyte-entity: merge_requests
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: state
+        in: query
+        description: Filter merge requests by state
+        schema:
+          type: string
+          enum:
+          - opened
+          - closed
+          - locked
+          - merged
+          - all
+      - name: scope
+        in: query
+        description: Filter merge requests by scope
+        schema:
+          type: string
+          enum:
+          - created_by_me
+          - assigned_to_me
+          - all
+      - name: order_by
+        in: query
+        description: Return merge requests ordered by field
+        schema:
+          type: string
+          enum:
+          - created_at
+          - title
+          - updated_at
+      - name: sort
+        in: query
+        description: Return merge requests sorted in asc or desc order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: created_after
+        in: query
+        description: Return merge requests created on or after the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_before
+        in: query
+        description: Return merge requests created on or before the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_after
+        in: query
+        description: Return merge requests updated on or after the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_before
+        in: query
+        description: Return merge requests updated on or before the given time (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: List of merge requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MergeRequest'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/merge_requests/{merge_request_iid}:
+    get:
+      summary: Get a merge request
+      description: Get information about a single merge request.
+      operationId: getMergeRequest
+      x-airbyte-entity: merge_requests
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: merge_request_iid
+        in: path
+        required: true
+        description: The internal ID of the merge request
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Merge request details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MergeRequest'
+        '404':
+          description: Merge request not found
+        '401':
+          description: Unauthorized
+  /users:
+    get:
+      summary: List users
+      description: Get a list of users.
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: search
+        in: query
+        description: Search for users by name, username, or email
+        schema:
+          type: string
+      - name: active
+        in: query
+        description: Filter users by active state
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+  /users/{id}:
+    get:
+      summary: Get a user
+      description: Get a single user by ID.
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the user
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/repository/commits:
+    get:
+      summary: List commits
+      description: Get a list of repository commits in a project.
+      operationId: listCommits
+      x-airbyte-entity: commits
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: ref_name
+        in: query
+        description: The name of a repository branch, tag, or revision range
+        schema:
+          type: string
+      - name: since
+        in: query
+        description: Only commits after or on this date (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        in: query
+        description: Only commits before or on this date (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: with_stats
+        in: query
+        description: Include stats about each commit
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of commits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Commit'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/repository/commits/{sha}:
+    get:
+      summary: Get a commit
+      description: Get a specific commit identified by the commit hash or name of a branch or tag.
+      operationId: getCommit
+      x-airbyte-entity: commits
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: sha
+        in: path
+        required: true
+        description: The commit hash or name of a repository branch or tag
+        schema:
+          type: string
+      - name: stats
+        in: query
+        description: Include commit stats
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Commit details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Commit'
+        '404':
+          description: Commit not found
+        '401':
+          description: Unauthorized
+  /groups:
+    get:
+      summary: List groups
+      description: Get a list of visible groups for the authenticated user.
+      operationId: listGroups
+      x-airbyte-entity: groups
+      x-airbyte-action: list
+      parameters:
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: search
+        in: query
+        description: Search for groups by name or path
+        schema:
+          type: string
+      - name: owned
+        in: query
+        description: Limit to groups explicitly owned by the current user
+        schema:
+          type: boolean
+      - name: order_by
+        in: query
+        description: Order groups by field
+        schema:
+          type: string
+          enum:
+          - name
+          - path
+          - id
+      - name: sort
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        '401':
+          description: Unauthorized
+  /groups/{id}:
+    get:
+      summary: Get a group
+      description: Get all details of a group.
+      operationId: getGroup
+      x-airbyte-entity: groups
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the group
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Group details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '404':
+          description: Group not found
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/repository/branches:
+    get:
+      summary: List branches
+      description: Get a list of repository branches from a project.
+      operationId: listBranches
+      x-airbyte-entity: branches
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: search
+        in: query
+        description: Return list of branches containing the search string
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of branches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Branch'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/repository/branches/{branch}:
+    get:
+      summary: Get a branch
+      description: Get a single project repository branch.
+      operationId: getBranch
+      x-airbyte-entity: branches
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: branch
+        in: path
+        required: true
+        description: The name of the branch (URL-encoded if it contains special characters)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A single branch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /projects/{project_id}/pipelines:
+    get:
+      summary: List pipelines
+      description: List pipelines in a project.
+      operationId: listPipelines
+      x-airbyte-entity: pipelines
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: status
+        in: query
+        description: Filter pipelines by status
+        schema:
+          type: string
+          enum:
+          - created
+          - waiting_for_resource
+          - preparing
+          - pending
+          - running
+          - success
+          - failed
+          - canceled
+          - skipped
+          - manual
+          - scheduled
+      - name: ref
+        in: query
+        description: Filter pipelines by ref
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Order pipelines by field
+        schema:
+          type: string
+          enum:
+          - id
+          - status
+          - ref
+          - updated_at
+          - user_id
+      - name: sort
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: List of pipelines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pipeline'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/pipelines/{pipeline_id}:
+    get:
+      summary: Get a pipeline
+      description: Get one pipeline of a project.
+      operationId: getPipeline
+      x-airbyte-entity: pipelines
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: pipeline_id
+        in: path
+        required: true
+        description: The ID of the pipeline
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Pipeline details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '404':
+          description: Pipeline not found
+        '401':
+          description: Unauthorized
+  /groups/{group_id}/members:
+    get:
+      summary: List group members
+      description: Gets a list of group members viewable by the authenticated user.
+      operationId: listGroupMembers
+      x-airbyte-entity: group_members
+      x-airbyte-action: list
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the group
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: query
+        in: query
+        description: Filter members by name or username
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of group members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+        '401':
+          description: Unauthorized
+  /groups/{group_id}/members/{user_id}:
+    get:
+      summary: Get a group member
+      description: Get a member of a group.
+      operationId: getGroupMember
+      x-airbyte-entity: group_members
+      x-airbyte-action: get
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the group
+        schema:
+          type: string
+      - name: user_id
+        in: path
+        required: true
+        description: The user ID of the member
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single group member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /projects/{project_id}/members:
+    get:
+      summary: List project members
+      description: Gets a list of project members viewable by the authenticated user.
+      operationId: listProjectMembers
+      x-airbyte-entity: project_members
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: query
+        in: query
+        description: Filter members by name or username
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of project members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/members/{user_id}:
+    get:
+      summary: Get a project member
+      description: Get a member of a project.
+      operationId: getProjectMember
+      x-airbyte-entity: project_members
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: user_id
+        in: path
+        required: true
+        description: The user ID of the member
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single project member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /projects/{project_id}/releases:
+    get:
+      summary: List releases
+      description: Paginated list of releases for a given project, sorted by released_at.
+      operationId: listReleases
+      x-airbyte-entity: releases
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: order_by
+        in: query
+        description: Order by field
+        schema:
+          type: string
+          enum:
+          - released_at
+          - created_at
+      - name: sort
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: List of releases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Release'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/releases/{tag_name}:
+    get:
+      summary: Get a release
+      description: Get a release for the given tag.
+      operationId: getRelease
+      x-airbyte-entity: releases
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: tag_name
+        in: path
+        required: true
+        description: The Git tag the release is associated with
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A single release
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /projects/{project_id}/repository/tags:
+    get:
+      summary: List tags
+      description: Get a list of repository tags from a project, sorted by update date and time in descending order.
+      operationId: listTags
+      x-airbyte-entity: tags
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: search
+        in: query
+        description: Return list of tags matching the search criteria
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Return tags ordered by field
+        schema:
+          type: string
+          enum:
+          - name
+          - updated
+          - version
+      - name: sort
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/repository/tags/{tag_name}:
+    get:
+      summary: Get a tag
+      description: Get a specific repository tag determined by its name.
+      operationId: getTag
+      x-airbyte-entity: tags
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: tag_name
+        in: path
+        required: true
+        description: The name of the tag
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A single tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /groups/{group_id}/milestones:
+    get:
+      summary: List group milestones
+      description: Returns a list of group milestones.
+      operationId: listGroupMilestones
+      x-airbyte-entity: group_milestones
+      x-airbyte-action: list
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the group
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: state
+        in: query
+        description: Filter milestones by state
+        schema:
+          type: string
+          enum:
+          - active
+          - closed
+      - name: search
+        in: query
+        description: Search for milestones by title or description
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of group milestones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Milestone'
+        '401':
+          description: Unauthorized
+  /groups/{group_id}/milestones/{milestone_id}:
+    get:
+      summary: Get a group milestone
+      description: Get a single group milestone.
+      operationId: getGroupMilestone
+      x-airbyte-entity: group_milestones
+      x-airbyte-action: get
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the group
+        schema:
+          type: string
+      - name: milestone_id
+        in: path
+        required: true
+        description: The ID of the milestone
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single group milestone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Milestone'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /projects/{project_id}/milestones:
+    get:
+      summary: List project milestones
+      description: Returns a list of project milestones.
+      operationId: listProjectMilestones
+      x-airbyte-entity: project_milestones
+      x-airbyte-action: list
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: state
+        in: query
+        description: Filter milestones by state
+        schema:
+          type: string
+          enum:
+          - active
+          - closed
+      - name: search
+        in: query
+        description: Search for milestones by title or description
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of project milestones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Milestone'
+        '401':
+          description: Unauthorized
+  /projects/{project_id}/milestones/{milestone_id}:
+    get:
+      summary: Get a project milestone
+      description: Get a single project milestone.
+      operationId: getProjectMilestone
+      x-airbyte-entity: project_milestones
+      x-airbyte-action: get
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The ID or URL-encoded path of the project
+        schema:
+          type: string
+      - name: milestone_id
+        in: path
+        required: true
+        description: The ID of the milestone
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A single project milestone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Milestone'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+components:
+  securitySchemes:
+    gitlabPAT:
+      type: http
+      scheme: bearer
+      description: Personal Access Token authentication
+      x-airbyte-auth-config:
+        title: Personal Access Token
+        type: object
+        required:
+        - access_token
+        properties:
+          access_token:
+            type: string
+            title: Private Token
+            description: Log into your GitLab account and generate a personal access token.
+        auth_mapping:
+          token: ${access_token}
+        replication_auth_key_mapping:
+          credentials.access_token: access_token
+        replication_auth_key_constants:
+          credentials.auth_type: access_token
+    gitlabOAuth:
+      type: oauth2
+      description: OAuth 2.0 authentication
+      x-airbyte-untested: true
+      flows:
+        authorizationCode:
+          authorizationUrl: https://gitlab.com/oauth/authorize
+          tokenUrl: https://gitlab.com/oauth/token
+          refreshUrl: https://gitlab.com/oauth/token
+          scopes:
+            read_user: Read user info
+            read_api: Read API access
+            read_repository: Read repository
+      x-airbyte-auth-config:
+        title: OAuth2.0
+        type: object
+        required:
+        - client_id
+        - client_secret
+        - refresh_token
+        - access_token
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: The API ID of the GitLab developer application.
+          client_secret:
+            type: string
+            title: Client Secret
+            description: The API Secret of the GitLab developer application.
+          access_token:
+            type: string
+            title: Access Token
+            description: Access Token for making authenticated requests.
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: The key to refresh the expired access token.
+        auth_mapping:
+          access_token: ${access_token}
+          refresh_token: ${refresh_token}
+          client_id: ${client_id}
+          client_secret: ${client_secret}
+        replication_auth_key_mapping:
+          credentials.client_id: client_id
+          credentials.client_secret: client_secret
+          credentials.refresh_token: refresh_token
+          credentials.access_token: access_token
+        replication_auth_key_constants:
+          credentials.auth_type: oauth2.0
+          credentials.token_expiry_date: ''
+  schemas:
+    Project:
+      type: object
+      x-airbyte-entity-name: projects
+      x-airbyte-stream-name: projects
+      description: GitLab project
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Project ID
+        name:
+          type: string
+          description: Project name
+        name_with_namespace:
+          type: string
+          description: Project name with namespace
+        path:
+          type: string
+          description: Project path
+        path_with_namespace:
+          type: string
+          description: Full path with namespace
+        description:
+          type:
+          - 'null'
+          - string
+          description: Project description
+        default_branch:
+          type:
+          - 'null'
+          - string
+          description: Default branch name
+        visibility:
+          type: string
+          description: Project visibility level
+        web_url:
+          type: string
+          description: Web URL of the project
+        ssh_url_to_repo:
+          type: string
+          description: SSH URL
+        http_url_to_repo:
+          type: string
+          description: HTTP URL for cloning
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        last_activity_at:
+          type: string
+          format: date-time
+          description: Last activity timestamp
+        namespace:
+          type: object
+          description: Namespace of the project
+        archived:
+          type: boolean
+          description: Whether the project is archived
+        forks_count:
+          type: integer
+          description: Number of forks
+        star_count:
+          type: integer
+          description: Number of stars
+        open_issues_count:
+          type: integer
+          description: Number of open issues
+        topics:
+          type: array
+          items:
+            type: string
+          description: Project topics
+        avatar_url:
+          type:
+          - 'null'
+          - string
+          description: Avatar URL
+        updated_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Last update timestamp
+        description_html:
+          type:
+          - 'null'
+          - string
+          description: HTML-rendered project description
+        tag_list:
+          type:
+          - 'null'
+          - array
+          description: 'Deprecated: use topics instead'
+        readme_url:
+          type:
+          - 'null'
+          - string
+          description: URL to the project README
+        _links:
+          type:
+          - 'null'
+          - object
+          description: Related links
+        container_registry_image_prefix:
+          type:
+          - 'null'
+          - string
+          description: Container registry image prefix
+        empty_repo:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the repository is empty
+        packages_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether packages are enabled
+        marked_for_deletion_at:
+          type:
+          - 'null'
+          - string
+          description: Timestamp when marked for deletion
+        marked_for_deletion_on:
+          type:
+          - 'null'
+          - string
+          description: Date when marked for deletion
+        container_registry_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether container registry is enabled
+        container_expiration_policy:
+          type:
+          - 'null'
+          - object
+          description: Container expiration policy
+        repository_object_format:
+          type:
+          - 'null'
+          - string
+          description: Repository object format
+        issues_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether issues are enabled
+        merge_requests_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether merge requests are enabled
+        wiki_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether wiki is enabled
+        jobs_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether CI jobs are enabled
+        snippets_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether snippets are enabled
+        service_desk_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether service desk is enabled
+        service_desk_address:
+          type:
+          - 'null'
+          - string
+          description: Service desk email address
+        can_create_merge_request_in:
+          type:
+          - 'null'
+          - boolean
+          description: Whether MRs can be created
+        resolve_outdated_diff_discussions:
+          type:
+          - 'null'
+          - boolean
+          description: Whether to resolve outdated diff discussions
+        lfs_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether Git LFS is enabled
+        shared_runners_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether shared runners are enabled
+        group_runners_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether group runners are enabled
+        creator_id:
+          type:
+          - 'null'
+          - integer
+          description: ID of the project creator
+        import_url:
+          type:
+          - 'null'
+          - string
+          description: URL used for project import
+        import_type:
+          type:
+          - 'null'
+          - string
+          description: Type of project import
+        import_status:
+          type:
+          - 'null'
+          - string
+          description: Project import status
+        import_error:
+          type:
+          - 'null'
+          - string
+          description: Project import error message
+        emails_disabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether emails are disabled
+        emails_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether emails are enabled
+        show_diff_preview_in_email:
+          type:
+          - 'null'
+          - boolean
+          description: Whether diff previews are shown in emails
+        auto_devops_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether Auto DevOps is enabled
+        auto_devops_deploy_strategy:
+          type:
+          - 'null'
+          - string
+          description: Auto DevOps deploy strategy
+        request_access_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether request access is enabled
+        merge_method:
+          type:
+          - 'null'
+          - string
+          description: Merge method (merge, rebase_merge, ff)
+        squash_option:
+          type:
+          - 'null'
+          - string
+          description: Squash option setting
+        enforce_auth_checks_on_uploads:
+          type:
+          - 'null'
+          - boolean
+          description: Enforce auth checks on uploads
+        shared_with_groups:
+          type:
+          - 'null'
+          - array
+          description: Groups the project is shared with
+        only_allow_merge_if_pipeline_succeeds:
+          type:
+          - 'null'
+          - boolean
+          description: Only merge if pipeline succeeds
+        allow_merge_on_skipped_pipeline:
+          type:
+          - 'null'
+          - boolean
+          description: Allow merge on skipped pipeline
+        only_allow_merge_if_all_discussions_are_resolved:
+          type:
+          - 'null'
+          - boolean
+          description: Only merge if all discussions resolved
+        remove_source_branch_after_merge:
+          type:
+          - 'null'
+          - boolean
+          description: Remove source branch after merge
+        printing_merge_request_link_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Print MR link enabled
+        build_timeout:
+          type:
+          - 'null'
+          - integer
+          description: Build timeout in seconds
+        auto_cancel_pending_pipelines:
+          type:
+          - 'null'
+          - string
+          description: Auto-cancel pending pipelines setting
+        build_git_strategy:
+          type:
+          - 'null'
+          - string
+          description: Git strategy for builds
+        public_jobs:
+          type:
+          - 'null'
+          - boolean
+          description: Whether CI jobs are public
+        restrict_user_defined_variables:
+          type:
+          - 'null'
+          - boolean
+          description: Restrict user-defined CI variables
+        keep_latest_artifact:
+          type:
+          - 'null'
+          - boolean
+          description: Keep latest build artifact
+        runner_token_expiration_interval:
+          type:
+          - 'null'
+          - string
+          description: Runner token expiration interval
+        resource_group_default_process_mode:
+          type:
+          - 'null'
+          - string
+          description: Default process mode for resource groups
+        ci_config_path:
+          type:
+          - 'null'
+          - string
+          description: CI configuration file path
+        ci_default_git_depth:
+          type:
+          - 'null'
+          - integer
+          description: Default git depth for CI
+        ci_delete_pipelines_in_seconds:
+          type:
+          - 'null'
+          - integer
+          description: Delete pipelines after seconds
+        ci_forward_deployment_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Forward deployment enabled
+        ci_forward_deployment_rollback_allowed:
+          type:
+          - 'null'
+          - boolean
+          description: Forward deployment rollback allowed
+        ci_job_token_scope_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: CI job token scope enabled
+        ci_separated_caches:
+          type:
+          - 'null'
+          - boolean
+          description: CI separated caches
+        ci_allow_fork_pipelines_to_run_in_parent_project:
+          type:
+          - 'null'
+          - boolean
+          description: Allow fork pipelines in parent project
+        ci_id_token_sub_claim_components:
+          type:
+          - 'null'
+          - array
+          description: CI ID token sub claim components
+        ci_pipeline_variables_minimum_override_role:
+          type:
+          - 'null'
+          - string
+          description: Minimum role to override CI variables
+        ci_push_repository_for_job_token_allowed:
+          type:
+          - 'null'
+          - boolean
+          description: Push repository for job token allowed
+        ci_display_pipeline_variables:
+          type:
+          - 'null'
+          - boolean
+          description: Display pipeline variables
+        protect_merge_request_pipelines:
+          type:
+          - 'null'
+          - boolean
+          description: Protect merge request pipelines
+        suggestion_commit_message:
+          type:
+          - 'null'
+          - string
+          description: Commit message for suggestions
+        merge_commit_template:
+          type:
+          - 'null'
+          - string
+          description: Template for merge commits
+        squash_commit_template:
+          type:
+          - 'null'
+          - string
+          description: Template for squash commits
+        issue_branch_template:
+          type:
+          - 'null'
+          - string
+          description: Template for issue branches
+        merge_request_title_regex:
+          type:
+          - 'null'
+          - string
+          description: Regex for MR titles
+        merge_request_title_regex_description:
+          type:
+          - 'null'
+          - string
+          description: Description for MR title regex
+        warn_about_potentially_unwanted_characters:
+          type:
+          - 'null'
+          - boolean
+          description: Warn about unwanted characters
+        autoclose_referenced_issues:
+          type:
+          - 'null'
+          - boolean
+          description: Auto-close referenced issues
+        max_artifacts_size:
+          type:
+          - 'null'
+          - integer
+          description: Maximum artifacts size
+        external_authorization_classification_label:
+          type:
+          - 'null'
+          - string
+          description: External authorization label
+        requirements_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether requirements are enabled
+        requirements_access_level:
+          type:
+          - 'null'
+          - string
+          description: Requirements access level
+        security_and_compliance_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether security and compliance is enabled
+        security_and_compliance_access_level:
+          type:
+          - 'null'
+          - string
+          description: Security and compliance access level
+        compliance_frameworks:
+          type:
+          - 'null'
+          - array
+          description: Compliance frameworks
+        web_based_commit_signing_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Web-based commit signing enabled
+        permissions:
+          type:
+          - 'null'
+          - object
+          description: Project permissions
+        issues_access_level:
+          type:
+          - 'null'
+          - string
+          description: Issues access level
+        repository_access_level:
+          type:
+          - 'null'
+          - string
+          description: Repository access level
+        merge_requests_access_level:
+          type:
+          - 'null'
+          - string
+          description: Merge requests access level
+        forking_access_level:
+          type:
+          - 'null'
+          - string
+          description: Forking access level
+        wiki_access_level:
+          type:
+          - 'null'
+          - string
+          description: Wiki access level
+        builds_access_level:
+          type:
+          - 'null'
+          - string
+          description: Builds access level
+        snippets_access_level:
+          type:
+          - 'null'
+          - string
+          description: Snippets access level
+        pages_access_level:
+          type:
+          - 'null'
+          - string
+          description: Pages access level
+        analytics_access_level:
+          type:
+          - 'null'
+          - string
+          description: Analytics access level
+        container_registry_access_level:
+          type:
+          - 'null'
+          - string
+          description: Container registry access level
+        releases_access_level:
+          type:
+          - 'null'
+          - string
+          description: Releases access level
+        environments_access_level:
+          type:
+          - 'null'
+          - string
+          description: Environments access level
+        feature_flags_access_level:
+          type:
+          - 'null'
+          - string
+          description: Feature flags access level
+        infrastructure_access_level:
+          type:
+          - 'null'
+          - string
+          description: Infrastructure access level
+        monitor_access_level:
+          type:
+          - 'null'
+          - string
+          description: Monitor access level
+        model_experiments_access_level:
+          type:
+          - 'null'
+          - string
+          description: Model experiments access level
+        model_registry_access_level:
+          type:
+          - 'null'
+          - string
+          description: Model registry access level
+        package_registry_access_level:
+          type:
+          - 'null'
+          - string
+          description: Package registry access level
+    Issue:
+      type: object
+      x-airbyte-entity-name: issues
+      x-airbyte-stream-name: issues
+      description: GitLab issue
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Issue ID (globally unique)
+        iid:
+          type: integer
+          description: Issue internal ID (unique within project)
+        project_id:
+          type: integer
+          description: Project ID
+        title:
+          type: string
+          description: Issue title
+        description:
+          type:
+          - 'null'
+          - string
+          description: Issue description
+        state:
+          type: string
+          description: Issue state (opened/closed)
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        closed_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Closed timestamp
+        labels:
+          type: array
+          items:
+            type: string
+          description: Labels
+        milestone:
+          type:
+          - 'null'
+          - object
+          description: Milestone info
+        author:
+          type: object
+          description: Issue author
+        assignee:
+          type:
+          - 'null'
+          - object
+          description: Assignee
+        assignees:
+          type: array
+          items:
+            type: object
+          description: Assignees list
+        web_url:
+          type: string
+          description: Web URL
+        due_date:
+          type:
+          - 'null'
+          - string
+          format: date
+          description: Due date
+        confidential:
+          type: boolean
+          description: Whether the issue is confidential
+        weight:
+          type:
+          - 'null'
+          - integer
+          description: Issue weight
+        user_notes_count:
+          type: integer
+          description: Number of notes
+        upvotes:
+          type: integer
+          description: Number of upvotes
+        downvotes:
+          type: integer
+          description: Number of downvotes
+        closed_by:
+          type:
+          - 'null'
+          - object
+          description: User who closed the issue
+        time_stats:
+          type:
+          - 'null'
+          - object
+          description: Time tracking statistics
+        task_completion_status:
+          type:
+          - 'null'
+          - object
+          description: Task completion status
+        references:
+          type:
+          - 'null'
+          - object
+          description: Issue references
+        _links:
+          type:
+          - 'null'
+          - object
+          description: Related links
+        discussion_locked:
+          type:
+          - 'null'
+          - boolean
+          description: Whether discussion is locked
+        merge_requests_count:
+          type:
+          - 'null'
+          - integer
+          description: Number of related merge requests
+        blocking_issues_count:
+          type:
+          - 'null'
+          - integer
+          description: Number of blocking issues
+        severity:
+          type:
+          - 'null'
+          - string
+          description: Issue severity level
+        type:
+          type:
+          - 'null'
+          - string
+          description: Issue type
+        issue_type:
+          type:
+          - 'null'
+          - string
+          description: Issue type (deprecated)
+        has_tasks:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the issue has tasks
+        task_status:
+          type:
+          - 'null'
+          - string
+          description: Task status text
+        moved_to_id:
+          type:
+          - 'null'
+          - integer
+          description: ID of issue this was moved to
+        service_desk_reply_to:
+          type:
+          - 'null'
+          - string
+          description: Service desk reply-to address
+        epic_iid:
+          type:
+          - 'null'
+          - integer
+          description: IID of the parent epic
+        epic:
+          type:
+          - 'null'
+          - object
+          description: Parent epic details
+        iteration:
+          type:
+          - 'null'
+          - object
+          description: Associated iteration
+        health_status:
+          type:
+          - 'null'
+          - string
+          description: Health status of the issue
+        start_date:
+          type:
+          - 'null'
+          - string
+          format: date
+          description: Start date
+        imported:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the issue was imported
+        imported_from:
+          type:
+          - 'null'
+          - string
+          description: Source of import
+        subscribed:
+          type:
+          - 'null'
+          - boolean
+          description: Whether current user is subscribed
+    MergeRequest:
+      type: object
+      x-airbyte-entity-name: merge_requests
+      x-airbyte-stream-name: merge_requests
+      description: GitLab merge request
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Merge request ID (globally unique)
+        iid:
+          type: integer
+          description: Merge request internal ID
+        project_id:
+          type: integer
+          description: Project ID
+        title:
+          type: string
+          description: Merge request title
+        description:
+          type:
+          - 'null'
+          - string
+          description: Merge request description
+        state:
+          type: string
+          description: Merge request state
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        merged_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Merged timestamp
+        closed_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Closed timestamp
+        source_branch:
+          type: string
+          description: Source branch
+        target_branch:
+          type: string
+          description: Target branch
+        author:
+          type: object
+          description: Author
+        assignee:
+          type:
+          - 'null'
+          - object
+          description: Assignee
+        assignees:
+          type: array
+          items:
+            type: object
+          description: Assignees list
+        labels:
+          type: array
+          items:
+            type: string
+          description: Labels
+        milestone:
+          type:
+          - 'null'
+          - object
+          description: Milestone info
+        web_url:
+          type: string
+          description: Web URL
+        merge_status:
+          type: string
+          description: Merge status
+        draft:
+          type:
+          - 'null'
+          - boolean
+          description: Whether MR is a draft
+        user_notes_count:
+          type: integer
+          description: Number of user notes
+        upvotes:
+          type: integer
+          description: Number of upvotes
+        downvotes:
+          type: integer
+          description: Number of downvotes
+        sha:
+          type:
+          - 'null'
+          - string
+          description: SHA of the head commit
+        merged_by:
+          type:
+          - 'null'
+          - object
+          description: User who merged the MR
+        merge_user:
+          type:
+          - 'null'
+          - object
+          description: User who performed the merge
+        closed_by:
+          type:
+          - 'null'
+          - object
+          description: User who closed the MR
+        reviewers:
+          type:
+          - 'null'
+          - array
+          description: Assigned reviewers
+        source_project_id:
+          type:
+          - 'null'
+          - integer
+          description: Source project ID
+        target_project_id:
+          type:
+          - 'null'
+          - integer
+          description: Target project ID
+        work_in_progress:
+          type:
+          - 'null'
+          - boolean
+          description: Whether MR is work in progress
+        merge_when_pipeline_succeeds:
+          type:
+          - 'null'
+          - boolean
+          description: Merge when pipeline succeeds
+        detailed_merge_status:
+          type:
+          - 'null'
+          - string
+          description: Detailed merge status
+        merge_after:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Scheduled merge time
+        merge_commit_sha:
+          type:
+          - 'null'
+          - string
+          description: Merge commit SHA
+        squash_commit_sha:
+          type:
+          - 'null'
+          - string
+          description: Squash commit SHA
+        discussion_locked:
+          type:
+          - 'null'
+          - boolean
+          description: Whether discussion is locked
+        should_remove_source_branch:
+          type:
+          - 'null'
+          - boolean
+          description: Whether source branch should be removed
+        force_remove_source_branch:
+          type:
+          - 'null'
+          - boolean
+          description: Whether source branch removal is forced
+        prepared_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: When MR was prepared
+        reference:
+          type:
+          - 'null'
+          - string
+          description: MR reference string
+        references:
+          type:
+          - 'null'
+          - object
+          description: MR reference details
+        time_stats:
+          type:
+          - 'null'
+          - object
+          description: Time tracking statistics
+        squash:
+          type:
+          - 'null'
+          - boolean
+          description: Whether squash is enabled
+        squash_on_merge:
+          type:
+          - 'null'
+          - boolean
+          description: Whether to squash on merge
+        task_completion_status:
+          type:
+          - 'null'
+          - object
+          description: Task completion status
+        has_conflicts:
+          type:
+          - 'null'
+          - boolean
+          description: Whether MR has conflicts
+        blocking_discussions_resolved:
+          type:
+          - 'null'
+          - boolean
+          description: Whether blocking discussions are resolved
+        approvals_before_merge:
+          type:
+          - 'null'
+          - integer
+          description: Required approvals before merge
+        imported:
+          type:
+          - 'null'
+          - boolean
+          description: Whether MR was imported
+        imported_from:
+          type:
+          - 'null'
+          - string
+          description: Source of import
+        subscribed:
+          type:
+          - 'null'
+          - boolean
+          description: Whether current user is subscribed
+        changes_count:
+          type:
+          - 'null'
+          - string
+          description: Number of changes
+        latest_build_started_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: When latest build started
+        latest_build_finished_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: When latest build finished
+        first_deployed_to_production_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: First deployed to production
+        pipeline:
+          type:
+          - 'null'
+          - object
+          description: Associated pipeline
+        head_pipeline:
+          type:
+          - 'null'
+          - object
+          description: Head pipeline
+        diff_refs:
+          type:
+          - 'null'
+          - object
+          description: Diff references
+        merge_error:
+          type:
+          - 'null'
+          - string
+          description: Merge error message
+        first_contribution:
+          type:
+          - 'null'
+          - boolean
+          description: Whether this is a first contribution
+        user:
+          type:
+          - 'null'
+          - object
+          description: Current user merge/approval info
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
+      description: GitLab user
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: User ID
+        username:
+          type: string
+          description: Username
+        name:
+          type: string
+          description: Full name
+        state:
+          type: string
+          description: User state
+        avatar_url:
+          type:
+          - 'null'
+          - string
+          description: Avatar URL
+        web_url:
+          type: string
+          description: Web URL
+        locked:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the user account is locked
+        public_email:
+          type:
+          - 'null'
+          - string
+          description: User's public email address
+    Commit:
+      type: object
+      x-airbyte-entity-name: commits
+      x-airbyte-stream-name: commits
+      description: GitLab commit
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Commit SHA
+        short_id:
+          type: string
+          description: Short commit SHA
+        title:
+          type: string
+          description: Commit title
+        message:
+          type: string
+          description: Commit message
+        author_name:
+          type: string
+          description: Author name
+        author_email:
+          type: string
+          description: Author email
+        authored_date:
+          type: string
+          format: date-time
+          description: Authored date
+        committer_name:
+          type: string
+          description: Committer name
+        committer_email:
+          type: string
+          description: Committer email
+        committed_date:
+          type: string
+          format: date-time
+          description: Committed date
+        created_at:
+          type: string
+          format: date-time
+          description: Created at timestamp
+        parent_ids:
+          type: array
+          items:
+            type: string
+          description: Parent commit SHAs
+        web_url:
+          type: string
+          description: Web URL
+        stats:
+          type:
+          - 'null'
+          - object
+          description: Commit stats
+          properties:
+            additions:
+              type: integer
+              description: Lines added
+            deletions:
+              type: integer
+              description: Lines deleted
+            total:
+              type: integer
+              description: Total changes
+        trailers:
+          type:
+          - 'null'
+          - object
+          description: Git trailers parsed from the commit message
+        extended_trailers:
+          type:
+          - 'null'
+          - object
+          description: Extended git trailers with support for multi-value keys
+    Group:
+      type: object
+      x-airbyte-entity-name: groups
+      x-airbyte-stream-name: groups
+      description: GitLab group
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Group ID
+        name:
+          type: string
+          description: Group name
+        path:
+          type: string
+          description: Group path
+        full_name:
+          type: string
+          description: Full group name
+        full_path:
+          type: string
+          description: Full group path
+        description:
+          type:
+          - 'null'
+          - string
+          description: Group description
+        visibility:
+          type: string
+          description: Visibility level
+        web_url:
+          type: string
+          description: Web URL
+        avatar_url:
+          type:
+          - 'null'
+          - string
+          description: Avatar URL
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        parent_id:
+          type:
+          - 'null'
+          - integer
+          description: ID of the parent group
+        organization_id:
+          type:
+          - 'null'
+          - integer
+          description: ID of the organization
+        default_branch:
+          type:
+          - 'null'
+          - string
+          description: Default branch of the group
+        default_branch_protection:
+          type:
+          - 'null'
+          - integer
+          description: Default branch protection level
+        default_branch_protection_defaults:
+          type:
+          - 'null'
+          - object
+          description: Default branch protection settings
+        share_with_group_lock:
+          type:
+          - 'null'
+          - boolean
+          description: Whether sharing with other groups is locked
+        require_two_factor_authentication:
+          type:
+          - 'null'
+          - boolean
+          description: Whether 2FA is required
+        two_factor_grace_period:
+          type:
+          - 'null'
+          - integer
+          description: Grace period for enabling 2FA
+        project_creation_level:
+          type:
+          - 'null'
+          - string
+          description: Project creation permission level
+        auto_devops_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether Auto DevOps is enabled
+        subgroup_creation_level:
+          type:
+          - 'null'
+          - string
+          description: Subgroup creation permission level
+        emails_disabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether emails are disabled
+        emails_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether emails are enabled
+        mentions_disabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether mentions are disabled
+        lfs_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether Git LFS is enabled
+        request_access_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether request access is enabled
+        shared_runners_setting:
+          type:
+          - 'null'
+          - string
+          description: Shared runners setting
+        ldap_cn:
+          type:
+          - 'null'
+          - string
+          description: LDAP CN for the group
+        ldap_access:
+          type:
+          - 'null'
+          - string
+          description: LDAP access level
+        wiki_access_level:
+          type:
+          - 'null'
+          - string
+          description: Wiki access level
+        marked_for_deletion_on:
+          type:
+          - 'null'
+          - string
+          description: Date marked for deletion
+        archived:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the group is archived
+        math_rendering_limits_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether math rendering limits are enabled
+        lock_math_rendering_limits_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether math rendering limits are locked
+        max_artifacts_size:
+          type:
+          - 'null'
+          - integer
+          description: Maximum artifacts size in MB
+        show_diff_preview_in_email:
+          type:
+          - 'null'
+          - boolean
+          description: Whether diff previews are shown in emails
+        web_based_commit_signing_enabled:
+          type:
+          - 'null'
+          - boolean
+          description: Whether web-based commit signing is enabled
+        duo_namespace_access_rules:
+          type:
+          - 'null'
+          - array
+          description: Duo namespace access rules
+        shared_with_groups:
+          type:
+          - 'null'
+          - array
+          description: Groups that this group is shared with
+        runners_token:
+          type:
+          - 'null'
+          - string
+          description: Runner registration token
+        enabled_git_access_protocol:
+          type:
+          - 'null'
+          - string
+          description: Enabled Git access protocol
+        prevent_sharing_groups_outside_hierarchy:
+          type:
+          - 'null'
+          - boolean
+          description: Prevent sharing groups outside hierarchy
+        projects:
+          type:
+          - 'null'
+          - array
+          description: Projects in the group
+        shared_projects:
+          type:
+          - 'null'
+          - array
+          description: Projects shared with the group
+        shared_runners_minutes_limit:
+          type:
+          - 'null'
+          - integer
+          description: Shared runners minutes limit
+        extra_shared_runners_minutes_limit:
+          type:
+          - 'null'
+          - integer
+          description: Extra shared runners minutes limit
+        prevent_forking_outside_group:
+          type:
+          - 'null'
+          - boolean
+          description: Prevent forking outside the group
+        membership_lock:
+          type:
+          - 'null'
+          - boolean
+          description: Whether membership is locked
+        ip_restriction_ranges:
+          type:
+          - 'null'
+          - string
+          description: IP restriction ranges
+        service_access_tokens_expiration_enforced:
+          type:
+          - 'null'
+          - boolean
+          description: Service access tokens expiration enforced
+    Branch:
+      type: object
+      x-airbyte-entity-name: branches
+      x-airbyte-stream-name: branches
+      description: GitLab branch
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          description: Branch name
+        merged:
+          type: boolean
+          description: Whether the branch has been merged
+        protected:
+          type: boolean
+          description: Whether the branch is protected
+        default:
+          type: boolean
+          description: Whether this is the default branch
+        developers_can_push:
+          type: boolean
+          description: Whether developers can push
+        developers_can_merge:
+          type: boolean
+          description: Whether developers can merge
+        can_push:
+          type: boolean
+          description: Whether the current user can push
+        web_url:
+          type: string
+          description: Web URL
+        commit:
+          type:
+          - 'null'
+          - object
+          description: Latest commit on this branch
+    Pipeline:
+      type: object
+      x-airbyte-entity-name: pipelines
+      x-airbyte-stream-name: pipelines
+      description: GitLab CI/CD pipeline
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Pipeline ID
+        iid:
+          type: integer
+          description: Pipeline internal ID
+        project_id:
+          type: integer
+          description: Project ID
+        status:
+          type: string
+          description: Pipeline status
+        ref:
+          type: string
+          description: Branch or tag reference
+        sha:
+          type: string
+          description: Commit SHA
+        source:
+          type: string
+          description: Pipeline source
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        web_url:
+          type: string
+          description: Web URL
+        name:
+          type:
+          - 'null'
+          - string
+          description: Pipeline name
+    Member:
+      type: object
+      description: GitLab group or project member
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: User ID
+        username:
+          type: string
+          description: Username
+        name:
+          type: string
+          description: Full name
+        state:
+          type: string
+          description: User state
+        avatar_url:
+          type:
+          - 'null'
+          - string
+          description: Avatar URL
+        web_url:
+          type: string
+          description: Web URL
+        access_level:
+          type: integer
+          description: Access level (10=Guest, 20=Reporter, 30=Developer, 40=Maintainer, 50=Owner)
+        expires_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Membership expiration date
+        created_at:
+          type: string
+          format: date-time
+          description: When the membership was created
+        locked:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the member account is locked
+        membership_state:
+          type:
+          - 'null'
+          - string
+          description: State of the membership
+        public_email:
+          type:
+          - 'null'
+          - string
+          description: Member's public email address
+        created_by:
+          type:
+          - 'null'
+          - object
+          description: User who created this membership
+    Release:
+      type: object
+      x-airbyte-entity-name: releases
+      x-airbyte-stream-name: releases
+      description: GitLab release
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          description: Release name
+        tag_name:
+          type: string
+          description: Tag name
+        description:
+          type:
+          - 'null'
+          - string
+          description: Release description
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        released_at:
+          type: string
+          format: date-time
+          description: Release timestamp
+        author:
+          type: object
+          description: Author
+        commit:
+          type: object
+          description: Commit info
+        upcoming_release:
+          type: boolean
+          description: Whether this is upcoming
+        _links:
+          type: object
+          description: Related links
+        assets:
+          type:
+          - 'null'
+          - object
+          description: Release assets (sources and links)
+        milestones:
+          type:
+          - 'null'
+          - array
+          description: Milestones associated with the release
+        evidences:
+          type:
+          - 'null'
+          - array
+          description: Release evidences
+        commit_path:
+          type:
+          - 'null'
+          - string
+          description: Path to the commit
+        tag_path:
+          type:
+          - 'null'
+          - string
+          description: Path to the tag
+    Tag:
+      type: object
+      x-airbyte-entity-name: tags
+      x-airbyte-stream-name: tags
+      description: GitLab repository tag
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          description: Tag name
+        message:
+          type:
+          - 'null'
+          - string
+          description: Tag message
+        target:
+          type: string
+          description: Commit SHA the tag points to
+        commit:
+          type: object
+          description: Commit info
+        release:
+          type:
+          - 'null'
+          - object
+          description: Associated release info
+        protected:
+          type: boolean
+          description: Whether the tag is protected
+        created_at:
+          type:
+          - 'null'
+          - string
+          format: date-time
+          description: Tag creation timestamp
+    Milestone:
+      type: object
+      description: GitLab milestone
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Milestone ID
+        iid:
+          type: integer
+          description: Internal ID
+        title:
+          type: string
+          description: Milestone title
+        description:
+          type:
+          - 'null'
+          - string
+          description: Milestone description
+        state:
+          type: string
+          description: Milestone state (active/closed)
+        due_date:
+          type:
+          - 'null'
+          - string
+          format: date
+          description: Due date
+        start_date:
+          type:
+          - 'null'
+          - string
+          format: date
+          description: Start date
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        web_url:
+          type: string
+          description: Web URL
+        expired:
+          type:
+          - 'null'
+          - boolean
+          description: Whether the milestone has expired
+        group_id:
+          type:
+          - 'null'
+          - integer
+          description: ID of the group (for group milestones)
+        project_id:
+          type:
+          - 'null'
+          - integer
+          description: ID of the project (for project milestones)

@@ -1,0 +1,4125 @@
+openapi: 3.1.0
+
+info:
+  title: Chargebee API Connector
+  version: 1.0.2
+  description: >
+    Connector for the Chargebee billing and subscription management API.
+    Supports reading subscriptions, customers, invoices, credit notes, coupons,
+    transactions, events, orders, items, item prices, and payment sources.
+    Chargebee is a recurring billing platform that helps SaaS and subscription
+    businesses manage the full subscription lifecycle.
+  x-airbyte-connector-name: chargebee
+  x-airbyte-connector-definition-id: 686473f1-76d9-4994-9cc7-9b13da46147c
+  x-airbyte-replication-version: "0.10.30"
+  x-airbyte-replication-compatibility: ">=0.10.30, <1.0.0"
+  x-airbyte-skip-suggested-streams:
+    - plan
+    - addon
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Chargebee.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: "UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ. Data before this date is excluded."
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Chargebee API Documentation
+      url: https://apidocs.chargebee.com/docs/api
+  x-airbyte-example-questions:
+    direct:
+      - "List all active subscriptions"
+      - "Show me details for a specific customer"
+      - "List recent invoices"
+      - "Show me details for a specific subscription"
+      - "List all coupons"
+      - "List recent transactions"
+      - "List recent events"
+    search:
+      - "Show me customers with the highest monthly recurring revenue"
+      - "Which subscriptions are set to cancel in the next 30 days?"
+      - "List all overdue invoices and their amounts"
+      - "Analyze subscription churn trends over the past quarter"
+      - "What are the most popular items by number of subscriptions?"
+      - "Show me total revenue breakdown by currency"
+      - "Identify customers with expiring payment sources"
+      - "Compare subscription plan distribution across item prices"
+      - "List all credit notes issued in the past month"
+      - "What is the average subscription lifetime for each plan?"
+    unsupported:
+      - "Create a new subscription in Chargebee"
+      - "Update a customer's billing address"
+      - "Cancel a subscription"
+      - "Apply a coupon to a subscription"
+      - "Issue a refund for an invoice"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: subscription
+        fields:
+          - name: activated_at
+            type: ["null", "integer"]
+            description: "The date and time when the subscription was activated."
+          - name: addons
+            type: ["null", "array"]
+            description: "Represents any additional features or services added to the subscription"
+          - name: affiliate_token
+            type: ["null", "string"]
+            description: "The affiliate token associated with the subscription."
+          - name: auto_close_invoices
+            type: ["null", "boolean"]
+            description: "Defines if the invoices are automatically closed or not."
+          - name: auto_collection
+            type: ["null", "string"]
+            description: "Indicates if auto-collection is enabled for the subscription."
+          - name: base_currency_code
+            type: ["null", "string"]
+            description: "The base currency code used for the subscription."
+          - name: billing_period
+            type: ["null", "integer"]
+            description: "The billing period duration for the subscription."
+          - name: billing_period_unit
+            type: ["null", "string"]
+            description: "The unit of the billing period."
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "The ID of the business entity to which the subscription belongs."
+          - name: cancel_reason
+            type: ["null", "string"]
+            description: "The reason for the cancellation of the subscription."
+          - name: cancel_reason_code
+            type: ["null", "string"]
+            description: "The code associated with the cancellation reason."
+          - name: cancel_schedule_created_at
+            type: ["null", "integer"]
+            description: "The date and time when the cancellation schedule was created."
+          - name: cancelled_at
+            type: ["null", "integer"]
+            description: "The date and time when the subscription was cancelled."
+          - name: channel
+            type: ["null", "string"]
+            description: "The channel through which the subscription was acquired."
+          - name: charged_event_based_addons
+            type: ["null", "array"]
+            description: "Details of addons charged based on events"
+          - name: charged_items
+            type: ["null", "array"]
+            description: "Lists the items that have been charged as part of the subscription"
+          - name: contract_term
+            type: ["null", "object"]
+            description: "Contains details about the contract term of the subscription"
+          - name: contract_term_billing_cycle_on_renewal
+            type: ["null", "integer"]
+            description: "Indicates if the contract term billing cycle is applied on renewal."
+          - name: coupon
+            type: ["null", "string"]
+            description: "The coupon applied to the subscription."
+          - name: coupons
+            type: ["null", "array"]
+            description: "Details of applied coupons"
+          - name: create_pending_invoices
+            type: ["null", "boolean"]
+            description: "Indicates if pending invoices are created."
+          - name: created_at
+            type: ["null", "integer"]
+            description: "The date and time of the creation of the subscription."
+          - name: created_from_ip
+            type: ["null", "string"]
+            description: "The IP address from which the subscription was created."
+          - name: currency_code
+            type: ["null", "string"]
+            description: "The currency code used for the subscription."
+          - name: current_term_end
+            type: ["null", "integer"]
+            description: "The end date of the current term for the subscription."
+          - name: current_term_start
+            type: ["null", "integer"]
+            description: "The start date of the current term for the subscription."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_id
+            type: ["null", "string"]
+            description: "The ID of the customer associated with the subscription."
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Indicates if the subscription has been deleted."
+          - name: discounts
+            type: ["null", "array"]
+            description: "Includes any discounts applied to the subscription"
+          - name: due_invoices_count
+            type: ["null", "integer"]
+            description: "The count of due invoices for the subscription."
+          - name: due_since
+            type: ["null", "integer"]
+            description: "The date since which the invoices are due."
+          - name: event_based_addons
+            type: ["null", "array"]
+            description: "Specifies any event-based addons associated with the subscription"
+          - name: exchange_rate
+            type: ["null", "number"]
+            description: "The exchange rate used for currency conversion."
+          - name: free_period
+            type: ["null", "integer"]
+            description: "The duration of the free period for the subscription."
+          - name: free_period_unit
+            type: ["null", "string"]
+            description: "The unit of the free period duration."
+          - name: gift_id
+            type: ["null", "string"]
+            description: "The ID of the gift associated with the subscription."
+          - name: has_scheduled_advance_invoices
+            type: ["null", "boolean"]
+            description: "Indicates if there are scheduled advance invoices for the subscription."
+          - name: has_scheduled_changes
+            type: ["null", "boolean"]
+            description: "Indicates if there are scheduled changes for the subscription."
+          - name: id
+            type: ["null", "string"]
+            description: "The unique ID of the subscription."
+          - name: invoice_notes
+            type: ["null", "string"]
+            description: "Any notes added to the invoices of the subscription."
+          - name: item_tiers
+            type: ["null", "array"]
+            description: "Provides information about tiers or levels for specific subscription items"
+          - name: meta_data
+            type: ["null", "object"]
+            description: "Additional metadata associated with subscription"
+          - name: metadata
+            type: ["null", "object"]
+            description: "Additional metadata associated with subscription"
+          - name: mrr
+            type: ["null", "integer"]
+            description: "The monthly recurring revenue generated by the subscription."
+          - name: next_billing_at
+            type: ["null", "integer"]
+            description: "The date and time of the next billing event for the subscription."
+          - name: object
+            type: ["null", "string"]
+            description: "The type of object (subscription)."
+          - name: offline_payment_method
+            type: ["null", "string"]
+            description: "The offline payment method used for the subscription."
+          - name: override_relationship
+            type: ["null", "boolean"]
+            description: "Indicates if the existing relationship is overridden by this subscription."
+          - name: pause_date
+            type: ["null", "integer"]
+            description: "The date on which the subscription was paused."
+          - name: payment_source_id
+            type: ["null", "string"]
+            description: "The ID of the payment source used for the subscription."
+          - name: plan_amount
+            type: ["null", "integer"]
+            description: "The total amount charged for the plan of the subscription."
+          - name: plan_amount_in_decimal
+            type: ["null", "string"]
+            description: "The total amount charged for the plan in decimal format."
+          - name: plan_free_quantity
+            type: ["null", "integer"]
+            description: "The free quantity included in the plan of the subscription."
+          - name: plan_free_quantity_in_decimal
+            type: ["null", "string"]
+            description: "The free quantity included in the plan in decimal format."
+          - name: plan_id
+            type: ["null", "string"]
+            description: "The ID of the plan associated with the subscription."
+          - name: plan_quantity
+            type: ["null", "integer"]
+            description: "The quantity of the plan included in the subscription."
+          - name: plan_quantity_in_decimal
+            type: ["null", "string"]
+            description: "The quantity of the plan in decimal format."
+          - name: plan_unit_price
+            type: ["null", "integer"]
+            description: "The unit price of the plan for the subscription."
+          - name: plan_unit_price_in_decimal
+            type: ["null", "string"]
+            description: "The unit price of the plan in decimal format."
+          - name: po_number
+            type: ["null", "string"]
+            description: "The purchase order number associated with the subscription."
+          - name: referral_info
+            type: ["null", "object"]
+            description: "Contains details related to any referral information associated with the subscription"
+          - name: remaining_billing_cycles
+            type: ["null", "integer"]
+            description: "The count of remaining billing cycles for the subscription."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "The version of the resource (subscription)."
+          - name: resume_date
+            type: ["null", "integer"]
+            description: "The date on which the subscription was resumed."
+          - name: setup_fee
+            type: ["null", "integer"]
+            description: "The setup fee charged for the subscription."
+          - name: shipping_address
+            type: ["null", "object"]
+            description: "Stores the shipping address related to the subscription"
+          - name: start_date
+            type: ["null", "integer"]
+            description: "The start date of the subscription."
+          - name: started_at
+            type: ["null", "integer"]
+            description: "The date and time when the subscription started."
+          - name: status
+            type: ["null", "string"]
+            description: "The current status of the subscription."
+          - name: subscription_items
+            type: ["null", "array"]
+            description: "Lists individual items included in the subscription"
+          - name: total_dues
+            type: ["null", "integer"]
+            description: "The total amount of dues for the subscription."
+          - name: trial_end
+            type: ["null", "integer"]
+            description: "The end date of the trial period for the subscription."
+          - name: trial_end_action
+            type: ["null", "string"]
+            description: "The action to be taken at the end of the trial period."
+          - name: trial_start
+            type: ["null", "integer"]
+            description: "The start date of the trial period for the subscription."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "The date and time when the subscription was last updated."
+      - entity: customer
+        fields:
+          - name: allow_direct_debit
+            type: ["null", "boolean"]
+            description: "Indicates if direct debit is allowed for the customer."
+          - name: auto_close_invoices
+            type: ["null", "boolean"]
+            description: "Flag to automatically close invoices for the customer."
+          - name: auto_collection
+            type: ["null", "string"]
+            description: "Configures the automatic collection settings for the customer."
+          - name: backup_payment_source_id
+            type: ["null", "string"]
+            description: "ID of the backup payment source for the customer."
+          - name: balances
+            type: ["null", "array"]
+            description: "Customer's balance information related to their account."
+          - name: billing_address
+            type: ["null", "object"]
+            description: "Customer's billing address details."
+          - name: billing_date
+            type: ["null", "integer"]
+            description: "Date for billing cycle."
+          - name: billing_date_mode
+            type: ["null", "string"]
+            description: "Mode for billing date calculation."
+          - name: billing_day_of_week
+            type: ["null", "string"]
+            description: "Day of the week for billing cycle."
+          - name: billing_day_of_week_mode
+            type: ["null", "string"]
+            description: "Mode for billing day of the week calculation."
+          - name: billing_month
+            type: ["null", "integer"]
+            description: "Month for billing cycle."
+          - name: business_customer_without_vat_number
+            type: ["null", "boolean"]
+            description: "Flag indicating business customer without a VAT number."
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "ID of the business entity."
+          - name: card_status
+            type: ["null", "string"]
+            description: "Status of payment card associated with the customer."
+          - name: channel
+            type: ["null", "string"]
+            description: "Channel through which the customer was acquired."
+          - name: child_account_access
+            type: ["null", "object"]
+            description: "Information regarding the access rights of child accounts linked to the customer's account."
+          - name: client_profile_id
+            type: ["null", "string"]
+            description: "Client profile ID of the customer."
+          - name: company
+            type: ["null", "string"]
+            description: "Company or organization name."
+          - name: consolidated_invoicing
+            type: ["null", "boolean"]
+            description: "Flag for consolidated invoicing setting."
+          - name: contacts
+            type: ["null", "array"]
+            description: "List of contact details associated with the customer."
+          - name: created_at
+            type: ["null", "integer"]
+            description: "Date and time when the customer was created."
+          - name: created_from_ip
+            type: ["null", "string"]
+            description: "IP address from which the customer was created."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_type
+            type: ["null", "string"]
+            description: "Type of customer (e.g., individual, business)."
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Flag indicating if the customer is deleted."
+          - name: email
+            type: ["null", "string"]
+            description: "Email address of the customer."
+          - name: entity_code
+            type: ["null", "string"]
+            description: "Code for the customer entity."
+          - name: excess_payments
+            type: ["null", "integer"]
+            description: "Total amount of excess payments by the customer."
+          - name: exempt_number
+            type: ["null", "string"]
+            description: "Exemption number for tax purposes."
+          - name: exemption_details
+            type: ["null", "array"]
+            description: "Details about any exemptions applicable to the customer's account."
+          - name: first_name
+            type: ["null", "string"]
+            description: "First name of the customer."
+          - name: fraud_flag
+            type: ["null", "string"]
+            description: "Flag indicating if fraud is associated with the customer."
+          - name: id
+            type: ["null", "string"]
+            description: "Unique ID of the customer."
+          - name: invoice_notes
+            type: ["null", "string"]
+            description: "Notes added to the customer's invoices."
+          - name: is_location_valid
+            type: ["null", "boolean"]
+            description: "Flag indicating if the customer location is valid."
+          - name: last_name
+            type: ["null", "string"]
+            description: "Last name of the customer."
+          - name: locale
+            type: ["null", "string"]
+            description: "Locale setting for the customer."
+          - name: meta_data
+            type: ["null", "object"]
+            description: "Additional metadata associated with the customer."
+          - name: mrr
+            type: ["null", "integer"]
+            description: "Monthly recurring revenue generated from the customer."
+          - name: net_term_days
+            type: ["null", "integer"]
+            description: "Number of days for net terms."
+          - name: object
+            type: ["null", "string"]
+            description: "Object type for the customer."
+          - name: offline_payment_method
+            type: ["null", "string"]
+            description: "Offline payment method used by the customer."
+          - name: parent_account_access
+            type: ["null", "object"]
+            description: "Information regarding the access rights of the parent account, if applicable."
+          - name: payment_method
+            type: ["null", "object"]
+            description: "Customer's preferred payment method details."
+          - name: phone
+            type: ["null", "string"]
+            description: "Phone number of the customer."
+          - name: pii_cleared
+            type: ["null", "string"]
+            description: "Flag indicating if PII (Personally Identifiable Information) is cleared."
+          - name: preferred_currency_code
+            type: ["null", "string"]
+            description: "Preferred currency code for transactions."
+          - name: primary_payment_source_id
+            type: ["null", "string"]
+            description: "ID of the primary payment source for the customer."
+          - name: promotional_credits
+            type: ["null", "integer"]
+            description: "Total amount of promotional credits used."
+          - name: referral_urls
+            type: ["null", "array"]
+            description: "List of referral URLs associated with the customer."
+          - name: refundable_credits
+            type: ["null", "integer"]
+            description: "Total amount of refundable credits."
+          - name: registered_for_gst
+            type: ["null", "boolean"]
+            description: "Flag indicating if the customer is registered for GST."
+          - name: relationship
+            type: ["null", "object"]
+            description: "Details about the relationship of the customer to other entities, if any."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Version of the customer's resource."
+          - name: tax_providers_fields
+            type: ["null", "array"]
+            description: "Fields related to tax providers."
+          - name: taxability
+            type: ["null", "string"]
+            description: "Taxability status of the customer."
+          - name: unbilled_charges
+            type: ["null", "integer"]
+            description: "Total amount of unbilled charges."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Date and time when the customer record was last updated."
+          - name: use_default_hierarchy_settings
+            type: ["null", "boolean"]
+            description: "Flag indicating if default hierarchy settings are used."
+          - name: vat_number
+            type: ["null", "string"]
+            description: "VAT number associated with the customer."
+          - name: vat_number_prefix
+            type: ["null", "string"]
+            description: "Prefix for the VAT number."
+          - name: vat_number_status
+            type: ["null", "string"]
+            description: "Status of the VAT number validation."
+          - name: vat_number_validated_time
+            type: ["null", "integer"]
+            description: "Date and time when the VAT number was validated."
+      - entity: invoice
+        fields:
+          - name: adjustment_credit_notes
+            type: ["null", "array"]
+            description: "Details of adjustment credit notes applied to the invoice"
+          - name: amount_adjusted
+            type: ["null", "integer"]
+            description: "Total amount adjusted in the invoice"
+          - name: amount_due
+            type: ["null", "integer"]
+            description: "Amount due for payment"
+          - name: amount_paid
+            type: ["null", "integer"]
+            description: "Amount already paid"
+          - name: amount_to_collect
+            type: ["null", "integer"]
+            description: "Amount yet to be collected"
+          - name: applied_credits
+            type: ["null", "array"]
+            description: "Details of credits applied to the invoice"
+          - name: base_currency_code
+            type: ["null", "string"]
+            description: "Currency code used as base for the invoice"
+          - name: billing_address
+            type: ["null", "object"]
+            description: "Details of the billing address associated with the invoice"
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "ID of the business entity"
+          - name: channel
+            type: ["null", "string"]
+            description: "Channel through which the invoice was generated"
+          - name: credits_applied
+            type: ["null", "integer"]
+            description: "Total credits applied to the invoice"
+          - name: currency_code
+            type: ["null", "string"]
+            description: "Currency code of the invoice"
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_id
+            type: ["null", "string"]
+            description: "ID of the customer"
+          - name: date
+            type: ["null", "integer"]
+            description: "Date of the invoice"
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Flag indicating if the invoice is deleted"
+          - name: discounts
+            type: ["null", "array"]
+            description: "Discount details applied to the invoice"
+          - name: due_date
+            type: ["null", "integer"]
+            description: "Due date for payment"
+          - name: dunning_attempts
+            type: ["null", "array"]
+            description: "Details of dunning attempts made"
+          - name: dunning_status
+            type: ["null", "string"]
+            description: "Status of dunning for the invoice"
+          - name: einvoice
+            type: ["null", "object"]
+            description: "Details of electronic invoice"
+          - name: exchange_rate
+            type: ["null", "number"]
+            description: "Exchange rate used for currency conversion"
+          - name: expected_payment_date
+            type: ["null", "integer"]
+            description: "Expected date of payment"
+          - name: first_invoice
+            type: ["null", "boolean"]
+            description: "Flag indicating whether it's the first invoice"
+          - name: generated_at
+            type: ["null", "integer"]
+            description: "Date when the invoice was generated"
+          - name: has_advance_charges
+            type: ["null", "boolean"]
+            description: "Flag indicating if there are advance charges"
+          - name: id
+            type: ["null", "string"]
+            description: "Unique ID of the invoice"
+          - name: is_digital
+            type: ["null", "boolean"]
+            description: "Flag indicating if the invoice is digital"
+          - name: is_gifted
+            type: ["null", "boolean"]
+            description: "Flag indicating if the invoice is gifted"
+          - name: issued_credit_notes
+            type: ["null", "array"]
+            description: "Details of credit notes issued"
+          - name: line_item_discounts
+            type: ["null", "array"]
+            description: "Details of line item discounts"
+          - name: line_item_taxes
+            type: ["null", "array"]
+            description: "Tax details applied to each line item in the invoice"
+          - name: line_item_tiers
+            type: ["null", "array"]
+            description: "Tiers information for each line item in the invoice"
+          - name: line_items
+            type: ["null", "array"]
+            description: "Details of individual line items in the invoice"
+          - name: linked_orders
+            type: ["null", "array"]
+            description: "Details of linked orders to the invoice"
+          - name: linked_payments
+            type: ["null", "array"]
+            description: "Details of linked payments"
+          - name: linked_taxes_withheld
+            type: ["null", "array"]
+            description: "Details of linked taxes withheld on the invoice"
+          - name: local_currency_code
+            type: ["null", "string"]
+            description: "Local currency code of the invoice"
+          - name: local_currency_exchange_rate
+            type: ["null", "number"]
+            description: "Exchange rate for local currency conversion"
+          - name: net_term_days
+            type: ["null", "integer"]
+            description: "Net term days for payment"
+          - name: new_sales_amount
+            type: ["null", "integer"]
+            description: "New sales amount in the invoice"
+          - name: next_retry_at
+            type: ["null", "integer"]
+            description: "Date of the next payment retry"
+          - name: notes
+            type: ["null", "array"]
+            description: "Notes associated with the invoice"
+          - name: object
+            type: ["null", "string"]
+            description: "Type of object"
+          - name: paid_at
+            type: ["null", "integer"]
+            description: "Date when the invoice was paid"
+          - name: payment_owner
+            type: ["null", "string"]
+            description: "Owner of the payment"
+          - name: po_number
+            type: ["null", "string"]
+            description: "Purchase order number"
+          - name: price_type
+            type: ["null", "string"]
+            description: "Type of pricing"
+          - name: recurring
+            type: ["null", "boolean"]
+            description: "Flag indicating if it's a recurring invoice"
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Resource version of the invoice"
+          - name: round_off_amount
+            type: ["null", "integer"]
+            description: "Amount rounded off"
+          - name: shipping_address
+            type: ["null", "object"]
+            description: "Details of the shipping address associated with the invoice"
+          - name: statement_descriptor
+            type: ["null", "object"]
+            description: "Descriptor for the statement"
+          - name: status
+            type: ["null", "string"]
+            description: "Status of the invoice"
+          - name: sub_total
+            type: ["null", "integer"]
+            description: "Subtotal amount"
+          - name: sub_total_in_local_currency
+            type: ["null", "integer"]
+            description: "Subtotal amount in local currency"
+          - name: subscription_id
+            type: ["null", "string"]
+            description: "ID of the subscription associated"
+          - name: tax
+            type: ["null", "integer"]
+            description: "Total tax amount"
+          - name: tax_category
+            type: ["null", "string"]
+            description: "Tax category"
+          - name: taxes
+            type: ["null", "array"]
+            description: "Details of taxes applied"
+          - name: term_finalized
+            type: ["null", "boolean"]
+            description: "Flag indicating if the term is finalized"
+          - name: total
+            type: ["null", "integer"]
+            description: "Total amount of the invoice"
+          - name: total_in_local_currency
+            type: ["null", "integer"]
+            description: "Total amount in local currency"
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Date of last update"
+          - name: vat_number
+            type: ["null", "string"]
+            description: "VAT number"
+          - name: vat_number_prefix
+            type: ["null", "string"]
+            description: "Prefix for the VAT number"
+          - name: void_reason_code
+            type: ["null", "string"]
+            description: "Reason code for voiding the invoice"
+          - name: voided_at
+            type: ["null", "integer"]
+            description: "Date when the invoice was voided"
+          - name: write_off_amount
+            type: ["null", "integer"]
+            description: "Amount written off"
+      - entity: credit_note
+        fields:
+          - name: allocations
+            type: ["null", "array"]
+            description: "Details of allocations associated with the credit note"
+          - name: amount_allocated
+            type: ["null", "integer"]
+            description: "The amount of credits allocated."
+          - name: amount_available
+            type: ["null", "integer"]
+            description: "The amount of credits available."
+          - name: amount_refunded
+            type: ["null", "integer"]
+            description: "The amount of credits refunded."
+          - name: base_currency_code
+            type: ["null", "string"]
+            description: "The base currency code for the credit note."
+          - name: billing_address
+            type: ["null", "object"]
+            description: "Details of the billing address associated with the credit note"
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "The ID of the business entity associated with the credit note."
+          - name: channel
+            type: ["null", "string"]
+            description: "The channel through which the credit note was created."
+          - name: create_reason_code
+            type: ["null", "string"]
+            description: "The reason code for creating the credit note."
+          - name: currency_code
+            type: ["null", "string"]
+            description: "The currency code for the credit note."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_id
+            type: ["null", "string"]
+            description: "The ID of the customer associated with the credit note."
+          - name: customer_notes
+            type: ["null", "string"]
+            description: "Notes provided by the customer for the credit note."
+          - name: date
+            type: ["null", "integer"]
+            description: "The date when the credit note was created."
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Indicates if the credit note has been deleted."
+          - name: discounts
+            type: ["null", "array"]
+            description: "Details of discounts applied to the credit note"
+          - name: exchange_rate
+            type: ["null", "number"]
+            description: "The exchange rate used for currency conversion."
+          - name: fractional_correction
+            type: ["null", "integer"]
+            description: "Fractional correction for rounding off decimals."
+          - name: generated_at
+            type: ["null", "integer"]
+            description: "The date when the credit note was generated."
+          - name: id
+            type: ["null", "string"]
+            description: "The unique identifier for the credit note."
+          - name: is_digital
+            type: ["null", "boolean"]
+            description: "Indicates if the credit note is in digital format."
+          - name: is_vat_moss_registered
+            type: ["null", "boolean"]
+            description: "Indicates if VAT MOSS registration applies."
+          - name: line_item_discounts
+            type: ["null", "array"]
+            description: "Details of discounts applied at the line item level in the credit note"
+          - name: line_item_taxes
+            type: ["null", "array"]
+            description: "Details of taxes applied at the line item level in the credit note"
+          - name: line_item_tiers
+            type: ["null", "array"]
+            description: "Details of tiers applied to line items in the credit note"
+          - name: line_items
+            type: ["null", "array"]
+            description: "Details of line items in the credit note"
+          - name: linked_refunds
+            type: ["null", "array"]
+            description: "Details of linked refunds to the credit note"
+          - name: linked_tax_withheld_refunds
+            type: ["null", "array"]
+            description: "Details of linked tax withheld refunds to the credit note"
+          - name: local_currency_code
+            type: ["null", "string"]
+            description: "The local currency code for the credit note."
+          - name: object
+            type: ["null", "string"]
+            description: "The object type of the credit note."
+          - name: price_type
+            type: ["null", "string"]
+            description: "The type of pricing used for the credit note."
+          - name: reason_code
+            type: ["null", "string"]
+            description: "The reason code for creating the credit note."
+          - name: reference_invoice_id
+            type: ["null", "string"]
+            description: "The ID of the invoice this credit note references."
+          - name: refunded_at
+            type: ["null", "integer"]
+            description: "The date when the credit note was refunded."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "The version of the credit note resource."
+          - name: round_off_amount
+            type: ["null", "integer"]
+            description: "Amount rounded off for currency conversions."
+          - name: shipping_address
+            type: ["null", "object"]
+            description: "Details of the shipping address associated with the credit note"
+          - name: status
+            type: ["null", "string"]
+            description: "The status of the credit note."
+          - name: sub_total
+            type: ["null", "integer"]
+            description: "The subtotal amount of the credit note."
+          - name: sub_total_in_local_currency
+            type: ["null", "integer"]
+            description: "The subtotal amount in local currency."
+          - name: subscription_id
+            type: ["null", "string"]
+            description: "The ID of the subscription associated with the credit note."
+          - name: taxes
+            type: ["null", "array"]
+            description: "List of taxes applied to the credit note"
+          - name: total
+            type: ["null", "integer"]
+            description: "The total amount of the credit note."
+          - name: total_in_local_currency
+            type: ["null", "integer"]
+            description: "The total amount in local currency."
+          - name: type
+            type: ["null", "string"]
+            description: "The type of credit note."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "The date when the credit note was last updated."
+          - name: vat_number
+            type: ["null", "string"]
+            description: "VAT number associated with the credit note."
+          - name: vat_number_prefix
+            type: ["null", "string"]
+            description: "Prefix for the VAT number."
+          - name: voided_at
+            type: ["null", "integer"]
+            description: "The date when the credit note was voided."
+      - entity: coupon
+        fields:
+          - name: apply_discount_on
+            type: ["null", "string"]
+            description: "Determines where the discount is applied on (e.g. subtotal, total)."
+          - name: apply_on
+            type: ["null", "string"]
+            description: "Specify on what type of items the coupon applies (e.g. subscription, addon)."
+          - name: archived_at
+            type: ["null", "integer"]
+            description: "Timestamp when the coupon was archived."
+          - name: coupon_constraints
+            type: ["null", "array"]
+            description: "Represents the constraints associated with the coupon"
+          - name: created_at
+            type: ["null", "integer"]
+            description: "Timestamp of the coupon creation."
+          - name: currency_code
+            type: ["null", "string"]
+            description: "The currency code for the coupon (e.g. USD, EUR)."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: discount_amount
+            type: ["null", "integer"]
+            description: "The fixed discount amount applied by the coupon."
+          - name: discount_percentage
+            type: ["null", "number"]
+            description: "Percentage discount applied by the coupon."
+          - name: discount_quantity
+            type: ["null", "integer"]
+            description: "Specifies the number of free units provided for the item price, without affecting the total quantity sold. This parameter is applicable only when the discount_type is set to offer_quantity."
+          - name: discount_type
+            type: ["null", "string"]
+            description: "Type of discount (e.g. fixed, percentage)."
+          - name: duration_month
+            type: ["null", "integer"]
+            description: "Duration of the coupon in months."
+          - name: duration_type
+            type: ["null", "string"]
+            description: "Type of duration (e.g. forever, one-time)."
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier for the coupon."
+          - name: invoice_name
+            type: ["null", "string"]
+            description: "Name displayed on invoices when the coupon is used."
+          - name: invoice_notes
+            type: ["null", "string"]
+            description: "Additional notes displayed on invoices when the coupon is used."
+          - name: item_constraint_criteria
+            type: ["null", "array"]
+            description: "Criteria for item constraints"
+          - name: item_constraints
+            type: ["null", "array"]
+            description: "Constraints related to the items"
+          - name: max_redemptions
+            type: ["null", "integer"]
+            description: "Maximum number of times the coupon can be redeemed."
+          - name: name
+            type: ["null", "string"]
+            description: "Name of the coupon."
+          - name: object
+            type: ["null", "string"]
+            description: "Type of object (usually 'coupon')."
+          - name: period
+            type: ["null", "integer"]
+            description: "Duration or frequency for which the coupon is valid."
+          - name: period_unit
+            type: ["null", "string"]
+            description: "Unit of the period (e.g. days, weeks)."
+          - name: redemptions
+            type: ["null", "integer"]
+            description: "Number of times the coupon has been redeemed."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Version of the resource."
+          - name: status
+            type: ["null", "string"]
+            description: "Current status of the coupon (e.g. active, inactive)."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Timestamp when the coupon was last updated."
+          - name: valid_till
+            type: ["null", "integer"]
+            description: "Date until which the coupon is valid for use."
+      - entity: transaction
+        fields:
+          - name: amount
+            type: ["null", "integer"]
+            description: "The total amount of the transaction."
+          - name: amount_capturable
+            type: ["null", "integer"]
+            description: "The remaining amount that can be captured in the transaction."
+          - name: amount_unused
+            type: ["null", "integer"]
+            description: "The amount in the transaction that remains unused."
+          - name: authorization_reason
+            type: ["null", "string"]
+            description: "Reason for authorization of the transaction."
+          - name: base_currency_code
+            type: ["null", "string"]
+            description: "The base currency code of the transaction."
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "The ID of the business entity related to the transaction."
+          - name: cn_create_reason_code
+            type: ["null", "string"]
+            description: "Reason code for creating a credit note."
+          - name: cn_date
+            type: ["null", "integer"]
+            description: "Date of the credit note."
+          - name: cn_reference_invoice_id
+            type: ["null", "string"]
+            description: "ID of the invoice referenced in the credit note."
+          - name: cn_status
+            type: ["null", "string"]
+            description: "Status of the credit note."
+          - name: cn_total
+            type: ["null", "integer"]
+            description: "Total amount of the credit note."
+          - name: currency_code
+            type: ["null", "string"]
+            description: "The currency code of the transaction."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_id
+            type: ["null", "string"]
+            description: "The ID of the customer associated with the transaction."
+          - name: date
+            type: ["null", "integer"]
+            description: "Date of the transaction."
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Flag indicating if the transaction is deleted."
+          - name: error_code
+            type: ["null", "string"]
+            description: "Error code associated with the transaction."
+          - name: error_detail
+            type: ["null", "string"]
+            description: "Detailed error information related to the transaction."
+          - name: error_text
+            type: ["null", "string"]
+            description: "Error message text of the transaction."
+          - name: exchange_rate
+            type: ["null", "number"]
+            description: "Exchange rate used in the transaction."
+          - name: fraud_flag
+            type: ["null", "string"]
+            description: "Flag indicating if the transaction is flagged for fraud."
+          - name: fraud_reason
+            type: ["null", "string"]
+            description: "Reason for flagging the transaction as fraud."
+          - name: gateway
+            type: ["null", "string"]
+            description: "The payment gateway used in the transaction."
+          - name: gateway_account_id
+            type: ["null", "string"]
+            description: "ID of the gateway account used in the transaction."
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier of the transaction."
+          - name: id_at_gateway
+            type: ["null", "string"]
+            description: "Transaction ID assigned by the gateway."
+          - name: iin
+            type: ["null", "string"]
+            description: "Bank identification number of the transaction."
+          - name: initiator_type
+            type: ["null", "string"]
+            description: "Type of initiator involved in the transaction."
+          - name: last4
+            type: ["null", "string"]
+            description: "Last 4 digits of the card used in the transaction."
+          - name: linked_credit_notes
+            type: ["null", "array"]
+            description: "Linked credit notes associated with the transaction."
+          - name: linked_invoices
+            type: ["null", "array"]
+            description: "Linked invoices associated with the transaction."
+          - name: linked_payments
+            type: ["null", "array"]
+            description: "Linked payments associated with the transaction."
+          - name: linked_refunds
+            type: ["null", "array"]
+            description: "Linked refunds associated with the transaction."
+          - name: masked_card_number
+            type: ["null", "string"]
+            description: "Masked card number used in the transaction."
+          - name: merchant_reference_id
+            type: ["null", "string"]
+            description: "Merchant reference ID of the transaction."
+          - name: object
+            type: ["null", "string"]
+            description: "Type of object representing the transaction."
+          - name: payment_method
+            type: ["null", "string"]
+            description: "Payment method used in the transaction."
+          - name: payment_method_details
+            type: ["null", "string"]
+            description: "Details of the payment method used in the transaction."
+          - name: payment_source_id
+            type: ["null", "string"]
+            description: "ID of the payment source used in the transaction."
+          - name: reference_authorization_id
+            type: ["null", "string"]
+            description: "Reference authorization ID of the transaction."
+          - name: reference_number
+            type: ["null", "string"]
+            description: "Reference number associated with the transaction."
+          - name: reference_transaction_id
+            type: ["null", "string"]
+            description: "ID of the reference transaction."
+          - name: refrence_number
+            type: ["null", "string"]
+            description: "Reference number of the transaction."
+          - name: refunded_txn_id
+            type: ["null", "string"]
+            description: "ID of the refunded transaction."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Resource version of the transaction."
+          - name: reversal_transaction_id
+            type: ["null", "string"]
+            description: "ID of the reversal transaction, if any."
+          - name: settled_at
+            type: ["null", "integer"]
+            description: "Date when the transaction was settled."
+          - name: status
+            type: ["null", "string"]
+            description: "Status of the transaction."
+          - name: subscription_id
+            type: ["null", "string"]
+            description: "ID of the subscription related to the transaction."
+          - name: three_d_secure
+            type: ["null", "boolean"]
+            description: "Flag indicating if 3D secure was used in the transaction."
+          - name: txn_amount
+            type: ["null", "integer"]
+            description: "Amount of the transaction."
+          - name: txn_date
+            type: ["null", "integer"]
+            description: "Date of the transaction."
+          - name: type
+            type: ["null", "string"]
+            description: "Type of the transaction."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Date when the transaction was last updated."
+          - name: voided_at
+            type: ["null", "integer"]
+            description: "Date when the transaction was voided."
+      - entity: event
+        fields:
+          - name: api_version
+            type: ["null", "string"]
+            description: "The version of the Chargebee API being used to fetch the event data."
+          - name: content
+            type: ["null", "object"]
+            description: "The specific content or information associated with the event."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: event_type
+            type: ["null", "string"]
+            description: "The type or category of the event."
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier for the event data record."
+          - name: object
+            type: ["null", "string"]
+            description: "The object or entity that the event is triggered for."
+          - name: occurred_at
+            type: ["null", "integer"]
+            description: "The datetime when the event occurred."
+          - name: source
+            type: ["null", "string"]
+            description: "The source or origin of the event data."
+          - name: user
+            type: ["null", "string"]
+            description: "Information about the user or entity associated with the event."
+          - name: webhook_status
+            type: ["null", "string"]
+            description: "The status of the webhook execution for the event."
+          - name: webhooks
+            type: ["null", "array"]
+            description: "List of webhooks associated with the event."
+      - entity: order
+        fields:
+          - name: amount_adjusted
+            type: ["null", "integer"]
+            description: "Adjusted amount for the order."
+          - name: amount_paid
+            type: ["null", "integer"]
+            description: "Amount paid for the order."
+          - name: base_currency_code
+            type: ["null", "string"]
+            description: "The base currency code used for the order."
+          - name: batch_id
+            type: ["null", "string"]
+            description: "Unique identifier for the batch the order belongs to."
+          - name: billing_address
+            type: ["null", "object"]
+            description: "The billing address associated with the order"
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "Identifier for the business entity associated with the order."
+          - name: cancellation_reason
+            type: ["null", "string"]
+            description: "Reason for order cancellation."
+          - name: cancelled_at
+            type: ["null", "integer"]
+            description: "Timestamp when the order was cancelled."
+          - name: created_at
+            type: ["null", "integer"]
+            description: "Timestamp when the order was created."
+          - name: created_by
+            type: ["null", "string"]
+            description: "User or system that created the order."
+          - name: currency_code
+            type: ["null", "string"]
+            description: "Currency code used for the order."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_id
+            type: ["null", "string"]
+            description: "Identifier for the customer placing the order."
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Flag indicating if the order has been deleted."
+          - name: delivered_at
+            type: ["null", "integer"]
+            description: "Timestamp when the order was delivered."
+          - name: discount
+            type: ["null", "integer"]
+            description: "Discount amount applied to the order."
+          - name: document_number
+            type: ["null", "string"]
+            description: "Unique document number associated with the order."
+          - name: exchange_rate
+            type: ["null", "number"]
+            description: "Rate used for currency exchange in the order."
+          - name: fulfillment_status
+            type: ["null", "string"]
+            description: "Status of fulfillment for the order."
+          - name: gift_id
+            type: ["null", "string"]
+            description: "Identifier for any gift associated with the order."
+          - name: gift_note
+            type: ["null", "string"]
+            description: "Note attached to any gift in the order."
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier for the order."
+          - name: invoice_id
+            type: ["null", "string"]
+            description: "Identifier for the invoice associated with the order."
+          - name: invoice_round_off_amount
+            type: ["null", "integer"]
+            description: "Round-off amount applied to the invoice."
+          - name: is_gifted
+            type: ["null", "boolean"]
+            description: "Flag indicating if the order is a gift."
+          - name: is_resent
+            type: ["null", "boolean"]
+            description: "Flag indicating if the order has been resent."
+          - name: line_item_discounts
+            type: ["null", "array"]
+            description: "Discounts applied to individual line items"
+          - name: line_item_taxes
+            type: ["null", "array"]
+            description: "Taxes applied to individual line items"
+          - name: linked_credit_notes
+            type: ["null", "array"]
+            description: "Credit notes linked to the order"
+          - name: note
+            type: ["null", "string"]
+            description: "Additional notes or comments for the order."
+          - name: object
+            type: ["null", "string"]
+            description: "Type of object representing an order in the system."
+          - name: order_date
+            type: ["null", "integer"]
+            description: "Date when the order was created."
+          - name: order_line_items
+            type: ["null", "array"]
+            description: "List of line items in the order"
+          - name: order_type
+            type: ["null", "string"]
+            description: "Type of order such as purchase order or sales order."
+          - name: original_order_id
+            type: ["null", "string"]
+            description: "Identifier for the original order if this is a modified order."
+          - name: paid_on
+            type: ["null", "integer"]
+            description: "Timestamp when the order was paid for."
+          - name: payment_status
+            type: ["null", "string"]
+            description: "Status of payment for the order."
+          - name: price_type
+            type: ["null", "string"]
+            description: "Type of pricing used for the order."
+          - name: reference_id
+            type: ["null", "string"]
+            description: "Reference identifier for the order."
+          - name: refundable_credits
+            type: ["null", "integer"]
+            description: "Credits that can be refunded for the whole order."
+          - name: refundable_credits_issued
+            type: ["null", "integer"]
+            description: "Credits already issued for refund for the whole order."
+          - name: resend_reason
+            type: ["null", "string"]
+            description: "Reason for resending the order."
+          - name: resent_orders
+            type: ["null", "array"]
+            description: "Orders that were resent to the customer"
+          - name: resent_status
+            type: ["null", "string"]
+            description: "Status of the resent order."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Version of the resource or order data."
+          - name: rounding_adjustement
+            type: ["null", "integer"]
+            description: "Adjustment made for rounding off the order amount."
+          - name: shipment_carrier
+            type: ["null", "string"]
+            description: "Carrier for shipping the order."
+          - name: shipped_at
+            type: ["null", "integer"]
+            description: "Timestamp when the order was shipped."
+          - name: shipping_address
+            type: ["null", "object"]
+            description: "The shipping address for the order"
+          - name: shipping_cut_off_date
+            type: ["null", "integer"]
+            description: "Date indicating the shipping cut-off for the order."
+          - name: shipping_date
+            type: ["null", "integer"]
+            description: "Date when the order is scheduled for shipping."
+          - name: status
+            type: ["null", "string"]
+            description: "Current status of the order."
+          - name: status_update_at
+            type: ["null", "integer"]
+            description: "Timestamp when the status of the order was last updated."
+          - name: sub_total
+            type: ["null", "integer"]
+            description: "Sub-total amount for the order before applying taxes or discounts."
+          - name: subscription_id
+            type: ["null", "string"]
+            description: "Identifier for the subscription associated with the order."
+          - name: tax
+            type: ["null", "integer"]
+            description: "Total tax amount for the order."
+          - name: total
+            type: ["null", "integer"]
+            description: "Total amount including taxes and discounts for the order."
+          - name: tracking_id
+            type: ["null", "string"]
+            description: "Tracking identifier for the order shipment."
+          - name: tracking_url
+            type: ["null", "string"]
+            description: "URL for tracking the order shipment."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Timestamp when the order data was last updated."
+      - entity: payment_source
+        fields:
+          - name: amazon_payment
+            type: ["null", "object"]
+            description: "Data related to Amazon Pay payment source"
+          - name: bank_account
+            type: ["null", "object"]
+            description: "Data related to bank account payment source"
+          - name: business_entity_id
+            type: ["null", "string"]
+            description: "Identifier for the business entity associated with the payment source"
+          - name: card
+            type: ["null", "object"]
+            description: "Data related to card payment source"
+          - name: created_at
+            type: ["null", "integer"]
+            description: "Timestamp indicating when the payment source was created"
+          - name: custom_fields
+            type: ["null", "array"]
+            description: ""
+          - name: customer_id
+            type: ["null", "string"]
+            description: "Unique identifier for the customer associated with the payment source"
+          - name: deleted
+            type: ["null", "boolean"]
+            description: "Indicates if the payment source has been deleted"
+          - name: gateway
+            type: ["null", "string"]
+            description: "Name of the payment gateway used for the payment source"
+          - name: gateway_account_id
+            type: ["null", "string"]
+            description: "Identifier for the gateway account tied to the payment source"
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier for the payment source"
+          - name: ip_address
+            type: ["null", "string"]
+            description: "IP address associated with the payment source"
+          - name: issuing_country
+            type: ["null", "string"]
+            description: "Country where the payment source was issued"
+          - name: mandates
+            type: ["null", "object"]
+            description: "Data related to mandates for payments"
+          - name: object
+            type: ["null", "string"]
+            description: "Type of object, e.g., payment_source"
+          - name: paypal
+            type: ["null", "object"]
+            description: "Data related to PayPal payment source"
+          - name: reference_id
+            type: ["null", "string"]
+            description: "Reference identifier for the payment source"
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Version of the payment source resource"
+          - name: status
+            type: ["null", "string"]
+            description: "Status of the payment source, e.g., active or inactive"
+          - name: type
+            type: ["null", "string"]
+            description: "Type of payment source, e.g., card, bank_account"
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Timestamp indicating when the payment source was last updated"
+          - name: upi
+            type: ["null", "object"]
+            description: "Data related to UPI payment source"
+      - entity: item
+        fields:
+          - name: applicable_items
+            type: ["null", "array"]
+            description: "Items associated with the item"
+          - name: archived_at
+            type: ["null", "integer"]
+            description: "Date and time when the item was archived"
+          - name: channel
+            type: ["null", "string"]
+            description: "Channel the item belongs to"
+          - name: custom_fields
+            type: ["null", "array"]
+            description: "Custom field entries for the item"
+          - name: description
+            type: ["null", "string"]
+            description: "Description of the item"
+          - name: enabled_for_checkout
+            type: ["null", "boolean"]
+            description: "Flag indicating if the item is enabled for checkout"
+          - name: enabled_in_portal
+            type: ["null", "boolean"]
+            description: "Flag indicating if the item is enabled in the portal"
+          - name: external_name
+            type: ["null", "string"]
+            description: "Name of the item in an external system"
+          - name: gift_claim_redirect_url
+            type: ["null", "string"]
+            description: "URL to redirect for gift claim"
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier for the item"
+          - name: included_in_mrr
+            type: ["null", "boolean"]
+            description: "Flag indicating if the item is included in Monthly Recurring Revenue"
+          - name: is_giftable
+            type: ["null", "boolean"]
+            description: "Flag indicating if the item is giftable"
+          - name: is_shippable
+            type: ["null", "boolean"]
+            description: "Flag indicating if the item is shippable"
+          - name: item_applicability
+            type: ["null", "string"]
+            description: "Applicability of the item"
+          - name: item_family_id
+            type: ["null", "string"]
+            description: "ID of the item's family"
+          - name: metadata
+            type: ["null", "object"]
+            description: "Additional data associated with the item"
+          - name: metered
+            type: ["null", "boolean"]
+            description: "Flag indicating if the item is metered"
+          - name: name
+            type: ["null", "string"]
+            description: "Name of the item"
+          - name: object
+            type: ["null", "string"]
+            description: "Type of object"
+          - name: redirect_url
+            type: ["null", "string"]
+            description: "URL to redirect for the item"
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Version of the resource"
+          - name: status
+            type: ["null", "string"]
+            description: "Status of the item"
+          - name: type
+            type: ["null", "string"]
+            description: "Type of the item"
+          - name: unit
+            type: ["null", "string"]
+            description: "Unit associated with the item"
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Date and time when the item was last updated"
+          - name: usage_calculation
+            type: ["null", "string"]
+            description: "Calculation method used for item usage"
+      - entity: item_price
+        fields:
+          - name: accounting_detail
+            type: ["null", "object"]
+            description: "Details related to accounting such as cost, revenue, expenses, etc."
+          - name: archived_at
+            type: ["null", "integer"]
+            description: "Date and time when the item was archived."
+          - name: billing_cycles
+            type: ["null", "integer"]
+            description: "Number of billing cycles for the item."
+          - name: channel
+            type: ["null", "string"]
+            description: "The channel through which the item is sold."
+          - name: created_at
+            type: ["null", "integer"]
+            description: "Date and time when the item was created."
+          - name: currency_code
+            type: ["null", "string"]
+            description: "The currency code used for pricing the item."
+          - name: custom_fields
+            type: ["null", "array"]
+            description: "Custom field entries for the item price."
+          - name: description
+            type: ["null", "string"]
+            description: "Description of the item."
+          - name: external_name
+            type: ["null", "string"]
+            description: "External name of the item."
+          - name: free_quantity
+            type: ["null", "integer"]
+            description: "Free quantity allowed for the item."
+          - name: free_quantity_in_decimal
+            type: ["null", "string"]
+            description: "Free quantity allowed represented in decimal format."
+          - name: id
+            type: ["null", "string"]
+            description: "Unique identifier for the item price."
+          - name: invoice_notes
+            type: ["null", "string"]
+            description: "Notes to be included in the invoice for the item."
+          - name: is_taxable
+            type: ["null", "boolean"]
+            description: "Flag indicating whether the item is taxable."
+          - name: item_family_id
+            type: ["null", "string"]
+            description: "Identifier for the item family to which the item belongs."
+          - name: item_id
+            type: ["null", "string"]
+            description: "Unique identifier for the parent item."
+          - name: item_type
+            type: ["null", "string"]
+            description: "Type of the item (e.g., product, service)."
+          - name: metadata
+            type: ["null", "object"]
+            description: "Additional metadata associated with the item."
+          - name: name
+            type: ["null", "string"]
+            description: "Name of the item price."
+          - name: object
+            type: ["null", "string"]
+            description: "Object type representing the item price."
+          - name: period
+            type: ["null", "integer"]
+            description: "Duration of the item's billing period."
+          - name: period_unit
+            type: ["null", "string"]
+            description: "Unit of measurement for the billing period duration."
+          - name: price
+            type: ["null", "integer"]
+            description: "Price of the item."
+          - name: price_in_decimal
+            type: ["null", "string"]
+            description: "Price of the item represented in decimal format."
+          - name: pricing_model
+            type: ["null", "string"]
+            description: "The pricing model used for the item (e.g., flat fee, usage-based)."
+          - name: resource_version
+            type: ["null", "integer"]
+            description: "Version of the item price resource."
+          - name: shipping_period
+            type: ["null", "integer"]
+            description: "Duration of the item's shipping period."
+          - name: shipping_period_unit
+            type: ["null", "string"]
+            description: "Unit of measurement for the shipping period duration."
+          - name: show_description_in_invoices
+            type: ["null", "boolean"]
+            description: "Flag indicating whether to show the description in invoices."
+          - name: show_description_in_quotes
+            type: ["null", "boolean"]
+            description: "Flag indicating whether to show the description in quotes."
+          - name: status
+            type: ["null", "string"]
+            description: "Current status of the item price (e.g., active, inactive)."
+          - name: tax_detail
+            type: ["null", "object"]
+            description: "Information about taxes associated with the item price."
+          - name: tiers
+            type: ["null", "array"]
+            description: "Different pricing tiers for the item."
+          - name: trial_end_action
+            type: ["null", "string"]
+            description: "Action to be taken at the end of the trial period."
+          - name: trial_period
+            type: ["null", "integer"]
+            description: "Duration of the trial period."
+          - name: trial_period_unit
+            type: ["null", "string"]
+            description: "Unit of measurement for the trial period duration."
+          - name: updated_at
+            type: ["null", "integer"]
+            description: "Date and time when the item price was last updated."
+
+servers:
+  - url: https://{site}.chargebee.com/api/v2
+    description: Chargebee API server
+    variables:
+      site:
+        default: your-site
+        description: Your Chargebee site name (subdomain)
+    x-airbyte-replication-environment-mapping:
+      site: site
+
+security:
+  - basicAuth: []
+
+paths:
+  # ─── Customers ──────────────────────────────────────────
+  "/customers":
+    get:
+      summary: List customers
+      operationId: listCustomers
+      x-airbyte-entity: customer
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].customer"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerList"
+        "401":
+          description: Unauthorized
+
+  "/customers/{id}":
+    get:
+      summary: Retrieve a customer
+      operationId: getCustomer
+      x-airbyte-entity: customer
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.customer"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Customer ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Customer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerWrapper"
+        "404":
+          description: Customer not found
+        "401":
+          description: Unauthorized
+
+  # ─── Subscriptions ──────────────────────────────────────
+  "/subscriptions":
+    get:
+      summary: List subscriptions
+      operationId: listSubscriptions
+      x-airbyte-entity: subscription
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].subscription"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionList"
+        "401":
+          description: Unauthorized
+
+  "/subscriptions/{id}":
+    get:
+      summary: Retrieve a subscription
+      operationId: getSubscription
+      x-airbyte-entity: subscription
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.subscription"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Subscription ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Subscription object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionWrapper"
+        "404":
+          description: Subscription not found
+        "401":
+          description: Unauthorized
+
+  # ─── Invoices ───────────────────────────────────────────
+  "/invoices":
+    get:
+      summary: List invoices
+      operationId: listInvoices
+      x-airbyte-entity: invoice
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].invoice"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceList"
+        "401":
+          description: Unauthorized
+
+  "/invoices/{id}":
+    get:
+      summary: Retrieve an invoice
+      operationId: getInvoice
+      x-airbyte-entity: invoice
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.invoice"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invoice object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceWrapper"
+        "404":
+          description: Invoice not found
+        "401":
+          description: Unauthorized
+
+  # ─── Credit Notes ───────────────────────────────────────
+  "/credit_notes":
+    get:
+      summary: List credit notes
+      operationId: listCreditNotes
+      x-airbyte-entity: credit_note
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].credit_note"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of credit notes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditNoteList"
+        "401":
+          description: Unauthorized
+
+  "/credit_notes/{id}":
+    get:
+      summary: Retrieve a credit note
+      operationId: getCreditNote
+      x-airbyte-entity: credit_note
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.credit_note"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Credit note ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Credit note object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditNoteWrapper"
+        "404":
+          description: Credit note not found
+        "401":
+          description: Unauthorized
+
+  # ─── Coupons ────────────────────────────────────────────
+  "/coupons":
+    get:
+      summary: List coupons
+      operationId: listCoupons
+      x-airbyte-entity: coupon
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].coupon"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of coupons
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponList"
+        "401":
+          description: Unauthorized
+
+  "/coupons/{id}":
+    get:
+      summary: Retrieve a coupon
+      operationId: getCoupon
+      x-airbyte-entity: coupon
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.coupon"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Coupon ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Coupon object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponWrapper"
+        "404":
+          description: Coupon not found
+        "401":
+          description: Unauthorized
+
+  # ─── Transactions ───────────────────────────────────────
+  "/transactions":
+    get:
+      summary: List transactions
+      operationId: listTransactions
+      x-airbyte-entity: transaction
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].transaction"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionList"
+        "401":
+          description: Unauthorized
+
+  "/transactions/{id}":
+    get:
+      summary: Retrieve a transaction
+      operationId: getTransaction
+      x-airbyte-entity: transaction
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.transaction"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Transaction object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionWrapper"
+        "404":
+          description: Transaction not found
+        "401":
+          description: Unauthorized
+
+  # ─── Events ─────────────────────────────────────────────
+  "/events":
+    get:
+      summary: List events
+      operationId: listEvents
+      x-airbyte-entity: event
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: "$.list[*].event"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventList"
+        "401":
+          description: Unauthorized
+
+  "/events/{id}":
+    get:
+      summary: Retrieve an event
+      operationId: getEvent
+      x-airbyte-entity: event
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.event"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Event object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventWrapper"
+        "404":
+          description: Event not found
+        "401":
+          description: Unauthorized
+
+  # ─── Orders ─────────────────────────────────────────────
+  "/orders":
+    get:
+      summary: List orders
+      operationId: listOrders
+      x-airbyte-entity: order
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].order"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderList"
+        "401":
+          description: Unauthorized
+
+  "/orders/{id}":
+    get:
+      summary: Retrieve an order
+      operationId: getOrder
+      x-airbyte-entity: order
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.order"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Order ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderWrapper"
+        "404":
+          description: Order not found
+        "401":
+          description: Unauthorized
+
+  # ─── Items ──────────────────────────────────────────────
+  "/items":
+    get:
+      summary: List items
+      operationId: listItems
+      x-airbyte-entity: item
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].item"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of items
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemList"
+        "401":
+          description: Unauthorized
+
+  "/items/{id}":
+    get:
+      summary: Retrieve an item
+      operationId: getItem
+      x-airbyte-entity: item
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.item"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Item ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Item object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemWrapper"
+        "404":
+          description: Item not found
+        "401":
+          description: Unauthorized
+
+  # ─── Item Prices ────────────────────────────────────────
+  "/item_prices":
+    get:
+      summary: List item prices
+      operationId: listItemPrices
+      x-airbyte-entity: item_price
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].item_price"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of item prices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemPriceList"
+        "401":
+          description: Unauthorized
+
+  "/item_prices/{id}":
+    get:
+      summary: Retrieve an item price
+      operationId: getItemPrice
+      x-airbyte-entity: item_price
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.item_price"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Item price ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Item price object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemPriceWrapper"
+        "404":
+          description: Item price not found
+        "401":
+          description: Unauthorized
+
+  # ─── Payment Sources ────────────────────────────────────
+  "/payment_sources":
+    get:
+      summary: List payment sources
+      operationId: listPaymentSources
+      x-airbyte-entity: payment_source
+      x-airbyte-action: list
+      x-airbyte-record-extractor: "$.list[*].payment_source"
+      x-airbyte-meta-extractor:
+        next_offset: "$.next_offset"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of payment sources
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentSourceList"
+        "401":
+          description: Unauthorized
+
+  "/payment_sources/{id}":
+    get:
+      summary: Retrieve a payment source
+      operationId: getPaymentSource
+      x-airbyte-entity: payment_source
+      x-airbyte-action: get
+      x-airbyte-record-extractor: "$.payment_source"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Payment source ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Payment source object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentSourceWrapper"
+        "404":
+          description: Payment source not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using your Chargebee API key as the username with an empty password.
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: Your Chargebee API key (used as the HTTP Basic username)
+        auth_mapping:
+          username: "${api_key}"
+          password: ""
+        replication_auth_key_mapping:
+          site_api_key: "api_key"
+
+  schemas:
+    # ─── Customer ─────────────────────────────────────────
+    Customer:
+      type: object
+      x-airbyte-entity-name: customer
+      x-airbyte-stream-name: customer
+      description: Chargebee customer object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the customer
+        first_name:
+          type: string
+          description: First name of the customer
+        last_name:
+          type: string
+          description: Last name of the customer
+        email:
+          type: string
+          description: Email address of the customer
+        phone:
+          type: string
+          description: Phone number of the customer
+        company:
+          type: string
+          description: Company name of the customer
+        vat_number:
+          type: string
+          description: VAT/tax registration number
+        auto_collection:
+          type: string
+          description: Automatic collection setting (on/off)
+        offline_payment_method:
+          type: string
+          description: Preferred offline payment method
+        net_term_days:
+          type: integer
+          description: Number of days for payment net terms
+        vat_number_validated_time:
+          type: integer
+          description: Recent VAT number validation timestamp
+        vat_number_status:
+          type: string
+          description: VAT validation status
+        allow_direct_debit:
+          type: boolean
+          description: Whether the customer can pay via Direct Debit
+        is_location_valid:
+          type: boolean
+          description: Whether the customer location is valid
+        created_at:
+          type: integer
+          description: Timestamp when the customer was created
+        created_from_ip:
+          type: string
+          description: IP address from which the customer was created
+        taxability:
+          type: string
+          description: Taxability status of the customer
+        entity_code:
+          type: string
+          description: Tax exemption category code
+        exempt_number:
+          type: string
+          description: Tax exemption number
+        resource_version:
+          type: integer
+          description: Version number of this resource
+        updated_at:
+          type: integer
+          description: Timestamp of last update
+        locale:
+          type: string
+          description: Customer locale setting
+        billing_date:
+          type: integer
+          description: Billing date for calendar billing
+        billing_date_mode:
+          type: string
+          description: Billing date mode
+        billing_day_of_week:
+          type: string
+          description: Billing day of week for weekly subscriptions
+        billing_day_of_week_mode:
+          type: string
+          description: Billing day of week mode
+        billing_month:
+          type: integer
+          description: Billing month for yearly subscriptions
+        pii_cleared:
+          type: string
+          description: PII cleared status
+        auto_close_invoices:
+          type: boolean
+          description: Whether invoices are auto-closed
+        channel:
+          type: string
+          description: Channel the customer originated from
+        fraud_flag:
+          type: string
+          description: Fraud flag status
+        primary_payment_source_id:
+          type: string
+          description: Primary payment source ID
+        backup_payment_source_id:
+          type: string
+          description: Backup payment source ID
+        invoice_notes:
+          type: string
+          description: Notes on customer invoices
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        preferred_currency_code:
+          type: string
+          description: Preferred currency code (ISO 4217)
+        promotional_credits:
+          type: integer
+          description: Promotional credits balance (in cents)
+        unbilled_charges:
+          type: integer
+          description: Total unbilled charges (in cents)
+        refundable_credits:
+          type: integer
+          description: Refundable credits balance (in cents)
+        excess_payments:
+          type: integer
+          description: Total excess payments (in cents)
+        deleted:
+          type: boolean
+          description: Whether the customer is deleted
+        registered_for_gst:
+          type: boolean
+          description: Whether registered for GST
+        consolidated_invoicing:
+          type: boolean
+          description: Whether invoices are consolidated
+        customer_type:
+          type: string
+          description: Customer type for tax purposes
+        business_customer_without_vat_number:
+          type: boolean
+          description: Business customer without VAT number flag
+        client_profile_id:
+          type: string
+          description: Avalara client profile ID
+        use_default_hierarchy_settings:
+          type: boolean
+          description: Whether using default hierarchy settings
+        vat_number_prefix:
+          type: string
+          description: VAT number prefix override
+        billing_address:
+          type: object
+          description: Billing address
+        referral_urls:
+          type: array
+          description: Referral URLs
+          items:
+            type: object
+        contacts:
+          type: array
+          description: Contact details
+          items:
+            type: object
+        payment_method:
+          type: object
+          description: Primary payment method details
+        balances:
+          type: array
+          description: Balance information
+          items:
+            type: object
+        relationship:
+          type: object
+          description: Account hierarchy relationship
+        parent_account_access:
+          type: object
+          description: Parent account access rights
+        child_account_access:
+          type: object
+          description: Child account access rights
+        meta_data:
+          type: object
+          description: Additional metadata
+        mrr:
+          type: integer
+          description: Monthly recurring revenue from the customer
+        exemption_details:
+          type: array
+          description: Tax exemption details
+          items:
+            type: object
+        tax_providers_fields:
+          type: array
+          description: Tax provider fields
+          items:
+            type: object
+        object:
+          type: string
+          description: Object type identifier
+        card_status:
+          type: string
+          description: Status of payment card
+        custom_fields:
+          type: array
+          description: Custom fields associated with the customer
+          items:
+            type: object
+
+    CustomerList:
+      type: object
+      description: Paginated list of customers
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              customer:
+                $ref: "#/components/schemas/Customer"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Subscription ─────────────────────────────────────
+    Subscription:
+      type: object
+      x-airbyte-entity-name: subscription
+      x-airbyte-stream-name: subscription
+      description: Chargebee subscription object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the subscription
+        customer_id:
+          type: string
+          description: Customer ID
+        plan_id:
+          type: string
+          description: Plan ID
+        plan_quantity:
+          type: integer
+          description: Plan quantity
+        plan_unit_price:
+          type: integer
+          description: Plan unit price (in cents)
+        plan_amount:
+          type: integer
+          description: Plan amount (in cents)
+        plan_free_quantity:
+          type: integer
+          description: Plan free quantity
+        status:
+          type: string
+          description: Subscription status
+        trial_start:
+          type: integer
+          description: Trial start timestamp
+        trial_end:
+          type: integer
+          description: Trial end timestamp
+        current_term_start:
+          type: integer
+          description: Current term start timestamp
+        current_term_end:
+          type: integer
+          description: Current term end timestamp
+        next_billing_at:
+          type: integer
+          description: Next billing timestamp
+        created_at:
+          type: integer
+          description: Creation timestamp
+        started_at:
+          type: integer
+          description: Start timestamp
+        activated_at:
+          type: integer
+          description: Activation timestamp
+        cancelled_at:
+          type: integer
+          description: Cancellation timestamp
+        cancel_reason:
+          type: string
+          description: Reason for cancellation
+        channel:
+          type: string
+          description: Channel the subscription originated from
+        billing_period:
+          type: integer
+          description: Billing period
+        billing_period_unit:
+          type: string
+          description: Billing period unit
+        auto_collection:
+          type: string
+          description: Automatic collection setting
+        currency_code:
+          type: string
+          description: Currency code
+        remaining_billing_cycles:
+          type: integer
+          description: Remaining billing cycles
+        po_number:
+          type: string
+          description: Purchase order number
+        created_from_ip:
+          type: string
+          description: IP address from creation
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        has_scheduled_changes:
+          type: boolean
+          description: Whether scheduled changes exist
+        payment_source_id:
+          type: string
+          description: Payment source ID
+        plan_free_quantity_in_decimal:
+          type: string
+          description: Plan free quantity in decimal
+        plan_quantity_in_decimal:
+          type: string
+          description: Plan quantity in decimal
+        plan_unit_price_in_decimal:
+          type: string
+          description: Plan unit price in decimal
+        plan_amount_in_decimal:
+          type: string
+          description: Plan amount in decimal
+        due_invoices_count:
+          type: integer
+          description: Count of due invoices
+        due_since:
+          type: integer
+          description: Due since timestamp
+        total_dues:
+          type: integer
+          description: Total dues amount (in cents)
+        mrr:
+          type: integer
+          description: Monthly recurring revenue (in cents)
+        exchange_rate:
+          type: number
+          description: Exchange rate
+        base_currency_code:
+          type: string
+          description: Base currency code
+        override_relationship:
+          type: boolean
+          description: Whether relationship is overridden
+        trial_end_action:
+          type: string
+          description: Action at trial end
+        pause_date:
+          type: integer
+          description: Pause date timestamp
+        resume_date:
+          type: integer
+          description: Resume date timestamp
+        cancelled_at_term_end:
+          type: boolean
+          description: Whether cancelled at term end
+        has_scheduled_advance_invoices:
+          type: boolean
+          description: Whether advance invoices are scheduled
+        object:
+          type: string
+          description: Object type
+        addons:
+          type: array
+          description: Addon details
+          items:
+            type: object
+        coupons:
+          type: array
+          description: Coupon details
+          items:
+            type: object
+        discounts:
+          type: array
+          description: Discount details
+          items:
+            type: object
+        subscription_items:
+          type: array
+          description: Subscription item details
+          items:
+            type: object
+        item_tiers:
+          type: array
+          description: Item tier details
+          items:
+            type: object
+        charged_items:
+          type: array
+          description: Charged items
+          items:
+            type: object
+        shipping_address:
+          type: object
+          description: Shipping address
+        contract_term:
+          type: object
+          description: Contract term details
+        meta_data:
+          type: object
+          description: Additional metadata
+        deleted:
+          type: boolean
+          description: Whether the subscription is deleted
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        free_period:
+          type: integer
+          description: Free period
+        free_period_unit:
+          type: string
+          description: Free period unit
+        cf_mandate_id:
+          type: string
+          description: Custom field mandate ID
+        custom_fields:
+          type: array
+          description: Custom fields associated with the subscription
+          items:
+            type: object
+        changes_scheduled_at:
+          type: integer
+          description: Timestamp of scheduled changes
+        invoice_notes:
+          type: string
+          description: Invoice notes
+        auto_close_invoices:
+          type: boolean
+          description: Whether invoices are auto-closed
+        offline_payment_method:
+          type: string
+          description: Offline payment method
+
+    SubscriptionList:
+      type: object
+      description: Paginated list of subscriptions
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              subscription:
+                $ref: "#/components/schemas/Subscription"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Invoice ──────────────────────────────────────────
+    Invoice:
+      type: object
+      x-airbyte-entity-name: invoice
+      x-airbyte-stream-name: invoice
+      description: Chargebee invoice object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the invoice
+        customer_id:
+          type: string
+          description: Customer ID
+        subscription_id:
+          type: string
+          description: Subscription ID
+        recurring:
+          type: boolean
+          description: Whether this is a recurring invoice
+        status:
+          type: string
+          description: Invoice status
+        price_type:
+          type: string
+          description: Price type
+        date:
+          type: integer
+          description: Invoice date timestamp
+        due_date:
+          type: integer
+          description: Due date timestamp
+        net_term_days:
+          type: integer
+          description: Net term days
+        currency_code:
+          type: string
+          description: Currency code
+        total:
+          type: integer
+          description: Total amount (in cents)
+        amount_paid:
+          type: integer
+          description: Amount paid (in cents)
+        amount_adjusted:
+          type: integer
+          description: Amount adjusted (in cents)
+        write_off_amount:
+          type: integer
+          description: Write-off amount (in cents)
+        credits_applied:
+          type: integer
+          description: Credits applied (in cents)
+        amount_due:
+          type: integer
+          description: Amount due (in cents)
+        paid_at:
+          type: integer
+          description: Paid at timestamp
+        dunning_status:
+          type: string
+          description: Dunning status
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        resource_version:
+          type: integer
+          description: Resource version
+        deleted:
+          type: boolean
+          description: Whether the invoice is deleted
+        object:
+          type: string
+          description: Object type
+        first_invoice:
+          type: boolean
+          description: Whether this is the first invoice
+        amount_to_collect:
+          type: integer
+          description: Amount to collect (in cents)
+        round_off_amount:
+          type: integer
+          description: Round-off amount (in cents)
+        new_sales_amount:
+          type: integer
+          description: New sales amount (in cents)
+        has_advance_charges:
+          type: boolean
+          description: Whether advance charges exist
+        tax:
+          type: integer
+          description: Tax amount (in cents)
+        sub_total:
+          type: integer
+          description: Subtotal (in cents)
+        sub_total_in_local_currency:
+          type: integer
+          description: Subtotal in local currency (in cents)
+        total_in_local_currency:
+          type: integer
+          description: Total in local currency (in cents)
+        exchange_rate:
+          type: number
+          description: Exchange rate
+        base_currency_code:
+          type: string
+          description: Base currency code
+        is_gifted:
+          type: boolean
+          description: Whether the invoice is for a gift
+        generated_at:
+          type: integer
+          description: Generation timestamp
+        expected_payment_date:
+          type: integer
+          description: Expected payment date
+        channel:
+          type: string
+          description: Channel
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        line_items:
+          type: array
+          description: Invoice line items
+          items:
+            type: object
+        discounts:
+          type: array
+          description: Discounts applied
+          items:
+            type: object
+        line_item_discounts:
+          type: array
+          description: Line item discounts
+          items:
+            type: object
+        taxes:
+          type: array
+          description: Tax details
+          items:
+            type: object
+        line_item_taxes:
+          type: array
+          description: Line item tax details
+          items:
+            type: object
+        line_item_tiers:
+          type: array
+          description: Line item tier details
+          items:
+            type: object
+        linked_payments:
+          type: array
+          description: Linked payment details
+          items:
+            type: object
+        dunning_attempts:
+          type: array
+          description: Dunning attempt details
+          items:
+            type: object
+        applied_credits:
+          type: array
+          description: Applied credit details
+          items:
+            type: object
+        adjustment_credit_notes:
+          type: array
+          description: Adjustment credit notes
+          items:
+            type: object
+        issued_credit_notes:
+          type: array
+          description: Issued credit notes
+          items:
+            type: object
+        linked_orders:
+          type: array
+          description: Linked orders
+          items:
+            type: object
+        notes:
+          type: array
+          description: Invoice notes
+          items:
+            type: object
+        billing_address:
+          type: object
+          description: Billing address
+        shipping_address:
+          type: object
+          description: Shipping address
+        linked_taxes_withheld:
+          type: array
+          description: Linked taxes withheld
+          items:
+            type: object
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+        void_reason_code:
+          type: string
+          description: Void reason code
+        voided_at:
+          type: integer
+          description: Voided at timestamp
+        created_at:
+          type: integer
+          description: Creation timestamp
+
+    InvoiceList:
+      type: object
+      description: Paginated list of invoices
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              invoice:
+                $ref: "#/components/schemas/Invoice"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Credit Note ──────────────────────────────────────
+    CreditNote:
+      type: object
+      x-airbyte-entity-name: credit_note
+      x-airbyte-stream-name: credit_note
+      description: Chargebee credit note object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credit note
+        customer_id:
+          type: string
+          description: Customer ID
+        subscription_id:
+          type: string
+          description: Subscription ID
+        reference_invoice_id:
+          type: string
+          description: Reference invoice ID
+        type:
+          type: string
+          description: Credit note type
+        reason_code:
+          type: string
+          description: Reason code
+        status:
+          type: string
+          description: Credit note status
+        date:
+          type: integer
+          description: Credit note date timestamp
+        price_type:
+          type: string
+          description: Price type
+        currency_code:
+          type: string
+          description: Currency code
+        total:
+          type: integer
+          description: Total amount (in cents)
+        amount_allocated:
+          type: integer
+          description: Amount allocated (in cents)
+        amount_refunded:
+          type: integer
+          description: Amount refunded (in cents)
+        amount_available:
+          type: integer
+          description: Amount available (in cents)
+        refunded_at:
+          type: integer
+          description: Refunded at timestamp
+        voided_at:
+          type: integer
+          description: Voided at timestamp
+        generated_at:
+          type: integer
+          description: Generated at timestamp
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        sub_total:
+          type: integer
+          description: Subtotal (in cents)
+        sub_total_in_local_currency:
+          type: integer
+          description: Subtotal in local currency (in cents)
+        total_in_local_currency:
+          type: integer
+          description: Total in local currency (in cents)
+        round_off_amount:
+          type: integer
+          description: Round-off amount (in cents)
+        channel:
+          type: string
+          description: Channel
+        exchange_rate:
+          type: number
+          description: Exchange rate
+        base_currency_code:
+          type: string
+          description: Base currency code
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        deleted:
+          type: boolean
+          description: Whether the credit note is deleted
+        object:
+          type: string
+          description: Object type
+        create_reason_code:
+          type: string
+          description: Creation reason code
+        void_reason_code:
+          type: string
+          description: Void reason code
+        fractional_correction:
+          type: integer
+          description: Fractional correction amount (in cents)
+        line_items:
+          type: array
+          description: Line items
+          items:
+            type: object
+        discounts:
+          type: array
+          description: Discounts
+          items:
+            type: object
+        line_item_discounts:
+          type: array
+          description: Line item discounts
+          items:
+            type: object
+        line_item_tiers:
+          type: array
+          description: Line item tiers
+          items:
+            type: object
+        taxes:
+          type: array
+          description: Tax details
+          items:
+            type: object
+        line_item_taxes:
+          type: array
+          description: Line item taxes
+          items:
+            type: object
+        linked_refunds:
+          type: array
+          description: Linked refunds
+          items:
+            type: object
+        allocations:
+          type: array
+          description: Allocations
+          items:
+            type: object
+        linked_tax_withheld_refunds:
+          type: array
+          description: Linked tax withheld refunds
+          items:
+            type: object
+        shipping_address:
+          type: object
+          description: Shipping address
+        billing_address:
+          type: object
+          description: Billing address
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+        created_at:
+          type: integer
+          description: Creation timestamp
+
+    CreditNoteList:
+      type: object
+      description: Paginated list of credit notes
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              credit_note:
+                $ref: "#/components/schemas/CreditNote"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Coupon ───────────────────────────────────────────
+    Coupon:
+      type: object
+      x-airbyte-entity-name: coupon
+      x-airbyte-stream-name: coupon
+      description: Chargebee coupon object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the coupon
+        name:
+          type: string
+          description: Name of the coupon
+        invoice_name:
+          type: string
+          description: Name displayed on invoices
+        discount_type:
+          type: string
+          description: Type of discount
+        discount_percentage:
+          type: number
+          description: Percentage discount
+        discount_amount:
+          type: integer
+          description: Fixed discount amount (in cents)
+        discount_quantity:
+          type: integer
+          description: Number of free units
+        currency_code:
+          type: string
+          description: Currency code
+        duration_type:
+          type: string
+          description: Duration type
+        duration_month:
+          type: integer
+          description: Duration in months
+        valid_till:
+          type: integer
+          description: Valid until timestamp
+        max_redemptions:
+          type: integer
+          description: Maximum redemptions allowed
+        status:
+          type: string
+          description: Coupon status
+        apply_discount_on:
+          type: string
+          description: Where discount is applied
+        apply_on:
+          type: string
+          description: What items the coupon applies to
+        plan_constraint:
+          type: string
+          description: Plan constraint
+        addon_constraint:
+          type: string
+          description: Addon constraint
+        created_at:
+          type: integer
+          description: Creation timestamp
+        archived_at:
+          type: integer
+          description: Archived at timestamp
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        object:
+          type: string
+          description: Object type
+        redemptions:
+          type: integer
+          description: Number of redemptions
+        invoice_notes:
+          type: string
+          description: Invoice notes
+        period:
+          type: integer
+          description: Validity period
+        period_unit:
+          type: string
+          description: Period unit
+        item_constraints:
+          type: array
+          description: Item constraints
+          items:
+            type: object
+        item_constraint_criteria:
+          type: array
+          description: Item constraint criteria
+          items:
+            type: object
+        coupon_constraints:
+          type: array
+          description: Coupon constraints
+          items:
+            type: object
+        deleted:
+          type: boolean
+          description: Whether the coupon is deleted
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+
+    CouponList:
+      type: object
+      description: Paginated list of coupons
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              coupon:
+                $ref: "#/components/schemas/Coupon"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Transaction ──────────────────────────────────────
+    Transaction:
+      type: object
+      x-airbyte-entity-name: transaction
+      x-airbyte-stream-name: transaction
+      description: Chargebee transaction object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the transaction
+        customer_id:
+          type: string
+          description: Customer ID
+        subscription_id:
+          type: string
+          description: Subscription ID
+        gateway_account_id:
+          type: string
+          description: Gateway account ID
+        payment_source_id:
+          type: string
+          description: Payment source ID
+        payment_method:
+          type: string
+          description: Payment method type
+        reference_number:
+          type: string
+          description: Reference number
+        gateway:
+          type: string
+          description: Payment gateway
+        type:
+          type: string
+          description: Transaction type
+        date:
+          type: integer
+          description: Transaction date timestamp
+        settled_at:
+          type: integer
+          description: Settled at timestamp
+        exchange_rate:
+          type: number
+          description: Exchange rate
+        currency_code:
+          type: string
+          description: Currency code
+        amount:
+          type: integer
+          description: Transaction amount (in cents)
+        id_at_gateway:
+          type: string
+          description: Transaction ID at gateway
+        status:
+          type: string
+          description: Transaction status
+        fraud_flag:
+          type: string
+          description: Fraud flag
+        initiator_type:
+          type: string
+          description: Initiator type
+        three_d_secure:
+          type: boolean
+          description: Whether 3D Secure was used
+        authorization_reason:
+          type: string
+          description: Authorization reason
+        error_code:
+          type: string
+          description: Error code
+        error_text:
+          type: string
+          description: Error text
+        voided_at:
+          type: integer
+          description: Voided at timestamp
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        fraud_reason:
+          type: string
+          description: Fraud reason
+        amount_unused:
+          type: integer
+          description: Unused amount (in cents)
+        masked_card_number:
+          type: string
+          description: Masked card number
+        reference_transaction_id:
+          type: string
+          description: Reference transaction ID
+        refunded_txn_id:
+          type: string
+          description: Refunded transaction ID
+        reference_authorization_id:
+          type: string
+          description: Reference authorization ID
+        amount_capturable:
+          type: integer
+          description: Capturable amount (in cents)
+        reversal_transaction_id:
+          type: string
+          description: Reversal transaction ID
+        deleted:
+          type: boolean
+          description: Whether the transaction is deleted
+        iin:
+          type: string
+          description: Card IIN
+        last4:
+          type: string
+          description: Last four digits of card
+        merchant_reference_id:
+          type: string
+          description: Merchant reference ID
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        payment_method_details:
+          description: Payment method details
+        object:
+          type: string
+          description: Object type
+        base_currency_code:
+          type: string
+          description: Base currency code
+        linked_invoices:
+          type: array
+          description: Linked invoices
+          items:
+            type: object
+        linked_credit_notes:
+          type: array
+          description: Linked credit notes
+          items:
+            type: object
+        linked_refunds:
+          type: array
+          description: Linked refunds
+          items:
+            type: object
+        linked_payments:
+          type: array
+          description: Linked payments
+          items:
+            type: object
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+        created_at:
+          type: integer
+          description: Creation timestamp
+
+    TransactionList:
+      type: object
+      description: Paginated list of transactions
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              transaction:
+                $ref: "#/components/schemas/Transaction"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Event ────────────────────────────────────────────
+    Event:
+      type: object
+      x-airbyte-entity-name: event
+      x-airbyte-stream-name: event
+      description: Chargebee event object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event
+        occurred_at:
+          type: integer
+          description: Timestamp when the event occurred
+        source:
+          type: string
+          description: Source of the event
+        user:
+          type: string
+          description: User who triggered the event
+        event_type:
+          type: string
+          description: Type of event
+        api_version:
+          type: string
+          description: API version
+        content:
+          type: object
+          description: Event content/payload
+        object:
+          type: string
+          description: Object type
+        webhook_status:
+          type: string
+          description: Webhook delivery status
+        webhooks:
+          type: array
+          description: Webhook details
+          items:
+            type: object
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+
+    EventList:
+      type: object
+      description: Paginated list of events
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              event:
+                $ref: "#/components/schemas/Event"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Order ────────────────────────────────────────────
+    Order:
+      type: object
+      x-airbyte-entity-name: order
+      x-airbyte-stream-name: order
+      description: Chargebee order object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the order
+        document_number:
+          type: string
+          description: Document number
+        invoice_id:
+          type: string
+          description: Invoice ID
+        subscription_id:
+          type: string
+          description: Subscription ID
+        customer_id:
+          type: string
+          description: Customer ID
+        status:
+          type: string
+          description: Order status
+        cancellation_reason:
+          type: string
+          description: Cancellation reason
+        payment_status:
+          type: string
+          description: Payment status
+        order_type:
+          type: string
+          description: Order type
+        price_type:
+          type: string
+          description: Price type
+        reference_id:
+          type: string
+          description: Reference ID
+        fulfillment_status:
+          type: string
+          description: Fulfillment status
+        order_date:
+          type: integer
+          description: Order date timestamp
+        shipping_date:
+          type: integer
+          description: Shipping date timestamp
+        note:
+          type: string
+          description: Order notes
+        tracking_id:
+          type: string
+          description: Tracking ID
+        tracking_url:
+          type: string
+          description: Tracking URL
+        batch_id:
+          type: string
+          description: Batch ID
+        created_by:
+          type: string
+          description: Created by user
+        shipment_carrier:
+          type: string
+          description: Shipment carrier
+        invoice_round_off_amount:
+          type: integer
+          description: Invoice round-off amount (in cents)
+        tax:
+          type: integer
+          description: Tax amount (in cents)
+        amount_paid:
+          type: integer
+          description: Amount paid (in cents)
+        amount_adjusted:
+          type: integer
+          description: Amount adjusted (in cents)
+        refundable_credits_issued:
+          type: integer
+          description: Refundable credits issued (in cents)
+        refundable_credits:
+          type: integer
+          description: Refundable credits (in cents)
+        rounding_adjustement:
+          type: integer
+          description: Rounding adjustment amount (in cents)
+        paid_on:
+          type: integer
+          description: Paid on timestamp
+        shipping_cut_off_date:
+          type: integer
+          description: Shipping cut-off date timestamp
+        created_at:
+          type: integer
+          description: Creation timestamp
+        status_update_at:
+          type: integer
+          description: Status update timestamp
+        delivered_at:
+          type: integer
+          description: Delivered at timestamp
+        shipped_at:
+          type: integer
+          description: Shipped at timestamp
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        cancelled_at:
+          type: integer
+          description: Cancelled at timestamp
+        resent_status:
+          type: string
+          description: Resent status
+        is_resent:
+          type: boolean
+          description: Whether this is a resent order
+        original_order_id:
+          type: string
+          description: Original order ID
+        deleted:
+          type: boolean
+          description: Whether the order is deleted
+        currency_code:
+          type: string
+          description: Currency code
+        is_gifted:
+          type: boolean
+          description: Whether the order is a gift
+        gift_note:
+          type: string
+          description: Gift note
+        gift_id:
+          type: string
+          description: Gift ID
+        resend_reason:
+          type: string
+          description: Resend reason
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        object:
+          type: string
+          description: Object type
+        discount:
+          type: integer
+          description: Discount amount (in cents)
+        sub_total:
+          type: integer
+          description: Subtotal (in cents)
+        total:
+          type: integer
+          description: Total amount (in cents)
+        order_line_items:
+          type: array
+          description: Order line items
+          items:
+            type: object
+        shipping_address:
+          type: object
+          description: Shipping address
+        billing_address:
+          type: object
+          description: Billing address
+        line_item_taxes:
+          type: array
+          description: Line item taxes
+          items:
+            type: object
+        line_item_discounts:
+          type: array
+          description: Line item discounts
+          items:
+            type: object
+        linked_credit_notes:
+          type: array
+          description: Linked credit notes
+          items:
+            type: object
+        resent_orders:
+          type: array
+          description: Resent orders
+          items:
+            type: object
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+
+    OrderList:
+      type: object
+      description: Paginated list of orders
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              order:
+                $ref: "#/components/schemas/Order"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Item ──────────────────────────────────────────────
+    Item:
+      type: object
+      x-airbyte-entity-name: item
+      x-airbyte-stream-name: item
+      description: Chargebee item object (Product Catalog 2.0)
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the item
+        name:
+          type: string
+          description: Item name
+        external_name:
+          type: string
+          description: External display name
+        description:
+          type: string
+          description: Item description
+        status:
+          type: string
+          description: Item status
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        item_family_id:
+          type: string
+          description: Item family ID
+        type:
+          type: string
+          description: Item type (plan, addon, charge)
+        is_shippable:
+          type: boolean
+          description: Whether the item is shippable
+        is_giftable:
+          type: boolean
+          description: Whether the item is giftable
+        redirect_url:
+          type: string
+          description: Redirect URL after checkout
+        enabled_for_checkout:
+          type: boolean
+          description: Whether enabled for checkout
+        enabled_in_portal:
+          type: boolean
+          description: Whether enabled in portal
+        included_in_mrr:
+          type: boolean
+          description: Whether included in MRR
+        item_applicability:
+          type: string
+          description: Item applicability setting
+        gift_claim_redirect_url:
+          type: string
+          description: Gift claim redirect URL
+        unit:
+          type: string
+          description: Unit of measure
+        metered:
+          type: boolean
+          description: Whether the item is metered
+        usage_calculation:
+          type: string
+          description: Usage calculation method
+        archived_at:
+          type: integer
+          description: Archived at timestamp
+        channel:
+          type: string
+          description: Channel
+        metadata:
+          type: object
+          description: Additional metadata
+        deleted:
+          type: boolean
+          description: Whether the item is deleted
+        object:
+          type: string
+          description: Object type
+        applicable_items:
+          type: array
+          description: Applicable items for plan-items
+          items:
+            type: object
+        bundle_items:
+          type: array
+          description: Bundle items
+          items:
+            type: object
+        bundle_configuration:
+          type: object
+          description: Bundle configuration
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        is_percentage_pricing:
+          type: boolean
+          description: Whether percentage pricing is used
+
+    ItemList:
+      type: object
+      description: Paginated list of items
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              item:
+                $ref: "#/components/schemas/Item"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Item Price ───────────────────────────────────────
+    ItemPrice:
+      type: object
+      x-airbyte-entity-name: item_price
+      x-airbyte-stream-name: item_price
+      description: Chargebee item price object (Product Catalog 2.0)
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the item price
+        name:
+          type: string
+          description: Item price name
+        item_family_id:
+          type: string
+          description: Item family ID
+        item_id:
+          type: string
+          description: Item ID
+        item_type:
+          type: string
+          description: Item type (plan, addon, charge)
+        description:
+          type: string
+          description: Item price description
+        status:
+          type: string
+          description: Item price status
+        external_name:
+          type: string
+          description: External display name
+        pricing_model:
+          type: string
+          description: Pricing model
+        price:
+          type: integer
+          description: Price (in cents)
+        price_in_decimal:
+          type: string
+          description: Price in decimal
+        period:
+          type: integer
+          description: Billing period
+        period_unit:
+          type: string
+          description: Period unit
+        trial_period:
+          type: integer
+          description: Trial period
+        trial_period_unit:
+          type: string
+          description: Trial period unit
+        trial_end_action:
+          type: string
+          description: Action at trial end
+        shipping_period:
+          type: integer
+          description: Shipping period
+        shipping_period_unit:
+          type: string
+          description: Shipping period unit
+        billing_cycles:
+          type: integer
+          description: Number of billing cycles
+        free_quantity:
+          type: integer
+          description: Free quantity
+        free_quantity_in_decimal:
+          type: string
+          description: Free quantity in decimal
+        currency_code:
+          type: string
+          description: Currency code
+        resource_version:
+          type: integer
+          description: Resource version
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        created_at:
+          type: integer
+          description: Creation timestamp
+        archived_at:
+          type: integer
+          description: Archived at timestamp
+        invoice_notes:
+          type: string
+          description: Invoice notes
+        is_taxable:
+          type: boolean
+          description: Whether the item price is taxable
+        metadata:
+          type: object
+          description: Additional metadata
+        tax_detail:
+          type: object
+          description: Tax details
+        accounting_detail:
+          type: object
+          description: Accounting details
+        tiers:
+          type: array
+          description: Pricing tiers
+          items:
+            type: object
+        tax_providers_fields:
+          type: array
+          description: Tax provider fields
+          items:
+            type: object
+        object:
+          type: string
+          description: Object type
+        channel:
+          type: string
+          description: Channel
+        show_description_in_invoices:
+          type: boolean
+          description: Whether to show description in invoices
+        show_description_in_quotes:
+          type: boolean
+          description: Whether to show description in quotes
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        deleted:
+          type: boolean
+          description: Whether the item price is deleted
+
+    ItemPriceList:
+      type: object
+      description: Paginated list of item prices
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              item_price:
+                $ref: "#/components/schemas/ItemPrice"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Payment Source ───────────────────────────────────
+    PaymentSource:
+      type: object
+      x-airbyte-entity-name: payment_source
+      x-airbyte-stream-name: payment_source
+      description: Chargebee payment source object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the payment source
+        customer_id:
+          type: string
+          description: Customer ID
+        type:
+          type: string
+          description: Payment source type
+        reference_id:
+          type: string
+          description: Reference ID
+        status:
+          type: string
+          description: Payment source status
+        gateway:
+          type: string
+          description: Payment gateway
+        gateway_account_id:
+          type: string
+          description: Gateway account ID
+        ip_address:
+          type: string
+          description: IP address
+        issuing_country:
+          type: string
+          description: Issuing country
+        created_at:
+          type: integer
+          description: Creation timestamp
+        updated_at:
+          type: integer
+          description: Last update timestamp
+        resource_version:
+          type: integer
+          description: Resource version
+        deleted:
+          type: boolean
+          description: Whether the payment source is deleted
+        business_entity_id:
+          type: string
+          description: Business entity ID
+        object:
+          type: string
+          description: Object type
+        card:
+          type: object
+          description: Card payment details
+        bank_account:
+          type: object
+          description: Bank account details
+        amazon_payment:
+          type: object
+          description: Amazon payment details
+        paypal:
+          type: object
+          description: PayPal payment details
+        upi:
+          type: object
+          description: UPI payment details
+        mandates:
+          type: object
+          description: Mandate details
+        custom_fields:
+          type: array
+          description: Custom fields
+          items:
+            type: object
+
+    PaymentSourceList:
+      type: object
+      description: Paginated list of payment sources
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              payment_source:
+                $ref: "#/components/schemas/PaymentSource"
+        next_offset:
+          type: string
+          description: Cursor for next page
+
+    # ─── Wrapper schemas for get operations ───────────────
+    CustomerWrapper:
+      type: object
+      properties:
+        customer:
+          $ref: "#/components/schemas/Customer"
+
+    SubscriptionWrapper:
+      type: object
+      properties:
+        subscription:
+          $ref: "#/components/schemas/Subscription"
+
+    InvoiceWrapper:
+      type: object
+      properties:
+        invoice:
+          $ref: "#/components/schemas/Invoice"
+
+    CreditNoteWrapper:
+      type: object
+      properties:
+        credit_note:
+          $ref: "#/components/schemas/CreditNote"
+
+    CouponWrapper:
+      type: object
+      properties:
+        coupon:
+          $ref: "#/components/schemas/Coupon"
+
+    TransactionWrapper:
+      type: object
+      properties:
+        transaction:
+          $ref: "#/components/schemas/Transaction"
+
+    EventWrapper:
+      type: object
+      properties:
+        event:
+          $ref: "#/components/schemas/Event"
+
+    OrderWrapper:
+      type: object
+      properties:
+        order:
+          $ref: "#/components/schemas/Order"
+
+    ItemWrapper:
+      type: object
+      properties:
+        item:
+          $ref: "#/components/schemas/Item"
+
+    ItemPriceWrapper:
+      type: object
+      properties:
+        item_price:
+          $ref: "#/components/schemas/ItemPrice"
+
+    PaymentSourceWrapper:
+      type: object
+      properties:
+        payment_source:
+          $ref: "#/components/schemas/PaymentSource"
+
+

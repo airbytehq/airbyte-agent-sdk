@@ -1,0 +1,427 @@
+openapi: 3.1.0
+
+info:
+  title: Airtable API Connector
+  version: 1.0.8
+  description: |
+    Airtable is a cloud-based platform that combines the simplicity of a spreadsheet with the 
+    power of a database. This connector provides access to bases, tables, and records for 
+    data analysis and workflow automation.
+  x-airbyte-connector-name: airtable
+  x-airbyte-connector-definition-id: 14c6e7ea-97ed-4f5e-a7b5-25e9a80b8212
+  x-airbyte-replication-version: "4.6.24"
+  x-airbyte-replication-compatibility: ">=4.6.24, <5.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Airtable Web API Documentation
+      url: https://airtable.com/developers/web/api/introduction
+    - type: authentication_guide
+      title: Airtable Authentication Guide
+      url: https://airtable.com/developers/web/api/authentication
+    - type: rate_limits
+      title: Airtable Rate Limits
+      url: https://airtable.com/developers/web/api/rate-limits
+  x-airbyte-skip-auth-methods:
+    - oauth2
+  x-airbyte-entity-relationships:
+    - source_entity: tables
+      target_entity: bases
+      foreign_key: base_id
+      target_key: id
+      cardinality: many_to_one
+    - source_entity: records
+      target_entity: bases
+      foreign_key: base_id
+      target_key: id
+      cardinality: many_to_one
+    - source_entity: records
+      target_entity: tables
+      foreign_key: table_id_or_name
+      target_key: id
+      cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: bases
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'string'
+            description: Unique identifier for the base
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: Name of the base
+          - name: permissionLevel
+            type:
+              - 'null'
+              - 'string'
+            description: Permission level for the base
+      - entity: tables
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'string'
+            description: Unique identifier for the table
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: Name of the table
+          - name: primaryFieldId
+            type:
+              - 'null'
+              - 'string'
+            description: ID of the primary field
+          - name: fields
+            type:
+              - 'null'
+              - 'array'
+            description: List of fields in the table
+          - name: views
+            type:
+              - 'null'
+              - 'array'
+            description: List of views in the table
+  x-airbyte-example-questions:
+    direct:
+      - "List all my Airtable bases"
+      - "What tables are in my first base?"
+      - "Show me the schema for tables in a base"
+      - "List records from a table in my base"
+      - "Show me recent records from a table"
+      - "What fields are in a table?"
+    search:
+      - "List records where Status is 'Done' in table tblXXX"
+      - "Find records created last week in table tblXXX"
+      - "Show me records updated in the last 30 days in base appXXX"
+    unsupported:
+      - "Create a new record in Airtable"
+      - "Update a record in Airtable"
+      - "Delete a record from Airtable"
+      - "Create a new table"
+      - "Modify table schema"
+
+servers:
+  - url: https://api.airtable.com/v0
+    description: Airtable API server
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token authentication
+      x-airbyte-auth-config:
+        title: "Personal Access Token"
+        type: object
+        required:
+          - personal_access_token
+        properties:
+          personal_access_token:
+            type: string
+            title: "Personal Access Token"
+            description: "Airtable Personal Access Token. See https://airtable.com/developers/web/guides/personal-access-tokens"
+        auth_mapping:
+          token: "${personal_access_token}"
+        replication_auth_key_mapping:
+          credentials.api_key: "personal_access_token"
+        replication_auth_key_constants:
+          credentials.auth_method: "api_key"
+
+  schemas:
+    Base:
+      type: object
+      x-airbyte-entity-name: bases
+      x-airbyte-stream-name: bases
+      description: An Airtable base (workspace)
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the base
+        name:
+          type: [string, "null"]
+          description: Name of the base
+        permissionLevel:
+          type: [string, "null"]
+          description: Permission level for the base (e.g., owner, editor, commenter, read)
+
+    BasesList:
+      type: object
+      description: Paginated list of bases
+      properties:
+        bases:
+          type: array
+          items:
+            $ref: "#/components/schemas/Base"
+        offset:
+          type: [string, "null"]
+          description: Pagination offset for next page
+
+    Table:
+      type: object
+      x-airbyte-entity-name: tables
+      x-airbyte-stream-name: tables
+      description: A table within an Airtable base
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the table
+        name:
+          type: [string, "null"]
+          description: Name of the table
+        primaryFieldId:
+          type: [string, "null"]
+          description: ID of the primary field
+        fields:
+          type: [array, "null"]
+          description: List of fields in the table
+          items:
+            $ref: "#/components/schemas/TableField"
+        views:
+          type: [array, "null"]
+          description: List of views in the table
+          items:
+            $ref: "#/components/schemas/View"
+
+    TableField:
+      type: object
+      description: A field (column) in a table
+      properties:
+        id:
+          type: [string, "null"]
+          description: Unique identifier for the field
+        name:
+          type: [string, "null"]
+          description: Name of the field
+        type:
+          type: [string, "null"]
+          description: Type of the field (e.g., singleLineText, number, checkbox)
+        options:
+          type: [object, "null"]
+          description: Field-specific options
+          additionalProperties: true
+
+    View:
+      type: object
+      description: A view in a table
+      properties:
+        id:
+          type: [string, "null"]
+          description: Unique identifier for the view
+        name:
+          type: [string, "null"]
+          description: Name of the view
+        type:
+          type: [string, "null"]
+          description: Type of the view (e.g., grid, form, calendar)
+
+    TablesList:
+      type: object
+      description: List of tables in a base
+      properties:
+        tables:
+          type: array
+          items:
+            $ref: "#/components/schemas/Table"
+
+    Record:
+      type: object
+      x-airbyte-entity-name: records
+      description: A record (row) in an Airtable table
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the record
+        createdTime:
+          type: [string, "null"]
+          format: date-time
+          description: Timestamp when the record was created
+        fields:
+          type: [object, "null"]
+          description: Field values for the record
+          additionalProperties: true
+
+    RecordsList:
+      type: object
+      description: Paginated list of records
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/Record"
+        offset:
+          type: [string, "null"]
+          description: Pagination offset for next page
+
+paths:
+  /meta/bases:
+    get:
+      summary: List bases
+      description: Returns a list of all bases the user has access to
+      operationId: listBases
+      x-airbyte-entity: bases
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.bases
+      parameters:
+        - name: offset
+          in: query
+          description: Pagination offset from previous response
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of bases
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasesList"
+        "401":
+          description: Unauthorized - Invalid or missing authentication
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  /meta/bases/{base_id}/tables:
+    get:
+      summary: List tables in a base
+      description: Returns a list of all tables in the specified base with their schema information
+      operationId: listTables
+      x-airbyte-entity: tables
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.tables
+      parameters:
+        - name: base_id
+          in: path
+          required: true
+          description: The ID of the base
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of tables with schema
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TablesList"
+        "401":
+          description: Unauthorized - Invalid or missing authentication
+        "403":
+          description: Forbidden - Insufficient permissions
+        "404":
+          description: Base not found
+
+  /{base_id}/{table_id_or_name}:
+    get:
+      summary: List records in a table
+      description: Returns a paginated list of records from the specified table
+      operationId: listRecords
+      x-airbyte-entity: records
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.records
+      parameters:
+        - name: base_id
+          in: path
+          required: true
+          description: The ID of the base
+          schema:
+            type: string
+        - name: table_id_or_name
+          in: path
+          required: true
+          description: The ID or name of the table
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: Pagination offset from previous response
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: Number of records per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - name: view
+          in: query
+          description: Name or ID of a view to filter records
+          schema:
+            type: string
+        - name: filterByFormula
+          in: query
+          description: Airtable formula to filter records
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Sort configuration as JSON array
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordsList"
+        "401":
+          description: Unauthorized - Invalid or missing authentication
+        "403":
+          description: Forbidden - Insufficient permissions
+        "404":
+          description: Base or table not found
+        "422":
+          description: Invalid request - Check parameters
+
+  /{base_id}/{table_id_or_name}/{record_id}:
+    get:
+      summary: Get a specific record
+      description: Returns a single record by ID from the specified table
+      operationId: getRecord
+      x-airbyte-entity: records
+      x-airbyte-action: get
+      parameters:
+        - name: base_id
+          in: path
+          required: true
+          description: The ID of the base
+          schema:
+            type: string
+        - name: table_id_or_name
+          in: path
+          required: true
+          description: The ID or name of the table
+          schema:
+            type: string
+        - name: record_id
+          in: path
+          required: true
+          description: The ID of the record
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Record details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        "401":
+          description: Unauthorized - Invalid or missing authentication
+        "403":
+          description: Forbidden - Insufficient permissions
+        "404":
+          description: Record not found

@@ -1,0 +1,3433 @@
+# Greenhouse API Connector
+# OpenAPI 3.1 specification with Airbyte extensions
+
+openapi: 3.1.0
+
+info:
+  title: Greenhouse Harvest API Connector
+  version: 0.1.8
+  description: |
+    Greenhouse is an applicant tracking system (ATS) that helps companies manage their
+    hiring process. This connector provides access to candidates, applications, jobs,
+    offers, users, departments, offices, job posts, sources, and scheduled interviews
+    for recruiting analytics and talent acquisition insights.
+  x-airbyte-connector-name: greenhouse
+  x-airbyte-connector-definition-id: 59f1e50a-331f-4f09-b3e8-2e8d4d355f44
+  x-airbyte-replication-version: "0.7.17"
+  x-airbyte-replication-compatibility: ">=0.7.17, <1.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Greenhouse API Reference documentation
+      url: "https://developers.greenhouse.io/harvest.html"
+  x-airbyte-example-questions:
+    direct:
+      - "List all open jobs"
+      - "Show me upcoming interviews this week"
+      - "Show me recent job offers"
+      - "List recent applications"
+    search:
+      - "Show me candidates from {company} who applied last month"
+      - "What are the top 5 sources for our job applications this quarter?"
+      - "Analyze the interview schedules for our engineering candidates this week"
+      - "Compare the number of applications across different offices"
+      - "Identify candidates who have multiple applications in our system"
+      - "Summarize the candidate pipeline for our latest job posting"
+      - "Find the most active departments in recruiting this month"
+    unsupported:
+      - "Create a new job posting for the marketing team"
+      - "Schedule an interview for {candidate}"
+      - "Update the status of {candidate}'s application"
+      - "Delete a candidate profile"
+      - "Send an offer letter to {candidate}"
+      - "Edit the details of a job description"
+
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: activity_feed
+        fields:
+          - name: activities
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of activities recorded in the greenhouse'
+          - name: emails
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of emails related to greenhouse communication'
+          - name: notes
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of notes or comments added in the greenhouse'
+      - entity: applications
+        fields:
+          - name: answers
+            type:
+              - 'null'
+              - 'array'
+            description: 'Answers provided in the application.'
+          - name: applied_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp when the candidate applied.'
+          - name: attachments
+            type:
+              - 'null'
+              - 'array'
+            description: 'Attachments uploaded with the application.'
+          - name: candidate_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the candidate.'
+          - name: credited_to
+            type:
+              - 'null'
+              - 'object'
+            description: 'Information about the employee who credited the application.'
+            properties:
+              employee_id:
+                type:
+                  - 'null'
+                  - 'string'
+              first_name:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              last_name:
+                type:
+                  - 'null'
+                  - 'string'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: current_stage
+            type:
+              - 'null'
+              - 'object'
+            description: 'Current stage of the application process.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the application.'
+          - name: job_post_id
+            type:
+              - 'integer'
+              - 'null'
+            description: ''
+          - name: jobs
+            type:
+              - 'null'
+              - 'array'
+            description: 'Jobs applied for by the candidate.'
+          - name: last_activity_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp of the last activity on the application.'
+          - name: location
+            type:
+              - 'null'
+              - 'string'
+            description: 'Location related to the application.'
+          - name: prospect
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Status of the application prospect.'
+          - name: prospect_detail
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details related to the application prospect.'
+            properties:
+              prospect_owner:
+                type:
+                  - 'null'
+                  - 'object'
+              prospect_pool:
+                type:
+                  - 'null'
+                  - 'string'
+              prospect_stage:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: prospective_department
+            type:
+              - 'null'
+              - 'string'
+            description: 'Prospective department for the candidate.'
+          - name: prospective_office
+            type:
+              - 'null'
+              - 'string'
+            description: 'Prospective office for the candidate.'
+          - name: rejected_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp when the application was rejected.'
+          - name: rejection_details
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details related to the application rejection.'
+            properties:
+              custom_fields:
+                type:
+                  - 'null'
+                  - 'object'
+              keyed_custom_fields:
+                type:
+                  - 'null'
+                  - 'object'
+          - name: rejection_reason
+            type:
+              - 'null'
+              - 'object'
+            description: 'Reason for the application rejection.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+              type:
+                type:
+                  - 'null'
+                  - 'object'
+          - name: source
+            type:
+              - 'null'
+              - 'object'
+            description: 'Source of the application.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              public_name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: status
+            type:
+              - 'null'
+              - 'string'
+            description: 'Status of the application.'
+      - entity: applications_demographics_answers
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the application associated with the demographic answer'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the demographic answer was created'
+          - name: demographic_answer_option_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the selected answer option for the demographic question'
+          - name: demographic_question_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the demographic question answered'
+          - name: free_form_text
+            type:
+              - 'null'
+              - 'string'
+            description: 'Any additional free form text provided as part of the answer'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the demographic answer record'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the demographic answer was last updated'
+      - entity: applications_interviews
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the job application.'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time when the application interview data was created.'
+          - name: end
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details about the end time of the interview.'
+            properties:
+              date_time:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: external_event_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'ID of the external event associated with the interview.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the interview data.'
+          - name: interview
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details of the interview such as type or category.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: interviewers
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of interviewers participating in the interview panel.'
+          - name: location
+            type:
+              - 'null'
+              - 'string'
+            description: 'Location where the interview takes place.'
+          - name: organizer
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details of the organizer or coordinator of the interview.'
+            properties:
+              employee_id:
+                type:
+                  - 'null'
+                  - 'string'
+              first_name:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              last_name:
+                type:
+                  - 'null'
+                  - 'string'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: start
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details about the start time of the interview.'
+            properties:
+              date_time:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: status
+            type:
+              - 'null'
+              - 'string'
+            description: 'Status of the interview (e.g., scheduled, completed).'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time when the application interview data was last updated.'
+          - name: video_conferencing_url
+            type:
+              - 'null'
+              - 'string'
+            description: 'URL for the video conferencing platform used for the interview.'
+      - entity: approvals
+        fields:
+          - name: approval_status
+            type:
+              - 'null'
+              - 'string'
+            description: 'The status of the approval (e.g. pending, approved, rejected)'
+          - name: approval_type
+            type:
+              - 'null'
+              - 'string'
+            description: 'The type of approval required for the request'
+          - name: approver_groups
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of groups of approvers with specific requirements'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier of the approval request'
+          - name: job_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Identifier of the job associated with this approval request'
+          - name: offer_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Identifier of the offer associated with this approval request'
+          - name: requested_by_user_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'User ID who requested this approval'
+          - name: sequential
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Flag indicating whether the approvals are required in a sequential order'
+          - name: version
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Version of the approval request'
+      - entity: candidates
+        fields:
+          - name: addresses
+            type:
+              - 'null'
+              - 'array'
+            description: 'Candidate''s addresses'
+          - name: application_ids
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of application IDs'
+          - name: applications
+            type:
+              - 'null'
+              - 'array'
+            description: 'An array of all applications made by candidates.'
+          - name: attachments
+            type:
+              - 'null'
+              - 'array'
+            description: 'Attachments related to the candidate'
+          - name: can_email
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if candidate can be emailed'
+          - name: company
+            type:
+              - 'null'
+              - 'string'
+            description: 'Company where the candidate is associated'
+          - name: coordinator
+            type:
+              - 'null'
+              - 'string'
+            description: 'Coordinator assigned to the candidate'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time of creation'
+          - name: custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Custom fields associated with the candidate'
+            properties:
+          - name: educations
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of candidate''s educations'
+          - name: email_addresses
+            type:
+              - 'null'
+              - 'array'
+            description: 'Candidate''s email addresses'
+          - name: employments
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of candidate''s employments'
+          - name: first_name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Candidate''s first name'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Candidate''s ID'
+          - name: is_private
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the candidate''s data is private'
+          - name: keyed_custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Keyed custom fields associated with the candidate'
+            properties:
+          - name: last_activity
+            type:
+              - 'null'
+              - 'string'
+            description: 'Details of the last activity related to the candidate'
+          - name: last_name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Candidate''s last name'
+          - name: phone_numbers
+            type:
+              - 'null'
+              - 'array'
+            description: 'Candidate''s phone numbers'
+          - name: photo_url
+            type:
+              - 'null'
+              - 'string'
+            description: 'URL of the candidate''s profile photo'
+          - name: recruiter
+            type:
+              - 'null'
+              - 'string'
+            description: 'Recruiter assigned to the candidate'
+          - name: social_media_addresses
+            type:
+              - 'null'
+              - 'array'
+            description: 'Candidate''s social media addresses'
+          - name: tags
+            type:
+              - 'null'
+              - 'array'
+            description: 'Tags associated with the candidate'
+          - name: title
+            type:
+              - 'null'
+              - 'string'
+            description: 'Candidate''s title (e.g., Mr., Mrs., Dr.)'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time of last update'
+          - name: website_addresses
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of candidate''s website addresses'
+      - entity: close_reasons
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the close reason.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name or description of the close reason.'
+      - entity: custom_fields
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates whether the custom field is currently active or not.'
+          - name: api_only
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Denotes if the custom field is used only in API requests.'
+          - name: custom_field_options
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of custom field options available for selection.'
+          - name: departments
+            type:
+              - 'null'
+              - 'array'
+            description: 'Departments associated with the custom field.'
+          - name: description
+            type:
+              - 'null'
+              - 'string'
+            description: 'Description of the custom field.'
+          - name: expose_in_job_board_api
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Specifies if the custom field should be exposed in the job board API.'
+          - name: field_type
+            type:
+              - 'null'
+              - 'string'
+            description: 'Type of the custom field (text, dropdown, etc.).'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier of the custom field.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the custom field.'
+          - name: name_key
+            type:
+              - 'null'
+              - 'string'
+            description: 'Key associated with the name of the custom field.'
+          - name: offices
+            type:
+              - 'null'
+              - 'array'
+            description: 'Offices related to the custom field.'
+          - name: priority
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Priority of the custom field.'
+          - name: private
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the custom field is for private use only.'
+          - name: require_approval
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Specifies if approval is required for changes to the custom field.'
+          - name: required
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Denotes whether the custom field is required or not.'
+          - name: template_token_string
+            type:
+              - 'null'
+              - 'string'
+            description: 'Token string used in templates for the custom field.'
+          - name: trigger_new_version
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if a new version should be triggered upon changes to the custom field.'
+          - name: value_type
+            type:
+              - 'null'
+              - 'string'
+            description: 'Type of values accepted by the custom field.'
+      - entity: degrees
+        fields:
+          - name: external_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'Unique identifier for the greenhouse record in an external system'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the greenhouse record'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the degrees data'
+          - name: priority
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Priority level of the degrees data for sorting'
+      - entity: demographics_answer_options
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the demographic answer option is currently active or not.'
+          - name: demographic_question_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The ID of the demographic question associated with this answer option.'
+          - name: free_form
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Specifies if the answer option allows for a free-form text input.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the demographic answer option.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name or label of the demographic answer option.'
+          - name: translations
+            type:
+              - 'null'
+              - 'array'
+            description: 'Array of translations for the answer option names in different languages.'
+      - entity: demographics_answers
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the application associated with the demographic answer'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the demographic answer was created'
+          - name: demographic_answer_option_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The identifier of the answer option chosen for the demographic question'
+          - name: demographic_question_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The identifier of the demographic question to which the answer belongs'
+          - name: free_form_text
+            type:
+              - 'null'
+              - 'string'
+            description: 'Any additional free-form text provided as part of the answer'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the demographic answer'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the demographic answer was last updated'
+      - entity: demographics_answers_answer_options
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates whether this demographic answer option is active or not.'
+          - name: demographic_question_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the demographic question associated with this answer option.'
+          - name: free_form
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Specifies if the answer option allows for free-form input in addition to predefined options.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of this demographic answer option.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name or label of the demographic answer option.'
+          - name: translations
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of translations for the name of the demographic answer option in different languages.'
+      - entity: demographics_question_sets
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the demographics question set is currently active'
+          - name: description
+            type:
+              - 'null'
+              - 'string'
+            description: 'A brief description of the demographics question set'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the demographics question set'
+          - name: title
+            type:
+              - 'null'
+              - 'string'
+            description: 'Title of the demographics question set'
+      - entity: demographics_question_sets_questions
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Specifies if the question is active or not.'
+          - name: demographic_question_set_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier of the demographic question set to which this question belongs.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier of the question.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the question.'
+          - name: required
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if this question is mandatory to answer.'
+          - name: translations
+            type:
+              - 'null'
+              - 'array'
+            description: 'An array of questions related to demographics in multiple languages.'
+      - entity: demographics_questions
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Specifies if the demographic question is currently active or not.'
+          - name: demographic_question_set_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The ID of the demographic question set this question belongs to.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the demographic question.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name or title of the demographic question.'
+          - name: required
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the demographic question is required to be answered.'
+          - name: translations
+            type:
+              - 'null'
+              - 'array'
+            description: 'An array of translations for the demographic question''s name in different languages.'
+      - entity: departments
+        fields:
+          - name: child_department_external_ids
+            type:
+              - 'null'
+              - 'array'
+            description: 'External IDs of child departments associated with this department.'
+          - name: child_ids
+            type:
+              - 'null'
+              - 'array'
+            description: 'Unique IDs of child departments associated with this department.'
+          - name: external_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'External ID of this department.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique ID of this department.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the department.'
+          - name: parent_department_external_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'External ID of the parent department of this department.'
+          - name: parent_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique ID of the parent department of this department.'
+      - entity: disciplines
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the discipline'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the discipline'
+          - name: priority
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Priority level of the discipline'
+      - entity: eeoc
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the job application'
+          - name: candidate_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the candidate applying for the job'
+          - name: disability_status
+            type:
+              - 'null'
+              - 'object'
+            description: 'The individual''s disability status, if any.'
+            properties:
+              description:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+          - name: gender
+            type:
+              - 'null'
+              - 'object'
+            description: 'The gender of the individual.'
+            properties:
+              description:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+          - name: race
+            type:
+              - 'null'
+              - 'object'
+            description: 'The racial or ethnic background of the individual.'
+            properties:
+              description:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+          - name: submitted_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp when the data was submitted'
+          - name: veteran_status
+            type:
+              - 'null'
+              - 'object'
+            description: 'The veteran status of the individual.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              message:
+                type:
+                  - 'null'
+                  - 'string'
+      - entity: email_templates
+        fields:
+          - name: body
+            type:
+              - 'null'
+              - 'string'
+            description: 'The main content body of the email template.'
+          - name: cc
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of email addresses to be CC''d when using the template.'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the email template was created.'
+          - name: default
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Flag indicating if the template is the default one to use.'
+          - name: description
+            type:
+              - 'null'
+              - 'string'
+            description: 'Brief description of the email template and its purpose.'
+          - name: from
+            type:
+              - 'null'
+              - 'string'
+            description: 'Email address or name of the sender for the email template.'
+          - name: html_body
+            type:
+              - 'null'
+              - 'string'
+            description: 'HTML formatted content of the email template.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the email template.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name or title of the email template.'
+          - name: type
+            type:
+              - 'null'
+              - 'string'
+            description: 'Type or category of the email template (e.g., welcome email, newsletter).'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the email template was last updated.'
+          - name: user
+            type:
+              - 'null'
+              - 'string'
+            description: 'User associated with the email template (creator or owner).'
+      - entity: interviews
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the job application associated with the interview'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the interview was created'
+          - name: end
+            type:
+              - 'null'
+              - 'object'
+            description: 'The end date and time of the interview'
+            properties:
+              date_time:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: external_event_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'The identifier for the external event related to the interview'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the interview'
+          - name: interview
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details about the interview such as type or purpose'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: interviewers
+            type:
+              - 'null'
+              - 'array'
+            description: 'Information about the individuals conducting the interview'
+          - name: location
+            type:
+              - 'null'
+              - 'string'
+            description: 'The physical or virtual location of the interview'
+          - name: organizer
+            type:
+              - 'null'
+              - 'object'
+            description: 'Information about the individual organizing the interview'
+            properties:
+              employee_id:
+                type:
+                  - 'null'
+                  - 'string'
+              first_name:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              last_name:
+                type:
+                  - 'null'
+                  - 'string'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: start
+            type:
+              - 'null'
+              - 'object'
+            description: 'The start date and time of the interview'
+            properties:
+              date_time:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: status
+            type:
+              - 'null'
+              - 'string'
+            description: 'The status of the interview (e.g., scheduled, completed)'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the interview was last updated'
+          - name: video_conferencing_url
+            type:
+              - 'null'
+              - 'string'
+            description: 'The URL for the video conferencing platform used for the interview'
+      - entity: job_posts
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Flag indicating if the job post is active or not.'
+          - name: content
+            type:
+              - 'null'
+              - 'string'
+            description: 'Content or description of the job post.'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time when the job post was created.'
+          - name: demographic_question_set_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'ID of the demographic question set associated with the job post.'
+          - name: external
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Flag indicating if the job post is external or not.'
+          - name: first_published_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time when the job post was first published.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier of the job post.'
+          - name: internal
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Flag indicating if the job post is internal or not.'
+          - name: internal_content
+            type:
+              - 'null'
+              - 'string'
+            description: 'Internal content or description of the job post.'
+          - name: job_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'ID of the job associated with the job post.'
+          - name: live
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Flag indicating if the job post is live or not.'
+          - name: location
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details about the job post location.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              job_post_location_type:
+                type:
+                  - 'null'
+                  - 'object'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+              office_id:
+                type:
+                  - 'null'
+                  - 'integer'
+          - name: questions
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of questions related to the job post.'
+          - name: title
+            type:
+              - 'null'
+              - 'string'
+            description: 'Title or headline of the job post.'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Date and time when the job post was last updated.'
+      - entity: job_stages
+        fields:
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The timestamp when the job stage was created'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the job stage'
+          - name: interviews
+            type:
+              - 'null'
+              - 'array'
+            description: 'Details of interviews associated with the job stage'
+          - name: job_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The identifier of the job associated with the job stage'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the job stage'
+          - name: priority
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The priority level of the job stage'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The timestamp when the job stage was last updated'
+      - entity: jobs
+        fields:
+          - name: closed_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time the job was closed'
+          - name: confidential
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the job details are confidential'
+          - name: copied_from_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The ID of the job from which this job was copied'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time the job was created'
+          - name: custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Custom fields related to the job'
+            properties:
+              employment_type:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: departments
+            type:
+              - 'null'
+              - 'array'
+            description: 'Departments associated with the job'
+          - name: hiring_team
+            type:
+              - 'null'
+              - 'object'
+            description: 'Members of the hiring team for the job'
+            properties:
+              coordinators:
+                type:
+                  - 'null'
+                  - 'array'
+              hiring_managers:
+                type:
+                  - 'null'
+                  - 'array'
+              recruiters:
+                type:
+                  - 'null'
+                  - 'array'
+              sourcers:
+                type:
+                  - 'null'
+                  - 'array'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique ID of the job'
+          - name: is_template
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates if the job is a template'
+          - name: keyed_custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Keyed custom fields related to the job'
+            properties:
+              employment_type:
+                type:
+                  - 'null'
+                  - 'object'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the job'
+          - name: notes
+            type:
+              - 'null'
+              - 'string'
+            description: 'Additional notes or comments about the job'
+          - name: offices
+            type:
+              - 'null'
+              - 'array'
+            description: 'Offices associated with the job'
+          - name: opened_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time the job was opened'
+          - name: openings
+            type:
+              - 'null'
+              - 'array'
+            description: 'Openings associated with the job'
+          - name: requisition_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'ID associated with the job requisition'
+          - name: status
+            type:
+              - 'null'
+              - 'string'
+            description: 'Current status of the job'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time the job was last updated'
+      - entity: jobs_openings
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the job application.'
+          - name: close_reason
+            type:
+              - 'null'
+              - 'object'
+            description: 'Reason for closing the job opening.'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: closed_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the job opening was closed.'
+          - name: custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Custom fields associated with the job opening.'
+            properties:
+              employment_type:
+                type:
+                  - 'null'
+                  - 'string'
+              maximum_budget:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the job opening.'
+          - name: keyed_custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Custom fields with key-value pairs associated with the job opening.'
+            properties:
+              budget:
+                type:
+                  - 'null'
+                  - 'object'
+              employment_type:
+                type:
+                  - 'null'
+                  - 'object'
+          - name: opened_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the job opening was created.'
+          - name: opening_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'The unique identifier for the job opening.'
+          - name: status
+            type:
+              - 'null'
+              - 'string'
+            description: 'The current status of the job opening.'
+      - entity: jobs_stages
+        fields:
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the job stage was created'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the job stage'
+          - name: interviews
+            type:
+              - 'null'
+              - 'array'
+            description: 'Array of interview details associated with this job stage'
+          - name: job_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the job associated with this stage'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the job stage'
+          - name: priority
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The priority level of this job stage'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the job stage was last updated'
+      - entity: offers
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the application associated with the offer'
+          - name: candidate_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the candidate associated with the offer'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the offer was created'
+          - name: custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Additional custom fields related to the offer'
+            properties:
+              employment_type:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the offer'
+          - name: job_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the job associated with the offer'
+          - name: keyed_custom_fields
+            type:
+              - 'null'
+              - 'object'
+            description: 'Keyed custom fields associated with the offer'
+            properties:
+              employment_type:
+                type:
+                  - 'null'
+                  - 'object'
+          - name: opening
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details about the job opening'
+            properties:
+              application_id:
+                type:
+                  - 'null'
+                  - 'integer'
+              close_reason:
+                type:
+                  - 'null'
+                  - 'string'
+              closed_at:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              opened_at:
+                type:
+                  - 'null'
+                  - 'string'
+              opening_id:
+                type:
+                  - 'null'
+                  - 'string'
+              status:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: resolved_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the offer was resolved'
+          - name: sent_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the offer was sent'
+          - name: starts_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the offer starts'
+          - name: status
+            type:
+              - 'null'
+              - 'string'
+            description: 'Status of the offer'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'Timestamp indicating when the offer was last updated'
+          - name: version
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Version of the offer data'
+      - entity: offices
+        fields:
+          - name: child_ids
+            type:
+              - 'null'
+              - 'array'
+            description: 'IDs of child offices associated with this office'
+          - name: child_office_external_ids
+            type:
+              - 'null'
+              - 'array'
+            description: 'External IDs of child offices associated with this office'
+          - name: external_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'Unique identifier for this office in the external system'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for this office in the API system'
+          - name: location
+            type:
+              - 'null'
+              - 'object'
+            description: 'Location details of this office'
+            properties:
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the office'
+          - name: parent_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'ID of the parent office, if this office is a branch office'
+          - name: parent_office_external_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'External ID of the parent office in the external system'
+          - name: primary_contact_user_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'User ID of the primary contact person for this office'
+      - entity: prospect_pools
+        fields:
+          - name: active
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates whether the prospect pool is active or not.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the prospect pool.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the prospect pool.'
+          - name: prospect_stages
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of prospect stages associated with the prospect pool.'
+      - entity: rejection_reasons
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the rejection reason.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the rejection reason.'
+          - name: type
+            type:
+              - 'null'
+              - 'object'
+            description: 'Type of rejection reason'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+      - entity: schools
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the school.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'Name of the school.'
+          - name: priority
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Priority level of the school.'
+      - entity: scorecards
+        fields:
+          - name: application_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the job application associated with the scorecard data.'
+          - name: attributes
+            type:
+              - 'null'
+              - 'array'
+            description: 'Information about the attributes related to the scorecard'
+          - name: candidate_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the candidate for whom the scorecard is created.'
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The timestamp when the scorecard was created.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier of the scorecard.'
+          - name: interview
+            type:
+              - 'null'
+              - 'string'
+            description: 'Details about the interview related to the scorecard.'
+          - name: interview_step
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details about the interview step associated with the scorecard'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: interviewed_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The timestamp when the candidate was interviewed.'
+          - name: interviewer
+            type:
+              - 'null'
+              - 'object'
+            description: 'Information about the interviewer who conducted the assessment'
+            properties:
+              employee_id:
+                type:
+                  - 'null'
+                  - 'string'
+              first_name:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              last_name:
+                type:
+                  - 'null'
+                  - 'string'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: overall_recommendation
+            type:
+              - 'null'
+              - 'string'
+            description: 'The overall recommendation for the candidate based on the scorecard evaluation.'
+          - name: questions
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of questions included in the scorecard'
+          - name: ratings
+            type:
+              - 'null'
+              - 'object'
+            description: 'Ratings given for each question in the scorecard'
+            properties:
+              definitely_not:
+                type:
+                  - 'null'
+                  - 'array'
+              mixed:
+                type:
+                  - 'null'
+                  - 'array'
+              'no':
+                type:
+                  - 'null'
+                  - 'array'
+              strong_yes:
+                type:
+                  - 'null'
+                  - 'array'
+              'yes':
+                type:
+                  - 'null'
+                  - 'array'
+          - name: submitted_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The timestamp when the scorecard was submitted.'
+          - name: submitted_by
+            type:
+              - 'null'
+              - 'object'
+            description: 'Details of the user who submitted the scorecard'
+            properties:
+              employee_id:
+                type:
+                  - 'null'
+                  - 'string'
+              first_name:
+                type:
+                  - 'null'
+                  - 'string'
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              last_name:
+                type:
+                  - 'null'
+                  - 'string'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The timestamp when the scorecard was last updated.'
+      - entity: sources
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the source.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the source.'
+          - name: type
+            type:
+              - 'null'
+              - 'object'
+            description: 'Type of the data source'
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'integer'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+      - entity: tags
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the tag.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the tag.'
+      - entity: user_permissions
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the user permission data'
+          - name: job_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Identifier for the job associated with the user permission data'
+          - name: user_role_id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Identifier for the user role associated with the user permission data'
+      - entity: user_roles
+        fields:
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'The unique identifier for the user role.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The name of the user role.'
+          - name: type
+            type:
+              - 'null'
+              - 'string'
+            description: 'The type or category of the user role.'
+      - entity: users
+        fields:
+          - name: created_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the user account was created.'
+          - name: departments
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of departments associated with users'
+          - name: disabled
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates whether the user account is disabled.'
+          - name: emails
+            type:
+              - 'null'
+              - 'array'
+            description: 'Email addresses of the users'
+          - name: employee_id
+            type:
+              - 'null'
+              - 'string'
+            description: 'Employee identifier for the user.'
+          - name: first_name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The first name of the user.'
+          - name: id
+            type:
+              - 'null'
+              - 'integer'
+            description: 'Unique identifier for the user.'
+          - name: last_name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The last name of the user.'
+          - name: linked_candidate_ids
+            type:
+              - 'null'
+              - 'array'
+            description: 'IDs of candidates linked to the user.'
+          - name: name
+            type:
+              - 'null'
+              - 'string'
+            description: 'The full name of the user.'
+          - name: offices
+            type:
+              - 'null'
+              - 'array'
+            description: 'List of office locations where users are based'
+          - name: primary_email_address
+            type:
+              - 'null'
+              - 'string'
+            description: 'The primary email address of the user.'
+          - name: site_admin
+            type:
+              - 'null'
+              - 'boolean'
+            description: 'Indicates whether the user is a site administrator.'
+          - name: updated_at
+            type:
+              - 'null'
+              - 'string'
+            description: 'The date and time when the user account was last updated.'
+
+servers:
+  - url: https://harvest.greenhouse.io/v1
+    description: Greenhouse Harvest API server
+
+security:
+  - basicAuth: []
+
+paths:
+  "/candidates":
+    get:
+      summary: List candidates
+      description: Returns a paginated list of all candidates in the organization
+      operationId: listCandidates
+      x-airbyte-entity: candidates
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of candidates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Candidate"
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable Entity
+
+  "/candidates/{id}":
+    get:
+      summary: Get a candidate
+      description: Get a single candidate by ID
+      operationId: getCandidate
+      x-airbyte-entity: candidates
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Candidate ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Candidate object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Candidate"
+        "404":
+          description: Candidate not found
+        "401":
+          description: Unauthorized
+
+  "/applications":
+    get:
+      summary: List applications
+      description: Returns a paginated list of all applications
+      operationId: listApplications
+      x-airbyte-entity: applications
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: created_before
+          in: query
+          description: Filter by applications created before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: created_after
+          in: query
+          description: Filter by applications created after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: last_activity_after
+          in: query
+          description: Filter by applications with activity after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: job_id
+          in: query
+          description: Filter by job ID
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: Filter by application status
+          schema:
+            type: string
+            enum: [active, rejected, hired]
+      responses:
+        "200":
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Application"
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable Entity
+
+  "/applications/{id}":
+    get:
+      summary: Get an application
+      description: Get a single application by ID
+      operationId: getApplication
+      x-airbyte-entity: applications
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Application ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Application object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Application"
+        "404":
+          description: Application not found
+        "401":
+          description: Unauthorized
+
+  "/jobs":
+    get:
+      summary: List jobs
+      description: Returns a paginated list of all jobs in the organization
+      operationId: listJobs
+      x-airbyte-entity: jobs
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Job"
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable Entity
+
+  "/jobs/{id}":
+    get:
+      summary: Get a job
+      description: Get a single job by ID
+      operationId: getJob
+      x-airbyte-entity: jobs
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Job ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Job object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+        "404":
+          description: Job not found
+        "401":
+          description: Unauthorized
+
+  # ============ OFFERS ============
+  "/offers":
+    get:
+      summary: List offers
+      description: Returns a paginated list of all offers
+      operationId: listOffers
+      x-airbyte-entity: offers
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: created_before
+          in: query
+          description: Filter by offers created before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: created_after
+          in: query
+          description: Filter by offers created after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: resolved_after
+          in: query
+          description: Filter by offers resolved after this timestamp
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Offer"
+        "401":
+          description: Unauthorized
+
+  "/offers/{id}":
+    get:
+      summary: Get an offer
+      description: Get a single offer by ID
+      operationId: getOffer
+      x-airbyte-entity: offers
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Offer ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Offer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Offer"
+        "404":
+          description: Offer not found
+        "401":
+          description: Unauthorized
+
+  # ============ USERS ============
+  "/users":
+    get:
+      summary: List users
+      description: Returns a paginated list of all users
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: created_before
+          in: query
+          description: Filter by users created before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: created_after
+          in: query
+          description: Filter by users created after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: updated_before
+          in: query
+          description: Filter by users updated before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: updated_after
+          in: query
+          description: Filter by users updated after this timestamp
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  "/users/{id}":
+    get:
+      summary: Get a user
+      description: Get a single user by ID
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+        "401":
+          description: Unauthorized
+
+  # ============ DEPARTMENTS ============
+  "/departments":
+    get:
+      summary: List departments
+      description: Returns a paginated list of all departments
+      operationId: listDepartments
+      x-airbyte-entity: departments
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of departments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Department"
+        "401":
+          description: Unauthorized
+
+  "/departments/{id}":
+    get:
+      summary: Get a department
+      description: Get a single department by ID
+      operationId: getDepartment
+      x-airbyte-entity: departments
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Department ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Department object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Department"
+        "404":
+          description: Department not found
+        "401":
+          description: Unauthorized
+
+  # ============ OFFICES ============
+  "/offices":
+    get:
+      summary: List offices
+      description: Returns a paginated list of all offices
+      operationId: listOffices
+      x-airbyte-entity: offices
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of offices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Office"
+        "401":
+          description: Unauthorized
+
+  "/offices/{id}":
+    get:
+      summary: Get an office
+      description: Get a single office by ID
+      operationId: getOffice
+      x-airbyte-entity: offices
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Office ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Office object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Office"
+        "404":
+          description: Office not found
+        "401":
+          description: Unauthorized
+
+  # ============ JOB POSTS ============
+  "/job_posts":
+    get:
+      summary: List job posts
+      description: Returns a paginated list of all job posts
+      operationId: listJobPosts
+      x-airbyte-entity: job_posts
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: live
+          in: query
+          description: Filter by live status
+          schema:
+            type: boolean
+        - name: active
+          in: query
+          description: Filter by active status
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of job posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JobPost"
+        "401":
+          description: Unauthorized
+
+  "/job_posts/{id}":
+    get:
+      summary: Get a job post
+      description: Get a single job post by ID
+      operationId: getJobPost
+      x-airbyte-entity: job_posts
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Job Post ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Job Post object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobPost"
+        "404":
+          description: Job Post not found
+        "401":
+          description: Unauthorized
+
+  # ============ SOURCES ============
+  "/sources":
+    get:
+      summary: List sources
+      description: Returns a paginated list of all sources
+      operationId: listSources
+      x-airbyte-entity: sources
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: List of sources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Source"
+        "401":
+          description: Unauthorized
+
+  # ============ SCHEDULED INTERVIEWS ============
+  "/scheduled_interviews":
+    get:
+      summary: List scheduled interviews
+      description: Returns a paginated list of all scheduled interviews
+      operationId: listScheduledInterviews
+      x-airbyte-entity: scheduled_interviews
+      x-airbyte-action: list
+      parameters:
+        - name: per_page
+          in: query
+          description: Number of items to return per page (max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: created_before
+          in: query
+          description: Filter by interviews created before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: created_after
+          in: query
+          description: Filter by interviews created after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: updated_before
+          in: query
+          description: Filter by interviews updated before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: updated_after
+          in: query
+          description: Filter by interviews updated after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: starts_after
+          in: query
+          description: Filter by interviews starting after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - name: ends_before
+          in: query
+          description: Filter by interviews ending before this timestamp
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of scheduled interviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ScheduledInterview"
+        "401":
+          description: Unauthorized
+
+  "/scheduled_interviews/{id}":
+    get:
+      summary: Get a scheduled interview
+      description: Get a single scheduled interview by ID
+      operationId: getScheduledInterview
+      x-airbyte-entity: scheduled_interviews
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Scheduled Interview ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Scheduled Interview object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduledInterview"
+        "404":
+          description: Scheduled Interview not found
+        "401":
+          description: Unauthorized
+
+  # ============ ATTACHMENT DOWNLOADS ============
+  "/applications/{id}/attachment:download/{attachment_index}":
+    get:
+      summary: Download application attachment
+      description: |
+        Downloads an attachment (resume, cover letter, etc.) for an application by index.
+        The attachment URL is a temporary signed AWS S3 URL that expires within 7 days.
+        Files should be downloaded immediately after retrieval.
+      operationId: downloadApplicationAttachment
+      x-airbyte-entity: application_attachment
+      x-airbyte-action: download
+      x-airbyte-file-url: attachments[{attachment_index}].url
+      x-airbyte-path-override:
+        path: /applications/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Application ID
+          schema:
+            type: integer
+        - name: attachment_index
+          in: path
+          required: true
+          description: Index of the attachment to download (0-based)
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Application with attachment URLs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Application"
+        "404":
+          description: Application not found
+        "401":
+          description: Unauthorized
+
+  "/candidates/{id}/attachment:download/{attachment_index}":
+    get:
+      summary: Download candidate attachment
+      description: |
+        Downloads an attachment (resume, cover letter, etc.) for a candidate by index.
+        The attachment URL is a temporary signed AWS S3 URL that expires within 7 days.
+        Files should be downloaded immediately after retrieval.
+      operationId: downloadCandidateAttachment
+      x-airbyte-entity: candidate_attachment
+      x-airbyte-action: download
+      x-airbyte-file-url: attachments[{attachment_index}].url
+      x-airbyte-path-override:
+        path: /candidates/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Candidate ID
+          schema:
+            type: integer
+        - name: attachment_index
+          in: path
+          required: true
+          description: Index of the attachment to download (0-based)
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Candidate with attachment URLs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Candidate"
+        "404":
+          description: Candidate not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication (API token as username, blank password)
+      x-airbyte-auth-config:
+        title: "Harvest API Key Authentication"
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: "Harvest API Key"
+            description: "Your Greenhouse Harvest API Key from the Dev Center"
+        auth_mapping:
+          username: "${api_key}"
+          password: ""
+        replication_auth_key_mapping:
+          api_key: "api_key"
+
+  schemas:
+    Candidate:
+      type: object
+      x-airbyte-entity-name: candidates
+      description: Greenhouse candidate object
+      properties:
+        id:
+          type: integer
+          description: Unique candidate identifier
+        first_name:
+          type: string
+          description: Candidate's first name
+        last_name:
+          type: string
+          description: Candidate's last name
+        company:
+          type: [string, "null"]
+          description: Candidate's current company
+        title:
+          type: [string, "null"]
+          description: Candidate's current title
+        created_at:
+          type: string
+          format: date-time
+          description: When the candidate was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the candidate was last updated
+        last_activity:
+          type: string
+          format: date-time
+          description: When the last activity occurred
+        is_private:
+          type: boolean
+          description: Whether the candidate is private
+        photo_url:
+          type: [string, "null"]
+          description: URL to candidate's photo
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+          description: Candidate attachments (resumes, cover letters, etc.)
+        application_ids:
+          type: array
+          items:
+            type: integer
+          description: IDs of candidate's applications
+        phone_numbers:
+          type: array
+          items:
+            type: object
+          description: Candidate phone numbers
+        addresses:
+          type: array
+          items:
+            type: object
+          description: Candidate addresses
+        email_addresses:
+          type: array
+          items:
+            type: object
+          description: Candidate email addresses
+        website_addresses:
+          type: array
+          items:
+            type: object
+          description: Candidate website addresses
+        social_media_addresses:
+          type: array
+          items:
+            type: object
+          description: Candidate social media addresses
+        recruiter:
+          type: [object, "null"]
+          description: Recruiter information
+        coordinator:
+          type: [object, "null"]
+          description: Coordinator information
+        can_email:
+          type: boolean
+          description: Whether the candidate can be emailed
+        tags:
+          type: array
+          items:
+            type: string
+          description: Candidate tags
+        custom_fields:
+          type: object
+          description: Custom field values
+
+    Application:
+      type: object
+      x-airbyte-entity-name: applications
+      description: Greenhouse application object
+      properties:
+        id:
+          type: integer
+          description: Unique application identifier
+        candidate_id:
+          type: integer
+          description: ID of the associated candidate
+        prospect:
+          type: boolean
+          description: Whether this is a prospect application
+        applied_at:
+          type: string
+          format: date-time
+          description: When the application was submitted
+        rejected_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the application was rejected
+        last_activity_at:
+          type: string
+          format: date-time
+          description: When the last activity occurred
+        location:
+          type: [object, "null"]
+          description: Application location
+        source:
+          type: object
+          description: Application source
+        credited_to:
+          type: object
+          description: User credited with the application
+        rejection_reason:
+          type: [object, "null"]
+          description: Rejection reason if rejected
+        rejection_details:
+          type: [object, "null"]
+          description: Additional rejection details
+        jobs:
+          type: array
+          items:
+            type: object
+          description: Jobs associated with the application
+        job_post_id:
+          type: [integer, "null"]
+          description: ID of the job post
+        status:
+          type: string
+          description: Application status
+        current_stage:
+          type: [object, "null"]
+          description: Current stage of the application
+        answers:
+          type: array
+          items:
+            type: object
+          description: Application question answers
+        prospective_office:
+          type: [object, "null"]
+          description: Prospective office
+        prospective_department:
+          type: [object, "null"]
+          description: Prospective department
+        prospect_detail:
+          type: object
+          description: Prospect details
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+          description: Application attachments (resumes, cover letters, etc.)
+        custom_fields:
+          type: object
+          description: Custom field values
+
+    Job:
+      type: object
+      x-airbyte-entity-name: jobs
+      description: Greenhouse job object
+      properties:
+        id:
+          type: integer
+          description: Unique job identifier
+        name:
+          type: string
+          description: Job name
+        requisition_id:
+          type: [string, "null"]
+          description: Job requisition ID
+        notes:
+          type: [string, "null"]
+          description: Job notes
+        confidential:
+          type: boolean
+          description: Whether the job is confidential
+        status:
+          type: string
+          description: Job status
+        created_at:
+          type: string
+          format: date-time
+          description: When the job was created
+        opened_at:
+          type: string
+          format: date-time
+          description: When the job was opened
+        closed_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the job was closed
+        updated_at:
+          type: string
+          format: date-time
+          description: When the job was last updated
+        departments:
+          type: array
+          items:
+            type: [object, "null"]
+          description: Departments associated with the job
+        offices:
+          type: array
+          items:
+            type: object
+          description: Offices associated with the job
+        custom_fields:
+          type: object
+          description: Custom field values
+        hiring_team:
+          type: object
+          description: Hiring team information
+        openings:
+          type: array
+          items:
+            type: object
+          description: Job openings
+
+    Offer:
+      type: object
+      x-airbyte-entity-name: offers
+      description: Greenhouse offer object
+      properties:
+        id:
+          type: integer
+          description: Unique offer identifier
+        version:
+          type: integer
+          description: Offer version number
+        application_id:
+          type: integer
+          description: Associated application ID
+        job_id:
+          type: integer
+          description: Associated job ID
+        candidate_id:
+          type: integer
+          description: Associated candidate ID
+        opening:
+          type: [object, "null"]
+          description: Associated job opening
+        created_at:
+          type: string
+          format: date-time
+          description: When the offer was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the offer was last updated
+        sent_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the offer was sent
+        resolved_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the offer was resolved
+        starts_at:
+          type: [string, "null"]
+          description: Employment start date
+        status:
+          type: string
+          description: Offer status
+        custom_fields:
+          type: object
+          description: Custom field values
+
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      description: Greenhouse user object
+      properties:
+        id:
+          type: integer
+          description: Unique user identifier
+        name:
+          type: string
+          description: User's full name
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+        primary_email_address:
+          type: string
+          format: email
+          description: User's primary email address
+        updated_at:
+          type: string
+          format: date-time
+          description: When the user was last updated
+        created_at:
+          type: string
+          format: date-time
+          description: When the user was created
+        disabled:
+          type: boolean
+          description: Whether the user is disabled
+        site_admin:
+          type: boolean
+          description: Whether the user is a site admin
+        emails:
+          type: array
+          items:
+            type: string
+          description: All user email addresses
+        employee_id:
+          type: [string, "null"]
+          description: Employee ID
+        linked_candidate_ids:
+          type: array
+          items:
+            type: integer
+          description: IDs of linked candidates
+        offices:
+          type: array
+          items:
+            type: object
+          description: Associated offices
+        departments:
+          type: array
+          items:
+            type: object
+          description: Associated departments
+
+    Department:
+      type: object
+      x-airbyte-entity-name: departments
+      description: Greenhouse department object
+      properties:
+        id:
+          type: integer
+          description: Unique department identifier
+        name:
+          type: string
+          description: Department name
+        parent_id:
+          type: [integer, "null"]
+          description: Parent department ID
+        parent_department_external_id:
+          type: [string, "null"]
+          description: Parent department external ID
+        child_ids:
+          type: array
+          items:
+            type: integer
+          description: Child department IDs
+        child_department_external_ids:
+          type: array
+          items:
+            type: string
+          description: Child department external IDs
+        external_id:
+          type: [string, "null"]
+          description: External ID
+
+    Office:
+      type: object
+      x-airbyte-entity-name: offices
+      description: Greenhouse office object
+      properties:
+        id:
+          type: integer
+          description: Unique office identifier
+        name:
+          type: string
+          description: Office name
+        location:
+          type: [object, "null"]
+          description: Office location details
+        primary_contact_user_id:
+          type: [integer, "null"]
+          description: Primary contact user ID
+        parent_id:
+          type: [integer, "null"]
+          description: Parent office ID
+        parent_office_external_id:
+          type: [string, "null"]
+          description: Parent office external ID
+        child_ids:
+          type: array
+          items:
+            type: integer
+          description: Child office IDs
+        child_office_external_ids:
+          type: array
+          items:
+            type: string
+          description: Child office external IDs
+        external_id:
+          type: [string, "null"]
+          description: External ID
+
+    JobPost:
+      type: object
+      x-airbyte-entity-name: job_posts
+      description: Greenhouse job post object
+      properties:
+        id:
+          type: integer
+          description: Unique job post identifier
+        title:
+          type: string
+          description: Job post title
+        location:
+          type: [object, "null"]
+          description: Job post location
+        internal:
+          type: boolean
+          description: Whether this is an internal job post
+        external:
+          type: boolean
+          description: Whether this is an external job post
+        active:
+          type: boolean
+          description: Whether the job post is active
+        live:
+          type: boolean
+          description: Whether the job post is live
+        first_published_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the job post was first published
+        job_id:
+          type: integer
+          description: Associated job ID
+        content:
+          type: [string, "null"]
+          description: Job post content/description
+        internal_content:
+          type: [string, "null"]
+          description: Internal job post content
+        updated_at:
+          type: string
+          format: date-time
+          description: When the job post was last updated
+        created_at:
+          type: string
+          format: date-time
+          description: When the job post was created
+        demographic_question_set_id:
+          type: [integer, "null"]
+          description: Demographic question set ID
+        questions:
+          type: array
+          items:
+            type: object
+          description: Application questions
+
+    Source:
+      type: object
+      x-airbyte-entity-name: sources
+      description: Greenhouse source object
+      properties:
+        id:
+          type: integer
+          description: Unique source identifier
+        name:
+          type: string
+          description: Source name
+        type:
+          type: [object, "null"]
+          description: Source type information
+
+    ScheduledInterview:
+      type: object
+      x-airbyte-entity-name: scheduled_interviews
+      description: Greenhouse scheduled interview object
+      properties:
+        id:
+          type: integer
+          description: Unique scheduled interview identifier
+        application_id:
+          type: integer
+          description: Associated application ID
+        external_event_id:
+          type: [string, "null"]
+          description: External calendar event ID
+        created_at:
+          type: string
+          format: date-time
+          description: When the interview was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the interview was last updated
+        start:
+          type: [object, "null"]
+          description: Interview start time details
+        end:
+          type: [object, "null"]
+          description: Interview end time details
+        location:
+          type: [string, "null"]
+          description: Interview location
+        video_conferencing_url:
+          type: [string, "null"]
+          description: Video conferencing URL
+        status:
+          type: string
+          description: Interview status
+        interview:
+          type: [object, "null"]
+          description: Interview details
+        organizer:
+          type: [object, "null"]
+          description: Interview organizer
+        interviewers:
+          type: array
+          items:
+            type: object
+          description: List of interviewers
+
+    Attachment:
+      type: object
+      description: File attachment (resume, cover letter, etc.)
+      properties:
+        filename:
+          type: string
+          description: Name of the attached file
+        url:
+          type: string
+          format: uri
+          description: |
+            Temporary signed AWS S3 URL to download the file.
+            This URL expires within 7 days - download immediately after retrieval.
+        type:
+          type: string
+          enum: [resume, cover_letter, admin_only, take_home_test, offer_packet, offer_letter, signed_offer_letter, other]
+          description: Type of attachment
+        created_at:
+          type: string
+          format: date-time
+          description: When the attachment was uploaded

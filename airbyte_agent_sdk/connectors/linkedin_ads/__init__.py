@@ -1,0 +1,55 @@
+"""
+Linkedin-Ads connector for Airbyte SDK.
+
+Auto-generated from OpenAPI specification.
+"""
+
+from .connector import LinkedinAdsConnector
+from .models import (
+    LinkedinAdsAuthConfig,
+    LinkedinAdsReplicationConfig,
+    AirbyteSearchMeta,
+    AirbyteSearchResult,
+    AccountsSearchData,
+    AccountsSearchResult,
+    AccountUsersSearchData,
+    AccountUsersSearchResult,
+    CampaignsSearchData,
+    CampaignsSearchResult,
+    CampaignGroupsSearchData,
+    CampaignGroupsSearchResult,
+    CreativesSearchData,
+    CreativesSearchResult,
+    ConversionsSearchData,
+    ConversionsSearchResult,
+    AdCampaignAnalyticsSearchData,
+    AdCampaignAnalyticsSearchResult,
+    AdCreativeAnalyticsSearchData,
+    AdCreativeAnalyticsSearchResult,
+)
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+__all__ = [
+    "LinkedinAdsConnector",
+    "AirbyteAuthConfig",
+    "LinkedinAdsAuthConfig",
+    "LinkedinAdsReplicationConfig",
+    "AirbyteSearchMeta",
+    "AirbyteSearchResult",
+    "AccountsSearchData",
+    "AccountsSearchResult",
+    "AccountUsersSearchData",
+    "AccountUsersSearchResult",
+    "CampaignsSearchData",
+    "CampaignsSearchResult",
+    "CampaignGroupsSearchData",
+    "CampaignGroupsSearchResult",
+    "CreativesSearchData",
+    "CreativesSearchResult",
+    "ConversionsSearchData",
+    "ConversionsSearchResult",
+    "AdCampaignAnalyticsSearchData",
+    "AdCampaignAnalyticsSearchResult",
+    "AdCreativeAnalyticsSearchData",
+    "AdCreativeAnalyticsSearchResult",
+]

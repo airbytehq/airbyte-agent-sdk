@@ -1,0 +1,4921 @@
+openapi: 3.1.0
+info:
+  title: Zendesk Support API Connector
+  version: 0.1.20
+  description: |
+    Zendesk Support is a customer service platform that helps businesses manage support
+    tickets, customer interactions, and help center content. This connector provides
+    access to tickets, users, organizations, groups, comments, attachments, automations,
+    triggers, macros, views, satisfaction ratings, SLA policies, and help center articles
+    for customer support analytics and service performance insights.
+  x-airbyte-connector-name: zendesk-support
+  x-airbyte-connector-definition-id: 79c1aa37-dae3-42ae-b333-d1c105477715
+  x-airbyte-replication-version: "5.2.0"
+  x-airbyte-replication-compatibility: ">=5.2.0, <6.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Zendesk Support API Documentation
+    url: https://developer.zendesk.com/api-reference/ticketing/introduction/
+  - type: changelog
+    title: Zendesk API Changelog
+    url: https://developer.zendesk.com/api-reference/changelog/changelog/
+  - type: developer_community
+    title: Zendesk APIs Developer Community
+    url: https://support.zendesk.com/hc/en-us/community/topics/1260801854210
+  - type: authentication_guide
+    title: Zendesk API Authentication Guide
+    url: https://developer.zendesk.com/api-reference/introduction/security-and-auth/
+  - type: api_reference
+    title: Zendesk Ticketing Documentation
+    url: https://developer.zendesk.com/documentation/ticketing/
+  - type: rate_limits
+    title: Zendesk API Rate Limits
+    url: https://developer.zendesk.com/api-reference/introduction/rate-limits/
+  - type: api_reference
+    title: Zendesk Pagination Documentation
+    url: https://developer.zendesk.com/api-reference/introduction/pagination/
+  x-airbyte-example-questions:
+    direct:
+    - "Show me the tickets assigned to me last week"
+    - "List all unresolved tickets"
+    - "Show me the details of recent tickets"
+    search:
+    - "What are the top 5 support issues our organization has faced this month?"
+    - "Analyze the satisfaction ratings for our support team in the last 30 days"
+    - "Compare ticket resolution times across different support groups"
+    - "Identify the most common ticket fields used in our support workflow"
+    - "Summarize the performance of our SLA policies this quarter"
+    unsupported:
+    - "Create a new support ticket for {customer}"
+    - "Update the priority of this ticket"
+    - "Assign this ticket to {team_member}"
+    - "Delete these old support tickets"
+    - "Send an automatic response to {customer}"
+  x-airbyte-skip-suggested-streams:
+  - ticket_metric_events
+  x-airbyte-skip-auth-methods:
+  - bearer    # Legacy OAuth option "oauth2.0" uses bearer tokens - we support oauth2 refresh flow and basic auth instead
+  x-airbyte-entity-relationships:
+  - source_entity: ticket_comments
+    target_entity: tickets
+    foreign_key: ticket_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: ticket_audits
+    target_entity: tickets
+    foreign_key: ticket_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: article_attachments
+    target_entity: articles
+    foreign_key: article_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: false
+    entities:
+    - entity: brands
+      fields:
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates whether the brand is set as active
+      - name: brand_url
+        type:
+        - "null"
+        - "string"
+        description: The public URL of the brand
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the brand was created
+      - name: default
+        type:
+        - "null"
+        - "boolean"
+        description: "Indicates whether the brand is the default brand for tickets generated from non-branded channels"
+      - name: has_help_center
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates whether the brand has a Help Center enabled
+      - name: help_center_state
+        type:
+        - "null"
+        - "string"
+        description: "The state of the Help Center, with allowed values of enabled, disabled, or restricted"
+      - name: host_mapping
+        type:
+        - "null"
+        - "string"
+        description: "The host mapping configuration for the brand, visible only to administrators"
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier automatically assigned when the brand is created
+      - name: is_deleted
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates whether the brand has been deleted
+      - name: logo
+        type:
+        - "null"
+        - "string"
+        description: Brand logo image file represented as an Attachment object
+      - name: name
+        type:
+        - "null"
+        - "string"
+        description: The name of the brand
+      - name: signature_template
+        type:
+        - "null"
+        - "string"
+        description: The signature template used for the brand
+      - name: subdomain
+        type:
+        - "null"
+        - "string"
+        description: The subdomain associated with the brand
+      - name: ticket_form_ids
+        type:
+        - "null"
+        - "array"
+        description: Array of ticket form IDs that are available for use by this brand
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the brand was last updated
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL for accessing this brand resource
+    - entity: groups
+      fields:
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the group was created
+      - name: default
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the group is the default one for the account
+      - name: deleted
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates whether the group has been deleted
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: The description of the group
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier automatically assigned when creating groups
+      - name: is_public
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the group is public (true) or private (false)
+      - name: name
+        type:
+        - "null"
+        - "string"
+        description: The name of the group
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the group was last updated
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL of the group
+    - entity: organizations
+      fields:
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the organization was created
+      - name: deleted_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the organization was deleted
+      - name: details
+        type:
+        - "null"
+        - "string"
+        description: "Details about the organization, such as the address"
+      - name: domain_names
+        type:
+        - "null"
+        - "array"
+        description: Array of domain names associated with this organization for automatic user assignment
+      - name: external_id
+        type:
+        - "null"
+        - "string"
+        description: "Unique external identifier to associate the organization to an external record (case-insensitive)"
+      - name: group_id
+        type:
+        - "null"
+        - "integer"
+        description: ID of the group where new tickets from users in this organization are automatically assigned
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier automatically assigned when the organization is created
+      - name: name
+        type:
+        - "null"
+        - "string"
+        description: Unique name for the organization (mandatory field)
+      - name: notes
+        type:
+        - "null"
+        - "string"
+        description: Notes about the organization
+      - name: organization_fields
+        type:
+        - "null"
+        - "object"
+        description: "Key-value object for custom organization fields"
+      - name: shared_comments
+        type:
+        - "null"
+        - "boolean"
+        description: "Boolean indicating whether end users in this organization can comment on each other's tickets"
+      - name: shared_tickets
+        type:
+        - "null"
+        - "boolean"
+        description: "Boolean indicating whether end users in this organization can see each other's tickets"
+      - name: tags
+        type:
+        - "null"
+        - "array"
+        description: Array of tags associated with the organization
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp of the last update to the organization
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL of this organization
+    - entity: satisfaction_ratings
+      fields:
+      - name: assignee_id
+        type:
+        - "null"
+        - "integer"
+        description: The identifier of the agent assigned to the ticket at the time the rating was submitted
+      - name: comment
+        type:
+        - "null"
+        - "string"
+        description: Optional comment provided by the requester with the rating
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the satisfaction rating was created
+      - name: group_id
+        type:
+        - "null"
+        - "integer"
+        description: The identifier of the group assigned to the ticket at the time the rating was submitted
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: "Unique identifier for the satisfaction rating, automatically assigned upon creation"
+      - name: reason
+        type:
+        - "null"
+        - "string"
+        description: "Free-text reason for a bad rating provided by the requester in a follow-up question"
+      - name: reason_id
+        type:
+        - "null"
+        - "integer"
+        description: "Identifier for the predefined reason given for a negative rating"
+      - name: requester_id
+        type:
+        - "null"
+        - "integer"
+        description: The identifier of the ticket requester who submitted the satisfaction rating
+      - name: score
+        type:
+        - "null"
+        - "string"
+        description: "The satisfaction rating value: 'offered', 'unoffered', 'good', or 'bad'"
+      - name: ticket_id
+        type:
+        - "null"
+        - "integer"
+        description: The identifier of the ticket being rated
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the satisfaction rating was last updated
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL of this satisfaction rating resource
+    - entity: tags
+      fields:
+      - name: count
+        type:
+        - "null"
+        - "integer"
+        description: The number of times this tag has been used across resources
+      - name: name
+        type:
+        - "null"
+        - "string"
+        description: The tag name string used to label and categorize resources
+    - entity: ticket_audits
+      fields:
+      - name: attachments
+        type:
+        - "null"
+        - "array"
+        description: Files or documents attached to the audit
+      - name: author_id
+        type:
+        - "null"
+        - "integer"
+        description: The unique identifier of the user who created the audit
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the audit was created
+      - name: events
+        type:
+        - "null"
+        - "array"
+        description: "Array of events that occurred in this audit, such as field changes, comments, or tag updates"
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: "Unique identifier for the audit record, automatically assigned when the audit is created"
+      - name: metadata
+        type:
+        - "null"
+        - "object"
+        description: Custom and system data associated with the audit
+      - name: ticket_id
+        type:
+        - "null"
+        - "integer"
+        description: The unique identifier of the ticket associated with this audit
+      - name: via
+        type:
+        - "null"
+        - "object"
+        description: "Describes how the audit was created, providing context about the creation source"
+    - entity: ticket_comments
+      fields:
+      - name: attachments
+        type:
+        - "null"
+        - "array"
+        description: List of files or media attached to the comment
+      - name: audit_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the audit record associated with this comment event
+      - name: author_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the user who created the comment
+      - name: body
+        type:
+        - "null"
+        - "string"
+        description: Content of the comment in its original format
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the comment was created
+      - name: event_type
+        type:
+        - "null"
+        - "string"
+        description: Specific classification of the event within the ticket event stream
+      - name: html_body
+        type:
+        - "null"
+        - "string"
+        description: "HTML-formatted content of the comment"
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier for the comment event
+      - name: metadata
+        type:
+        - "null"
+        - "object"
+        description: Additional structured information about the comment not covered by standard fields
+      - name: plain_body
+        type:
+        - "null"
+        - "string"
+        description: Plain text content of the comment without formatting
+      - name: public
+        type:
+        - "null"
+        - "boolean"
+        description: Boolean indicating whether the comment is visible to end users or is an internal note
+      - name: ticket_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the ticket to which this comment belongs
+      - name: timestamp
+        type:
+        - "null"
+        - "integer"
+        description: Timestamp of when the event occurred in the incremental export stream
+      - name: type
+        type:
+        - "null"
+        - "string"
+        description: "Type of event, typically indicating this is a comment event"
+      - name: uploads
+        type:
+        - "null"
+        - "array"
+        description: Array of upload tokens or identifiers for files being attached to the comment
+      - name: via
+        type:
+        - "null"
+        - "object"
+        description: Channel or method through which the comment was submitted
+      - name: via_reference_id
+        type:
+        - "null"
+        - "integer"
+        description: Reference identifier for the channel through which the comment was created
+    - entity: ticket_fields
+      fields:
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Whether this field is currently available for use
+      - name: agent_description
+        type:
+        - "null"
+        - "string"
+        description: A description of the ticket field that only agents can see
+      - name: collapsed_for_agents
+        type:
+        - "null"
+        - "boolean"
+        description: "If true, the field is shown to agents by default; if false, it is hidden alongside infrequently used fields"
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the custom ticket field was created
+      - name: custom_field_options
+        type:
+        - "null"
+        - "array"
+        description: "Array of option objects for custom ticket fields of type multiselect or tagger"
+      - name: custom_statuses
+        type:
+        - "null"
+        - "array"
+        description: "List of customized ticket statuses, only present for system ticket fields of type custom_status"
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: Text describing the purpose of the ticket field to users
+      - name: editable_in_portal
+        type:
+        - "null"
+        - "boolean"
+        description: Whether this field is editable by end users in Help Center
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: "Unique identifier for the ticket field, automatically assigned when created"
+      - name: key
+        type:
+        - "null"
+        - "string"
+        description: Internal identifier or reference key for the field
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: "The relative position of the ticket field on a ticket, controlling display order"
+      - name: raw_description
+        type:
+        - "null"
+        - "string"
+        description: "The dynamic content placeholder if present, or the description value if not"
+      - name: raw_title
+        type:
+        - "null"
+        - "string"
+        description: "The dynamic content placeholder if present, or the title value if not"
+      - name: raw_title_in_portal
+        type:
+        - "null"
+        - "string"
+        description: "The dynamic content placeholder if present, or the title_in_portal value if not"
+      - name: regexp_for_validation
+        type:
+        - "null"
+        - "string"
+        description: "For regexp fields only, the validation pattern for a field value to be deemed valid"
+      - name: removable
+        type:
+        - "null"
+        - "boolean"
+        description: "If false, this field is a system field that must be present on all tickets"
+      - name: required
+        type:
+        - "null"
+        - "boolean"
+        description: "If true, agents must enter a value in the field to change the ticket status to solved"
+      - name: required_in_portal
+        type:
+        - "null"
+        - "boolean"
+        description: "If true, end users must enter a value in the field to create a request"
+      - name: sub_type_id
+        type:
+        - "null"
+        - "integer"
+        description: "For system ticket fields of type priority and status, controlling available options"
+      - name: system_field_options
+        type:
+        - "null"
+        - "array"
+        description: "Array of options for system ticket fields of type tickettype, priority, or status"
+      - name: tag
+        type:
+        - "null"
+        - "string"
+        description: "For checkbox fields only, a tag added to tickets when the checkbox field is selected"
+      - name: title
+        type:
+        - "null"
+        - "string"
+        description: The title of the ticket field displayed to agents
+      - name: title_in_portal
+        type:
+        - "null"
+        - "string"
+        description: The title of the ticket field displayed to end users in Help Center
+      - name: type
+        type:
+        - "null"
+        - "string"
+        description: "Field type such as text, textarea, checkbox, date, integer, decimal, regexp, multiselect, or tagger"
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the custom ticket field was last updated
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL for this ticket field resource
+      - name: visible_in_portal
+        type:
+        - "null"
+        - "boolean"
+        description: Whether this field is visible to end users in Help Center
+    - entity: ticket_forms
+      fields:
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the form is set as active
+      - name: agent_conditions
+        type:
+        - "null"
+        - "array"
+        description: Array of condition sets for agent workspaces
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the ticket form was created
+      - name: default
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the form is the default form for this account
+      - name: display_name
+        type:
+        - "null"
+        - "string"
+        description: The name of the form that is displayed to an end user
+      - name: end_user_conditions
+        type:
+        - "null"
+        - "array"
+        description: Array of condition sets for end user products
+      - name: end_user_visible
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the form is visible to the end user
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: "Unique identifier for the ticket form, automatically assigned when creating the form"
+      - name: in_all_brands
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the form is available for use in all brands on this account
+      - name: name
+        type:
+        - "null"
+        - "string"
+        description: The name of the ticket form
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: "The position of this form among other forms in the account, such as in a dropdown"
+      - name: raw_display_name
+        type:
+        - "null"
+        - "string"
+        description: "The dynamic content placeholder if present, or the display_name value if not"
+      - name: raw_name
+        type:
+        - "null"
+        - "string"
+        description: "The dynamic content placeholder if present, or the name value if not"
+      - name: restricted_brand_ids
+        type:
+        - "null"
+        - "array"
+        description: IDs of all brands that this ticket form is restricted to
+      - name: ticket_field_ids
+        type:
+        - "null"
+        - "array"
+        description: "IDs of all ticket fields included in this ticket form"
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp of the last update to the ticket form
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: URL of the ticket form
+    - entity: ticket_metric_events
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: "Unique identifier for the ticket metric event, automatically assigned when the record is created"
+      - name: instance_id
+        type:
+        - "null"
+        - "integer"
+        description: Instance identifier tracking occurrences of metric events that can happen multiple times per ticket
+      - name: metric
+        type:
+        - "null"
+        - "string"
+        description: "The specific metric being tracked, such as agent work time, reply time, or requester wait time"
+      - name: ticket_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the associated ticket for which the metric event was recorded
+      - name: time
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the metric event occurred
+      - name: type
+        type:
+        - "null"
+        - "string"
+        description: "The category of metric event, such as activate, pause, fulfill, apply_sla, breach, or update_status"
+    - entity: ticket_metrics
+      fields:
+      - name: agent_wait_time_in_minutes
+        type:
+        - "null"
+        - "object"
+        description: Number of minutes the agent spent waiting during calendar and business hours
+      - name: assigned_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the ticket was assigned
+      - name: assignee_stations
+        type:
+        - "null"
+        - "integer"
+        description: Number of assignees the ticket had
+      - name: assignee_updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the assignee last updated the ticket
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the metric record was created
+      - name: custom_status_updated_at
+        type:
+        - "null"
+        - "string"
+        description: "Timestamp when the ticket's custom status was last updated"
+      - name: first_resolution_time_in_minutes
+        type:
+        - "null"
+        - "object"
+        description: Number of minutes to the first resolution time during calendar and business hours
+      - name: full_resolution_time_in_minutes
+        type:
+        - "null"
+        - "object"
+        description: Number of minutes to the full resolution during calendar and business hours
+      - name: generated_timestamp
+        type:
+        - "null"
+        - "integer"
+        description: Timestamp of when record was last updated
+      - name: group_stations
+        type:
+        - "null"
+        - "integer"
+        description: Number of groups the ticket passed through
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier for the ticket metric record
+      - name: initially_assigned_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the ticket was initially assigned
+      - name: instance_id
+        type:
+        - "null"
+        - "integer"
+        description: ID of the Zendesk instance associated with the ticket
+      - name: latest_comment_added_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the latest comment was added
+      - name: metric
+        type:
+        - "null"
+        - "string"
+        description: Ticket metrics data
+      - name: on_hold_time_in_minutes
+        type:
+        - "null"
+        - "object"
+        description: Number of minutes on hold
+      - name: reopens
+        type:
+        - "null"
+        - "integer"
+        description: Total number of times the ticket was reopened
+      - name: replies
+        type:
+        - "null"
+        - "integer"
+        description: The number of public replies added to a ticket by an agent
+      - name: reply_time_in_minutes
+        type:
+        - "null"
+        - "object"
+        description: Number of minutes to the first reply during calendar and business hours
+      - name: reply_time_in_seconds
+        type:
+        - "null"
+        - "object"
+        description: "Number of seconds to the first reply during calendar hours, only available for Messaging tickets"
+      - name: requester_updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the requester last updated the ticket
+      - name: requester_wait_time_in_minutes
+        type:
+        - "null"
+        - "object"
+        description: Number of minutes the requester spent waiting during calendar and business hours
+      - name: solved_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the ticket was solved
+      - name: status
+        type:
+        - "null"
+        - "object"
+        description: "The current status of the ticket (open, pending, solved, etc.)."
+      - name: status_updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the status of the ticket was last updated
+      - name: ticket_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the associated ticket
+      - name: time
+        type:
+        - "null"
+        - "string"
+        description: Time related to the ticket
+      - name: type
+        type:
+        - "null"
+        - "string"
+        description: Type of ticket
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp when the metric record was last updated
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API url of the ticket metric
+    - entity: tickets
+      fields:
+      - name: allow_attachments
+        type:
+        - "null"
+        - "boolean"
+        description: Boolean indicating whether attachments are allowed on the ticket
+      - name: allow_channelback
+        type:
+        - "null"
+        - "boolean"
+        description: Boolean indicating whether agents can reply to the ticket through the original channel
+      - name: assignee_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the agent currently assigned to the ticket
+      - name: brand_id
+        type:
+        - "null"
+        - "integer"
+        description: "Unique identifier of the brand associated with the ticket in multi-brand accounts"
+      - name: collaborator_ids
+        type:
+        - "null"
+        - "array"
+        description: Array of user identifiers who are collaborating on the ticket
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the ticket was created
+      - name: custom_fields
+        type:
+        - "null"
+        - "array"
+        description: "Array of custom field values specific to the account's ticket configuration"
+      - name: custom_status_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the custom status applied to the ticket
+      - name: deleted_ticket_form_id
+        type:
+        - "null"
+        - "integer"
+        description: The ID of the ticket form that was previously associated with this ticket but has since been deleted
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: Initial description or content of the ticket when it was created
+      - name: due_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the ticket is due for completion or resolution
+      - name: email_cc_ids
+        type:
+        - "null"
+        - "array"
+        description: "Array of user identifiers who are CC'd on ticket email notifications"
+      - name: external_id
+        type:
+        - "null"
+        - "string"
+        description: "External identifier for the ticket, used for integrations with other systems"
+      - name: fields
+        type:
+        - "null"
+        - "array"
+        description: Array of ticket field values including both system and custom fields
+      - name: follower_ids
+        type:
+        - "null"
+        - "array"
+        description: Array of user identifiers who are following the ticket for updates
+      - name: followup_ids
+        type:
+        - "null"
+        - "array"
+        description: "Array of identifiers for follow-up tickets related to this ticket"
+      - name: forum_topic_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier linking the ticket to a forum topic if applicable
+      - name: from_messaging_channel
+        type:
+        - "null"
+        - "boolean"
+        description: Boolean indicating whether the ticket originated from a messaging channel
+      - name: generated_timestamp
+        type:
+        - "null"
+        - "integer"
+        description: "Timestamp updated for all ticket updates including system changes, used for incremental export"
+      - name: group_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the agent group assigned to handle the ticket
+      - name: has_incidents
+        type:
+        - "null"
+        - "boolean"
+        description: Boolean indicating whether this problem ticket has related incident tickets
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier for the ticket
+      - name: is_public
+        type:
+        - "null"
+        - "boolean"
+        description: Boolean indicating whether the ticket is publicly visible
+      - name: organization_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the organization associated with the ticket
+      - name: priority
+        type:
+        - "null"
+        - "string"
+        description: "Priority level assigned to the ticket (e.g., urgent, high, normal, low)"
+      - name: problem_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the problem ticket if this is an incident ticket
+      - name: raw_subject
+        type:
+        - "null"
+        - "string"
+        description: Original unprocessed subject line before any system modifications
+      - name: recipient
+        type:
+        - "null"
+        - "string"
+        description: Email address or identifier of the ticket recipient
+      - name: requester_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the user who requested or created the ticket
+      - name: satisfaction_rating
+        type:
+        - "null"
+        - "object"
+        - "string"
+        description: Object containing customer satisfaction rating data for the ticket
+      - name: sharing_agreement_ids
+        type:
+        - "null"
+        - "array"
+        description: Array of sharing agreement identifiers if the ticket is shared across Zendesk instances
+      - name: status
+        type:
+        - "null"
+        - "string"
+        description: "Current status of the ticket (e.g., new, open, pending, solved, closed)"
+      - name: subject
+        type:
+        - "null"
+        - "string"
+        description: Subject line of the ticket describing the issue or request
+      - name: submitter_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the user who submitted the ticket on behalf of the requester
+      - name: tags
+        type:
+        - "null"
+        - "array"
+        description: Array of tags applied to the ticket for categorization and filtering
+      - name: ticket_form_id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier of the ticket form used when creating the ticket
+      - name: type
+        type:
+        - "null"
+        - "string"
+        description: "Type of ticket (e.g., problem, incident, question, task)"
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the ticket was last updated with a ticket event
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: API URL to access the full ticket resource
+      - name: result_type
+        type:
+        - "null"
+        - "string"
+        description: The type of the search result (e.g. ticket) when returned from search endpoints
+      - name: via
+        type:
+        - "null"
+        - "object"
+        description: Object describing the channel and method through which the ticket was created
+    - entity: deleted_tickets
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: The unique identifier of the deleted ticket
+      - name: subject
+        type:
+        - "null"
+        - "string"
+        description: The subject or title of the deleted ticket
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: Additional details or comments about the deleted ticket
+      - name: deleted_at
+        type:
+        - "null"
+        - "string"
+        description: The timestamp when the ticket was deleted
+      - name: previous_state
+        type:
+        - "null"
+        - "string"
+        description: The state of the ticket before it was deleted
+      - name: actor
+        type:
+        - "null"
+        - "object"
+        description: The user who performed the deletion action
+    - entity: users
+      fields:
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user account is currently active
+      - name: alias
+        type:
+        - "null"
+        - "string"
+        description: Alternative name or nickname for the user
+      - name: chat_only
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user can only interact via chat
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the user was created
+      - name: custom_role_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier for a custom role assigned to the user
+      - name: default_group_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the default group assigned to the user
+      - name: details
+        type:
+        - "null"
+        - "string"
+        description: Additional descriptive information about the user
+      - name: email
+        type:
+        - "null"
+        - "string"
+        description: Email address of the user
+      - name: external_id
+        type:
+        - "null"
+        - "string"
+        description: "External system identifier for the user, used for integrations"
+      - name: iana_time_zone
+        type:
+        - "null"
+        - "string"
+        description: IANA standard time zone identifier for the user
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Unique identifier for the user
+      - name: last_login_at
+        type:
+        - "null"
+        - "string"
+        description: "Timestamp of the user's most recent login"
+      - name: locale
+        type:
+        - "null"
+        - "string"
+        description: Locale setting determining language and regional format preferences
+      - name: locale_id
+        type:
+        - "null"
+        - "integer"
+        description: "Identifier for the user's locale preference"
+      - name: moderator
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user has moderator privileges
+      - name: name
+        type:
+        - "null"
+        - "string"
+        description: Display name of the user
+      - name: notes
+        type:
+        - "null"
+        - "string"
+        description: "Internal notes about the user, visible only to agents"
+      - name: only_private_comments
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user can only make private comments on tickets
+      - name: organization_id
+        type:
+        - "null"
+        - "integer"
+        description: Identifier of the organization the user belongs to
+      - name: permanently_deleted
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user has been permanently deleted from the system
+      - name: phone
+        type:
+        - "null"
+        - "string"
+        description: Phone number of the user
+      - name: photo
+        type:
+        - "null"
+        - "object"
+        description: Profile photo or avatar of the user
+      - name: report_csv
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user receives reports in CSV format
+      - name: restricted_agent
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the agent has restricted access permissions
+      - name: role
+        type:
+        - "null"
+        - "string"
+        description: Role assigned to the user defining their permissions level
+      - name: role_type
+        type:
+        - "null"
+        - "integer"
+        description: "Type classification of the user's role"
+      - name: shared
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user is shared across multiple accounts
+      - name: shared_agent
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user is a shared agent across multiple brands or accounts
+      - name: shared_phone_number
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the phone number is shared with other users
+      - name: signature
+        type:
+        - "null"
+        - "string"
+        description: Email signature text for the user
+      - name: suspended
+        type:
+        - "null"
+        - "boolean"
+        description: Indicates if the user account is suspended
+      - name: tags
+        type:
+        - "null"
+        - "array"
+        description: Labels or tags associated with the user for categorization
+      - name: ticket_restriction
+        type:
+        - "null"
+        - "string"
+        description: Defines which tickets the user can access based on restrictions
+      - name: time_zone
+        type:
+        - "null"
+        - "string"
+        description: Time zone setting for the user
+      - name: two_factor_auth_enabled
+        type:
+        - "null"
+        - "boolean"
+        description: "Indicates if two-factor authentication is enabled for the user"
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: Timestamp indicating when the user was last updated
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: "API endpoint URL for accessing the user's detailed information"
+      - name: user_fields
+        type:
+        - "null"
+        - "object"
+        description: "Custom field values specific to the user, stored as key-value pairs"
+      - name: verified
+        type:
+        - "null"
+        - "boolean"
+        description: "Indicates if the user's identity has been verified"
+
+servers:
+- url: https://{subdomain}.zendesk.com/api/v2
+  description: Zendesk Support API Server
+  variables:
+    subdomain:
+      default: your-subdomain
+      description: Your Zendesk subdomain
+  x-airbyte-replication-environment-mapping:
+    subdomain: subdomain
+
+security:
+- zendeskOAuth: []
+- zendeskAPIToken: []
+
+components:
+  securitySchemes:
+    zendeskOAuth:
+      type: oauth2
+      description: Zendesk OAuth 2.0 authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://{{subdomain}}.zendesk.com/oauth/authorizations/new
+          tokenUrl: https://{{subdomain}}.zendesk.com/oauth/tokens
+          refreshUrl: https://{{subdomain}}.zendesk.com/oauth/tokens
+          scopes:
+            read: Read access to all resources
+            write: Write access to all resources
+            read write: Read and write access to all resources
+      x-airbyte-oauth-scopes:
+      - scope: "read"
+        mode: read
+        description: Read access to all resources
+        entities:
+        - article_attachments
+        - articles
+        - attachments
+        - automations
+        - brands
+        - group_memberships
+        - groups
+        - macros
+        - organization_memberships
+        - organizations
+        - satisfaction_ratings
+        - sla_policies
+        - tags
+        - deleted_tickets
+        - ticket_audits
+        - ticket_comments
+        - ticket_fields
+        - ticket_forms
+        - ticket_metric_events
+        - ticket_metrics
+        - tickets
+        - triggers
+        - users
+        - views
+      - scope: "write"
+        mode: write
+        description: Write access to all resources
+        entities:
+        - article_attachments
+        - articles
+        - attachments
+        - automations
+        - brands
+        - group_memberships
+        - groups
+        - macros
+        - organization_memberships
+        - organizations
+        - satisfaction_ratings
+        - sla_policies
+        - tags
+        - deleted_tickets
+        - ticket_audits
+        - ticket_comments
+        - ticket_fields
+        - ticket_forms
+        - ticket_metrics
+        - tickets
+        - triggers
+        - users
+        - views
+      x-airbyte-auth-config:
+        type: object
+        title: OAuth 2.0
+        description: Zendesk OAuth 2.0 authentication
+        required: [access_token]
+        properties:
+          access_token:
+            type: string
+            title: Access Token
+            description: OAuth 2.0 access token
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: OAuth 2.0 refresh token (optional)
+        auth_mapping:
+          access_token: "${access_token}"
+          refresh_token: "${refresh_token}"
+        replication_auth_key_mapping:
+          credentials.access_token: "access_token"
+        replication_auth_key_constants:
+          credentials.credentials: "oauth2.0"
+
+    zendeskAPIToken:
+      type: http
+      scheme: basic
+      x-airbyte-untested: true
+      description: |
+        Zendesk API Token authentication.
+        API tokens are managed in Admin Center at Apps and integrations > APIs > Zendesk API.
+      x-airbyte-auth-config:
+        type: object
+        title: API Token
+        description: Authenticate using email and API token
+        required: [email, api_token]
+        properties:
+          email:
+            type: string
+            format: email
+            title: Email Address
+            description: Your Zendesk account email address
+          api_token:
+            type: string
+            title: API Token
+            description: Your Zendesk API token from Admin Center
+        auth_mapping:
+          username: "${email}/token"
+          password: "${api_token}"
+        replication_auth_key_mapping:
+          credentials.email: "email"
+          credentials.api_token: "api_token"
+        replication_auth_key_constants:
+          credentials.credentials: "api_token"
+
+  schemas:
+    # ==================== TICKETS ====================
+    Ticket:
+      type: object
+      x-airbyte-entity-name: tickets
+      description: Zendesk Support ticket object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the ticket is created
+        url:
+          type: string
+          description: The API url of this ticket
+        external_id:
+          type:
+          - string
+          - "null"
+          description: An id you can use to link Zendesk Support tickets to local records
+        type:
+          type:
+          - string
+          - "null"
+          description: The type of this ticket (problem, incident, question, task)
+        subject:
+          type:
+          - string
+          - "null"
+          description: The value of the subject field for this ticket
+        raw_subject:
+          type:
+          - string
+          - "null"
+          description: The dynamic content placeholder or the subject value
+        description:
+          type: string
+          description: Read-only first comment on the ticket
+        priority:
+          type:
+          - string
+          - "null"
+          description: The urgency with which the ticket should be addressed (urgent, high, normal, low)
+        status:
+          type: string
+          enum: [new, open, pending, hold, solved, closed]
+          description: The state of the ticket
+        recipient:
+          type:
+          - string
+          - "null"
+          description: The original recipient e-mail address of the ticket
+        requester_id:
+          type: integer
+          description: The user who requested this ticket
+        submitter_id:
+          type: integer
+          description: The user who submitted the ticket
+        assignee_id:
+          type:
+          - integer
+          - "null"
+          description: The agent currently assigned to the ticket
+        organization_id:
+          type:
+          - integer
+          - "null"
+          description: The organization of the requester
+        group_id:
+          type:
+          - integer
+          - "null"
+          description: The group this ticket is assigned to
+        collaborator_ids:
+          type: array
+          items:
+            type: integer
+          description: The ids of users currently CC'ed on the ticket
+        follower_ids:
+          type: array
+          items:
+            type: integer
+          description: The ids of agents currently following the ticket
+        email_cc_ids:
+          type: array
+          items:
+            type: integer
+          description: The ids of agents or end users currently CC'ed on the ticket
+        forum_topic_id:
+          type:
+          - integer
+          - "null"
+          description: The topic in the Zendesk Web portal this ticket originated from
+        problem_id:
+          type:
+          - integer
+          - "null"
+          description: For tickets of type incident, the ID of the problem the incident is linked to
+        has_incidents:
+          type: boolean
+          description: Is true if a ticket is a problem type and has one or more incidents linked to it
+        is_public:
+          type: boolean
+          description: Is true if any comments are public, false otherwise
+        due_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: If this is a ticket of type task it has a due date
+        tags:
+          type: array
+          items:
+            type: string
+          description: The array of tags applied to this ticket
+        custom_fields:
+          type: array
+          items:
+            type: object
+          description: Custom fields for the ticket
+        satisfaction_rating:
+          type: object
+          description: The satisfaction rating of the ticket
+        sharing_agreement_ids:
+          type: array
+          items:
+            type: integer
+          description: The ids of the sharing agreements used for this ticket
+        custom_status_id:
+          type: integer
+          description: The custom ticket status id of the ticket
+        fields:
+          type: array
+          items:
+            type: object
+          description: Ticket fields
+        followup_ids:
+          type: array
+          items:
+            type: integer
+          description: The ids of the followups created from this ticket
+        ticket_form_id:
+          type: integer
+          description: Enterprise only. The id of the ticket form to render for the ticket
+        brand_id:
+          type: integer
+          description: Enterprise only. The id of the brand this ticket is associated with
+        allow_channelback:
+          type: boolean
+          description: Is false if channelback is disabled, true otherwise
+        allow_attachments:
+          type: boolean
+          description: Permission for agents to add attachments to a comment
+        from_messaging_channel:
+          type: boolean
+          description: If true, the ticket's via type is a messaging channel
+        generated_timestamp:
+          type: integer
+          description: A Unix timestamp for the ticket
+        result_type:
+          type:
+          - string
+          - "null"
+          description: The type of the search result (e.g. ticket) when returned from search endpoints
+        created_at:
+          type: string
+          format: date-time
+          description: When this record was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When this record was last updated
+        via:
+          type: object
+          description: How the ticket was created
+      required:
+      - id
+
+    # ==================== DELETED TICKETS ====================
+    DeletedTicket:
+      type: object
+      x-airbyte-entity-name: deleted_tickets
+      description: Zendesk Support deleted ticket object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the deleted ticket
+        subject:
+          type:
+          - string
+          - "null"
+          description: The subject or title of the deleted ticket
+        description:
+          type:
+          - string
+          - "null"
+          description: Additional details or comments about the deleted ticket
+        deleted_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: The timestamp when the ticket was deleted
+        previous_state:
+          type:
+          - string
+          - "null"
+          description: The state of the ticket before it was deleted
+        actor:
+          type:
+          - object
+          - "null"
+          description: The user who performed the deletion action
+          properties:
+            id:
+              type:
+              - integer
+              - "null"
+              description: The unique identifier of the user
+            name:
+              type:
+              - string
+              - "null"
+              description: The name of the user
+      required:
+      - id
+
+    # ==================== USERS ====================
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      description: Zendesk Support user object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the user is created
+        url:
+          type: string
+          description: The user's API url
+        name:
+          type: string
+          description: The user's name
+        email:
+          type:
+          - string
+          - "null"
+          description: The user's primary email address
+        alias:
+          type:
+          - string
+          - "null"
+          description: An alias displayed to end users
+        phone:
+          type:
+          - string
+          - "null"
+          description: The user's primary phone number
+        time_zone:
+          type: string
+          description: The user's time zone
+        locale:
+          type: string
+          description: The user's locale
+        locale_id:
+          type: integer
+          description: The user's language identifier
+        organization_id:
+          type:
+          - integer
+          - "null"
+          description: The id of the user's organization
+        role:
+          type: string
+          enum: [end-user, agent, admin]
+          description: The user's role
+        role_type:
+          type:
+          - integer
+          - "null"
+          description: The user's role id
+        custom_role_id:
+          type:
+          - integer
+          - "null"
+          description: A custom role if the user is an agent on the Enterprise plan
+        external_id:
+          type:
+          - string
+          - "null"
+          description: A unique identifier from another system
+        tags:
+          type: array
+          items:
+            type: string
+          description: The user's tags
+        active:
+          type: boolean
+          description: False if the user has been deleted
+        verified:
+          type: boolean
+          description: If the user's primary identity is verified or not
+        shared:
+          type: boolean
+          description: If the user is shared from a different Zendesk Support instance
+        shared_agent:
+          type: boolean
+          description: If the user is a shared agent from a different Zendesk Support instance
+        shared_phone_number:
+          type:
+          - boolean
+          - "null"
+          description: Whether the phone number is shared or not
+        signature:
+          type:
+          - string
+          - "null"
+          description: The user's signature
+        details:
+          type:
+          - string
+          - "null"
+          description: Any details you want to store about the user
+        notes:
+          type:
+          - string
+          - "null"
+          description: Any notes you want to store about the user
+        suspended:
+          type: boolean
+          description: If the agent is suspended
+        restricted_agent:
+          type: boolean
+          description: If the agent has any restrictions
+        only_private_comments:
+          type: boolean
+          description: True if the user can only create private comments
+        moderator:
+          type: boolean
+          description: If the user has forum moderation capabilities
+        ticket_restriction:
+          type:
+          - string
+          - "null"
+          description: Specifies which tickets the user has access to
+        default_group_id:
+          type:
+          - integer
+          - "null"
+          description: The id of the user's default group
+        report_csv:
+          type: boolean
+          description: Whether or not the user can access the CSV report
+        photo:
+          type:
+          - object
+          - "null"
+          description: The user's profile picture
+        user_fields:
+          type: object
+          description: Custom fields for the user
+        last_login_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: The last time the user signed in to Zendesk Support
+        two_factor_auth_enabled:
+          type:
+          - boolean
+          - "null"
+          description: If two-factor authentication is enabled
+        iana_time_zone:
+          type: string
+          description: The user's IANA time zone name
+        permanently_deleted:
+          type: boolean
+          description: If the user has been permanently deleted
+        created_at:
+          type: string
+          format: date-time
+          description: When the user was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the user was last updated
+      required:
+      - id
+
+    # ==================== ORGANIZATIONS ====================
+    Organization:
+      type: object
+      x-airbyte-entity-name: organizations
+      description: Zendesk Support organization object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the organization is created
+        url:
+          type: string
+          description: The API url of this organization
+        name:
+          type: string
+          description: A unique name for the organization
+        details:
+          type:
+          - string
+          - "null"
+          description: Any details about the organization
+        notes:
+          type:
+          - string
+          - "null"
+          description: Any notes about the organization
+        group_id:
+          type:
+          - integer
+          - "null"
+          description: New tickets from users in this organization are automatically put in this group
+        shared_tickets:
+          type: boolean
+          description: End users in this organization are able to see each other's tickets
+        shared_comments:
+          type: boolean
+          description: End users in this organization are able to comment on each other's tickets
+        external_id:
+          type:
+          - string
+          - "null"
+          description: A unique external id to associate organizations to an external record
+        domain_names:
+          type: array
+          items:
+            type: string
+          description: An array of domain names associated with this organization
+        tags:
+          type: array
+          items:
+            type: string
+          description: The tags of the organization
+        organization_fields:
+          type: object
+          description: Custom fields for this organization
+        created_at:
+          type: string
+          format: date-time
+          description: When the organization was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the organization was last updated
+      required:
+      - id
+
+    # ==================== GROUPS ====================
+    Group:
+      type: object
+      x-airbyte-entity-name: groups
+      description: Zendesk Support group object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when creating groups
+        url:
+          type: string
+          description: The API url of the group
+        name:
+          type: string
+          description: The name of the group
+        description:
+          type: string
+          description: The description of the group
+        default:
+          type: boolean
+          description: If the group is the default one for the account
+        deleted:
+          type: boolean
+          description: Deleted groups get marked as such
+        is_public:
+          type: boolean
+          description: If true, the group is public. If false, the group is private
+        created_at:
+          type: string
+          format: date-time
+          description: When the group was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the group was last updated
+      required:
+      - id
+
+    # ==================== TICKET COMMENTS ====================
+    TicketComment:
+      type: object
+      x-airbyte-entity-name: ticket_comments
+      description: Zendesk Support ticket comment object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the comment is created
+        type:
+          type: string
+          description: Comment or VoiceComment
+        body:
+          type: string
+          description: The comment string
+        html_body:
+          type: string
+          description: The comment formatted as HTML
+        plain_body:
+          type: string
+          description: The comment presented as plain text
+        public:
+          type: boolean
+          description: True if a public comment; false if an internal note
+        author_id:
+          type: integer
+          description: The id of the comment author
+        attachments:
+          type: array
+          items:
+            type: object
+          description: Attachments, if any
+        audit_id:
+          type: integer
+          description: The id of the ticket audit record
+        via:
+          type: object
+          description: How the comment was created
+        metadata:
+          type: object
+          description: System information and comment flags
+        created_at:
+          type: string
+          format: date-time
+          description: When the comment was created
+      required:
+      - id
+
+    # ==================== ATTACHMENTS ====================
+    Attachment:
+      type: object
+      x-airbyte-entity-name: attachments
+      description: Zendesk Support attachment object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when created
+        file_name:
+          type: string
+          description: The name of the file
+        content_url:
+          type: string
+          description: A full URL where the attachment file can be downloaded
+        mapped_content_url:
+          type: string
+          description: The URL the attachment file has been mapped to
+        content_type:
+          type: string
+          description: The content type of the file
+        size:
+          type: integer
+          description: The size of the file in bytes
+        width:
+          type:
+          - integer
+          - "null"
+          description: The width of the image file
+        height:
+          type:
+          - integer
+          - "null"
+          description: The height of the image file
+        inline:
+          type: boolean
+          description: If true, the attachment is excluded from the attachment list
+        deleted:
+          type: boolean
+          description: If true, the attachment has been deleted
+        malware_access_override:
+          type: boolean
+          description: If true, access is allowed even if it has been deemed malware
+        malware_scan_result:
+          type: string
+          description: Result of malware scan
+        url:
+          type: string
+          description: A URL to access the attachment
+        thumbnails:
+          type: array
+          items:
+            type: object
+          description: An array of attachment objects for image thumbnails
+      required:
+      - id
+
+    # ==================== TICKET AUDITS ====================
+    TicketAudit:
+      type: object
+      x-airbyte-entity-name: ticket_audits
+      description: Zendesk Support ticket audit object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when creating audits
+        ticket_id:
+          type: integer
+          description: The ID of the associated ticket
+        author_id:
+          type: integer
+          description: The user who created the audit
+        metadata:
+          type: object
+          description: Metadata for the audit
+        via:
+          type: object
+          description: How the audit was created
+        events:
+          type: array
+          items:
+            type: object
+          description: An array of the events that happened in this audit
+        created_at:
+          type: string
+          format: date-time
+          description: When the audit was created
+      required:
+      - id
+
+    # ==================== TICKET METRICS ====================
+    TicketMetric:
+      type: object
+      x-airbyte-entity-name: ticket_metrics
+      description: Zendesk Support ticket metric object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned
+        url:
+          type: string
+          description: The API url of the ticket metric
+        ticket_id:
+          type: integer
+          description: Id of the associated ticket
+        group_stations:
+          type: integer
+          description: Number of groups the ticket passed through
+        assignee_stations:
+          type: integer
+          description: Number of assignees the ticket had
+        reopens:
+          type: integer
+          description: Total number of times the ticket was reopened
+        replies:
+          type: integer
+          description: The total number of times the ticket was replied to
+        assignee_updated_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the assignee last updated the ticket
+        requester_updated_at:
+          type: string
+          format: date-time
+          description: When the requester last updated the ticket
+        status_updated_at:
+          type: string
+          format: date-time
+          description: When the status was last updated
+        initially_assigned_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the ticket was initially assigned
+        assigned_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the ticket was last assigned
+        solved_at:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the ticket was solved
+        latest_comment_added_at:
+          type: string
+          format: date-time
+          description: When the latest comment was added
+        reply_time_in_minutes:
+          type: object
+          description: Number of minutes to the first reply
+        first_resolution_time_in_minutes:
+          type: object
+          description: Number of minutes to the first resolution time
+        full_resolution_time_in_minutes:
+          type: object
+          description: Number of minutes to the full resolution
+        agent_wait_time_in_minutes:
+          type: object
+          description: Number of minutes the agent waited
+        requester_wait_time_in_minutes:
+          type: object
+          description: Number of minutes the requester waited
+        on_hold_time_in_minutes:
+          type: object
+          description: Number of minutes on hold
+        created_at:
+          type: string
+          format: date-time
+          description: When the record was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the record was last updated
+      required:
+      - id
+
+    # ==================== TICKET FIELDS ====================
+    TicketField:
+      type: object
+      x-airbyte-entity-name: ticket_fields
+      description: Zendesk Support ticket field object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when created
+        url:
+          type: string
+          description: The URL for this resource
+        type:
+          type: string
+          description: The type of the custom field
+        title:
+          type: string
+          description: The title of the custom field
+        raw_title:
+          type: string
+          description: The dynamic content placeholder
+        description:
+          type: string
+          description: Describes the purpose of the ticket field
+        raw_description:
+          type: string
+          description: The dynamic content placeholder for description
+        position:
+          type: integer
+          description: A relative position for the ticket field
+        active:
+          type: boolean
+          description: Whether this field is available
+        required:
+          type: boolean
+          description: If true, agents must enter a value in the field
+        collapsed_for_agents:
+          type: boolean
+          description: If true, the field is shown to agents by default
+        regexp_for_validation:
+          type:
+          - string
+          - "null"
+          description: Regular expression for validation
+        title_in_portal:
+          type: string
+          description: The title of the ticket field for end users
+        raw_title_in_portal:
+          type: string
+          description: The dynamic content placeholder for title in portal
+        visible_in_portal:
+          type: boolean
+          description: Whether this field is visible to end users
+        editable_in_portal:
+          type: boolean
+          description: Whether this field is editable by end users
+        required_in_portal:
+          type: boolean
+          description: If true, end users must enter a value in the field
+        tag:
+          type:
+          - string
+          - "null"
+          description: A tag value to set for checkbox fields
+        custom_field_options:
+          type: array
+          items:
+            type: object
+          description: Required for multiselect or tagger fields
+        system_field_options:
+          type: array
+          items:
+            type: object
+          description: Presented for system ticket fields of type tagger
+        sub_type_id:
+          type: integer
+          description: For system ticket fields of type priority and status
+        removable:
+          type: boolean
+          description: If false, this field is a system field that must be present
+        agent_description:
+          type:
+          - string
+          - "null"
+          description: A description only agents can see
+        created_at:
+          type: string
+          format: date-time
+          description: When the ticket field was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the ticket field was last updated
+      required:
+      - id
+
+    # ==================== BRANDS ====================
+    Brand:
+      type: object
+      x-airbyte-entity-name: brands
+      description: Zendesk Support brand object
+      properties:
+        id:
+          type: integer
+          description: The ID automatically assigned when the brand is created
+        url:
+          type: string
+          description: The API url of this brand
+        name:
+          type: string
+          description: The name of the brand
+        brand_url:
+          type: string
+          description: The url of the brand
+        subdomain:
+          type: string
+          description: The subdomain of the brand
+        host_mapping:
+          type:
+          - string
+          - "null"
+          description: The hostmapping to this brand, if any
+        has_help_center:
+          type: boolean
+          description: If the brand has a Help Center
+        help_center_state:
+          type: string
+          description: The state of the Help Center
+        active:
+          type: boolean
+          description: If the brand is active
+        default:
+          type: boolean
+          description: Is the brand the default brand for this account
+        is_deleted:
+          type: boolean
+          description: If the brand object is deleted or not
+        logo:
+          type:
+          - object
+          - "null"
+          description: A file represented as an Attachment object
+        ticket_form_ids:
+          type: array
+          items:
+            type: integer
+          description: The ids of ticket forms that are available for use by a brand
+        signature_template:
+          type: string
+          description: The signature template for a brand
+        created_at:
+          type: string
+          format: date-time
+          description: The time the brand was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the brand was last updated
+      required:
+      - id
+
+    # ==================== VIEWS ====================
+    View:
+      type: object
+      x-airbyte-entity-name: views
+      description: Zendesk Support view object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the view is created
+        url:
+          type: string
+          description: The URL for this resource
+        title:
+          type: string
+          description: The title of the view
+        active:
+          type: boolean
+          description: Whether the view is active
+        position:
+          type: integer
+          description: The position of the view
+        description:
+          type:
+          - string
+          - "null"
+          description: The description of the view
+        execution:
+          type: object
+          description: An object describing how the view should be executed
+        conditions:
+          type: object
+          description: An object that describes the conditions under which the view will be executed
+        restriction:
+          type:
+          - object
+          - "null"
+          description: Who may access this view
+        raw_title:
+          type: string
+          description: The dynamic content placeholder for title
+        created_at:
+          type: string
+          format: date-time
+          description: The time the view was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the view was last updated
+      required:
+      - id
+
+    # ==================== MACROS ====================
+    Macro:
+      type: object
+      x-airbyte-entity-name: macros
+      description: Zendesk Support macro object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the macro is created
+        url:
+          type: string
+          description: A URL to access the macro's details
+        title:
+          type: string
+          description: The title of the macro
+        active:
+          type: boolean
+          description: Useful for determining if the macro should be displayed
+        position:
+          type: integer
+          description: The position of the macro
+        description:
+          type: string
+          description: The description of the macro
+        actions:
+          type: array
+          items:
+            type: object
+          description: Actions to perform when macro is applied
+        restriction:
+          type:
+          - object
+          - "null"
+          description: Who may access this macro
+        raw_title:
+          type: string
+          description: The dynamic content placeholder for title
+        created_at:
+          type: string
+          format: date-time
+          description: The time the macro was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the macro was last updated
+      required:
+      - id
+
+    # ==================== TRIGGERS ====================
+    Trigger:
+      type: object
+      x-airbyte-entity-name: triggers
+      description: Zendesk Support trigger object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when created
+        url:
+          type: string
+          description: The URL of the trigger
+        title:
+          type: string
+          description: The title of the trigger
+        active:
+          type: boolean
+          description: Whether the trigger is active
+        position:
+          type: integer
+          description: Position of the trigger
+        description:
+          type:
+          - string
+          - "null"
+          description: The description of the trigger
+        conditions:
+          type: object
+          description: An object that describes the conditions under which the trigger will execute
+        actions:
+          type: array
+          items:
+            type: object
+          description: An array of actions
+        raw_title:
+          type: string
+          description: The dynamic content placeholder for title
+        category_id:
+          type: string
+          description: The ID of the category the trigger belongs to
+        created_at:
+          type: string
+          format: date-time
+          description: The time the trigger was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the trigger was last updated
+      required:
+      - id
+
+    # ==================== AUTOMATIONS ====================
+    Automation:
+      type: object
+      x-airbyte-entity-name: automations
+      description: Zendesk Support automation object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when created
+        url:
+          type: string
+          description: The URL of the automation
+        title:
+          type: string
+          description: The title of the automation
+        active:
+          type: boolean
+          description: Whether the automation is active
+        position:
+          type: integer
+          description: The position of the automation
+        conditions:
+          type: object
+          description: An object that describes the conditions under which the automation will execute
+        actions:
+          type: array
+          items:
+            type: object
+          description: An array of actions
+        raw_title:
+          type: string
+          description: The dynamic content placeholder for title
+        created_at:
+          type: string
+          format: date-time
+          description: The time the automation was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the automation was last updated
+      required:
+      - id
+
+    # ==================== TAGS ====================
+    Tag:
+      type: object
+      x-airbyte-entity-name: tags
+      description: Zendesk Support tag object
+      properties:
+        name:
+          type: string
+          description: The name of the tag
+        count:
+          type: integer
+          description: The number of tickets with this tag
+      required:
+      - name
+
+    # ==================== SATISFACTION RATINGS ====================
+    SatisfactionRating:
+      type: object
+      x-airbyte-entity-name: satisfaction_ratings
+      description: Zendesk Support satisfaction rating object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned
+        url:
+          type: string
+          description: The API url of this rating
+        assignee_id:
+          type:
+          - integer
+          - "null"
+          description: The id of agent assigned to at the time of rating
+        group_id:
+          type:
+          - integer
+          - "null"
+          description: The id of group assigned to at the time of rating
+        requester_id:
+          type: integer
+          description: The id of ticket requester submitting the rating
+        ticket_id:
+          type: integer
+          description: The id of the ticket being rated
+        score:
+          type: string
+          description: The rating (offered, unoffered, good, bad)
+        comment:
+          type:
+          - string
+          - "null"
+          description: Feedback comment
+        reason:
+          type:
+          - string
+          - "null"
+          description: The reason for a bad rating
+        reason_id:
+          type:
+          - integer
+          - "null"
+          description: The id of a reason selected by the requester
+        reason_code:
+          type:
+          - integer
+          - "null"
+          description: The reason code for the selection
+        created_at:
+          type: string
+          format: date-time
+          description: When this record was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When this record was last updated
+      required:
+      - id
+
+    # ==================== GROUP MEMBERSHIPS ====================
+    GroupMembership:
+      type: object
+      x-airbyte-entity-name: group_memberships
+      description: Zendesk Support group membership object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned upon creation
+        url:
+          type: string
+          description: The API url of this record
+        user_id:
+          type: integer
+          description: The id of an agent
+        group_id:
+          type: integer
+          description: The id of a group
+        default:
+          type: boolean
+          description: If true, tickets assigned directly to the agent will assume this membership's group
+        created_at:
+          type: string
+          format: date-time
+          description: When the group membership was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the group membership was last updated
+      required:
+      - id
+
+    # ==================== ORGANIZATION MEMBERSHIPS ====================
+    OrganizationMembership:
+      type: object
+      x-airbyte-entity-name: organization_memberships
+      description: Zendesk Support organization membership object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the membership is created
+        url:
+          type: string
+          description: The API url of this membership
+        user_id:
+          type: integer
+          description: The ID of the user for whom this memberships belongs
+        organization_id:
+          type: integer
+          description: The ID of the organization associated with this user
+        default:
+          type: boolean
+          description: If true, this is the default organization for the user
+        organization_name:
+          type: string
+          description: The name of the organization
+        view_tickets:
+          type: boolean
+          description: If true, this user can view tickets from this organization
+        created_at:
+          type: string
+          format: date-time
+          description: When the membership was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the membership was last updated
+      required:
+      - id
+
+    # ==================== SLA POLICIES ====================
+    SLAPolicy:
+      type: object
+      x-airbyte-entity-name: sla_policies
+      description: Zendesk Support SLA policy object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when the SLA policy is created
+        url:
+          type: string
+          description: URL of the SLA policy
+        title:
+          type: string
+          description: The title of the SLA policy
+        description:
+          type: string
+          description: The description of the SLA policy
+        position:
+          type: integer
+          description: Position of the SLA policy
+        filter:
+          type: object
+          description: Filter for the SLA policy
+        policy_metrics:
+          type: array
+          items:
+            type: object
+          description: Array of policy metrics
+        created_at:
+          type: string
+          format: date-time
+          description: When the SLA policy was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the SLA policy was last updated
+      required:
+      - id
+
+    # ==================== TICKET FORMS ====================
+    TicketForm:
+      type: object
+      x-airbyte-entity-name: ticket_forms
+      description: Zendesk Support ticket form object
+      properties:
+        id:
+          type: integer
+          description: Automatically assigned when creating ticket forms
+        url:
+          type: string
+          description: URL of the ticket form
+        name:
+          type: string
+          description: The name of the form
+        display_name:
+          type: string
+          description: The name of the form that is displayed to an end user
+        raw_name:
+          type: string
+          description: The dynamic content placeholder for name
+        raw_display_name:
+          type: string
+          description: The dynamic content placeholder for display_name
+        position:
+          type: integer
+          description: The position of this form among other forms
+        active:
+          type: boolean
+          description: If the form is set as active
+        end_user_visible:
+          type: boolean
+          description: Is the form visible to the end user
+        default:
+          type: boolean
+          description: Is the form the default form for this account
+        in_all_brands:
+          type: boolean
+          description: Is the form available for use in all brands
+        restricted_brand_ids:
+          type: array
+          items:
+            type: integer
+          description: ids of brands that this form is restricted to
+        ticket_field_ids:
+          type: array
+          items:
+            type: integer
+          description: ids of all ticket fields which are in this form
+        agent_conditions:
+          type: array
+          items:
+            type: object
+          description: Array of condition sets for agent workspaces
+        end_user_conditions:
+          type: array
+          items:
+            type: object
+          description: Array of condition sets for end user products
+        created_at:
+          type: string
+          format: date-time
+          description: When the ticket form was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the ticket form was last updated
+      required:
+      - id
+
+    # ==================== HELP CENTER - ARTICLES ====================
+    Article:
+      type: object
+      x-airbyte-entity-name: articles
+      description: Help Center article object
+      properties:
+        id:
+          type: integer
+          description: The unique ID of the article
+        url:
+          type: string
+          description: The API URL of the article
+        html_url:
+          type: string
+          description: The public URL of the article
+        title:
+          type: string
+          description: The title of the article
+        body:
+          type: string
+          description: The body content of the article (HTML)
+        locale:
+          type: string
+          description: The locale of the article
+        author_id:
+          type: integer
+          description: The ID of the user who created the article
+        section_id:
+          type: integer
+          description: The ID of the section the article belongs to
+        created_at:
+          type: string
+          format: date-time
+          description: The time the article was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the article was last updated
+        vote_sum:
+          type: integer
+          description: Sum of upvotes and downvotes
+        vote_count:
+          type: integer
+          description: Number of votes
+        label_names:
+          type: array
+          items:
+            type: string
+          description: List of label names associated with the article
+        draft:
+          type: boolean
+          description: Whether the article is a draft
+        promoted:
+          type: boolean
+          description: Whether the article is promoted
+        position:
+          type: integer
+          description: Position of the article in the section
+      required:
+      - id
+
+    # ==================== HELP CENTER - ARTICLE ATTACHMENTS ====================
+    ArticleAttachment:
+      type: object
+      x-airbyte-entity-name: article_attachments
+      description: Article attachment object
+      properties:
+        id:
+          type: integer
+          description: The unique ID of the attachment
+        url:
+          type: string
+          format: uri
+          description: The API URL of the attachment
+        article_id:
+          type: integer
+          description: The ID of the article this attachment belongs to
+        file_name:
+          type: string
+          description: The name of the attached file
+        content_type:
+          type: string
+          description: The MIME type of the attachment
+        content_url:
+          type: string
+          format: uri
+          description: The URL to download the attachment
+        size:
+          type: integer
+          description: The size of the attachment in bytes
+        inline:
+          type: boolean
+          description: Whether the attachment is displayed inline
+        created_at:
+          type: string
+          format: date-time
+          description: The time the attachment was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The time the attachment was last updated
+      required:
+      - id
+      - file_name
+
+paths:
+  # ==================== TICKETS ====================
+  /tickets.json:
+    get:
+      summary: List all tickets
+      description: Returns a list of all tickets in your account
+      operationId: ListTickets
+      x-airbyte-entity: tickets
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.tickets
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Tickets
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: external_id
+        in: query
+        description: Lists tickets by external id
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        description: Sort field for offset pagination
+        schema:
+          type: string
+          enum: [assignee, assignee.name, created_at, group, id, requester, requester.name, status, subject, updated_at]
+      - name: sort_order
+        in: query
+        description: Sort order for offset pagination
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tickets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Ticket"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /tickets/{ticket_id}.json:
+    get:
+      summary: Get a ticket
+      description: Returns a ticket by its ID
+      operationId: GetTicket
+      x-airbyte-entity: tickets
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.ticket
+      tags:
+      - Tickets
+      parameters:
+      - name: ticket_id
+        in: path
+        required: true
+        description: The ID of the ticket
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Ticket object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket:
+                    $ref: "#/components/schemas/Ticket"
+
+  # ==================== DELETED TICKETS ====================
+  /deleted_tickets.json:
+    get:
+      summary: List deleted tickets
+      description: Returns a list of deleted tickets in your account. Only tickets deleted in the past 30 days are returned.
+      operationId: ListDeletedTickets
+      x-airbyte-entity: deleted_tickets
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.deleted_tickets
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Deleted Tickets
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: sort_by
+        in: query
+        description: Sort tickets by field
+        schema:
+          type: string
+          enum: [id, subject, deleted_at]
+      - name: sort_order
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of deleted tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted_tickets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DeletedTicket"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  # ==================== USERS ====================
+  /users.json:
+    get:
+      summary: List all users
+      description: Returns a list of all users in your account
+      operationId: ListUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.users
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Users
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: role
+        in: query
+        description: Filter by role
+        schema:
+          type: string
+          enum: [end-user, agent, admin]
+      - name: external_id
+        in: query
+        description: Filter by external id
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /users/{user_id}.json:
+    get:
+      summary: Get a user
+      description: Returns a user by their ID
+      operationId: GetUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.user
+      tags:
+      - Users
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: The ID of the user
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+
+  # ==================== ORGANIZATIONS ====================
+  /organizations.json:
+    get:
+      summary: List all organizations
+      description: Returns a list of all organizations in your account
+      operationId: ListOrganizations
+      x-airbyte-entity: organizations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.organizations
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Organizations
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  organizations:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Organization"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /organizations/{organization_id}.json:
+    get:
+      summary: Get an organization
+      description: Returns an organization by its ID
+      operationId: GetOrganization
+      x-airbyte-entity: organizations
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.organization
+      tags:
+      - Organizations
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        description: The ID of the organization
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Organization object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  organization:
+                    $ref: "#/components/schemas/Organization"
+
+  # ==================== GROUPS ====================
+  /groups.json:
+    get:
+      summary: List all groups
+      description: Returns a list of all groups in your account
+      operationId: ListGroups
+      x-airbyte-entity: groups
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.groups
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Groups
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: exclude_deleted
+        in: query
+        description: Exclude deleted groups
+        schema:
+          type: boolean
+          default: false
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groups:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Group"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /groups/{group_id}.json:
+    get:
+      summary: Get a group
+      description: Returns a group by its ID
+      operationId: GetGroup
+      x-airbyte-entity: groups
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.group
+      tags:
+      - Groups
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        description: The ID of the group
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Group object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  group:
+                    $ref: "#/components/schemas/Group"
+
+  # ==================== TICKET COMMENTS ====================
+  /tickets/{ticket_id}/comments.json:
+    get:
+      summary: List ticket comments
+      description: Returns a list of comments for a specific ticket
+      operationId: ListTicketComments
+      x-airbyte-entity: ticket_comments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.comments
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Ticket Comments
+      parameters:
+      - name: ticket_id
+        in: path
+        required: true
+        description: The ID of the ticket
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: include_inline_images
+        in: query
+        description: Include inline images in the response
+        schema:
+          type: boolean
+          default: false
+      - name: sort_order
+        in: query
+        description: Sort order for comments (always sorted by created_at)
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of ticket comments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TicketComment"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+
+  # ==================== ATTACHMENTS ====================
+  /attachments/{attachment_id}.json:
+    get:
+      summary: Get an attachment
+      description: Returns an attachment by its ID
+      operationId: GetAttachment
+      x-airbyte-entity: attachments
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.attachment
+      tags:
+      - Attachments
+      parameters:
+      - name: attachment_id
+        in: path
+        required: true
+        description: The ID of the attachment
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Attachment object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attachment:
+                    $ref: "#/components/schemas/Attachment"
+
+  /attachments/{attachment_id}:download:
+    get:
+      summary: Download attachment file
+      description: Downloads the file content of a ticket attachment
+      operationId: DownloadAttachment
+      x-airbyte-entity: attachments
+      x-airbyte-action: download
+      x-airbyte-file-url: attachment.content_url
+      x-airbyte-path-override:
+        path: /attachments/{attachment_id}.json
+      tags:
+      - Attachments
+      parameters:
+      - name: attachment_id
+        in: path
+        required: true
+        description: The ID of the attachment
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Attachment file content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  # ==================== TICKET AUDITS ====================
+  /ticket_audits.json:
+    get:
+      summary: List all ticket audits
+      description: Returns a list of all ticket audits
+      operationId: ListTicketAudits
+      x-airbyte-entity: ticket_audits
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.audits
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Ticket Audits
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of ticket audits
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audits:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TicketAudit"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /tickets/{ticket_id}/audits.json:
+    get:
+      summary: List audits for a ticket
+      description: Returns a list of audits for a specific ticket
+      operationId: ListAuditsForTicket
+      x-airbyte-entity: ticket_audits
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.audits
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Ticket Audits
+      parameters:
+      - name: ticket_id
+        in: path
+        required: true
+        description: The ID of the ticket
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of audits for the ticket
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audits:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TicketAudit"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+
+  # ==================== TICKET METRICS ====================
+  /ticket_metrics.json:
+    get:
+      summary: List all ticket metrics
+      description: Returns a list of all ticket metrics
+      operationId: ListTicketMetrics
+      x-airbyte-entity: ticket_metrics
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.ticket_metrics
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Ticket Metrics
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of ticket metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket_metrics:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TicketMetric"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+
+  # ==================== TICKET FIELDS ====================
+  /ticket_fields.json:
+    get:
+      summary: List all ticket fields
+      description: Returns a list of all ticket fields
+      operationId: ListTicketFields
+      x-airbyte-entity: ticket_fields
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.ticket_fields
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Ticket Fields
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: locale
+        in: query
+        description: Locale for the results
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of ticket fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket_fields:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TicketField"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /ticket_fields/{ticket_field_id}.json:
+    get:
+      summary: Get a ticket field
+      description: Returns a ticket field by its ID
+      operationId: GetTicketField
+      x-airbyte-entity: ticket_fields
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.ticket_field
+      tags:
+      - Ticket Fields
+      parameters:
+      - name: ticket_field_id
+        in: path
+        required: true
+        description: The ID of the ticket field
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Ticket field object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket_field:
+                    $ref: "#/components/schemas/TicketField"
+
+  # ==================== BRANDS ====================
+  /brands.json:
+    get:
+      summary: List all brands
+      description: Returns a list of all brands for the account
+      operationId: ListBrands
+      x-airbyte-entity: brands
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.brands
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Brands
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of brands
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  brands:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Brand"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /brands/{brand_id}.json:
+    get:
+      summary: Get a brand
+      description: Returns a brand by its ID
+      operationId: GetBrand
+      x-airbyte-entity: brands
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.brand
+      tags:
+      - Brands
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        description: The ID of the brand
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Brand object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  brand:
+                    $ref: "#/components/schemas/Brand"
+
+  # ==================== VIEWS ====================
+  /views.json:
+    get:
+      summary: List all views
+      description: Returns a list of all views for the account
+      operationId: ListViews
+      x-airbyte-entity: views
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.views
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Views
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: access
+        in: query
+        description: Filter by access level
+        schema:
+          type: string
+          enum: [personal, shared, account]
+      - name: active
+        in: query
+        description: Filter by active status
+        schema:
+          type: boolean
+      - name: group_id
+        in: query
+        description: Filter by group ID
+        schema:
+          type: integer
+      - name: sort_by
+        in: query
+        description: Sort results
+        schema:
+          type: string
+          enum: [alphabetical, created_at, updated_at, position]
+      - name: sort_order
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum: [asc, desc]
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of views
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  views:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/View"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /views/{view_id}.json:
+    get:
+      summary: Get a view
+      description: Returns a view by its ID
+      operationId: GetView
+      x-airbyte-entity: views
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.view
+      tags:
+      - Views
+      parameters:
+      - name: view_id
+        in: path
+        required: true
+        description: The ID of the view
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: View object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  view:
+                    $ref: "#/components/schemas/View"
+
+  # ==================== MACROS ====================
+  /macros.json:
+    get:
+      summary: List all macros
+      description: Returns a list of all macros for the account
+      operationId: ListMacros
+      x-airbyte-entity: macros
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.macros
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Macros
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: access
+        in: query
+        description: Filter by access level
+        schema:
+          type: string
+          enum: [personal, shared, account]
+      - name: active
+        in: query
+        description: Filter by active status
+        schema:
+          type: boolean
+      - name: category
+        in: query
+        description: Filter by category
+        schema:
+          type: integer
+      - name: group_id
+        in: query
+        description: Filter by group ID
+        schema:
+          type: integer
+      - name: only_viewable
+        in: query
+        description: Return only viewable macros
+        schema:
+          type: boolean
+      - name: sort_by
+        in: query
+        description: Sort results
+        schema:
+          type: string
+          enum: [alphabetical, created_at, updated_at, position]
+      - name: sort_order
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum: [asc, desc]
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of macros
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  macros:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Macro"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /macros/{macro_id}.json:
+    get:
+      summary: Get a macro
+      description: Returns a macro by its ID
+      operationId: GetMacro
+      x-airbyte-entity: macros
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.macro
+      tags:
+      - Macros
+      parameters:
+      - name: macro_id
+        in: path
+        required: true
+        description: The ID of the macro
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Macro object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  macro:
+                    $ref: "#/components/schemas/Macro"
+
+  # ==================== TRIGGERS ====================
+  /triggers.json:
+    get:
+      summary: List all triggers
+      description: Returns a list of all triggers for the account
+      operationId: ListTriggers
+      x-airbyte-entity: triggers
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.triggers
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Triggers
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: active
+        in: query
+        description: Filter by active status
+        schema:
+          type: boolean
+      - name: category_id
+        in: query
+        description: Filter by category ID
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        description: Sort field for offset pagination
+        schema:
+          type: string
+          enum: [alphabetical, created_at, updated_at, usage_1h, usage_24h, usage_7d]
+          default: position
+      - name: sort_order
+        in: query
+        description: Sort order for offset pagination
+        schema:
+          type: string
+          enum: [asc, desc]
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of triggers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  triggers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Trigger"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /triggers/{trigger_id}.json:
+    get:
+      summary: Get a trigger
+      description: Returns a trigger by its ID
+      operationId: GetTrigger
+      x-airbyte-entity: triggers
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.trigger
+      tags:
+      - Triggers
+      parameters:
+      - name: trigger_id
+        in: path
+        required: true
+        description: The ID of the trigger
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Trigger object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trigger:
+                    $ref: "#/components/schemas/Trigger"
+
+  # ==================== AUTOMATIONS ====================
+  /automations.json:
+    get:
+      summary: List all automations
+      description: Returns a list of all automations for the account
+      operationId: ListAutomations
+      x-airbyte-entity: automations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.automations
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Automations
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: active
+        in: query
+        description: Filter by active status
+        schema:
+          type: boolean
+      - name: sort_by
+        in: query
+        description: Sort field for offset pagination
+        schema:
+          type: string
+          enum: [alphabetical, created_at, updated_at, usage_1h, usage_24h, usage_7d]
+          default: position
+      - name: sort_order
+        in: query
+        description: Sort order for offset pagination
+        schema:
+          type: string
+          enum: [asc, desc]
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of automations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  automations:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Automation"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /automations/{automation_id}.json:
+    get:
+      summary: Get an automation
+      description: Returns an automation by its ID
+      operationId: GetAutomation
+      x-airbyte-entity: automations
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.automation
+      tags:
+      - Automations
+      parameters:
+      - name: automation_id
+        in: path
+        required: true
+        description: The ID of the automation
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Automation object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  automation:
+                    $ref: "#/components/schemas/Automation"
+
+  # ==================== TAGS ====================
+  /tags.json:
+    get:
+      summary: List all tags
+      description: Returns a list of all tags used in the account
+      operationId: ListTags
+      x-airbyte-entity: tags
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.tags
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Tags
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Tag"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+
+  # ==================== SATISFACTION RATINGS ====================
+  /satisfaction_ratings.json:
+    get:
+      summary: List all satisfaction ratings
+      description: Returns a list of all satisfaction ratings
+      operationId: ListSatisfactionRatings
+      x-airbyte-entity: satisfaction_ratings
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.satisfaction_ratings
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Satisfaction Ratings
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: score
+        in: query
+        description: Filter by score
+        schema:
+          type: string
+          enum: [offered, unoffered, received, good, bad]
+      - name: start_time
+        in: query
+        description: Start time (Unix epoch)
+        schema:
+          type: integer
+      - name: end_time
+        in: query
+        description: End time (Unix epoch)
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of satisfaction ratings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  satisfaction_ratings:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SatisfactionRating"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /satisfaction_ratings/{satisfaction_rating_id}.json:
+    get:
+      summary: Get a satisfaction rating
+      description: Returns a satisfaction rating by its ID
+      operationId: GetSatisfactionRating
+      x-airbyte-entity: satisfaction_ratings
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.satisfaction_rating
+      tags:
+      - Satisfaction Ratings
+      parameters:
+      - name: satisfaction_rating_id
+        in: path
+        required: true
+        description: The ID of the satisfaction rating
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Satisfaction rating object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  satisfaction_rating:
+                    $ref: "#/components/schemas/SatisfactionRating"
+
+  # ==================== GROUP MEMBERSHIPS ====================
+  /group_memberships.json:
+    get:
+      summary: List all group memberships
+      description: Returns a list of all group memberships
+      operationId: ListGroupMemberships
+      x-airbyte-entity: group_memberships
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.group_memberships
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Group Memberships
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of group memberships
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  group_memberships:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/GroupMembership"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+
+  # ==================== ORGANIZATION MEMBERSHIPS ====================
+  /organization_memberships.json:
+    get:
+      summary: List all organization memberships
+      description: Returns a list of all organization memberships
+      operationId: ListOrganizationMemberships
+      x-airbyte-entity: organization_memberships
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.organization_memberships
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Organization Memberships
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of organization memberships
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  organization_memberships:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OrganizationMembership"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+
+  # ==================== SLA POLICIES ====================
+  /slas/policies.json:
+    get:
+      summary: List all SLA policies
+      description: Returns a list of all SLA policies
+      operationId: ListSLAPolicies
+      x-airbyte-entity: sla_policies
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.sla_policies
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - SLA Policies
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of SLA policies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sla_policies:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SLAPolicy"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /slas/policies/{sla_policy_id}.json:
+    get:
+      summary: Get an SLA policy
+      description: Returns an SLA policy by its ID
+      operationId: GetSLAPolicy
+      x-airbyte-entity: sla_policies
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.sla_policy
+      tags:
+      - SLA Policies
+      parameters:
+      - name: sla_policy_id
+        in: path
+        required: true
+        description: The ID of the SLA policy
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: SLA policy object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sla_policy:
+                    $ref: "#/components/schemas/SLAPolicy"
+
+  # ==================== TICKET FORMS ====================
+  /ticket_forms.json:
+    get:
+      summary: List all ticket forms
+      description: Returns a list of all ticket forms for the account
+      operationId: ListTicketForms
+      x-airbyte-entity: ticket_forms
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.ticket_forms
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Ticket Forms
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: active
+        in: query
+        description: Filter by active status
+        schema:
+          type: boolean
+      - name: end_user_visible
+        in: query
+        description: Filter by end user visibility
+        schema:
+          type: boolean
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of ticket forms
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket_forms:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TicketForm"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /ticket_forms/{ticket_form_id}.json:
+    get:
+      summary: Get a ticket form
+      description: Returns a ticket form by its ID
+      operationId: GetTicketForm
+      x-airbyte-entity: ticket_forms
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.ticket_form
+      tags:
+      - Ticket Forms
+      parameters:
+      - name: ticket_form_id
+        in: path
+        required: true
+        description: The ID of the ticket form
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Ticket form object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket_form:
+                    $ref: "#/components/schemas/TicketForm"
+
+  # ==================== HELP CENTER - ARTICLES ====================
+  /help_center/articles.json:
+    get:
+      summary: List all articles
+      description: Returns a list of all articles in the Help Center
+      operationId: ListArticles
+      x-airbyte-entity: articles
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.articles
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Articles
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: sort_by
+        in: query
+        description: Sort articles by field
+        schema:
+          type: string
+          enum: [created_at, updated_at, title, position]
+      - name: sort_order
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum: [asc, desc]
+          default: asc
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Article"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /help_center/articles/{id}.json:
+    get:
+      summary: Get an article by ID
+      description: Retrieves the details of a specific article
+      operationId: GetArticle
+      x-airbyte-entity: articles
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.article
+      tags:
+      - Articles
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique ID of the article
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Article object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/Article"
+
+  # ==================== HELP CENTER - ARTICLE ATTACHMENTS ====================
+  /help_center/articles/{article_id}/attachments.json:
+    get:
+      summary: List attachments for an article
+      description: Returns a list of all attachments for a specific article
+      operationId: ListArticleAttachments
+      x-airbyte-entity: article_attachments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.article_attachments
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        previous_page: $.previous_page
+        count: $.count
+      tags:
+      - Article Attachments
+      parameters:
+      - name: article_id
+        in: path
+        required: true
+        description: The unique ID of the article
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        "200":
+          description: List of article attachments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article_attachments:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticleAttachment"
+                  next_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the next page of results
+                  previous_page:
+                    type:
+                    - string
+                    - "null"
+                    description: URL to the previous page of results
+                  count:
+                    type: integer
+                    description: Total count of records
+
+  /help_center/articles/{article_id}/attachments/{attachment_id}:
+    get:
+      summary: Retrieve attachment metadata
+      description: Retrieves the metadata of a specific attachment for a specific article
+      operationId: GetArticleAttachmentMetadata
+      x-airbyte-entity: article_attachments
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.article_attachment
+      tags:
+      - Article Attachments
+      parameters:
+      - name: article_id
+        in: path
+        required: true
+        description: The unique ID of the article
+        schema:
+          type: integer
+      - name: attachment_id
+        in: path
+        required: true
+        description: The unique ID of the attachment
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Article attachment metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article_attachment:
+                    $ref: "#/components/schemas/ArticleAttachment"
+
+  /help_center/articles/{article_id}/attachments/{attachment_id}:download:
+    get:
+      summary: Download attachment file
+      description: Downloads the file content of a specific attachment
+      operationId: DownloadArticleAttachment
+      x-airbyte-entity: article_attachments
+      x-airbyte-action: download
+      x-airbyte-file-url: article_attachment.content_url
+      x-airbyte-path-override:
+        path: /help_center/articles/{article_id}/attachments/{attachment_id}
+      tags:
+      - Article Attachments
+      parameters:
+      - name: article_id
+        in: path
+        required: true
+        description: The unique ID of the article
+        schema:
+          type: integer
+      - name: attachment_id
+        in: path
+        required: true
+        description: The unique ID of the attachment
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Article attachment file content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary

@@ -1,0 +1,2477 @@
+openapi: 3.1.0
+
+info:
+  title: LinkedIn Ads API Connector
+  version: 1.0.4
+  description: >
+    Connector for the LinkedIn Ads Marketing API. Provides access to ad accounts,
+    campaigns, campaign groups, creatives, conversions, and ad analytics data.
+    Supports OAuth 2.0 and direct access token authentication. Use this connector
+    to retrieve advertising performance metrics, manage campaign structures, and
+    monitor creative assets across your LinkedIn advertising accounts.
+  x-airbyte-connector-name: linkedin-ads
+  x-airbyte-connector-definition-id: 137ece28-5434-455c-8f34-69dc3782f451
+  x-airbyte-replication-version: "5.6.4"
+  x-airbyte-replication-compatibility: ">=5.6.4, <6.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: LinkedIn Marketing API Documentation
+    url: https://learn.microsoft.com/en-us/linkedin/marketing/
+  x-airbyte-skip-auth-methods:
+  - bearer
+  x-airbyte-example-questions:
+    direct:
+    - "List all my LinkedIn ad accounts"
+    - "Show me all campaigns in my ad account"
+    - "List all campaign groups"
+    - "Show me the creatives for my campaigns"
+    - "List all conversions configured for my ad accounts"
+    - "Show me account users for my LinkedIn ads accounts"
+    search:
+    - "Which campaigns have the highest click-through rate?"
+    - "What is the total ad spend across all campaigns this month?"
+    - "Show me campaigns with status ACTIVE"
+    - "Which creatives have the most impressions?"
+    - "Compare campaign performance by cost type"
+    unsupported:
+    - "Create a new campaign"
+    - "Update campaign budgets"
+    - "Delete an ad creative"
+    - "Pause a campaign"
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from LinkedIn Ads.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: "UTC date in the format YYYY-MM-DD. Any data before this date will not be replicated."
+        format: date
+    required:
+    - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-entity-relationships:
+  - source_entity: campaigns
+    target_entity: accounts
+    foreign_key: account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: campaign_groups
+    target_entity: accounts
+    foreign_key: account_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: creatives
+    target_entity: accounts
+    foreign_key: account_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: accounts
+      fields:
+      - name: id
+        type: ["null", "integer"]
+        description: Unique account identifier
+      - name: name
+        type: ["null", "string"]
+        description: Account name
+      - name: currency
+        type: ["null", "string"]
+        description: Currency code used by the account
+      - name: status
+        type: ["null", "string"]
+        description: Account status
+      - name: type
+        type: ["null", "string"]
+        description: Account type
+      - name: reference
+        type: ["null", "string"]
+        description: Reference organization URN
+      - name: test
+        type: ["null", "boolean"]
+        description: Whether this is a test account
+      - name: notifiedOnCampaignOptimization
+        type: ["null", "boolean"]
+        description: Flag for notifications on campaign optimization
+      - name: notifiedOnCreativeApproval
+        type: ["null", "boolean"]
+        description: Flag for notifications on creative approval
+      - name: notifiedOnCreativeRejection
+        type: ["null", "boolean"]
+        description: Flag for notifications on creative rejection
+      - name: notifiedOnEndOfCampaign
+        type: ["null", "boolean"]
+        description: Flag for notifications on end of campaign
+      - name: notifiedOnNewFeaturesEnabled
+        type: ["null", "boolean"]
+        description: Flag for notifications on new features
+      - name: servingStatuses
+        type: ["null", "array"]
+        description: List of serving statuses
+      - name: version
+        type: ["null", "object"]
+        description: Version information
+        properties:
+          versionTag:
+            type: ["null", "string"]
+    - entity: account_users
+      fields:
+      - name: account
+        type: ["null", "string"]
+        description: Associated account URN
+      - name: user
+        type: ["null", "string"]
+        description: User URN
+      - name: role
+        type: ["null", "string"]
+        description: User role in the account
+    - entity: campaigns
+      fields:
+      - name: id
+        type: ["null", "integer"]
+        description: Unique campaign identifier
+      - name: name
+        type: ["null", "string"]
+        description: Campaign name
+      - name: account
+        type: ["null", "string"]
+        description: Associated account URN
+      - name: campaignGroup
+        type: ["null", "string"]
+        description: Parent campaign group URN
+      - name: status
+        type: ["null", "string"]
+        description: Campaign status
+      - name: type
+        type: ["null", "string"]
+        description: Campaign type
+      - name: costType
+        type: ["null", "string"]
+        description: Cost type (CPC CPM etc)
+      - name: format
+        type: ["null", "string"]
+        description: Campaign ad format
+      - name: objectiveType
+        type: ["null", "string"]
+        description: Campaign objective type
+      - name: optimizationTargetType
+        type: ["null", "string"]
+        description: Optimization target type
+      - name: creativeSelection
+        type: ["null", "string"]
+        description: Creative selection mode
+      - name: pacingStrategy
+        type: ["null", "string"]
+        description: Budget pacing strategy
+      - name: audienceExpansionEnabled
+        type: ["null", "boolean"]
+        description: Whether audience expansion is enabled
+      - name: offsiteDeliveryEnabled
+        type: ["null", "boolean"]
+        description: Whether offsite delivery is enabled
+      - name: storyDeliveryEnabled
+        type: ["null", "boolean"]
+        description: Whether story delivery is enabled
+      - name: test
+        type: ["null", "boolean"]
+        description: Whether this is a test campaign
+      - name: associatedEntity
+        type: ["null", "string"]
+        description: Associated entity URN
+      - name: dailyBudget
+        type: ["null", "object"]
+        description: Daily budget configuration
+        properties:
+          amount:
+            type: ["null", "string"]
+          currencyCode:
+            type: ["null", "string"]
+      - name: totalBudget
+        type: ["null", "object"]
+        description: Total budget configuration
+        properties:
+          amount:
+            type: ["null", "string"]
+          currencyCode:
+            type: ["null", "string"]
+      - name: unitCost
+        type: ["null", "object"]
+        description: Cost per unit (bid amount)
+        properties:
+          amount:
+            type: ["null", "string"]
+          currencyCode:
+            type: ["null", "string"]
+      - name: runSchedule
+        type: ["null", "object"]
+        description: Campaign run schedule
+        properties:
+          start:
+            type: ["null", "integer"]
+          end:
+            type: ["null", "integer"]
+      - name: locale
+        type: ["null", "object"]
+        description: Campaign locale settings
+        properties:
+          country:
+            type: ["null", "string"]
+          language:
+            type: ["null", "string"]
+      - name: servingStatuses
+        type: ["null", "array"]
+        description: List of serving statuses
+      - name: version
+        type: ["null", "object"]
+        description: Version information
+        properties:
+          versionTag:
+            type: ["null", "string"]
+    - entity: campaign_groups
+      fields:
+      - name: id
+        type: ["null", "integer"]
+        description: Unique campaign group identifier
+      - name: name
+        type: ["null", "string"]
+        description: Campaign group name
+      - name: account
+        type: ["null", "string"]
+        description: Associated account URN
+      - name: status
+        type: ["null", "string"]
+        description: Campaign group status
+      - name: test
+        type: ["null", "boolean"]
+        description: Whether this is a test campaign group
+      - name: backfilled
+        type: ["null", "boolean"]
+        description: Whether the campaign group is backfilled
+      - name: totalBudget
+        type: ["null", "object"]
+        description: Total budget for the campaign group
+        properties:
+          amount:
+            type: ["null", "string"]
+          currencyCode:
+            type: ["null", "string"]
+      - name: runSchedule
+        type: ["null", "object"]
+        description: Campaign group run schedule
+        properties:
+          start:
+            type: ["null", "integer"]
+          end:
+            type: ["null", "integer"]
+      - name: servingStatuses
+        type: ["null", "array"]
+        description: List of serving statuses
+      - name: allowedCampaignTypes
+        type: ["null", "array"]
+        description: Types of campaigns allowed in this group
+    - entity: creatives
+      fields:
+      - name: id
+        type: ["null", "string"]
+        description: Unique creative identifier
+      - name: name
+        type: ["null", "string"]
+        description: Creative name
+      - name: account
+        type: ["null", "string"]
+        description: Associated account URN
+      - name: campaign
+        type: ["null", "string"]
+        description: Parent campaign URN
+      - name: intendedStatus
+        type: ["null", "string"]
+        description: Intended creative status
+      - name: isServing
+        type: ["null", "boolean"]
+        description: Whether the creative is currently serving
+      - name: isTest
+        type: ["null", "boolean"]
+        description: Whether this is a test creative
+      - name: createdAt
+        type: ["null", "integer"]
+        description: Creation timestamp (epoch milliseconds)
+      - name: createdBy
+        type: ["null", "string"]
+        description: URN of the user who created the creative
+      - name: lastModifiedAt
+        type: ["null", "integer"]
+        description: Last modification timestamp (epoch milliseconds)
+      - name: lastModifiedBy
+        type: ["null", "string"]
+        description: URN of the user who last modified the creative
+      - name: content
+        type: ["null", "object"]
+        description: Creative content configuration
+      - name: servingHoldReasons
+        type: ["null", "array"]
+        description: Reasons for holding creative from serving
+    - entity: conversions
+      fields:
+      - name: id
+        type: ["null", "integer"]
+        description: Unique conversion identifier
+      - name: name
+        type: ["null", "string"]
+        description: Conversion name
+      - name: account
+        type: ["null", "string"]
+        description: Associated account URN
+      - name: type
+        type: ["null", "string"]
+        description: Conversion type
+      - name: attributionType
+        type: ["null", "string"]
+        description: Attribution type for the conversion
+      - name: enabled
+        type: ["null", "boolean"]
+        description: Whether the conversion tracking is enabled
+      - name: created
+        type: ["null", "integer"]
+        description: Creation timestamp (epoch milliseconds)
+      - name: lastModified
+        type: ["null", "integer"]
+        description: Last modification timestamp (epoch milliseconds)
+      - name: postClickAttributionWindowSize
+        type: ["null", "integer"]
+        description: Post-click attribution window size in days
+      - name: viewThroughAttributionWindowSize
+        type: ["null", "integer"]
+        description: View-through attribution window size in days
+      - name: campaigns
+        type: ["null", "array"]
+        description: Related campaign URNs
+      - name: associatedCampaigns
+        type: ["null", "array"]
+        description: Associated campaigns
+      - name: imagePixelTag
+        type: ["null", "string"]
+        description: Image pixel tracking tag
+      - name: value
+        type: ["null", "object"]
+        description: Conversion value
+        properties:
+          amount:
+            type: ["null", "string"]
+          currencyCode:
+            type: ["null", "string"]
+    - entity: ad_campaign_analytics
+      fields:
+      - name: impressions
+        type: ["null", "number"]
+        description: Number of times the ad was shown
+      - name: clicks
+        type: ["null", "number"]
+        description: Number of clicks on the ad
+      - name: costInLocalCurrency
+        type: ["null", "number"]
+        description: Total cost in the accounts local currency
+      - name: costInUsd
+        type: ["null", "number"]
+        description: Total cost in USD
+      - name: likes
+        type: ["null", "number"]
+        description: Number of likes
+      - name: shares
+        type: ["null", "number"]
+        description: Number of shares
+      - name: comments
+        type: ["null", "number"]
+        description: Number of comments
+      - name: reactions
+        type: ["null", "number"]
+        description: Number of reactions
+      - name: follows
+        type: ["null", "number"]
+        description: Number of follows
+      - name: totalEngagements
+        type: ["null", "number"]
+        description: Total number of engagements
+      - name: landingPageClicks
+        type: ["null", "number"]
+        description: Number of landing page clicks
+      - name: companyPageClicks
+        type: ["null", "number"]
+        description: Number of company page clicks
+      - name: externalWebsiteConversions
+        type: ["null", "number"]
+        description: Number of conversions on external websites
+      - name: externalWebsitePostClickConversions
+        type: ["null", "number"]
+        description: Post-click conversions on external websites
+      - name: externalWebsitePostViewConversions
+        type: ["null", "number"]
+        description: Post-view conversions on external websites
+      - name: conversionValueInLocalCurrency
+        type: ["null", "number"]
+        description: Conversion value in local currency
+      - name: approximateMemberReach
+        type: ["null", "number"]
+        description: Approximate unique member reach
+      - name: cardClicks
+        type: ["null", "number"]
+        description: Number of carousel card clicks
+      - name: cardImpressions
+        type: ["null", "number"]
+        description: Number of carousel card impressions
+      - name: videoStarts
+        type: ["null", "number"]
+        description: Number of video starts
+      - name: videoViews
+        type: ["null", "number"]
+        description: Number of video views
+      - name: videoFirstQuartileCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 25%
+      - name: videoMidpointCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 50%
+      - name: videoThirdQuartileCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 75%
+      - name: videoCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 100%
+      - name: fullScreenPlays
+        type: ["null", "number"]
+        description: Number of full screen video plays
+      - name: oneClickLeads
+        type: ["null", "number"]
+        description: Number of one-click leads
+      - name: oneClickLeadFormOpens
+        type: ["null", "number"]
+        description: Number of one-click lead form opens
+      - name: otherEngagements
+        type: ["null", "number"]
+        description: Number of other engagements
+      - name: adUnitClicks
+        type: ["null", "number"]
+        description: Number of ad unit clicks
+      - name: actionClicks
+        type: ["null", "number"]
+        description: Number of action clicks
+      - name: textUrlClicks
+        type: ["null", "number"]
+        description: Number of text URL clicks
+      - name: commentLikes
+        type: ["null", "number"]
+        description: Number of comment likes
+      - name: sends
+        type: ["null", "number"]
+        description: Number of sends (InMail)
+      - name: opens
+        type: ["null", "number"]
+        description: Number of opens (InMail)
+      - name: downloadClicks
+        type: ["null", "number"]
+        description: Number of download clicks
+      - name: pivotValues
+        type: ["null", "array"]
+        description: Pivot values (URNs) for this analytics record
+      - name: start_date
+        type: ["null", "string"]
+        description: Start date of the ad analytics data
+      - name: end_date
+        type: ["null", "string"]
+        description: End date of the ad analytics data
+    - entity: ad_creative_analytics
+      fields:
+      - name: impressions
+        type: ["null", "number"]
+        description: Number of times the ad was shown
+      - name: clicks
+        type: ["null", "number"]
+        description: Number of clicks on the ad
+      - name: costInLocalCurrency
+        type: ["null", "number"]
+        description: Total cost in the accounts local currency
+      - name: costInUsd
+        type: ["null", "number"]
+        description: Total cost in USD
+      - name: likes
+        type: ["null", "number"]
+        description: Number of likes
+      - name: shares
+        type: ["null", "number"]
+        description: Number of shares
+      - name: comments
+        type: ["null", "number"]
+        description: Number of comments
+      - name: reactions
+        type: ["null", "number"]
+        description: Number of reactions
+      - name: follows
+        type: ["null", "number"]
+        description: Number of follows
+      - name: totalEngagements
+        type: ["null", "number"]
+        description: Total number of engagements
+      - name: landingPageClicks
+        type: ["null", "number"]
+        description: Number of landing page clicks
+      - name: companyPageClicks
+        type: ["null", "number"]
+        description: Number of company page clicks
+      - name: externalWebsiteConversions
+        type: ["null", "number"]
+        description: Number of conversions on external websites
+      - name: externalWebsitePostClickConversions
+        type: ["null", "number"]
+        description: Post-click conversions on external websites
+      - name: externalWebsitePostViewConversions
+        type: ["null", "number"]
+        description: Post-view conversions on external websites
+      - name: conversionValueInLocalCurrency
+        type: ["null", "number"]
+        description: Conversion value in local currency
+      - name: approximateMemberReach
+        type: ["null", "number"]
+        description: Approximate unique member reach
+      - name: cardClicks
+        type: ["null", "number"]
+        description: Number of carousel card clicks
+      - name: cardImpressions
+        type: ["null", "number"]
+        description: Number of carousel card impressions
+      - name: videoStarts
+        type: ["null", "number"]
+        description: Number of video starts
+      - name: videoViews
+        type: ["null", "number"]
+        description: Number of video views
+      - name: videoFirstQuartileCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 25%
+      - name: videoMidpointCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 50%
+      - name: videoThirdQuartileCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 75%
+      - name: videoCompletions
+        type: ["null", "number"]
+        description: Number of times video played to 100%
+      - name: fullScreenPlays
+        type: ["null", "number"]
+        description: Number of full screen video plays
+      - name: oneClickLeads
+        type: ["null", "number"]
+        description: Number of one-click leads
+      - name: oneClickLeadFormOpens
+        type: ["null", "number"]
+        description: Number of one-click lead form opens
+      - name: otherEngagements
+        type: ["null", "number"]
+        description: Number of other engagements
+      - name: adUnitClicks
+        type: ["null", "number"]
+        description: Number of ad unit clicks
+      - name: actionClicks
+        type: ["null", "number"]
+        description: Number of action clicks
+      - name: textUrlClicks
+        type: ["null", "number"]
+        description: Number of text URL clicks
+      - name: commentLikes
+        type: ["null", "number"]
+        description: Number of comment likes
+      - name: sends
+        type: ["null", "number"]
+        description: Number of sends (InMail)
+      - name: opens
+        type: ["null", "number"]
+        description: Number of opens (InMail)
+      - name: downloadClicks
+        type: ["null", "number"]
+        description: Number of download clicks
+      - name: pivotValues
+        type: ["null", "array"]
+        description: Pivot values (URNs) for this analytics record
+      - name: start_date
+        type: ["null", "string"]
+        description: Start date of the ad analytics data
+      - name: end_date
+        type: ["null", "string"]
+        description: End date of the ad analytics data
+
+servers:
+- url: https://api.linkedin.com/rest
+  description: LinkedIn Marketing API server
+
+security:
+- oauth2: []
+
+paths:
+  /adAccounts:
+    get:
+      summary: List ad accounts
+      description: Returns a list of ad accounts the authenticated user has access to
+      operationId: listAccounts
+      x-airbyte-entity: accounts
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-meta-extractor:
+        nextPageToken: $.metadata.nextPageToken
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: search
+      - name: pageSize
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: pageToken
+        in: query
+        description: Token for the next page of results
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      responses:
+        "200":
+          description: List of ad accounts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountsList"
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{id}:
+    get:
+      summary: Get an ad account
+      description: Get a single ad account by ID
+      operationId: getAccount
+      x-airbyte-entity: accounts
+      x-airbyte-action: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      responses:
+        "200":
+          description: Ad account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        "404":
+          description: Account not found
+        "401":
+          description: Unauthorized
+
+  /adAccountUsers:
+    get:
+      summary: List account users
+      description: Returns a list of users associated with ad accounts
+      operationId: listAccountUsers
+      x-airbyte-entity: account_users
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-meta-extractor:
+        nextPageToken: $.metadata.nextPageToken
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: accounts
+      - name: accounts
+        in: query
+        description: "Account URN, e.g. urn:li:sponsoredAccount:123456"
+        required: true
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: start
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      responses:
+        "200":
+          description: List of account users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountUsersList"
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{account_id}/adCampaigns:
+    get:
+      summary: List campaigns
+      description: Returns a list of campaigns for an ad account
+      operationId: listCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-meta-extractor:
+        nextPageToken: $.metadata.nextPageToken
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: search
+      - name: pageSize
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: pageToken
+        in: query
+        description: Token for the next page of results
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: List of campaigns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignsList"
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{account_id}/adCampaigns/{id}:
+    get:
+      summary: Get a campaign
+      description: Get a single campaign by ID
+      operationId: getCampaign
+      x-airbyte-entity: campaigns
+      x-airbyte-action: get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        description: Campaign ID
+        schema:
+          type: integer
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: Campaign object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Campaign"
+        "404":
+          description: Campaign not found
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{account_id}/adCampaignGroups:
+    get:
+      summary: List campaign groups
+      description: Returns a list of campaign groups for an ad account
+      operationId: listCampaignGroups
+      x-airbyte-entity: campaign_groups
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-meta-extractor:
+        nextPageToken: $.metadata.nextPageToken
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: search
+      - name: pageSize
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: pageToken
+        in: query
+        description: Token for the next page of results
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: List of campaign groups
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignGroupsList"
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{account_id}/adCampaignGroups/{id}:
+    get:
+      summary: Get a campaign group
+      description: Get a single campaign group by ID
+      operationId: getCampaignGroup
+      x-airbyte-entity: campaign_groups
+      x-airbyte-action: get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        description: Campaign group ID
+        schema:
+          type: integer
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: Campaign group object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignGroup"
+        "404":
+          description: Campaign group not found
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{account_id}/creatives:
+    get:
+      summary: List creatives
+      description: Returns a list of creatives for an ad account
+      operationId: listCreatives
+      x-airbyte-entity: creatives
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-meta-extractor:
+        nextPageToken: $.metadata.nextPageToken
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: criteria
+      - name: pageSize
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 100
+      - name: pageToken
+        in: query
+        description: Token for the next page of results
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-RestLi-Method
+        in: header
+        required: true
+        schema:
+          type: string
+          default: FINDER
+      responses:
+        "200":
+          description: List of creatives
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreativesList"
+        "401":
+          description: Unauthorized
+
+  /adAccounts/{account_id}/creatives/{id}:
+    get:
+      summary: Get a creative
+      description: Get a single creative by ID
+      operationId: getCreative
+      x-airbyte-entity: creatives
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Ad account ID
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        description: Creative ID
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      responses:
+        "200":
+          description: Creative object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Creative"
+        "404":
+          description: Creative not found
+        "401":
+          description: Unauthorized
+
+  /conversions:
+    get:
+      summary: List conversions
+      description: Returns a list of conversion rules for an ad account
+      operationId: listConversions
+      x-airbyte-entity: conversions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-meta-extractor:
+        total: $.paging.total
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: account
+      - name: account
+        in: query
+        description: "Account URN, e.g. urn:li:sponsoredAccount:123456"
+        required: true
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: Number of items per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: start
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: List of conversions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConversionsList"
+        "401":
+          description: Unauthorized
+
+  /conversions/{id}:
+    get:
+      summary: Get a conversion
+      description: Get a single conversion rule by ID
+      operationId: getConversion
+      x-airbyte-entity: conversions
+      x-airbyte-action: get
+      x-airbyte-untested: true
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Conversion ID
+        schema:
+          type: integer
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: Conversion object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conversion"
+        "404":
+          description: Conversion not found
+        "401":
+          description: Unauthorized
+
+  /adAnalytics:campaign:
+    get:
+      summary: List campaign analytics
+      description: >
+        Returns ad analytics data pivoted by campaign. Provides performance metrics
+        including clicks, impressions, spend, and engagement data grouped by campaign.
+      operationId: listAdCampaignAnalytics
+      x-airbyte-entity: ad_campaign_analytics
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-path-override:
+        path: /adAnalytics
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: analytics
+      - name: pivot
+        in: query
+        required: true
+        description: Pivot dimension for analytics grouping
+        schema:
+          type: string
+          default: CAMPAIGN
+      - name: timeGranularity
+        in: query
+        required: true
+        description: Time granularity for analytics data
+        schema:
+          type: string
+          enum: [DAILY, MONTHLY, ALL]
+          default: DAILY
+      - name: dateRange
+        in: query
+        required: true
+        description: "Date range in LinkedIn format, e.g. (start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
+        schema:
+          type: string
+      - name: campaigns
+        in: query
+        required: true
+        description: "List of campaign URNs, e.g. List(urn%3Ali%3AsponsoredCampaign%3A123)"
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Comma-separated list of metric fields to return
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: Campaign analytics data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+  /adAnalytics:creative:
+    get:
+      summary: List creative analytics
+      description: >
+        Returns ad analytics data pivoted by creative. Provides performance metrics
+        including clicks, impressions, spend, and engagement data grouped by creative.
+      operationId: listAdCreativeAnalytics
+      x-airbyte-entity: ad_creative_analytics
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.elements
+      x-airbyte-path-override:
+        path: /adAnalytics
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          default: analytics
+      - name: pivot
+        in: query
+        required: true
+        description: Pivot dimension for analytics grouping
+        schema:
+          type: string
+          default: CREATIVE
+      - name: timeGranularity
+        in: query
+        required: true
+        description: Time granularity for analytics data
+        schema:
+          type: string
+          enum: [DAILY, MONTHLY, ALL]
+          default: DAILY
+      - name: dateRange
+        in: query
+        required: true
+        description: "Date range in LinkedIn format, e.g. (start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
+        schema:
+          type: string
+      - name: creatives
+        in: query
+        required: true
+        description: "List of creative URNs, e.g. List(urn%3Ali%3AsponsoredCreative%3A123)"
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Comma-separated list of metric fields to return
+        schema:
+          type: string
+      - name: LinkedIn-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "202601"
+      - name: X-Restli-Protocol-Version
+        in: header
+        required: true
+        schema:
+          type: string
+          default: "2.0.0"
+      responses:
+        "200":
+          description: Creative analytics data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdAnalyticsResponse"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authentication with refresh token
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.linkedin.com/oauth/v2/authorization
+          tokenUrl: https://www.linkedin.com/oauth/v2/accessToken
+          refreshUrl: https://www.linkedin.com/oauth/v2/accessToken
+          scopes:
+            r_ads: Read access to advertising accounts
+            r_ads_reporting: Retrieve reporting for advertising accounts
+      x-airbyte-token-refresh:
+        auth_style: body
+        body_format: form
+      x-airbyte-auth-config:
+        title: "OAuth 2.0 Authentication"
+        type: object
+        required:
+        - refresh_token
+        - client_id
+        - client_secret
+        properties:
+          refresh_token:
+            type: string
+            title: "Refresh Token"
+            description: "OAuth 2.0 refresh token for automatic renewal"
+          client_id:
+            type: string
+            title: "Client ID"
+            description: "OAuth 2.0 application client ID"
+          client_secret:
+            type: string
+            title: "Client Secret"
+            description: "OAuth 2.0 application client secret"
+        auth_mapping:
+          refresh_token: "${refresh_token}"
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+        replication_auth_key_mapping:
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          credentials.auth_method: "oAuth2.0"
+
+  schemas:
+    Account:
+      type: object
+      x-airbyte-entity-name: accounts
+      description: LinkedIn ad account object
+      properties:
+        id:
+          type:
+          - "null"
+          - integer
+          description: Unique account identifier
+        name:
+          type:
+          - "null"
+          - string
+          description: Account name
+        currency:
+          type:
+          - "null"
+          - string
+          description: Currency code used by the account
+        status:
+          type:
+          - "null"
+          - string
+          description: Account status (ACTIVE, PAUSED, etc.)
+        type:
+          type:
+          - "null"
+          - string
+          description: Account type
+        reference:
+          type:
+          - "null"
+          - string
+          description: Reference organization URN
+        test:
+          type:
+          - "null"
+          - boolean
+          description: Whether this is a test account
+        changeAuditStamps:
+          type:
+          - "null"
+          - object
+          description: Creation and last modification audit stamps
+          properties:
+            created:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+            lastModified:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+        notifiedOnCampaignOptimization:
+          type:
+          - "null"
+          - boolean
+          description: Notification flag for campaign optimization
+        notifiedOnCreativeApproval:
+          type:
+          - "null"
+          - boolean
+          description: Notification flag for creative approval
+        notifiedOnCreativeRejection:
+          type:
+          - "null"
+          - boolean
+          description: Notification flag for creative rejection
+        notifiedOnEndOfCampaign:
+          type:
+          - "null"
+          - boolean
+          description: Notification flag for end of campaign
+        notifiedOnNewFeaturesEnabled:
+          type:
+          - "null"
+          - boolean
+          description: Notification flag for new features
+        servingStatuses:
+          type:
+          - "null"
+          - array
+          description: List of serving statuses
+          items:
+            type: string
+        version:
+          type:
+          - "null"
+          - object
+          description: Version information
+          properties:
+            versionTag:
+              type:
+              - "null"
+              - string
+      additionalProperties: true
+
+    AccountsList:
+      type: object
+      description: Paginated list of ad accounts
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+        metadata:
+          type: object
+          properties:
+            nextPageToken:
+              type: string
+
+    AccountUser:
+      type: object
+      x-airbyte-entity-name: account_users
+      description: LinkedIn ad account user object
+      properties:
+        account:
+          type:
+          - "null"
+          - string
+          description: Associated account URN
+        user:
+          type:
+          - "null"
+          - string
+          description: User URN
+        role:
+          type:
+          - "null"
+          - string
+          description: User role in the account
+        changeAuditStamps:
+          type:
+          - "null"
+          - object
+          description: Creation and last modification audit stamps
+          properties:
+            created:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+            lastModified:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+      additionalProperties: true
+
+    AccountUsersList:
+      type: object
+      description: Paginated list of account users
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/AccountUser"
+        metadata:
+          type: object
+          properties:
+            nextPageToken:
+              type: string
+
+    Campaign:
+      type: object
+      x-airbyte-entity-name: campaigns
+      description: LinkedIn ad campaign object
+      properties:
+        id:
+          type:
+          - "null"
+          - integer
+          description: Unique campaign identifier
+        name:
+          type:
+          - "null"
+          - string
+          description: Campaign name
+        account:
+          type:
+          - "null"
+          - string
+          description: Associated account URN
+        campaignGroup:
+          type:
+          - "null"
+          - string
+          description: Parent campaign group URN
+        status:
+          type:
+          - "null"
+          - string
+          description: Campaign status
+        type:
+          type:
+          - "null"
+          - string
+          description: Campaign type
+        costType:
+          type:
+          - "null"
+          - string
+          description: Cost type (CPC, CPM, etc.)
+        format:
+          type:
+          - "null"
+          - string
+          description: Campaign ad format
+        objectiveType:
+          type:
+          - "null"
+          - string
+          description: Campaign objective type
+        optimizationTargetType:
+          type:
+          - "null"
+          - string
+          description: Optimization target type
+        creativeSelection:
+          type:
+          - "null"
+          - string
+          description: Creative selection mode
+        pacingStrategy:
+          type:
+          - "null"
+          - string
+          description: Budget pacing strategy
+        audienceExpansionEnabled:
+          type:
+          - "null"
+          - boolean
+          description: Whether audience expansion is enabled
+        offsiteDeliveryEnabled:
+          type:
+          - "null"
+          - boolean
+          description: Whether offsite delivery is enabled
+        storyDeliveryEnabled:
+          type:
+          - "null"
+          - boolean
+          description: Whether story delivery is enabled
+        test:
+          type:
+          - "null"
+          - boolean
+          description: Whether this is a test campaign
+        associatedEntity:
+          type:
+          - "null"
+          - string
+          description: Associated entity URN
+        connectedTelevisionOnly:
+          type:
+          - "null"
+          - boolean
+          description: Whether the campaign targets connected television only
+        politicalIntent:
+          type:
+          - "null"
+          - string
+          description: Political intent status of the campaign (e.g., NOT_POLITICAL)
+        changeAuditStamps:
+          type:
+          - "null"
+          - object
+          description: Creation and last modification audit stamps
+          properties:
+            created:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+            lastModified:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+        dailyBudget:
+          type:
+          - "null"
+          - object
+          description: Daily budget configuration
+          properties:
+            amount:
+              type:
+              - "null"
+              - string
+            currencyCode:
+              type:
+              - "null"
+              - string
+        totalBudget:
+          type:
+          - "null"
+          - object
+          description: Total budget configuration
+          properties:
+            amount:
+              type:
+              - "null"
+              - string
+            currencyCode:
+              type:
+              - "null"
+              - string
+        unitCost:
+          type:
+          - "null"
+          - object
+          description: Cost per unit (bid amount)
+          properties:
+            amount:
+              type:
+              - "null"
+              - string
+            currencyCode:
+              type:
+              - "null"
+              - string
+        runSchedule:
+          type:
+          - "null"
+          - object
+          description: Campaign run schedule
+          properties:
+            start:
+              type:
+              - "null"
+              - integer
+            end:
+              type:
+              - "null"
+              - integer
+        locale:
+          type:
+          - "null"
+          - object
+          description: Campaign locale settings
+          properties:
+            country:
+              type:
+              - "null"
+              - string
+            language:
+              type:
+              - "null"
+              - string
+        targetingCriteria:
+          type:
+          - "null"
+          - object
+          description: Targeting criteria for the campaign
+        offsitePreferences:
+          type:
+          - "null"
+          - object
+          description: Offsite delivery preferences
+        servingStatuses:
+          type:
+          - "null"
+          - array
+          description: List of serving statuses
+          items:
+            type: string
+        version:
+          type:
+          - "null"
+          - object
+          description: Version information
+          properties:
+            versionTag:
+              type:
+              - "null"
+              - string
+      additionalProperties: true
+
+    CampaignsList:
+      type: object
+      description: Paginated list of campaigns
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Campaign"
+        metadata:
+          type: object
+          properties:
+            nextPageToken:
+              type: string
+
+    CampaignGroup:
+      type: object
+      x-airbyte-entity-name: campaign_groups
+      description: LinkedIn ad campaign group object
+      properties:
+        id:
+          type:
+          - "null"
+          - integer
+          description: Unique campaign group identifier
+        name:
+          type:
+          - "null"
+          - string
+          description: Campaign group name
+        account:
+          type:
+          - "null"
+          - string
+          description: Associated account URN
+        status:
+          type:
+          - "null"
+          - string
+          description: Campaign group status
+        test:
+          type:
+          - "null"
+          - boolean
+          description: Whether this is a test campaign group
+        backfilled:
+          type:
+          - "null"
+          - boolean
+          description: Whether the campaign group is backfilled
+        changeAuditStamps:
+          type:
+          - "null"
+          - object
+          description: Creation and last modification audit stamps
+          properties:
+            created:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+            lastModified:
+              type:
+              - "null"
+              - object
+              properties:
+                actor:
+                  type:
+                  - "null"
+                  - string
+                time:
+                  type:
+                  - "null"
+                  - integer
+        totalBudget:
+          type:
+          - "null"
+          - object
+          description: Total budget for the campaign group
+          properties:
+            amount:
+              type:
+              - "null"
+              - string
+            currencyCode:
+              type:
+              - "null"
+              - string
+        runSchedule:
+          type:
+          - "null"
+          - object
+          description: Campaign group run schedule
+          properties:
+            start:
+              type:
+              - "null"
+              - integer
+            end:
+              type:
+              - "null"
+              - integer
+        servingStatuses:
+          type:
+          - "null"
+          - array
+          description: List of serving statuses
+          items:
+            type: string
+        allowedCampaignTypes:
+          type:
+          - "null"
+          - array
+          description: Types of campaigns allowed in this group
+          items:
+            type: string
+      additionalProperties: true
+
+    CampaignGroupsList:
+      type: object
+      description: Paginated list of campaign groups
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/CampaignGroup"
+        metadata:
+          type: object
+          properties:
+            nextPageToken:
+              type: string
+
+    Creative:
+      type: object
+      x-airbyte-entity-name: creatives
+      description: LinkedIn ad creative object
+      properties:
+        id:
+          type:
+          - "null"
+          - string
+          description: Unique creative identifier
+        name:
+          type:
+          - "null"
+          - string
+          description: Creative name
+        account:
+          type:
+          - "null"
+          - string
+          description: Associated account URN
+        campaign:
+          type:
+          - "null"
+          - string
+          description: Parent campaign URN
+        intendedStatus:
+          type:
+          - "null"
+          - string
+          description: Intended creative status
+        isServing:
+          type:
+          - "null"
+          - boolean
+          description: Whether the creative is currently serving
+        isTest:
+          type:
+          - "null"
+          - boolean
+          description: Whether this is a test creative
+        createdAt:
+          type:
+          - "null"
+          - integer
+          description: Creation timestamp (epoch milliseconds)
+        createdBy:
+          type:
+          - "null"
+          - string
+          description: URN of the user who created the creative
+        lastModifiedAt:
+          type:
+          - "null"
+          - integer
+          description: Last modification timestamp (epoch milliseconds)
+        lastModifiedBy:
+          type:
+          - "null"
+          - string
+          description: URN of the user who last modified the creative
+        content:
+          type:
+          - "null"
+          - object
+          description: Creative content configuration
+        review:
+          type:
+          - "null"
+          - object
+          description: Review status and rejection reasons
+          properties:
+            status:
+              type:
+              - "null"
+              - string
+            rejectionReasons:
+              type:
+              - "null"
+              - array
+        servingHoldReasons:
+          type:
+          - "null"
+          - array
+          description: Reasons for holding creative from serving
+          items:
+            type: string
+        leadgenCallToAction:
+          type:
+          - "null"
+          - object
+          description: Lead generation call to action
+          properties:
+            destination:
+              type:
+              - "null"
+              - string
+            label:
+              type:
+              - "null"
+              - string
+      additionalProperties: true
+
+    CreativesList:
+      type: object
+      description: Paginated list of creatives
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Creative"
+        metadata:
+          type: object
+          properties:
+            nextPageToken:
+              type: string
+
+    Conversion:
+      type: object
+      x-airbyte-entity-name: conversions
+      description: LinkedIn ad conversion tracking rule
+      properties:
+        id:
+          type:
+          - "null"
+          - integer
+          description: Unique conversion identifier
+        name:
+          type:
+          - "null"
+          - string
+          description: Conversion name
+        account:
+          type:
+          - "null"
+          - string
+          description: Associated account URN
+        type:
+          type:
+          - "null"
+          - string
+          description: Conversion type
+        attributionType:
+          type:
+          - "null"
+          - string
+          description: Attribution type for the conversion
+        conversionMethod:
+          type:
+          - "null"
+          - string
+          description: Method used for tracking conversions (e.g., INSIGHT_TAG_URL_MATCH_RULES)
+        valueType:
+          type:
+          - "null"
+          - string
+          description: Type of conversion value (DYNAMIC or FIXED)
+        enabled:
+          type:
+          - "null"
+          - boolean
+          description: Whether the conversion tracking is enabled
+        created:
+          type:
+          - "null"
+          - integer
+          description: Creation timestamp (epoch milliseconds)
+        lastModified:
+          type:
+          - "null"
+          - integer
+          description: Last modification timestamp (epoch milliseconds)
+        postClickAttributionWindowSize:
+          type:
+          - "null"
+          - integer
+          description: Post-click attribution window size in days
+        viewThroughAttributionWindowSize:
+          type:
+          - "null"
+          - integer
+          description: View-through attribution window size in days
+        campaigns:
+          type:
+          - "null"
+          - array
+          description: Related campaign URNs
+          items:
+            type: string
+        associatedCampaigns:
+          type:
+          - "null"
+          - array
+          description: Associated campaigns
+        imagePixelTag:
+          type:
+          - "null"
+          - string
+          description: Image pixel tracking tag
+        lastCallbackAt:
+          type:
+          - "null"
+          - integer
+          description: Last callback timestamp
+        latestFirstPartyCallbackAt:
+          type:
+          - "null"
+          - integer
+          description: Latest first-party callback timestamp
+        urlMatchRuleExpression:
+          type:
+          - "null"
+          - array
+          description: URL match rule expressions
+        urlRules:
+          type:
+          - "null"
+          - array
+          description: URL rules for conversion matching
+        value:
+          type:
+          - "null"
+          - object
+          description: Conversion value
+          properties:
+            amount:
+              type:
+              - "null"
+              - string
+            currencyCode:
+              type:
+              - "null"
+              - string
+      additionalProperties: true
+
+    ConversionsList:
+      type: object
+      description: Paginated list of conversions
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Conversion"
+        paging:
+          type: object
+          properties:
+            total:
+              type: integer
+            count:
+              type: integer
+            start:
+              type: integer
+
+    AdAnalyticsRecord:
+      type: object
+      description: Ad analytics data record with performance metrics
+      properties:
+        dateRange:
+          type:
+          - "null"
+          - object
+          description: Date range for this analytics record
+          properties:
+            start:
+              type: object
+              properties:
+                year:
+                  type: integer
+                month:
+                  type: integer
+                day:
+                  type: integer
+            end:
+              type: object
+              properties:
+                year:
+                  type: integer
+                month:
+                  type: integer
+                day:
+                  type: integer
+        pivotValues:
+          type:
+          - "null"
+          - array
+          description: Pivot values (URNs) for this analytics record
+          items:
+            type: string
+        impressions:
+          type:
+          - "null"
+          - integer
+          description: Number of times the ad was shown
+        clicks:
+          type:
+          - "null"
+          - integer
+          description: Number of clicks on the ad
+        costInLocalCurrency:
+          type:
+          - "null"
+          - string
+          description: Total cost in the account's local currency
+        costInUsd:
+          type:
+          - "null"
+          - string
+          description: Total cost in USD
+        likes:
+          type:
+          - "null"
+          - integer
+          description: Number of likes
+        shares:
+          type:
+          - "null"
+          - integer
+          description: Number of shares
+        comments:
+          type:
+          - "null"
+          - integer
+          description: Number of comments
+        reactions:
+          type:
+          - "null"
+          - integer
+          description: Number of reactions
+        follows:
+          type:
+          - "null"
+          - integer
+          description: Number of follows
+        totalEngagements:
+          type:
+          - "null"
+          - integer
+          description: Total number of engagements
+        landingPageClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of landing page clicks
+        companyPageClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of company page clicks
+        externalWebsiteConversions:
+          type:
+          - "null"
+          - integer
+          description: Number of conversions on external websites
+        externalWebsitePostClickConversions:
+          type:
+          - "null"
+          - integer
+          description: Post-click conversions on external websites
+        externalWebsitePostViewConversions:
+          type:
+          - "null"
+          - integer
+          description: Post-view conversions on external websites
+        conversionValueInLocalCurrency:
+          type:
+          - "null"
+          - string
+          description: Conversion value in local currency
+        approximateMemberReach:
+          type:
+          - "null"
+          - integer
+          description: Approximate unique member reach
+        cardClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of carousel card clicks
+        cardImpressions:
+          type:
+          - "null"
+          - integer
+          description: Number of carousel card impressions
+        videoStarts:
+          type:
+          - "null"
+          - integer
+          description: Number of video starts
+        videoViews:
+          type:
+          - "null"
+          - integer
+          description: Number of video views
+        videoFirstQuartileCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times video played to 25%
+        videoMidpointCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times video played to 50%
+        videoThirdQuartileCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times video played to 75%
+        videoCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times video played to 100%
+        fullScreenPlays:
+          type:
+          - "null"
+          - integer
+          description: Number of full screen video plays
+        oneClickLeads:
+          type:
+          - "null"
+          - integer
+          description: Number of one-click leads
+        oneClickLeadFormOpens:
+          type:
+          - "null"
+          - integer
+          description: Number of one-click lead form opens
+        otherEngagements:
+          type:
+          - "null"
+          - integer
+          description: Number of other engagements
+        adUnitClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of ad unit clicks
+        actionClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of action clicks
+        textUrlClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of text URL clicks
+        commentLikes:
+          type:
+          - "null"
+          - integer
+          description: Number of comment likes
+        sends:
+          type:
+          - "null"
+          - integer
+          description: Number of sends (InMail)
+        opens:
+          type:
+          - "null"
+          - integer
+          description: Number of opens (InMail)
+        downloadClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of download clicks
+        jobApplications:
+          type:
+          - "null"
+          - integer
+          description: Number of job applications
+        jobApplyClicks:
+          type:
+          - "null"
+          - integer
+          description: Number of job apply clicks
+        registrations:
+          type:
+          - "null"
+          - integer
+          description: Number of registrations
+        talentLeads:
+          type:
+          - "null"
+          - integer
+          description: Number of talent leads
+        validWorkEmailLeads:
+          type:
+          - "null"
+          - integer
+          description: Number of valid work email leads
+        postClickJobApplications:
+          type:
+          - "null"
+          - integer
+          description: Post-click job applications
+        postClickJobApplyClicks:
+          type:
+          - "null"
+          - integer
+          description: Post-click job apply clicks
+        postClickRegistrations:
+          type:
+          - "null"
+          - integer
+          description: Post-click registrations
+        postViewJobApplications:
+          type:
+          - "null"
+          - integer
+          description: Post-view job applications
+        postViewJobApplyClicks:
+          type:
+          - "null"
+          - integer
+          description: Post-view job apply clicks
+        postViewRegistrations:
+          type:
+          - "null"
+          - integer
+          description: Post-view registrations
+        leadGenerationMailContactInfoShares:
+          type:
+          - "null"
+          - integer
+          description: Lead gen mail contact info shares
+        leadGenerationMailInterestedClicks:
+          type:
+          - "null"
+          - integer
+          description: Lead gen mail interested clicks
+        documentCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of document completions
+        documentFirstQuartileCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times document viewed to 25%
+        documentMidpointCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times document viewed to 50%
+        documentThirdQuartileCompletions:
+          type:
+          - "null"
+          - integer
+          description: Number of times document viewed to 75%
+      additionalProperties: true
+
+    AdAnalyticsResponse:
+      type: object
+      description: Ad analytics API response
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdAnalyticsRecord"
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            start:
+              type: integer

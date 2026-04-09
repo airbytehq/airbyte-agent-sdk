@@ -1,0 +1,2203 @@
+openapi: 3.1.0
+
+info:
+  title: Sentry API Connector
+  version: 1.0.4
+  description: >-
+    Connector for the Sentry error monitoring and performance tracking API.
+    Provides access to projects, issues, events, and releases within your
+    Sentry organization. Supports listing and retrieving detailed information
+    about error tracking data, project configurations, and software releases.
+  x-airbyte-connector-name: sentry
+  x-airbyte-connector-definition-id: cdaf146a-9b75-49fd-9dd2-9d64a0bb4781
+  x-airbyte-replication-version: "0.9.17"
+  x-airbyte-replication-compatibility: ">=0.9.17, <1.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Sentry API Documentation
+    url: https://docs.sentry.io/api/
+  - type: api_release_history
+    title: Sentry Changelog
+    url: https://sentry.io/changelog/
+
+  x-airbyte-example-questions:
+    direct:
+    - "List all projects in my Sentry organization"
+    - "Show me the issues for a specific project"
+    - "List recent events from a project"
+    - "Show me all releases for my organization"
+    - "Get the details of a specific project"
+    search:
+    - "What are the most common unresolved issues?"
+    - "Which projects have the most events?"
+    - "Show me issues that were first seen this week"
+    - "Find releases created in the last month"
+    unsupported:
+    - "Create a new project in Sentry"
+    - "Delete an issue"
+    - "Update a release"
+    - "Resolve all issues in a project"
+
+  x-airbyte-entity-relationships:
+  - source_entity: issues
+    target_entity: projects
+    foreign_key: project_slug
+    target_key: slug
+    cardinality: many_to_one
+  - source_entity: events
+    target_entity: projects
+    foreign_key: project_slug
+    target_key: slug
+    cardinality: many_to_one
+  x-airbyte-scoping:
+  - param: organization_slug
+    config_key: organization
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: events
+      fields:
+      - name: _meta
+        type: ["null", "object"]
+        description: Meta information for data scrubbing.
+      - name: context
+        type: ["null", "object"]
+        description: Additional context data.
+      - name: contexts
+        type: ["null", "object"]
+        description: Structured context information.
+      - name: crashFile
+        type: ["null", "string"]
+        description: Crash file reference.
+      - name: culprit
+        type: ["null", "string"]
+        description: The culprit (source) of the event.
+      - name: dateCreated
+        type: ["string", "null"]
+        description: When the event was created.
+      - name: dateReceived
+        type: ["null", "string"]
+        description: When the event was received by Sentry.
+      - name: dist
+        type: ["null", "string"]
+        description: Distribution information.
+      - name: entries
+        type: ["null", "array"]
+        description: Event entries (exception, breadcrumbs, request, etc.).
+      - name: errors
+        type: ["null", "array"]
+        description: Processing errors.
+      - name: event.type
+        type: ["string", "null"]
+        description: The type of the event.
+      - name: eventID
+        type: ["string", "null"]
+        description: Event ID as reported by the client.
+      - name: fingerprints
+        type: ["null", "array"]
+        description: Fingerprints used for grouping.
+      - name: groupID
+        type: ["string", "null"]
+        description: ID of the issue group this event belongs to.
+      - name: groupingConfig
+        type: ["null", "object"]
+        description: Grouping configuration.
+        properties:
+          id:
+            type: ["null", "string"]
+          enhancements:
+            type: ["null", "string"]
+      - name: id
+        type: ["string", "null"]
+        description: Unique event identifier.
+      - name: location
+        type: ["null", "string"]
+        description: Location in source code.
+      - name: message
+        type: ["string", "null"]
+        description: Event message.
+      - name: metadata
+        type: ["null", "object"]
+        description: Event metadata.
+        properties:
+          title:
+            type: ["null", "string"]
+          in_app_frame_mix:
+            type: ["null", "string"]
+      - name: occurrence
+        type: ["null", "string"]
+        description: Occurrence information for the event.
+      - name: packages
+        type: ["null", "object"]
+        description: Package information.
+      - name: platform
+        type: ["string", "null"]
+        description: Platform the event was generated on.
+      - name: projectID
+        type: ["null", "string"]
+        description: Project ID this event belongs to.
+      - name: sdk
+        type: ["null", "string"]
+        description: SDK information.
+      - name: size
+        type: ["null", "integer"]
+        description: Event payload size in bytes.
+      - name: tags
+        type: ["array", "null"]
+        description: Tags associated with the event.
+      - name: title
+        type: ["string", "null"]
+        description: Event title.
+      - name: type
+        type: ["null", "string"]
+        description: Event type.
+      - name: user
+        type: ["null", "object"]
+        description: User associated with the event.
+        properties:
+          id:
+            type: ["string", "null"]
+          email:
+            type: ["null", "string"]
+          username:
+            type: ["null", "string"]
+          name:
+            type: ["null", "string"]
+          ip_address:
+            type: ["null", "string"]
+    - entity: issues
+      fields:
+      - name: annotations
+        type: ["array", "null"]
+        description: Annotations on the issue.
+      - name: assignedTo
+        type: ["null", "object"]
+        description: User or team assigned to this issue.
+      - name: count
+        type: ["string", "null"]
+        description: Number of events for this issue.
+      - name: culprit
+        type: ["string", "null"]
+        description: The culprit (source) of the issue.
+      - name: firstSeen
+        type: ["string", "null"]
+        description: When the issue was first seen.
+      - name: hasSeen
+        type: ["boolean", "null"]
+        description: Whether the authenticated user has seen the issue.
+      - name: id
+        type: ["string", "null"]
+        description: Unique issue identifier.
+      - name: isBookmarked
+        type: ["boolean", "null"]
+        description: Whether the issue is bookmarked.
+      - name: isPublic
+        type: ["boolean", "null"]
+        description: Whether the issue is public.
+      - name: isSubscribed
+        type: ["boolean", "null"]
+        description: Whether the user is subscribed to the issue.
+      - name: isUnhandled
+        type: ["null", "boolean"]
+        description: Whether the issue is from an unhandled error.
+      - name: issueCategory
+        type: ["null", "string"]
+        description: The category classification of the issue.
+      - name: issueType
+        type: ["null", "string"]
+        description: The type classification of the issue.
+      - name: lastSeen
+        type: ["string", "null"]
+        description: When the issue was last seen.
+      - name: level
+        type: ["string", "null"]
+        description: Issue severity level.
+      - name: logger
+        type: ["null", "string"]
+        description: Logger that generated the issue.
+      - name: metadata
+        type: ["object", "null"]
+        description: Issue metadata.
+      - name: numComments
+        type: ["integer", "null"]
+        description: Number of comments on the issue.
+      - name: permalink
+        type: ["string", "null"]
+        description: Permalink to the issue in the Sentry UI.
+      - name: platform
+        type: ["null", "string"]
+        description: Platform for this issue.
+      - name: project
+        type: ["object", "null"]
+        description: Project this issue belongs to.
+        properties:
+          id:
+            type: ["string", "null"]
+          name:
+            type: ["string", "null"]
+          slug:
+            type: ["string", "null"]
+      - name: shareId
+        type: ["null", "string"]
+        description: Share ID if the issue is shared.
+      - name: shortId
+        type: ["string", "null"]
+        description: Short human-readable identifier.
+      - name: stats
+        type: ["object", "null"]
+        description: Issue event statistics.
+      - name: status
+        type: ["string", "null"]
+        description: Issue status (resolved, unresolved, ignored).
+      - name: statusDetails
+        type: ["object", "null"]
+        description: Status detail information.
+      - name: subscriptionDetails
+        type: ["null", "object"]
+        description: Subscription details.
+      - name: substatus
+        type: ["null", "string"]
+        description: Issue substatus.
+      - name: title
+        type: ["string", "null"]
+        description: Issue title.
+      - name: type
+        type: ["string", "null"]
+        description: Issue type.
+      - name: userCount
+        type: ["integer", "null"]
+        description: Number of users affected.
+    - entity: projects
+      fields:
+      - name: access
+        type: ["null", "array"]
+        description: List of access permissions for the authenticated user.
+      - name: avatar
+        type: ["object", "null"]
+        description: Project avatar information.
+        properties:
+          avatarUrl:
+            type: ["null", "string"]
+          avatarType:
+            type: ["string", "null"]
+          avatarUuid:
+            type: ["null", "string"]
+      - name: color
+        type: ["string", "null"]
+        description: Project color code.
+      - name: dateCreated
+        type: ["string", "null"]
+        description: Date the project was created.
+      - name: features
+        type: ["array", "null"]
+        description: List of enabled features.
+      - name: firstEvent
+        type: ["null", "string"]
+        description: Timestamp of the first event.
+      - name: firstTransactionEvent
+        type: ["null", "boolean"]
+        description: Whether a transaction event has been received.
+      - name: hasAccess
+        type: ["boolean", "null"]
+        description: Whether the user has access to this project.
+      - name: hasCustomMetrics
+        type: ["null", "boolean"]
+        description: Whether the project has custom metrics.
+      - name: hasFeedbacks
+        type: ["null", "boolean"]
+        description: Whether the project has user feedback.
+      - name: hasMinifiedStackTrace
+        type: ["null", "boolean"]
+        description: Whether the project has minified stack traces.
+      - name: hasMonitors
+        type: ["null", "boolean"]
+        description: Whether the project has cron monitors.
+      - name: hasNewFeedbacks
+        type: ["null", "boolean"]
+        description: Whether the project has new user feedback.
+      - name: hasProfiles
+        type: ["null", "boolean"]
+        description: Whether the project has profiling data.
+      - name: hasReplays
+        type: ["null", "boolean"]
+        description: Whether the project has session replays.
+      - name: hasSessions
+        type: ["null", "boolean"]
+        description: Whether the project has session data.
+      - name: id
+        type: ["string", "null"]
+        description: Unique project identifier.
+      - name: isBookmarked
+        type: ["boolean", "null"]
+        description: Whether the project is bookmarked.
+      - name: isInternal
+        type: ["boolean", "null"]
+        description: Whether the project is internal.
+      - name: isMember
+        type: ["boolean", "null"]
+        description: Whether the authenticated user is a member.
+      - name: isPublic
+        type: ["boolean", "null"]
+        description: Whether the project is public.
+      - name: name
+        type: ["string", "null"]
+        description: Human-readable project name.
+      - name: organization
+        type: ["object", "null"]
+        description: Organization this project belongs to.
+        properties:
+          id:
+            type: ["string", "null"]
+          name:
+            type: ["string", "null"]
+          slug:
+            type: ["string", "null"]
+      - name: platform
+        type: ["null", "string"]
+        description: The platform for this project.
+      - name: slug
+        type: ["string", "null"]
+        description: URL-friendly project identifier.
+      - name: status
+        type: ["string", "null"]
+        description: Project status.
+    - entity: releases
+      fields:
+      - name: authors
+        type: ["null", "array"]
+        description: Authors of commits in this release.
+      - name: commitCount
+        type: ["null", "integer"]
+        description: Number of commits in this release.
+      - name: currentProjectMeta
+        type: ["null", "object"]
+        description: Metadata for the current project context.
+      - name: data
+        type: ["null", "object"]
+        description: Additional release data.
+      - name: dateCreated
+        type: ["null", "string"]
+        description: When the release was created.
+      - name: dateReleased
+        type: ["null", "string"]
+        description: When the release was deployed.
+      - name: deployCount
+        type: ["null", "integer"]
+        description: Number of deploys for this release.
+      - name: firstEvent
+        type: ["null", "string"]
+        description: Timestamp of the first event in this release.
+      - name: id
+        type: ["null", "integer"]
+        description: Unique release identifier.
+      - name: lastCommit
+        type: ["null", "object"]
+        description: Last commit in this release.
+      - name: lastDeploy
+        type: ["null", "object"]
+        description: Last deploy of this release.
+      - name: lastEvent
+        type: ["null", "string"]
+        description: Timestamp of the last event in this release.
+      - name: newGroups
+        type: ["null", "integer"]
+        description: Number of new issue groups in this release.
+      - name: owner
+        type: ["null", "string"]
+        description: Owner of the release.
+      - name: projects
+        type: ["null", "array"]
+        description: Projects associated with this release.
+      - name: ref
+        type: ["null", "string"]
+        description: Git reference (commit SHA, tag, etc.).
+      - name: shortVersion
+        type: ["null", "string"]
+        description: Short version string.
+      - name: status
+        type: ["null", "string"]
+        description: Release status.
+      - name: url
+        type: ["null", "string"]
+        description: URL associated with the release.
+      - name: userAgent
+        type: ["null", "string"]
+        description: User agent that created the release.
+      - name: version
+        type: ["null", "string"]
+        description: Release version string.
+      - name: versionInfo
+        type: ["null", "object"]
+        description: Parsed version information.
+        properties:
+          version:
+            type: ["null", "object"]
+            properties:
+              pre:
+                type: ["null", "string"]
+              raw:
+                type: ["null", "string"]
+              major:
+                type: ["null", "integer"]
+              minor:
+                type: ["null", "integer"]
+              patch:
+                type: ["null", "integer"]
+              buildCode:
+                type: ["null", "string"]
+              components:
+                type: ["null", "integer"]
+          description:
+            type: ["null", "string"]
+          package:
+            type: ["null", "string"]
+          buildHash:
+            type: ["null", "string"]
+
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Sentry.
+    properties:
+      organization:
+        type: string
+        title: Organization
+        description: The slug of the organization to replicate data from.
+      project:
+        type: string
+        title: Project
+        description: The slug of the project to replicate data from.
+    required:
+    - organization
+    - project
+    replication_config_key_mapping:
+      organization: organization
+      project: project
+
+servers:
+- url: https://{hostname}/api/0
+  description: Sentry API server
+  variables:
+    hostname:
+      default: sentry.io
+      description: >-
+        Host name of Sentry API server. For self-hosted instances, specify
+        your host name here. Otherwise, leave as sentry.io.
+  x-airbyte-replication-environment-mapping:
+    hostname: hostname
+
+security:
+- sentryAuth: []
+
+paths:
+  /projects/:
+    get:
+      summary: List projects
+      description: Return a list of projects available to the authenticated user.
+      operationId: Projects_List
+      x-airbyte-entity: projects
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      parameters:
+      - name: cursor
+        in: query
+        description: Pagination cursor for next page of results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /projects/{organization_slug}/{project_slug}/:
+    get:
+      summary: Retrieve a project
+      description: Return details on an individual project.
+      operationId: Projects_Get
+      x-airbyte-entity: projects
+      x-airbyte-action: get
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization the project belongs to.
+        schema:
+          type: string
+      - name: project_slug
+        in: path
+        required: true
+        description: The slug of the project to retrieve.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectDetail"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Project not found
+
+  /projects/{organization_slug}/{project_slug}/issues/:
+    get:
+      summary: List a project's issues
+      description: >-
+        Return a list of issues (groups) bound to a project.
+        A default query of is:unresolved is applied. To return results with
+        other statuses send a new query value (i.e. ?query= for all results).
+      operationId: Issues_List
+      x-airbyte-entity: issues
+      x-airbyte-action: list
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization the issues belong to.
+        schema:
+          type: string
+      - name: project_slug
+        in: path
+        required: true
+        description: The slug of the project the issues belong to.
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: >-
+          An optional Sentry structured search query. If not provided
+          an implied "is:unresolved" is assumed.
+        required: false
+        schema:
+          type: string
+      - name: statsPeriod
+        in: query
+        description: >-
+          An optional stat period (can be one of "24h", "14d", and "").
+        required: false
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: Pagination cursor for next page of results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of issues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Issue"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /organizations/{organization_slug}/issues/{issue_id}/:
+    get:
+      summary: Retrieve an issue
+      description: >-
+        Return details on an individual issue. This returns the basic stats
+        for the issue (title, last seen, first seen), some overall numbers
+        (number of comments, user reports) as well as the summarized event data.
+      operationId: Issues_Get
+      x-airbyte-entity: issues
+      x-airbyte-action: get
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization the issue belongs to.
+        schema:
+          type: string
+      - name: issue_id
+        in: path
+        required: true
+        description: The ID of the issue to retrieve.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Issue details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Issue"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Issue not found
+
+  /projects/{organization_slug}/{project_slug}/events/:
+    get:
+      summary: List a project's events
+      description: Return a list of events bound to a project.
+      operationId: Events_List
+      x-airbyte-entity: events
+      x-airbyte-action: list
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization the events belong to.
+        schema:
+          type: string
+      - name: project_slug
+        in: path
+        required: true
+        description: The slug of the project the events belong to.
+        schema:
+          type: string
+      - name: full
+        in: query
+        description: If set to true, the event payload will include the full event body.
+        required: false
+        schema:
+          type: string
+          default: "true"
+      - name: cursor
+        in: query
+        description: Pagination cursor for next page of results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /projects/{organization_slug}/{project_slug}/events/{event_id}/:
+    get:
+      summary: Retrieve an event for a project
+      description: Return details on an individual event.
+      operationId: Events_Get
+      x-airbyte-entity: events
+      x-airbyte-action: get
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization the event belongs to.
+        schema:
+          type: string
+      - name: project_slug
+        in: path
+        required: true
+        description: The slug of the project the event belongs to.
+        schema:
+          type: string
+      - name: event_id
+        in: path
+        required: true
+        description: The ID of the event to retrieve (hexadecimal).
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Event not found
+
+  /organizations/{organization_slug}/releases/:
+    get:
+      summary: List an organization's releases
+      description: Return a list of releases for a given organization.
+      operationId: Releases_List
+      x-airbyte-entity: releases
+      x-airbyte-action: list
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization.
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: This parameter can be used to create a "starts with" filter for the version.
+        required: false
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: Pagination cursor for next page of results.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of releases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Release"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /organizations/{organization_slug}/releases/{version}/:
+    get:
+      summary: Retrieve an organization's release
+      description: Return a release for a given organization.
+      operationId: Releases_Get
+      x-airbyte-entity: releases
+      x-airbyte-action: get
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization.
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        description: The version identifier of the release.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Release details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Release"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Release not found
+
+  /projects/{organization_slug}/{project_slug}/detail/:
+    get:
+      summary: Retrieve project detail
+      description: Return detailed information about a specific project.
+      operationId: ProjectDetail_Get
+      x-airbyte-entity: project_detail
+      x-airbyte-action: get
+      x-airbyte-path-override:
+        path: /projects/{organization_slug}/{project_slug}/
+      parameters:
+      - name: organization_slug
+        in: path
+        required: true
+        description: The slug of the organization the project belongs to.
+        schema:
+          type: string
+      - name: project_slug
+        in: path
+        required: true
+        description: The slug of the project.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Project detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectDetail"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Project not found
+
+components:
+  securitySchemes:
+    sentryAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Sentry authentication token. Create one at
+        https://sentry.io/settings/account/api/auth-tokens/
+      x-airbyte-auth-config:
+        title: Authentication Token
+        type: object
+        required:
+        - auth_token
+        properties:
+          auth_token:
+            type: string
+            title: Authentication Token
+            description: >-
+              Sentry authentication token. Log into Sentry and create one at
+              Settings > Account > API > Auth Tokens.
+        auth_mapping:
+          token: "${auth_token}"
+        replication_auth_key_mapping:
+          auth_token: auth_token
+
+  schemas:
+    Project:
+      type: object
+      x-airbyte-entity-name: projects
+      x-airbyte-stream-name: projects
+      description: A Sentry project (summary view from list endpoint).
+      properties:
+        id:
+          type:
+          - string
+          - "null"
+          description: Unique project identifier.
+        name:
+          type:
+          - string
+          - "null"
+          description: Human-readable project name.
+        slug:
+          type:
+          - string
+          - "null"
+          description: URL-friendly project identifier.
+        status:
+          type:
+          - string
+          - "null"
+          description: Project status.
+        platform:
+          type:
+          - string
+          - "null"
+          description: The platform for this project.
+        dateCreated:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: Date the project was created.
+        isBookmarked:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project is bookmarked.
+        isMember:
+          type:
+          - boolean
+          - "null"
+          description: Whether the authenticated user is a member.
+        hasAccess:
+          type:
+          - boolean
+          - "null"
+          description: Whether the user has access to this project.
+        isPublic:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project is public.
+        isInternal:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project is internal.
+        color:
+          type:
+          - string
+          - "null"
+          description: Project color code.
+        features:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: List of enabled features.
+        firstEvent:
+          type:
+          - string
+          - "null"
+          description: Timestamp of the first event.
+        firstTransactionEvent:
+          type:
+          - boolean
+          - "null"
+          description: Whether a transaction event has been received.
+        access:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: List of access permissions for the authenticated user.
+        hasMinifiedStackTrace:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has minified stack traces.
+        hasMonitors:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has cron monitors.
+        hasProfiles:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has profiling data.
+        hasReplays:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has session replays.
+        hasFeedbacks:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has user feedback.
+        hasFlags:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has feature flags.
+        hasNewFeedbacks:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has new user feedback.
+        hasSessions:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has session data.
+        hasInsightsHttp:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has HTTP insights.
+        hasInsightsDb:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has database insights.
+        hasInsightsAssets:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has asset insights.
+        hasInsightsAppStart:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has app start insights.
+        hasInsightsScreenLoad:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has screen load insights.
+        hasInsightsVitals:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has web vitals insights.
+        hasInsightsCaches:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has cache insights.
+        hasInsightsQueues:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has queue insights.
+        hasInsightsAgentMonitoring:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has agent monitoring insights.
+        hasInsightsMCP:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has MCP insights.
+        hasLogs:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has log data.
+        hasTraceMetrics:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has trace metrics.
+        avatar:
+          type:
+          - object
+          - "null"
+          description: Project avatar information.
+          properties:
+            avatarType:
+              type:
+              - string
+              - "null"
+            avatarUuid:
+              type:
+              - string
+              - "null"
+            avatarUrl:
+              type:
+              - string
+              - "null"
+        organization:
+          type:
+          - object
+          - "null"
+          description: Organization this project belongs to.
+          properties:
+            id:
+              type:
+              - string
+              - "null"
+            name:
+              type:
+              - string
+              - "null"
+            slug:
+              type:
+              - string
+              - "null"
+
+    ProjectDetail:
+      type: object
+      x-airbyte-entity-name: project_detail
+      x-airbyte-stream-name: project_detail
+      description: Detailed project information.
+      properties:
+        id:
+          type:
+          - string
+          - "null"
+          description: Unique project identifier.
+        name:
+          type:
+          - string
+          - "null"
+          description: Human-readable project name.
+        slug:
+          type:
+          - string
+          - "null"
+          description: URL-friendly project identifier.
+        status:
+          type:
+          - string
+          - "null"
+          description: Project status.
+        platform:
+          type:
+          - string
+          - "null"
+          description: The platform for this project.
+        dateCreated:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: Date the project was created.
+        isBookmarked:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project is bookmarked.
+        isMember:
+          type:
+          - boolean
+          - "null"
+          description: Whether the authenticated user is a member.
+        hasAccess:
+          type:
+          - boolean
+          - "null"
+          description: Whether the user has access.
+        isPublic:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project is public.
+        isInternal:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project is internal.
+        color:
+          type:
+          - string
+          - "null"
+          description: Project color code.
+        features:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: List of enabled features.
+        firstEvent:
+          type:
+          - string
+          - "null"
+          description: Timestamp of the first event.
+        firstTransactionEvent:
+          type:
+          - boolean
+          - "null"
+          description: Whether a transaction event has been received.
+        access:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: List of access permissions for the authenticated user.
+        hasMinifiedStackTrace:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has minified stack traces.
+        hasMonitors:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has cron monitors.
+        hasProfiles:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has profiling data.
+        hasReplays:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has session replays.
+        hasFeedbacks:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has user feedback.
+        hasFlags:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has feature flags.
+        hasNewFeedbacks:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has new user feedback.
+        hasSessions:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has session data.
+        hasInsightsHttp:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has HTTP insights.
+        hasInsightsDb:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has database insights.
+        hasInsightsAssets:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has asset insights.
+        hasInsightsAppStart:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has app start insights.
+        hasInsightsScreenLoad:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has screen load insights.
+        hasInsightsVitals:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has web vitals insights.
+        hasInsightsCaches:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has cache insights.
+        hasInsightsQueues:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has queue insights.
+        hasInsightsAgentMonitoring:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has agent monitoring insights.
+        hasInsightsMCP:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has MCP insights.
+        hasLogs:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has log data.
+        hasTraceMetrics:
+          type:
+          - boolean
+          - "null"
+          description: Whether the project has trace metrics.
+        team:
+          type:
+          - object
+          - "null"
+          description: Primary team for this project.
+          properties:
+            id:
+              type:
+              - string
+              - "null"
+            name:
+              type:
+              - string
+              - "null"
+            slug:
+              type:
+              - string
+              - "null"
+        teams:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - object
+            - "null"
+            properties:
+              id:
+                type:
+                - string
+                - "null"
+              name:
+                type:
+                - string
+                - "null"
+              slug:
+                type:
+                - string
+                - "null"
+          description: Teams assigned to this project.
+        avatar:
+          type:
+          - object
+          - "null"
+          description: Project avatar information.
+          properties:
+            avatarType:
+              type:
+              - string
+              - "null"
+            avatarUuid:
+              type:
+              - string
+              - "null"
+            avatarUrl:
+              type:
+              - string
+              - "null"
+        organization:
+          type:
+          - object
+          - "null"
+          description: Organization this project belongs to.
+          properties:
+            id:
+              type:
+              - string
+              - "null"
+            name:
+              type:
+              - string
+              - "null"
+            slug:
+              type:
+              - string
+              - "null"
+        latestRelease:
+          type:
+          - object
+          - "null"
+          description: Latest release for this project.
+        options:
+          type:
+          - object
+          - "null"
+          description: Project configuration options.
+        digestsMinDelay:
+          type:
+          - integer
+          - "null"
+          description: Minimum digest delay in seconds.
+        digestsMaxDelay:
+          type:
+          - integer
+          - "null"
+          description: Maximum digest delay in seconds.
+        resolveAge:
+          type:
+          - integer
+          - "null"
+          description: Hours before an issue is auto-resolved.
+        dataScrubber:
+          type:
+          - boolean
+          - "null"
+          description: Whether data scrubbing is enabled.
+        safeFields:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Fields that are safe from data scrubbing.
+        sensitiveFields:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Fields that contain sensitive data.
+        verifySSL:
+          type:
+          - boolean
+          - "null"
+          description: Whether SSL verification is enabled.
+        scrubIPAddresses:
+          type:
+          - boolean
+          - "null"
+          description: Whether IP address scrubbing is enabled.
+        scrapeJavaScript:
+          type:
+          - boolean
+          - "null"
+          description: Whether JavaScript scraping is enabled.
+        allowedDomains:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Domains allowed to send events.
+        processingIssues:
+          type:
+          - integer
+          - "null"
+          description: Number of processing issues.
+        securityToken:
+          type:
+          - string
+          - "null"
+          description: Security token for the project.
+        subjectPrefix:
+          type:
+          - string
+          - "null"
+          description: Subject prefix for notification emails.
+        dataScrubberDefaults:
+          type:
+          - boolean
+          - "null"
+          description: Whether default data scrubbers are enabled.
+        storeCrashReports:
+          type:
+          - boolean
+          - integer
+          - "null"
+          description: Number of crash reports to store, or null/false if disabled.
+        subjectTemplate:
+          type:
+          - string
+          - "null"
+          description: Template for notification email subjects.
+        securityTokenHeader:
+          type:
+          - string
+          - "null"
+          description: Custom security token header name.
+        groupingConfig:
+          type:
+          - string
+          - "null"
+          description: Grouping configuration identifier.
+        groupingEnhancements:
+          type:
+          - string
+          - "null"
+          description: Custom grouping enhancements.
+        derivedGroupingEnhancements:
+          type:
+          - string
+          - "null"
+          description: Derived grouping enhancements.
+        secondaryGroupingExpiry:
+          type:
+          - integer
+          - "null"
+          description: Expiry timestamp for secondary grouping.
+        secondaryGroupingConfig:
+          type:
+          - string
+          - "null"
+          description: Secondary grouping configuration.
+        fingerprintingRules:
+          type:
+          - string
+          - "null"
+          description: Custom fingerprinting rules.
+        plugins:
+          type:
+          - array
+          - "null"
+          description: Installed plugins.
+        platforms:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Platforms detected in this project.
+        defaultEnvironment:
+          type:
+          - string
+          - "null"
+          description: Default environment for the project.
+        relayPiiConfig:
+          type:
+          - string
+          - "null"
+          description: Relay PII configuration.
+        builtinSymbolSources:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Built-in symbol sources.
+        dynamicSamplingBiases:
+          type:
+          - array
+          - "null"
+          description: Dynamic sampling biases configuration.
+        symbolSources:
+          type:
+          - string
+          - "null"
+          description: Custom symbol sources configuration.
+        isDynamicallySampled:
+          type:
+          - boolean
+          - "null"
+          description: Whether dynamic sampling is active.
+        autofixAutomationTuning:
+          type:
+          - string
+          - "null"
+          description: Autofix automation tuning setting.
+        seerScannerAutomation:
+          type:
+          - boolean
+          - "null"
+          description: Whether Seer scanner automation is enabled.
+        highlightTags:
+          type:
+          - array
+          - "null"
+          description: Highlighted tags configuration.
+        highlightContext:
+          type:
+          - object
+          - "null"
+          description: Highlighted context configuration.
+        highlightPreset:
+          type:
+          - object
+          - "null"
+          description: Highlight preset configuration.
+        debugFilesRole:
+          type:
+          - string
+          - "null"
+          description: Debug files role configuration.
+
+    Issue:
+      type: object
+      x-airbyte-entity-name: issues
+      x-airbyte-stream-name: issues
+      description: A Sentry issue (group of similar events).
+      properties:
+        id:
+          type:
+          - string
+          - "null"
+          description: Unique issue identifier.
+        title:
+          type:
+          - string
+          - "null"
+          description: Issue title.
+        shortId:
+          type:
+          - string
+          - "null"
+          description: Short human-readable identifier.
+        culprit:
+          type:
+          - string
+          - "null"
+          description: The culprit (source) of the issue.
+        level:
+          type:
+          - string
+          - "null"
+          description: Issue severity level.
+        status:
+          type:
+          - string
+          - "null"
+          description: Issue status (resolved, unresolved, ignored).
+        type:
+          type:
+          - string
+          - "null"
+          description: Issue type.
+        count:
+          type:
+          - string
+          - "null"
+          description: Number of events for this issue.
+        userCount:
+          type:
+          - integer
+          - "null"
+          description: Number of users affected.
+        firstSeen:
+          type:
+          - string
+          - "null"
+          description: When the issue was first seen.
+        lastSeen:
+          type:
+          - string
+          - "null"
+          description: When the issue was last seen.
+        hasSeen:
+          type:
+          - boolean
+          - "null"
+          description: Whether the authenticated user has seen the issue.
+        isBookmarked:
+          type:
+          - boolean
+          - "null"
+          description: Whether the issue is bookmarked.
+        isPublic:
+          type:
+          - boolean
+          - "null"
+          description: Whether the issue is public.
+        isSubscribed:
+          type:
+          - boolean
+          - "null"
+          description: Whether the user is subscribed to the issue.
+        logger:
+          type:
+          - string
+          - "null"
+          description: Logger that generated the issue.
+        permalink:
+          type:
+          - string
+          - "null"
+          description: Permalink to the issue in the Sentry UI.
+        platform:
+          type:
+          - string
+          - "null"
+          description: Platform for this issue.
+        shareId:
+          type:
+          - string
+          - "null"
+          description: Share ID if the issue is shared.
+        numComments:
+          type:
+          - integer
+          - "null"
+          description: Number of comments on the issue.
+        issueType:
+          type:
+          - string
+          - "null"
+          description: The type classification of the issue.
+        issueCategory:
+          type:
+          - string
+          - "null"
+          description: The category classification of the issue.
+        isUnhandled:
+          type:
+          - boolean
+          - "null"
+          description: Whether the issue is from an unhandled error.
+        substatus:
+          type:
+          - string
+          - "null"
+          description: Issue substatus.
+        metadata:
+          type:
+          - object
+          - "null"
+          description: Issue metadata.
+          properties:
+            title:
+              type:
+              - string
+              - "null"
+            type:
+              type:
+              - string
+              - "null"
+            value:
+              type:
+              - string
+              - "null"
+            filename:
+              type:
+              - string
+              - "null"
+        project:
+          type:
+          - object
+          - "null"
+          description: Project this issue belongs to.
+          properties:
+            id:
+              type:
+              - string
+              - "null"
+            name:
+              type:
+              - string
+              - "null"
+            slug:
+              type:
+              - string
+              - "null"
+        stats:
+          type:
+          - object
+          - "null"
+          description: Issue event statistics.
+        statusDetails:
+          type:
+          - object
+          - "null"
+          description: Status detail information.
+        assignedTo:
+          type:
+          - object
+          - "null"
+          description: User or team assigned to this issue.
+        annotations:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Annotations on the issue.
+        subscriptionDetails:
+          type:
+          - object
+          - "null"
+          description: Subscription details.
+
+    Event:
+      type: object
+      x-airbyte-entity-name: events
+      x-airbyte-stream-name: events
+      description: A Sentry event (individual error occurrence).
+      properties:
+        id:
+          type:
+          - string
+          - "null"
+          description: Unique event identifier.
+        eventID:
+          type:
+          - string
+          - "null"
+          description: Event ID as reported by the client.
+        groupID:
+          type:
+          - string
+          - "null"
+          description: ID of the issue group this event belongs to.
+        title:
+          type:
+          - string
+          - "null"
+          description: Event title.
+        message:
+          type:
+          - string
+          - "null"
+          description: Event message.
+        type:
+          type:
+          - string
+          - "null"
+          description: Event type.
+        platform:
+          type:
+          - string
+          - "null"
+          description: Platform the event was generated on.
+        dateCreated:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the event was created.
+        dateReceived:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the event was received by Sentry.
+        culprit:
+          type:
+          - string
+          - "null"
+          description: The culprit (source) of the event.
+        location:
+          type:
+          - string
+          - "null"
+          description: Location in source code.
+        crashFile:
+          type:
+          - string
+          - "null"
+          description: Crash file reference.
+        projectID:
+          type:
+          - string
+          - "null"
+          description: Project ID this event belongs to.
+        sdk:
+          type:
+          - string
+          - "null"
+          description: SDK information.
+        dist:
+          type:
+          - string
+          - "null"
+          description: Distribution information.
+        size:
+          type:
+          - integer
+          - "null"
+          description: Event payload size in bytes.
+        event.type:
+          type:
+          - string
+          - "null"
+          description: The type of the event.
+        tags:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - object
+            - "null"
+            properties:
+              key:
+                type:
+                - string
+                - "null"
+              value:
+                type:
+                - string
+                - "null"
+          description: Tags associated with the event.
+        user:
+          type:
+          - object
+          - "null"
+          description: User associated with the event.
+          properties:
+            id:
+              type:
+              - string
+              - "null"
+            email:
+              type:
+              - string
+              - "null"
+            username:
+              type:
+              - string
+              - "null"
+            name:
+              type:
+              - string
+              - "null"
+            ip_address:
+              type:
+              - string
+              - "null"
+        metadata:
+          type:
+          - object
+          - "null"
+          description: Event metadata.
+          properties:
+            title:
+              type:
+              - string
+              - "null"
+        context:
+          type:
+          - object
+          - "null"
+          description: Additional context data.
+        contexts:
+          type:
+          - object
+          - "null"
+          description: Structured context information.
+        entries:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - object
+            - "null"
+          description: Event entries (exception, breadcrumbs, request, etc.).
+        errors:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Processing errors.
+        fingerprints:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - string
+            - "null"
+          description: Fingerprints used for grouping.
+        packages:
+          type:
+          - object
+          - "null"
+          description: Package information.
+        groupingConfig:
+          type:
+          - object
+          - "null"
+          description: Grouping configuration.
+          properties:
+            id:
+              type:
+              - string
+              - "null"
+            enhancements:
+              type:
+              - string
+              - "null"
+        _meta:
+          type:
+          - object
+          - "null"
+          description: Meta information for data scrubbing.
+
+    Release:
+      type: object
+      x-airbyte-entity-name: releases
+      x-airbyte-stream-name: releases
+      description: A Sentry release.
+      properties:
+        id:
+          type:
+          - integer
+          - "null"
+          description: Unique release identifier.
+        version:
+          type:
+          - string
+          - "null"
+          description: Release version string.
+        shortVersion:
+          type:
+          - string
+          - "null"
+          description: Short version string.
+        ref:
+          type:
+          - string
+          - "null"
+          description: Git reference (commit SHA, tag, etc.).
+        url:
+          type:
+          - string
+          - "null"
+          description: URL associated with the release.
+        status:
+          type:
+          - string
+          - "null"
+          description: Release status.
+        dateCreated:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the release was created.
+        dateReleased:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: When the release was deployed.
+        owner:
+          type:
+          - string
+          - "null"
+          description: Owner of the release.
+        newGroups:
+          type:
+          - integer
+          - "null"
+          description: Number of new issue groups in this release.
+        commitCount:
+          type:
+          - integer
+          - "null"
+          description: Number of commits in this release.
+        deployCount:
+          type:
+          - integer
+          - "null"
+          description: Number of deploys for this release.
+        firstEvent:
+          type:
+          - string
+          - "null"
+          description: Timestamp of the first event in this release.
+        lastEvent:
+          type:
+          - string
+          - "null"
+          description: Timestamp of the last event in this release.
+        lastCommit:
+          type:
+          - object
+          - "null"
+          description: Last commit in this release.
+        lastDeploy:
+          type:
+          - object
+          - "null"
+          description: Last deploy of this release.
+        data:
+          type:
+          - object
+          - "null"
+          description: Additional release data.
+        userAgent:
+          type:
+          - string
+          - "null"
+          description: User agent that created the release.
+        authors:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - object
+            - "null"
+            properties:
+              name:
+                type:
+                - string
+                - "null"
+              email:
+                type:
+                - string
+                - "null"
+          description: Authors of commits in this release.
+        projects:
+          type:
+          - array
+          - "null"
+          items:
+            type:
+            - object
+            - "null"
+            properties:
+              id:
+                type:
+                - integer
+                - "null"
+              name:
+                type:
+                - string
+                - "null"
+              slug:
+                type:
+                - string
+                - "null"
+              platform:
+                type:
+                - string
+                - "null"
+              newGroups:
+                type:
+                - integer
+                - "null"
+              hasHealthData:
+                type:
+                - boolean
+                - "null"
+          description: Projects associated with this release.
+        versionInfo:
+          type:
+          - object
+          - "null"
+          description: Parsed version information.
+          properties:
+            version:
+              type:
+              - object
+              - "null"
+              properties:
+                raw:
+                  type:
+                  - string
+                  - "null"
+                major:
+                  type:
+                  - integer
+                  - "null"
+                minor:
+                  type:
+                  - integer
+                  - "null"
+                patch:
+                  type:
+                  - integer
+                  - "null"
+                pre:
+                  type:
+                  - string
+                  - "null"
+                buildCode:
+                  type:
+                  - string
+                  - "null"
+                components:
+                  type:
+                  - integer
+                  - "null"
+            description:
+              type:
+              - string
+              - "null"
+            package:
+              type:
+              - string
+              - "null"
+            buildHash:
+              type:
+              - string
+              - "null"
+        currentProjectMeta:
+          type:
+          - object
+          - "null"
+          description: Metadata for the current project context.

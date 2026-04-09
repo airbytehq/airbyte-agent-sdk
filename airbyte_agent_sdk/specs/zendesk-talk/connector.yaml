@@ -1,0 +1,2129 @@
+openapi: 3.1.0
+
+info:
+  title: Zendesk Talk API Connector
+  version: 1.0.2
+  description: |
+    Connector for the Zendesk Talk (Voice) API. Provides access to phone numbers,
+    addresses, greetings, IVR configurations, call data, and agent/account statistics
+    for Zendesk Talk voice support channels.
+  x-airbyte-connector-name: zendesk-talk
+  x-airbyte-connector-definition-id: c8630570-086d-4a40-99ae-ea5b18673071
+  x-airbyte-replication-version: "2.0.7"
+  x-airbyte-replication-compatibility: ">=2.0.7, <3.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Zendesk Talk API Documentation
+      url: https://developer.zendesk.com/api-reference/voice/talk-api/introduction/
+  x-airbyte-skip-auth-methods:
+    - bearer
+    - customauthenticator
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Zendesk Talk.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: "UTC date and time in the format YYYY-MM-DDT00:00:00Z from which to start replicating data."
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: addresses
+        fields:
+          - name: city
+            type: ["null", "string"]
+            description: City of the address
+          - name: country_code
+            type: ["null", "string"]
+            description: ISO country code
+          - name: id
+            type: ["null", "integer"]
+            description: Unique address identifier
+          - name: name
+            type: ["null", "string"]
+            description: Name of the address
+          - name: provider_reference
+            type: ["null", "string"]
+            description: Provider reference of the address
+          - name: province
+            type: ["null", "string"]
+            description: Province of the address
+          - name: state
+            type: ["null", "string"]
+            description: State of the address
+          - name: street
+            type: ["null", "string"]
+            description: Street of the address
+          - name: zip
+            type: ["null", "string"]
+            description: Zip code of the address
+      - entity: agents_activity
+        fields:
+          - name: accepted_third_party_conferences
+            type: ["null", "integer"]
+            description: Accepted third party conferences
+          - name: accepted_transfers
+            type: ["null", "integer"]
+            description: Total transfers accepted
+          - name: agent_id
+            type: ["null", "integer"]
+            description: Agent ID
+          - name: agent_state
+            type: ["null", "string"]
+            description: "Agent state: online, offline, away, or transfers_only"
+          - name: available_time
+            type: ["null", "integer"]
+            description: Total time agent was available to answer calls
+          - name: avatar_url
+            type: ["null", "string"]
+            description: URL to agent avatar
+          - name: average_hold_time
+            type: ["null", "integer"]
+            description: Average hold time per call
+          - name: average_talk_time
+            type: ["null", "integer"]
+            description: Average talk time per call
+          - name: average_wrap_up_time
+            type: ["null", "integer"]
+            description: Average wrap-up time per call
+          - name: away_time
+            type: ["null", "integer"]
+            description: Total time agent was set to away
+          - name: call_status
+            type: ["null", "string"]
+            description: "Agent call status: on_call, wrap_up, or null"
+          - name: calls_accepted
+            type: ["null", "integer"]
+            description: Total calls accepted
+          - name: calls_denied
+            type: ["null", "integer"]
+            description: Total calls denied
+          - name: calls_missed
+            type: ["null", "integer"]
+            description: Total calls missed
+          - name: calls_put_on_hold
+            type: ["null", "integer"]
+            description: Total calls placed on hold
+          - name: forwarding_number
+            type: ["null", "string"]
+            description: Forwarding number set by the agent
+          - name: name
+            type: ["null", "string"]
+            description: Agent name
+          - name: online_time
+            type: ["null", "integer"]
+            description: Total online time
+          - name: started_third_party_conferences
+            type: ["null", "integer"]
+            description: Started third party conferences
+          - name: started_transfers
+            type: ["null", "integer"]
+            description: Total transfers started
+          - name: total_call_duration
+            type: ["null", "integer"]
+            description: Total call duration
+          - name: total_hold_time
+            type: ["null", "integer"]
+            description: Total hold time across all calls
+          - name: total_talk_time
+            type: ["null", "integer"]
+            description: Total talk time (excludes hold)
+          - name: total_wrap_up_time
+            type: ["null", "integer"]
+            description: Total wrap-up time
+          - name: transfers_only_time
+            type: ["null", "integer"]
+            description: Total time in transfers-only mode
+          - name: via
+            type: ["null", "string"]
+            description: Channel the agent is registered on
+      - entity: agents_overview
+        fields:
+          - name: average_accepted_transfers
+            type: ["null", "integer"]
+            description: Average accepted transfers
+          - name: average_available_time
+            type: ["null", "integer"]
+            description: Average available time
+          - name: average_away_time
+            type: ["null", "integer"]
+            description: Average away time
+          - name: average_calls_accepted
+            type: ["null", "integer"]
+            description: Average calls accepted
+          - name: average_calls_denied
+            type: ["null", "integer"]
+            description: Average calls denied
+          - name: average_calls_missed
+            type: ["null", "integer"]
+            description: Average calls missed
+          - name: average_calls_put_on_hold
+            type: ["null", "integer"]
+            description: Average calls put on hold
+          - name: average_hold_time
+            type: ["null", "integer"]
+            description: Average hold time
+          - name: average_online_time
+            type: ["null", "integer"]
+            description: Average online time
+          - name: average_started_transfers
+            type: ["null", "integer"]
+            description: Average started transfers
+          - name: average_talk_time
+            type: ["null", "integer"]
+            description: Average talk time
+          - name: average_transfers_only_time
+            type: ["null", "integer"]
+            description: Average transfers-only time
+          - name: average_wrap_up_time
+            type: ["null", "integer"]
+            description: Average wrap-up time
+          - name: current_timestamp
+            type: ["null", "integer"]
+            description: Current timestamp
+          - name: total_accepted_transfers
+            type: ["null", "integer"]
+            description: Total accepted transfers
+          - name: total_calls_accepted
+            type: ["null", "integer"]
+            description: Total calls accepted
+          - name: total_calls_denied
+            type: ["null", "integer"]
+            description: Total calls denied
+          - name: total_calls_missed
+            type: ["null", "integer"]
+            description: Total calls missed
+          - name: total_calls_put_on_hold
+            type: ["null", "integer"]
+            description: Total calls put on hold
+          - name: total_hold_time
+            type: ["null", "integer"]
+            description: Total hold time
+          - name: total_started_transfers
+            type: ["null", "integer"]
+            description: Total started transfers
+          - name: total_talk_time
+            type: ["null", "integer"]
+            description: Total talk time
+          - name: total_wrap_up_time
+            type: ["null", "integer"]
+            description: Total wrap-up time
+      - entity: greeting_categories
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: Greeting category ID
+          - name: name
+            type: ["null", "string"]
+            description: Name of the greeting category
+      - entity: greetings
+        fields:
+          - name: active
+            type: ["null", "boolean"]
+            description: Whether the greeting is associated with phone numbers
+          - name: audio_name
+            type: ["null", "string"]
+            description: Audio file name
+          - name: audio_url
+            type: ["null", "string"]
+            description: Path to the greeting sound file
+          - name: category_id
+            type: ["null", "integer"]
+            description: ID of the greeting category
+          - name: default
+            type: ["null", "boolean"]
+            description: Whether this is a system default greeting
+          - name: default_lang
+            type: ["null", "boolean"]
+            description: Whether the greeting has a default language
+          - name: has_sub_settings
+            type: ["null", "boolean"]
+            description: Sub-settings for categorized greetings
+          - name: id
+            type: ["null", "string"]
+            description: Greeting ID
+          - name: ivr_ids
+            type: ["null", "array"]
+            description: IDs of IVRs associated with the greeting
+          - name: name
+            type: ["null", "string"]
+            description: Name of the greeting
+          - name: pending
+            type: ["null", "boolean"]
+            description: Whether the greeting is pending
+          - name: phone_number_ids
+            type: ["null", "array"]
+            description: IDs of phone numbers associated with the greeting
+          - name: upload_id
+            type: ["null", "integer"]
+            description: Upload ID associated with the greeting
+      - entity: phone_numbers
+        fields:
+          - name: call_recording_consent
+            type: ["null", "string"]
+            description: What call recording consent is set to
+          - name: capabilities
+            type: ["null", "object"]
+            description: Phone number capabilities (sms, mms, voice)
+            properties:
+              emergency_address:
+                type: ["null", "boolean"]
+              mms:
+                type: ["null", "boolean"]
+              sms:
+                type: ["null", "boolean"]
+              voice:
+                type: ["null", "boolean"]
+          - name: categorised_greetings
+            type: ["null", "object"]
+            description: Greeting category IDs and names
+          - name: categorised_greetings_with_sub_settings
+            type: ["null", "object"]
+            description: Greeting categories with associated settings
+          - name: country_code
+            type: ["null", "string"]
+            description: ISO country code for the number
+          - name: created_at
+            type: ["null", "string"]
+            description: Date and time the phone number was created
+          - name: default_greeting_ids
+            type: ["null", "array"]
+            description: Names of default system greetings
+          - name: default_group_id
+            type: ["null", "integer"]
+            description: Default group ID
+          - name: display_number
+            type: ["null", "string"]
+            description: Formatted phone number
+          - name: external
+            type: ["null", "boolean"]
+            description: Whether this is an external caller ID number
+          - name: failover_number
+            type: ["null", "string"]
+            description: Failover number associated with the phone number
+          - name: greeting_ids
+            type: ["null", "array"]
+            description: Custom greeting IDs associated with the phone number
+          - name: group_ids
+            type: ["null", "array"]
+            description: Array of associated group IDs
+          - name: id
+            type: ["null", "integer"]
+            description: Unique phone number identifier
+          - name: ivr_id
+            type: ["null", "integer"]
+            description: ID of IVR associated with the phone number
+          - name: line_type
+            type: ["null", "string"]
+            description: Type of line (phone or digital)
+          - name: location
+            type: ["null", "string"]
+            description: Geographical location of the number
+          - name: name
+            type: ["null", "string"]
+            description: Nickname if set, otherwise the display number
+          - name: nickname
+            type: ["null", "string"]
+            description: Nickname of the phone number
+          - name: number
+            type: ["null", "string"]
+            description: Phone number digits
+          - name: outbound_enabled
+            type: ["null", "boolean"]
+            description: Whether outbound calls are enabled
+          - name: priority
+            type: ["null", "integer"]
+            description: Priority level of the phone number
+          - name: recorded
+            type: ["null", "boolean"]
+            description: Whether calls are recorded
+          - name: schedule_id
+            type: ["null", "integer"]
+            description: ID of schedule associated with the phone number
+          - name: sms_enabled
+            type: ["null", "boolean"]
+            description: Whether SMS is enabled
+          - name: sms_group_id
+            type: ["null", "integer"]
+            description: Group associated with SMS
+          - name: token
+            type: ["null", "string"]
+            description: Generated token unique for the phone number
+          - name: toll_free
+            type: ["null", "boolean"]
+            description: Whether the number is toll-free
+          - name: transcription
+            type: ["null", "boolean"]
+            description: Whether voicemail transcription is enabled
+          - name: voice_enabled
+            type: ["null", "boolean"]
+            description: Whether voice is enabled
+      - entity: call_legs
+        fields:
+          - name: agent_id
+            type: ["null", "integer"]
+            description: Agent ID
+          - name: available_via
+            type: ["null", "string"]
+            description: Channel agent was available through
+          - name: call_charge
+            type: ["null", "string"]
+            description: Call charge amount
+          - name: call_id
+            type: ["null", "integer"]
+            description: Associated call ID
+          - name: completion_status
+            type: ["null", "string"]
+            description: Completion status
+          - name: conference_from
+            type: ["null", "integer"]
+            description: Conference from time
+          - name: conference_time
+            type: ["null", "integer"]
+            description: Conference duration
+          - name: conference_to
+            type: ["null", "integer"]
+            description: Conference to time
+          - name: consultation_from
+            type: ["null", "integer"]
+            description: Consultation from time
+          - name: consultation_time
+            type: ["null", "integer"]
+            description: Consultation duration
+          - name: consultation_to
+            type: ["null", "integer"]
+            description: Consultation to time
+          - name: created_at
+            type: ["null", "string"]
+            description: Creation timestamp
+          - name: duration
+            type: ["null", "integer"]
+            description: Duration in seconds
+          - name: forwarded_to
+            type: ["null", "string"]
+            description: Number forwarded to
+          - name: hold_time
+            type: ["null", "integer"]
+            description: Hold time in seconds
+          - name: id
+            type: ["null", "integer"]
+            description: Call leg ID
+          - name: minutes_billed
+            type: ["null", "integer"]
+            description: Minutes billed
+          - name: quality_issues
+            type: ["null", "array"]
+            description: Quality issues detected
+          - name: talk_time
+            type: ["null", "integer"]
+            description: Talk time in seconds
+          - name: transferred_from
+            type: ["null", "integer"]
+            description: Transferred from agent ID
+          - name: transferred_to
+            type: ["null", "integer"]
+            description: Transferred to agent ID
+          - name: type
+            type: ["null", "string"]
+            description: Type of call leg
+          - name: updated_at
+            type: ["null", "string"]
+            description: Last update timestamp
+          - name: user_id
+            type: ["null", "integer"]
+            description: User ID
+          - name: wrap_up_time
+            type: ["null", "integer"]
+            description: Wrap-up time in seconds
+      - entity: calls
+        fields:
+          - name: agent_id
+            type: ["null", "integer"]
+            description: Agent ID
+          - name: call_charge
+            type: ["null", "string"]
+            description: Call charge amount
+          - name: call_group_id
+            type: ["null", "integer"]
+            description: Call group ID
+          - name: call_recording_consent
+            type: ["null", "string"]
+            description: Call recording consent status
+          - name: call_recording_consent_action
+            type: ["null", "string"]
+            description: Recording consent action
+          - name: call_recording_consent_keypress
+            type: ["null", "string"]
+            description: Recording consent keypress
+          - name: callback
+            type: ["null", "boolean"]
+            description: Whether this was a callback
+          - name: callback_source
+            type: ["null", "string"]
+            description: Source of the callback
+          - name: completion_status
+            type: ["null", "string"]
+            description: Call completion status
+          - name: consultation_time
+            type: ["null", "integer"]
+            description: Consultation time
+          - name: created_at
+            type: ["null", "string"]
+            description: Creation timestamp
+          - name: customer_requested_voicemail
+            type: ["null", "boolean"]
+            description: Whether customer requested voicemail
+          - name: default_group
+            type: ["null", "boolean"]
+            description: Whether default group was used
+          - name: direction
+            type: ["null", "string"]
+            description: Call direction (inbound/outbound)
+          - name: duration
+            type: ["null", "integer"]
+            description: Call duration in seconds
+          - name: exceeded_queue_time
+            type: ["null", "boolean"]
+            description: Whether queue time was exceeded
+          - name: exceeded_queue_wait_time
+            type: ["null", "boolean"]
+            description: Whether max queue wait time was exceeded
+          - name: hold_time
+            type: ["null", "integer"]
+            description: Hold time in seconds
+          - name: id
+            type: ["null", "integer"]
+            description: Call ID
+          - name: ivr_action
+            type: ["null", "string"]
+            description: IVR action taken
+          - name: ivr_destination_group_name
+            type: ["null", "string"]
+            description: IVR destination group name
+          - name: ivr_hops
+            type: ["null", "integer"]
+            description: Number of IVR hops
+          - name: ivr_routed_to
+            type: ["null", "string"]
+            description: Where IVR routed the call
+          - name: ivr_time_spent
+            type: ["null", "integer"]
+            description: Time spent in IVR
+          - name: minutes_billed
+            type: ["null", "integer"]
+            description: Minutes billed
+          - name: not_recording_time
+            type: ["null", "integer"]
+            description: Time not recording
+          - name: outside_business_hours
+            type: ["null", "boolean"]
+            description: Whether call was outside business hours
+          - name: overflowed
+            type: ["null", "boolean"]
+            description: Whether call overflowed
+          - name: overflowed_to
+            type: ["null", "string"]
+            description: Where call overflowed to
+          - name: phone_number
+            type: ["null", "string"]
+            description: Phone number used
+          - name: phone_number_id
+            type: ["null", "integer"]
+            description: Phone number ID
+          - name: quality_issues
+            type: ["null", "array"]
+            description: Quality issues detected
+          - name: recording_control_interactions
+            type: ["null", "integer"]
+            description: Recording control interactions count
+          - name: recording_time
+            type: ["null", "integer"]
+            description: Recording time
+          - name: talk_time
+            type: ["null", "integer"]
+            description: Talk time in seconds
+          - name: ticket_id
+            type: ["null", "integer"]
+            description: Associated ticket ID
+          - name: time_to_answer
+            type: ["null", "integer"]
+            description: Time to answer in seconds
+          - name: updated_at
+            type: ["null", "string"]
+            description: Last update timestamp
+          - name: voicemail
+            type: ["null", "boolean"]
+            description: Whether it was a voicemail
+          - name: wait_time
+            type: ["null", "integer"]
+            description: Wait time in seconds
+          - name: wrap_up_time
+            type: ["null", "integer"]
+            description: Wrap-up time in seconds
+      - entity: current_queue_activity
+        fields:
+          - name: agents_online
+            type: ["null", "integer"]
+            description: Current number of agents online
+          - name: average_wait_time
+            type: ["null", "integer"]
+            description: Average wait time for callers in queue (seconds)
+          - name: callbacks_waiting
+            type: ["null", "integer"]
+            description: Number of callers in callback queue
+          - name: calls_waiting
+            type: ["null", "integer"]
+            description: Number of callers waiting in queue
+          - name: current_timestamp
+            type: ["null", "integer"]
+            description: Current timestamp
+          - name: embeddable_callbacks_waiting
+            type: ["null", "integer"]
+            description: Number of Web Widget callback requests waiting
+          - name: longest_wait_time
+            type: ["null", "integer"]
+            description: Longest wait time for any caller (seconds)
+      - entity: account_overview
+        fields:
+          - name: average_call_duration
+            type: ["null", "integer"]
+            description: Average call duration
+          - name: average_callback_wait_time
+            type: ["null", "integer"]
+            description: Average callback wait time
+          - name: average_hold_time
+            type: ["null", "integer"]
+            description: Average hold time per call
+          - name: average_queue_wait_time
+            type: ["null", "integer"]
+            description: Average queue wait time
+          - name: average_time_to_answer
+            type: ["null", "integer"]
+            description: Average time to answer
+          - name: average_wrap_up_time
+            type: ["null", "integer"]
+            description: Average wrap-up time
+          - name: current_timestamp
+            type: ["null", "integer"]
+            description: Current timestamp
+          - name: max_calls_waiting
+            type: ["null", "integer"]
+            description: Max calls waiting in queue
+          - name: max_queue_wait_time
+            type: ["null", "integer"]
+            description: Max queue wait time
+          - name: total_call_duration
+            type: ["null", "integer"]
+            description: Total call duration
+          - name: total_callback_calls
+            type: ["null", "integer"]
+            description: Total callback calls
+          - name: total_calls
+            type: ["null", "integer"]
+            description: Total calls
+          - name: total_calls_abandoned_in_queue
+            type: ["null", "integer"]
+            description: Total calls abandoned in queue
+          - name: total_calls_outside_business_hours
+            type: ["null", "integer"]
+            description: Total calls outside business hours
+          - name: total_calls_with_exceeded_queue_wait_time
+            type: ["null", "integer"]
+            description: Total calls exceeding max queue wait time
+          - name: total_calls_with_requested_voicemail
+            type: ["null", "integer"]
+            description: Total calls requesting voicemail
+          - name: total_embeddable_callback_calls
+            type: ["null", "integer"]
+            description: Total embeddable callback calls
+          - name: total_hold_time
+            type: ["null", "integer"]
+            description: Total hold time
+          - name: total_inbound_calls
+            type: ["null", "integer"]
+            description: Total inbound calls
+          - name: total_outbound_calls
+            type: ["null", "integer"]
+            description: Total outbound calls
+          - name: total_textback_requests
+            type: ["null", "integer"]
+            description: Total textback requests
+          - name: total_voicemails
+            type: ["null", "integer"]
+            description: Total voicemails
+          - name: total_wrap_up_time
+            type: ["null", "integer"]
+            description: Total wrap-up time
+      - entity: ivrs
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: IVR ID
+          - name: menus
+            type: ["null", "array"]
+            description: List of IVR menus
+          - name: name
+            type: ["null", "string"]
+            description: Name of the IVR
+          - name: phone_number_ids
+            type: ["null", "array"]
+            description: IDs of phone numbers configured with this IVR
+          - name: phone_number_names
+            type: ["null", "array"]
+            description: Names of phone numbers configured with this IVR
+      - entity: ivr_menus
+        fields:
+          - name: default
+            type: ["null", "boolean"]
+            description: Whether this is the default menu
+          - name: greeting_id
+            type: ["null", "integer"]
+            description: ID of the greeting associated with this menu
+          - name: id
+            type: ["null", "integer"]
+            description: IVR menu ID
+          - name: ivr_id
+            type: ["null", "integer"]
+            description: Parent IVR ID
+          - name: name
+            type: ["null", "string"]
+            description: Name of the IVR menu
+      - entity: ivr_routes
+        fields:
+          - name: action
+            type: ["null", "string"]
+            description: Action to perform for this route
+          - name: greeting
+            type: ["null", "string"]
+            description: Greeting associated with this route
+          - name: id
+            type: ["null", "integer"]
+            description: IVR route ID
+          - name: ivr_id
+            type: ["null", "integer"]
+            description: Parent IVR ID
+          - name: ivr_menu_id
+            type: ["null", "integer"]
+            description: Parent IVR menu ID
+          - name: keypress
+            type: ["null", "string"]
+            description: Keypress that triggers this route
+          - name: option_text
+            type: ["null", "string"]
+            description: Text description of this route option
+          - name: options
+            type: ["null", "object"]
+            description: Additional options for this route
+          - name: overflow_options
+            type: ["null", "array"]
+            description: Overflow routing options
+  x-airbyte-example-questions:
+    direct:
+      - "List all phone numbers in our Zendesk Talk account"
+      - "Show all addresses on file"
+      - "List all IVR configurations"
+      - "Show all greetings"
+      - "List greeting categories"
+      - "Show agent activity statistics"
+      - "Show the account overview stats"
+      - "Show current queue activity"
+    search:
+      - "Which phone numbers have SMS enabled?"
+      - "Find agents who have missed the most calls today"
+      - "What is the average call duration across all calls?"
+      - "Which phone numbers are toll-free?"
+    unsupported:
+      - "Create a new phone number"
+      - "Delete an IVR configuration"
+      - "Update a greeting"
+      - "Make an outbound call"
+
+servers:
+  - url: https://{subdomain}.zendesk.com/api/v2/channels/voice
+    description: Zendesk Talk API Server
+    variables:
+      subdomain:
+        default: your-subdomain
+        description: Your Zendesk subdomain (the part before .zendesk.com in your Zendesk URL)
+    x-airbyte-replication-environment-mapping:
+      subdomain: subdomain
+
+security:
+  - zendeskOAuth: []
+  - zendeskAPIToken: []
+
+paths:
+  /phone_numbers:
+    get:
+      summary: List phone numbers
+      description: Returns a list of all phone numbers in the Zendesk Talk account
+      operationId: listPhoneNumbers
+      x-airbyte-entity: phone_numbers
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.phone_numbers
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+      responses:
+        "200":
+          description: List of phone numbers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PhoneNumbersList"
+
+  /phone_numbers/{phone_number_id}:
+    get:
+      summary: Show phone number
+      description: Retrieves a single phone number by ID
+      operationId: getPhoneNumber
+      x-airbyte-entity: phone_numbers
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.phone_number
+      parameters:
+        - name: phone_number_id
+          in: path
+          required: true
+          description: ID of the phone number
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Phone number object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PhoneNumberWrapper"
+        "404":
+          description: Phone number not found
+
+  /addresses:
+    get:
+      summary: List addresses
+      description: Returns a list of all addresses in the Zendesk Talk account
+      operationId: listAddresses
+      x-airbyte-entity: addresses
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.addresses
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+      responses:
+        "200":
+          description: List of addresses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressesList"
+
+  /addresses/{address_id}:
+    get:
+      summary: Show address
+      description: Retrieves a single address by ID
+      operationId: getAddress
+      x-airbyte-entity: addresses
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.address
+      parameters:
+        - name: address_id
+          in: path
+          required: true
+          description: ID of the address
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Address object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressWrapper"
+        "404":
+          description: Address not found
+
+  /greetings:
+    get:
+      summary: List greetings
+      description: Returns a list of all greetings in the Zendesk Talk account
+      operationId: listGreetings
+      x-airbyte-entity: greetings
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.greetings
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+      responses:
+        "200":
+          description: List of greetings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingsList"
+
+  /greetings/{greeting_id}:
+    get:
+      summary: Show greeting
+      description: Retrieves a single greeting by ID
+      operationId: getGreeting
+      x-airbyte-entity: greetings
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.greeting
+      parameters:
+        - name: greeting_id
+          in: path
+          required: true
+          description: ID of the greeting
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Greeting object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingWrapper"
+        "404":
+          description: Greeting not found
+
+  /greeting_categories:
+    get:
+      summary: List greeting categories
+      description: Returns a list of all greeting categories
+      operationId: listGreetingCategories
+      x-airbyte-entity: greeting_categories
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.greeting_categories
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+      responses:
+        "200":
+          description: List of greeting categories
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingCategoriesList"
+
+  /greeting_categories/{greeting_category_id}:
+    get:
+      summary: Show greeting category
+      description: Retrieves a single greeting category by ID
+      operationId: getGreetingCategory
+      x-airbyte-entity: greeting_categories
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.greeting_category
+      parameters:
+        - name: greeting_category_id
+          in: path
+          required: true
+          description: ID of the greeting category
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Greeting category object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingCategoryWrapper"
+        "404":
+          description: Greeting category not found
+
+  /ivr:
+    get:
+      summary: List IVRs
+      description: Returns a list of all IVR configurations
+      operationId: listIvrs
+      x-airbyte-entity: ivrs
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.ivrs
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+      responses:
+        "200":
+          description: List of IVRs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IvrsList"
+
+  /ivr/{ivr_id}:
+    get:
+      summary: Show IVR
+      description: Retrieves a single IVR configuration by ID
+      operationId: getIvr
+      x-airbyte-entity: ivrs
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.ivr
+      parameters:
+        - name: ivr_id
+          in: path
+          required: true
+          description: ID of the IVR
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: IVR object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IvrWrapper"
+        "404":
+          description: IVR not found
+
+  /stats/agents_activity:
+    get:
+      summary: List agents activity
+      description: Returns activity statistics for all agents for the current day
+      operationId: listAgentsActivity
+      x-airbyte-entity: agents_activity
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.agents_activity
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+      responses:
+        "200":
+          description: List of agent activity stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentsActivityList"
+
+  /stats/agents_overview:
+    get:
+      summary: Show agents overview
+      description: Returns overview statistics for all agents for the current day
+      operationId: listAgentsOverview
+      x-airbyte-entity: agents_overview
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.agents_overview
+      responses:
+        "200":
+          description: Agents overview stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentsOverviewResponse"
+
+  /stats/account_overview:
+    get:
+      summary: Show account overview
+      description: Returns overview statistics for the account for the current day
+      operationId: listAccountOverview
+      x-airbyte-entity: account_overview
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.account_overview
+      responses:
+        "200":
+          description: Account overview stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountOverviewResponse"
+
+  /stats/current_queue_activity:
+    get:
+      summary: Show current queue activity
+      description: Returns current queue activity statistics
+      operationId: listCurrentQueueActivity
+      x-airbyte-entity: current_queue_activity
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.current_queue_activity
+      responses:
+        "200":
+          description: Current queue activity stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentQueueActivityResponse"
+
+  /stats/incremental/calls:
+    get:
+      summary: List calls
+      description: Returns incremental call data. Requires a start_time parameter (Unix epoch timestamp).
+      operationId: listCalls
+      x-airbyte-entity: calls
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.calls
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        count: $.count
+      parameters:
+        - name: start_time
+          in: query
+          required: true
+          description: Unix epoch time to start from (e.g. 1704067200 for 2024-01-01)
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of calls
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallsList"
+
+  /stats/incremental/legs:
+    get:
+      summary: List call legs
+      description: Returns incremental call leg data. Requires a start_time parameter (Unix epoch timestamp).
+      operationId: listCallLegs
+      x-airbyte-entity: call_legs
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.legs
+      x-airbyte-meta-extractor:
+        next_page: $.next_page
+        count: $.count
+      parameters:
+        - name: start_time
+          in: query
+          required: true
+          description: Unix epoch time to start from (e.g. 1704067200 for 2024-01-01)
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of call legs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallLegsList"
+
+components:
+  securitySchemes:
+    zendeskOAuth:
+      type: oauth2
+      x-airbyte-untested: true
+      description: Zendesk OAuth 2.0 authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://{{subdomain}}.zendesk.com/oauth/authorizations/new
+          tokenUrl: https://{{subdomain}}.zendesk.com/oauth/tokens
+          refreshUrl: https://{{subdomain}}.zendesk.com/oauth/tokens
+          scopes:
+            read: Read access to all resources
+            write: Write access to all resources
+            read write: Read and write access to all resources
+      x-airbyte-oauth-scopes:
+        - scope: "read"
+          mode: read
+          description: Read access to all resources
+          entities:
+            - account_overview
+            - addresses
+            - agents_activity
+            - agents_overview
+            - call_legs
+            - calls
+            - current_queue_activity
+            - greeting_categories
+            - greetings
+            - ivr_menus
+            - ivr_routes
+            - ivrs
+            - phone_numbers
+        - scope: "write"
+          mode: write
+          description: Write access to IVR resources
+          entities:
+            - ivr_menus
+            - ivr_routes
+      x-airbyte-auth-config:
+        type: object
+        title: OAuth 2.0
+        description: Zendesk OAuth 2.0 authentication
+        required:
+          - access_token
+        properties:
+          access_token:
+            type: string
+            title: Access Token
+            description: OAuth 2.0 access token
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: OAuth 2.0 refresh token (optional)
+          client_id:
+            type: string
+            title: Client ID
+            description: OAuth client ID
+          client_secret:
+            type: string
+            title: Client Secret
+            description: OAuth client secret
+        auth_mapping:
+          access_token: "${access_token}"
+          refresh_token: "${refresh_token}"
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+        replication_auth_key_mapping:
+          credentials.access_token: "access_token"
+          credentials.refresh_token: "refresh_token"
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+        replication_auth_key_constants:
+          credentials.auth_type: "oauth2_refresh"
+
+    zendeskAPIToken:
+      type: http
+      scheme: basic
+      description: |
+        Zendesk API Token authentication.
+        API tokens are managed in Admin Center at Apps and integrations > APIs > Zendesk API.
+      x-airbyte-auth-config:
+        type: object
+        title: API Token
+        description: Authenticate using email and API token
+        required:
+          - email
+          - api_token
+        properties:
+          email:
+            type: string
+            format: email
+            title: Email Address
+            description: Your Zendesk account email address
+          api_token:
+            type: string
+            title: API Token
+            description: Your Zendesk API token from Admin Center
+        auth_mapping:
+          username: "${email}/token"
+          password: "${api_token}"
+        replication_auth_key_mapping:
+          credentials.email: "email"
+          credentials.api_token: "api_token"
+        replication_auth_key_constants:
+          credentials.auth_type: "api_token"
+
+  schemas:
+    PhoneNumber:
+      type: object
+      x-airbyte-entity-name: phone_numbers
+      x-airbyte-stream-name: phone_numbers
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique phone number identifier
+        brand_id:
+          type: ["null", "integer"]
+          description: ID of brand associated with the phone number
+        call_recording_consent:
+          type: ["null", "string"]
+          description: What call recording consent is set to
+        capabilities:
+          type: ["null", "object"]
+          description: Phone number capabilities (sms, mms, voice)
+          properties:
+            sms:
+              type: ["null", "boolean"]
+            mms:
+              type: ["null", "boolean"]
+            voice:
+              type: ["null", "boolean"]
+            emergency_address:
+              type: ["null", "boolean"]
+        categorised_greetings:
+          type: ["null", "object"]
+          description: Greeting category IDs and names
+        categorised_greetings_with_sub_settings:
+          type: ["null", "object"]
+          description: Greeting categories with associated settings
+        country_code:
+          type: ["null", "string"]
+          description: ISO country code for the number
+        created_at:
+          type: ["null", "string"]
+          description: Date and time the phone number was created
+        default_greeting_ids:
+          type: ["null", "array"]
+          description: Names of default system greetings
+          items:
+            type: string
+        default_group_id:
+          type: ["null", "integer"]
+          description: Default group ID
+        display_number:
+          type: ["null", "string"]
+          description: Formatted phone number
+        external:
+          type: ["null", "boolean"]
+          description: Whether this is an external caller ID number
+        failover_number:
+          type: ["null", "string"]
+          description: Failover number associated with the phone number
+        greeting_ids:
+          type: ["null", "array"]
+          description: Custom greeting IDs associated with the phone number
+          items:
+            type: integer
+        group_ids:
+          type: ["null", "array"]
+          description: Array of associated group IDs
+          items:
+            type: integer
+        ivr_id:
+          type: ["null", "integer"]
+          description: ID of IVR associated with the phone number
+        line_type:
+          type: ["null", "string"]
+          description: Type of line (phone or digital)
+        location:
+          type: ["null", "string"]
+          description: Geographical location of the number
+        name:
+          type: ["null", "string"]
+          description: Nickname if set, otherwise the display number
+        nickname:
+          type: ["null", "string"]
+          description: Nickname of the phone number
+        number:
+          type: ["null", "string"]
+          description: Phone number digits
+        outbound_enabled:
+          type: ["null", "boolean"]
+          description: Whether outbound calls are enabled
+        priority:
+          type: ["null", "integer"]
+          description: Priority level of the phone number
+        recorded:
+          type: ["null", "boolean"]
+          description: Whether calls are recorded
+        schedule_id:
+          type: ["null", "integer"]
+          description: ID of schedule associated with the phone number
+        sms_enabled:
+          type: ["null", "boolean"]
+          description: Whether SMS is enabled
+        sms_group_id:
+          type: ["null", "integer"]
+          description: Group associated with SMS
+        token:
+          type: ["null", "string"]
+          description: Generated token unique for the phone number
+        toll_free:
+          type: ["null", "boolean"]
+          description: Whether the number is toll-free
+        transcription:
+          type: ["null", "boolean"]
+          description: Whether voicemail transcription is enabled
+        voice_enabled:
+          type: ["null", "boolean"]
+          description: Whether voice is enabled
+
+    PhoneNumbersList:
+      type: object
+      properties:
+        phone_numbers:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneNumber"
+        next_page:
+          type: ["null", "string"]
+          description: URL for the next page of results
+        previous_page:
+          type: ["null", "string"]
+          description: URL for the previous page of results
+        count:
+          type: ["null", "integer"]
+          description: Total count of phone numbers
+
+    PhoneNumberWrapper:
+      type: object
+      properties:
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+
+    Address:
+      type: object
+      x-airbyte-entity-name: addresses
+      x-airbyte-stream-name: addresses
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Unique address identifier
+        city:
+          type: ["null", "string"]
+          description: City of the address
+        country_code:
+          type: ["null", "string"]
+          description: ISO country code
+        name:
+          type: ["null", "string"]
+          description: Name of the address
+        provider_reference:
+          type: ["null", "string"]
+          description: Provider reference of the address
+        province:
+          type: ["null", "string"]
+          description: Province of the address
+        state:
+          type: ["null", "string"]
+          description: State of the address
+        street:
+          type: ["null", "string"]
+          description: Street of the address
+        zip:
+          type: ["null", "string"]
+          description: Zip code of the address
+
+    AddressesList:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        next_page:
+          type: ["null", "string"]
+        previous_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+
+    AddressWrapper:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+
+    Greeting:
+      type: object
+      x-airbyte-entity-name: greetings
+      x-airbyte-stream-name: greetings
+      properties:
+        id:
+          type: ["null", "string"]
+          description: Greeting ID
+        active:
+          type: ["null", "boolean"]
+          description: Whether the greeting is associated with phone numbers
+        audio_name:
+          type: ["null", "string"]
+          description: Audio file name
+        audio_url:
+          type: ["null", "string"]
+          description: Path to the greeting sound file
+        category_id:
+          type: ["null", "integer"]
+          description: ID of the greeting category
+        default:
+          type: ["null", "boolean"]
+          description: Whether this is a system default greeting
+        default_lang:
+          type: ["null", "boolean"]
+          description: Whether the greeting has a default language
+        has_sub_settings:
+          type: ["null", "boolean"]
+          description: Sub-settings for categorized greetings
+        ivr_ids:
+          type: ["null", "array"]
+          description: IDs of IVRs associated with the greeting
+          items:
+            type: ["string", "integer"]
+        name:
+          type: ["null", "string"]
+          description: Name of the greeting
+        pending:
+          type: ["null", "boolean"]
+          description: Whether the greeting is pending
+        phone_number_ids:
+          type: ["null", "array"]
+          description: IDs of phone numbers associated with the greeting
+          items:
+            type: ["integer", "string"]
+        upload_id:
+          type: ["null", "integer"]
+          description: Upload ID associated with the greeting
+
+    GreetingsList:
+      type: object
+      properties:
+        greetings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Greeting"
+        next_page:
+          type: ["null", "string"]
+        previous_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+
+    GreetingWrapper:
+      type: object
+      properties:
+        greeting:
+          $ref: "#/components/schemas/Greeting"
+
+    GreetingCategory:
+      type: object
+      x-airbyte-entity-name: greeting_categories
+      x-airbyte-stream-name: greeting_categories
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Greeting category ID
+        name:
+          type: ["null", "string"]
+          description: Name of the greeting category
+
+    GreetingCategoriesList:
+      type: object
+      properties:
+        greeting_categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/GreetingCategory"
+        next_page:
+          type: ["null", "string"]
+        previous_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+
+    GreetingCategoryWrapper:
+      type: object
+      properties:
+        greeting_category:
+          $ref: "#/components/schemas/GreetingCategory"
+
+    Ivr:
+      type: object
+      x-airbyte-entity-name: ivrs
+      x-airbyte-stream-name: ivrs
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: IVR ID
+        name:
+          type: ["null", "string"]
+          description: Name of the IVR
+        phone_number_ids:
+          type: ["null", "array"]
+          description: IDs of phone numbers configured with this IVR
+          items:
+            type: ["string", "integer"]
+        phone_number_names:
+          type: ["null", "array"]
+          description: Names of phone numbers configured with this IVR
+          items:
+            type: ["string", "integer"]
+        menus:
+          type: ["null", "array"]
+          description: List of IVR menus
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "integer"]
+              name:
+                type: ["null", "string"]
+              default:
+                type: ["null", "boolean"]
+              greeting_id:
+                type: ["null", "integer"]
+              routes:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "integer"]
+                    action:
+                      type: ["null", "string"]
+                    greeting:
+                      type: ["null", "string"]
+                    keypress:
+                      type: ["null", "string"]
+                    option_text:
+                      type: ["null", "string"]
+                    options:
+                      type: ["null", "object"]
+                    overflow_options:
+                      type: ["null", "array"]
+
+    IvrsList:
+      type: object
+      properties:
+        ivrs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ivr"
+        next_page:
+          type: ["null", "string"]
+        previous_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+
+    IvrWrapper:
+      type: object
+      properties:
+        ivr:
+          $ref: "#/components/schemas/Ivr"
+
+    AgentActivity:
+      type: object
+      x-airbyte-entity-name: agents_activity
+      x-airbyte-stream-name: agents_activity
+      properties:
+        agent_id:
+          type: ["null", "integer"]
+          description: Agent ID
+        agent_state:
+          type: ["null", "string"]
+          description: "Agent state: online, offline, away, or transfers_only"
+        available_time:
+          type: ["null", "integer"]
+          description: Total time agent was available to answer calls
+        avatar_url:
+          type: ["null", "string"]
+          description: URL to agent avatar
+        away_time:
+          type: ["null", "integer"]
+          description: Total time agent was set to away
+        call_status:
+          type: ["null", "string"]
+          description: "Agent call status: on_call, wrap_up, or null"
+        calls_accepted:
+          type: ["null", "integer"]
+          description: Total calls accepted
+        calls_denied:
+          type: ["null", "integer"]
+          description: Total calls denied
+        calls_missed:
+          type: ["null", "integer"]
+          description: Total calls missed
+        forwarding_number:
+          type: ["null", "string"]
+          description: Forwarding number set by the agent
+        name:
+          type: ["null", "string"]
+          description: Agent name
+        online_time:
+          type: ["null", "integer"]
+          description: Total online time
+        total_call_duration:
+          type: ["null", "integer"]
+          description: Total call duration
+        total_talk_time:
+          type: ["null", "integer"]
+          description: Total talk time (excludes hold)
+        total_wrap_up_time:
+          type: ["null", "integer"]
+          description: Total wrap-up time
+        transfers_only_time:
+          type: ["null", "integer"]
+          description: Total time in transfers-only mode
+        via:
+          type: ["null", "string"]
+          description: Channel the agent is registered on
+        accepted_third_party_conferences:
+          type: ["null", "integer"]
+          description: Accepted third party conferences
+        accepted_transfers:
+          type: ["null", "integer"]
+          description: Total transfers accepted
+        average_hold_time:
+          type: ["null", "integer"]
+          description: Average hold time per call
+        average_talk_time:
+          type: ["null", "integer"]
+          description: Average talk time per call
+        average_wrap_up_time:
+          type: ["null", "integer"]
+          description: Average wrap-up time per call
+        calls_put_on_hold:
+          type: ["null", "integer"]
+          description: Total calls placed on hold
+        started_third_party_conferences:
+          type: ["null", "integer"]
+          description: Started third party conferences
+        started_transfers:
+          type: ["null", "integer"]
+          description: Total transfers started
+        total_hold_time:
+          type: ["null", "integer"]
+          description: Total hold time across all calls
+
+    AgentsActivityList:
+      type: object
+      properties:
+        agents_activity:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentActivity"
+        next_page:
+          type: ["null", "string"]
+        previous_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+
+    AgentsOverview:
+      type: object
+      x-airbyte-entity-name: agents_overview
+      x-airbyte-stream-name: agents_overview
+      properties:
+        average_calls_accepted:
+          type: ["null", "integer"]
+          description: Average calls accepted
+        average_calls_denied:
+          type: ["null", "integer"]
+          description: Average calls denied
+        average_calls_missed:
+          type: ["null", "integer"]
+          description: Average calls missed
+        average_wrap_up_time:
+          type: ["null", "integer"]
+          description: Average wrap-up time
+        total_calls_accepted:
+          type: ["null", "integer"]
+          description: Total calls accepted
+        total_calls_denied:
+          type: ["null", "integer"]
+          description: Total calls denied
+        total_calls_missed:
+          type: ["null", "integer"]
+          description: Total calls missed
+        total_talk_time:
+          type: ["null", "integer"]
+          description: Total talk time
+        total_wrap_up_time:
+          type: ["null", "integer"]
+          description: Total wrap-up time
+        average_accepted_transfers:
+          type: ["null", "integer"]
+          description: Average accepted transfers
+        average_available_time:
+          type: ["null", "integer"]
+          description: Average available time
+        average_away_time:
+          type: ["null", "integer"]
+          description: Average away time
+        average_calls_put_on_hold:
+          type: ["null", "integer"]
+          description: Average calls put on hold
+        average_hold_time:
+          type: ["null", "integer"]
+          description: Average hold time
+        average_online_time:
+          type: ["null", "integer"]
+          description: Average online time
+        average_started_transfers:
+          type: ["null", "integer"]
+          description: Average started transfers
+        average_talk_time:
+          type: ["null", "integer"]
+          description: Average talk time
+        average_transfers_only_time:
+          type: ["null", "integer"]
+          description: Average transfers-only time
+        current_timestamp:
+          type: ["null", "integer"]
+          description: Current timestamp
+        total_accepted_transfers:
+          type: ["null", "integer"]
+          description: Total accepted transfers
+        total_calls_put_on_hold:
+          type: ["null", "integer"]
+          description: Total calls put on hold
+        total_hold_time:
+          type: ["null", "integer"]
+          description: Total hold time
+        total_started_transfers:
+          type: ["null", "integer"]
+          description: Total started transfers
+
+    AgentsOverviewResponse:
+      type: object
+      properties:
+        agents_overview:
+          $ref: "#/components/schemas/AgentsOverview"
+
+    AccountOverview:
+      type: object
+      x-airbyte-entity-name: account_overview
+      x-airbyte-stream-name: account_overview
+      properties:
+        average_call_duration:
+          type: ["null", "integer"]
+          description: Average call duration
+        average_callback_wait_time:
+          type: ["null", "integer"]
+          description: Average callback wait time
+        average_hold_time:
+          type: ["null", "integer"]
+          description: Average hold time per call
+        average_queue_wait_time:
+          type: ["null", "integer"]
+          description: Average queue wait time
+        average_time_to_answer:
+          type: ["null", "integer"]
+          description: Average time to answer
+        average_wrap_up_time:
+          type: ["null", "integer"]
+          description: Average wrap-up time
+        current_timestamp:
+          type: ["null", "integer"]
+          description: Current timestamp
+        max_calls_waiting:
+          type: ["null", "integer"]
+          description: Max calls waiting in queue
+        max_queue_wait_time:
+          type: ["null", "integer"]
+          description: Max queue wait time
+        total_call_duration:
+          type: ["null", "integer"]
+          description: Total call duration
+        total_callback_calls:
+          type: ["null", "integer"]
+          description: Total callback calls
+        total_calls:
+          type: ["null", "integer"]
+          description: Total calls
+        total_calls_abandoned_in_queue:
+          type: ["null", "integer"]
+          description: Total calls abandoned in queue
+        total_calls_outside_business_hours:
+          type: ["null", "integer"]
+          description: Total calls outside business hours
+        total_calls_with_exceeded_queue_wait_time:
+          type: ["null", "integer"]
+          description: Total calls exceeding max queue wait time
+        total_calls_with_requested_voicemail:
+          type: ["null", "integer"]
+          description: Total calls requesting voicemail
+        total_embeddable_callback_calls:
+          type: ["null", "integer"]
+          description: Total embeddable callback calls
+        total_hold_time:
+          type: ["null", "integer"]
+          description: Total hold time
+        total_inbound_calls:
+          type: ["null", "integer"]
+          description: Total inbound calls
+        total_outbound_calls:
+          type: ["null", "integer"]
+          description: Total outbound calls
+        total_textback_requests:
+          type: ["null", "integer"]
+          description: Total textback requests
+        total_voicemails:
+          type: ["null", "integer"]
+          description: Total voicemails
+        total_wrap_up_time:
+          type: ["null", "integer"]
+          description: Total wrap-up time
+
+    AccountOverviewResponse:
+      type: object
+      properties:
+        account_overview:
+          $ref: "#/components/schemas/AccountOverview"
+
+    CurrentQueueActivity:
+      type: object
+      x-airbyte-entity-name: current_queue_activity
+      x-airbyte-stream-name: current_queue_activity
+      properties:
+        agents_online:
+          type: ["null", "integer"]
+          description: Current number of agents online
+        average_wait_time:
+          type: ["null", "integer"]
+          description: Average wait time for callers in queue (seconds)
+        callbacks_waiting:
+          type: ["null", "integer"]
+          description: Number of callers in callback queue
+        calls_waiting:
+          type: ["null", "integer"]
+          description: Number of callers waiting in queue
+        current_timestamp:
+          type: ["null", "integer"]
+          description: Current timestamp
+        embeddable_callbacks_waiting:
+          type: ["null", "integer"]
+          description: Number of Web Widget callback requests waiting
+        longest_wait_time:
+          type: ["null", "integer"]
+          description: Longest wait time for any caller (seconds)
+        ai_agent_calls:
+          type: ["null", "integer"]
+          description: Current number of calls with AI agents
+
+    CurrentQueueActivityResponse:
+      type: object
+      properties:
+        current_queue_activity:
+          $ref: "#/components/schemas/CurrentQueueActivity"
+
+    Call:
+      type: object
+      x-airbyte-entity-name: calls
+      x-airbyte-stream-name: calls
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Call ID
+        agent_id:
+          type: ["null", "integer"]
+          description: Agent ID
+        call_charge:
+          type: ["null", "string"]
+          description: Call charge amount
+        call_group_id:
+          type: ["null", "integer"]
+          description: Call group ID
+        call_recording_consent:
+          type: ["null", "string"]
+          description: Call recording consent status
+        call_recording_consent_action:
+          type: ["null", "string"]
+          description: Recording consent action
+        call_recording_consent_keypress:
+          type: ["null", "string"]
+          description: Recording consent keypress
+        callback:
+          type: ["null", "boolean"]
+          description: Whether this was a callback
+        callback_source:
+          type: ["null", "string"]
+          description: Source of the callback
+        completion_status:
+          type: ["null", "string"]
+          description: Call completion status
+        consultation_time:
+          type: ["null", "integer"]
+          description: Consultation time
+        created_at:
+          type: ["null", "string"]
+          description: Creation timestamp
+        customer_requested_voicemail:
+          type: ["null", "boolean"]
+          description: Whether customer requested voicemail
+        default_group:
+          type: ["null", "boolean"]
+          description: Whether default group was used
+        direction:
+          type: ["null", "string"]
+          description: Call direction (inbound/outbound)
+        duration:
+          type: ["null", "integer"]
+          description: Call duration in seconds
+        exceeded_queue_time:
+          type: ["null", "boolean"]
+          description: Whether queue time was exceeded
+        exceeded_queue_wait_time:
+          type: ["null", "boolean"]
+          description: Whether max queue wait time was exceeded
+        hold_time:
+          type: ["null", "integer"]
+          description: Hold time in seconds
+        ivr_action:
+          type: ["null", "string"]
+          description: IVR action taken
+        ivr_destination_group_name:
+          type: ["null", "string"]
+          description: IVR destination group name
+        ivr_hops:
+          type: ["null", "integer"]
+          description: Number of IVR hops
+        ivr_routed_to:
+          type: ["null", "string"]
+          description: Where IVR routed the call
+        ivr_time_spent:
+          type: ["null", "integer"]
+          description: Time spent in IVR
+        minutes_billed:
+          type: ["null", "integer"]
+          description: Minutes billed
+        not_recording_time:
+          type: ["null", "integer"]
+          description: Time not recording
+        outside_business_hours:
+          type: ["null", "boolean"]
+          description: Whether call was outside business hours
+        overflowed:
+          type: ["null", "boolean"]
+          description: Whether call overflowed
+        overflowed_to:
+          type: ["null", "string"]
+          description: Where call overflowed to
+        phone_number:
+          type: ["null", "string"]
+          description: Phone number used
+        phone_number_id:
+          type: ["null", "integer"]
+          description: Phone number ID
+        quality_issues:
+          type: ["null", "array"]
+          description: Quality issues detected
+          items:
+            type: string
+        recording_control_interactions:
+          type: ["null", "integer"]
+          description: Recording control interactions count
+        recording_time:
+          type: ["null", "integer"]
+          description: Recording time
+        talk_time:
+          type: ["null", "integer"]
+          description: Talk time in seconds
+        ticket_id:
+          type: ["null", "integer"]
+          description: Associated ticket ID
+        time_to_answer:
+          type: ["null", "integer"]
+          description: Time to answer in seconds
+        updated_at:
+          type: ["null", "string"]
+          description: Last update timestamp
+        voicemail:
+          type: ["null", "boolean"]
+          description: Whether it was a voicemail
+        wait_time:
+          type: ["null", "integer"]
+          description: Wait time in seconds
+        wrap_up_time:
+          type: ["null", "integer"]
+          description: Wrap-up time in seconds
+        customer_id:
+          type: ["null", "integer"]
+          description: Customer ID
+        line:
+          type: ["null", "string"]
+          description: Line name
+        line_id:
+          type: ["null", "integer"]
+          description: Line ID
+        line_type:
+          type: ["null", "string"]
+          description: Line type (phone or digital)
+        call_channel:
+          type: ["null", "string"]
+          description: Channel of the call
+        post_call_transcription_created:
+          type: ["null", "boolean"]
+          description: Whether a post-call transcription was created
+        post_call_summary_created:
+          type: ["null", "boolean"]
+          description: Whether a post-call summary was created
+
+    CallsList:
+      type: object
+      properties:
+        calls:
+          type: array
+          items:
+            $ref: "#/components/schemas/Call"
+        next_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+        end_time:
+          type: ["null", "integer"]
+          description: End time of the incremental export window (Unix epoch)
+
+    CallLeg:
+      type: object
+      x-airbyte-entity-name: call_legs
+      x-airbyte-stream-name: call_legs
+      properties:
+        id:
+          type: ["null", "integer"]
+          description: Call leg ID
+        type:
+          type: ["null", "string"]
+          description: Type of call leg
+        agent_id:
+          type: ["null", "integer"]
+          description: Agent ID
+        available_via:
+          type: ["null", "string"]
+          description: Channel agent was available through
+        call_charge:
+          type: ["null", "string"]
+          description: Call charge amount
+        call_id:
+          type: ["null", "integer"]
+          description: Associated call ID
+        completion_status:
+          type: ["null", "string"]
+          description: Completion status
+        conference_from:
+          type: ["null", "integer"]
+          description: Conference from time
+        conference_time:
+          type: ["null", "integer"]
+          description: Conference duration
+        conference_to:
+          type: ["null", "integer"]
+          description: Conference to time
+        consultation_from:
+          type: ["null", "integer"]
+          description: Consultation from time
+        consultation_time:
+          type: ["null", "integer"]
+          description: Consultation duration
+        consultation_to:
+          type: ["null", "integer"]
+          description: Consultation to time
+        created_at:
+          type: ["null", "string"]
+          description: Creation timestamp
+        duration:
+          type: ["null", "integer"]
+          description: Duration in seconds
+        forwarded_to:
+          type: ["null", "string"]
+          description: Number forwarded to
+        hold_time:
+          type: ["null", "integer"]
+          description: Hold time in seconds
+        minutes_billed:
+          type: ["null", "integer"]
+          description: Minutes billed
+        quality_issues:
+          type: ["null", "array"]
+          description: Quality issues detected
+          items:
+            type: string
+        talk_time:
+          type: ["null", "integer"]
+          description: Talk time in seconds
+        transferred_from:
+          type: ["null", "integer"]
+          description: Transferred from agent ID
+        transferred_to:
+          type: ["null", "integer"]
+          description: Transferred to agent ID
+        updated_at:
+          type: ["null", "string"]
+          description: Last update timestamp
+        user_id:
+          type: ["null", "integer"]
+          description: User ID
+        wrap_up_time:
+          type: ["null", "integer"]
+          description: Wrap-up time in seconds
+
+    CallLegsList:
+      type: object
+      properties:
+        legs:
+          type: array
+          items:
+            $ref: "#/components/schemas/CallLeg"
+        next_page:
+          type: ["null", "string"]
+        count:
+          type: ["null", "integer"]
+        end_time:
+          type: ["null", "integer"]
+          description: End time of the incremental export window (Unix epoch)

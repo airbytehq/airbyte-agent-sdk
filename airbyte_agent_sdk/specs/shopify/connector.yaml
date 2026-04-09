@@ -1,0 +1,4166 @@
+openapi: 3.1.0
+info:
+  title: Shopify API Connector
+  version: 0.1.12
+  description: |
+    Shopify is an e-commerce platform that enables businesses to create online stores,
+    manage products, process orders, and handle customer relationships. This connector
+    provides access to Shopify Admin REST API for reading store data including customers,
+    orders, products, inventory, and more.
+  x-airbyte-connector-name: shopify
+  x-airbyte-connector-definition-id: 9da77001-af33-4bcd-be46-6252bf9342b9
+  x-airbyte-replication-version: "3.2.2"
+  x-airbyte-replication-compatibility: ">=3.2.2, <4.0.0"
+  x-airbyte-external-documentation-urls:
+  - title: Shopify Admin REST API Reference
+    type: api_reference
+    url: "https://shopify.dev/docs/api/admin-rest"
+  - title: Shopify API Changelog
+    type: api_release_history
+    url: "https://shopify.dev/docs/api/release-notes"
+  - title: Shopify Authentication Guide
+    type: authentication_guide
+    url: "https://shopify.dev/docs/apps/build/authentication-authorization"
+  - title: Shopify Rate Limits
+    type: rate_limits
+    url: "https://shopify.dev/docs/api/usage/rate-limits"
+  x-airbyte-example-questions:
+    direct:
+    - "List all customers in my Shopify store"
+    - "Show me details for a recent customer"
+    - "What products do I have in my store?"
+    - "List all locations for my store"
+    - "Show me inventory levels for a recent location"
+    - "Show me all draft orders"
+    - "List all custom collections in my store"
+    - "Show me details for a recent order"
+    - "Show me product variants for a recent product"
+    search:
+    - "Show me orders from the last 30 days"
+    - "Show me abandoned checkouts from this week"
+    - "What price rules are currently active?"
+    unsupported:
+    - "Create a new customer in Shopify"
+    - "Update product pricing"
+    - "Delete an order"
+    - "Process a refund"
+    - "Send shipping notification to customer"
+    - "Create a new discount code"
+  x-airbyte-skip-suggested-streams:
+  - customer_journey_summary
+  - order_agreements
+  - transactions_graphql
+  x-airbyte-skip-auth-methods:
+  - oauth2
+
+  x-airbyte-entity-relationships:
+  - source_entity: product_variants
+    target_entity: products
+    foreign_key: product_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: product_images
+    target_entity: products
+    foreign_key: product_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: inventory_levels
+    target_entity: locations
+    foreign_key: location_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: discount_codes
+    target_entity: price_rules
+    foreign_key: price_rule_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: fulfillments
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: order_refunds
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: transactions
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_customers
+    target_entity: customers
+    foreign_key: customer_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_products
+    target_entity: products
+    foreign_key: product_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_orders
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_draft_orders
+    target_entity: draft_orders
+    foreign_key: draft_order_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_locations
+    target_entity: locations
+    foreign_key: location_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_product_variants
+    target_entity: product_variants
+    foreign_key: variant_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_smart_collections
+    target_entity: smart_collections
+    foreign_key: collection_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_product_images
+    target_entity: products
+    foreign_key: product_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: metafield_product_images
+    target_entity: product_images
+    foreign_key: image_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: customer_address
+    target_entity: customers
+    foreign_key: customer_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: fulfillment_orders
+    target_entity: orders
+    foreign_key: order_id
+    target_key: id
+    cardinality: many_to_one
+  x-airbyte-skip-context-store: "Will be populated in a follow-up PR with context-store entities"
+servers:
+- url: https://{shop}.myshopify.com/admin/api/2025-01
+  description: Shopify Admin REST API Server
+  variables:
+    shop:
+      default: my-store
+      description: Your Shopify store name (e.g., 'my-store' from my-store.myshopify.com)
+  x-airbyte-replication-environment-mapping:
+    shop: shop
+
+security:
+- shopifyAccessToken: []
+
+paths:
+  /customers.json:
+    get:
+      summary: List all customers
+      description: Returns a list of customers from the store
+      operationId: Customers_List
+      x-airbyte-entity: customers
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.customers
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Customers
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: created_at_min
+        in: query
+        description: Show customers created after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        description: Show customers created before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        description: Show customers last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show customers last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerList"
+
+  /customers/{customer_id}.json:
+    get:
+      summary: Get a customer
+      description: Retrieves a single customer by ID
+      operationId: Customers_Get
+      x-airbyte-entity: customers
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.customer
+      tags:
+      - Customers
+      parameters:
+      - name: customer_id
+        in: path
+        required: true
+        description: The customer ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Customer retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customer:
+                    $ref: "#/components/schemas/Customer"
+
+  /orders.json:
+    get:
+      summary: List all orders
+      description: Returns a list of orders from the store
+      operationId: Orders_List
+      x-airbyte-entity: orders
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.orders
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: created_at_min
+        in: query
+        description: Show orders created after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        description: Show orders created before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        description: Show orders last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show orders last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: status
+        in: query
+        description: Filter orders by status
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - cancelled
+          - any
+          default: any
+      - name: financial_status
+        in: query
+        description: Filter orders by financial status
+        schema:
+          type: string
+          enum:
+          - authorized
+          - pending
+          - paid
+          - partially_paid
+          - refunded
+          - voided
+          - partially_refunded
+          - any
+          - unpaid
+      - name: fulfillment_status
+        in: query
+        description: Filter orders by fulfillment status
+        schema:
+          type: string
+          enum:
+          - shipped
+          - partial
+          - unshipped
+          - any
+          - unfulfilled
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderList"
+
+  /orders/{order_id}.json:
+    get:
+      summary: Get an order
+      description: Retrieves a single order by ID
+      operationId: Orders_Get
+      x-airbyte-entity: orders
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.order
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Order retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: "#/components/schemas/Order"
+
+  /products.json:
+    get:
+      summary: List all products
+      description: Returns a list of products from the store
+      operationId: Products_List
+      x-airbyte-entity: products
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.products
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Products
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: created_at_min
+        in: query
+        description: Show products created after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        description: Show products created before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        description: Show products last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show products last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: status
+        in: query
+        description: Filter products by status
+        schema:
+          type: string
+          enum:
+          - active
+          - archived
+          - draft
+      - name: product_type
+        in: query
+        description: Filter by product type
+        schema:
+          type: string
+      - name: vendor
+        in: query
+        description: Filter by vendor
+        schema:
+          type: string
+      - name: collection_id
+        in: query
+        description: Filter by collection ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductList"
+
+  /products/{product_id}.json:
+    get:
+      summary: Get a product
+      description: Retrieves a single product by ID
+      operationId: Products_Get
+      x-airbyte-entity: products
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.product
+      tags:
+      - Products
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: The product ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: "#/components/schemas/Product"
+
+  /products/{product_id}/variants.json:
+    get:
+      summary: List product variants
+      description: Returns a list of variants for a product
+      operationId: ProductVariants_List
+      x-airbyte-entity: product_variants
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.variants
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Products
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: The product ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of product variants
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductVariantList"
+
+  /variants/{variant_id}.json:
+    get:
+      summary: Get a product variant
+      description: Retrieves a single product variant by ID
+      operationId: ProductVariants_Get
+      x-airbyte-entity: product_variants
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.variant
+      tags:
+      - Products
+      parameters:
+      - name: variant_id
+        in: path
+        required: true
+        description: The variant ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product variant retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  variant:
+                    $ref: "#/components/schemas/ProductVariant"
+
+  /products/{product_id}/images.json:
+    get:
+      summary: List product images
+      description: Returns a list of images for a product
+      operationId: ProductImages_List
+      x-airbyte-entity: product_images
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.images
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Products
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: The product ID
+        schema:
+          type: integer
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of product images
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductImageList"
+
+  /products/{product_id}/images/{image_id}.json:
+    get:
+      summary: Get a product image
+      description: Retrieves a single product image by ID
+      operationId: ProductImages_Get
+      x-airbyte-entity: product_images
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.image
+      tags:
+      - Products
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: The product ID
+        schema:
+          type: integer
+      - name: image_id
+        in: path
+        required: true
+        description: The image ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Product image retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image:
+                    $ref: "#/components/schemas/ProductImage"
+
+  /checkouts.json:
+    get:
+      summary: List abandoned checkouts
+      description: Returns a list of abandoned checkouts
+      operationId: AbandonedCheckouts_List
+      x-airbyte-entity: abandoned_checkouts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.checkouts
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Checkouts
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: created_at_min
+        in: query
+        description: Show checkouts created after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        description: Show checkouts created before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        description: Show checkouts last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show checkouts last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: status
+        in: query
+        description: Filter checkouts by status
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - any
+          default: any
+      responses:
+        "200":
+          description: List of abandoned checkouts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AbandonedCheckoutList"
+
+  /locations.json:
+    get:
+      summary: List all locations
+      description: Returns a list of locations for the store
+      operationId: Locations_List
+      x-airbyte-entity: locations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.locations
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Inventory
+      responses:
+        "200":
+          description: List of locations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationList"
+
+  /locations/{location_id}.json:
+    get:
+      summary: Get a location
+      description: Retrieves a single location by ID
+      operationId: Locations_Get
+      x-airbyte-entity: locations
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.location
+      tags:
+      - Inventory
+      parameters:
+      - name: location_id
+        in: path
+        required: true
+        description: The location ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Location retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  location:
+                    $ref: "#/components/schemas/Location"
+
+  /locations/{location_id}/inventory_levels.json:
+    get:
+      summary: List inventory levels for a location
+      description: Returns a list of inventory levels for a specific location
+      operationId: InventoryLevels_ListByLocation
+      x-airbyte-entity: inventory_levels
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.inventory_levels
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Inventory
+      parameters:
+      - name: location_id
+        in: path
+        required: true
+        description: The location ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      responses:
+        "200":
+          description: List of inventory levels
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryLevelList"
+
+  /inventory_items.json:
+    get:
+      summary: List inventory items
+      description: Returns a list of inventory items
+      operationId: InventoryItems_List
+      x-airbyte-entity: inventory_items
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.inventory_items
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Inventory
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        description: Comma-separated list of inventory item IDs
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      responses:
+        "200":
+          description: List of inventory items
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItemList"
+
+  /inventory_items/{inventory_item_id}.json:
+    get:
+      summary: Get an inventory item
+      description: Retrieves a single inventory item by ID
+      operationId: InventoryItems_Get
+      x-airbyte-entity: inventory_items
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.inventory_item
+      tags:
+      - Inventory
+      parameters:
+      - name: inventory_item_id
+        in: path
+        required: true
+        description: The inventory item ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Inventory item retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inventory_item:
+                    $ref: "#/components/schemas/InventoryItem"
+
+  /shop.json:
+    get:
+      summary: Get shop information
+      description: Retrieves the shop's configuration
+      operationId: Shop_Get
+      x-airbyte-entity: shop
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.shop
+      tags:
+      - Shop
+      responses:
+        "200":
+          description: Shop information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shop:
+                    $ref: "#/components/schemas/Shop"
+
+  /price_rules.json:
+    get:
+      summary: List all price rules
+      description: Returns a list of price rules
+      operationId: PriceRules_List
+      x-airbyte-entity: price_rules
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.price_rules
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Discounts
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: created_at_min
+        in: query
+        description: Show price rules created after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        description: Show price rules created before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        description: Show price rules last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show price rules last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: List of price rules
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceRuleList"
+
+  /price_rules/{price_rule_id}.json:
+    get:
+      summary: Get a price rule
+      description: Retrieves a single price rule by ID
+      operationId: PriceRules_Get
+      x-airbyte-entity: price_rules
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.price_rule
+      tags:
+      - Discounts
+      parameters:
+      - name: price_rule_id
+        in: path
+        required: true
+        description: The price rule ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Price rule retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  price_rule:
+                    $ref: "#/components/schemas/PriceRule"
+
+  /price_rules/{price_rule_id}/discount_codes.json:
+    get:
+      summary: List discount codes for a price rule
+      description: Returns a list of discount codes for a price rule
+      operationId: DiscountCodes_List
+      x-airbyte-entity: discount_codes
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.discount_codes
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Discounts
+      parameters:
+      - name: price_rule_id
+        in: path
+        required: true
+        description: The price rule ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      responses:
+        "200":
+          description: List of discount codes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiscountCodeList"
+
+  /price_rules/{price_rule_id}/discount_codes/{discount_code_id}.json:
+    get:
+      summary: Get a discount code
+      description: Retrieves a single discount code by ID
+      operationId: DiscountCodes_Get
+      x-airbyte-entity: discount_codes
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.discount_code
+      tags:
+      - Discounts
+      parameters:
+      - name: price_rule_id
+        in: path
+        required: true
+        description: The price rule ID
+        schema:
+          type: integer
+      - name: discount_code_id
+        in: path
+        required: true
+        description: The discount code ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Discount code retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  discount_code:
+                    $ref: "#/components/schemas/DiscountCode"
+
+  /custom_collections.json:
+    get:
+      summary: List all custom collections
+      description: Returns a list of custom collections
+      operationId: CustomCollections_List
+      x-airbyte-entity: custom_collections
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.custom_collections
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Collections
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: title
+        in: query
+        description: Filter by collection title
+        schema:
+          type: string
+      - name: product_id
+        in: query
+        description: Filter by product ID
+        schema:
+          type: integer
+      - name: updated_at_min
+        in: query
+        description: Show collections last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show collections last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: List of custom collections
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomCollectionList"
+
+  /custom_collections/{collection_id}.json:
+    get:
+      summary: Get a custom collection
+      description: Retrieves a single custom collection by ID
+      operationId: CustomCollections_Get
+      x-airbyte-entity: custom_collections
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.custom_collection
+      tags:
+      - Collections
+      parameters:
+      - name: collection_id
+        in: path
+        required: true
+        description: The collection ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Custom collection retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_collection:
+                    $ref: "#/components/schemas/CustomCollection"
+
+  /smart_collections.json:
+    get:
+      summary: List all smart collections
+      description: Returns a list of smart collections
+      operationId: SmartCollections_List
+      x-airbyte-entity: smart_collections
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.smart_collections
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Collections
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: title
+        in: query
+        description: Filter by collection title
+        schema:
+          type: string
+      - name: product_id
+        in: query
+        description: Filter by product ID
+        schema:
+          type: integer
+      - name: updated_at_min
+        in: query
+        description: Show collections last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show collections last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: List of smart collections
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SmartCollectionList"
+
+  /smart_collections/{collection_id}.json:
+    get:
+      summary: Get a smart collection
+      description: Retrieves a single smart collection by ID
+      operationId: SmartCollections_Get
+      x-airbyte-entity: smart_collections
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.smart_collection
+      tags:
+      - Collections
+      parameters:
+      - name: collection_id
+        in: path
+        required: true
+        description: The collection ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Smart collection retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  smart_collection:
+                    $ref: "#/components/schemas/SmartCollection"
+
+  /collects.json:
+    get:
+      summary: List all collects
+      description: Returns a list of collects (links between products and collections)
+      operationId: Collects_List
+      x-airbyte-entity: collects
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.collects
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Collections
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: collection_id
+        in: query
+        description: Filter by collection ID
+        schema:
+          type: integer
+      - name: product_id
+        in: query
+        description: Filter by product ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of collects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectList"
+
+  /collects/{collect_id}.json:
+    get:
+      summary: Get a collect
+      description: Retrieves a single collect by ID
+      operationId: Collects_Get
+      x-airbyte-entity: collects
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.collect
+      tags:
+      - Collections
+      parameters:
+      - name: collect_id
+        in: path
+        required: true
+        description: The collect ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Collect retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collect:
+                    $ref: "#/components/schemas/Collect"
+
+  /draft_orders.json:
+    get:
+      summary: List all draft orders
+      description: Returns a list of draft orders
+      operationId: DraftOrders_List
+      x-airbyte-entity: draft_orders
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.draft_orders
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: status
+        in: query
+        description: Filter draft orders by status
+        schema:
+          type: string
+          enum:
+          - open
+          - invoice_sent
+          - completed
+      - name: updated_at_min
+        in: query
+        description: Show draft orders last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show draft orders last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: List of draft orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DraftOrderList"
+
+  /draft_orders/{draft_order_id}.json:
+    get:
+      summary: Get a draft order
+      description: Retrieves a single draft order by ID
+      operationId: DraftOrders_Get
+      x-airbyte-entity: draft_orders
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.draft_order
+      tags:
+      - Orders
+      parameters:
+      - name: draft_order_id
+        in: path
+        required: true
+        description: The draft order ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Draft order retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draft_order:
+                    $ref: "#/components/schemas/DraftOrder"
+
+  /orders/{order_id}/fulfillments.json:
+    get:
+      summary: List fulfillments for an order
+      description: Returns a list of fulfillments for an order
+      operationId: Fulfillments_List
+      x-airbyte-entity: fulfillments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.fulfillments
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: created_at_min
+        in: query
+        description: Show fulfillments created after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        description: Show fulfillments created before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        description: Show fulfillments last updated after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        description: Show fulfillments last updated before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: List of fulfillments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FulfillmentList"
+
+  /orders/{order_id}/fulfillments/{fulfillment_id}.json:
+    get:
+      summary: Get a fulfillment
+      description: Retrieves a single fulfillment by ID
+      operationId: Fulfillments_Get
+      x-airbyte-entity: fulfillments
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.fulfillment
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: fulfillment_id
+        in: path
+        required: true
+        description: The fulfillment ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Fulfillment retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fulfillment:
+                    $ref: "#/components/schemas/Fulfillment"
+
+  /orders/{order_id}/refunds.json:
+    get:
+      summary: List refunds for an order
+      description: Returns a list of refunds for an order
+      operationId: OrderRefunds_List
+      x-airbyte-entity: order_refunds
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.refunds
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      responses:
+        "200":
+          description: List of refunds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefundList"
+
+  /orders/{order_id}/refunds/{refund_id}.json:
+    get:
+      summary: Get a refund
+      description: Retrieves a single refund by ID
+      operationId: OrderRefunds_Get
+      x-airbyte-entity: order_refunds
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.refund
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: refund_id
+        in: path
+        required: true
+        description: The refund ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Refund retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refund:
+                    $ref: "#/components/schemas/Refund"
+
+  /orders/{order_id}/transactions.json:
+    get:
+      summary: List transactions for an order
+      description: Returns a list of transactions for an order
+      operationId: Transactions_List
+      x-airbyte-entity: transactions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.transactions
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionList"
+
+  /orders/{order_id}/transactions/{transaction_id}.json:
+    get:
+      summary: Get a transaction
+      description: Retrieves a single transaction by ID
+      operationId: Transactions_Get
+      x-airbyte-entity: transactions
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.transaction
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: transaction_id
+        in: path
+        required: true
+        description: The transaction ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Transaction retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: "#/components/schemas/Transaction"
+
+  /tender_transactions.json:
+    get:
+      summary: List all tender transactions
+      description: Returns a list of tender transactions
+      operationId: TenderTransactions_List
+      x-airbyte-entity: tender_transactions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.tender_transactions
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: processed_at_min
+        in: query
+        description: Show tender transactions processed after date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: processed_at_max
+        in: query
+        description: Show tender transactions processed before date (ISO 8601 format)
+        schema:
+          type: string
+          format: date-time
+      - name: order
+        in: query
+        description: Order of results
+        schema:
+          type: string
+          enum:
+          - processed_at ASC
+          - processed_at DESC
+      responses:
+        "200":
+          description: List of tender transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TenderTransactionList"
+
+  /countries.json:
+    get:
+      summary: List all countries
+      description: Returns a list of countries
+      operationId: Countries_List
+      x-airbyte-entity: countries
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.countries
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Shipping
+      parameters:
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of countries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountryList"
+
+  /countries/{country_id}.json:
+    get:
+      summary: Get a country
+      description: Retrieves a single country by ID
+      operationId: Countries_Get
+      x-airbyte-entity: countries
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.country
+      tags:
+      - Shipping
+      parameters:
+      - name: country_id
+        in: path
+        required: true
+        description: The country ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Country retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  country:
+                    $ref: "#/components/schemas/Country"
+
+  /metafields.json:
+    get:
+      summary: List shop metafields
+      description: Returns a list of metafields for the shop
+      operationId: MetafieldShops_List
+      x-airbyte-entity: metafield_shops
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Filter by type
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /metafields/{metafield_id}.json:
+    get:
+      summary: Get a shop metafield
+      description: Retrieves a single metafield by ID
+      operationId: MetafieldShops_Get
+      x-airbyte-entity: metafield_shops
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.metafield
+      tags:
+      - Metafields
+      parameters:
+      - name: metafield_id
+        in: path
+        required: true
+        description: The metafield ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Metafield retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metafield:
+                    $ref: "#/components/schemas/Metafield"
+
+  /customers/{customer_id}/metafields.json:
+    get:
+      summary: List customer metafields
+      description: Returns a list of metafields for a customer
+      operationId: MetafieldCustomers_List
+      x-airbyte-entity: metafield_customers
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: customer_id
+        in: path
+        required: true
+        description: The customer ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of customer metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /products/{product_id}/metafields.json:
+    get:
+      summary: List product metafields
+      description: Returns a list of metafields for a product
+      operationId: MetafieldProducts_List
+      x-airbyte-entity: metafield_products
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: The product ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of product metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /orders/{order_id}/metafields.json:
+    get:
+      summary: List order metafields
+      description: Returns a list of metafields for an order
+      operationId: MetafieldOrders_List
+      x-airbyte-entity: metafield_orders
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of order metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /draft_orders/{draft_order_id}/metafields.json:
+    get:
+      summary: List draft order metafields
+      description: Returns a list of metafields for a draft order
+      operationId: MetafieldDraftOrders_List
+      x-airbyte-entity: metafield_draft_orders
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: draft_order_id
+        in: path
+        required: true
+        description: The draft order ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of draft order metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /locations/{location_id}/metafields.json:
+    get:
+      summary: List location metafields
+      description: Returns a list of metafields for a location
+      operationId: MetafieldLocations_List
+      x-airbyte-entity: metafield_locations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: location_id
+        in: path
+        required: true
+        description: The location ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of location metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /variants/{variant_id}/metafields.json:
+    get:
+      summary: List product variant metafields
+      description: Returns a list of metafields for a product variant
+      operationId: MetafieldProductVariants_List
+      x-airbyte-entity: metafield_product_variants
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: variant_id
+        in: path
+        required: true
+        description: The variant ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of product variant metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /smart_collections/{collection_id}/metafields.json:
+    get:
+      summary: List smart collection metafields
+      description: Returns a list of metafields for a smart collection
+      operationId: MetafieldSmartCollections_List
+      x-airbyte-entity: metafield_smart_collections
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: collection_id
+        in: path
+        required: true
+        description: The collection ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of smart collection metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /products/{product_id}/images/{image_id}/metafields.json:
+    get:
+      summary: List product image metafields
+      description: Returns a list of metafields for a product image
+      operationId: MetafieldProductImages_List
+      x-airbyte-entity: metafield_product_images
+      x-airbyte-action: list
+      x-airbyte-untested: true
+      x-airbyte-record-extractor: $.metafields
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Metafields
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        description: The product ID
+        schema:
+          type: integer
+      - name: image_id
+        in: path
+        required: true
+        description: The image ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      - name: since_id
+        in: query
+        description: Restrict results to after the specified ID
+        schema:
+          type: integer
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Filter by key
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of product image metafields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetafieldList"
+
+  /customers/{customer_id}/addresses.json:
+    get:
+      summary: List customer addresses
+      description: Returns a list of addresses for a customer
+      operationId: CustomerAddresses_List
+      x-airbyte-entity: customer_address
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.addresses
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Customers
+      parameters:
+      - name: customer_id
+        in: path
+        required: true
+        description: The customer ID
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of results to return (max 250)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 250
+          default: 50
+      responses:
+        "200":
+          description: List of customer addresses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerAddressList"
+
+  /customers/{customer_id}/addresses/{address_id}.json:
+    get:
+      summary: Get a customer address
+      description: Retrieves a single customer address by ID
+      operationId: CustomerAddresses_Get
+      x-airbyte-entity: customer_address
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.customer_address
+      tags:
+      - Customers
+      parameters:
+      - name: customer_id
+        in: path
+        required: true
+        description: The customer ID
+        schema:
+          type: integer
+      - name: address_id
+        in: path
+        required: true
+        description: The address ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Customer address retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customer_address:
+                    $ref: "#/components/schemas/CustomerAddress"
+
+  /orders/{order_id}/fulfillment_orders.json:
+    get:
+      summary: List fulfillment orders
+      description: Returns a list of fulfillment orders for a specific order
+      operationId: FulfillmentOrders_List
+      x-airbyte-entity: fulfillment_orders
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.fulfillment_orders
+      x-airbyte-meta-extractor:
+        next_page_url: "@link.next"
+      tags:
+      - Orders
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: The order ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of fulfillment orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FulfillmentOrderList"
+
+  /fulfillment_orders/{fulfillment_order_id}.json:
+    get:
+      summary: Get a fulfillment order
+      description: Retrieves a single fulfillment order by ID
+      operationId: FulfillmentOrders_Get
+      x-airbyte-entity: fulfillment_orders
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.fulfillment_order
+      tags:
+      - Orders
+      parameters:
+      - name: fulfillment_order_id
+        in: path
+        required: true
+        description: The fulfillment order ID
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Fulfillment order retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fulfillment_order:
+                    $ref: "#/components/schemas/FulfillmentOrder"
+
+components:
+  securitySchemes:
+    shopifyAccessToken:
+      type: apiKey
+      in: header
+      name: X-Shopify-Access-Token
+      description: Shopify Admin API access token
+      x-airbyte-auth-config:
+        title: "Access Token Authentication"
+        type: object
+        required:
+        - api_key
+        properties:
+          api_key:
+            type: string
+            title: "Access Token"
+            description: "Your Shopify Admin API access token"
+        auth_mapping:
+          api_key: "${api_key}"
+        replication_auth_key_mapping:
+          credentials.api_password: "api_key"
+        replication_auth_key_constants:
+          credentials.auth_method: "api_password"
+
+  schemas:
+    Customer:
+      type: object
+      x-airbyte-entity-name: customers
+      x-airbyte-stream-name: customers
+      description: A Shopify customer
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Unique customer identifier
+        email:
+          type: [string, "null"]
+          description: Customer email address
+        accepts_marketing:
+          type: [boolean, "null"]
+          description: Whether the customer accepts marketing
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the customer was created
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the customer was last updated
+        first_name:
+          type: [string, "null"]
+          description: Customer first name
+        last_name:
+          type: [string, "null"]
+          description: Customer last name
+        orders_count:
+          type: [integer, "null"]
+          description: Number of orders
+        state:
+          type: [string, "null"]
+          description: Customer state
+        total_spent:
+          type: [string, "null"]
+          description: Total amount spent
+        last_order_id:
+          type: [integer, "null"]
+          description: ID of last order
+        note:
+          type: [string, "null"]
+          description: Note about the customer
+        verified_email:
+          type: [boolean, "null"]
+          description: Whether email is verified
+        multipass_identifier:
+          type: [string, "null"]
+          description: Multipass identifier
+        tax_exempt:
+          type: [boolean, "null"]
+          description: Whether customer is tax exempt
+        tags:
+          type: [string, "null"]
+          description: Tags associated with customer
+        last_order_name:
+          type: [string, "null"]
+          description: Name of last order
+        currency:
+          type: [string, "null"]
+          description: Customer currency
+        phone:
+          type: [string, "null"]
+          description: Customer phone number
+        addresses:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/CustomerAddress"
+        accepts_marketing_updated_at:
+          type: [string, "null"]
+          format: date-time
+          description: When marketing acceptance was updated
+        marketing_opt_in_level:
+          type: [string, "null"]
+          description: Marketing opt-in level
+        tax_exemptions:
+          type: [array, "null"]
+          items:
+            type: string
+        email_marketing_consent:
+          oneOf:
+          - $ref: "#/components/schemas/MarketingConsent"
+          - type: "null"
+        sms_marketing_consent:
+          oneOf:
+          - $ref: "#/components/schemas/MarketingConsent"
+          - type: "null"
+        admin_graphql_api_id:
+          type: [string, "null"]
+          description: GraphQL API ID
+        default_address:
+          oneOf:
+          - $ref: "#/components/schemas/CustomerAddress"
+          - type: "null"
+
+    CustomerList:
+      type: object
+      properties:
+        customers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+
+    CustomerAddress:
+      type: object
+      description: A customer address
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Address ID
+        customer_id:
+          type: [integer, "null"]
+          description: Customer ID
+        first_name:
+          type: [string, "null"]
+          description: First name
+        last_name:
+          type: [string, "null"]
+          description: Last name
+        company:
+          type: [string, "null"]
+          description: Company name
+        address1:
+          type: [string, "null"]
+          description: Address line 1
+        address2:
+          type: [string, "null"]
+          description: Address line 2
+        city:
+          type: [string, "null"]
+          description: City
+        province:
+          type: [string, "null"]
+          description: Province/State
+        country:
+          type: [string, "null"]
+          description: Country
+        zip:
+          type: [string, "null"]
+          description: ZIP/Postal code
+        phone:
+          type: [string, "null"]
+          description: Phone number
+        name:
+          type: [string, "null"]
+          description: Full name
+        province_code:
+          type: [string, "null"]
+          description: Province code
+        country_code:
+          type: [string, "null"]
+          description: Country code
+        country_name:
+          type: [string, "null"]
+          description: Country name
+        default:
+          type: [boolean, "null"]
+          description: Whether this is the default address
+
+    CustomerAddressList:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerAddress"
+
+    MarketingConsent:
+      type: object
+      properties:
+        state:
+          type: [string, "null"]
+        opt_in_level:
+          type: [string, "null"]
+        consent_updated_at:
+          type: [string, "null"]
+          format: date-time
+        consent_collected_from:
+          type: [string, "null"]
+
+    OrderAddress:
+      type: object
+      description: An address in an order (shipping or billing) - does not have id field
+      properties:
+        first_name:
+          type: [string, "null"]
+        last_name:
+          type: [string, "null"]
+        company:
+          type: [string, "null"]
+        address1:
+          type: [string, "null"]
+        address2:
+          type: [string, "null"]
+        city:
+          type: [string, "null"]
+        province:
+          type: [string, "null"]
+        country:
+          type: [string, "null"]
+        zip:
+          type: [string, "null"]
+        phone:
+          type: [string, "null"]
+        name:
+          type: [string, "null"]
+        province_code:
+          type: [string, "null"]
+        country_code:
+          type: [string, "null"]
+        latitude:
+          type: [number, "null"]
+        longitude:
+          type: [number, "null"]
+
+    Order:
+      type: object
+      x-airbyte-entity-name: orders
+      x-airbyte-stream-name: orders
+      description: A Shopify order
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Unique order identifier
+        admin_graphql_api_id:
+          type: [string, "null"]
+        app_id:
+          type: [integer, "null"]
+        browser_ip:
+          type: [string, "null"]
+        buyer_accepts_marketing:
+          type: [boolean, "null"]
+        cancel_reason:
+          type: [string, "null"]
+        cancelled_at:
+          type: [string, "null"]
+          format: date-time
+        cart_token:
+          type: [string, "null"]
+        checkout_id:
+          type: [integer, "null"]
+        checkout_token:
+          type: [string, "null"]
+        client_details:
+          type: [object, "null"]
+        closed_at:
+          type: [string, "null"]
+          format: date-time
+        company:
+          type: [object, "null"]
+        confirmation_number:
+          type: [string, "null"]
+        confirmed:
+          type: [boolean, "null"]
+        contact_email:
+          type: [string, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        currency:
+          type: [string, "null"]
+        current_subtotal_price:
+          type: [string, "null"]
+        current_subtotal_price_set:
+          type: [object, "null"]
+        current_total_additional_fees_set:
+          type: [object, "null"]
+        current_total_discounts:
+          type: [string, "null"]
+        current_total_discounts_set:
+          type: [object, "null"]
+        current_total_duties_set:
+          type: [object, "null"]
+        current_total_price:
+          type: [string, "null"]
+        current_total_price_set:
+          type: [object, "null"]
+        current_total_tax:
+          type: [string, "null"]
+        current_total_tax_set:
+          type: [object, "null"]
+        customer:
+          oneOf:
+          - $ref: "#/components/schemas/Customer"
+          - type: "null"
+        customer_locale:
+          type: [string, "null"]
+        device_id:
+          type: [integer, "null"]
+        discount_applications:
+          type: [array, "null"]
+          items:
+            type: object
+        discount_codes:
+          type: [array, "null"]
+          items:
+            type: object
+        email:
+          type: [string, "null"]
+        estimated_taxes:
+          type: [boolean, "null"]
+        financial_status:
+          type: [string, "null"]
+        fulfillment_status:
+          type: [string, "null"]
+        fulfillments:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/Fulfillment"
+        gateway:
+          type: [string, "null"]
+        landing_site:
+          type: [string, "null"]
+        landing_site_ref:
+          type: [string, "null"]
+        line_items:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/LineItem"
+        location_id:
+          type: [integer, "null"]
+        merchant_of_record_app_id:
+          type: [integer, "null"]
+        merchant_business_entity_id:
+          type: [string, "null"]
+        duties_included:
+          type: [boolean, "null"]
+        total_cash_rounding_payment_adjustment_set:
+          type: [object, "null"]
+        total_cash_rounding_refund_adjustment_set:
+          type: [object, "null"]
+        payment_terms:
+          type: [object, "null"]
+        name:
+          type: [string, "null"]
+        note:
+          type: [string, "null"]
+        note_attributes:
+          type: [array, "null"]
+          items:
+            type: object
+        number:
+          type: [integer, "null"]
+        order_number:
+          type: [integer, "null"]
+        order_status_url:
+          type: [string, "null"]
+        original_total_additional_fees_set:
+          type: [object, "null"]
+        original_total_duties_set:
+          type: [object, "null"]
+        payment_gateway_names:
+          type: [array, "null"]
+          items:
+            type: string
+        phone:
+          type: [string, "null"]
+        po_number:
+          type: [string, "null"]
+        presentment_currency:
+          type: [string, "null"]
+        processed_at:
+          type: [string, "null"]
+          format: date-time
+        reference:
+          type: [string, "null"]
+        referring_site:
+          type: [string, "null"]
+        refunds:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/Refund"
+        shipping_address:
+          oneOf:
+          - $ref: "#/components/schemas/OrderAddress"
+          - type: "null"
+        shipping_lines:
+          type: [array, "null"]
+          items:
+            type: object
+        source_identifier:
+          type: [string, "null"]
+        source_name:
+          type: [string, "null"]
+        source_url:
+          type: [string, "null"]
+        subtotal_price:
+          type: [string, "null"]
+        subtotal_price_set:
+          type: [object, "null"]
+        tags:
+          type: [string, "null"]
+        tax_exempt:
+          type: [boolean, "null"]
+        tax_lines:
+          type: [array, "null"]
+          items:
+            type: object
+        taxes_included:
+          type: [boolean, "null"]
+        test:
+          type: [boolean, "null"]
+        token:
+          type: [string, "null"]
+        total_discounts:
+          type: [string, "null"]
+        total_discounts_set:
+          type: [object, "null"]
+        total_line_items_price:
+          type: [string, "null"]
+        total_line_items_price_set:
+          type: [object, "null"]
+        total_outstanding:
+          type: [string, "null"]
+        total_price:
+          type: [string, "null"]
+        total_price_set:
+          type: [object, "null"]
+        total_shipping_price_set:
+          type: [object, "null"]
+        total_tax:
+          type: [string, "null"]
+        total_tax_set:
+          type: [object, "null"]
+        total_tip_received:
+          type: [string, "null"]
+        total_weight:
+          type: [integer, "null"]
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        user_id:
+          type: [integer, "null"]
+        billing_address:
+          oneOf:
+          - $ref: "#/components/schemas/OrderAddress"
+          - type: "null"
+
+    OrderList:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        admin_graphql_api_id:
+          type: [string, "null"]
+        attributed_staffs:
+          type: [array, "null"]
+          items:
+            type: object
+        current_quantity:
+          type: [integer, "null"]
+        fulfillable_quantity:
+          type: [integer, "null"]
+        fulfillment_service:
+          type: [string, "null"]
+        fulfillment_status:
+          type: [string, "null"]
+        gift_card:
+          type: [boolean, "null"]
+        grams:
+          type: [integer, "null"]
+        name:
+          type: [string, "null"]
+        price:
+          type: [string, "null"]
+        price_set:
+          type: [object, "null"]
+        product_exists:
+          type: [boolean, "null"]
+        product_id:
+          type: [integer, "null"]
+        properties:
+          type: [array, "null"]
+          items:
+            type: object
+        quantity:
+          type: [integer, "null"]
+        requires_shipping:
+          type: [boolean, "null"]
+        sku:
+          type: [string, "null"]
+        taxable:
+          type: [boolean, "null"]
+        title:
+          type: [string, "null"]
+        total_discount:
+          type: [string, "null"]
+        total_discount_set:
+          type: [object, "null"]
+        variant_id:
+          type: [integer, "null"]
+        variant_inventory_management:
+          type: [string, "null"]
+        variant_title:
+          type: [string, "null"]
+        vendor:
+          type: [string, "null"]
+        tax_lines:
+          type: [array, "null"]
+          items:
+            type: object
+        duties:
+          type: [array, "null"]
+          items:
+            type: object
+        discount_allocations:
+          type: [array, "null"]
+          items:
+            type: object
+
+    Product:
+      type: object
+      x-airbyte-entity-name: products
+      x-airbyte-stream-name: products
+      description: A Shopify product
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Unique product identifier
+        title:
+          type: [string, "null"]
+          description: Product title
+        body_html:
+          type: [string, "null"]
+          description: Product description in HTML
+        vendor:
+          type: [string, "null"]
+          description: Product vendor
+        product_type:
+          type: [string, "null"]
+          description: Product type
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the product was created
+        handle:
+          type: [string, "null"]
+          description: Product handle for URL
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the product was last updated
+        published_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the product was published
+        template_suffix:
+          type: [string, "null"]
+          description: Template suffix
+        published_scope:
+          type: [string, "null"]
+          description: Published scope
+        tags:
+          type: [string, "null"]
+          description: Product tags
+        status:
+          type: [string, "null"]
+          description: Product status
+        admin_graphql_api_id:
+          type: [string, "null"]
+          description: GraphQL API ID
+        variants:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/ProductVariant"
+        options:
+          type: [array, "null"]
+          items:
+            type: object
+        images:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/ProductImage"
+        image:
+          oneOf:
+          - $ref: "#/components/schemas/ProductImage"
+          - type: "null"
+
+    ProductList:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+
+    ProductVariant:
+      type: object
+      x-airbyte-entity-name: product_variants
+      x-airbyte-stream-name: product_variants
+      description: A product variant
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Variant ID
+        product_id:
+          type: [integer, "null"]
+          description: Product ID
+        title:
+          type: [string, "null"]
+          description: Variant title
+        price:
+          type: [string, "null"]
+          description: Variant price
+        sku:
+          type: [string, "null"]
+          description: SKU
+        position:
+          type: [integer, "null"]
+          description: Position
+        inventory_policy:
+          type: [string, "null"]
+          description: Inventory policy
+        compare_at_price:
+          type: [string, "null"]
+          description: Compare at price
+        fulfillment_service:
+          type: [string, "null"]
+          description: Fulfillment service
+        inventory_management:
+          type: [string, "null"]
+          description: Inventory management
+        option1:
+          type: [string, "null"]
+          description: Option 1 value
+        option2:
+          type: [string, "null"]
+          description: Option 2 value
+        option3:
+          type: [string, "null"]
+          description: Option 3 value
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the variant was created
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the variant was last updated
+        taxable:
+          type: [boolean, "null"]
+          description: Whether the variant is taxable
+        barcode:
+          type: [string, "null"]
+          description: Barcode
+        grams:
+          type: [integer, "null"]
+          description: Weight in grams
+        image_id:
+          type: [integer, "null"]
+          description: Image ID
+        weight:
+          type: [number, "null"]
+          description: Weight
+        weight_unit:
+          type: [string, "null"]
+          description: Weight unit
+        inventory_item_id:
+          type: [integer, "null"]
+          description: Inventory item ID
+        inventory_quantity:
+          type: [integer, "null"]
+          description: Inventory quantity
+        old_inventory_quantity:
+          type: [integer, "null"]
+          description: Old inventory quantity
+        requires_shipping:
+          type: [boolean, "null"]
+          description: Whether shipping is required
+        admin_graphql_api_id:
+          type: [string, "null"]
+          description: GraphQL API ID
+
+    ProductVariantList:
+      type: object
+      properties:
+        variants:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductVariant"
+
+    ProductImage:
+      type: object
+      x-airbyte-entity-name: product_images
+      x-airbyte-stream-name: product_images
+      description: A product image
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Image ID
+        product_id:
+          type: [integer, "null"]
+          description: Product ID
+        position:
+          type: [integer, "null"]
+          description: Position
+        created_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the image was created
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+          description: When the image was last updated
+        alt:
+          type: [string, "null"]
+          description: Alt text
+        width:
+          type: [integer, "null"]
+          description: Image width
+        height:
+          type: [integer, "null"]
+          description: Image height
+        src:
+          type: [string, "null"]
+          description: Image source URL
+        variant_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        admin_graphql_api_id:
+          type: [string, "null"]
+          description: GraphQL API ID
+
+    ProductImageList:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductImage"
+
+    AbandonedCheckout:
+      type: object
+      x-airbyte-entity-name: abandoned_checkouts
+      x-airbyte-stream-name: abandoned_checkouts
+      description: An abandoned checkout
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Checkout ID
+        token:
+          type: [string, "null"]
+        cart_token:
+          type: [string, "null"]
+        email:
+          type: [string, "null"]
+        gateway:
+          type: [string, "null"]
+        buyer_accepts_marketing:
+          type: [boolean, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        landing_site:
+          type: [string, "null"]
+        note:
+          type: [string, "null"]
+        note_attributes:
+          type: [array, "null"]
+          items:
+            type: object
+        referring_site:
+          type: [string, "null"]
+        shipping_lines:
+          type: [array, "null"]
+          items:
+            type: object
+        taxes_included:
+          type: [boolean, "null"]
+        total_weight:
+          type: [integer, "null"]
+        currency:
+          type: [string, "null"]
+        completed_at:
+          type: [string, "null"]
+          format: date-time
+        closed_at:
+          type: [string, "null"]
+          format: date-time
+        user_id:
+          type: [integer, "null"]
+        location_id:
+          type: [integer, "null"]
+        source_identifier:
+          type: [string, "null"]
+        source_url:
+          type: [string, "null"]
+        device_id:
+          type: [integer, "null"]
+        phone:
+          type: [string, "null"]
+        customer_locale:
+          type: [string, "null"]
+        line_items:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/LineItem"
+        name:
+          type: [string, "null"]
+        source:
+          type: [string, "null"]
+        abandoned_checkout_url:
+          type: [string, "null"]
+        discount_codes:
+          type: [array, "null"]
+          items:
+            type: object
+        tax_lines:
+          type: [array, "null"]
+          items:
+            type: object
+        source_name:
+          type: [string, "null"]
+        presentment_currency:
+          type: [string, "null"]
+        buyer_accepts_sms_marketing:
+          type: [boolean, "null"]
+        sms_marketing_phone:
+          type: [string, "null"]
+        total_discounts:
+          type: [string, "null"]
+        total_line_items_price:
+          type: [string, "null"]
+        total_price:
+          type: [string, "null"]
+        total_tax:
+          type: [string, "null"]
+        subtotal_price:
+          type: [string, "null"]
+        total_duties:
+          type: [string, "null"]
+        billing_address:
+          oneOf:
+          - $ref: "#/components/schemas/OrderAddress"
+          - type: "null"
+        shipping_address:
+          oneOf:
+          - $ref: "#/components/schemas/OrderAddress"
+          - type: "null"
+        customer:
+          oneOf:
+          - $ref: "#/components/schemas/Customer"
+          - type: "null"
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    AbandonedCheckoutList:
+      type: object
+      properties:
+        checkouts:
+          type: array
+          items:
+            $ref: "#/components/schemas/AbandonedCheckout"
+
+    Location:
+      type: object
+      x-airbyte-entity-name: locations
+      x-airbyte-stream-name: locations
+      description: A store location
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Location ID
+        name:
+          type: [string, "null"]
+        address1:
+          type: [string, "null"]
+        address2:
+          type: [string, "null"]
+        city:
+          type: [string, "null"]
+        zip:
+          type: [string, "null"]
+        province:
+          type: [string, "null"]
+        country:
+          type: [string, "null"]
+        phone:
+          type: [string, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        country_code:
+          type: [string, "null"]
+        country_name:
+          type: [string, "null"]
+        province_code:
+          type: [string, "null"]
+        legacy:
+          type: [boolean, "null"]
+        active:
+          type: [boolean, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+        localized_country_name:
+          type: [string, "null"]
+        localized_province_name:
+          type: [string, "null"]
+
+    LocationList:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Location"
+
+    InventoryLevel:
+      type: object
+      x-airbyte-entity-name: inventory_levels
+      x-airbyte-stream-name: inventory_levels
+      description: An inventory level
+      properties:
+        inventory_item_id:
+          type: integer
+        location_id:
+          type: [integer, "null"]
+        available:
+          type: [integer, "null"]
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    InventoryLevelList:
+      type: object
+      properties:
+        inventory_levels:
+          type: array
+          items:
+            $ref: "#/components/schemas/InventoryLevel"
+
+    InventoryItem:
+      type: object
+      x-airbyte-entity-name: inventory_items
+      x-airbyte-stream-name: inventory_items
+      description: An inventory item
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Inventory item ID
+        sku:
+          type: [string, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        requires_shipping:
+          type: [boolean, "null"]
+        cost:
+          type: [string, "null"]
+        country_code_of_origin:
+          type: [string, "null"]
+        province_code_of_origin:
+          type: [string, "null"]
+        harmonized_system_code:
+          type: [string, "null"]
+        tracked:
+          type: [boolean, "null"]
+        country_harmonized_system_codes:
+          type: [array, "null"]
+          items:
+            type: object
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    InventoryItemList:
+      type: object
+      properties:
+        inventory_items:
+          type: array
+          items:
+            $ref: "#/components/schemas/InventoryItem"
+
+    Shop:
+      type: object
+      x-airbyte-entity-name: shop
+      x-airbyte-stream-name: shop
+      description: Shop configuration
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Shop ID
+        name:
+          type: [string, "null"]
+        email:
+          type: [string, "null"]
+        domain:
+          type: [string, "null"]
+        province:
+          type: [string, "null"]
+        country:
+          type: [string, "null"]
+        address1:
+          type: [string, "null"]
+        zip:
+          type: [string, "null"]
+        city:
+          type: [string, "null"]
+        source:
+          type: [string, "null"]
+        phone:
+          type: [string, "null"]
+        latitude:
+          type: [number, "null"]
+        longitude:
+          type: [number, "null"]
+        primary_locale:
+          type: [string, "null"]
+        address2:
+          type: [string, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        country_code:
+          type: [string, "null"]
+        country_name:
+          type: [string, "null"]
+        currency:
+          type: [string, "null"]
+        customer_email:
+          type: [string, "null"]
+        timezone:
+          type: [string, "null"]
+        iana_timezone:
+          type: [string, "null"]
+        shop_owner:
+          type: [string, "null"]
+        money_format:
+          type: [string, "null"]
+        money_with_currency_format:
+          type: [string, "null"]
+        weight_unit:
+          type: [string, "null"]
+        province_code:
+          type: [string, "null"]
+        taxes_included:
+          type: [boolean, "null"]
+        auto_configure_tax_inclusivity:
+          type: [boolean, "null"]
+        tax_shipping:
+          type: [boolean, "null"]
+        county_taxes:
+          type: [boolean, "null"]
+        plan_display_name:
+          type: [string, "null"]
+        plan_name:
+          type: [string, "null"]
+        has_discounts:
+          type: [boolean, "null"]
+        has_gift_cards:
+          type: [boolean, "null"]
+        myshopify_domain:
+          type: [string, "null"]
+        google_apps_domain:
+          type: [string, "null"]
+        google_apps_login_enabled:
+          type: [boolean, "null"]
+        money_in_emails_format:
+          type: [string, "null"]
+        money_with_currency_in_emails_format:
+          type: [string, "null"]
+        eligible_for_payments:
+          type: [boolean, "null"]
+        requires_extra_payments_agreement:
+          type: [boolean, "null"]
+        password_enabled:
+          type: [boolean, "null"]
+        has_storefront:
+          type: [boolean, "null"]
+        finances:
+          type: [boolean, "null"]
+        primary_location_id:
+          type: [integer, "null"]
+        checkout_api_supported:
+          type: [boolean, "null"]
+        multi_location_enabled:
+          type: [boolean, "null"]
+        setup_required:
+          type: [boolean, "null"]
+        pre_launch_enabled:
+          type: [boolean, "null"]
+        enabled_presentment_currencies:
+          type: [array, "null"]
+          items:
+            type: string
+        transactional_sms_disabled:
+          type: [boolean, "null"]
+        marketing_sms_consent_enabled_at_checkout:
+          type: [boolean, "null"]
+
+    PriceRule:
+      type: object
+      x-airbyte-entity-name: price_rules
+      x-airbyte-stream-name: price_rules
+      description: A price rule
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Price rule ID
+        value_type:
+          type: [string, "null"]
+        value:
+          type: [string, "null"]
+        customer_selection:
+          type: [string, "null"]
+        target_type:
+          type: [string, "null"]
+        target_selection:
+          type: [string, "null"]
+        allocation_method:
+          type: [string, "null"]
+        allocation_limit:
+          type: [integer, "null"]
+        once_per_customer:
+          type: [boolean, "null"]
+        usage_limit:
+          type: [integer, "null"]
+        starts_at:
+          type: [string, "null"]
+          format: date-time
+        ends_at:
+          type: [string, "null"]
+          format: date-time
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        entitled_product_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        entitled_variant_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        entitled_collection_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        entitled_country_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        prerequisite_product_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        prerequisite_variant_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        prerequisite_collection_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        customer_segment_prerequisite_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        prerequisite_customer_ids:
+          type: [array, "null"]
+          items:
+            type: integer
+        prerequisite_subtotal_range:
+          type: [object, "null"]
+        prerequisite_quantity_range:
+          type: [object, "null"]
+        prerequisite_shipping_price_range:
+          type: [object, "null"]
+        prerequisite_to_entitlement_quantity_ratio:
+          type: [object, "null"]
+        prerequisite_to_entitlement_purchase:
+          type: [object, "null"]
+        title:
+          type: [string, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    PriceRuleList:
+      type: object
+      properties:
+        price_rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/PriceRule"
+
+    DiscountCode:
+      type: object
+      x-airbyte-entity-name: discount_codes
+      x-airbyte-stream-name: discount_codes
+      description: A discount code
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Discount code ID
+        price_rule_id:
+          type: [integer, "null"]
+        code:
+          type: [string, "null"]
+        usage_count:
+          type: [integer, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+
+    DiscountCodeList:
+      type: object
+      properties:
+        discount_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/DiscountCode"
+
+    CustomCollection:
+      type: object
+      x-airbyte-entity-name: custom_collections
+      x-airbyte-stream-name: custom_collections
+      description: A custom collection
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Collection ID
+        handle:
+          type: [string, "null"]
+        title:
+          type: [string, "null"]
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        body_html:
+          type: [string, "null"]
+        published_at:
+          type: [string, "null"]
+          format: date-time
+        sort_order:
+          type: [string, "null"]
+        template_suffix:
+          type: [string, "null"]
+        published_scope:
+          type: [string, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+        image:
+          type: [object, "null"]
+        products_count:
+          type: [integer, "null"]
+
+    CustomCollectionList:
+      type: object
+      properties:
+        custom_collections:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomCollection"
+
+    SmartCollection:
+      type: object
+      x-airbyte-entity-name: smart_collections
+      x-airbyte-stream-name: smart_collections
+      description: A smart collection
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Collection ID
+        handle:
+          type: [string, "null"]
+        title:
+          type: [string, "null"]
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        body_html:
+          type: [string, "null"]
+        published_at:
+          type: [string, "null"]
+          format: date-time
+        sort_order:
+          type: [string, "null"]
+        template_suffix:
+          type: [string, "null"]
+        disjunctive:
+          type: [boolean, "null"]
+        rules:
+          type: [array, "null"]
+          items:
+            type: object
+        published_scope:
+          type: [string, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+        image:
+          type: [object, "null"]
+        products_count:
+          type: [integer, "null"]
+
+    SmartCollectionList:
+      type: object
+      properties:
+        smart_collections:
+          type: array
+          items:
+            $ref: "#/components/schemas/SmartCollection"
+
+    Collect:
+      type: object
+      x-airbyte-entity-name: collects
+      x-airbyte-stream-name: collects
+      description: A collect (product-collection link)
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Collect ID
+        collection_id:
+          type: [integer, "null"]
+        product_id:
+          type: [integer, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        position:
+          type: [integer, "null"]
+        sort_value:
+          type: [string, "null"]
+
+    CollectList:
+      type: object
+      properties:
+        collects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Collect"
+
+    DraftOrder:
+      type: object
+      x-airbyte-entity-name: draft_orders
+      x-airbyte-stream-name: draft_orders
+      description: A draft order
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Draft order ID
+        note:
+          type: [string, "null"]
+        email:
+          type: [string, "null"]
+        taxes_included:
+          type: [boolean, "null"]
+        currency:
+          type: [string, "null"]
+        invoice_sent_at:
+          type: [string, "null"]
+          format: date-time
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        tax_exempt:
+          type: [boolean, "null"]
+        completed_at:
+          type: [string, "null"]
+          format: date-time
+        name:
+          type: [string, "null"]
+        status:
+          type: [string, "null"]
+        line_items:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/LineItem"
+        shipping_address:
+          oneOf:
+          - $ref: "#/components/schemas/OrderAddress"
+          - type: "null"
+        billing_address:
+          oneOf:
+          - $ref: "#/components/schemas/OrderAddress"
+          - type: "null"
+        invoice_url:
+          type: [string, "null"]
+        applied_discount:
+          type: [object, "null"]
+        order_id:
+          type: [integer, "null"]
+        shipping_line:
+          type: [object, "null"]
+        tax_lines:
+          type: [array, "null"]
+          items:
+            type: object
+        tags:
+          type: [string, "null"]
+        note_attributes:
+          type: [array, "null"]
+          items:
+            type: object
+        total_price:
+          type: [string, "null"]
+        subtotal_price:
+          type: [string, "null"]
+        total_tax:
+          type: [string, "null"]
+        payment_terms:
+          type: [object, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+        customer:
+          oneOf:
+          - $ref: "#/components/schemas/Customer"
+          - type: "null"
+        allow_discount_codes_in_checkout?:
+          type: [boolean, "null"]
+          description: Whether discount codes can be applied at checkout
+        b2b?:
+          type: [boolean, "null"]
+          description: Whether this is a B2B order
+        api_client_id:
+          type: [integer, "null"]
+          description: The ID of the API client that created the draft order
+        created_on_api_version_handle:
+          type: [string, "null"]
+          description: The API version handle when the draft order was created
+
+    DraftOrderList:
+      type: object
+      properties:
+        draft_orders:
+          type: array
+          items:
+            $ref: "#/components/schemas/DraftOrder"
+
+    Fulfillment:
+      type: object
+      x-airbyte-entity-name: fulfillments
+      x-airbyte-stream-name: fulfillments
+      description: A fulfillment
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Fulfillment ID
+        order_id:
+          type: [integer, "null"]
+        status:
+          type: [string, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        service:
+          type: [string, "null"]
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        tracking_company:
+          type: [string, "null"]
+        shipment_status:
+          type: [string, "null"]
+        location_id:
+          type: [integer, "null"]
+        origin_address:
+          type: [object, "null"]
+        line_items:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/LineItem"
+        tracking_number:
+          type: [string, "null"]
+        tracking_numbers:
+          type: [array, "null"]
+          items:
+            type: string
+        tracking_url:
+          type: [string, "null"]
+        tracking_urls:
+          type: [array, "null"]
+          items:
+            type: string
+        receipt:
+          type: [object, "null"]
+        name:
+          type: [string, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    FulfillmentList:
+      type: object
+      properties:
+        fulfillments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Fulfillment"
+
+    FulfillmentOrder:
+      type: object
+      x-airbyte-entity-name: fulfillment_orders
+      x-airbyte-stream-name: fulfillment_orders
+      description: A fulfillment order
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Fulfillment order ID
+        shop_id:
+          type: [integer, "null"]
+        order_id:
+          type: [integer, "null"]
+        assigned_location_id:
+          type: [integer, "null"]
+        request_status:
+          type: [string, "null"]
+        status:
+          type: [string, "null"]
+        supported_actions:
+          type: [array, "null"]
+          items:
+            type: string
+        destination:
+          type: [object, "null"]
+        line_items:
+          type: [array, "null"]
+          items:
+            type: object
+        fulfill_at:
+          type: [string, "null"]
+          format: date-time
+        fulfill_by:
+          type: [string, "null"]
+          format: date-time
+        international_duties:
+          type: [object, "null"]
+        fulfillment_holds:
+          type: [array, "null"]
+          items:
+            type: object
+        delivery_method:
+          type: [object, "null"]
+        assigned_location:
+          type: [object, "null"]
+        merchant_requests:
+          type: [array, "null"]
+          items:
+            type: object
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+
+    FulfillmentOrderList:
+      type: object
+      properties:
+        fulfillment_orders:
+          type: array
+          items:
+            $ref: "#/components/schemas/FulfillmentOrder"
+
+    Refund:
+      type: object
+      x-airbyte-entity-name: order_refunds
+      x-airbyte-stream-name: order_refunds
+      description: An order refund
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Refund ID
+        order_id:
+          type: [integer, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        note:
+          type: [string, "null"]
+        user_id:
+          type: [integer, "null"]
+        processed_at:
+          type: [string, "null"]
+          format: date-time
+        restock:
+          type: [boolean, "null"]
+        duties:
+          type: [array, "null"]
+          items:
+            type: object
+        total_duties_set:
+          type: [object, "null"]
+        return:
+          type: [object, "null"]
+        refund_line_items:
+          type: [array, "null"]
+          items:
+            type: object
+        transactions:
+          type: [array, "null"]
+          items:
+            $ref: "#/components/schemas/Transaction"
+        order_adjustments:
+          type: [array, "null"]
+          items:
+            type: object
+        admin_graphql_api_id:
+          type: [string, "null"]
+        refund_shipping_lines:
+          type: [array, "null"]
+          items:
+            type: object
+
+    RefundList:
+      type: object
+      properties:
+        refunds:
+          type: array
+          items:
+            $ref: "#/components/schemas/Refund"
+
+    Transaction:
+      type: object
+      x-airbyte-entity-name: transactions
+      x-airbyte-stream-name: transactions
+      description: An order transaction
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Transaction ID
+        order_id:
+          type: [integer, "null"]
+        kind:
+          type: [string, "null"]
+        gateway:
+          type: [string, "null"]
+        status:
+          type: [string, "null"]
+        message:
+          type: [string, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        test:
+          type: [boolean, "null"]
+        authorization:
+          type: [string, "null"]
+        location_id:
+          type: [integer, "null"]
+        user_id:
+          type: [integer, "null"]
+        parent_id:
+          type: [integer, "null"]
+        processed_at:
+          type: [string, "null"]
+          format: date-time
+        device_id:
+          type: [integer, "null"]
+        error_code:
+          type: [string, "null"]
+        source_name:
+          type: [string, "null"]
+        receipt:
+          type: [object, "null"]
+        currency_exchange_adjustment:
+          type: [object, "null"]
+        amount:
+          type: [string, "null"]
+        currency:
+          type: [string, "null"]
+        payment_id:
+          type: [string, "null"]
+        total_unsettled_set:
+          type: [object, "null"]
+        manual_payment_gateway:
+          type: [boolean, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    TransactionList:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+
+    TenderTransaction:
+      type: object
+      x-airbyte-entity-name: tender_transactions
+      x-airbyte-stream-name: tender_transactions
+      description: A tender transaction
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Tender transaction ID
+        order_id:
+          type: [integer, "null"]
+        amount:
+          type: [string, "null"]
+        currency:
+          type: [string, "null"]
+        user_id:
+          type: [integer, "null"]
+        test:
+          type: [boolean, "null"]
+        processed_at:
+          type: [string, "null"]
+          format: date-time
+        remote_reference:
+          type: [string, "null"]
+        payment_details:
+          type: [object, "null"]
+        payment_method:
+          type: [string, "null"]
+
+    TenderTransactionList:
+      type: object
+      properties:
+        tender_transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TenderTransaction"
+
+    Country:
+      type: object
+      x-airbyte-entity-name: countries
+      x-airbyte-stream-name: countries
+      description: A country
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Country ID
+        name:
+          type: [string, "null"]
+        code:
+          type: [string, "null"]
+        tax_name:
+          type: [string, "null"]
+        tax:
+          type: [number, "null"]
+        provinces:
+          type: [array, "null"]
+          items:
+            type: object
+
+    CountryList:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: "#/components/schemas/Country"
+
+    Metafield:
+      type: object
+      x-airbyte-entity-name: metafields
+      x-airbyte-stream-name: metafields
+      description: A metafield
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: Metafield ID
+        namespace:
+          type: [string, "null"]
+        key:
+          type: [string, "null"]
+        value:
+          type: [string, integer, boolean, "null"]
+          description: The metafield value (can be string, integer, or boolean depending on type)
+        type:
+          type: [string, "null"]
+        description:
+          type: [string, "null"]
+        owner_id:
+          type: [integer, "null"]
+        created_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: [string, "null"]
+          format: date-time
+        owner_resource:
+          type: [string, "null"]
+        admin_graphql_api_id:
+          type: [string, "null"]
+
+    MetafieldList:
+      type: object
+      properties:
+        metafields:
+          type: array
+          items:
+            $ref: "#/components/schemas/Metafield"

@@ -1,0 +1,133 @@
+{%- from "_macros.jinja2" import python_operation_call, supported_entities_actions_table -%}
+# {{ connector_name | title }}
+
+The {{ connector_name | title }} agent connector is a Python package that equips AI agents to interact with {{ connector_name | title }} through strongly typed, well-documented tools. It's ready to use directly in your Python app, in an agent framework, or exposed through an MCP.
+
+{% if custom_description %}
+{{ custom_description }}
+{% else %}
+Type-safe {{ connector_name | title }} API connector with full IDE autocomplete support for AI applications.
+{% endif %}
+
+{% if supported_questions %}
+## Example questions
+
+The {{ connector_name | title }} connector is optimized to handle prompts like these.
+
+{{ supported_questions | mdx_escape }}
+
+{% endif %}
+{% if unsupported_questions %}
+## Unsupported questions
+
+The {{ connector_name | title }} connector isn't currently able to handle prompts like these.
+
+{{ unsupported_questions | mdx_escape }}
+
+{% endif %}
+## Installation
+
+```bash
+uv pip install airbyte-agent-{{ connector_name }}
+```
+
+## Usage
+
+Connectors can run in open source or hosted mode.
+
+### Open source
+
+In open source mode, you provide API credentials directly to the connector.
+
+{% if auth_config and auth_config.options %}
+{#- Find a non-OAuth option for the example, or use the first option -#}
+{%- set non_oauth_options = [] -%}
+{%- for opt in auth_config.options -%}
+{%- if 'oauth' not in opt.title|lower -%}
+{%- set _ = non_oauth_options.append(opt) -%}
+{%- endif -%}
+{%- endfor -%}
+{%- set example_option = non_oauth_options[0] if non_oauth_options else auth_config.options[0] -%}
+{%- if auth_config.options | length > 1 %}
+{%- set auth_class = auth_config.base_name ~ example_option.type_suffix ~ "AuthConfig" -%}
+{%- set auth_import = "\nfrom " ~ package_name ~ ".models import " ~ auth_class -%}
+{%- else %}
+{%- set auth_class = auth_config.type_name -%}
+{%- set auth_import = "\nfrom " ~ package_name ~ ".models import " ~ auth_class -%}
+{%- endif %}
+```python
+from {{ package_name }} import {{ class_name }}{{ auth_import }}
+
+connector = {{ class_name }}(
+    auth_config={{ auth_class }}(
+{% for field in example_option.fields %}        {{ field.name }}="<{{ field.description or field.name }}>"{{ "," if not loop.last else "" }}
+{% endfor %}    )
+)
+
+@agent.tool_plain # assumes you're using Pydantic AI
+@{{ class_name }}.tool_utils
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+{% else %}
+```python
+from {{ package_name }} import {{ class_name }}
+
+connector = {{ class_name }}()
+
+@agent.tool_plain # assumes you're using Pydantic AI
+@{{ class_name }}.tool_utils
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+{% endif %}
+
+### Hosted
+
+In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+If your Airbyte client can access multiple organizations, also set `organization_id`.
+
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+
+```python
+from {{ package_name }} import {{ class_name }}, AirbyteAuthConfig
+
+connector = {{ class_name }}(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+
+@agent.tool_plain # assumes you're using Pydantic AI
+@{{ class_name }}.tool_utils
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+## Full documentation
+
+### Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+{{ supported_entities_actions_table(entities_grouped, reference_path="./REFERENCE.md", search_schemas=search_schemas) }}
+
+### Authentication
+
+For all authentication options, see the connector's [authentication documentation](AUTH.md).
+
+{% if api_reference_url %}
+### {{ connector_name | title }} API docs
+
+See the official [{{ connector_name | title }} API reference]({{ api_reference_url }}).
+{% endif %}
+
+## Version information
+
+- **Package version:** {{ package_version }}
+- **Connector version:** {{ yaml_version }}
+- **Generated with Connector SDK commit SHA:** {{ commit_sha }}
+- **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/{{ connector_name }}/CHANGELOG.md)

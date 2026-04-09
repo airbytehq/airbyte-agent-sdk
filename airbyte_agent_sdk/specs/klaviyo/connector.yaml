@@ -1,0 +1,2209 @@
+openapi: 3.1.0
+
+info:
+  title: Klaviyo API Connector
+  version: 1.0.4
+  description: |
+    Klaviyo is a marketing automation platform that helps businesses build customer relationships
+    through personalized email, SMS, and push notifications. This connector provides access to
+    Klaviyo's core entities including profiles, lists, campaigns, events, metrics, flows, and
+    email templates for marketing analytics and customer engagement insights.
+  x-airbyte-connector-name: klaviyo
+  x-airbyte-connector-definition-id: 95e8cffd-b8c4-4039-968e-d32fb4a69bde
+  x-airbyte-replication-version: "2.17.2"
+  x-airbyte-replication-compatibility: ">=2.17.2, <3.0.0"
+  x-airbyte-external-documentation-urls:
+    - title: Klaviyo API Reference
+      type: api_reference
+      url: "https://developers.klaviyo.com/en/reference/api_overview"
+    - title: Klaviyo Authentication Guide
+      type: authentication_guide
+      url: "https://developers.klaviyo.com/en/docs/authenticate_"
+  x-airbyte-example-questions:
+    direct:
+      - "List all profiles in my Klaviyo account"
+      - "Show me details for a recent profile"
+      - "Show me all email lists"
+      - "Show me details for a recent email list"
+      - "What campaigns have been created?"
+      - "Show me details for a recent campaign"
+      - "Show me all email campaigns"
+      - "List all events for tracking customer actions"
+      - "Show me all metrics (event types)"
+      - "Show me details for a recent metric"
+      - "What automated flows are configured?"
+      - "Show me details for a recent flow"
+      - "List all email templates"
+      - "Show me details for a recent email template"
+    search: []
+    unsupported:
+      - "Create a new profile"
+      - "Update a profile's email address"
+      - "Delete a list"
+      - "Send an email campaign"
+      - "Add a profile to a list"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+    - entity: profiles
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          anonymous_id:
+            type:
+            - 'null'
+            - string
+          created:
+            type:
+            - 'null'
+            - string
+          email:
+            type:
+            - 'null'
+            - string
+          external_id:
+            type:
+            - 'null'
+            - string
+          first_name:
+            type:
+            - 'null'
+            - string
+          image:
+            type:
+            - 'null'
+            - string
+          last_event_date:
+            type:
+            - 'null'
+            - string
+          last_name:
+            type:
+            - 'null'
+            - string
+          locale:
+            type:
+            - 'null'
+            - string
+          location:
+            type:
+            - 'null'
+            - object
+            properties:
+              address1:
+                type:
+                - 'null'
+                - string
+              address2:
+                type:
+                - 'null'
+                - string
+              city:
+                type:
+                - 'null'
+                - string
+              country:
+                type:
+                - 'null'
+                - string
+              ip:
+                type:
+                - 'null'
+                - string
+              latitude:
+                type:
+                - 'null'
+                - number
+                - string
+              longitude:
+                type:
+                - 'null'
+                - number
+                - string
+              region:
+                type:
+                - 'null'
+                - string
+              timezone:
+                type:
+                - 'null'
+                - string
+              zip:
+                type:
+                - 'null'
+                - string
+          organization:
+            type:
+            - 'null'
+            - string
+          phone_number:
+            type:
+            - 'null'
+            - string
+          predictive_analytics:
+            type:
+            - 'null'
+            - object
+            properties:
+              average_days_between_orders:
+                type:
+                - 'null'
+                - number
+              average_order_value:
+                type:
+                - 'null'
+                - number
+              churn_probability:
+                type:
+                - 'null'
+                - number
+              expected_date_of_next_order:
+                type:
+                - 'null'
+                - string
+              historic_clv:
+                type:
+                - 'null'
+                - number
+              historic_number_of_orders:
+                type:
+                - 'null'
+                - integer
+              predicted_clv:
+                type:
+                - 'null'
+                - number
+              predicted_number_of_orders:
+                type:
+                - 'null'
+                - number
+              total_clv:
+                type:
+                - 'null'
+                - number
+          properties:
+            type:
+            - 'null'
+            - object
+          subscriptions:
+            type:
+            - 'null'
+            - object
+            properties:
+              email:
+                type:
+                - 'null'
+                - object
+                properties:
+                  marketing:
+                    type:
+                    - 'null'
+                    - object
+                    properties:
+                      can_receive_email_marketing:
+                        type:
+                        - 'null'
+                        - boolean
+                      consent:
+                        type:
+                        - 'null'
+                        - string
+                      consent_timestamp:
+                        type:
+                        - 'null'
+                        - string
+                      custom_method_detail:
+                        type:
+                        - 'null'
+                        - string
+                      double_optin:
+                        type:
+                        - 'null'
+                        - boolean
+                      last_updated:
+                        type:
+                        - 'null'
+                        - string
+                      list_suppressions:
+                        type:
+                        - 'null'
+                        - array
+                      method:
+                        type:
+                        - 'null'
+                        - string
+                      method_detail:
+                        type:
+                        - 'null'
+                        - string
+                      suppressions:
+                        type:
+                        - 'null'
+                        - array
+                      timestamp:
+                        type:
+                        - 'null'
+                        - string
+              mobile_push:
+                type:
+                - 'null'
+                - object
+                properties:
+                  marketing:
+                    type:
+                    - 'null'
+                    - object
+                    properties:
+                      can_receive_sms_marketing:
+                        type:
+                        - 'null'
+                        - boolean
+                      consent:
+                        type:
+                        - 'null'
+                        - string
+                      consent_timestamp:
+                        type:
+                        - 'null'
+                        - string
+              sms:
+                type:
+                - 'null'
+                - object
+                properties:
+                  marketing:
+                    type:
+                    - 'null'
+                    - object
+                    properties:
+                      can_receive_sms_marketing:
+                        type:
+                        - 'null'
+                        - boolean
+                      consent:
+                        type:
+                        - 'null'
+                        - string
+                      consent_timestamp:
+                        type:
+                        - 'null'
+                        - string
+                      last_updated:
+                        type:
+                        - 'null'
+                        - string
+                      method:
+                        type:
+                        - 'null'
+                        - string
+                      method_detail:
+                        type:
+                        - 'null'
+                        - string
+                      timestamp:
+                        type:
+                        - 'null'
+                        - string
+                  transactional:
+                    type:
+                    - 'null'
+                    - object
+                    properties:
+                      can_receive_sms_marketing:
+                        type:
+                        - 'null'
+                        - boolean
+                      consent:
+                        type:
+                        - 'null'
+                        - string
+                      consent_timestamp:
+                        type:
+                        - 'null'
+                        - string
+                      last_updated:
+                        type:
+                        - 'null'
+                        - string
+                      method:
+                        type:
+                        - 'null'
+                        - string
+                      method_detail:
+                        type:
+                        - 'null'
+                        - string
+                      timestamp:
+                        type:
+                        - 'null'
+                        - string
+          title:
+            type:
+            - 'null'
+            - string
+          updated:
+            type:
+            - 'null'
+            - string
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: relationships
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          lists:
+            type:
+            - 'null'
+            - object
+            properties:
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          segments:
+            type:
+            - 'null'
+            - object
+            properties:
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+      - name: segments
+        type:
+        - 'null'
+        - object
+        description: ''
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: updated
+        type:
+        - 'null'
+        - string
+        description: ''
+    - entity: events
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          datetime:
+            type:
+            - 'null'
+            - string
+          event_properties:
+            type:
+            - 'null'
+            - object
+          timestamp:
+            type:
+            - 'null'
+            - integer
+          uuid:
+            type:
+            - 'null'
+            - string
+      - name: datetime
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: relationships
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          attributions:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - array
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          metric:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - object
+                properties:
+                  type:
+                    type:
+                    - 'null'
+                    - string
+                  id:
+                    type:
+                    - 'null'
+                    - string
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          profile:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - object
+                properties:
+                  type:
+                    type:
+                    - 'null'
+                    - string
+                  id:
+                    type:
+                    - 'null'
+                    - string
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+    - entity: email_templates
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          company_id:
+            type:
+            - 'null'
+            - string
+          created:
+            type:
+            - 'null'
+            - string
+          editor_type:
+            type:
+            - 'null'
+            - string
+          html:
+            type:
+            - 'null'
+            - string
+          name:
+            type:
+            - 'null'
+            - string
+          text:
+            type:
+            - 'null'
+            - string
+          updated:
+            type:
+            - 'null'
+            - string
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: updated
+        type:
+        - 'null'
+        - string
+        description: ''
+    - entity: campaigns
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          archived:
+            type:
+            - 'null'
+            - boolean
+          audiences:
+            type:
+            - 'null'
+            - object
+            properties:
+              excluded:
+                type:
+                - 'null'
+                - array
+              included:
+                type:
+                - 'null'
+                - array
+          channel:
+            type:
+            - 'null'
+            - string
+          created_at:
+            type:
+            - 'null'
+            - string
+          message:
+            type:
+            - 'null'
+            - string
+          name:
+            type:
+            - 'null'
+            - string
+          scheduled_at:
+            type:
+            - 'null'
+            - string
+          send_options:
+            type:
+            - 'null'
+            - object
+            properties:
+              ignore_unsubscribes:
+                type:
+                - 'null'
+                - boolean
+              use_smart_sending:
+                type:
+                - 'null'
+                - boolean
+          send_strategy:
+            type:
+            - 'null'
+            - object
+            properties:
+              method:
+                type:
+                - 'null'
+                - string
+              options_static:
+                type:
+                - 'null'
+                - object
+                properties:
+                  datetime:
+                    type:
+                    - 'null'
+                    - string
+                  is_local:
+                    type:
+                    - 'null'
+                    - boolean
+                  send_past_recipients_immediately:
+                    type:
+                    - 'null'
+                    - boolean
+              options_sto:
+                type:
+                - 'null'
+                - object
+                properties:
+                  date:
+                    type:
+                    - 'null'
+                    - string
+              options_throttled:
+                type:
+                - 'null'
+                - object
+                properties:
+                  datetime:
+                    type:
+                    - 'null'
+                    - string
+                  throttle_percentage:
+                    type:
+                    - 'null'
+                    - integer
+          send_time:
+            type:
+            - 'null'
+            - string
+          status:
+            type:
+            - 'null'
+            - string
+          tracking_options:
+            type:
+            - 'null'
+            - object
+            properties:
+              add_tracking_params:
+                type:
+                - 'null'
+                - boolean
+              is_add_utm:
+                type:
+                - 'null'
+                - boolean
+              is_tracking_clicks:
+                type:
+                - 'null'
+                - boolean
+              is_tracking_opens:
+                type:
+                - 'null'
+                - boolean
+              utm_params:
+                type:
+                - 'null'
+                - array
+          updated_at:
+            type:
+            - 'null'
+            - string
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: relationships
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          campaign-messages:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - array
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          tags:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - array
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: updated_at
+        type:
+        - 'null'
+        - string
+        description: ''
+    - entity: flows
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          archived:
+            type:
+            - 'null'
+            - boolean
+          created:
+            type:
+            - 'null'
+            - string
+          name:
+            type:
+            - 'null'
+            - string
+          status:
+            type:
+            - 'null'
+            - string
+          trigger_type:
+            type:
+            - 'null'
+            - string
+          updated:
+            type:
+            - 'null'
+            - string
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: relationships
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          flow-actions:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - array
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          tags:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - array
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: updated
+        type:
+        - 'null'
+        - string
+        description: ''
+    - entity: metrics
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          created:
+            type:
+            - 'null'
+            - string
+          integration:
+            type:
+            - 'null'
+            - object
+          name:
+            type:
+            - 'null'
+            - string
+          updated:
+            type:
+            - 'null'
+            - string
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: relationships
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          flow-triggers:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - object
+                properties:
+                  type:
+                    type:
+                    - 'null'
+                    - string
+                  id:
+                    type:
+                    - 'null'
+                    - string
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: updated
+        type:
+        - 'null'
+        - string
+        description: ''
+    - entity: lists
+      fields:
+      - name: attributes
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          created:
+            type:
+            - 'null'
+            - string
+          name:
+            type:
+            - 'null'
+            - string
+          opt_in_process:
+            type:
+            - 'null'
+            - string
+          updated:
+            type:
+            - 'null'
+            - string
+      - name: id
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: links
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          self:
+            type:
+            - 'null'
+            - string
+      - name: relationships
+        type:
+        - 'null'
+        - object
+        description: ''
+        properties:
+          flow-triggers:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - object
+                properties:
+                  type:
+                    type:
+                    - 'null'
+                    - string
+                  id:
+                    type:
+                    - 'null'
+                    - string
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          profiles:
+            type:
+            - 'null'
+            - object
+            properties:
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+          tags:
+            type:
+            - 'null'
+            - object
+            properties:
+              data:
+                type:
+                - 'null'
+                - array
+              links:
+                type:
+                - 'null'
+                - object
+                properties:
+                  related:
+                    type:
+                    - 'null'
+                    - string
+                  self:
+                    type:
+                    - 'null'
+                    - string
+      - name: type
+        type:
+        - 'null'
+        - string
+        description: ''
+      - name: updated
+        type:
+        - 'null'
+        - string
+        description: ''
+
+servers:
+  - url: https://a.klaviyo.com/api
+    description: Klaviyo API Server
+
+security:
+  - klaviyoApiKey: []
+
+paths:
+  /profiles:
+    get:
+      summary: List profiles
+      description: Returns a paginated list of profiles (contacts) in your Klaviyo account
+      operationId: listProfiles
+      x-airbyte-entity: profiles
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of profiles
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfilesList"
+        "401":
+          description: Unauthorized
+
+  /profiles/{id}:
+    get:
+      summary: Get a profile
+      description: Get a single profile by ID
+      operationId: getProfile
+      x-airbyte-entity: profiles
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: id
+          in: path
+          required: true
+          description: Profile ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profile object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Profile"
+        "404":
+          description: Profile not found
+        "401":
+          description: Unauthorized
+
+  /lists:
+    get:
+      summary: List all lists
+      description: Returns a paginated list of all lists in your Klaviyo account
+      operationId: listLists
+      x-airbyte-entity: lists
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of lists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListsList"
+        "401":
+          description: Unauthorized
+
+  /lists/{id}:
+    get:
+      summary: Get a list
+      description: Get a single list by ID
+      operationId: getList
+      x-airbyte-entity: lists
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: id
+          in: path
+          required: true
+          description: List ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/List"
+        "404":
+          description: List not found
+        "401":
+          description: Unauthorized
+
+  /campaigns:
+    get:
+      summary: List campaigns
+      description: Returns a paginated list of campaigns. A channel filter is required.
+      operationId: listCampaigns
+      x-airbyte-entity: campaigns
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: filter
+          in: query
+          required: true
+          description: Filter by channel (email or sms)
+          schema:
+            type: string
+            default: "equals(messages.channel,'email')"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of campaigns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignsList"
+        "401":
+          description: Unauthorized
+
+  /campaigns/{id}:
+    get:
+      summary: Get a campaign
+      description: Get a single campaign by ID
+      operationId: getCampaign
+      x-airbyte-entity: campaigns
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: id
+          in: path
+          required: true
+          description: Campaign ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Campaign object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Campaign"
+        "404":
+          description: Campaign not found
+        "401":
+          description: Unauthorized
+
+  /events:
+    get:
+      summary: List events
+      description: Returns a paginated list of events (actions taken by profiles)
+      operationId: listEvents
+      x-airbyte-entity: events
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Sort order for events
+          schema:
+            type: string
+            default: "-datetime"
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsList"
+        "401":
+          description: Unauthorized
+
+  /metrics:
+    get:
+      summary: List metrics
+      description: Returns a paginated list of metrics (event types)
+      operationId: listMetrics
+      x-airbyte-entity: metrics
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetricsList"
+        "401":
+          description: Unauthorized
+
+  /metrics/{id}:
+    get:
+      summary: Get a metric
+      description: Get a single metric by ID
+      operationId: getMetric
+      x-airbyte-entity: metrics
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: id
+          in: path
+          required: true
+          description: Metric ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Metric object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Metric"
+        "404":
+          description: Metric not found
+        "401":
+          description: Unauthorized
+
+  /flows:
+    get:
+      summary: List flows
+      description: Returns a paginated list of flows (automated sequences)
+      operationId: listFlows
+      x-airbyte-entity: flows
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of flows
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowsList"
+        "401":
+          description: Unauthorized
+
+  /flows/{id}:
+    get:
+      summary: Get a flow
+      description: Get a single flow by ID
+      operationId: getFlow
+      x-airbyte-entity: flows
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: id
+          in: path
+          required: true
+          description: Flow ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Flow object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Flow"
+        "404":
+          description: Flow not found
+        "401":
+          description: Unauthorized
+
+  /templates:
+    get:
+      summary: List email templates
+      description: Returns a paginated list of email templates
+      operationId: listTemplates
+      x-airbyte-entity: email_templates
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: page[size]
+          in: query
+          description: Number of results per page (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: page[cursor]
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of templates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplatesList"
+        "401":
+          description: Unauthorized
+
+  /templates/{id}:
+    get:
+      summary: Get an email template
+      description: Get a single email template by ID
+      operationId: getTemplate
+      x-airbyte-entity: email_templates
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.data
+      parameters:
+        - name: revision
+          in: header
+          required: true
+          description: API revision date
+          schema:
+            type: string
+            default: "2024-10-15"
+        - name: id
+          in: path
+          required: true
+          description: Template ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Template object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Template"
+        "404":
+          description: Template not found
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    klaviyoApiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Klaviyo API Key authentication
+      x-airbyte-auth-config:
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: "API Key"
+            description: "Your Klaviyo private API key"
+        auth_mapping:
+          api_key: "Klaviyo-API-Key ${api_key}"
+        replication_auth_key_mapping:
+          api_key: "api_key"
+
+  schemas:
+    Profile:
+      type: object
+      x-airbyte-entity-name: profiles
+      x-airbyte-stream-name: profiles
+      description: A Klaviyo profile representing a contact
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique profile identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "profile")
+        attributes:
+          type: [object, "null"]
+          description: Profile attributes
+          properties:
+            email:
+              type: [string, "null"]
+              description: Email address
+            phone_number:
+              type: [string, "null"]
+              description: Phone number
+            external_id:
+              type: [string, "null"]
+              description: External identifier
+            first_name:
+              type: [string, "null"]
+              description: First name
+            last_name:
+              type: [string, "null"]
+              description: Last name
+            organization:
+              type: [string, "null"]
+              description: Organization name
+            title:
+              type: [string, "null"]
+              description: Job title
+            image:
+              type: [string, "null"]
+              description: Profile image URL
+            created:
+              type: [string, "null"]
+              format: date-time
+              description: Creation timestamp
+            updated:
+              type: [string, "null"]
+              format: date-time
+              description: Last update timestamp
+            location:
+              type: [object, "null"]
+              description: Location information
+              properties:
+                address1:
+                  type: [string, "null"]
+                address2:
+                  type: [string, "null"]
+                city:
+                  type: [string, "null"]
+                country:
+                  type: [string, "null"]
+                region:
+                  type: [string, "null"]
+                zip:
+                  type: [string, "null"]
+                timezone:
+                  type: [string, "null"]
+                latitude:
+                  type: [number, "null"]
+                longitude:
+                  type: [number, "null"]
+            properties:
+              type: [object, "null"]
+              description: Custom properties
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    ProfilesList:
+      type: object
+      description: Paginated list of profiles
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Profile"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]
+
+    List:
+      type: object
+      x-airbyte-entity-name: lists
+      x-airbyte-stream-name: lists
+      description: A Klaviyo list for organizing profiles
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique list identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "list")
+        attributes:
+          type: [object, "null"]
+          description: List attributes
+          properties:
+            name:
+              type: [string, "null"]
+              description: List name
+            created:
+              type: [string, "null"]
+              format: date-time
+              description: Creation timestamp
+            updated:
+              type: [string, "null"]
+              format: date-time
+              description: Last update timestamp
+            opt_in_process:
+              type: [string, "null"]
+              description: Opt-in process type
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    ListsList:
+      type: object
+      description: Paginated list of lists
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/List"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]
+
+    Campaign:
+      type: object
+      x-airbyte-entity-name: campaigns
+      x-airbyte-stream-name: campaigns
+      description: A Klaviyo campaign
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique campaign identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "campaign")
+        attributes:
+          type: [object, "null"]
+          description: Campaign attributes
+          properties:
+            name:
+              type: [string, "null"]
+              description: Campaign name
+            status:
+              type: [string, "null"]
+              description: Campaign status
+            archived:
+              type: [boolean, "null"]
+              description: Whether campaign is archived
+            audiences:
+              type: [object, "null"]
+              description: Target audiences
+            send_options:
+              type: [object, "null"]
+              description: Send options
+            tracking_options:
+              type: [object, "null"]
+              description: Tracking options
+            send_strategy:
+              type: [object, "null"]
+              description: Send strategy
+            created_at:
+              type: [string, "null"]
+              format: date-time
+              description: Creation timestamp
+            scheduled_at:
+              type: [string, "null"]
+              format: date-time
+              description: Scheduled send time
+            updated_at:
+              type: [string, "null"]
+              format: date-time
+              description: Last update timestamp
+            send_time:
+              type: [string, "null"]
+              format: date-time
+              description: Actual send time
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    CampaignsList:
+      type: object
+      description: Paginated list of campaigns
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Campaign"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]
+
+    Event:
+      type: object
+      x-airbyte-entity-name: events
+      x-airbyte-stream-name: events
+      description: A Klaviyo event representing an action taken by a profile
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique event identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "event")
+        attributes:
+          type: [object, "null"]
+          description: Event attributes
+          properties:
+            timestamp:
+              oneOf:
+                - type: string
+                  format: date-time
+                - type: integer
+                - type: "null"
+              description: Event timestamp (can be ISO string or Unix timestamp)
+            datetime:
+              type: [string, "null"]
+              format: date-time
+              description: Event datetime
+            uuid:
+              type: [string, "null"]
+              description: Event UUID
+            event_properties:
+              type: [object, "null"]
+              description: Custom event properties
+        relationships:
+          type: [object, "null"]
+          description: Related resources
+          properties:
+            profile:
+              type: [object, "null"]
+              properties:
+                data:
+                  type: [object, "null"]
+                  properties:
+                    type:
+                      type: [string, "null"]
+                    id:
+                      type: [string, "null"]
+            metric:
+              type: [object, "null"]
+              properties:
+                data:
+                  type: [object, "null"]
+                  properties:
+                    type:
+                      type: [string, "null"]
+                    id:
+                      type: [string, "null"]
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    EventsList:
+      type: object
+      description: Paginated list of events
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]
+
+    Metric:
+      type: object
+      x-airbyte-entity-name: metrics
+      x-airbyte-stream-name: metrics
+      description: A Klaviyo metric (event type)
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique metric identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "metric")
+        attributes:
+          type: [object, "null"]
+          description: Metric attributes
+          properties:
+            name:
+              type: [string, "null"]
+              description: Metric name
+            created:
+              type: [string, "null"]
+              format: date-time
+              description: Creation timestamp
+            updated:
+              type: [string, "null"]
+              format: date-time
+              description: Last update timestamp
+            integration:
+              type: [object, "null"]
+              description: Integration information
+              properties:
+                id:
+                  type: [string, "null"]
+                name:
+                  type: [string, "null"]
+                category:
+                  type: [string, "null"]
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    MetricsList:
+      type: object
+      description: Paginated list of metrics
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Metric"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]
+
+    Flow:
+      type: object
+      x-airbyte-entity-name: flows
+      x-airbyte-stream-name: flows
+      description: A Klaviyo flow (automated sequence)
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique flow identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "flow")
+        attributes:
+          type: [object, "null"]
+          description: Flow attributes
+          properties:
+            name:
+              type: [string, "null"]
+              description: Flow name
+            status:
+              type: [string, "null"]
+              description: Flow status (draft, manual, live)
+            archived:
+              type: [boolean, "null"]
+              description: Whether flow is archived
+            created:
+              type: [string, "null"]
+              format: date-time
+              description: Creation timestamp
+            updated:
+              type: [string, "null"]
+              format: date-time
+              description: Last update timestamp
+            trigger_type:
+              type: [string, "null"]
+              description: Type of trigger for the flow
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    FlowsList:
+      type: object
+      description: Paginated list of flows
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Flow"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]
+
+    Template:
+      type: object
+      x-airbyte-entity-name: email_templates
+      x-airbyte-stream-name: email_templates
+      description: A Klaviyo email template
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique template identifier
+        type:
+          type: [string, "null"]
+          description: Object type (always "template")
+        attributes:
+          type: [object, "null"]
+          description: Template attributes
+          properties:
+            name:
+              type: [string, "null"]
+              description: Template name
+            editor_type:
+              type: [string, "null"]
+              description: Editor type used to create template
+            html:
+              type: [string, "null"]
+              description: HTML content
+            text:
+              type: [string, "null"]
+              description: Plain text content
+            created:
+              type: [string, "null"]
+              format: date-time
+              description: Creation timestamp
+            updated:
+              type: [string, "null"]
+              format: date-time
+              description: Last update timestamp
+        links:
+          type: [object, "null"]
+          description: Related links
+          properties:
+            self:
+              type: [string, "null"]
+
+    TemplatesList:
+      type: object
+      description: Paginated list of templates
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Template"
+        links:
+          type: [object, "null"]
+          properties:
+            self:
+              type: [string, "null"]
+            next:
+              type: [string, "null"]
+            prev:
+              type: [string, "null"]

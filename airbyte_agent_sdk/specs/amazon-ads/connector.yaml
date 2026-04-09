@@ -1,0 +1,6142 @@
+# Amazon Ads API Connector
+# OpenAPI 3.1 specification with Airbyte extensions
+
+openapi: 3.1.0
+
+info:
+  title: Amazon Ads API Connector
+  version: 1.0.10
+  description: |
+    Amazon Ads is Amazon's advertising platform that enables sellers and vendors to promote their
+    products across Amazon's marketplace. This connector provides access to advertising profiles
+    for managing and analyzing advertising campaigns across different marketplaces.
+  x-airbyte-connector-name: amazon-ads
+  x-airbyte-connector-definition-id: c6b0a29e-1da9-4512-9002-7bfd0cba2246
+  x-airbyte-replication-version: "7.3.14"
+  x-airbyte-replication-compatibility: ">=7.3.14, <8.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Amazon Ads API Documentation
+      url: https://advertising.amazon.com/API/docs/en-us
+    - type: authentication_guide
+      title: Amazon Ads Authorization Guide
+      url: https://advertising.amazon.com/API/docs/en-us/get-started/authorization
+    - type: rate_limits
+      title: API Rate Limits
+      url: https://advertising.amazon.com/API/docs/en-us/get-started/developer-notes#rate-limiting
+  x-airbyte-example-questions:
+    direct:
+      - "List all my advertising profiles across marketplaces"
+      - "Show me the profiles for my seller accounts"
+      - "What marketplaces do I have advertising profiles in?"
+      - "List all portfolios for one of my profiles"
+      - "Show me all sponsored product campaigns"
+    search:
+      - "What campaigns are currently enabled?"
+      - "Find campaigns with a specific targeting type"
+    unsupported:
+      - "Create a new advertising campaign"
+      - "Update my campaign budget"
+      - "Delete an ad group"
+      - "Generate a performance report"
+  x-airbyte-skip-suggested-streams:
+    - sponsored_brands_video_report_stream
+    - sponsored_display_report_stream
+    - sponsored_brands_report_stream
+    - sponsored_products_report_stream
+
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: profiles
+        fields:
+          - name: accountInfo
+            type:
+              - 'object'
+              - 'null'
+            description: ''
+            properties:
+              id:
+                type:
+                  - 'null'
+                  - 'string'
+              marketplaceStringId:
+                type:
+                  - 'null'
+                  - 'string'
+              name:
+                type:
+                  - 'null'
+                  - 'string'
+              subType:
+                type:
+                  - 'null'
+                  - 'string'
+              type:
+                type:
+                  - 'null'
+                  - 'string'
+              validPaymentMethod:
+                type:
+                  - 'null'
+                  - 'boolean'
+          - name: countryCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: currencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: dailyBudget
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: timezone
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+      - entity: sponsored_brands_v3_report_stream
+        fields:
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributionType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: newToBrandPurchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesPercentage14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesPercentage14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldPercentage14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: orders14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: productCategory
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: productName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSold14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_brands_v3_report_stream_daily
+        fields:
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributionType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: newToBrandPurchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesPercentage14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesPercentage14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldPercentage14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: orders14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: productCategory
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: productName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSold14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_display_adgroups_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: bidOptimization
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: cumulativeReach
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: endDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsFrequencyAverage
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandDetailPageViewViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandECPDetailPageView
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: startDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_adgroups_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: bidOptimization
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: cumulativeReach
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsFrequencyAverage
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandDetailPageViewViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandECPDetailPageView
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_asins_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: asinBrandHalo
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: conversionsBrandHalo
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: conversionsBrandHaloClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: endDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: promotedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: promotedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: salesBrandHalo
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: salesBrandHaloClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: startDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSoldBrandHalo
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldBrandHaloClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_display_asins_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: asinBrandHalo
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: conversionsBrandHalo
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: conversionsBrandHaloClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: promotedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: promotedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: salesBrandHalo
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: salesBrandHaloClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldBrandHalo
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldBrandHaloClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_display_campaigns_report_stream
+        fields:
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetAmount
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignStatus
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: costType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: cumulativeReach
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: endDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsFrequencyAverage
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandDetailPageViewViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandECPDetailPageView
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: startDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_campaigns_report_stream_daily
+        fields:
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetAmount
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignStatus
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: costType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: cumulativeReach
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsFrequencyAverage
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandDetailPageViewViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandECPDetailPageView
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_productads_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: adId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: bidOptimization
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: cumulativeReach
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: endDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsFrequencyAverage
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandDetailPageViewViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandECPDetailPageView
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: promotedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: promotedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: startDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_productads_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: adId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: bidOptimization
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: cumulativeReach
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsFrequencyAverage
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViewRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandDetailPageViewViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandDetailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandECPDetailPageView
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: promotedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: promotedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_targets_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: endDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: startDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: targetingExpression
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: targetingId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: targetingText
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_display_targets_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: addToCart
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToCartRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: addToCartViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToList
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: addToListFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: brandedSearches
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: brandedSearchesViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: detailPageViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: detailPageViewsClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: eCPAddToCart
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: eCPBrandSearch
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: impressionsViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leadFormOpens
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: leads
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: linkOuts
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandPurchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandSales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandSalesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: newToBrandUnitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: newToBrandUnitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesPromotedClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: qualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: royaltyQualifiedBorrows
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: royaltyQualifiedBorrowsFromViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: sales
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesPromotedClicks
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: targetingExpression
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: targetingId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: targetingText
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSold
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoCompleteViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoFirstQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoMidpointViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoThirdQuartileViews
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: videoUnmutes
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: viewClickThroughRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: viewabilityRate
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+      - entity: sponsored_products_adgroups_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_adgroups_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_asins_keywords_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keyword
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: matchType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: salesOtherSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_asins_keywords_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keyword
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: matchType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: salesOtherSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_asins_targets_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keywordType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: matchType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: salesOtherSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: targeting
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_asins_targets_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: advertisedSku
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keywordType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: matchType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: salesOtherSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: salesOtherSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: targeting
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldOtherSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_campaigns_report_stream
+        fields:
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignApplicableBudgetRuleId
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignApplicableBudgetRuleName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetAmount
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignRuleBasedBudgetAmount
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignStatus
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_campaigns_report_stream_daily
+        fields:
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignApplicableBudgetRuleId
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignApplicableBudgetRuleName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignBudgetAmount
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignRuleBasedBudgetAmount
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignStatus
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_keywords_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keyword
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: matchType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_keywords_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keyword
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: matchType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_productads_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: adId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: advertisedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_productads_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: adId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: advertisedAsin
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignBudgetCurrencyCode
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_targets_report_stream
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keyword
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keywordType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: targeting
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+      - entity: sponsored_products_targets_report_stream_daily
+        fields:
+          - name: adGroupId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: adGroupName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: attributedSalesSameSku14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: attributedSalesSameSku7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: campaignId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: campaignName
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: clicks
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: cost
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: date
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: impressions
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keyword
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: keywordId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: keywordType
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: profileId
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchases7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: purchasesSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: reportDate
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: sales14d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales1d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales30d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: sales7d
+            type:
+              - 'null'
+              - 'number'
+            description: ''
+          - name: targeting
+            type:
+              - 'null'
+              - 'string'
+            description: ''
+          - name: unitsSoldClicks14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldClicks7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku14d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku1d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku30d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+          - name: unitsSoldSameSku7d
+            type:
+              - 'null'
+              - 'integer'
+            description: ''
+
+servers:
+  - url: "{region}"
+    description: Amazon Ads API server (region-specific)
+    variables:
+      region:
+        default: https://advertising-api.amazon.com
+        description: |
+          The Amazon Ads API endpoint URL based on region:
+          - NA (North America): https://advertising-api.amazon.com
+          - EU (Europe): https://advertising-api-eu.amazon.com
+          - FE (Far East): https://advertising-api-fe.amazon.com
+        enum:
+          - https://advertising-api.amazon.com
+          - https://advertising-api-eu.amazon.com
+          - https://advertising-api-fe.amazon.com
+    x-airbyte-replication-environment-mapping:
+      region:
+        source: region
+        format: "https://advertising-api{{ '' if value == 'NA' else '-' + value.lower() }}.amazon.com"
+
+security:
+  - oauth2: []
+
+paths:
+  # ============================================================================
+  # Profiles Endpoints
+  # ============================================================================
+  /v2/profiles:
+    get:
+      summary: List profiles
+      description: |
+        Returns a list of advertising profiles associated with the authenticated user.
+        Profiles represent an advertiser's account in a specific marketplace. Advertisers
+        may have a single profile if they advertise in only one marketplace, or a separate
+        profile for each marketplace if they advertise regionally or globally.
+      operationId: listProfiles
+      x-airbyte-entity: profiles
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      tags:
+        - Profiles
+      parameters:
+        - name: profileTypeFilter
+          in: query
+          description: |
+            Filter profiles by type. Comma-separated list of profile types.
+            Valid values: seller, vendor, agency
+          schema:
+            type: string
+            default: seller,vendor
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of advertising profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Profile"
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+        "429":
+          description: Too Many Requests - Rate limit exceeded
+
+  /v2/profiles/{profileId}:
+    get:
+      summary: Get a profile
+      description: |
+        Retrieves a single advertising profile by its ID. The profile contains
+        information about the advertiser's account in a specific marketplace.
+      operationId: getProfile
+      x-airbyte-entity: profiles
+      x-airbyte-action: get
+      tags:
+        - Profiles
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          description: The unique identifier of the profile
+          schema:
+            type: integer
+            format: int64
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profile details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+        "404":
+          description: Profile not found
+
+  # ============================================================================
+  # Portfolios Endpoints
+  # ============================================================================
+  /portfolios/list:
+    post:
+      summary: List portfolios
+      description: |
+        Returns a list of portfolios for the specified profile. Portfolios are used to
+        group campaigns together for organizational and budget management purposes.
+      operationId: listPortfolios
+      x-airbyte-entity: portfolios
+      x-airbyte-action: list
+      tags:
+        - Portfolios
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                includeExtendedDataFields:
+                  type: string
+                  default: "true"
+                  description: Whether to include extended data fields in the response
+      responses:
+        "200":
+          description: List of portfolios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  portfolios:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Portfolio"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  /v2/portfolios/{portfolioId}:
+    get:
+      summary: Get a portfolio
+      description: |
+        Retrieves a single portfolio by its ID using the v2 API.
+      operationId: getPortfolio
+      x-airbyte-entity: portfolios
+      x-airbyte-action: get
+      tags:
+        - Portfolios
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          description: The unique identifier of the portfolio
+          schema:
+            type: integer
+            format: int64
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Portfolio details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Portfolio"
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "404":
+          description: Portfolio not found
+
+  # ============================================================================
+  # Sponsored Product Campaigns Endpoints
+  # ============================================================================
+  /sp/campaigns/list:
+    post:
+      summary: List sponsored product campaigns
+      description: |
+        Returns a list of sponsored product campaigns for the specified profile.
+        Sponsored Products campaigns promote individual product listings on Amazon.
+      operationId: listSponsoredProductCampaigns
+      x-airbyte-entity: sponsored_product_campaigns
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Campaigns
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spCampaign.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spCampaign.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product campaigns
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaigns:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductCampaign"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  /v2/sp/campaigns/{campaignId}:
+    get:
+      summary: Get a sponsored product campaign
+      description: |
+        Retrieves a single sponsored product campaign by its ID using the v2 API.
+      operationId: getSponsoredProductCampaign
+      x-airbyte-entity: sponsored_product_campaigns
+      x-airbyte-action: get
+      tags:
+        - Sponsored Product Campaigns
+      parameters:
+        - name: campaignId
+          in: path
+          required: true
+          description: The unique identifier of the campaign
+          schema:
+            type: integer
+            format: int64
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Campaign details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SponsoredProductCampaign"
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "404":
+          description: Campaign not found
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Amazon Ads OAuth 2.0 authentication with automatic token refresh
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.amazon.com/ap/oa
+          tokenUrl: https://api.amazon.com/auth/o2/token
+          refreshUrl: https://api.amazon.com/auth/o2/token
+          scopes:
+            advertising::campaign_management: Access to campaign management APIs
+            cpc_advertising:campaign_management: Access to CPC advertising campaign management
+      x-airbyte-auth-config:
+        title: "OAuth2 Authentication"
+        type: object
+        required:
+          - refresh_token
+        properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: The client ID of your Amazon Ads API application
+          client_secret:
+            type: string
+            title: Client Secret
+            description: The client secret of your Amazon Ads API application
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: The refresh token obtained from the OAuth authorization flow
+        auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
+          refresh_token: "${refresh_token}"
+        replication_auth_key_mapping:
+          client_id: "client_id"
+          client_secret: "client_secret"
+          refresh_token: "refresh_token"
+        additional_headers:
+          Amazon-Advertising-API-ClientId: "{{ client_id }}"
+
+  schemas:
+    Profile:
+      type: object
+      x-airbyte-entity-name: profiles
+      description: |
+        An advertising profile represents an advertiser's account in a specific marketplace.
+        Profiles are used to scope API calls and manage advertising campaigns.
+      properties:
+        profileId:
+          type: integer
+          format: int64
+          description: The unique identifier of the profile
+        countryCode:
+          type: [string, "null"]
+          description: The country code of the marketplace (e.g., US, UK, DE, JP)
+        currencyCode:
+          type: [string, "null"]
+          description: The currency code used for the profile (e.g., USD, GBP, EUR, JPY)
+        dailyBudget:
+          type: [number, "null"]
+          description: The daily budget limit for the profile
+        timezone:
+          type: [string, "null"]
+          description: The timezone of the profile (e.g., America/Los_Angeles, Europe/London)
+        accountInfo:
+          oneOf:
+            - $ref: "#/components/schemas/AccountInfo"
+            - type: "null"
+          description: Information about the advertiser's account
+
+    AccountInfo:
+      type: object
+      description: Information about the advertiser's account associated with a profile
+      properties:
+        marketplaceStringId:
+          type: [string, "null"]
+          description: The unique identifier of the marketplace
+        id:
+          type: [string, "null"]
+          description: The unique identifier of the account
+        type:
+          type: [string, "null"]
+          description: The type of account (e.g., seller, vendor, agency)
+          enum:
+            - seller
+            - vendor
+            - agency
+        name:
+          type: [string, "null"]
+          description: The name of the account
+        subType:
+          type: [string, "null"]
+          description: The subtype of the account
+        validPaymentMethod:
+          type: [boolean, "null"]
+          description: Whether the account has a valid payment method configured
+
+    Portfolio:
+      type: object
+      x-airbyte-entity-name: portfolios
+      description: |
+        A portfolio is a container for grouping campaigns together for organizational
+        and budget management purposes.
+      properties:
+        portfolioId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the portfolio
+        name:
+          type: [string, "null"]
+          description: The name of the portfolio
+        budget:
+          oneOf:
+            - $ref: "#/components/schemas/PortfolioBudget"
+            - type: "null"
+          description: Budget configuration for the portfolio
+        inBudget:
+          type: [boolean, "null"]
+          description: Whether the portfolio is within its budget
+        state:
+          type: [string, "null"]
+          description: The state of the portfolio (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        creationDate:
+          type: [integer, "null"]
+          format: int64
+          description: The creation date of the portfolio (epoch milliseconds)
+        lastUpdatedDate:
+          type: [integer, "null"]
+          format: int64
+          description: The last updated date of the portfolio (epoch milliseconds)
+        servingStatus:
+          type: [string, "null"]
+          description: The serving status of the portfolio
+
+    PortfolioBudget:
+      type: object
+      description: Budget configuration for a portfolio
+      properties:
+        amount:
+          type: [number, "null"]
+          description: The budget amount
+        currencyCode:
+          type: [string, "null"]
+          description: The currency code for the budget
+        policy:
+          type: [string, "null"]
+          description: The budget policy (dateRange, monthlyRecurring)
+        startDate:
+          type: [string, "null"]
+          description: The start date of the budget period
+        endDate:
+          type: [string, "null"]
+          description: The end date of the budget period
+
+    SponsoredProductCampaign:
+      type: object
+      x-airbyte-entity-name: sponsored_product_campaigns
+      description: |
+        A Sponsored Products campaign promotes individual product listings on Amazon.
+        Campaigns contain ad groups, which contain ads and targeting settings.
+        Note: The list endpoint (v3) and get endpoint (v2) return slightly different field formats.
+      properties:
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the campaign
+        portfolioId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+            - type: "null"
+          description: The portfolio ID this campaign belongs to
+        name:
+          type: [string, "null"]
+          description: The name of the campaign
+        campaignType:
+          type: [string, "null"]
+          description: The type of campaign (sponsoredProducts) - returned by v2 API
+        tags:
+          type: [object, "null"]
+          additionalProperties: true
+          description: Tags associated with the campaign
+        targetingType:
+          type: [string, "null"]
+          description: The targeting type (manual, auto)
+          enum:
+            - manual
+            - auto
+            - MANUAL
+            - AUTO
+        premiumBidAdjustment:
+          type: [boolean, "null"]
+          description: Whether premium bid adjustment is enabled - returned by v2 API
+        state:
+          type: [string, "null"]
+          description: The state of the campaign (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        dynamicBidding:
+          oneOf:
+            - $ref: "#/components/schemas/DynamicBidding"
+            - type: "null"
+          description: Dynamic bidding settings for the campaign (v3 API format)
+        bidding:
+          oneOf:
+            - $ref: "#/components/schemas/DynamicBidding"
+            - type: "null"
+          description: Bidding settings for the campaign (v2 API format)
+        startDate:
+          type: [string, "null"]
+          description: The start date of the campaign (YYYYMMDD format)
+        endDate:
+          type: [string, "null"]
+          description: The end date of the campaign (YYYYMMDD format)
+        dailyBudget:
+          type: [number, "null"]
+          description: The daily budget amount - returned by v2 API
+        budget:
+          oneOf:
+            - $ref: "#/components/schemas/CampaignBudget"
+            - type: "null"
+          description: Budget configuration for the campaign (v3 API format)
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the campaign
+        marketplaceBudgetAllocation:
+          type: [string, "null"]
+          description: Marketplace budget allocation setting (MANUAL, AUTO)
+        offAmazonSettings:
+          type: [object, "null"]
+          description: Off-Amazon settings for the campaign
+
+    DynamicBidding:
+      type: object
+      description: Dynamic bidding settings for a campaign
+      properties:
+        placementBidding:
+          type: [array, "null"]
+          items:
+            type: object
+            properties:
+              placement:
+                type: [string, "null"]
+                description: The placement type
+              percentage:
+                type: [integer, "null"]
+                description: The bid adjustment percentage
+        strategy:
+          type: [string, "null"]
+          description: The bidding strategy (legacyForSales, autoForSales, manual)
+
+    CampaignBudget:
+      type: object
+      description: Budget configuration for a campaign
+      properties:
+        budgetType:
+          type: [string, "null"]
+          description: The budget type (daily)
+        budget:
+          type: [number, "null"]
+          description: The budget amount

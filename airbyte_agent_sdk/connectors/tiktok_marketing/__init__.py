@@ -1,0 +1,67 @@
+"""
+Tiktok-Marketing connector for Airbyte SDK.
+
+Auto-generated from OpenAPI specification.
+"""
+
+from .connector import TiktokMarketingConnector
+from .models import (
+    TiktokMarketingAuthConfig,
+    TiktokMarketingReplicationConfig,
+    AirbyteSearchMeta,
+    AirbyteSearchResult,
+    AdvertisersSearchData,
+    AdvertisersSearchResult,
+    CampaignsSearchData,
+    CampaignsSearchResult,
+    AdGroupsSearchData,
+    AdGroupsSearchResult,
+    AdsSearchData,
+    AdsSearchResult,
+    AudiencesSearchData,
+    AudiencesSearchResult,
+    CreativeAssetsImagesSearchData,
+    CreativeAssetsImagesSearchResult,
+    CreativeAssetsVideosSearchData,
+    CreativeAssetsVideosSearchResult,
+    AdvertisersReportsDailySearchData,
+    AdvertisersReportsDailySearchResult,
+    CampaignsReportsDailySearchData,
+    CampaignsReportsDailySearchResult,
+    AdGroupsReportsDailySearchData,
+    AdGroupsReportsDailySearchResult,
+    AdsReportsDailySearchData,
+    AdsReportsDailySearchResult,
+)
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+__all__ = [
+    "TiktokMarketingConnector",
+    "AirbyteAuthConfig",
+    "TiktokMarketingAuthConfig",
+    "TiktokMarketingReplicationConfig",
+    "AirbyteSearchMeta",
+    "AirbyteSearchResult",
+    "AdvertisersSearchData",
+    "AdvertisersSearchResult",
+    "CampaignsSearchData",
+    "CampaignsSearchResult",
+    "AdGroupsSearchData",
+    "AdGroupsSearchResult",
+    "AdsSearchData",
+    "AdsSearchResult",
+    "AudiencesSearchData",
+    "AudiencesSearchResult",
+    "CreativeAssetsImagesSearchData",
+    "CreativeAssetsImagesSearchResult",
+    "CreativeAssetsVideosSearchData",
+    "CreativeAssetsVideosSearchResult",
+    "AdvertisersReportsDailySearchData",
+    "AdvertisersReportsDailySearchResult",
+    "CampaignsReportsDailySearchData",
+    "CampaignsReportsDailySearchResult",
+    "AdGroupsReportsDailySearchData",
+    "AdGroupsReportsDailySearchResult",
+    "AdsReportsDailySearchData",
+    "AdsReportsDailySearchResult",
+]

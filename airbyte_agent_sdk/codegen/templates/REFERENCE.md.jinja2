@@ -1,0 +1,159 @@
+{%- from "_macros.jinja2" import python_operation_call, format_action, anchor -%}
+# {{ connector_name|title }} full reference
+
+This is the full reference documentation for the {{ connector_name|title }} agent connector.
+
+## Supported entities and actions
+
+The {{ connector_name|title }} connector supports the following entities and actions.
+
+| Entity | Actions |
+|--------|---------|
+{% for entity, operations in entities_grouped.items() %}
+| {{ entity.replace('_', ' ')|title }} | {% for op in operations %}[{{ format_action(op.action) }}](#{{ anchor(entity, op.action) }}){{ ", " if not loop.last else "" }}{% endfor %}{% if entity in search_schemas %}, [{{ format_action("context_store_search") }}](#{{ anchor(entity, 'context_store_search') }}){% endif %} |
+{% endfor %}
+
+{% for entity, operations in entities_grouped.items() %}
+## {{ entity.replace('_', ' ')|title }}
+
+{% for op in operations %}
+### {{ entity.replace('_', ' ')|title }} {{ format_action(op.action) }}
+
+{{ op.description | mdx_escape }}
+
+{# Write operations (create, update) show all parameters; read operations show only required #}
+{%- set is_write_operation = op.action in ['create', 'update'] -%}
+{%- set example_params = op.parameters if is_write_operation else op.required_parameters -%}
+#### Python SDK
+
+```python
+{{ python_operation_call(connector_instance_name, op, include_download_comment=True, params=example_params) }}
+```
+{% if op.is_download %}
+
+> **Note**: Download operations return an async iterator of bytes chunks for memory-efficient streaming. Use `async for` to process chunks as they arrive.
+{% endif %}
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "{{ op.entity }}",
+    "action": "{{ op.action }}"{{ "," if example_params else "" }}
+{% if example_params %}    "params": {
+{% for param in example_params %}        "{{ param.name }}": {{ param.example_value_json }}{{ "," if not loop.last else "" }}
+{% endfor %}    }
+{% endif %}}'
+```
+
+{% if op.flattened_parameters %}
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+{% for param in op.flattened_parameters %}
+| `{{ param.name }}` | `{{ param.json_type|replace('|', '\\|') }}` | {{ "Yes" if param.required else "No" }} | {{ param.description | mdx_escape }} |
+{% endfor %}
+{% endif %}
+
+{% if op.flattened_response or op.flattened_meta %}
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+{% if op.flattened_response %}
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+{% for field in op.flattened_response %}
+| `{{ field.name }}` | `{{ field.type|replace('|', '\\|') }}` | {{ field.description | mdx_escape }} |
+{% endfor %}
+{% endif %}
+
+{% if op.flattened_meta %}
+
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+{% for field in op.flattened_meta %}
+| `{{ field.name }}` | `{{ field.type|replace('|', '\\|') }}` | {{ field.description | mdx_escape }} |
+{% endfor %}
+{% endif %}
+
+</details>
+{% endif %}
+
+{% endfor %}
+{% if entity in search_schemas %}
+{%- set search_schema = search_schemas[entity] %}
+{%- set example_field = search_schema.fields[0] if search_schema.fields else {"name": "id", "example_value_json": '"<str>"'} %}
+### {{ entity.replace('_', ' ')|title }} {{ format_action("context_store_search") }}
+
+Search and filter {{ entity.replace('_', ' ') }} records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
+
+#### Python SDK
+
+```python
+await {{ connector_instance_name }}.{{ entity }}.context_store_search(
+    query={"filter": {"eq": {"{{ example_field.name }}": {{ example_field.example_value_json }}}}}
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "{{ entity }}",
+    "action": "context_store_search",
+    "params": {
+        "query": {"filter": {"eq": {"{{ example_field.name }}": {{ example_field.example_value_json }}}}}
+    }
+}'
+```
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `query` | `object` | Yes | Filter and sort conditions. Supports operators: eq, neq, gt, gte, lt, lte, in, like, fuzzy, keyword, not, and, or |
+| `query.filter` | `object` | No | Filter conditions |
+| `query.sort` | `array` | No | Sort conditions |
+| `limit` | `integer` | No | Maximum results to return (default 1000) |
+| `cursor` | `string` | No | Pagination cursor from previous response's `meta.cursor` |
+| `fields` | `array` | No | Field paths to include in results |
+
+#### Searchable Fields
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+{% for field in search_schema.fields %}
+| `{{ field.name }}` | `{{ field.json_type|replace('null | ', '')|replace(' | null', '')|replace('null', 'any') }}` | {{ field.description | mdx_escape }} |
+{% endfor %}
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `data` | `array` | List of matching records |
+| `meta` | `object` | Pagination metadata |
+| `meta.has_more` | `boolean` | Whether additional pages are available |
+| `meta.cursor` | `string \| null` | Cursor for next page of results |
+| `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+{% for field in search_schema.fields %}
+| `data[].{{ field.name }}` | `{{ field.json_type|replace('null | ', '')|replace(' | null', '')|replace('null', 'any') }}` | {{ field.description | mdx_escape }} |
+{% endfor %}
+
+</details>
+
+{% endif %}
+{% endfor %}

@@ -1,0 +1,158 @@
+"""
+Auto-generated cassette tests for {{ connector_name.title() }} connector.
+
+These tests are generated from cassette YAML files and test the connector
+against recorded API responses.
+"""
+
+import pytest
+from unittest.mock import AsyncMock, patch
+
+from {{ package_name }} import {{ class_name }}
+{% if auth_config %}
+{%- if auth_config.options | length == 1 %}
+from {{ package_name }}.models import {{ auth_config.type_name }}
+{%- else %}
+from {{ package_name }}.models import {{ auth_config.type_name }}{% for option in auth_config.options %}, {{ auth_config.base_name }}{{ option.type_suffix }}AuthConfig{% endfor %}
+{%- endif %}
+{% endif %}
+
+{% for test in cassette_tests %}
+
+@pytest.mark.asyncio
+async def test_{{ test.test_name }}():
+    """{{ test.description }}"""
+{% if test.is_download %}
+    import base64
+    from unittest.mock import Mock
+
+    # Expected binary data from cassette
+    expected_base64 = """{{ test.expected_base64 }}"""
+    expected_data = base64.b64decode(expected_base64)
+
+    # Mock metadata response (first request)
+    mock_metadata_response = {{ test.response_repr }}
+
+    # Mock file download response (second request)
+    mock_file_response = Mock()
+    mock_file_response.status_code = 200
+    mock_file_response.headers = {}
+    mock_file_response.raise_for_status.return_value = None
+
+    async def mock_aiter_bytes(chunk_size=None):
+        yield expected_data
+
+    mock_file_response.aiter_bytes = mock_aiter_bytes
+
+    # Create mock that returns different values based on stream parameter
+    # This handles both two-step downloads (metadata + file) and one-step direct downloads
+    async def mock_request_with_stream(*args, **kwargs):
+        stream = kwargs.get('stream', False)
+        if stream:
+            # Streaming request: file download
+            return (mock_file_response, {})
+        else:
+            # Non-streaming request: metadata request
+            return (mock_metadata_response, {})
+
+    connector = {{ class_name }}(auth_config={% if test.auth_config_class_name %}{{ test.auth_config_class_name }}{% else %}{{ auth_config.type_name }}{% endif %}(**{ {{- test.secrets_dict -}} }){% if test.server_vars_kwargs %}, {{ test.server_vars_kwargs }}{% endif %})
+
+    with patch(
+        "{{ http_client_patch_path }}",
+        new=mock_request_with_stream
+    ):
+        result = await connector.{{ test.entity }}.{{ test.action }}({{ test.kwargs_str }})
+
+        # Consume the async iterator to get all chunks
+        chunks = []
+        async for chunk in result:
+            chunks.append(chunk)
+        downloaded_data = b''.join(chunks)
+
+    assert downloaded_data == expected_data
+{% else %}
+    mock_response = {{ test.response_repr }}
+
+    connector = {{ class_name }}(auth_config={% if test.auth_config_class_name %}{{ test.auth_config_class_name }}{% else %}{{ auth_config.type_name }}{% endif %}(**{ {{- test.secrets_dict -}} }){% if test.server_vars_kwargs %}, {{ test.server_vars_kwargs }}{% endif %})
+
+    with patch(
+        "{{ http_client_patch_path }}",
+        new=AsyncMock(return_value=(mock_response, {}))
+    ):
+        result = await connector.{{ test.entity }}.{{ test.action }}({{ test.kwargs_str }})
+{% if test.needs_envelope %}
+
+    # Verify envelope structure
+    assert hasattr(result, "data")
+
+    # Extract expected data from mock response using JSONPath
+    from jsonpath_ng import parse as parse_jsonpath
+    record_path = parse_jsonpath("{{ test.record_extractor }}")
+    record_matches = record_path.find(mock_response)
+
+    if record_matches:
+        # When JSONPath contains wildcards (e.g., $.list[*].item), multiple matches are returned
+        # Collect all matches when there are multiple, use single value when there's one
+        if len(record_matches) > 1:
+            expected_data = [m.value for m in record_matches]
+        else:
+            expected_data = record_matches[0].value
+
+        # Convert Pydantic models to dict for comparison
+        if isinstance(result.data, list):
+            actual_data = [item.model_dump(exclude_none=True, by_alias=True) if hasattr(item, 'model_dump') else item for item in result.data]
+        elif hasattr(result.data, 'model_dump'):
+            actual_data = result.data.model_dump(exclude_none=True, by_alias=True)
+        else:
+            actual_data = result.data
+
+        assert actual_data == expected_data
+    else:
+        # When JSONPath doesn't match, expect None or empty array
+        assert result.data is None or result.data == []
+{% if test.meta_extractor %}
+
+    # Verify metadata
+    assert hasattr(result, "meta")
+{%- for meta_field_name, meta_jsonpath in test.meta_extractor.items() %}
+{%- if not meta_jsonpath.startswith("@link.") and not meta_jsonpath.startswith("@header.") %}
+
+    meta_path_{{ meta_field_name }} = parse_jsonpath("{{ meta_jsonpath }}")
+    meta_matches_{{ meta_field_name }} = meta_path_{{ meta_field_name }}.find(mock_response)
+    if meta_matches_{{ meta_field_name }}:
+        expected_meta_{{ meta_field_name }} = meta_matches_{{ meta_field_name }}[0].value
+        actual_meta_{{ meta_field_name }} = result.meta.{{ meta_field_name | snake_case }}
+        # Convert Pydantic model to dict
+        if hasattr(actual_meta_{{ meta_field_name }}, 'model_dump'):
+            actual_meta_{{ meta_field_name }} = actual_meta_{{ meta_field_name }}.model_dump(exclude_none=True, by_alias=True)
+        assert actual_meta_{{ meta_field_name }} == expected_meta_{{ meta_field_name }}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+{% else %}
+    # Extract expected data from mock response using JSONPath
+    from jsonpath_ng import parse as parse_jsonpath
+    record_path = parse_jsonpath("{{ test.record_extractor }}")
+    record_matches = record_path.find(mock_response)
+
+    if record_matches:
+        # When JSONPath contains wildcards (e.g., $.list[*].item), multiple matches are returned
+        if len(record_matches) > 1:
+            expected_data = [m.value for m in record_matches]
+        else:
+            expected_data = record_matches[0].value
+
+        # Convert Pydantic models to dict for comparison
+        if hasattr(result, 'model_dump'):
+            actual_data = result.model_dump(exclude_none=True, by_alias=True)
+        else:
+            actual_data = result
+
+        assert actual_data == expected_data
+    else:
+        # When JSONPath doesn't match, expect None
+        assert result is None
+{%- endif %}
+{%- endif %}
+
+{% endfor %}

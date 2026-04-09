@@ -1,0 +1,2156 @@
+openapi: 3.1.0
+
+info:
+  title: incident.io API Connector
+  version: 1.0.4
+  description: |
+    Connect to the incident.io API to access incident management data including
+    incidents, alerts, escalations, users, schedules, and more. incident.io is an
+    on-call, status pages, and incident response platform. This connector provides
+    read-only access to core incident management entities via the v1 and v2 APIs.
+    Requires an API key from your incident.io dashboard (Pro plan or above).
+  x-airbyte-connector-name: incident-io
+  x-airbyte-connector-definition-id: 7926da90-399e-4f9f-9833-52d8dc3fcb29
+  x-airbyte-replication-version: "0.1.22"
+  x-airbyte-replication-compatibility: ">=0.1.22, <1.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: incident.io API reference
+      url: https://api-docs.incident.io/
+    - type: authentication_guide
+      title: incident.io authentication
+      url: https://api-docs.incident.io/#section/Authentication
+    - type: status_page
+      title: incident.io Status
+      url: https://status.incident.io/
+  x-airbyte-example-questions:
+    direct:
+      - "List all incidents"
+      - "Show all open incidents"
+      - "List all alerts"
+      - "Show all users"
+      - "List all escalations"
+      - "Show all on-call schedules"
+      - "List all severities"
+      - "Show all incident statuses"
+      - "List all custom fields"
+    search:
+      - "Which incidents were created this week?"
+      - "What are the most recent high-severity incidents?"
+      - "Who is currently on-call?"
+      - "How many incidents are in triage status?"
+      - "What incidents were updated today?"
+    unsupported:
+      - "Create a new incident"
+      - "Update an incident's severity"
+      - "Delete an alert"
+      - "Assign someone to an incident role"
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: incidents
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: When the incident was created
+          - name: creator
+            type: ["null", "object"]
+            description: The user who created the incident
+            properties:
+              user:
+                type: ["null", "object"]
+                properties:
+                  email:
+                    type: ["null", "string"]
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  role:
+                    type: ["null", "string"]
+                  slack_user_id:
+                    type: ["null", "string"]
+          - name: custom_field_entries
+            type: ["null", "array"]
+            description: Custom field values for the incident
+          - name: duration_metrics
+            type: ["null", "array"]
+            description: Duration metrics associated with the incident
+          - name: has_debrief
+            type: ["null", "boolean"]
+            description: Whether the incident has had a debrief
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the incident
+          - name: incident_role_assignments
+            type: ["null", "array"]
+            description: Role assignments for the incident
+          - name: incident_status
+            type: ["null", "object"]
+            description: Current status of the incident
+            properties:
+              category:
+                type: ["null", "string"]
+              created_at:
+                type: ["null", "string"]
+              description:
+                type: ["null", "string"]
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              rank:
+                type: ["null", "number"]
+              updated_at:
+                type: ["null", "string"]
+          - name: incident_timestamp_values
+            type: ["null", "array"]
+            description: Timestamp values for the incident
+          - name: incident_type
+            type: ["null", "object"]
+            description: Type of the incident
+            properties:
+              create_in_triage:
+                type: ["null", "string"]
+              created_at:
+                type: ["null", "string"]
+              description:
+                type: ["null", "string"]
+              id:
+                type: ["null", "string"]
+              is_default:
+                type: ["null", "boolean"]
+              name:
+                type: ["null", "string"]
+              private_incidents_only:
+                type: ["null", "boolean"]
+              updated_at:
+                type: ["null", "string"]
+          - name: mode
+            type: ["null", "string"]
+            description: "Mode of the incident: standard, retrospective, test, or tutorial"
+          - name: name
+            type: ["null", "string"]
+            description: Name/title of the incident
+          - name: permalink
+            type: ["null", "string"]
+            description: Link to the incident in the dashboard
+          - name: reference
+            type: ["null", "string"]
+            description: Human-readable reference (e.g. INC-123)
+          - name: severity
+            type: ["null", "object"]
+            description: Severity of the incident
+            properties:
+              created_at:
+                type: ["null", "string"]
+              description:
+                type: ["null", "string"]
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              rank:
+                type: ["null", "number"]
+              updated_at:
+                type: ["null", "string"]
+          - name: slack_channel_id
+            type: ["null", "string"]
+            description: Slack channel ID for the incident
+          - name: slack_channel_name
+            type: ["null", "string"]
+            description: Slack channel name for the incident
+          - name: slack_team_id
+            type: ["null", "string"]
+            description: Slack team/workspace ID
+          - name: summary
+            type: ["null", "string"]
+            description: Detailed summary of the incident
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the incident was last updated
+          - name: visibility
+            type: ["null", "string"]
+            description: Whether the incident is public or private
+          - name: workload_minutes_late
+            type: ["null", "number"]
+            description: Minutes of workload classified as late
+          - name: workload_minutes_sleeping
+            type: ["null", "number"]
+            description: Minutes of workload classified as sleeping
+          - name: workload_minutes_total
+            type: ["null", "number"]
+            description: Total workload minutes
+          - name: workload_minutes_working
+            type: ["null", "number"]
+            description: Minutes of workload classified as working
+      - entity: alerts
+        fields:
+          - name: alert_source_id
+            type: ["null", "string"]
+            description: ID of the alert source that generated this alert
+          - name: attributes
+            type: ["null", "array"]
+            description: Structured alert attributes
+          - name: created_at
+            type: ["null", "string"]
+            description: When the alert was created
+          - name: deduplication_key
+            type: ["null", "string"]
+            description: Deduplication key uniquely referencing this alert
+          - name: description
+            type: ["null", "string"]
+            description: Description of the alert
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the alert
+          - name: resolved_at
+            type: ["null", "string"]
+            description: When the alert was resolved
+          - name: source_url
+            type: ["null", "string"]
+            description: Link to the alert in the upstream system
+          - name: status
+            type: ["null", "string"]
+            description: "Status of the alert: firing or resolved"
+          - name: title
+            type: ["null", "string"]
+            description: Title of the alert
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the alert was last updated
+      - entity: users
+        fields:
+          - name: base_role
+            type: ["null", "object"]
+            description: Base role assigned to the user
+            properties:
+              description:
+                type: ["null", "string"]
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              slug:
+                type: ["null", "string"]
+          - name: custom_roles
+            type: ["null", "array"]
+            description: Custom roles assigned to the user
+          - name: email
+            type: ["null", "string"]
+            description: Email address of the user
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the user
+          - name: name
+            type: ["null", "string"]
+            description: Full name of the user
+          - name: role
+            type: ["null", "string"]
+            description: Deprecated role field
+          - name: slack_user_id
+            type: ["null", "string"]
+            description: Slack user ID
+      - entity: incident_updates
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: When the update was created
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the incident update
+          - name: incident_id
+            type: ["null", "string"]
+            description: ID of the incident this update belongs to
+          - name: message
+            type: ["null", "string"]
+            description: Update message content
+          - name: new_incident_status
+            type: ["null", "object"]
+            description: New incident status set by this update
+            properties:
+              category:
+                type: ["null", "string"]
+              created_at:
+                type: ["null", "string"]
+              description:
+                type: ["null", "string"]
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              rank:
+                type: ["null", "number"]
+              updated_at:
+                type: ["null", "string"]
+          - name: new_severity
+            type: ["null", "object"]
+            description: New severity set by this update
+            properties:
+              created_at:
+                type: ["null", "string"]
+              description:
+                type: ["null", "string"]
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              rank:
+                type: ["null", "number"]
+              updated_at:
+                type: ["null", "string"]
+          - name: updater
+            type: ["null", "object"]
+            description: Who made this update
+            properties:
+              user:
+                type: ["null", "object"]
+                properties:
+                  email:
+                    type: ["null", "string"]
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  role:
+                    type: ["null", "string"]
+                  slack_user_id:
+                    type: ["null", "string"]
+      - entity: incident_roles
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: When the role was created
+          - name: description
+            type: ["null", "string"]
+            description: Description of the role
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the incident role
+          - name: instructions
+            type: ["null", "string"]
+            description: Instructions for the role holder
+          - name: name
+            type: ["null", "string"]
+            description: Name of the role
+          - name: required
+            type: ["null", "boolean"]
+            description: Whether this role must be assigned
+          - name: role_type
+            type: ["null", "string"]
+            description: Type of role
+          - name: shortform
+            type: ["null", "string"]
+            description: Short form label for the role
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the role was last updated
+      - entity: incident_statuses
+        fields:
+          - name: category
+            type: ["null", "string"]
+            description: "Category: triage, active, post-incident, closed, etc."
+          - name: created_at
+            type: ["null", "string"]
+            description: When the status was created
+          - name: description
+            type: ["null", "string"]
+            description: Description of the status
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the status
+          - name: name
+            type: ["null", "string"]
+            description: Name of the status
+          - name: rank
+            type: ["null", "number"]
+            description: Rank for ordering
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the status was last updated
+      - entity: incident_timestamps
+        fields:
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the timestamp
+          - name: name
+            type: ["null", "string"]
+            description: Name of the timestamp
+          - name: rank
+            type: ["null", "number"]
+            description: Rank for ordering
+      - entity: severities
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: When the severity was created
+          - name: description
+            type: ["null", "string"]
+            description: Description of the severity
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the severity
+          - name: name
+            type: ["null", "string"]
+            description: Name of the severity
+          - name: rank
+            type: ["null", "number"]
+            description: Rank for ordering
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the severity was last updated
+      - entity: custom_fields
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: When the custom field was created
+          - name: description
+            type: ["null", "string"]
+            description: Description of the custom field
+          - name: field_type
+            type: ["null", "string"]
+            description: Type of field
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the custom field
+          - name: name
+            type: ["null", "string"]
+            description: Name of the custom field
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the custom field was last updated
+      - entity: catalog_types
+        fields:
+          - name: annotations
+            type: ["null", "object"]
+            description: Annotations metadata
+          - name: categories
+            type: ["null", "array"]
+            description: Categories this type belongs to
+          - name: color
+            type: ["null", "string"]
+            description: Display color
+          - name: created_at
+            type: ["null", "string"]
+            description: When the catalog type was created
+          - name: description
+            type: ["null", "string"]
+            description: Description of the catalog type
+          - name: icon
+            type: ["null", "string"]
+            description: Display icon
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the catalog type
+          - name: is_editable
+            type: ["null", "boolean"]
+            description: Whether entries can be edited
+          - name: last_synced_at
+            type: ["null", "string"]
+            description: When the catalog type was last synced
+          - name: name
+            type: ["null", "string"]
+            description: Name of the catalog type
+          - name: ranked
+            type: ["null", "boolean"]
+            description: Whether entries are ranked
+          - name: registry_type
+            type: ["null", "string"]
+            description: Registry type if synced from an integration
+          - name: required_integrations
+            type: ["null", "array"]
+            description: Integrations required for this type
+          - name: schema
+            type: ["null", "object"]
+            description: Schema definition for the catalog type
+            properties:
+              attributes:
+                type: ["null", "array"]
+              version:
+                type: ["null", "number"]
+          - name: semantic_type
+            type: ["null", "string"]
+            description: Semantic type for special behavior
+          - name: type_name
+            type: ["null", "string"]
+            description: Programmatic type name
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the catalog type was last updated
+      - entity: schedules
+        fields:
+          - name: annotations
+            type: ["null", "object"]
+            description: Annotations metadata
+          - name: config
+            type: ["null", "object"]
+            description: Schedule configuration with rotations
+            properties:
+              rotations:
+                type: ["null", "array"]
+          - name: created_at
+            type: ["null", "string"]
+            description: When the schedule was created
+          - name: current_shifts
+            type: ["null", "array"]
+            description: Currently active shifts
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the schedule
+          - name: name
+            type: ["null", "string"]
+            description: Name of the schedule
+          - name: timezone
+            type: ["null", "string"]
+            description: Timezone for the schedule
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the schedule was last updated
+      - entity: escalations
+        fields:
+          - name: created_at
+            type: ["null", "string"]
+            description: When the escalation was created
+          - name: creator
+            type: ["null", "object"]
+            description: The creator of this escalation
+            properties:
+              alert:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  title:
+                    type: ["null", "string"]
+              user:
+                type: ["null", "object"]
+                properties:
+                  email:
+                    type: ["null", "string"]
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  role:
+                    type: ["null", "string"]
+                  slack_user_id:
+                    type: ["null", "string"]
+              workflow:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+          - name: escalation_path_id
+            type: ["null", "string"]
+            description: ID of the escalation path used
+          - name: events
+            type: ["null", "array"]
+            description: History of escalation events
+          - name: id
+            type: ["null", "string"]
+            description: Unique identifier for the escalation
+          - name: priority
+            type: ["null", "object"]
+            description: Priority of the escalation
+            properties:
+              name:
+                type: ["null", "string"]
+          - name: related_alerts
+            type: ["null", "array"]
+            description: Alerts related to this escalation
+          - name: related_incidents
+            type: ["null", "array"]
+            description: Incidents related to this escalation
+          - name: status
+            type: ["null", "string"]
+            description: "Status: pending, triggered, acked, resolved, expired, cancelled"
+          - name: title
+            type: ["null", "string"]
+            description: Title of the escalation
+          - name: updated_at
+            type: ["null", "string"]
+            description: When the escalation was last updated
+
+servers:
+  - url: https://api.incident.io
+    description: incident.io API server
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ── Incidents ──
+  /v2/incidents:
+    get:
+      summary: List incidents
+      description: List all incidents for the organisation with cursor-based pagination.
+      operationId: listIncidents
+      x-airbyte-entity: incidents
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.incidents
+      x-airbyte-meta-extractor:
+        pagination: $.pagination_meta
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of incidents per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 25
+        - name: after
+          in: query
+          description: Cursor for the next page of results
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of incidents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incidents:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Incident"
+                  pagination_meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /v2/incidents/{id}:
+    get:
+      summary: Get an incident
+      description: Get a single incident by ID or numeric reference.
+      operationId: getIncident
+      x-airbyte-entity: incidents
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.incident
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Incident ID or numeric reference
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Incident details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident:
+                    $ref: "#/components/schemas/Incident"
+
+  # ── Alerts ──
+  /v2/alerts:
+    get:
+      summary: List alerts
+      description: List all alerts for the account with cursor-based pagination.
+      operationId: listAlerts
+      x-airbyte-entity: alerts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.alerts
+      x-airbyte-meta-extractor:
+        pagination: $.pagination_meta
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of alerts per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 25
+        - name: after
+          in: query
+          description: Cursor for the next page of results
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of alerts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alerts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Alert"
+                  pagination_meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /v2/alerts/{id}:
+    get:
+      summary: Get an alert
+      description: Show a single alert by ID.
+      operationId: getAlert
+      x-airbyte-entity: alerts
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.alert
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Alert ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Alert details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alert:
+                    $ref: "#/components/schemas/Alert"
+
+  # ── Escalations ──
+  /v2/escalations:
+    get:
+      summary: List escalations
+      description: List all escalations for the account with cursor-based pagination.
+      operationId: listEscalations
+      x-airbyte-entity: escalations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.escalations
+      x-airbyte-meta-extractor:
+        pagination: $.pagination_meta
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of escalations per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 25
+        - name: after
+          in: query
+          description: Cursor for the next page of results
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of escalations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  escalations:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Escalation"
+                  pagination_meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /v2/escalations/{id}:
+    get:
+      summary: Get an escalation
+      description: Show a specific escalation by ID.
+      operationId: getEscalation
+      x-airbyte-entity: escalations
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.escalation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Escalation ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Escalation details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  escalation:
+                    $ref: "#/components/schemas/Escalation"
+
+  # ── Users ──
+  /v2/users:
+    get:
+      summary: List users
+      description: List all users for the organisation with cursor-based pagination.
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.users
+      x-airbyte-meta-extractor:
+        pagination: $.pagination_meta
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of users per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: after
+          in: query
+          description: Cursor for the next page of results
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+                  pagination_meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /v2/users/{id}:
+    get:
+      summary: Get a user
+      description: Get a single user by ID.
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+
+  # ── Incident Updates ──
+  /v2/incident_updates:
+    get:
+      summary: List incident updates
+      description: List all incident updates for the organisation with cursor-based pagination.
+      operationId: listIncidentUpdates
+      x-airbyte-entity: incident_updates
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.incident_updates
+      x-airbyte-meta-extractor:
+        pagination: $.pagination_meta
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of incident updates per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: after
+          in: query
+          description: Cursor for the next page of results
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of incident updates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_updates:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/IncidentUpdate"
+                  pagination_meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  # ── Incident Roles ──
+  /v1/incident_roles:
+    get:
+      summary: List incident roles
+      description: List all incident roles for the organisation.
+      operationId: listIncidentRoles
+      x-airbyte-entity: incident_roles
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.incident_roles
+      responses:
+        "200":
+          description: List of incident roles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_roles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/IncidentRole"
+
+  /v1/incident_roles/{id}:
+    get:
+      summary: Get an incident role
+      description: Get a single incident role by ID.
+      operationId: getIncidentRole
+      x-airbyte-entity: incident_roles
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.incident_role
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Incident role ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Incident role details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_role:
+                    $ref: "#/components/schemas/IncidentRole"
+
+  # ── Incident Statuses ──
+  /v1/incident_statuses:
+    get:
+      summary: List incident statuses
+      description: List all incident statuses for the organisation.
+      operationId: listIncidentStatuses
+      x-airbyte-entity: incident_statuses
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.incident_statuses
+      responses:
+        "200":
+          description: List of incident statuses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_statuses:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/IncidentStatus"
+
+  /v1/incident_statuses/{id}:
+    get:
+      summary: Get an incident status
+      description: Get a single incident status by ID.
+      operationId: getIncidentStatus
+      x-airbyte-entity: incident_statuses
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.incident_status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Incident status ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Incident status details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_status:
+                    $ref: "#/components/schemas/IncidentStatus"
+
+  # ── Incident Timestamps ──
+  /v2/incident_timestamps:
+    get:
+      summary: List incident timestamps
+      description: List all incident timestamps for the organisation.
+      operationId: listIncidentTimestamps
+      x-airbyte-entity: incident_timestamps
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.incident_timestamps
+      responses:
+        "200":
+          description: List of incident timestamps
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_timestamps:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/IncidentTimestamp"
+
+  /v2/incident_timestamps/{id}:
+    get:
+      summary: Get an incident timestamp
+      description: Get a single incident timestamp by ID.
+      operationId: getIncidentTimestamp
+      x-airbyte-entity: incident_timestamps
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.incident_timestamp
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Incident timestamp ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Incident timestamp details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incident_timestamp:
+                    $ref: "#/components/schemas/IncidentTimestamp"
+
+  # ── Severities ──
+  /v1/severities:
+    get:
+      summary: List severities
+      description: List all severities for the organisation.
+      operationId: listSeverities
+      x-airbyte-entity: severities
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.severities
+      responses:
+        "200":
+          description: List of severities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  severities:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Severity"
+
+  /v1/severities/{id}:
+    get:
+      summary: Get a severity
+      description: Get a single severity by ID.
+      operationId: getSeverity
+      x-airbyte-entity: severities
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.severity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Severity ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Severity details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  severity:
+                    $ref: "#/components/schemas/Severity"
+
+  # ── Custom Fields ──
+  /v2/custom_fields:
+    get:
+      summary: List custom fields
+      description: List all custom fields for the organisation.
+      operationId: listCustomFields
+      x-airbyte-entity: custom_fields
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.custom_fields
+      responses:
+        "200":
+          description: List of custom fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_fields:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CustomField"
+
+  /v2/custom_fields/{id}:
+    get:
+      summary: Get a custom field
+      description: Get a single custom field by ID.
+      operationId: getCustomField
+      x-airbyte-entity: custom_fields
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.custom_field
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Custom field ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Custom field details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_field:
+                    $ref: "#/components/schemas/CustomField"
+
+  # ── Catalog Types ──
+  /v2/catalog_types:
+    get:
+      summary: List catalog types
+      description: List all catalog types for the organisation.
+      operationId: listCatalogTypes
+      x-airbyte-entity: catalog_types
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.catalog_types
+      responses:
+        "200":
+          description: List of catalog types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  catalog_types:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CatalogType"
+
+  /v2/catalog_types/{id}:
+    get:
+      summary: Get a catalog type
+      description: Show a single catalog type by ID.
+      operationId: getCatalogType
+      x-airbyte-entity: catalog_types
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.catalog_type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Catalog type ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Catalog type details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  catalog_type:
+                    $ref: "#/components/schemas/CatalogType"
+
+  # ── Schedules ──
+  /v2/schedules:
+    get:
+      summary: List schedules
+      description: List all on-call schedules with cursor-based pagination.
+      operationId: listSchedules
+      x-airbyte-entity: schedules
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.schedules
+      x-airbyte-meta-extractor:
+        pagination: $.pagination_meta
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of schedules per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: after
+          in: query
+          description: Cursor for the next page of results
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of schedules
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedules:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Schedule"
+                  pagination_meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /v2/schedules/{id}:
+    get:
+      summary: Get a schedule
+      description: Get a single on-call schedule by ID.
+      operationId: getSchedule
+      x-airbyte-entity: schedules
+      x-airbyte-action: get
+      x-airbyte-record-extractor: $.schedule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Schedule ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Schedule details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: "#/components/schemas/Schedule"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication using an incident.io API key
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+          - api_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: "Your incident.io API key. Create one at https://app.incident.io/settings/api-keys"
+        auth_mapping:
+          token: "${api_key}"
+        replication_auth_key_mapping:
+          api_key: api_key
+
+  schemas:
+    PaginationMeta:
+      type: object
+      description: Cursor-based pagination metadata
+      properties:
+        after:
+          type: ["null", "string"]
+          description: Cursor to pass as the after parameter to get the next page
+        page_size:
+          type: ["null", "integer"]
+          description: Maximum number of results per page
+
+    Incident:
+      type: object
+      x-airbyte-entity-name: incidents
+      x-airbyte-stream-name: incidents
+      description: An incident tracked in incident.io
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the incident
+        name:
+          type: ["null", "string"]
+          description: Name/title of the incident
+        reference:
+          type: ["null", "string"]
+          description: Human-readable reference (e.g. INC-123)
+        summary:
+          type: ["null", "string"]
+          description: Detailed summary of the incident
+        mode:
+          type: ["null", "string"]
+          description: "Mode of the incident: standard, retrospective, test, or tutorial"
+        visibility:
+          type: ["null", "string"]
+          description: Whether the incident is public or private
+        permalink:
+          type: ["null", "string"]
+          description: Link to the incident in the dashboard
+        call_url:
+          type: ["null", "string"]
+          description: URL of the call associated with the incident
+        slack_channel_id:
+          type: ["null", "string"]
+          description: Slack channel ID for the incident
+        slack_channel_name:
+          type: ["null", "string"]
+          description: Slack channel name for the incident
+        slack_team_id:
+          type: ["null", "string"]
+          description: Slack team/workspace ID
+        has_debrief:
+          type: ["null", "boolean"]
+          description: Whether the incident has had a debrief
+        created_at:
+          type: ["null", "string"]
+          description: When the incident was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the incident was last updated
+        creator:
+          type: ["null", "object"]
+          description: The user who created the incident
+          properties:
+            user:
+              type: ["null", "object"]
+              properties:
+                id:
+                  type: ["null", "string"]
+                name:
+                  type: ["null", "string"]
+                email:
+                  type: ["null", "string"]
+                role:
+                  type: ["null", "string"]
+                slack_user_id:
+                  type: ["null", "string"]
+        incident_status:
+          type: ["null", "object"]
+          description: Current status of the incident
+          properties:
+            id:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            description:
+              type: ["null", "string"]
+            category:
+              type: ["null", "string"]
+            rank:
+              type: ["null", "number"]
+            created_at:
+              type: ["null", "string"]
+            updated_at:
+              type: ["null", "string"]
+        severity:
+          type: ["null", "object"]
+          description: Severity of the incident
+          properties:
+            id:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            description:
+              type: ["null", "string"]
+            rank:
+              type: ["null", "number"]
+            created_at:
+              type: ["null", "string"]
+            updated_at:
+              type: ["null", "string"]
+        incident_type:
+          type: ["null", "object"]
+          description: Type of the incident
+          properties:
+            id:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            description:
+              type: ["null", "string"]
+            create_in_triage:
+              type: ["null", "string"]
+            is_default:
+              type: ["null", "boolean"]
+            private_incidents_only:
+              type: ["null", "boolean"]
+            created_at:
+              type: ["null", "string"]
+            updated_at:
+              type: ["null", "string"]
+        incident_role_assignments:
+          type: ["null", "array"]
+          description: Role assignments for the incident
+          items:
+            type: object
+            properties:
+              assignee:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  email:
+                    type: ["null", "string"]
+                  role:
+                    type: ["null", "string"]
+                  slack_user_id:
+                    type: ["null", "string"]
+              role:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  description:
+                    type: ["null", "string"]
+                  instructions:
+                    type: ["null", "string"]
+                  required:
+                    type: ["null", "boolean"]
+                  role_type:
+                    type: ["null", "string"]
+                  shortform:
+                    type: ["null", "string"]
+                  created_at:
+                    type: ["null", "string"]
+                  updated_at:
+                    type: ["null", "string"]
+        custom_field_entries:
+          type: ["null", "array"]
+          description: Custom field values for the incident
+          items:
+            type: object
+            properties:
+              custom_field:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  description:
+                    type: ["null", "string"]
+                  field_type:
+                    type: ["null", "string"]
+                  options:
+                    type: ["null", "array"]
+              values:
+                type: ["null", "array"]
+        duration_metrics:
+          type: ["null", "array"]
+          description: Duration metrics associated with the incident
+          items:
+            type: object
+            properties:
+              duration_metric:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+        incident_timestamp_values:
+          type: ["null", "array"]
+          description: Timestamp values for the incident
+          items:
+            type: object
+            properties:
+              incident_timestamp:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  rank:
+                    type: ["null", "number"]
+              value:
+                type: ["null", "object"]
+                properties:
+                  value:
+                    type: ["null", "string"]
+        workload_minutes_late:
+          type: ["null", "number"]
+          description: Minutes of workload classified as late
+        workload_minutes_sleeping:
+          type: ["null", "number"]
+          description: Minutes of workload classified as sleeping
+        workload_minutes_total:
+          type: ["null", "number"]
+          description: Total workload minutes
+        workload_minutes_working:
+          type: ["null", "number"]
+          description: Minutes of workload classified as working
+
+    Alert:
+      type: object
+      x-airbyte-entity-name: alerts
+      x-airbyte-stream-name: alerts
+      description: An alert ingested from an alert source
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the alert
+        title:
+          type: ["null", "string"]
+          description: Title of the alert
+        description:
+          type: ["null", "string"]
+          description: Description of the alert
+        status:
+          type: ["null", "string"]
+          description: "Status of the alert: firing or resolved"
+        alert_source_id:
+          type: ["null", "string"]
+          description: ID of the alert source that generated this alert
+        deduplication_key:
+          type: ["null", "string"]
+          description: Deduplication key uniquely referencing this alert from the source
+        source_url:
+          type: ["null", "string"]
+          description: Link to the alert in the upstream system
+        created_at:
+          type: ["null", "string"]
+          description: When the alert was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the alert was last updated
+        resolved_at:
+          type: ["null", "string"]
+          description: When the alert was resolved
+        attributes:
+          type: ["null", "array"]
+          description: Structured alert attributes
+          items:
+            type: object
+            properties:
+              attribute:
+                type: ["null", "object"]
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  type:
+                    type: ["null", "string"]
+                  array:
+                    type: ["null", "boolean"]
+              value:
+                type: ["null", "object"]
+                properties:
+                  literal:
+                    type: ["null", "string"]
+                  label:
+                    type: ["null", "string"]
+                  catalog_entry:
+                    type: ["null", "object"]
+                    properties:
+                      id:
+                        type: ["null", "string"]
+                      name:
+                        type: ["null", "string"]
+                      catalog_type_id:
+                        type: ["null", "string"]
+
+    Escalation:
+      type: object
+      x-airbyte-entity-name: escalations
+      x-airbyte-stream-name: escalations
+      description: An escalation that pages people via escalation paths
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the escalation
+        title:
+          type: ["null", "string"]
+          description: Title of the escalation
+        status:
+          type: ["null", "string"]
+          description: "Status: pending, triggered, acked, resolved, expired, cancelled, snoozed"
+        escalation_path_id:
+          type: ["null", "string"]
+          description: ID of the escalation path used
+        created_at:
+          type: ["null", "string"]
+          description: When the escalation was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the escalation was last updated
+        creator:
+          type: ["null", "object"]
+          description: The creator of this escalation
+          properties:
+            alert:
+              type: ["null", "object"]
+              properties:
+                id:
+                  type: ["null", "string"]
+                title:
+                  type: ["null", "string"]
+            user:
+              type: ["null", "object"]
+              properties:
+                id:
+                  type: ["null", "string"]
+                name:
+                  type: ["null", "string"]
+                email:
+                  type: ["null", "string"]
+                role:
+                  type: ["null", "string"]
+                slack_user_id:
+                  type: ["null", "string"]
+            workflow:
+              type: ["null", "object"]
+              properties:
+                id:
+                  type: ["null", "string"]
+                name:
+                  type: ["null", "string"]
+        priority:
+          type: ["null", "object"]
+          description: Priority of the escalation
+          properties:
+            name:
+              type: ["null", "string"]
+        events:
+          type: ["null", "array"]
+          description: History of escalation events
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "string"]
+              event:
+                type: ["null", "string"]
+              occurred_at:
+                type: ["null", "string"]
+              urgency:
+                type: ["null", "string"]
+              users:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: ["null", "string"]
+                    name:
+                      type: ["null", "string"]
+                    email:
+                      type: ["null", "string"]
+                    role:
+                      type: ["null", "string"]
+                    slack_user_id:
+                      type: ["null", "string"]
+              channels:
+                type: ["null", "array"]
+                items:
+                  type: object
+                  properties:
+                    slack_channel_id:
+                      type: ["null", "string"]
+                    slack_team_id:
+                      type: ["null", "string"]
+                    microsoft_teams_channel_id:
+                      type: ["null", "string"]
+                    microsoft_teams_team_id:
+                      type: ["null", "string"]
+        related_incidents:
+          type: ["null", "array"]
+          description: Incidents related to this escalation
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "string"]
+              name:
+                type: ["null", "string"]
+              reference:
+                type: ["null", "string"]
+              summary:
+                type: ["null", "string"]
+              external_id:
+                type: ["null", "integer"]
+              status_category:
+                type: ["null", "string"]
+              visibility:
+                type: ["null", "string"]
+        related_alerts:
+          type: ["null", "array"]
+          description: Alerts related to this escalation
+          items:
+            type: object
+            properties:
+              id:
+                type: ["null", "string"]
+              title:
+                type: ["null", "string"]
+              description:
+                type: ["null", "string"]
+              status:
+                type: ["null", "string"]
+              alert_source_id:
+                type: ["null", "string"]
+              deduplication_key:
+                type: ["null", "string"]
+              source_url:
+                type: ["null", "string"]
+              created_at:
+                type: ["null", "string"]
+              updated_at:
+                type: ["null", "string"]
+              resolved_at:
+                type: ["null", "string"]
+
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
+      description: A user in the incident.io organisation
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        name:
+          type: ["null", "string"]
+          description: Full name of the user
+        email:
+          type: ["null", "string"]
+          description: Email address of the user
+        role:
+          type: ["null", "string"]
+          description: Deprecated role field
+        slack_user_id:
+          type: ["null", "string"]
+          description: Slack user ID
+        base_role:
+          type: ["null", "object"]
+          description: Base role assigned to the user
+          properties:
+            id:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            slug:
+              type: ["null", "string"]
+            description:
+              type: ["null", "string"]
+        custom_roles:
+          type: ["null", "array"]
+          description: Custom roles assigned to the user
+
+    IncidentUpdate:
+      type: object
+      x-airbyte-entity-name: incident_updates
+      x-airbyte-stream-name: incident_updates
+      description: An update posted to an incident
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the incident update
+        incident_id:
+          type: ["null", "string"]
+          description: ID of the incident this update belongs to
+        message:
+          type: ["null", "string"]
+          description: Update message content
+        created_at:
+          type: ["null", "string"]
+          description: When the update was created
+        new_incident_status:
+          type: ["null", "object"]
+          description: New incident status set by this update
+          properties:
+            id:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            description:
+              type: ["null", "string"]
+            category:
+              type: ["null", "string"]
+            rank:
+              type: ["null", "number"]
+            created_at:
+              type: ["null", "string"]
+            updated_at:
+              type: ["null", "string"]
+        new_severity:
+          type: ["null", "object"]
+          description: New severity set by this update
+          properties:
+            id:
+              type: ["null", "string"]
+            name:
+              type: ["null", "string"]
+            description:
+              type: ["null", "string"]
+            rank:
+              type: ["null", "number"]
+            created_at:
+              type: ["null", "string"]
+            updated_at:
+              type: ["null", "string"]
+        updater:
+          type: ["null", "object"]
+          description: Who made this update
+          properties:
+            user:
+              type: ["null", "object"]
+              properties:
+                id:
+                  type: ["null", "string"]
+                name:
+                  type: ["null", "string"]
+                email:
+                  type: ["null", "string"]
+                role:
+                  type: ["null", "string"]
+                slack_user_id:
+                  type: ["null", "string"]
+
+    IncidentRole:
+      type: object
+      x-airbyte-entity-name: incident_roles
+      x-airbyte-stream-name: incident_roles
+      description: A role that can be assigned during an incident
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the incident role
+        name:
+          type: ["null", "string"]
+          description: Name of the role
+        description:
+          type: ["null", "string"]
+          description: Description of the role
+        instructions:
+          type: ["null", "string"]
+          description: Instructions for the role holder
+        shortform:
+          type: ["null", "string"]
+          description: Short form label for the role
+        role_type:
+          type: ["null", "string"]
+          description: Type of role (e.g. lead, custom)
+        required:
+          type: ["null", "boolean"]
+          description: Whether this role must be assigned
+        created_at:
+          type: ["null", "string"]
+          description: When the role was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the role was last updated
+
+    IncidentStatus:
+      type: object
+      x-airbyte-entity-name: incident_statuses
+      x-airbyte-stream-name: incident_statuses
+      description: A status that an incident can be in
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the status
+        name:
+          type: ["null", "string"]
+          description: Name of the status
+        description:
+          type: ["null", "string"]
+          description: Description of the status
+        category:
+          type: ["null", "string"]
+          description: "Category: triage, active, post-incident, closed, etc."
+        rank:
+          type: ["null", "number"]
+          description: Rank for ordering
+        created_at:
+          type: ["null", "string"]
+          description: When the status was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the status was last updated
+
+    IncidentTimestamp:
+      type: object
+      x-airbyte-entity-name: incident_timestamps
+      x-airbyte-stream-name: incident_timestamps
+      description: A timestamp definition for incidents
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the timestamp
+        name:
+          type: ["null", "string"]
+          description: Name of the timestamp (e.g. Reported, Resolved)
+        rank:
+          type: ["null", "number"]
+          description: Rank for ordering
+
+    Severity:
+      type: object
+      x-airbyte-entity-name: severities
+      x-airbyte-stream-name: severities
+      description: A severity level for incidents
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the severity
+        name:
+          type: ["null", "string"]
+          description: Name of the severity (e.g. SEV1, Critical)
+        description:
+          type: ["null", "string"]
+          description: Description of the severity
+        rank:
+          type: ["null", "number"]
+          description: Rank for ordering (lower is more severe)
+        created_at:
+          type: ["null", "string"]
+          description: When the severity was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the severity was last updated
+
+    CustomField:
+      type: object
+      x-airbyte-entity-name: custom_fields
+      x-airbyte-stream-name: custom_fields
+      description: A custom field definition for incidents
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the custom field
+        name:
+          type: ["null", "string"]
+          description: Name of the custom field
+        description:
+          type: ["null", "string"]
+          description: Description of the custom field
+        field_type:
+          type: ["null", "string"]
+          description: "Type of field: single_select, multi_select, text, link, numeric"
+        catalog_type_id:
+          type: ["null", "string"]
+          description: ID of the catalog type associated with this custom field
+        created_at:
+          type: ["null", "string"]
+          description: When the custom field was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the custom field was last updated
+
+    CatalogType:
+      type: object
+      x-airbyte-entity-name: catalog_types
+      x-airbyte-stream-name: catalog_types
+      description: A catalog type defining a category of catalog entries
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the catalog type
+        name:
+          type: ["null", "string"]
+          description: Name of the catalog type
+        description:
+          type: ["null", "string"]
+          description: Description of the catalog type
+        type_name:
+          type: ["null", "string"]
+          description: Programmatic type name
+        color:
+          type: ["null", "string"]
+          description: Display color
+        icon:
+          type: ["null", "string"]
+          description: Display icon
+        ranked:
+          type: ["null", "boolean"]
+          description: Whether entries are ranked
+        is_editable:
+          type: ["null", "boolean"]
+          description: Whether entries can be edited
+        registry_type:
+          type: ["null", "string"]
+          description: Registry type if synced from an integration
+        semantic_type:
+          type: ["null", "string"]
+          description: Semantic type for special behavior
+        created_at:
+          type: ["null", "string"]
+          description: When the catalog type was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the catalog type was last updated
+        last_synced_at:
+          type: ["null", "string"]
+          description: When the catalog type was last synced from an integration
+        annotations:
+          type: ["null", "object"]
+          description: Annotations metadata
+        categories:
+          type: ["null", "array"]
+          description: Categories this type belongs to
+          items:
+            type: string
+        required_integrations:
+          type: ["null", "array"]
+          description: Integrations required for this type
+          items:
+            type: string
+        schema:
+          type: ["null", "object"]
+          description: Schema definition for the catalog type
+          properties:
+            version:
+              type: ["null", "number"]
+            attributes:
+              type: ["null", "array"]
+              items:
+                type: object
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  type:
+                    type: ["null", "string"]
+                  array:
+                    type: ["null", "boolean"]
+                  mode:
+                    type: ["null", "string"]
+
+    Schedule:
+      type: object
+      x-airbyte-entity-name: schedules
+      x-airbyte-stream-name: schedules
+      description: An on-call schedule
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the schedule
+        name:
+          type: ["null", "string"]
+          description: Name of the schedule
+        timezone:
+          type: ["null", "string"]
+          description: Timezone for the schedule
+        created_at:
+          type: ["null", "string"]
+          description: When the schedule was created
+        updated_at:
+          type: ["null", "string"]
+          description: When the schedule was last updated
+        annotations:
+          type: ["null", "object"]
+          description: Annotations metadata
+        config:
+          type: ["null", "object"]
+          description: Schedule configuration with rotations
+          properties:
+            rotations:
+              type: ["null", "array"]
+              items:
+                type: object
+                properties:
+                  id:
+                    type: ["null", "string"]
+                  name:
+                    type: ["null", "string"]
+                  handover_start_at:
+                    type: ["null", "string"]
+                  handovers:
+                    type: ["null", "array"]
+                    items:
+                      type: object
+                      properties:
+                        interval:
+                          type: ["null", "number"]
+                        interval_type:
+                          type: ["null", "string"]
+                  layers:
+                    type: ["null", "array"]
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: ["null", "string"]
+                        name:
+                          type: ["null", "string"]
+        team_ids:
+          type: ["null", "array"]
+          description: IDs of teams associated with this schedule
+          items:
+            type: string
+        holidays_public_config:
+          type: ["null", "object"]
+          description: Public holiday configuration for the schedule
+        current_shifts:
+          type: ["null", "array"]
+          description: Currently active shifts
+          items:
+            type: object
+            properties:
+              rotation_id:
+                type: ["null", "string"]
+              fingerprint:
+                type: ["null", "string"]
+              start_at:
+                type: ["null", "string"]
+              end_at:
+                type: ["null", "string"]
+
+

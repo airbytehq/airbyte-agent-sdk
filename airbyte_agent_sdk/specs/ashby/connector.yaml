@@ -1,0 +1,1894 @@
+openapi: 3.1.0
+info:
+  title: Ashby API Connector
+  version: 0.1.4
+  description: |
+    Ashby is a modern applicant tracking system (ATS) and recruiting platform that helps companies manage their hiring process. This connector provides access to candidates, applications, jobs, departments, locations, users, job postings, sources, archive reasons, candidate tags, custom fields, and feedback form definitions for talent acquisition analytics and hiring insights.
+  x-airbyte-connector-name: ashby
+  x-airbyte-connector-definition-id: 4e8c9fa0-3634-499b-b948-11581b5c3efa
+  x-airbyte-replication-version: "0.3.3"
+  x-airbyte-replication-compatibility: ">=0.3.3, <1.0.0"
+  x-airbyte-external-documentation-urls:
+  - type: api_reference
+    title: Ashby API Reference documentation
+    url: https://developers.ashbyhq.com/reference
+  x-airbyte-skip-suggested-streams:
+    - interview_schedules
+  x-airbyte-example-questions:
+    direct:
+    - List all open jobs
+    - Show me all candidates
+    - List recent applications
+    - List all departments
+    - Show me all job postings
+    - List all users in the organization
+    search:
+    - Show me candidates who applied last month
+    - What are the top sources for job applications?
+    - Compare the number of applications across different departments
+    - Find candidates with multiple applications
+    - Summarize the candidate pipeline for our latest job posting
+    - Find the most active departments in recruiting this month
+    unsupported:
+    - Create a new job posting
+    - Schedule an interview for a candidate
+    - Update a candidates application status
+    - Delete a candidate profile
+    - Send an offer letter to a candidate
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Ashby.
+    properties:
+      start_date:
+        type: string
+        title: Start Date
+        description: The date from which to start replicating data, in the format YYYY-MM-DDT00:00:00Z.
+        format: date-time
+    required:
+      - start_date
+    replication_config_key_mapping:
+      start_date: start_date
+  x-airbyte-skip-context-store: "Will be populated in a follow-up PR with context-store entities"
+servers:
+- url: https://api.ashbyhq.com
+  description: Ashby API server
+security:
+- ashbyBasicAuth: []
+paths:
+  /candidate.list:
+    post:
+      summary: List candidates
+      description: Lists all candidates in the organization
+      operationId: listCandidates
+      x-airbyte-entity: candidates
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of candidates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /candidate.info:
+    post:
+      summary: Get a candidate
+      description: Get a single candidate by ID
+      operationId: getCandidate
+      x-airbyte-entity: candidates
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: Candidate object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/Candidate'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Candidate ID
+              required:
+              - id
+  /application.list:
+    post:
+      summary: List applications
+      description: Gets all applications in the organization
+      operationId: listApplications
+      x-airbyte-entity: applications
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Application'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /application.info:
+    post:
+      summary: Get an application
+      description: Get a single application by ID
+      operationId: getApplication
+      x-airbyte-entity: applications
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: Application object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/Application'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                applicationId:
+                  type: string
+                  description: Application ID
+              required:
+              - applicationId
+  /job.list:
+    post:
+      summary: List jobs
+      description: List all open, closed, and archived jobs
+      operationId: listJobs
+      x-airbyte-entity: jobs
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /job.info:
+    post:
+      summary: Get a job
+      description: Get a single job by ID
+      operationId: getJob
+      x-airbyte-entity: jobs
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: Job object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/Job'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Job ID
+              required:
+              - id
+  /department.list:
+    post:
+      summary: List departments
+      description: List all departments
+      operationId: listDepartments
+      x-airbyte-entity: departments
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of departments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Department'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /department.info:
+    post:
+      summary: Get a department
+      description: Get a single department by ID
+      operationId: getDepartment
+      x-airbyte-entity: departments
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: Department object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/Department'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                departmentId:
+                  type: string
+                  description: Department ID
+              required:
+              - departmentId
+  /location.list:
+    post:
+      summary: List locations
+      description: List all locations
+      operationId: listLocations
+      x-airbyte-entity: locations
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of locations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Location'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /location.info:
+    post:
+      summary: Get a location
+      description: Get a single location by ID
+      operationId: getLocation
+      x-airbyte-entity: locations
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: Location object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/Location'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locationId:
+                  type: string
+                  description: Location ID
+              required:
+              - locationId
+  /user.list:
+    post:
+      summary: List users
+      description: List all users in the organization
+      operationId: listUsers
+      x-airbyte-entity: users
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+      x-airbyte-preferred-for-check: true
+  /user.info:
+    post:
+      summary: Get a user
+      description: Get a single user by ID
+      operationId: getUser
+      x-airbyte-entity: users
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: User object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/User'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: User ID
+              required:
+              - userId
+  /jobPosting.list:
+    post:
+      summary: List job postings
+      description: List all job postings
+      operationId: listJobPostings
+      x-airbyte-entity: job_postings
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of job postings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/JobPosting'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /jobPosting.info:
+    post:
+      summary: Get a job posting
+      description: Get a single job posting by ID
+      operationId: getJobPosting
+      x-airbyte-entity: job_postings
+      x-airbyte-action: get
+      responses:
+        '200':
+          description: JobPosting object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    $ref: '#/components/schemas/JobPosting'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jobPostingId:
+                  type: string
+                  description: Job posting ID
+              required:
+              - jobPostingId
+  /source.list:
+    post:
+      summary: List sources
+      description: List all candidate sources
+      operationId: listSources
+      x-airbyte-entity: sources
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of sources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Source'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /archiveReason.list:
+    post:
+      summary: List archive reasons
+      description: List all archive reasons
+      operationId: listArchiveReasons
+      x-airbyte-entity: archive_reasons
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of archive reasons
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ArchiveReason'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /candidateTag.list:
+    post:
+      summary: List candidate tags
+      description: List all candidate tags
+      operationId: listCandidateTags
+      x-airbyte-entity: candidate_tags
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of candidate tags
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CandidateTag'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /customField.list:
+    post:
+      summary: List custom fields
+      description: List all custom fields
+      operationId: listCustomFields
+      x-airbyte-entity: custom_fields
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of custom fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomField'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+  /feedbackFormDefinition.list:
+    post:
+      summary: List feedback form definitions
+      description: List all feedback form definitions
+      operationId: listFeedbackFormDefinitions
+      x-airbyte-entity: feedback_form_definitions
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        cursor: $.nextCursor
+        has_more: $.moreDataAvailable
+      responses:
+        '200':
+          description: List of feedback form definitions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FeedbackFormDefinition'
+                  moreDataAvailable:
+                    type: boolean
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: string
+                  description: Pagination cursor for next page
+                limit:
+                  type: integer
+                  description: Maximum number of records to return per page
+components:
+  securitySchemes:
+    ashbyBasicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using API key
+      x-airbyte-auth-config:
+        title: API Key Authentication
+        type: object
+        required:
+        - api_key
+        properties:
+          api_key:
+            type: string
+            title: API Key
+            description: Your Ashby API key
+        auth_mapping:
+          username: ${api_key}
+          password: ''
+        replication_auth_key_mapping:
+          api_key: api_key
+  schemas:
+    Candidate:
+      type: object
+      x-airbyte-entity-name: candidates
+      x-airbyte-stream-name: candidates
+      description: Candidate object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique candidate identifier
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: Creation timestamp
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          description: Last update timestamp
+        name:
+          type:
+          - string
+          - 'null'
+          description: Full name of the candidate
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          description: List of email addresses
+          items:
+            type: object
+            properties:
+              value:
+                type:
+                - string
+                - 'null'
+              type:
+                type:
+                - string
+                - 'null'
+              isPrimary:
+                type:
+                - boolean
+                - 'null'
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          description: List of phone numbers
+          items:
+            type: object
+            properties:
+              value:
+                type:
+                - string
+                - 'null'
+              type:
+                type:
+                - string
+                - 'null'
+              isPrimary:
+                type:
+                - boolean
+                - 'null'
+        socialLinks:
+          type:
+          - array
+          - 'null'
+          description: Social media links
+          items:
+            type: object
+            properties:
+              type:
+                type:
+                - string
+                - 'null'
+              url:
+                type:
+                - string
+                - 'null'
+        tags:
+          type:
+          - array
+          - 'null'
+          description: Tags associated with the candidate
+          items:
+            type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              title:
+                type:
+                - string
+                - 'null'
+              isArchived:
+                type:
+                - boolean
+                - 'null'
+        applicationIds:
+          type:
+          - array
+          - 'null'
+          description: List of application IDs
+          items:
+            type:
+            - string
+            - 'null'
+        fileHandles:
+          type:
+          - array
+          - 'null'
+          description: Associated file handles
+        customFields:
+          type:
+          - array
+          - 'null'
+          description: Custom field values
+        profileUrl:
+          type:
+          - string
+          - 'null'
+          description: URL to candidate profile
+        source:
+          oneOf:
+          - type: object
+          - type: 'null'
+          description: Candidate source
+        creditedToUser:
+          oneOf:
+          - type: object
+          - type: 'null'
+          description: User credited for the candidate
+        timezone:
+          type:
+          - string
+          - 'null'
+          description: Candidate timezone
+    Application:
+      type: object
+      x-airbyte-entity-name: applications
+      x-airbyte-stream-name: applications
+      description: Application object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique application identifier
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: Creation timestamp
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          description: Last update timestamp
+        archivedAt:
+          type:
+          - string
+          - 'null'
+          description: Archived timestamp
+        candidate:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              name:
+                type:
+                - string
+                - 'null'
+          - type: 'null'
+          description: Associated candidate object
+        status:
+          type:
+          - string
+          - 'null'
+          description: Application status
+        customFields:
+          type:
+          - array
+          - 'null'
+          description: Custom field values
+        currentInterviewStage:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              title:
+                type:
+                - string
+                - 'null'
+              type:
+                type:
+                - string
+                - 'null'
+              interviewPlanId:
+                type:
+                - string
+                - 'null'
+              orderInInterviewPlan:
+                type:
+                - integer
+                - 'null'
+          - type: 'null'
+          description: Current interview stage
+        source:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              title:
+                type:
+                - string
+                - 'null'
+              isArchived:
+                type:
+                - boolean
+                - 'null'
+              sourceType:
+                oneOf:
+                - type: object
+                  properties:
+                    id:
+                      type:
+                      - string
+                      - 'null'
+                    title:
+                      type:
+                      - string
+                      - 'null'
+                    isArchived:
+                      type:
+                      - boolean
+                      - 'null'
+                - type: 'null'
+          - type: 'null'
+          description: Application source
+        creditedToUser:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              firstName:
+                type:
+                - string
+                - 'null'
+              lastName:
+                type:
+                - string
+                - 'null'
+              email:
+                type:
+                - string
+                - 'null'
+              globalRole:
+                type:
+                - string
+                - 'null'
+              isEnabled:
+                type:
+                - boolean
+                - 'null'
+              updatedAt:
+                type:
+                - string
+                - 'null'
+          - type: 'null'
+          description: User credited for this application
+        archiveReason:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              text:
+                type:
+                - string
+                - 'null'
+              reasonType:
+                type:
+                - string
+                - 'null'
+              isArchived:
+                type:
+                - boolean
+                - 'null'
+              customFields:
+                type:
+                - array
+                - 'null'
+          - type: 'null'
+          description: Reason for archiving
+        job:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              title:
+                type:
+                - string
+                - 'null'
+              locationId:
+                type:
+                - string
+                - 'null'
+              departmentId:
+                type:
+                - string
+                - 'null'
+              brandId:
+                type:
+                - string
+                - 'null'
+          - type: 'null'
+          description: Associated job object
+        hiringTeam:
+          type:
+          - array
+          - 'null'
+          description: Hiring team members
+          items:
+            type: object
+            properties:
+              userId:
+                type:
+                - string
+                - 'null'
+              firstName:
+                type:
+                - string
+                - 'null'
+              lastName:
+                type:
+                - string
+                - 'null'
+              email:
+                type:
+                - string
+                - 'null'
+              role:
+                type:
+                - string
+                - 'null'
+        appliedViaJobPostingId:
+          type:
+          - string
+          - 'null'
+          description: Job posting ID applied via
+        submitterClientIp:
+          type:
+          - string
+          - 'null'
+          description: Submitter client IP
+        submitterUserAgent:
+          type:
+          - string
+          - 'null'
+          description: Submitter user agent
+    Job:
+      type: object
+      x-airbyte-entity-name: jobs
+      x-airbyte-stream-name: jobs
+      description: Job object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique job identifier
+        title:
+          type:
+          - string
+          - 'null'
+          description: Job title
+        confidential:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the job is confidential
+        status:
+          type:
+          - string
+          - 'null'
+          description: Job status
+        employmentType:
+          type:
+          - string
+          - 'null'
+          description: Employment type
+        locationId:
+          type:
+          - string
+          - 'null'
+          description: Location identifier
+        departmentId:
+          type:
+          - string
+          - 'null'
+          description: Department identifier
+        defaultInterviewPlanId:
+          type:
+          - string
+          - 'null'
+          description: Default interview plan identifier
+        interviewPlanIds:
+          type:
+          - array
+          - 'null'
+          description: Interview plan identifiers
+          items:
+            type:
+            - string
+            - 'null'
+        jobPostingIds:
+          type:
+          - array
+          - 'null'
+          description: Job posting identifiers
+          items:
+            type:
+            - string
+            - 'null'
+        customFields:
+          type:
+          - array
+          - 'null'
+          description: Custom field values
+          items:
+            type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              isPrivate:
+                type:
+                - boolean
+                - 'null'
+              title:
+                type:
+                - string
+                - 'null'
+              value:
+                type:
+                - string
+                - 'null'
+              valueLabel:
+                type:
+                - string
+                - 'null'
+        hiringTeam:
+          type:
+          - array
+          - 'null'
+          description: Hiring team members
+          items:
+            type: object
+            properties:
+              userId:
+                type:
+                - string
+                - 'null'
+              firstName:
+                type:
+                - string
+                - 'null'
+              lastName:
+                type:
+                - string
+                - 'null'
+              email:
+                type:
+                - string
+                - 'null'
+              role:
+                type:
+                - string
+                - 'null'
+        customRequisitionId:
+          type:
+          - string
+          - 'null'
+          description: Custom requisition identifier
+        brandId:
+          type:
+          - string
+          - 'null'
+          description: Brand identifier
+        author:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              firstName:
+                type:
+                - string
+                - 'null'
+              lastName:
+                type:
+                - string
+                - 'null'
+              email:
+                type:
+                - string
+                - 'null'
+              globalRole:
+                type:
+                - string
+                - 'null'
+              isEnabled:
+                type:
+                - boolean
+                - 'null'
+              updatedAt:
+                type:
+                - string
+                - 'null'
+          - type: 'null'
+          description: Job author
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: Creation timestamp
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          description: Last update timestamp
+        openedAt:
+          type:
+          - string
+          - 'null'
+          description: Opened timestamp
+        closedAt:
+          type:
+          - string
+          - 'null'
+          description: Closed timestamp
+    Department:
+      type: object
+      x-airbyte-entity-name: departments
+      x-airbyte-stream-name: departments
+      description: Department object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique department identifier
+        name:
+          type:
+          - string
+          - 'null'
+          description: Department name
+        externalName:
+          type:
+          - string
+          - 'null'
+          description: External department name
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the department is archived
+        parentId:
+          type:
+          - string
+          - 'null'
+          description: Parent department identifier
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: Creation timestamp
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          description: Last update timestamp
+        extraData:
+          oneOf:
+          - type: object
+          - type: 'null'
+          description: Extra data
+    Location:
+      type: object
+      x-airbyte-entity-name: locations
+      x-airbyte-stream-name: locations
+      description: Location object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique location identifier
+        name:
+          type:
+          - string
+          - 'null'
+          description: Location name
+        externalName:
+          type:
+          - string
+          - 'null'
+          description: External location name
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the location is archived
+        address:
+          oneOf:
+          - type: object
+            properties:
+              postalAddress:
+                oneOf:
+                - type: object
+                  properties:
+                    addressRegion:
+                      type:
+                      - string
+                      - 'null'
+                    addressCountry:
+                      type:
+                      - string
+                      - 'null'
+                    addressLocality:
+                      type:
+                      - string
+                      - 'null'
+                - type: 'null'
+          - type: 'null'
+          description: Location address
+        isRemote:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the location is remote
+        workplaceType:
+          type:
+          - string
+          - 'null'
+          description: Workplace type
+        parentLocationId:
+          type:
+          - string
+          - 'null'
+          description: Parent location identifier
+        type:
+          type:
+          - string
+          - 'null'
+          description: Location type
+        extraData:
+          oneOf:
+          - type: object
+          - type: 'null'
+          description: Extra data
+    User:
+      type: object
+      x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
+      description: User object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        firstName:
+          type:
+          - string
+          - 'null'
+          description: First name
+        lastName:
+          type:
+          - string
+          - 'null'
+          description: Last name
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+        globalRole:
+          type:
+          - string
+          - 'null'
+          description: Global role
+        isEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the user is enabled
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          description: Last update timestamp
+    JobPosting:
+      type: object
+      x-airbyte-entity-name: job_postings
+      x-airbyte-stream-name: job_postings
+      description: Job posting object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique job posting identifier
+        title:
+          type:
+          - string
+          - 'null'
+          description: Job posting title
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: Associated job identifier
+        departmentName:
+          type:
+          - string
+          - 'null'
+          description: Department name
+        teamName:
+          type:
+          - string
+          - 'null'
+          description: Team name
+        locationName:
+          type:
+          - string
+          - 'null'
+          description: Location name
+        locationExternalName:
+          type:
+          - string
+          - 'null'
+          description: External location name
+        workplaceType:
+          type:
+          - string
+          - 'null'
+          description: Workplace type
+        employmentType:
+          type:
+          - string
+          - 'null'
+          description: Employment type
+        isListed:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the posting is listed
+        publishedDate:
+          type:
+          - string
+          - 'null'
+          description: Published date
+        applicationDeadline:
+          type:
+          - string
+          - 'null'
+          description: Application deadline
+        externalLink:
+          type:
+          - string
+          - 'null'
+          description: External link
+        applyLink:
+          type:
+          - string
+          - 'null'
+          description: Apply link
+        locationIds:
+          oneOf:
+          - type: object
+            properties:
+              primaryLocationId:
+                type:
+                - string
+                - 'null'
+              secondaryLocationIds:
+                type:
+                - array
+                - 'null'
+          - type: 'null'
+          description: Location identifiers
+        compensationTierSummary:
+          type:
+          - string
+          - 'null'
+          description: Compensation tier summary
+        shouldDisplayCompensationOnJobBoard:
+          type:
+          - boolean
+          - 'null'
+          description: Whether to display compensation on job board
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          description: Last update timestamp
+    Source:
+      type: object
+      x-airbyte-entity-name: sources
+      x-airbyte-stream-name: sources
+      description: Candidate source object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique source identifier
+        title:
+          type:
+          - string
+          - 'null'
+          description: Source title
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the source is archived
+        sourceType:
+          oneOf:
+          - type: object
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              title:
+                type:
+                - string
+                - 'null'
+              isArchived:
+                type:
+                - boolean
+                - 'null'
+          - type: 'null'
+          description: Source type
+    ArchiveReason:
+      type: object
+      x-airbyte-entity-name: archive_reasons
+      x-airbyte-stream-name: archive_reasons
+      description: Archive reason object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique archive reason identifier
+        text:
+          type:
+          - string
+          - 'null'
+          description: Archive reason text
+        reasonType:
+          type:
+          - string
+          - 'null'
+          description: Type of archive reason
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the archive reason is archived
+    CandidateTag:
+      type: object
+      x-airbyte-entity-name: candidate_tags
+      x-airbyte-stream-name: candidate_tags
+      description: Candidate tag object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique tag identifier
+        title:
+          type:
+          - string
+          - 'null'
+          description: Tag title
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the tag is archived
+    CustomField:
+      type: object
+      x-airbyte-entity-name: custom_fields
+      x-airbyte-stream-name: custom_fields
+      description: Custom field definition
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique custom field identifier
+        title:
+          type:
+          - string
+          - 'null'
+          description: Custom field title
+        objectType:
+          type:
+          - string
+          - 'null'
+          description: Object type this field applies to
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the custom field is archived
+        isPrivate:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the custom field is private
+        fieldType:
+          type:
+          - string
+          - 'null'
+          description: Field type
+    FeedbackFormDefinition:
+      type: object
+      x-airbyte-entity-name: feedback_form_definitions
+      x-airbyte-stream-name: feedback_form_definitions
+      description: Feedback form definition
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: Unique feedback form definition identifier
+        organizationId:
+          type:
+          - string
+          - 'null'
+          description: Organization identifier
+        title:
+          type:
+          - string
+          - 'null'
+          description: Form title
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the form is archived
+        isDefaultForm:
+          type:
+          - boolean
+          - 'null'
+          description: Whether this is the default form
+        formDefinition:
+          oneOf:
+          - type: object
+            properties:
+              sections:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    fields:
+                      type:
+                      - array
+                      - 'null'
+                      items:
+                        type: object
+                        properties:
+                          isRequired:
+                            type:
+                            - boolean
+                            - 'null'
+                          field:
+                            oneOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type:
+                                  - string
+                                  - 'null'
+                                type:
+                                  type:
+                                  - string
+                                  - 'null'
+                                path:
+                                  type:
+                                  - string
+                                  - 'null'
+                                humanReadablePath:
+                                  type:
+                                  - string
+                                  - 'null'
+                                title:
+                                  type:
+                                  - string
+                                  - 'null'
+                                isNullable:
+                                  type:
+                                  - boolean
+                                  - 'null'
+                                selectableValues:
+                                  type:
+                                  - array
+                                  - 'null'
+                                  items:
+                                    type: object
+                                    properties:
+                                      label:
+                                        type:
+                                        - string
+                                        - 'null'
+                                      value:
+                                        type:
+                                        - string
+                                        - 'null'
+                            - type: 'null'
+                          descriptionHtml:
+                            type:
+                            - string
+                            - 'null'
+                          descriptionPlain:
+                            type:
+                            - string
+                            - 'null'
+                    title:
+                      type:
+                      - string
+                      - 'null'
+          - type: 'null'
+          description: Form definition with sections and fields
+        interviewId:
+          type:
+          - string
+          - 'null'
+          description: Associated interview identifier

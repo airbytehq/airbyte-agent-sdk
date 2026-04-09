@@ -1,0 +1,1248 @@
+openapi: 3.1.0
+
+info:
+  title: Confluence API Connector
+  version: 1.0.1
+  description: >-
+    Connector for the Confluence Cloud REST API. Provides read access to Confluence
+    spaces, pages, blog posts, groups, and audit logs. Uses the Confluence Cloud
+    REST API v2 for spaces, pages, and blog posts, and the v1 API for groups and
+    audit records. Authenticates via HTTP Basic using an Atlassian account email
+    and API token.
+  x-airbyte-connector-name: confluence
+  x-airbyte-connector-definition-id: cf40a7f8-71f8-45ce-a7fa-fca053e4028c
+  x-airbyte-replication-version: "1.0.21"
+  x-airbyte-replication-compatibility: ">=1.0.21, <2.0.0"
+  x-airbyte-external-documentation-urls:
+    - type: api_reference
+      title: Confluence Cloud REST API
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+    - type: authentication_guide
+      title: Confluence authentication
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/#authentication
+    - type: rate_limits
+      title: Confluence rate limits
+      url: https://developer.atlassian.com/cloud/confluence/rate-limiting/
+    - type: status_page
+      title: Atlassian Status
+      url: https://status.atlassian.com/
+  x-airbyte-example-questions:
+    direct:
+      - "List all spaces in my Confluence instance"
+      - "Show me the most recently created pages"
+      - "List all blog posts"
+      - "Show me details for a specific page"
+      - "List all groups in Confluence"
+      - "Show me recent audit log entries"
+      - "Get details about a specific space"
+      - "Show me blog post details"
+    search:
+      - "Find pages created in the last 7 days"
+      - "What spaces have the most pages?"
+      - "Show me all pages in a specific space"
+      - "Find blog posts by a specific author"
+      - "What audit events happened this week?"
+    unsupported:
+      - "Create a new page in Confluence"
+      - "Update an existing page"
+      - "Delete a space"
+      - "Upload an attachment to a page"
+      - "Manage space permissions"
+  x-airbyte-replication-config:
+    title: Replication Configuration
+    description: Settings for data replication from Confluence.
+    properties: {}
+    replication_config_key_mapping: {}
+  x-airbyte-context-store:
+    disable_compaction: true
+    entities:
+      - entity: audit
+        fields:
+          - name: affectedObject
+            type: ["null", "object"]
+            description: The object that was affected by the audit event.
+          - name: associatedObjects
+            type: ["null", "array"]
+            description: Any associated objects related to the audit event.
+          - name: author
+            type: ["null", "object"]
+            description: The user who triggered the audit event.
+          - name: category
+            type: ["null", "string"]
+            description: The category under which the audit event falls.
+          - name: changedValues
+            type: ["null", "array"]
+            description: Details of the values that were changed during the audit event.
+          - name: creationDate
+            type: ["null", "integer"]
+            description: The date and time when the audit event was created.
+          - name: description
+            type: ["null", "string"]
+            description: A detailed description of the audit event.
+          - name: remoteAddress
+            type: ["null", "string"]
+            description: The IP address from which the audit event originated.
+          - name: summary
+            type: ["null", "string"]
+            description: A brief summary or title describing the audit event.
+          - name: superAdmin
+            type: ["null", "boolean"]
+            description: Indicates if the user triggering the audit event is a super admin.
+          - name: sysAdmin
+            type: ["null", "boolean"]
+            description: Indicates if the user triggering the audit event is a system admin.
+      - entity: blog_posts
+        fields:
+          - name: _links
+            type: ["null", "object"]
+            description: Links related to the blog post
+            properties:
+              webui:
+                type: ["null", "string"]
+              editui:
+                type: ["null", "string"]
+              tinyui:
+                type: ["null", "string"]
+          - name: authorId
+            type: ["null", "string"]
+            description: ID of the user who created the blog post
+          - name: body
+            type: ["null", "object"]
+            description: Blog post body content
+            properties:
+              storage:
+                type: ["null", "object"]
+              atlas_doc_format:
+                type: ["null", "object"]
+          - name: createdAt
+            type: ["null", "string"]
+            description: Timestamp when the blog post was created
+          - name: id
+            type: ["null", "string"]
+            description: Unique blog post identifier
+          - name: spaceId
+            type: ["null", "string"]
+            description: ID of the space containing this blog post
+          - name: status
+            type: ["null", "string"]
+            description: Blog post status (current, draft, trashed)
+          - name: title
+            type: ["null", "string"]
+            description: Blog post title
+          - name: version
+            type: ["null", "object"]
+            description: Version information
+            properties:
+              createdAt:
+                type: ["null", "string"]
+              message:
+                type: ["null", "string"]
+              number:
+                type: ["null", "integer"]
+              minorEdit:
+                type: ["null", "boolean"]
+              authorId:
+                type: ["null", "string"]
+      - entity: groups
+        x-airbyte-name: group
+        fields:
+          - name: _links
+            type: ["null", "object"]
+            description: Links related to the group
+          - name: id
+            type: ["null", "string"]
+            description: The unique identifier of the group
+          - name: name
+            type: ["null", "string"]
+            description: The name of the group
+          - name: type
+            type: ["null", "string"]
+            description: The type of group
+      - entity: pages
+        fields:
+          - name: _links
+            type: ["null", "object"]
+            description: Links related to the page
+            properties:
+              webui:
+                type: ["null", "string"]
+              editui:
+                type: ["null", "string"]
+              tinyui:
+                type: ["null", "string"]
+          - name: authorId
+            type: ["null", "string"]
+            description: ID of the user who created the page
+          - name: body
+            type: ["null", "object"]
+            description: Page body content
+            properties:
+              storage:
+                type: ["null", "object"]
+              atlas_doc_format:
+                type: ["null", "object"]
+          - name: createdAt
+            type: ["null", "string"]
+            description: Timestamp when the page was created
+          - name: id
+            type: ["null", "string"]
+            description: Unique page identifier
+          - name: lastOwnerId
+            type: ["null", "string"]
+            description: ID of the previous page owner
+          - name: ownerId
+            type: ["null", "string"]
+            description: ID of the current page owner
+          - name: parentId
+            type: ["null", "string"]
+            description: ID of the parent page
+          - name: parentType
+            type: ["null", "string"]
+            description: Type of the parent (page or space)
+          - name: position
+            type: ["null", "integer"]
+            description: Position of the page among siblings
+          - name: spaceId
+            type: ["null", "string"]
+            description: ID of the space containing this page
+          - name: status
+            type: ["null", "string"]
+            description: Page status (current, archived, trashed, draft)
+          - name: title
+            type: ["null", "string"]
+            description: Page title
+          - name: version
+            type: ["null", "object"]
+            description: Version information
+            properties:
+              createdAt:
+                type: ["null", "string"]
+              message:
+                type: ["null", "string"]
+              number:
+                type: ["null", "integer"]
+              minorEdit:
+                type: ["null", "boolean"]
+              authorId:
+                type: ["null", "string"]
+      - entity: spaces
+        x-airbyte-name: space
+        fields:
+          - name: _links
+            type: ["null", "object"]
+            description: Links related to the space
+            properties:
+              webui:
+                type: ["null", "string"]
+          - name: authorId
+            type: ["null", "string"]
+            description: ID of the user who created the space
+          - name: createdAt
+            type: ["null", "string"]
+            description: Timestamp when the space was created
+          - name: description
+            type: ["null", "object"]
+            description: Space description in various formats
+            properties:
+              plain:
+                type: ["null", "object"]
+              view:
+                type: ["null", "object"]
+          - name: homepageId
+            type: ["null", "string"]
+            description: ID of the space homepage
+          - name: icon
+            type: ["null", "object"]
+            description: Space icon information
+            properties:
+              path:
+                type: ["null", "string"]
+              apiDownloadLink:
+                type: ["null", "string"]
+          - name: id
+            type: ["null", "string"]
+            description: Unique space identifier
+          - name: key
+            type: ["null", "string"]
+            description: Space key
+          - name: name
+            type: ["null", "string"]
+            description: Space name
+          - name: status
+            type: ["null", "string"]
+            description: Space status (current or archived)
+          - name: type
+            type: ["null", "string"]
+            description: Space type (global or personal)
+
+servers:
+  - url: https://{subdomain}.atlassian.net
+    description: Confluence Cloud API server
+    variables:
+      subdomain:
+        description: Your Confluence Cloud subdomain (e.g., mycompany for mycompany.atlassian.net)
+        default: "{subdomain}"
+    x-airbyte-replication-environment-mapping:
+      domain_name:
+        source: subdomain
+        format: "https://{value}.atlassian.net"
+
+security:
+  - basicAuth: []
+
+paths:
+  /wiki/api/v2/spaces:
+    get:
+      summary: List spaces
+      description: Returns all spaces. Only spaces that the user has permission to view will be returned.
+      operationId: listSpaces
+      x-airbyte-entity: spaces
+      x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next: $._links.next
+      parameters:
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of spaces to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 25
+        - name: type
+          in: query
+          description: Filter by space type (global or personal)
+          schema:
+            type: string
+            enum:
+              - global
+              - personal
+        - name: status
+          in: query
+          description: Filter by space status (current or archived)
+          schema:
+            type: string
+            enum:
+              - current
+              - archived
+        - name: keys
+          in: query
+          description: Filter by space keys
+          schema:
+            type: array
+            items:
+              type: string
+        - name: sort
+          in: query
+          description: Sort order for results
+          schema:
+            type: string
+            enum:
+              - id
+              - -id
+              - key
+              - -key
+              - name
+              - -name
+      responses:
+        "200":
+          description: List of spaces
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpacesList"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+
+  /wiki/api/v2/spaces/{id}:
+    get:
+      summary: Get space by id
+      description: Returns a specific space.
+      operationId: getSpace
+      x-airbyte-entity: spaces
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the space
+          schema:
+            type: string
+        - name: description-format
+          in: query
+          description: The format of the space description in the response
+          schema:
+            type: string
+            enum:
+              - plain
+              - view
+      responses:
+        "200":
+          description: Space object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Space"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Space not found
+
+  /wiki/api/v2/pages:
+    get:
+      summary: List pages
+      description: Returns all pages. Only pages that the user has permission to view will be returned.
+      operationId: listPages
+      x-airbyte-entity: pages
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next: $._links.next
+      parameters:
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of pages to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 25
+        - name: space-id
+          in: query
+          description: Filter pages by space ID(s)
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: title
+          in: query
+          description: Filter pages by title (exact match)
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter pages by status
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - current
+                - archived
+                - trashed
+                - draft
+        - name: sort
+          in: query
+          description: Sort order for results
+          schema:
+            type: string
+            enum:
+              - id
+              - -id
+              - title
+              - -title
+              - created-date
+              - -created-date
+              - modified-date
+              - -modified-date
+        - name: body-format
+          in: query
+          description: The format of the page body in the response
+          schema:
+            type: string
+            enum:
+              - storage
+              - atlas_doc_format
+              - view
+      responses:
+        "200":
+          description: List of pages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagesList"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+
+  /wiki/api/v2/pages/{id}:
+    get:
+      summary: Get page by id
+      description: Returns a specific page.
+      operationId: getPage
+      x-airbyte-entity: pages
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the page
+          schema:
+            type: string
+        - name: body-format
+          in: query
+          description: The format of the page body in the response
+          schema:
+            type: string
+            enum:
+              - storage
+              - atlas_doc_format
+              - view
+        - name: version
+          in: query
+          description: Specific version number to retrieve
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Page object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Page not found
+
+  /wiki/api/v2/blogposts:
+    get:
+      summary: List blog posts
+      description: Returns all blog posts. Only blog posts that the user has permission to view will be returned.
+      operationId: listBlogPosts
+      x-airbyte-entity: blog_posts
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        next: $._links.next
+      parameters:
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of blog posts to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 25
+        - name: space-id
+          in: query
+          description: Filter blog posts by space ID(s)
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: title
+          in: query
+          description: Filter blog posts by title (exact match)
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter blog posts by status
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - current
+                - draft
+                - trashed
+        - name: sort
+          in: query
+          description: Sort order for results
+          schema:
+            type: string
+            enum:
+              - id
+              - -id
+              - title
+              - -title
+              - created-date
+              - -created-date
+              - modified-date
+              - -modified-date
+        - name: body-format
+          in: query
+          description: The format of the blog post body in the response
+          schema:
+            type: string
+            enum:
+              - storage
+              - atlas_doc_format
+              - view
+      responses:
+        "200":
+          description: List of blog posts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPostsList"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+
+  /wiki/api/v2/blogposts/{id}:
+    get:
+      summary: Get blog post by id
+      description: Returns a specific blog post.
+      operationId: getBlogPost
+      x-airbyte-entity: blog_posts
+      x-airbyte-action: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the blog post
+          schema:
+            type: string
+        - name: body-format
+          in: query
+          description: The format of the blog post body in the response
+          schema:
+            type: string
+            enum:
+              - storage
+              - atlas_doc_format
+              - view
+        - name: version
+          in: query
+          description: Specific version number to retrieve
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Blog post object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Blog post not found
+
+  /wiki/rest/api/group:
+    get:
+      summary: List groups
+      description: Returns all user groups.
+      operationId: listGroups
+      x-airbyte-entity: groups
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        start: $.start
+        limit: $.limit
+        size: $.size
+      parameters:
+        - name: start
+          in: query
+          description: Starting index for pagination
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Maximum number of groups to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 25
+      responses:
+        "200":
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupsList"
+        "401":
+          description: Unauthorized
+
+  /wiki/rest/api/audit:
+    get:
+      summary: List audit records
+      description: Returns audit log records.
+      operationId: listAuditRecords
+      x-airbyte-entity: audit
+      x-airbyte-action: list
+      x-airbyte-record-extractor: $.results
+      x-airbyte-meta-extractor:
+        start: $.start
+        limit: $.limit
+        size: $.size
+      parameters:
+        - name: start
+          in: query
+          description: Starting index for pagination
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Maximum number of audit records to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 25
+        - name: startDate
+          in: query
+          description: Start date for filtering audit records (ISO 8601)
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          description: End date for filtering audit records (ISO 8601)
+          schema:
+            type: string
+        - name: searchString
+          in: query
+          description: Search string to filter audit records
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of audit records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditRecordsList"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        Basic Authentication using your Atlassian account email and API token.
+        Username: Your Atlassian account email.
+        Password: Your Confluence API token.
+        To get an API token:
+        1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
+        2. Click "Create API token"
+        3. Give it a name and copy the generated token
+      x-airbyte-auth-config:
+        type: object
+        title: Confluence API Token Authentication
+        description: Authenticate using your Atlassian account email and API token
+        required:
+          - username
+          - password
+        properties:
+          username:
+            type: string
+            format: email
+            title: Email Address
+            description: Your Atlassian account email address
+          password:
+            type: string
+            title: API Token
+            description: Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens
+        auth_mapping:
+          username: "${username}"
+          password: "${password}"
+        replication_auth_key_mapping:
+          email: "username"
+          api_token: "password"
+
+  schemas:
+    Space:
+      type: object
+      x-airbyte-entity-name: spaces
+      description: Confluence space object
+      properties:
+        id:
+          type: string
+          description: Unique space identifier
+        key:
+          type: string
+          description: Space key
+        name:
+          type: string
+          description: Space name
+        type:
+          type: string
+          description: Space type (global or personal)
+        status:
+          type: string
+          description: Space status (current or archived)
+        authorId:
+          type: string
+          description: ID of the user who created the space
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the space was created
+        homepageId:
+          type: string
+          description: ID of the space homepage
+        spaceOwnerId:
+          type: string
+          description: ID of the space owner
+        currentActiveAlias:
+          type: string
+          description: Currently active alias for the space
+        description:
+          oneOf:
+            - type: object
+              properties:
+                plain:
+                  type: object
+                view:
+                  type: object
+            - type: "null"
+          description: Space description in various formats
+        icon:
+          oneOf:
+            - type: object
+              properties:
+                path:
+                  type: string
+                  description: Path to the icon
+                apiDownloadLink:
+                  type: string
+                  description: API download link for the icon
+            - type: "null"
+          description: Space icon information
+        _links:
+          type: object
+          description: Links related to the space
+          properties:
+            webui:
+              type: string
+              description: Web UI link
+            base:
+              type: string
+              description: Base URL
+
+    SpacesList:
+      type: object
+      description: Paginated list of spaces
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Space"
+        _links:
+          type: object
+          properties:
+            next:
+              type: string
+              description: URL for the next page of results
+            base:
+              type: string
+              description: Base URL
+
+    Page:
+      type: object
+      x-airbyte-entity-name: pages
+      description: Confluence page object
+      properties:
+        id:
+          type: string
+          description: Unique page identifier
+        status:
+          type: string
+          description: Page status (current, archived, trashed, draft)
+        title:
+          type: string
+          description: Page title
+        spaceId:
+          type: string
+          description: ID of the space containing this page
+        parentId:
+          oneOf:
+            - type: string
+            - type: "null"
+          description: ID of the parent page
+        parentType:
+          oneOf:
+            - type: string
+            - type: "null"
+          description: Type of the parent (page or space)
+        position:
+          type: integer
+          description: Position of the page among siblings
+        authorId:
+          type: string
+          description: ID of the user who created the page
+        ownerId:
+          type: string
+          description: ID of the current page owner
+        lastOwnerId:
+          oneOf:
+            - type: string
+            - type: "null"
+          description: ID of the previous page owner
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the page was created
+        version:
+          type: object
+          description: Version information
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+              description: Version creation timestamp
+            message:
+              type: string
+              description: Version message
+            number:
+              type: integer
+              description: Version number
+            minorEdit:
+              type: boolean
+              description: Whether this was a minor edit
+            authorId:
+              type: string
+              description: ID of the version author
+            ncsStepVersion:
+              oneOf:
+                - type: string
+                - type: "null"
+              description: NCS step version
+        body:
+          type: object
+          description: Page body content
+          properties:
+            storage:
+              type: object
+              description: Storage format body
+            atlas_doc_format:
+              type: object
+              description: Atlas doc format body
+        _links:
+          type: object
+          description: Links related to the page
+          properties:
+            webui:
+              type: string
+              description: Web UI link
+            editui:
+              type: string
+              description: Edit UI link
+            edituiv2:
+              type: string
+              description: Edit UI v2 link
+            tinyui:
+              type: string
+              description: Tiny UI link
+            base:
+              type: string
+              description: Base URL
+
+    PagesList:
+      type: object
+      description: Paginated list of pages
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Page"
+        _links:
+          type: object
+          properties:
+            next:
+              type: string
+              description: URL for the next page of results
+            base:
+              type: string
+              description: Base URL
+
+    BlogPost:
+      type: object
+      x-airbyte-entity-name: blog_posts
+      description: Confluence blog post object
+      properties:
+        id:
+          type: string
+          description: Unique blog post identifier
+        status:
+          type: string
+          description: Blog post status (current, draft, trashed)
+        title:
+          type: string
+          description: Blog post title
+        spaceId:
+          type: string
+          description: ID of the space containing this blog post
+        authorId:
+          type: string
+          description: ID of the user who created the blog post
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the blog post was created
+        version:
+          type: object
+          description: Version information
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+              description: Version creation timestamp
+            message:
+              type: string
+              description: Version message
+            number:
+              type: integer
+              description: Version number
+            minorEdit:
+              type: boolean
+              description: Whether this was a minor edit
+            authorId:
+              type: string
+              description: ID of the version author
+            ncsStepVersion:
+              oneOf:
+                - type: string
+                - type: "null"
+              description: NCS step version
+        body:
+          type: object
+          description: Blog post body content
+          properties:
+            storage:
+              type: object
+              description: Storage format body
+            atlas_doc_format:
+              type: object
+              description: Atlas doc format body
+        _links:
+          type: object
+          description: Links related to the blog post
+          properties:
+            webui:
+              type: string
+              description: Web UI link
+            editui:
+              type: string
+              description: Edit UI link
+            edituiv2:
+              type: string
+              description: Edit UI v2 link
+            tinyui:
+              type: string
+              description: Tiny UI link
+            base:
+              type: string
+              description: Base URL
+
+    BlogPostsList:
+      type: object
+      description: Paginated list of blog posts
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/BlogPost"
+        _links:
+          type: object
+          properties:
+            next:
+              type: string
+              description: URL for the next page of results
+            base:
+              type: string
+              description: Base URL
+
+    Group:
+      type: object
+      x-airbyte-entity-name: groups
+      description: Confluence group object
+      properties:
+        type:
+          type: string
+          description: Type of the group
+        id:
+          type: string
+          description: Unique group identifier
+        name:
+          type: string
+          description: Group name
+        managedBy:
+          type: string
+          description: Entity managing this group
+        usageType:
+          type: string
+          description: Usage type of the group
+        resourceAri:
+          type: string
+          description: Atlassian Resource Identifier for the group
+        _links:
+          type: object
+          description: Links related to the group
+          properties:
+            self:
+              type: string
+              description: Self link
+
+    GroupsList:
+      type: object
+      description: Paginated list of groups
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Group"
+        start:
+          type: integer
+          description: Starting index
+        limit:
+          type: integer
+          description: Number of results per page
+        size:
+          type: integer
+          description: Number of results returned
+        _links:
+          type: object
+          properties:
+            base:
+              type: string
+            context:
+              type: string
+            next:
+              type: string
+            self:
+              type: string
+
+    AuditRecord:
+      type: object
+      x-airbyte-entity-name: audit
+      description: Confluence audit record
+      properties:
+        author:
+          type: object
+          description: User who triggered the audit event
+          properties:
+            type:
+              type: string
+              description: Author type
+            displayName:
+              type: string
+              description: Display name of the author
+            publicName:
+              type: string
+              description: Public name of the author
+            accountType:
+              type: string
+              description: Account type
+            isExternalCollaborator:
+              type: boolean
+              description: Whether the author is an external collaborator
+            externalCollaborator:
+              type: boolean
+              description: Whether the author is an external collaborator
+            operations:
+              oneOf:
+                - type: object
+                - type: "null"
+              description: Operations available for the author
+        remoteAddress:
+          type: string
+          description: IP address from which the event originated
+        creationDate:
+          type: integer
+          description: Timestamp of the audit event
+        summary:
+          type: string
+          description: Brief summary of the audit event
+        description:
+          type: string
+          description: Detailed description of the audit event
+        category:
+          type: string
+          description: Category of the audit event
+        sysAdmin:
+          type: boolean
+          description: Whether the user is a system admin
+        superAdmin:
+          type: boolean
+          description: Whether the user is a super admin
+        affectedObject:
+          type: object
+          description: Object affected by the audit event
+          properties:
+            name:
+              type: string
+              description: Name of the affected object
+            objectType:
+              type: string
+              description: Type of the affected object
+        changedValues:
+          type: array
+          description: Values changed during the audit event
+        associatedObjects:
+          type: array
+          description: Objects associated with the audit event
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the associated object
+              objectType:
+                type: string
+                description: Type of the associated object
+
+    AuditRecordsList:
+      type: object
+      description: Paginated list of audit records
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditRecord"
+        start:
+          type: integer
+          description: Starting index
+        limit:
+          type: integer
+          description: Number of results per page
+        size:
+          type: integer
+          description: Number of results returned
+        _links:
+          type: object
+          properties:
+            base:
+              type: string
+            context:
+              type: string
+            next:
+              type: string
+            self:
+              type: string

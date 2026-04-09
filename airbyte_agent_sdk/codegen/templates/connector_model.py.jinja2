@@ -1,0 +1,26 @@
+"""
+Connector model for {{ connector_name }}.
+
+This file is auto-generated from the connector definition at build time.
+DO NOT EDIT MANUALLY - changes will be overwritten on next generation.
+"""
+
+from __future__ import annotations
+
+{% for module, type_names in imports_by_module.items() %}
+{% if module in ['uuid'] %}
+from {{ module }} import (
+{% for type_name in type_names %}
+    {{ type_name }},
+{% endfor %}
+)
+{% else %}
+from airbyte_agent_sdk.{{ module }} import (
+{% for type_name in type_names %}
+    {{ type_name }},
+{% endfor %}
+)
+{% endif %}
+{% endfor %}
+
+{{ model_constant_name }}: ConnectorModel = {{ model_python_code }}

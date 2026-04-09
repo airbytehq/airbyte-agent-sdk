@@ -1,0 +1,97 @@
+"""
+Tests for {{ connector_name.title() }} blessed connector.
+"""
+
+from {{ package_name }} import {{ class_name }}
+{% if auth_config %}
+{%- if auth_config.options | length == 1 %}
+from {{ package_name }}.models import {{ auth_config.type_name }}
+{%- else %}
+from {{ package_name }}.models import {{ auth_config.type_name }}{% for option in auth_config.options %}, {{ auth_config.base_name }}{{ option.type_suffix }}AuthConfig{% endfor %}
+{%- endif %}
+{% endif %}
+
+{% if auth_config and auth_config.options %}
+{%- if auth_config.options | length == 1 %}
+{%- set option = auth_config.options[0] %}
+
+def test_connector_creation():
+    """Test creating {{ class_name }} instance with {{ option.title }}.
+{%- if option.description %}
+
+    {{ option.description }}
+{%- endif %}
+
+    """
+    connector = {{ class_name }}(auth_config={{ auth_config.type_name }}(
+{%- for field in option.fields -%}
+{%- if field.type == "str" %}
+{{ field.name }}="test_{{ field.name }}"
+{%- elif field.type == "int" %}
+{{ field.name }}=12345
+{%- elif field.type == "float" %}
+{{ field.name }}=123.45
+{%- elif field.type == "bool" %}
+{{ field.name }}=True
+{%- else %}
+{{ field.name }}="test_value"
+{%- endif %}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+))
+    assert connector.connector_name == "{{ connector_name }}"
+    assert connector.connector_version
+{%- else %}
+{%- for option in auth_config.options %}
+
+def test_connector_creation_{{ option.type_suffix | lower }}():
+    """Test creating {{ class_name }} instance with {{ option.title }}.
+{%- if option.description %}
+
+    {{ option.description }}
+{%- endif %}
+
+    """
+    connector = {{ class_name }}(auth_config={{ auth_config.base_name }}{{ option.type_suffix }}AuthConfig(
+{%- for field in option.fields -%}
+{%- if field.type == "str" %}
+{{ field.name }}="test_{{ field.name }}"
+{%- elif field.type == "int" %}
+{{ field.name }}=12345
+{%- elif field.type == "float" %}
+{{ field.name }}=123.45
+{%- elif field.type == "bool" %}
+{{ field.name }}=True
+{%- else %}
+{{ field.name }}="test_value"
+{%- endif %}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+))
+    assert connector.connector_name == "{{ connector_name }}"
+    assert connector.connector_version
+{%- endfor %}
+{%- endif %}
+{%- else %}
+
+def test_connector_creation():
+    """Test creating {{ class_name }} instance."""
+    connector = {{ class_name }}()
+    assert connector.connector_name == "{{ connector_name }}"
+    assert connector.connector_version
+{%- endif %}
+
+
+def test_connector_metadata():
+    """Test connector metadata."""
+    assert {{ class_name }}.connector_name == "{{ connector_name }}"
+    assert hasattr({{ class_name }}, "connector_version")
+
+
+def test_embedded_connector_model():
+    """Test embedded model can be loaded."""
+    from {{ package_name }}.connector_model import {{ model_constant_name }}
+
+    assert {{ model_constant_name }} is not None
+    assert {{ model_constant_name }}.name == "{{ connector_name }}"
+    assert len({{ model_constant_name }}.entities) > 0

@@ -1,0 +1,23 @@
+"""
+{{ connector_name|title }} connector for Airbyte SDK.
+
+Auto-generated from OpenAPI specification.
+"""
+
+from .connector import {{ class_name }}
+{% if essential_types %}
+from .models import (
+{% for type in essential_types %}
+    {{ type }},
+{% endfor %}
+)
+{% endif %}
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+__all__ = [
+    "{{ class_name }}",
+    "AirbyteAuthConfig",
+{% for type in essential_types %}
+    "{{ type }}",
+{% endfor %}
+]
