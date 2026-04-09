@@ -1800,6 +1800,12 @@ SendgridConnectorModel: ConnectorModel = ConnectorModel(
             'List all spam reports',
             'Show all suppression groups',
         ],
+        context_store_search=[
+            'How many contacts are in each marketing list?',
+            'Which single sends were scheduled in the last month?',
+            'What are the most common bounce reasons?',
+            'Show me contacts created in the last 7 days',
+        ],
         search=[
             'How many contacts are in each marketing list?',
             'Which single sends were scheduled in the last month?',
