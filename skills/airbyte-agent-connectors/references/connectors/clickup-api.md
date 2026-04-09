@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/clickup-api/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-04-08 -->
+<!-- Source format: v1 | Generated: 2026-04-09 -->
 
 # Clickup Api
 

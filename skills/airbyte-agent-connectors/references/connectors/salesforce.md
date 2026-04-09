@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED from connectors/salesforce/ -- do not edit manually -->
-<!-- Source format: v1 | Generated: 2026-04-08 -->
+<!-- Source format: v1 | Generated: 2026-04-09 -->
 
 # Salesforce
 
@@ -7,7 +7,7 @@ The Salesforce agent connector is a Python package that equips AI agents to inte
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-salesforce` v0.1.121
+- **Package:** `airbyte-agent-salesforce` v0.1.122
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm)
 - **Status:** complete
@@ -87,11 +87,11 @@ async def salesforce_execute(entity: str, action: str, params: dict | None = Non
 | Entity | Actions |
 |--------|---------|
 | Sobjects | List |
-| Accounts | List, Get, API Search, Search |
-| Contacts | List, Get, API Search, Search |
-| Leads | List, Get, API Search, Search |
-| Opportunities | List, Get, API Search, Search |
-| Tasks | List, Get, API Search, Search |
+| Accounts | List, Get, API Search, Context Store Search |
+| Contacts | List, Get, API Search, Context Store Search |
+| Leads | List, Get, API Search, Context Store Search |
+| Opportunities | List, Get, API Search, Context Store Search |
+| Tasks | List, Get, API Search, Context Store Search |
 | Events | List, Get, API Search |
 | Campaigns | List, Get, API Search |
 | Cases | List, Get, API Search |
