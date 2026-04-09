@@ -36,7 +36,7 @@ from uuid import (
 SentryConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('cdaf146a-9b75-49fd-9dd2-9d64a0bb4781'),
     name='sentry',
-    version='1.0.3',
+    version='1.0.4',
     base_url='https://{hostname}/api/0',
     auth=AuthConfig(
         type=AuthType.BEARER,
