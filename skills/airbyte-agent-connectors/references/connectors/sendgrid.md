@@ -7,7 +7,7 @@ The Sendgrid agent connector is a Python package that equips AI agents to intera
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-sendgrid` v0.1.20
+- **Package:** `airbyte-agent-sendgrid` v0.1.21
 - **Auth:** Token
 - **Docs:** [Official API docs](https://docs.sendgrid.com/api-reference)
 - **Status:** complete
@@ -85,20 +85,20 @@ async def sendgrid_execute(entity: str, action: str, params: dict | None = None)
 
 | Entity | Actions |
 |--------|---------|
-| Contacts | List, Get, Search |
-| Lists | List, Get, Search |
-| Segments | List, Get, Search |
-| Campaigns | List, Search |
-| Singlesends | List, Get, Search |
-| Templates | List, Get, Search |
-| Singlesend Stats | List, Search |
-| Bounces | List, Search |
-| Blocks | List, Search |
+| Contacts | List, Get, Context Store Search |
+| Lists | List, Get, Context Store Search |
+| Segments | List, Get, Context Store Search |
+| Campaigns | List, Context Store Search |
+| Singlesends | List, Get, Context Store Search |
+| Templates | List, Get, Context Store Search |
+| Singlesend Stats | List, Context Store Search |
+| Bounces | List, Context Store Search |
+| Blocks | List, Context Store Search |
 | Spam Reports | List |
-| Invalid Emails | List, Search |
-| Global Suppressions | List, Search |
-| Suppression Groups | List, Get, Search |
-| Suppression Group Members | List, Search |
+| Invalid Emails | List, Context Store Search |
+| Global Suppressions | List, Context Store Search |
+| Suppression Groups | List, Get, Context Store Search |
+| Suppression Group Members | List, Context Store Search |
 
 ## Authentication
 

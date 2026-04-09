@@ -7,7 +7,7 @@ The Monday agent connector is a Python package that equips AI agents to interact
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-monday` v0.1.20
+- **Package:** `airbyte-agent-monday` v0.1.21
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://developer.monday.com/api-reference/docs)
 - **Status:** complete
@@ -84,14 +84,14 @@ async def monday_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Users | List, Get, Search |
-| Boards | List, Get, Search |
-| Items | List, Get, Search |
-| Teams | List, Get, Search |
-| Tags | List, Search |
-| Updates | List, Get, Search |
-| Workspaces | List, Get, Search |
-| Activity Logs | List, Search |
+| Users | List, Get, Context Store Search |
+| Boards | List, Get, Context Store Search |
+| Items | List, Get, Context Store Search |
+| Teams | List, Get, Context Store Search |
+| Tags | List, Context Store Search |
+| Updates | List, Get, Context Store Search |
+| Workspaces | List, Get, Context Store Search |
+| Activity Logs | List, Context Store Search |
 
 ## Authentication
 
