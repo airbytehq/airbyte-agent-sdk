@@ -631,6 +631,12 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
             'Get the details of a specific note',
             'List notes created in the last week',
         ],
+        context_store_search=[
+            'Find meeting notes from last month',
+            'Which meetings had the most attendees?',
+            'Show me notes that mention budget reviews',
+            'What meetings happened this quarter?',
+        ],
         search=[
             'Find meeting notes from last month',
             'Which meetings had the most attendees?',
