@@ -22,12 +22,6 @@ class KlaviyoAuthConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class ProfileLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class ProfileAttributesLocation(BaseModel):
     """Location information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -70,6 +64,12 @@ class ProfileAttributes(BaseModel):
     """Location information"""
     properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom properties")
     """Custom properties"""
+
+class ProfileLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
 
 class Profile(BaseModel):
     """A Klaviyo profile representing a contact"""
@@ -138,6 +138,12 @@ class ListsList(BaseModel):
     data: Union[list[List], Any] = Field(default=None)
     links: Union[ListsListLinks | None, Any] = Field(default=None)
 
+class CampaignLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
+
 class CampaignAttributes(BaseModel):
     """Campaign attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -165,12 +171,6 @@ class CampaignAttributes(BaseModel):
     send_time: Union[str | None, Any] = Field(default=None, description="Actual send time")
     """Actual send time"""
 
-class CampaignLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class Campaign(BaseModel):
     """A Klaviyo campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -195,12 +195,6 @@ class CampaignsList(BaseModel):
     data: Union[list[Campaign], Any] = Field(default=None)
     links: Union[CampaignsListLinks | None, Any] = Field(default=None)
 
-class EventLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class EventAttributes(BaseModel):
     """Event attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -213,6 +207,12 @@ class EventAttributes(BaseModel):
     """Event UUID"""
     event_properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom event properties")
     """Custom event properties"""
+
+class EventLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
 
 class EventRelationshipsMetricData(BaseModel):
     """Nested schema for EventRelationshipsMetric.data"""
