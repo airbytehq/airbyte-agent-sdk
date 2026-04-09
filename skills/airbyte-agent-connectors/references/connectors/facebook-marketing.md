@@ -7,7 +7,7 @@ The Facebook-Marketing agent connector is a Python package that equips AI agents
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-facebook-marketing` v0.1.69
+- **Package:** `airbyte-agent-facebook-marketing` v0.1.70
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://developers.facebook.com/docs/marketing-api/)
 - **Status:** complete
