@@ -7,7 +7,7 @@ The Paypal-Transaction agent connector is a Python package that equips AI agents
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-paypal-transaction` v0.1.12
+- **Package:** `airbyte-agent-paypal-transaction` v0.1.13
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developer.paypal.com/docs/api/transaction-search/v1/)
 - **Status:** complete
@@ -85,13 +85,13 @@ async def paypal_transaction_execute(entity: str, action: str, params: dict | No
 
 | Entity | Actions |
 |--------|---------|
-| Balances | List, Search |
-| Transactions | List, Search |
-| List Payments | List, Search |
-| List Disputes | List, Search |
-| List Products | List, Search |
-| Show Product Details | Get, Search |
-| Search Invoices | List, Search |
+| Balances | List, Context Store Search |
+| Transactions | List, Context Store Search |
+| List Payments | List, Context Store Search |
+| List Disputes | List, Context Store Search |
+| List Products | List, Context Store Search |
+| Show Product Details | Get, Context Store Search |
+| Search Invoices | List, Context Store Search |
 
 ## Authentication
 

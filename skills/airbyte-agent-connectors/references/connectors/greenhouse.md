@@ -7,7 +7,7 @@ The Greenhouse agent connector is a Python package that equips AI agents to inte
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-greenhouse` v0.17.122
+- **Package:** `airbyte-agent-greenhouse` v0.17.123
 - **Auth:** Token
 - **Docs:** [Official API docs](https://developers.greenhouse.io/harvest.html)
 - **Status:** complete
@@ -85,15 +85,15 @@ async def greenhouse_execute(entity: str, action: str, params: dict | None = Non
 
 | Entity | Actions |
 |--------|---------|
-| Candidates | List, Get, Search |
-| Applications | List, Get, Search |
-| Jobs | List, Get, Search |
-| Offers | List, Get, Search |
-| Users | List, Get, Search |
-| Departments | List, Get, Search |
-| Offices | List, Get, Search |
-| Job Posts | List, Get, Search |
-| Sources | List, Search |
+| Candidates | List, Get, Context Store Search |
+| Applications | List, Get, Context Store Search |
+| Jobs | List, Get, Context Store Search |
+| Offers | List, Get, Context Store Search |
+| Users | List, Get, Context Store Search |
+| Departments | List, Get, Context Store Search |
+| Offices | List, Get, Context Store Search |
+| Job Posts | List, Get, Context Store Search |
+| Sources | List, Context Store Search |
 | Scheduled Interviews | List, Get |
 | Application Attachment | Download |
 | Candidate Attachment | Download |

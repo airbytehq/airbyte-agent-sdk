@@ -7,7 +7,7 @@ The Gong agent connector is a Python package that equips AI agents to interact w
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-gong` v0.19.134
+- **Package:** `airbyte-agent-gong` v0.19.135
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://gong.app.gong.io/settings/api/documentation)
 - **Status:** complete
@@ -86,9 +86,9 @@ async def gong_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Users | List, Get, Search |
-| Calls | List, Get, Search |
-| Calls Extensive | List, Search |
+| Users | List, Get, Context Store Search |
+| Calls | List, Get, Context Store Search |
+| Calls Extensive | List, Context Store Search |
 | Call Audio | Download |
 | Call Video | Download |
 | Workspaces | List |
@@ -96,12 +96,12 @@ async def gong_execute(entity: str, action: str, params: dict | None = None):
 | Stats Activity Aggregate | List |
 | Stats Activity Day By Day | List |
 | Stats Interaction | List |
-| Settings Scorecards | List, Search |
+| Settings Scorecards | List, Context Store Search |
 | Settings Trackers | List |
 | Library Folders | List |
 | Library Folder Content | List |
 | Coaching | List |
-| Stats Activity Scorecards | List, Search |
+| Stats Activity Scorecards | List, Context Store Search |
 
 ## Authentication
 
