@@ -7,7 +7,7 @@ The Zendesk-Chat agent connector is a Python package that equips AI agents to in
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-zendesk-chat` v0.1.77
+- **Package:** `airbyte-agent-zendesk-chat` v0.1.78
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/)
 - **Status:** complete
@@ -82,17 +82,17 @@ async def zendesk_chat_execute(entity: str, action: str, params: dict | None = N
 | Entity | Actions |
 |--------|---------|
 | Accounts | Get |
-| Agents | List, Get, Search |
+| Agents | List, Get, Context Store Search |
 | Agent Timeline | List |
 | Bans | List, Get |
-| Chats | List, Get, Search |
-| Departments | List, Get, Search |
+| Chats | List, Get, Context Store Search |
+| Departments | List, Get, Context Store Search |
 | Goals | List, Get |
 | Roles | List, Get |
 | Routing Settings | Get |
-| Shortcuts | List, Get, Search |
+| Shortcuts | List, Get, Context Store Search |
 | Skills | List, Get |
-| Triggers | List, Search |
+| Triggers | List, Context Store Search |
 
 ## Authentication
 

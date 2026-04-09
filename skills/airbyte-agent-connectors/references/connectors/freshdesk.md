@@ -7,7 +7,7 @@ The Freshdesk agent connector is a Python package that equips AI agents to inter
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-freshdesk` v0.1.24
+- **Package:** `airbyte-agent-freshdesk` v0.1.25
 - **Auth:** Token
 - **Docs:** [Official API docs](https://developers.freshdesk.com/api/)
 - **Status:** complete
@@ -86,10 +86,10 @@ async def freshdesk_execute(entity: str, action: str, params: dict | None = None
 
 | Entity | Actions |
 |--------|---------|
-| Tickets | List, Get, Search |
+| Tickets | List, Get, Context Store Search |
 | Contacts | List, Get |
-| Agents | List, Get, Search |
-| Groups | List, Get, Search |
+| Agents | List, Get, Context Store Search |
+| Groups | List, Get, Context Store Search |
 | Companies | List, Get |
 | Roles | List, Get |
 | Satisfaction Ratings | List |

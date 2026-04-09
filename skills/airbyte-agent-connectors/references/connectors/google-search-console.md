@@ -7,7 +7,7 @@ The Google-Search-Console agent connector is a Python package that equips AI age
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-google-search-console` v0.1.14
+- **Package:** `airbyte-agent-google-search-console` v0.1.15
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developers.google.com/webmaster-tools/v1/api_reference_index)
 - **Status:** complete
@@ -87,14 +87,14 @@ async def google_search_console_execute(entity: str, action: str, params: dict |
 
 | Entity | Actions |
 |--------|---------|
-| Sites | List, Get, Search |
-| Sitemaps | List, Get, Search |
-| Search Analytics By Date | List, Search |
-| Search Analytics By Country | List, Search |
-| Search Analytics By Device | List, Search |
-| Search Analytics By Page | List, Search |
-| Search Analytics By Query | List, Search |
-| Search Analytics All Fields | List, Search |
+| Sites | List, Get, Context Store Search |
+| Sitemaps | List, Get, Context Store Search |
+| Search Analytics By Date | List, Context Store Search |
+| Search Analytics By Country | List, Context Store Search |
+| Search Analytics By Device | List, Context Store Search |
+| Search Analytics By Page | List, Context Store Search |
+| Search Analytics By Query | List, Context Store Search |
+| Search Analytics All Fields | List, Context Store Search |
 
 ## Authentication
 
