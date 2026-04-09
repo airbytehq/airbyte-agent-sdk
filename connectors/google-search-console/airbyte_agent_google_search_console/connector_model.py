@@ -1323,6 +1323,13 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
             'Which pages get the most clicks?',
             'What queries bring the most traffic to my site?',
         ],
+        context_store_search=[
+            'Which country has the highest CTR for my site?',
+            'What are my top 10 search queries by impressions?',
+            'Compare mobile vs desktop click-through rates',
+            'Which pages have the worst average position?',
+            'Show me search performance trends over the last month',
+        ],
         search=[
             'Which country has the highest CTR for my site?',
             'What are my top 10 search queries by impressions?',
