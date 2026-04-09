@@ -7,7 +7,7 @@ The Harvest agent connector is a Python package that equips AI agents to interac
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-harvest` v0.1.13
+- **Package:** `airbyte-agent-harvest` v0.1.14
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://help.getharvest.com/api-v2/)
 - **Status:** complete
@@ -87,24 +87,24 @@ async def harvest_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Users | List, Get, Search |
-| Clients | List, Get, Search |
-| Contacts | List, Get, Search |
-| Company | Get, Search |
-| Projects | List, Get, Search |
-| Tasks | List, Get, Search |
-| Time Entries | List, Get, Search |
-| Invoices | List, Get, Search |
-| Invoice Item Categories | List, Get, Search |
-| Estimates | List, Get, Search |
-| Estimate Item Categories | List, Get, Search |
-| Expenses | List, Get, Search |
-| Expense Categories | List, Get, Search |
-| Roles | List, Get, Search |
-| User Assignments | List, Search |
-| Task Assignments | List, Search |
-| Time Projects | List, Search |
-| Time Tasks | List, Search |
+| Users | List, Get, Context Store Search |
+| Clients | List, Get, Context Store Search |
+| Contacts | List, Get, Context Store Search |
+| Company | Get, Context Store Search |
+| Projects | List, Get, Context Store Search |
+| Tasks | List, Get, Context Store Search |
+| Time Entries | List, Get, Context Store Search |
+| Invoices | List, Get, Context Store Search |
+| Invoice Item Categories | List, Get, Context Store Search |
+| Estimates | List, Get, Context Store Search |
+| Estimate Item Categories | List, Get, Context Store Search |
+| Expenses | List, Get, Context Store Search |
+| Expense Categories | List, Get, Context Store Search |
+| Roles | List, Get, Context Store Search |
+| User Assignments | List, Context Store Search |
+| Task Assignments | List, Context Store Search |
+| Time Projects | List, Context Store Search |
+| Time Tasks | List, Context Store Search |
 
 ## Authentication
 
