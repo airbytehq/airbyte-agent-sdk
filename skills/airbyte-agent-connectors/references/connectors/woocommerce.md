@@ -7,7 +7,7 @@ The Woocommerce agent connector is a Python package that equips AI agents to int
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-woocommerce` v0.1.15
+- **Package:** `airbyte-agent-woocommerce` v0.1.16
 - **Auth:** Token
 - **Docs:** [Official API docs](https://woocommerce.github.io/woocommerce-rest-api-docs/)
 - **Status:** complete
@@ -88,22 +88,22 @@ async def woocommerce_execute(entity: str, action: str, params: dict | None = No
 
 | Entity | Actions |
 |--------|---------|
-| Customers | List, Get, Search |
-| Orders | List, Get, Search |
-| Products | List, Get, Search |
-| Coupons | List, Get, Search |
-| Product Categories | List, Get, Search |
-| Product Tags | List, Get, Search |
-| Product Reviews | List, Get, Search |
-| Product Attributes | List, Get, Search |
-| Product Variations | List, Get, Search |
-| Order Notes | List, Get, Search |
-| Refunds | List, Get, Search |
-| Payment Gateways | List, Get, Search |
-| Shipping Methods | List, Get, Search |
-| Shipping Zones | List, Get, Search |
-| Tax Rates | List, Get, Search |
-| Tax Classes | List, Search |
+| Customers | List, Get, Context Store Search |
+| Orders | List, Get, Context Store Search |
+| Products | List, Get, Context Store Search |
+| Coupons | List, Get, Context Store Search |
+| Product Categories | List, Get, Context Store Search |
+| Product Tags | List, Get, Context Store Search |
+| Product Reviews | List, Get, Context Store Search |
+| Product Attributes | List, Get, Context Store Search |
+| Product Variations | List, Get, Context Store Search |
+| Order Notes | List, Get, Context Store Search |
+| Refunds | List, Get, Context Store Search |
+| Payment Gateways | List, Get, Context Store Search |
+| Shipping Methods | List, Get, Context Store Search |
+| Shipping Zones | List, Get, Context Store Search |
+| Tax Rates | List, Get, Context Store Search |
+| Tax Classes | List, Context Store Search |
 
 ## Authentication
 
