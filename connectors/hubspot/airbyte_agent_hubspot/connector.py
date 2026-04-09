@@ -419,14 +419,14 @@ class HubspotConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "api_search", "search"],
+        action: Literal["list", "get", "api_search", "context_store_search"],
         params: Mapping[str, Any]
     ) -> HubspotExecuteResult[Any] | HubspotExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "api_search", "search"],
+        action: Literal["list", "get", "api_search", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -1037,7 +1037,7 @@ class ContactsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ContactsSearchQuery,
         limit: int | None = None,
@@ -1080,7 +1080,7 @@ class ContactsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("contacts", "search", params)
+        result = await self._connector.execute("contacts", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1234,7 +1234,7 @@ class CompaniesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: CompaniesSearchQuery,
         limit: int | None = None,
@@ -1277,7 +1277,7 @@ class CompaniesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("companies", "search", params)
+        result = await self._connector.execute("companies", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1431,7 +1431,7 @@ class DealsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: DealsSearchQuery,
         limit: int | None = None,
@@ -1476,7 +1476,7 @@ class DealsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("deals", "search", params)
+        result = await self._connector.execute("deals", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
