@@ -472,14 +472,14 @@ class GongConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "download", "search"],
+        action: Literal["list", "get", "download", "context_store_search"],
         params: Mapping[str, Any]
     ) -> GongExecuteResult[Any] | GongExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "download", "search"],
+        action: Literal["list", "get", "download", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -960,7 +960,7 @@ class UsersQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: UsersSearchQuery,
         limit: int | None = None,
@@ -1013,7 +1013,7 @@ class UsersQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("users", "search", params)
+        result = await self._connector.execute("users", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1099,7 +1099,7 @@ class CallsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: CallsSearchQuery,
         limit: int | None = None,
@@ -1156,7 +1156,7 @@ class CallsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("calls", "search", params)
+        result = await self._connector.execute("calls", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1217,7 +1217,7 @@ class CallsExtensiveQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: CallsExtensiveSearchQuery,
         limit: int | None = None,
@@ -1263,7 +1263,7 @@ class CallsExtensiveQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("calls_extensive", "search", params)
+        result = await self._connector.execute("calls_extensive", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1661,7 +1661,7 @@ class SettingsScorecardsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SettingsScorecardsSearchQuery,
         limit: int | None = None,
@@ -1706,7 +1706,7 @@ class SettingsScorecardsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("settings_scorecards", "search", params)
+        result = await self._connector.execute("settings_scorecards", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1925,7 +1925,7 @@ class StatsActivityScorecardsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: StatsActivityScorecardsSearchQuery,
         limit: int | None = None,
@@ -1972,7 +1972,7 @@ class StatsActivityScorecardsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("stats_activity_scorecards", "search", params)
+        result = await self._connector.execute("stats_activity_scorecards", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")

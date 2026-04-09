@@ -2954,6 +2954,12 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
             'What trackers are set up in my account?',
             'Get coaching metrics for a manager',
         ],
+        context_store_search=[
+            'What are the activity stats for our sales team?',
+            'Find calls mentioning {keyword} this month',
+            'Show me calls for rep {user_id} in the last 30 days',
+            'Which calls had the longest duration last week?',
+        ],
         search=[
             'What are the activity stats for our sales team?',
             'Find calls mentioning {keyword} this month',
