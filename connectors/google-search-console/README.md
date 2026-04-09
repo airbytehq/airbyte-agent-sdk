@@ -97,14 +97,14 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Sites | [List](./REFERENCE.md#sites-list), [Get](./REFERENCE.md#sites-get), [Search](./REFERENCE.md#sites-search) |
-| Sitemaps | [List](./REFERENCE.md#sitemaps-list), [Get](./REFERENCE.md#sitemaps-get), [Search](./REFERENCE.md#sitemaps-search) |
-| Search Analytics By Date | [List](./REFERENCE.md#search-analytics-by-date-list), [Search](./REFERENCE.md#search-analytics-by-date-search) |
-| Search Analytics By Country | [List](./REFERENCE.md#search-analytics-by-country-list), [Search](./REFERENCE.md#search-analytics-by-country-search) |
-| Search Analytics By Device | [List](./REFERENCE.md#search-analytics-by-device-list), [Search](./REFERENCE.md#search-analytics-by-device-search) |
-| Search Analytics By Page | [List](./REFERENCE.md#search-analytics-by-page-list), [Search](./REFERENCE.md#search-analytics-by-page-search) |
-| Search Analytics By Query | [List](./REFERENCE.md#search-analytics-by-query-list), [Search](./REFERENCE.md#search-analytics-by-query-search) |
-| Search Analytics All Fields | [List](./REFERENCE.md#search-analytics-all-fields-list), [Search](./REFERENCE.md#search-analytics-all-fields-search) |
+| Sites | [List](./REFERENCE.md#sites-list), [Get](./REFERENCE.md#sites-get), [Context Store Search](./REFERENCE.md#sites-context-store-search) |
+| Sitemaps | [List](./REFERENCE.md#sitemaps-list), [Get](./REFERENCE.md#sitemaps-get), [Context Store Search](./REFERENCE.md#sitemaps-context-store-search) |
+| Search Analytics By Date | [List](./REFERENCE.md#search-analytics-by-date-list), [Context Store Search](./REFERENCE.md#search-analytics-by-date-context-store-search) |
+| Search Analytics By Country | [List](./REFERENCE.md#search-analytics-by-country-list), [Context Store Search](./REFERENCE.md#search-analytics-by-country-context-store-search) |
+| Search Analytics By Device | [List](./REFERENCE.md#search-analytics-by-device-list), [Context Store Search](./REFERENCE.md#search-analytics-by-device-context-store-search) |
+| Search Analytics By Page | [List](./REFERENCE.md#search-analytics-by-page-list), [Context Store Search](./REFERENCE.md#search-analytics-by-page-context-store-search) |
+| Search Analytics By Query | [List](./REFERENCE.md#search-analytics-by-query-list), [Context Store Search](./REFERENCE.md#search-analytics-by-query-context-store-search) |
+| Search Analytics All Fields | [List](./REFERENCE.md#search-analytics-all-fields-list), [Context Store Search](./REFERENCE.md#search-analytics-all-fields-context-store-search) |
 
 
 ### Authentication
@@ -117,7 +117,7 @@ See the official [Google-Search-Console API reference](https://developers.google
 
 ## Version information
 
-- **Package version:** 0.1.14
+- **Package version:** 0.1.15
 - **Connector version:** 1.0.2
-- **Generated with Connector SDK commit SHA:** eeaf9a603e6c650b89bac7339c63f31ef77f5bcf
+- **Generated with Connector SDK commit SHA:** 3cecc817f060335c13c5d88bc9ad34a4dace961f
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/google-search-console/CHANGELOG.md)
