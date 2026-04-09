@@ -219,14 +219,14 @@ class GranolaConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> GranolaExecuteResult[Any] | GranolaExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -617,7 +617,7 @@ class NotesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: NotesSearchQuery,
         limit: int | None = None,
@@ -666,7 +666,7 @@ class NotesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("notes", "search", params)
+        result = await self._connector.execute("notes", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
