@@ -5260,6 +5260,14 @@ HarvestConnectorModel: ConnectorModel = ConnectorModel(
             'List all expense categories',
             'Get company information',
         ],
+        context_store_search=[
+            'How many hours were logged last week?',
+            'Which projects have the most time entries?',
+            'Show me all unbilled time entries',
+            'What are the active projects for a specific client?',
+            'List all overdue invoices',
+            'Which users logged the most hours this month?',
+        ],
         search=[
             'How many hours were logged last week?',
             'Which projects have the most time entries?',
