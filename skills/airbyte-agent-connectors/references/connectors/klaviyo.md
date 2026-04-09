@@ -7,7 +7,7 @@ The Klaviyo agent connector is a Python package that equips AI agents to interac
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-klaviyo` v0.1.53
+- **Package:** `airbyte-agent-klaviyo` v0.1.54
 - **Auth:** Token
 - **Docs:** [Official API docs](https://developers.klaviyo.com/en/reference/api_overview)
 - **Status:** complete
@@ -87,13 +87,13 @@ async def klaviyo_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Profiles | List, Get, Search |
-| Lists | List, Get, Search |
-| Campaigns | List, Get, Search |
-| Events | List, Search |
-| Metrics | List, Get, Search |
-| Flows | List, Get, Search |
-| Email Templates | List, Get, Search |
+| Profiles | List, Get, Context Store Search |
+| Lists | List, Get, Context Store Search |
+| Campaigns | List, Get, Context Store Search |
+| Events | List, Context Store Search |
+| Metrics | List, Get, Context Store Search |
+| Flows | List, Get, Context Store Search |
+| Email Templates | List, Get, Context Store Search |
 
 ## Authentication
 

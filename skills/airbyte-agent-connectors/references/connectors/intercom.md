@@ -7,7 +7,7 @@ The Intercom agent connector is a Python package that equips AI agents to intera
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-intercom` v0.1.97
+- **Package:** `airbyte-agent-intercom` v0.1.98
 - **Auth:** Token
 - **Docs:** [Official API docs](https://developers.intercom.com/docs/references/rest-api/api.intercom.io)
 - **Status:** complete
@@ -91,10 +91,10 @@ async def intercom_execute(entity: str, action: str, params: dict | None = None)
 
 | Entity | Actions |
 |--------|---------|
-| Contacts | List, Create, Get, Update, Search |
-| Conversations | List, Get, Search |
-| Companies | List, Create, Get, Update, Search |
-| Teams | List, Get, Search |
+| Contacts | List, Create, Get, Update, Context Store Search |
+| Conversations | List, Get, Context Store Search |
+| Companies | List, Create, Get, Update, Context Store Search |
+| Teams | List, Get, Context Store Search |
 | Admins | List, Get |
 | Tags | List, Create, Get |
 | Notes | Create |
