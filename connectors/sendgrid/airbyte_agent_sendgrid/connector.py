@@ -503,14 +503,14 @@ class SendgridConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> SendgridExecuteResult[Any] | SendgridExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -894,7 +894,7 @@ class ContactsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ContactsSearchQuery,
         limit: int | None = None,
@@ -951,7 +951,7 @@ class ContactsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("contacts", "search", params)
+        result = await self._connector.execute("contacts", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1031,7 +1031,7 @@ class ListsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ListsSearchQuery,
         limit: int | None = None,
@@ -1072,7 +1072,7 @@ class ListsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("lists", "search", params)
+        result = await self._connector.execute("lists", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1145,7 +1145,7 @@ class SegmentsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SegmentsSearchQuery,
         limit: int | None = None,
@@ -1192,7 +1192,7 @@ class SegmentsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("segments", "search", params)
+        result = await self._connector.execute("segments", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1247,7 +1247,7 @@ class CampaignsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: CampaignsSearchQuery,
         limit: int | None = None,
@@ -1291,7 +1291,7 @@ class CampaignsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("campaigns", "search", params)
+        result = await self._connector.execute("campaigns", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1371,7 +1371,7 @@ class SinglesendsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SinglesendsSearchQuery,
         limit: int | None = None,
@@ -1416,7 +1416,7 @@ class SinglesendsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("singlesends", "search", params)
+        result = await self._connector.execute("singlesends", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1498,7 +1498,7 @@ class TemplatesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: TemplatesSearchQuery,
         limit: int | None = None,
@@ -1540,7 +1540,7 @@ class TemplatesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("templates", "search", params)
+        result = await self._connector.execute("templates", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1595,7 +1595,7 @@ class SinglesendStatsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SinglesendStatsSearchQuery,
         limit: int | None = None,
@@ -1637,7 +1637,7 @@ class SinglesendStatsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("singlesend_stats", "search", params)
+        result = await self._connector.execute("singlesend_stats", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1694,7 +1694,7 @@ class BouncesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: BouncesSearchQuery,
         limit: int | None = None,
@@ -1735,7 +1735,7 @@ class BouncesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("bounces", "search", params)
+        result = await self._connector.execute("bounces", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1792,7 +1792,7 @@ class BlocksQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: BlocksSearchQuery,
         limit: int | None = None,
@@ -1833,7 +1833,7 @@ class BlocksQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("blocks", "search", params)
+        result = await self._connector.execute("blocks", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1930,7 +1930,7 @@ class InvalidEmailsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: InvalidEmailsSearchQuery,
         limit: int | None = None,
@@ -1970,7 +1970,7 @@ class InvalidEmailsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("invalid_emails", "search", params)
+        result = await self._connector.execute("invalid_emails", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -2027,7 +2027,7 @@ class GlobalSuppressionsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: GlobalSuppressionsSearchQuery,
         limit: int | None = None,
@@ -2066,7 +2066,7 @@ class GlobalSuppressionsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("global_suppressions", "search", params)
+        result = await self._connector.execute("global_suppressions", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -2139,7 +2139,7 @@ class SuppressionGroupsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SuppressionGroupsSearchQuery,
         limit: int | None = None,
@@ -2181,7 +2181,7 @@ class SuppressionGroupsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("suppression_groups", "search", params)
+        result = await self._connector.execute("suppression_groups", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -2238,7 +2238,7 @@ class SuppressionGroupMembersQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SuppressionGroupMembersSearchQuery,
         limit: int | None = None,
@@ -2279,7 +2279,7 @@ class SuppressionGroupMembersQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("suppression_group_members", "search", params)
+        result = await self._connector.execute("suppression_group_members", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
