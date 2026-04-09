@@ -7,7 +7,7 @@ The Gitlab agent connector is a Python package that equips AI agents to interact
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-gitlab` v0.1.15
+- **Package:** `airbyte-agent-gitlab` v0.1.16
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://docs.gitlab.com/ee/api/rest/)
 - **Status:** complete
@@ -84,20 +84,20 @@ async def gitlab_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Projects | List, Get, Search |
-| Issues | List, Get, Search |
-| Merge Requests | List, Get, Search |
-| Users | List, Get, Search |
-| Commits | List, Get, Search |
-| Groups | List, Get, Search |
-| Branches | List, Get, Search |
-| Pipelines | List, Get, Search |
-| Group Members | List, Get, Search |
-| Project Members | List, Get, Search |
-| Releases | List, Get, Search |
-| Tags | List, Get, Search |
-| Group Milestones | List, Get, Search |
-| Project Milestones | List, Get, Search |
+| Projects | List, Get, Context Store Search |
+| Issues | List, Get, Context Store Search |
+| Merge Requests | List, Get, Context Store Search |
+| Users | List, Get, Context Store Search |
+| Commits | List, Get, Context Store Search |
+| Groups | List, Get, Context Store Search |
+| Branches | List, Get, Context Store Search |
+| Pipelines | List, Get, Context Store Search |
+| Group Members | List, Get, Context Store Search |
+| Project Members | List, Get, Context Store Search |
+| Releases | List, Get, Context Store Search |
+| Tags | List, Get, Context Store Search |
+| Group Milestones | List, Get, Context Store Search |
+| Project Milestones | List, Get, Context Store Search |
 
 ## Authentication
 
