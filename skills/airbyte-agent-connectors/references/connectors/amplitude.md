@@ -7,7 +7,7 @@ The Amplitude agent connector is a Python package that equips AI agents to inter
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-amplitude` v0.1.16
+- **Package:** `airbyte-agent-amplitude` v0.1.17
 - **Auth:** Token
 - **Docs:** [Official API docs](https://www.docs.developers.amplitude.com/analytics/apis/)
 - **Status:** complete
@@ -80,11 +80,11 @@ async def amplitude_execute(entity: str, action: str, params: dict | None = None
 
 | Entity | Actions |
 |--------|---------|
-| Annotations | List, Get, Search |
-| Cohorts | List, Get, Search |
-| Events List | List, Search |
-| Active Users | List, Search |
-| Average Session Length | List, Search |
+| Annotations | List, Get, Context Store Search |
+| Cohorts | List, Get, Context Store Search |
+| Events List | List, Context Store Search |
+| Active Users | List, Context Store Search |
+| Average Session Length | List, Context Store Search |
 
 ## Authentication
 
