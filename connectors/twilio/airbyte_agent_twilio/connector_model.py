@@ -3635,6 +3635,14 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
             'Show me addresses on my account',
             'List transcriptions',
         ],
+        context_store_search=[
+            'What are my top 10 most expensive calls this month?',
+            'How many SMS messages did I send vs receive in the last 30 days?',
+            'Summarize my usage costs by category',
+            'Which phone numbers have the most incoming calls?',
+            'Show me all failed messages and their error codes',
+            'What is the average call duration for outbound calls?',
+        ],
         search=[
             'What are my top 10 most expensive calls this month?',
             'How many SMS messages did I send vs receive in the last 30 days?',

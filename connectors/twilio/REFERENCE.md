@@ -8,17 +8,17 @@ The Twilio connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Accounts | [List](#accounts-list), [Get](#accounts-get), [Search](#accounts-search) |
-| Calls | [List](#calls-list), [Get](#calls-get), [Search](#calls-search) |
-| Messages | [List](#messages-list), [Get](#messages-get), [Search](#messages-search) |
-| Incoming Phone Numbers | [List](#incoming-phone-numbers-list), [Get](#incoming-phone-numbers-get), [Search](#incoming-phone-numbers-search) |
-| Recordings | [List](#recordings-list), [Get](#recordings-get), [Search](#recordings-search) |
-| Conferences | [List](#conferences-list), [Get](#conferences-get), [Search](#conferences-search) |
-| Usage Records | [List](#usage-records-list), [Search](#usage-records-search) |
-| Addresses | [List](#addresses-list), [Get](#addresses-get), [Search](#addresses-search) |
-| Queues | [List](#queues-list), [Get](#queues-get), [Search](#queues-search) |
-| Transcriptions | [List](#transcriptions-list), [Get](#transcriptions-get), [Search](#transcriptions-search) |
-| Outgoing Caller Ids | [List](#outgoing-caller-ids-list), [Get](#outgoing-caller-ids-get), [Search](#outgoing-caller-ids-search) |
+| Accounts | [List](#accounts-list), [Get](#accounts-get), [Context Store Search](#accounts-context-store-search) |
+| Calls | [List](#calls-list), [Get](#calls-get), [Context Store Search](#calls-context-store-search) |
+| Messages | [List](#messages-list), [Get](#messages-get), [Context Store Search](#messages-context-store-search) |
+| Incoming Phone Numbers | [List](#incoming-phone-numbers-list), [Get](#incoming-phone-numbers-get), [Context Store Search](#incoming-phone-numbers-context-store-search) |
+| Recordings | [List](#recordings-list), [Get](#recordings-get), [Context Store Search](#recordings-context-store-search) |
+| Conferences | [List](#conferences-list), [Get](#conferences-get), [Context Store Search](#conferences-context-store-search) |
+| Usage Records | [List](#usage-records-list), [Context Store Search](#usage-records-context-store-search) |
+| Addresses | [List](#addresses-list), [Get](#addresses-get), [Context Store Search](#addresses-context-store-search) |
+| Queues | [List](#queues-list), [Get](#queues-get), [Context Store Search](#queues-context-store-search) |
+| Transcriptions | [List](#transcriptions-list), [Get](#transcriptions-get), [Context Store Search](#transcriptions-context-store-search) |
+| Outgoing Caller Ids | [List](#outgoing-caller-ids-list), [Get](#outgoing-caller-ids-get), [Context Store Search](#outgoing-caller-ids-context-store-search) |
 
 ## Accounts
 
@@ -138,14 +138,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Accounts Search
+### Accounts Context Store Search
 
 Search and filter accounts records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.accounts.search(
+await twilio.accounts.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -158,7 +158,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "accounts",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -371,14 +371,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Calls Search
+### Calls Context Store Search
 
 Search and filter calls records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.calls.search(
+await twilio.calls.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -391,7 +391,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "calls",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -600,14 +600,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Messages Search
+### Messages Context Store Search
 
 Search and filter messages records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.messages.search(
+await twilio.messages.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -620,7 +620,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "messages",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -865,14 +865,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Incoming Phone Numbers Search
+### Incoming Phone Numbers Context Store Search
 
 Search and filter incoming phone numbers records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.incoming_phone_numbers.search(
+await twilio.incoming_phone_numbers.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -885,7 +885,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "incoming_phone_numbers",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -1082,14 +1082,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Recordings Search
+### Recordings Context Store Search
 
 Search and filter recordings records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.recordings.search(
+await twilio.recordings.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -1102,7 +1102,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "recordings",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -1289,14 +1289,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Conferences Search
+### Conferences Context Store Search
 
 Search and filter conferences records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.conferences.search(
+await twilio.conferences.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -1309,7 +1309,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "conferences",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -1432,14 +1432,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Usage Records Search
+### Usage Records Context Store Search
 
 Search and filter usage records records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.usage_records.search(
+await twilio.usage_records.context_store_search(
     query={"filter": {"eq": {"account_sid": "<str>"}}}
 )
 ```
@@ -1452,7 +1452,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "usage_records",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"account_sid": "<str>"}}}
     }
@@ -1649,14 +1649,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Addresses Search
+### Addresses Context Store Search
 
 Search and filter addresses records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.addresses.search(
+await twilio.addresses.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -1669,7 +1669,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "addresses",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -1854,14 +1854,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Queues Search
+### Queues Context Store Search
 
 Search and filter queues records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.queues.search(
+await twilio.queues.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -1874,7 +1874,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "queues",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -2059,14 +2059,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Transcriptions Search
+### Transcriptions Context Store Search
 
 Search and filter transcriptions records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.transcriptions.search(
+await twilio.transcriptions.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -2079,7 +2079,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "transcriptions",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
@@ -2254,14 +2254,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Outgoing Caller Ids Search
+### Outgoing Caller Ids Context Store Search
 
 Search and filter outgoing caller ids records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await twilio.outgoing_caller_ids.search(
+await twilio.outgoing_caller_ids.context_store_search(
     query={"filter": {"eq": {"sid": "<str>"}}}
 )
 ```
@@ -2274,7 +2274,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "outgoing_caller_ids",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"sid": "<str>"}}}
     }
