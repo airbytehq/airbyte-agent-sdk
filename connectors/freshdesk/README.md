@@ -96,10 +96,10 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Tickets | [List](./REFERENCE.md#tickets-list), [Get](./REFERENCE.md#tickets-get), [Search](./REFERENCE.md#tickets-search) |
+| Tickets | [List](./REFERENCE.md#tickets-list), [Get](./REFERENCE.md#tickets-get), [Context Store Search](./REFERENCE.md#tickets-context-store-search) |
 | Contacts | [List](./REFERENCE.md#contacts-list), [Get](./REFERENCE.md#contacts-get) |
-| Agents | [List](./REFERENCE.md#agents-list), [Get](./REFERENCE.md#agents-get), [Search](./REFERENCE.md#agents-search) |
-| Groups | [List](./REFERENCE.md#groups-list), [Get](./REFERENCE.md#groups-get), [Search](./REFERENCE.md#groups-search) |
+| Agents | [List](./REFERENCE.md#agents-list), [Get](./REFERENCE.md#agents-get), [Context Store Search](./REFERENCE.md#agents-context-store-search) |
+| Groups | [List](./REFERENCE.md#groups-list), [Get](./REFERENCE.md#groups-get), [Context Store Search](./REFERENCE.md#groups-context-store-search) |
 | Companies | [List](./REFERENCE.md#companies-list), [Get](./REFERENCE.md#companies-get) |
 | Roles | [List](./REFERENCE.md#roles-list), [Get](./REFERENCE.md#roles-get) |
 | Satisfaction Ratings | [List](./REFERENCE.md#satisfaction-ratings-list) |
@@ -118,7 +118,7 @@ See the official [Freshdesk API reference](https://developers.freshdesk.com/api/
 
 ## Version information
 
-- **Package version:** 0.1.24
+- **Package version:** 0.1.25
 - **Connector version:** 1.0.2
-- **Generated with Connector SDK commit SHA:** eeaf9a603e6c650b89bac7339c63f31ef77f5bcf
+- **Generated with Connector SDK commit SHA:** 3cecc817f060335c13c5d88bc9ad34a4dace961f
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/freshdesk/CHANGELOG.md)

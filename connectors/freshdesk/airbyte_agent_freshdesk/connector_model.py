@@ -2877,6 +2877,14 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
             'Show me the ticket fields and their options',
             'List time entries for tickets',
         ],
+        context_store_search=[
+            'What are the high priority tickets from last week?',
+            'Which tickets have breached their SLA due date?',
+            'Show me tickets assigned to agent {agent_name}',
+            'Find all tickets from company {company_name}',
+            'How many tickets were created this month by status?',
+            'What are the satisfaction ratings for resolved tickets?',
+        ],
         search=[
             'What are the high priority tickets from last week?',
             'Which tickets have breached their SLA due date?',
