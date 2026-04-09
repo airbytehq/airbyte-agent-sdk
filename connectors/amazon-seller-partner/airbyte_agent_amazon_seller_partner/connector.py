@@ -336,14 +336,14 @@ class AmazonSellerPartnerConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> AmazonSellerPartnerExecuteResult[Any] | AmazonSellerPartnerExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -859,7 +859,7 @@ class OrdersQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: OrdersSearchQuery,
         limit: int | None = None,
@@ -930,7 +930,7 @@ class OrdersQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("orders", "search", params)
+        result = await self._connector.execute("orders", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -988,7 +988,7 @@ class OrderItemsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: OrderItemsSearchQuery,
         limit: int | None = None,
@@ -1062,7 +1062,7 @@ class OrderItemsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("order_items", "search", params)
+        result = await self._connector.execute("order_items", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1126,7 +1126,7 @@ class ListFinancialEventGroupsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ListFinancialEventGroupsSearchQuery,
         limit: int | None = None,
@@ -1174,7 +1174,7 @@ class ListFinancialEventGroupsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("list_financial_event_groups", "search", params)
+        result = await self._connector.execute("list_financial_event_groups", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1238,7 +1238,7 @@ class ListFinancialEventsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ListFinancialEventsSearchQuery,
         limit: int | None = None,
@@ -1310,7 +1310,7 @@ class ListFinancialEventsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("list_financial_events", "search", params)
+        result = await self._connector.execute("list_financial_events", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")

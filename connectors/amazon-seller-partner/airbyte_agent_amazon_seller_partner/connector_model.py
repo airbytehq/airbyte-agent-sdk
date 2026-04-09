@@ -2362,6 +2362,12 @@ AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
             'Search catalog items by keyword',
             'List recent reports',
         ],
+        context_store_search=[
+            'What are my top-selling products by order volume?',
+            'Show orders from the last 30 days with status Shipped',
+            'Find financial events related to refunds',
+            'Which orders have the highest total value?',
+        ],
         search=[
             'What are my top-selling products by order volume?',
             'Show orders from the last 30 days with status Shipped',
