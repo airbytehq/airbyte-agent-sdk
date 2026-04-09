@@ -382,14 +382,14 @@ class KlaviyoConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> KlaviyoExecuteResult[Any] | KlaviyoExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -770,7 +770,7 @@ class ProfilesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ProfilesSearchQuery,
         limit: int | None = None,
@@ -814,7 +814,7 @@ class ProfilesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("profiles", "search", params)
+        result = await self._connector.execute("profiles", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -896,7 +896,7 @@ class ListsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ListsSearchQuery,
         limit: int | None = None,
@@ -939,7 +939,7 @@ class ListsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("lists", "search", params)
+        result = await self._connector.execute("lists", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1024,7 +1024,7 @@ class CampaignsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: CampaignsSearchQuery,
         limit: int | None = None,
@@ -1067,7 +1067,7 @@ class CampaignsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("campaigns", "search", params)
+        result = await self._connector.execute("campaigns", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1127,7 +1127,7 @@ class EventsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: EventsSearchQuery,
         limit: int | None = None,
@@ -1170,7 +1170,7 @@ class EventsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("events", "search", params)
+        result = await self._connector.execute("events", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1252,7 +1252,7 @@ class MetricsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: MetricsSearchQuery,
         limit: int | None = None,
@@ -1295,7 +1295,7 @@ class MetricsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("metrics", "search", params)
+        result = await self._connector.execute("metrics", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1377,7 +1377,7 @@ class FlowsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: FlowsSearchQuery,
         limit: int | None = None,
@@ -1420,7 +1420,7 @@ class FlowsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("flows", "search", params)
+        result = await self._connector.execute("flows", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1502,7 +1502,7 @@ class EmailTemplatesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: EmailTemplatesSearchQuery,
         limit: int | None = None,
@@ -1544,7 +1544,7 @@ class EmailTemplatesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("email_templates", "search", params)
+        result = await self._connector.execute("email_templates", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
