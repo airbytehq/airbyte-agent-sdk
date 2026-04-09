@@ -400,6 +400,7 @@ AirtableConnectorModel: ConnectorModel = ConnectorModel(
             'Show me recent records from a table',
             'What fields are in a table?',
         ],
+        context_store_search=["List records where Status is 'Done' in table tblXXX", 'Find records created last week in table tblXXX', 'Show me records updated in the last 30 days in base appXXX'],
         search=["List records where Status is 'Done' in table tblXXX", 'Find records created last week in table tblXXX', 'Show me records updated in the last 30 days in base appXXX'],
         unsupported=[
             'Create a new record in Airtable',

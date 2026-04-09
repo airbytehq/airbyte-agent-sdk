@@ -94,8 +94,8 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Bases | [List](./REFERENCE.md#bases-list), [Search](./REFERENCE.md#bases-search) |
-| Tables | [List](./REFERENCE.md#tables-list), [Search](./REFERENCE.md#tables-search) |
+| Bases | [List](./REFERENCE.md#bases-list), [Context Store Search](./REFERENCE.md#bases-context-store-search) |
+| Tables | [List](./REFERENCE.md#tables-list), [Context Store Search](./REFERENCE.md#tables-context-store-search) |
 | Records | [List](./REFERENCE.md#records-list), [Get](./REFERENCE.md#records-get) |
 
 
@@ -109,7 +109,7 @@ See the official [Airtable API reference](https://airtable.com/developers/web/ap
 
 ## Version information
 
-- **Package version:** 0.1.57
+- **Package version:** 0.1.58
 - **Connector version:** 1.0.7
-- **Generated with Connector SDK commit SHA:** eeaf9a603e6c650b89bac7339c63f31ef77f5bcf
+- **Generated with Connector SDK commit SHA:** 3cecc817f060335c13c5d88bc9ad34a4dace961f
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/airtable/CHANGELOG.md)
