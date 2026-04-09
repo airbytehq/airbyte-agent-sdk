@@ -3220,6 +3220,13 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
             'List all conversions configured for my ad accounts',
             'Show me account users for my LinkedIn ads accounts',
         ],
+        context_store_search=[
+            'Which campaigns have the highest click-through rate?',
+            'What is the total ad spend across all campaigns this month?',
+            'Show me campaigns with status ACTIVE',
+            'Which creatives have the most impressions?',
+            'Compare campaign performance by cost type',
+        ],
         search=[
             'Which campaigns have the highest click-through rate?',
             'What is the total ad spend across all campaigns this month?',
