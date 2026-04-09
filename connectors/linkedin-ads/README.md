@@ -95,14 +95,14 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Accounts | [List](./REFERENCE.md#accounts-list), [Get](./REFERENCE.md#accounts-get), [Search](./REFERENCE.md#accounts-search) |
-| Account Users | [List](./REFERENCE.md#account-users-list), [Search](./REFERENCE.md#account-users-search) |
-| Campaigns | [List](./REFERENCE.md#campaigns-list), [Get](./REFERENCE.md#campaigns-get), [Search](./REFERENCE.md#campaigns-search) |
-| Campaign Groups | [List](./REFERENCE.md#campaign-groups-list), [Get](./REFERENCE.md#campaign-groups-get), [Search](./REFERENCE.md#campaign-groups-search) |
-| Creatives | [List](./REFERENCE.md#creatives-list), [Get](./REFERENCE.md#creatives-get), [Search](./REFERENCE.md#creatives-search) |
-| Conversions | [List](./REFERENCE.md#conversions-list), [Get](./REFERENCE.md#conversions-get), [Search](./REFERENCE.md#conversions-search) |
-| Ad Campaign Analytics | [List](./REFERENCE.md#ad-campaign-analytics-list), [Search](./REFERENCE.md#ad-campaign-analytics-search) |
-| Ad Creative Analytics | [List](./REFERENCE.md#ad-creative-analytics-list), [Search](./REFERENCE.md#ad-creative-analytics-search) |
+| Accounts | [List](./REFERENCE.md#accounts-list), [Get](./REFERENCE.md#accounts-get), [Context Store Search](./REFERENCE.md#accounts-context-store-search) |
+| Account Users | [List](./REFERENCE.md#account-users-list), [Context Store Search](./REFERENCE.md#account-users-context-store-search) |
+| Campaigns | [List](./REFERENCE.md#campaigns-list), [Get](./REFERENCE.md#campaigns-get), [Context Store Search](./REFERENCE.md#campaigns-context-store-search) |
+| Campaign Groups | [List](./REFERENCE.md#campaign-groups-list), [Get](./REFERENCE.md#campaign-groups-get), [Context Store Search](./REFERENCE.md#campaign-groups-context-store-search) |
+| Creatives | [List](./REFERENCE.md#creatives-list), [Get](./REFERENCE.md#creatives-get), [Context Store Search](./REFERENCE.md#creatives-context-store-search) |
+| Conversions | [List](./REFERENCE.md#conversions-list), [Get](./REFERENCE.md#conversions-get), [Context Store Search](./REFERENCE.md#conversions-context-store-search) |
+| Ad Campaign Analytics | [List](./REFERENCE.md#ad-campaign-analytics-list), [Context Store Search](./REFERENCE.md#ad-campaign-analytics-context-store-search) |
+| Ad Creative Analytics | [List](./REFERENCE.md#ad-creative-analytics-list), [Context Store Search](./REFERENCE.md#ad-creative-analytics-context-store-search) |
 
 
 ### Authentication
@@ -115,7 +115,7 @@ See the official [Linkedin-Ads API reference](https://learn.microsoft.com/en-us/
 
 ## Version information
 
-- **Package version:** 0.1.15
+- **Package version:** 0.1.16
 - **Connector version:** 1.0.3
-- **Generated with Connector SDK commit SHA:** eeaf9a603e6c650b89bac7339c63f31ef77f5bcf
+- **Generated with Connector SDK commit SHA:** 3cecc817f060335c13c5d88bc9ad34a4dace961f
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/linkedin-ads/CHANGELOG.md)
