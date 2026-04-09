@@ -639,14 +639,14 @@ class StripeConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "create", "get", "update", "delete", "api_search", "search"],
+        action: Literal["list", "create", "get", "update", "delete", "api_search", "context_store_search"],
         params: Mapping[str, Any]
     ) -> StripeExecuteResult[Any] | StripeExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "create", "get", "update", "delete", "api_search", "search"],
+        action: Literal["list", "create", "get", "update", "delete", "api_search", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -1153,7 +1153,7 @@ class CustomersQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: CustomersSearchQuery,
         limit: int | None = None,
@@ -1221,7 +1221,7 @@ class CustomersQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("customers", "search", params)
+        result = await self._connector.execute("customers", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1359,7 +1359,7 @@ class InvoicesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: InvoicesSearchQuery,
         limit: int | None = None,
@@ -1486,7 +1486,7 @@ class InvoicesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("invoices", "search", params)
+        result = await self._connector.execute("invoices", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1615,7 +1615,7 @@ class ChargesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: ChargesSearchQuery,
         limit: int | None = None,
@@ -1703,7 +1703,7 @@ class ChargesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("charges", "search", params)
+        result = await self._connector.execute("charges", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1850,7 +1850,7 @@ class SubscriptionsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: SubscriptionsSearchQuery,
         limit: int | None = None,
@@ -1938,7 +1938,7 @@ class SubscriptionsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("subscriptions", "search", params)
+        result = await self._connector.execute("subscriptions", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -2052,7 +2052,7 @@ class RefundsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: RefundsSearchQuery,
         limit: int | None = None,
@@ -2105,7 +2105,7 @@ class RefundsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("refunds", "search", params)
+        result = await self._connector.execute("refunds", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")

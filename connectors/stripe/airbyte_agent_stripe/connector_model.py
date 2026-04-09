@@ -17892,6 +17892,18 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
             'List recent invoices',
             'List active subscriptions',
         ],
+        context_store_search=[
+            'Show me my top 10 customers by total revenue this month',
+            'List all customers who have spent over $5,000 in the last quarter',
+            'Analyze payment trends for my Stripe customers',
+            'Identify which customers have the most consistent subscription payments',
+            'Give me insights into my customer retention rates',
+            'Summarize the payment history for {customer}',
+            'Compare customer spending patterns from last month to this month',
+            'Show me details about my highest-value Stripe customers',
+            'What are the key financial insights from my customer base?',
+            'Break down my customers by their average transaction value',
+        ],
         search=[
             'Show me my top 10 customers by total revenue this month',
             'List all customers who have spent over $5,000 in the last quarter',

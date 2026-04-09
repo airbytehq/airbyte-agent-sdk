@@ -8,11 +8,11 @@ The Stripe connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Customers | [List](#customers-list), [Create](#customers-create), [Get](#customers-get), [Update](#customers-update), [Delete](#customers-delete), [API Search](#customers-api-search), [Search](#customers-search) |
-| Invoices | [List](#invoices-list), [Get](#invoices-get), [API Search](#invoices-api-search), [Search](#invoices-search) |
-| Charges | [List](#charges-list), [Get](#charges-get), [API Search](#charges-api-search), [Search](#charges-search) |
-| Subscriptions | [List](#subscriptions-list), [Get](#subscriptions-get), [API Search](#subscriptions-api-search), [Search](#subscriptions-search) |
-| Refunds | [List](#refunds-list), [Create](#refunds-create), [Get](#refunds-get), [Search](#refunds-search) |
+| Customers | [List](#customers-list), [Create](#customers-create), [Get](#customers-get), [Update](#customers-update), [Delete](#customers-delete), [API Search](#customers-api-search), [Context Store Search](#customers-context-store-search) |
+| Invoices | [List](#invoices-list), [Get](#invoices-get), [API Search](#invoices-api-search), [Context Store Search](#invoices-context-store-search) |
+| Charges | [List](#charges-list), [Get](#charges-get), [API Search](#charges-api-search), [Context Store Search](#charges-context-store-search) |
+| Subscriptions | [List](#subscriptions-list), [Get](#subscriptions-get), [API Search](#subscriptions-api-search), [Context Store Search](#subscriptions-context-store-search) |
+| Refunds | [List](#refunds-list), [Create](#refunds-create), [Get](#refunds-get), [Context Store Search](#refunds-context-store-search) |
 | Products | [List](#products-list), [Create](#products-create), [Get](#products-get), [Update](#products-update), [Delete](#products-delete), [API Search](#products-api-search) |
 | Balance | [Get](#balance-get) |
 | Balance Transactions | [List](#balance-transactions-list), [Get](#balance-transactions-get) |
@@ -457,14 +457,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Customers Search
+### Customers Context Store Search
 
 Search and filter customers records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await stripe.customers.search(
+await stripe.customers.context_store_search(
     query={"filter": {"eq": {"account_balance": 0}}}
 )
 ```
@@ -477,7 +477,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "customers",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"account_balance": 0}}}
     }
@@ -1005,14 +1005,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Invoices Search
+### Invoices Context Store Search
 
 Search and filter invoices records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await stripe.invoices.search(
+await stripe.invoices.context_store_search(
     query={"filter": {"eq": {"account_country": "<str>"}}}
 )
 ```
@@ -1025,7 +1025,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "invoices",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"account_country": "<str>"}}}
     }
@@ -1548,14 +1548,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Charges Search
+### Charges Context Store Search
 
 Search and filter charges records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await stripe.charges.search(
+await stripe.charges.context_store_search(
     query={"filter": {"eq": {"amount": 0}}}
 )
 ```
@@ -1568,7 +1568,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "charges",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"amount": 0}}}
     }
@@ -2028,14 +2028,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Subscriptions Search
+### Subscriptions Context Store Search
 
 Search and filter subscriptions records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await stripe.subscriptions.search(
+await stripe.subscriptions.context_store_search(
     query={"filter": {"eq": {"application": "<str>"}}}
 )
 ```
@@ -2048,7 +2048,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "subscriptions",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"application": "<str>"}}}
     }
@@ -2388,14 +2388,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Refunds Search
+### Refunds Context Store Search
 
 Search and filter refunds records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await stripe.refunds.search(
+await stripe.refunds.context_store_search(
     query={"filter": {"eq": {"amount": 0}}}
 )
 ```
@@ -2408,7 +2408,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "refunds",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"amount": 0}}}
     }
