@@ -8,10 +8,10 @@ The Amazon-Seller-Partner connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Orders | [List](#orders-list), [Get](#orders-get), [Search](#orders-search) |
-| Order Items | [List](#order-items-list), [Search](#order-items-search) |
-| List Financial Event Groups | [List](#list-financial-event-groups-list), [Search](#list-financial-event-groups-search) |
-| List Financial Events | [List](#list-financial-events-list), [Search](#list-financial-events-search) |
+| Orders | [List](#orders-list), [Get](#orders-get), [Context Store Search](#orders-context-store-search) |
+| Order Items | [List](#order-items-list), [Context Store Search](#order-items-context-store-search) |
+| List Financial Event Groups | [List](#list-financial-event-groups-list), [Context Store Search](#list-financial-event-groups-context-store-search) |
+| List Financial Events | [List](#list-financial-events-list), [Context Store Search](#list-financial-events-context-store-search) |
 | Catalog Items | [List](#catalog-items-list), [Get](#catalog-items-get) |
 | Reports | [List](#reports-list), [Get](#reports-get) |
 
@@ -144,14 +144,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `orderId` | `string` | Yes | An Amazon order identifier in 3-7-7 format. |
 
 
-### Orders Search
+### Orders Context Store Search
 
 Search and filter orders records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await amazon_seller_partner.orders.search(
+await amazon_seller_partner.orders.context_store_search(
     query={"filter": {"eq": {"AmazonOrderId": "<str>"}}}
 )
 ```
@@ -164,7 +164,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "orders",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"AmazonOrderId": "<str>"}}}
     }
@@ -356,14 +356,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Order Items Search
+### Order Items Context Store Search
 
 Search and filter order items records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await amazon_seller_partner.order_items.search(
+await amazon_seller_partner.order_items.context_store_search(
     query={"filter": {"eq": {"ASIN": "<str>"}}}
 )
 ```
@@ -376,7 +376,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "order_items",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"ASIN": "<str>"}}}
     }
@@ -549,14 +549,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### List Financial Event Groups Search
+### List Financial Event Groups Context Store Search
 
 Search and filter list financial event groups records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await amazon_seller_partner.list_financial_event_groups.search(
+await amazon_seller_partner.list_financial_event_groups.context_store_search(
     query={"filter": {"eq": {"AccountTail": "<str>"}}}
 )
 ```
@@ -569,7 +569,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "list_financial_event_groups",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"AccountTail": "<str>"}}}
     }
@@ -714,14 +714,14 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### List Financial Events Search
+### List Financial Events Context Store Search
 
 Search and filter list financial events records powered by Airbyte's data sync. This often provides additional fields and operators beyond what the API natively supports, making it easier to narrow down results before performing further operations. Only available in hosted mode.
 
 #### Python SDK
 
 ```python
-await amazon_seller_partner.list_financial_events.search(
+await amazon_seller_partner.list_financial_events.context_store_search(
     query={"filter": {"eq": {"AdhocDisbursementEventList": []}}}
 )
 ```
@@ -734,7 +734,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "list_financial_events",
-    "action": "search",
+    "action": "context_store_search",
     "params": {
         "query": {"filter": {"eq": {"AdhocDisbursementEventList": []}}}
     }
