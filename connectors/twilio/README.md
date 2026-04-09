@@ -101,17 +101,17 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Accounts | [List](./REFERENCE.md#accounts-list), [Get](./REFERENCE.md#accounts-get), [Search](./REFERENCE.md#accounts-search) |
-| Calls | [List](./REFERENCE.md#calls-list), [Get](./REFERENCE.md#calls-get), [Search](./REFERENCE.md#calls-search) |
-| Messages | [List](./REFERENCE.md#messages-list), [Get](./REFERENCE.md#messages-get), [Search](./REFERENCE.md#messages-search) |
-| Incoming Phone Numbers | [List](./REFERENCE.md#incoming-phone-numbers-list), [Get](./REFERENCE.md#incoming-phone-numbers-get), [Search](./REFERENCE.md#incoming-phone-numbers-search) |
-| Recordings | [List](./REFERENCE.md#recordings-list), [Get](./REFERENCE.md#recordings-get), [Search](./REFERENCE.md#recordings-search) |
-| Conferences | [List](./REFERENCE.md#conferences-list), [Get](./REFERENCE.md#conferences-get), [Search](./REFERENCE.md#conferences-search) |
-| Usage Records | [List](./REFERENCE.md#usage-records-list), [Search](./REFERENCE.md#usage-records-search) |
-| Addresses | [List](./REFERENCE.md#addresses-list), [Get](./REFERENCE.md#addresses-get), [Search](./REFERENCE.md#addresses-search) |
-| Queues | [List](./REFERENCE.md#queues-list), [Get](./REFERENCE.md#queues-get), [Search](./REFERENCE.md#queues-search) |
-| Transcriptions | [List](./REFERENCE.md#transcriptions-list), [Get](./REFERENCE.md#transcriptions-get), [Search](./REFERENCE.md#transcriptions-search) |
-| Outgoing Caller Ids | [List](./REFERENCE.md#outgoing-caller-ids-list), [Get](./REFERENCE.md#outgoing-caller-ids-get), [Search](./REFERENCE.md#outgoing-caller-ids-search) |
+| Accounts | [List](./REFERENCE.md#accounts-list), [Get](./REFERENCE.md#accounts-get), [Context Store Search](./REFERENCE.md#accounts-context-store-search) |
+| Calls | [List](./REFERENCE.md#calls-list), [Get](./REFERENCE.md#calls-get), [Context Store Search](./REFERENCE.md#calls-context-store-search) |
+| Messages | [List](./REFERENCE.md#messages-list), [Get](./REFERENCE.md#messages-get), [Context Store Search](./REFERENCE.md#messages-context-store-search) |
+| Incoming Phone Numbers | [List](./REFERENCE.md#incoming-phone-numbers-list), [Get](./REFERENCE.md#incoming-phone-numbers-get), [Context Store Search](./REFERENCE.md#incoming-phone-numbers-context-store-search) |
+| Recordings | [List](./REFERENCE.md#recordings-list), [Get](./REFERENCE.md#recordings-get), [Context Store Search](./REFERENCE.md#recordings-context-store-search) |
+| Conferences | [List](./REFERENCE.md#conferences-list), [Get](./REFERENCE.md#conferences-get), [Context Store Search](./REFERENCE.md#conferences-context-store-search) |
+| Usage Records | [List](./REFERENCE.md#usage-records-list), [Context Store Search](./REFERENCE.md#usage-records-context-store-search) |
+| Addresses | [List](./REFERENCE.md#addresses-list), [Get](./REFERENCE.md#addresses-get), [Context Store Search](./REFERENCE.md#addresses-context-store-search) |
+| Queues | [List](./REFERENCE.md#queues-list), [Get](./REFERENCE.md#queues-get), [Context Store Search](./REFERENCE.md#queues-context-store-search) |
+| Transcriptions | [List](./REFERENCE.md#transcriptions-list), [Get](./REFERENCE.md#transcriptions-get), [Context Store Search](./REFERENCE.md#transcriptions-context-store-search) |
+| Outgoing Caller Ids | [List](./REFERENCE.md#outgoing-caller-ids-list), [Get](./REFERENCE.md#outgoing-caller-ids-get), [Context Store Search](./REFERENCE.md#outgoing-caller-ids-context-store-search) |
 
 
 ### Authentication
@@ -124,7 +124,7 @@ See the official [Twilio API reference](https://www.twilio.com/docs/usage/api).
 
 ## Version information
 
-- **Package version:** 0.1.15
+- **Package version:** 0.1.16
 - **Connector version:** 1.0.3
-- **Generated with Connector SDK commit SHA:** eeaf9a603e6c650b89bac7339c63f31ef77f5bcf
+- **Generated with Connector SDK commit SHA:** 3cecc817f060335c13c5d88bc9ad34a4dace961f
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/twilio/CHANGELOG.md)
