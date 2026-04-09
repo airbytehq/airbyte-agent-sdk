@@ -7,7 +7,7 @@ The Confluence agent connector is a Python package that equips AI agents to inte
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-confluence` v0.1.12
+- **Package:** `airbyte-agent-confluence` v0.1.13
 - **Auth:** Token
 - **Docs:** [Official API docs](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/)
 - **Status:** complete
@@ -87,11 +87,11 @@ async def confluence_execute(entity: str, action: str, params: dict | None = Non
 
 | Entity | Actions |
 |--------|---------|
-| Spaces | List, Get, Search |
-| Pages | List, Get, Search |
-| Blog Posts | List, Get, Search |
-| Groups | List, Search |
-| Audit | List, Search |
+| Spaces | List, Get, Context Store Search |
+| Pages | List, Get, Context Store Search |
+| Blog Posts | List, Get, Context Store Search |
+| Groups | List, Context Store Search |
+| Audit | List, Context Store Search |
 
 ## Authentication
 
