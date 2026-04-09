@@ -415,14 +415,14 @@ class FreshdeskConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> FreshdeskExecuteResult[Any] | FreshdeskExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -812,7 +812,7 @@ class TicketsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: TicketsSearchQuery,
         limit: int | None = None,
@@ -883,7 +883,7 @@ class TicketsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("tickets", "search", params)
+        result = await self._connector.execute("tickets", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1033,7 +1033,7 @@ class AgentsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: AgentsSearchQuery,
         limit: int | None = None,
@@ -1081,7 +1081,7 @@ class AgentsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("agents", "search", params)
+        result = await self._connector.execute("agents", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -1163,7 +1163,7 @@ class GroupsQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: GroupsSearchQuery,
         limit: int | None = None,
@@ -1210,7 +1210,7 @@ class GroupsQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("groups", "search", params)
+        result = await self._connector.execute("groups", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
