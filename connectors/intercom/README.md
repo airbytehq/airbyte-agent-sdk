@@ -106,10 +106,10 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Contacts | [List](./REFERENCE.md#contacts-list), [Create](./REFERENCE.md#contacts-create), [Get](./REFERENCE.md#contacts-get), [Update](./REFERENCE.md#contacts-update), [Search](./REFERENCE.md#contacts-search) |
-| Conversations | [List](./REFERENCE.md#conversations-list), [Get](./REFERENCE.md#conversations-get), [Search](./REFERENCE.md#conversations-search) |
-| Companies | [List](./REFERENCE.md#companies-list), [Create](./REFERENCE.md#companies-create), [Get](./REFERENCE.md#companies-get), [Update](./REFERENCE.md#companies-update), [Search](./REFERENCE.md#companies-search) |
-| Teams | [List](./REFERENCE.md#teams-list), [Get](./REFERENCE.md#teams-get), [Search](./REFERENCE.md#teams-search) |
+| Contacts | [List](./REFERENCE.md#contacts-list), [Create](./REFERENCE.md#contacts-create), [Get](./REFERENCE.md#contacts-get), [Update](./REFERENCE.md#contacts-update), [Context Store Search](./REFERENCE.md#contacts-context-store-search) |
+| Conversations | [List](./REFERENCE.md#conversations-list), [Get](./REFERENCE.md#conversations-get), [Context Store Search](./REFERENCE.md#conversations-context-store-search) |
+| Companies | [List](./REFERENCE.md#companies-list), [Create](./REFERENCE.md#companies-create), [Get](./REFERENCE.md#companies-get), [Update](./REFERENCE.md#companies-update), [Context Store Search](./REFERENCE.md#companies-context-store-search) |
+| Teams | [List](./REFERENCE.md#teams-list), [Get](./REFERENCE.md#teams-get), [Context Store Search](./REFERENCE.md#teams-context-store-search) |
 | Admins | [List](./REFERENCE.md#admins-list), [Get](./REFERENCE.md#admins-get) |
 | Tags | [List](./REFERENCE.md#tags-list), [Create](./REFERENCE.md#tags-create), [Get](./REFERENCE.md#tags-get) |
 | Notes | [Create](./REFERENCE.md#notes-create) |
@@ -127,7 +127,7 @@ See the official [Intercom API reference](https://developers.intercom.com/docs/r
 
 ## Version information
 
-- **Package version:** 0.1.97
+- **Package version:** 0.1.98
 - **Connector version:** 0.1.9
-- **Generated with Connector SDK commit SHA:** eeaf9a603e6c650b89bac7339c63f31ef77f5bcf
+- **Generated with Connector SDK commit SHA:** 3cecc817f060335c13c5d88bc9ad34a4dace961f
 - **Changelog:** [View changelog](https://github.com/airbytehq/airbyte-agent-connectors/blob/main/connectors/intercom/CHANGELOG.md)
