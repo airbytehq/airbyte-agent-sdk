@@ -7,7 +7,7 @@ The Tiktok-Marketing agent connector is a Python package that equips AI agents t
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-tiktok-marketing` v0.1.28
+- **Package:** `airbyte-agent-tiktok-marketing` v0.1.29
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://business-api.tiktok.com/portal/docs?id=1740302848670722)
 - **Status:** complete
@@ -88,17 +88,17 @@ async def tiktok_marketing_execute(entity: str, action: str, params: dict | None
 
 | Entity | Actions |
 |--------|---------|
-| Advertisers | List, Search |
-| Campaigns | List, Search |
-| Ad Groups | List, Search |
-| Ads | List, Search |
-| Audiences | List, Search |
-| Creative Assets Images | List, Search |
-| Creative Assets Videos | List, Search |
-| Advertisers Reports Daily | List, Search |
-| Campaigns Reports Daily | List, Search |
-| Ad Groups Reports Daily | List, Search |
-| Ads Reports Daily | List, Search |
+| Advertisers | List, Context Store Search |
+| Campaigns | List, Context Store Search |
+| Ad Groups | List, Context Store Search |
+| Ads | List, Context Store Search |
+| Audiences | List, Context Store Search |
+| Creative Assets Images | List, Context Store Search |
+| Creative Assets Videos | List, Context Store Search |
+| Advertisers Reports Daily | List, Context Store Search |
+| Campaigns Reports Daily | List, Context Store Search |
+| Ad Groups Reports Daily | List, Context Store Search |
+| Ads Reports Daily | List, Context Store Search |
 
 ## Authentication
 
