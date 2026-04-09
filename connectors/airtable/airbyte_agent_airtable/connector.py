@@ -251,14 +251,14 @@ class AirtableConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> AirtableExecuteResult[Any] | AirtableExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "search"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -611,7 +611,7 @@ class BasesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: BasesSearchQuery,
         limit: int | None = None,
@@ -651,7 +651,7 @@ class BasesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("bases", "search", params)
+        result = await self._connector.execute("bases", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
@@ -705,7 +705,7 @@ class TablesQuery:
 
 
 
-    async def search(
+    async def context_store_search(
         self,
         query: TablesSearchQuery,
         limit: int | None = None,
@@ -747,7 +747,7 @@ class TablesQuery:
         if fields is not None:
             params["fields"] = fields
 
-        result = await self._connector.execute("tables", "search", params)
+        result = await self._connector.execute("tables", "context_store_search", params)
 
         # Parse response into typed result
         meta_data = result.get("meta")
