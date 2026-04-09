@@ -7,7 +7,7 @@ The Zendesk-Support agent connector is a Python package that equips AI agents to
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-zendesk-support` v0.18.133
+- **Package:** `airbyte-agent-zendesk-support` v0.18.134
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://developer.zendesk.com/api-reference/ticketing/introduction/)
 - **Status:** complete
@@ -82,27 +82,27 @@ async def zendesk_support_execute(entity: str, action: str, params: dict | None 
 
 | Entity | Actions |
 |--------|---------|
-| Tickets | List, Get, Search |
-| Deleted Tickets | List, Search |
-| Users | List, Get, Search |
-| Organizations | List, Get, Search |
-| Groups | List, Get, Search |
-| Ticket Comments | List, Search |
+| Tickets | List, Get, Context Store Search |
+| Deleted Tickets | List, Context Store Search |
+| Users | List, Get, Context Store Search |
+| Organizations | List, Get, Context Store Search |
+| Groups | List, Get, Context Store Search |
+| Ticket Comments | List, Context Store Search |
 | Attachments | Get, Download |
-| Ticket Audits | List, List, Search |
-| Ticket Metrics | List, Search |
-| Ticket Fields | List, Get, Search |
-| Brands | List, Get, Search |
+| Ticket Audits | List, List, Context Store Search |
+| Ticket Metrics | List, Context Store Search |
+| Ticket Fields | List, Get, Context Store Search |
+| Brands | List, Get, Context Store Search |
 | Views | List, Get |
 | Macros | List, Get |
 | Triggers | List, Get |
 | Automations | List, Get |
-| Tags | List, Search |
-| Satisfaction Ratings | List, Get, Search |
+| Tags | List, Context Store Search |
+| Satisfaction Ratings | List, Get, Context Store Search |
 | Group Memberships | List |
 | Organization Memberships | List |
 | Sla Policies | List, Get |
-| Ticket Forms | List, Get, Search |
+| Ticket Forms | List, Get, Context Store Search |
 | Articles | List, Get |
 | Article Attachments | List, Get, Download |
 

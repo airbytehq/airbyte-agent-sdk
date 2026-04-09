@@ -7,7 +7,7 @@ The Zoho-Crm agent connector is a Python package that equips AI agents to intera
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-zoho-crm` v0.1.11
+- **Package:** `airbyte-agent-zoho-crm` v0.1.12
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://www.zoho.com/crm/developer/docs/api/v2/)
 - **Status:** complete
@@ -101,17 +101,17 @@ async def zoho_crm_execute(entity: str, action: str, params: dict | None = None)
 
 | Entity | Actions |
 |--------|---------|
-| Leads | List, Get, Search |
-| Contacts | List, Get, Search |
-| Accounts | List, Get, Search |
-| Deals | List, Get, Search |
-| Campaigns | List, Get, Search |
-| Tasks | List, Get, Search |
-| Events | List, Get, Search |
-| Calls | List, Get, Search |
-| Products | List, Get, Search |
-| Quotes | List, Get, Search |
-| Invoices | List, Get, Search |
+| Leads | List, Get, Context Store Search |
+| Contacts | List, Get, Context Store Search |
+| Accounts | List, Get, Context Store Search |
+| Deals | List, Get, Context Store Search |
+| Campaigns | List, Get, Context Store Search |
+| Tasks | List, Get, Context Store Search |
+| Events | List, Get, Context Store Search |
+| Calls | List, Get, Context Store Search |
+| Products | List, Get, Context Store Search |
+| Quotes | List, Get, Context Store Search |
+| Invoices | List, Get, Context Store Search |
 
 ## Authentication
 

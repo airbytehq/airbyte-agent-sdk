@@ -7,7 +7,7 @@ The Facebook-Marketing agent connector is a Python package that equips AI agents
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-facebook-marketing` v0.1.68
+- **Package:** `airbyte-agent-facebook-marketing` v0.1.69
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://developers.facebook.com/docs/marketing-api/)
 - **Status:** complete
@@ -97,16 +97,16 @@ async def facebook_marketing_execute(entity: str, action: str, params: dict | No
 | Entity | Actions |
 |--------|---------|
 | Current User | Get |
-| Ad Accounts | List, Search |
-| Campaigns | List, Create, Get, Update, Search |
-| Ad Sets | List, Create, Get, Update, Search |
-| Ads | List, Create, Get, Update, Search |
-| Ad Creatives | List, Search |
-| Ads Insights | List, Search |
-| Ad Account | Get, Search |
-| Custom Conversions | List, Search |
-| Images | List, Search |
-| Videos | List, Search |
+| Ad Accounts | List, Context Store Search |
+| Campaigns | List, Create, Get, Update, Context Store Search |
+| Ad Sets | List, Create, Get, Update, Context Store Search |
+| Ads | List, Create, Get, Update, Context Store Search |
+| Ad Creatives | List, Context Store Search |
+| Ads Insights | List, Context Store Search |
+| Ad Account | Get, Context Store Search |
+| Custom Conversions | List, Context Store Search |
+| Images | List, Context Store Search |
+| Videos | List, Context Store Search |
 | Pixels | List, Get |
 | Pixel Stats | List |
 | Ad Library | List |

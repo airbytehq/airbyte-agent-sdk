@@ -7,7 +7,7 @@ The Amazon-Seller-Partner agent connector is a Python package that equips AI age
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-amazon-seller-partner` v0.1.15
+- **Package:** `airbyte-agent-amazon-seller-partner` v0.1.16
 - **Auth:** OAuth
 - **Docs:** [Official API docs](https://developer-docs.amazon.com/sp-api/)
 - **Status:** complete
@@ -85,10 +85,10 @@ async def amazon_seller_partner_execute(entity: str, action: str, params: dict |
 
 | Entity | Actions |
 |--------|---------|
-| Orders | List, Get, Search |
-| Order Items | List, Search |
-| List Financial Event Groups | List, Search |
-| List Financial Events | List, Search |
+| Orders | List, Get, Context Store Search |
+| Order Items | List, Context Store Search |
+| List Financial Event Groups | List, Context Store Search |
+| List Financial Events | List, Context Store Search |
 | Catalog Items | List, Get |
 | Reports | List, Get |
 

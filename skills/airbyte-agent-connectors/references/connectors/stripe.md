@@ -7,7 +7,7 @@ The Stripe agent connector is a Python package that equips AI agents to interact
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-stripe` v0.5.127
+- **Package:** `airbyte-agent-stripe` v0.5.128
 - **Auth:** Token
 - **Docs:** [Official API docs](https://docs.stripe.com/api)
 - **Status:** complete
@@ -89,11 +89,11 @@ async def stripe_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Customers | List, Create, Get, Update, Delete, API Search, Search |
-| Invoices | List, Get, API Search, Search |
-| Charges | List, Get, API Search, Search |
-| Subscriptions | List, Get, API Search, Search |
-| Refunds | List, Create, Get, Search |
+| Customers | List, Create, Get, Update, Delete, API Search, Context Store Search |
+| Invoices | List, Get, API Search, Context Store Search |
+| Charges | List, Get, API Search, Context Store Search |
+| Subscriptions | List, Get, API Search, Context Store Search |
+| Refunds | List, Create, Get, Context Store Search |
 | Products | List, Create, Get, Update, Delete, API Search |
 | Balance | Get |
 | Balance Transactions | List, Get |

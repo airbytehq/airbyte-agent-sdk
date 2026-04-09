@@ -7,7 +7,7 @@ The Notion agent connector is a Python package that equips AI agents to interact
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-notion` v0.1.32
+- **Package:** `airbyte-agent-notion` v0.1.33
 - **Auth:** OAuth, Token
 - **Docs:** [Official API docs](https://developers.notion.com/reference/intro)
 - **Status:** complete
@@ -83,10 +83,10 @@ async def notion_execute(entity: str, action: str, params: dict | None = None):
 
 | Entity | Actions |
 |--------|---------|
-| Users | List, Get, Search |
-| Pages | List, Get, Search |
-| Data Sources | List, Get, Search |
-| Blocks | List, Get, Search |
+| Users | List, Get, Context Store Search |
+| Pages | List, Get, Context Store Search |
+| Data Sources | List, Get, Context Store Search |
+| Blocks | List, Get, Context Store Search |
 | Comments | List |
 
 ## Authentication
