@@ -7,7 +7,7 @@ The Incident-Io agent connector is a Python package that equips AI agents to int
 
 **Key metadata:**
 
-- **Package:** `airbyte-agent-incident-io` v0.1.17
+- **Package:** `airbyte-agent-incident-io` v0.1.18
 - **Auth:** Token
 - **Docs:** [Official API docs](https://api-docs.incident.io/)
 - **Status:** complete
@@ -86,18 +86,18 @@ async def incident_io_execute(entity: str, action: str, params: dict | None = No
 
 | Entity | Actions |
 |--------|---------|
-| Incidents | List, Get, Search |
-| Alerts | List, Get, Search |
-| Escalations | List, Get, Search |
-| Users | List, Get, Search |
-| Incident Updates | List, Search |
-| Incident Roles | List, Get, Search |
-| Incident Statuses | List, Get, Search |
-| Incident Timestamps | List, Get, Search |
-| Severities | List, Get, Search |
-| Custom Fields | List, Get, Search |
-| Catalog Types | List, Get, Search |
-| Schedules | List, Get, Search |
+| Incidents | List, Get, Context Store Search |
+| Alerts | List, Get, Context Store Search |
+| Escalations | List, Get, Context Store Search |
+| Users | List, Get, Context Store Search |
+| Incident Updates | List, Context Store Search |
+| Incident Roles | List, Get, Context Store Search |
+| Incident Statuses | List, Get, Context Store Search |
+| Incident Timestamps | List, Get, Context Store Search |
+| Severities | List, Get, Context Store Search |
+| Custom Fields | List, Get, Context Store Search |
+| Catalog Types | List, Get, Context Store Search |
+| Schedules | List, Get, Context Store Search |
 
 ## Authentication
 
