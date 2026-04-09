@@ -5647,6 +5647,13 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
             "Create a company named 'Acme Corp' with company_id 'acme-001'",
             "Create a tag named 'VIP Customer'",
         ],
+        context_store_search=[
+            "Update the name of contact {id} to 'John Updated'",
+            "Add a note to contact {id} saying 'Followed up on support request'",
+            'Show me conversations from the last week',
+            'List conversations assigned to team {team_id}',
+            'Show me open conversations',
+        ],
         search=[
             "Update the name of contact {id} to 'John Updated'",
             "Add a note to contact {id} saying 'Followed up on support request'",
