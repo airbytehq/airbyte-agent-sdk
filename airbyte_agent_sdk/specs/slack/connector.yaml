@@ -1245,6 +1245,16 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Slack workspace members, their profiles, roles, and contact info"
+        when_to_use: "Looking up a person in Slack by name, email, or role, or listing workspace members"
+        trigger_phrases: ["who is", "find user", "look up", "team members", "user list"]
+        freshness: live
+        search_strategy: "When searching for a user by name, match against all name-related fields: name (username), real_name, profile.display_name, profile.display_name_normalized, profile.real_name, profile.real_name_normalized, profile.first_name, profile.last_name, and profile.email. Use case-insensitive substring matching across all of these fields to maximize recall."
+        example_questions:
+          - "Who is John in Slack?"
+          - "Find the Slack user with email alex@example.com"
+          - "List all admins in the workspace"
       description: Slack user object
       properties:
         id:
