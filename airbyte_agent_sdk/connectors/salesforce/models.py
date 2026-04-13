@@ -324,6 +324,29 @@ class AttachmentQueryResult(BaseModel):
     next_records_url: Union[str, Any] = Field(default=None, alias="nextRecordsUrl")
     records: Union[list[Attachment], Any] = Field(default=None)
 
+class Report(BaseModel):
+    """Salesforce Report metadata from the Analytics API"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    url: Union[str | None, Any] = Field(default=None)
+    describe_url: Union[str | None, Any] = Field(default=None, alias="describeUrl")
+    instances_url: Union[str | None, Any] = Field(default=None, alias="instancesUrl")
+
+class ReportResults(BaseModel):
+    """Executed report results including data rows, aggregates, and metadata"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    attributes: Union[dict[str, Any] | None, Any] = Field(default=None)
+    report_metadata: Union[dict[str, Any] | None, Any] = Field(default=None, alias="reportMetadata")
+    report_extended_metadata: Union[dict[str, Any] | None, Any] = Field(default=None, alias="reportExtendedMetadata")
+    fact_map: Union[dict[str, Any] | None, Any] = Field(default=None, alias="factMap")
+    groupings_down: Union[dict[str, Any] | None, Any] = Field(default=None, alias="groupingsDown")
+    groupings_across: Union[dict[str, Any] | None, Any] = Field(default=None, alias="groupingsAcross")
+    has_detail_rows: Union[bool | None, Any] = Field(default=None, alias="hasDetailRows")
+    all_data: Union[bool | None, Any] = Field(default=None, alias="allData")
+
 class QueryResult(BaseModel):
     """Generic SOQL query result"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -911,6 +934,9 @@ ContentVersionsListResult = SalesforceExecuteResultWithMeta[list[ContentVersion]
 
 AttachmentsListResult = SalesforceExecuteResultWithMeta[list[Attachment], AttachmentsListResultMeta]
 """Result type for attachments.list operation with data and metadata."""
+
+ReportsListResult = SalesforceExecuteResult[list[Report]]
+"""Result type for reports.list operation."""
 
 QueryListResult = SalesforceExecuteResultWithMeta[list[dict[str, Any]], QueryListResultMeta]
 """Result type for query.list operation with data and metadata."""

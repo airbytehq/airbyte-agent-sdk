@@ -15,6 +15,8 @@ The Salesforce connector is optimized to handle prompts like these.
 - List recent contacts in my Salesforce account
 - List open cases in my Salesforce account
 - Show me the notes and attachments for a recent account
+- List all available reports in Salesforce
+- Run my quarterly revenue report and show the results
 - Show me my top 5 opportunities this month
 - List all contacts from \{company\} in the last quarter
 - Search for leads in the technology sector with revenue over $10M
@@ -111,6 +113,7 @@ This connector supports the following entities and actions. For more details, se
 | Notes | [List](./REFERENCE.md#notes-list), [Get](./REFERENCE.md#notes-get), [API Search](./REFERENCE.md#notes-api_search) |
 | Content Versions | [List](./REFERENCE.md#content-versions-list), [Get](./REFERENCE.md#content-versions-get), [Download](./REFERENCE.md#content-versions-download) |
 | Attachments | [List](./REFERENCE.md#attachments-list), [Get](./REFERENCE.md#attachments-get), [Download](./REFERENCE.md#attachments-download) |
+| Reports | [List](./REFERENCE.md#reports-list), [Get](./REFERENCE.md#reports-get) |
 | Query | [List](./REFERENCE.md#query-list) |
 
 

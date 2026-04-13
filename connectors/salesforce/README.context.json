@@ -46,7 +46,7 @@
   },
   "replication_config": null,
   "custom_description": "Salesforce is a cloud-based CRM platform that helps businesses manage customer\nrelationships, sales pipelines, and business operations. This connector provides\naccess to accounts, contacts, leads, opportunities, tasks, events, campaigns, cases,\nnotes, and attachments for sales analytics and customer relationship management.\n",
-  "supported_questions": "- List recent contacts in my Salesforce account\n- List open cases in my Salesforce account\n- Show me the notes and attachments for a recent account\n- Show me my top 5 opportunities this month\n- List all contacts from {company} in the last quarter\n- Search for leads in the technology sector with revenue over $10M\n- What trends can you identify in my recent sales pipeline?\n- Summarize the open cases for my key accounts\n- Find upcoming events related to my most important opportunities\n- Analyze the performance of my recent marketing campaigns\n- Identify the highest value opportunities I'm currently tracking",
+  "supported_questions": "- List recent contacts in my Salesforce account\n- List open cases in my Salesforce account\n- Show me the notes and attachments for a recent account\n- List all available reports in Salesforce\n- Run my quarterly revenue report and show the results\n- Show me my top 5 opportunities this month\n- List all contacts from {company} in the last quarter\n- Search for leads in the technology sector with revenue over $10M\n- What trends can you identify in my recent sales pipeline?\n- Summarize the open cases for my key accounts\n- Find upcoming events related to my most important opportunities\n- Analyze the performance of my recent marketing campaigns\n- Identify the highest value opportunities I'm currently tracking",
   "unsupported_questions": "- Create a new lead for {person}\n- Update the status of my sales opportunity\n- Schedule a follow-up meeting with {customer}\n- Delete this old contact record\n- Send an email to all contacts in this campaign",
   "first_operation": {
     "method_name": "list_s_objects",
@@ -1423,6 +1423,65 @@
         "record_type": null,
         "meta_fields": null,
         "is_download": true
+      }
+    ],
+    "reports": [
+      {
+        "method_name": "list_reports",
+        "http_method": "get",
+        "path": "/analytics/reports",
+        "entity": "reports",
+        "action": "list",
+        "parameters": [],
+        "params_type_name": "ReportsListParams",
+        "response_type": "ReportsListResult",
+        "description": "Returns a list of reports available in the Salesforce org.\nEach report includes metadata such as Id, Name, Format, Description, and URL.\nThis uses the Analytics REST API, not SOQL.\n",
+        "record_extractor": "$",
+        "meta_extractor": null,
+        "needs_envelope": true,
+        "record_type": "list[Report]",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "get_report",
+        "http_method": "get",
+        "path": "/analytics/reports/{id}",
+        "entity": "reports",
+        "action": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "python_name": "id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Salesforce Report ID (18-character ID starting with '00O').\nObtain this ID from the list action.\n"
+          },
+          {
+            "name": "includeDetails",
+            "python_name": "include_details",
+            "type": "bool",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            },
+            "required": null,
+            "description": "Whether to include detail rows in the report results. Defaults to true.\nSet to false to get only summary/aggregate data.\n",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "ReportsGetParams",
+        "response_type": "ReportResults",
+        "description": "Executes a report synchronously and returns the report data results.\nReturns both metadata and the executed data including fact maps, aggregates, and detail rows.\nFirst use the list action to find available reports, then use this action to run a report and get its data.\nNote: Large reports may be truncated. For reports with more than 2,000 detail rows, consider using async report runs.\n",
+        "record_extractor": "$",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "ReportResults",
+        "meta_fields": null,
+        "is_download": false
       }
     ],
     "query": [

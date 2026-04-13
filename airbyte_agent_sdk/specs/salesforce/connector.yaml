@@ -30,6 +30,8 @@ info:
       - "List recent contacts in my Salesforce account"
       - "List open cases in my Salesforce account"
       - "Show me the notes and attachments for a recent account"
+      - "List all available reports in Salesforce"
+      - "Run my quarterly revenue report and show the results"
     search:
       - "Show me my top 5 opportunities this month"
       - "List all contacts from {company} in the last quarter"
@@ -2285,6 +2287,75 @@ paths:
           description: Unauthorized
 
   # ============================================
+  # REPORTS Resource (Analytics API)
+  # ============================================
+  /analytics/reports:
+    get:
+      summary: List reports
+      description: |
+        Returns a list of reports available in the Salesforce org.
+        Each report includes metadata such as Id, Name, Format, Description, and URL.
+        This uses the Analytics REST API, not SOQL.
+      operationId: listReports
+      x-airbyte-entity: reports
+      x-airbyte-action: list
+      tags:
+        - Reports
+      responses:
+        "200":
+          description: List of report metadata
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Report"
+        "401":
+          description: Unauthorized
+
+  /analytics/reports/{id}:
+    get:
+      summary: Get report results
+      description: |
+        Executes a report synchronously and returns the report data results.
+        Returns both metadata and the executed data including fact maps, aggregates, and detail rows.
+        First use the list action to find available reports, then use this action to run a report and get its data.
+        Note: Large reports may be truncated. For reports with more than 2,000 detail rows, consider using async report runs.
+      operationId: getReport
+      x-airbyte-entity: reports
+      x-airbyte-action: get
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: |
+            Salesforce Report ID (18-character ID starting with '00O').
+            Obtain this ID from the list action.
+          schema:
+            type: string
+        - name: includeDetails
+          in: query
+          description: |
+            Whether to include detail rows in the report results. Defaults to true.
+            Set to false to get only summary/aggregate data.
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: Executed report results with data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportResults"
+        "404":
+          description: Report not found
+        "401":
+          description: Unauthorized
+
+  # ============================================
   # GENERIC QUERY Resource
   # ============================================
   /query:
@@ -2885,6 +2956,91 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Attachment"
+
+    # ============================================
+    # Report Schemas (Analytics API)
+    # ============================================
+    Report:
+      type: object
+      x-airbyte-entity-name: reports
+      description: Salesforce Report metadata from the Analytics API
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the report
+        name:
+          type:
+            - "null"
+            - string
+          description: Name of the report
+        url:
+          type:
+            - "null"
+            - string
+          description: API URL to access the report
+        describeUrl:
+          type:
+            - "null"
+            - string
+          description: API URL to get the report describe/metadata
+        instancesUrl:
+          type:
+            - "null"
+            - string
+          description: API URL for async report run instances
+
+    ReportResults:
+      type: object
+      description: Executed report results including data rows, aggregates, and metadata
+      additionalProperties: true
+      properties:
+        attributes:
+          type:
+            - "null"
+            - object
+          description: Report attributes including description, format, and report type
+          additionalProperties: true
+        reportMetadata:
+          type:
+            - "null"
+            - object
+          description: Report metadata including columns, groupings, and filters
+          additionalProperties: true
+        reportExtendedMetadata:
+          type:
+            - "null"
+            - object
+          description: Extended metadata including column details and data types
+          additionalProperties: true
+        factMap:
+          type:
+            - "null"
+            - object
+          description: Contains the report data organized by grouping keys with rows and aggregates
+          additionalProperties: true
+        groupingsDown:
+          type:
+            - "null"
+            - object
+          description: Row-level grouping information
+          additionalProperties: true
+        groupingsAcross:
+          type:
+            - "null"
+            - object
+          description: Column-level grouping information
+          additionalProperties: true
+        hasDetailRows:
+          type:
+            - "null"
+            - boolean
+          description: Whether the report results include detail rows
+        allData:
+          type:
+            - "null"
+            - boolean
+          description: Whether all data is included (false if report was truncated)
 
     # ============================================
     # Generic Query Result

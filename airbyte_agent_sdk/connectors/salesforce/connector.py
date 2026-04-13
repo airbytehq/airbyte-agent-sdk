@@ -51,6 +51,8 @@ from .types import (
     OpportunitiesGetParams,
     OpportunitiesListParams,
     QueryListParams,
+    ReportsGetParams,
+    ReportsListParams,
     SobjectsListParams,
     TasksApiSearchParams,
     TasksGetParams,
@@ -95,6 +97,7 @@ from .models import (
     NotesApiSearchResult,
     ContentVersionsListResult,
     AttachmentsListResult,
+    ReportsListResult,
     QueryListResult,
     Account,
     Attachment,
@@ -106,6 +109,8 @@ from .models import (
     Lead,
     Note,
     Opportunity,
+    Report,
+    ReportResults,
     SObject,
     SearchResult,
     Task,
@@ -207,6 +212,8 @@ class SalesforceConnector:
         ("attachments", "list"): True,
         ("attachments", "get"): None,
         ("attachments", "download"): None,
+        ("reports", "list"): True,
+        ("reports", "get"): None,
         ("query", "list"): True,
     }
 
@@ -246,6 +253,7 @@ class SalesforceConnector:
         ('attachments', 'list'): {'q': 'q'},
         ('attachments', 'get'): {'id': 'id', 'fields': 'fields'},
         ('attachments', 'download'): {'id': 'id', 'range_header': 'range_header'},
+        ('reports', 'get'): {'id': 'id', 'include_details': 'includeDetails'},
         ('query', 'list'): {'q': 'q'},
     }
 
@@ -361,6 +369,7 @@ class SalesforceConnector:
         self.notes = NotesQuery(self)
         self.content_versions = ContentVersionsQuery(self)
         self.attachments = AttachmentsQuery(self)
+        self.reports = ReportsQuery(self)
         self.query = QueryQuery(self)
 
     # ===== TYPED EXECUTE METHOD (Recommended Interface) =====
@@ -636,6 +645,22 @@ class SalesforceConnector:
         action: Literal["download"],
         params: "AttachmentsDownloadParams"
     ) -> "AsyncIterator[bytes]": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["reports"],
+        action: Literal["list"],
+        params: "ReportsListParams"
+    ) -> "ReportsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["reports"],
+        action: Literal["get"],
+        params: "ReportsGetParams"
+    ) -> "ReportResults": ...
 
     @overload
     async def execute(
@@ -2806,6 +2831,76 @@ Obtain this ID from the list or get action.
         )
 
         return await save_download(content_iterator, path)
+
+
+class ReportsQuery:
+    """
+    Query class for Reports entity operations.
+    """
+
+    def __init__(self, connector: SalesforceConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        **kwargs
+    ) -> ReportsListResult:
+        """
+        Returns a list of reports available in the Salesforce org.
+Each report includes metadata such as Id, Name, Format, Description, and URL.
+This uses the Analytics REST API, not SOQL.
+
+
+        Returns:
+            ReportsListResult
+        """
+        params = {k: v for k, v in {
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("reports", "list", params)
+        # Cast generic envelope to concrete typed result
+        return ReportsListResult(
+            data=result.data
+        )
+
+
+
+    async def get(
+        self,
+        id: str | None = None,
+        include_details: bool | None = None,
+        **kwargs
+    ) -> ReportResults:
+        """
+        Executes a report synchronously and returns the report data results.
+Returns both metadata and the executed data including fact maps, aggregates, and detail rows.
+First use the list action to find available reports, then use this action to run a report and get its data.
+Note: Large reports may be truncated. For reports with more than 2,000 detail rows, consider using async report runs.
+
+
+        Args:
+            id: Salesforce Report ID (18-character ID starting with '00O').
+Obtain this ID from the list action.
+
+            include_details: Whether to include detail rows in the report results. Defaults to true.
+Set to false to get only summary/aggregate data.
+
+            **kwargs: Additional parameters
+
+        Returns:
+            ReportResults
+        """
+        params = {k: v for k, v in {
+            "id": id,
+            "includeDetails": include_details,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("reports", "get", params)
+        return result
+
 
 
 class QueryQuery:

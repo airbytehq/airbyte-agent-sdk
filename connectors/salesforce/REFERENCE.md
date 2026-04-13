@@ -20,6 +20,7 @@ The Salesforce connector supports the following entities and actions.
 | Notes | [List](#notes-list), [Get](#notes-get), [API Search](#notes-api-search) |
 | Content Versions | [List](#content-versions-list), [Get](#content-versions-get), [Download](#content-versions-download) |
 | Attachments | [List](#attachments-list), [Get](#attachments-get), [Download](#attachments-download) |
+| Reports | [List](#reports-list), [Get](#reports-get) |
 | Query | [List](#query-list) |
 
 ## Sobjects
@@ -2504,6 +2505,114 @@ Obtain this ID from the list or get action.
  |
 | `range_header` | `string` | No | Optional Range header for partial downloads (e.g., 'bytes=0-99') |
 
+
+## Reports
+
+### Reports List
+
+Returns a list of reports available in the Salesforce org.
+Each report includes metadata such as Id, Name, Format, Description, and URL.
+This uses the Analytics REST API, not SOQL.
+
+
+#### Python SDK
+
+```python
+await salesforce.reports.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "reports",
+    "action": "list"
+}'
+```
+
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `id` | `string` |  |
+| `name` | `null \| string` |  |
+| `url` | `null \| string` |  |
+| `describeUrl` | `null \| string` |  |
+| `instancesUrl` | `null \| string` |  |
+
+
+</details>
+
+### Reports Get
+
+Executes a report synchronously and returns the report data results.
+Returns both metadata and the executed data including fact maps, aggregates, and detail rows.
+First use the list action to find available reports, then use this action to run a report and get its data.
+Note: Large reports may be truncated. For reports with more than 2,000 detail rows, consider using async report runs.
+
+
+#### Python SDK
+
+```python
+await salesforce.reports.get(
+    id="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "reports",
+    "action": "get",
+    "params": {
+        "id": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `id` | `string` | Yes | Salesforce Report ID (18-character ID starting with '00O').
+Obtain this ID from the list action.
+ |
+| `includeDetails` | `boolean` | No | Whether to include detail rows in the report results. Defaults to true.
+Set to false to get only summary/aggregate data.
+ |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `attributes` | `null \| object` |  |
+| `reportMetadata` | `null \| object` |  |
+| `reportExtendedMetadata` | `null \| object` |  |
+| `factMap` | `null \| object` |  |
+| `groupingsDown` | `null \| object` |  |
+| `groupingsAcross` | `null \| object` |  |
+| `hasDetailRows` | `null \| boolean` |  |
+| `allData` | `null \| boolean` |  |
+
+
+</details>
 
 ## Query
 

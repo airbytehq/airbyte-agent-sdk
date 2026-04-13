@@ -1708,6 +1708,134 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
         EntityDefinition(
+            name='reports',
+            actions=[Action.LIST, Action.GET],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='GET',
+                    path='/analytics/reports',
+                    action=Action.LIST,
+                    description='Returns a list of reports available in the Salesforce org.\nEach report includes metadata such as Id, Name, Format, Description, and URL.\nThis uses the Analytics REST API, not SOQL.\n',
+                    response_schema={
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'description': 'Salesforce Report metadata from the Analytics API',
+                            'properties': {
+                                'id': {'type': 'string', 'description': 'Unique identifier for the report'},
+                                'name': {
+                                    'type': ['null', 'string'],
+                                    'description': 'Name of the report',
+                                },
+                                'url': {
+                                    'type': ['null', 'string'],
+                                    'description': 'API URL to access the report',
+                                },
+                                'describeUrl': {
+                                    'type': ['null', 'string'],
+                                    'description': 'API URL to get the report describe/metadata',
+                                },
+                                'instancesUrl': {
+                                    'type': ['null', 'string'],
+                                    'description': 'API URL for async report run instances',
+                                },
+                            },
+                            'additionalProperties': True,
+                            'x-airbyte-entity-name': 'reports',
+                        },
+                    },
+                ),
+                Action.GET: EndpointDefinition(
+                    method='GET',
+                    path='/analytics/reports/{id}',
+                    action=Action.GET,
+                    description='Executes a report synchronously and returns the report data results.\nReturns both metadata and the executed data including fact maps, aggregates, and detail rows.\nFirst use the list action to find available reports, then use this action to run a report and get its data.\nNote: Large reports may be truncated. For reports with more than 2,000 detail rows, consider using async report runs.\n',
+                    query_params=['includeDetails'],
+                    query_params_schema={
+                        'includeDetails': {
+                            'type': 'boolean',
+                            'required': False,
+                            'default': True,
+                        },
+                    },
+                    path_params=['id'],
+                    path_params_schema={
+                        'id': {'type': 'string', 'required': True},
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Executed report results including data rows, aggregates, and metadata',
+                        'properties': {
+                            'attributes': {
+                                'type': ['null', 'object'],
+                                'description': 'Report attributes including description, format, and report type',
+                                'additionalProperties': True,
+                            },
+                            'reportMetadata': {
+                                'type': ['null', 'object'],
+                                'description': 'Report metadata including columns, groupings, and filters',
+                                'additionalProperties': True,
+                            },
+                            'reportExtendedMetadata': {
+                                'type': ['null', 'object'],
+                                'description': 'Extended metadata including column details and data types',
+                                'additionalProperties': True,
+                            },
+                            'factMap': {
+                                'type': ['null', 'object'],
+                                'description': 'Contains the report data organized by grouping keys with rows and aggregates',
+                                'additionalProperties': True,
+                            },
+                            'groupingsDown': {
+                                'type': ['null', 'object'],
+                                'description': 'Row-level grouping information',
+                                'additionalProperties': True,
+                            },
+                            'groupingsAcross': {
+                                'type': ['null', 'object'],
+                                'description': 'Column-level grouping information',
+                                'additionalProperties': True,
+                            },
+                            'hasDetailRows': {
+                                'type': ['null', 'boolean'],
+                                'description': 'Whether the report results include detail rows',
+                            },
+                            'allData': {
+                                'type': ['null', 'boolean'],
+                                'description': 'Whether all data is included (false if report was truncated)',
+                            },
+                        },
+                        'additionalProperties': True,
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'Salesforce Report metadata from the Analytics API',
+                'properties': {
+                    'id': {'type': 'string', 'description': 'Unique identifier for the report'},
+                    'name': {
+                        'type': ['null', 'string'],
+                        'description': 'Name of the report',
+                    },
+                    'url': {
+                        'type': ['null', 'string'],
+                        'description': 'API URL to access the report',
+                    },
+                    'describeUrl': {
+                        'type': ['null', 'string'],
+                        'description': 'API URL to get the report describe/metadata',
+                    },
+                    'instancesUrl': {
+                        'type': ['null', 'string'],
+                        'description': 'API URL for async report run instances',
+                    },
+                },
+                'additionalProperties': True,
+                'x-airbyte-entity-name': 'reports',
+            },
+        ),
+        EntityDefinition(
             name='query',
             actions=[Action.LIST],
             endpoints={
@@ -1961,7 +2089,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
         ],
     },
     example_questions=ExampleQuestions(
-        direct=['List recent contacts in my Salesforce account', 'List open cases in my Salesforce account', 'Show me the notes and attachments for a recent account'],
+        direct=[
+            'List recent contacts in my Salesforce account',
+            'List open cases in my Salesforce account',
+            'Show me the notes and attachments for a recent account',
+            'List all available reports in Salesforce',
+            'Run my quarterly revenue report and show the results',
+        ],
         context_store_search=[
             'Show me my top 5 opportunities this month',
             'List all contacts from {company} in the last quarter',

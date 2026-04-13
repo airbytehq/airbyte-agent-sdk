@@ -280,15 +280,6 @@ class TimeEntryUser(BaseModel):
     name: Union[str | None, Any] = Field(default=None, description="User name")
     """User name"""
 
-class TimeEntryInvoice(BaseModel):
-    """The invoice associated with the time entry"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None, description="Invoice ID")
-    """Invoice ID"""
-    number: Union[str | None, Any] = Field(default=None, description="Invoice number")
-    """Invoice number"""
-
 class TimeEntryProject(BaseModel):
     """The project associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -297,6 +288,15 @@ class TimeEntryProject(BaseModel):
     """Project ID"""
     name: Union[str | None, Any] = Field(default=None, description="Project name")
     """Project name"""
+
+class TimeEntryInvoice(BaseModel):
+    """The invoice associated with the time entry"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None, description="Invoice ID")
+    """Invoice ID"""
+    number: Union[str | None, Any] = Field(default=None, description="Invoice number")
+    """Invoice number"""
 
 class TimeEntryClient(BaseModel):
     """The client associated with the time entry"""

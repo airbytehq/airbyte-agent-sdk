@@ -168,6 +168,15 @@ class AttachmentsDownloadParams(TypedDict):
     id: str
     range_header: NotRequired[str]
 
+class ReportsListParams(TypedDict):
+    """Parameters for reports.list operation"""
+    pass
+
+class ReportsGetParams(TypedDict):
+    """Parameters for reports.get operation"""
+    id: str
+    include_details: NotRequired[bool]
+
 class QueryListParams(TypedDict):
     """Parameters for query.list operation"""
     q: str
