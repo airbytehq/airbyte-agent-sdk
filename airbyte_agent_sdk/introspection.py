@@ -80,7 +80,7 @@ EXECUTE_INSTRUCTIONS = (
     "HOW TO USE CONTEXT_STORE_SEARCH:\n"
     "action='context_store_search' uses params.query with filter, sort, and limit.\n"
     '- Basic:   params={"limit": 20, "query": {"filter": {...}}}\n'
-    '- Sort:    params={"limit": 20, "query": {"filter": {...}, "sort": {"field": "created", "order": "desc"}}}\n'
+    '- Sort:    params={"limit": 20, "query": {"filter": {...}, "sort": [{"created": "desc"}]}}\n'
     "- When searching for text, ALWAYS prefer `fuzzy` over `like`. "
     "`fuzzy` matches words in any order, ignores punctuation/casing, and handles partial names. "
     "`like` requires exact substring match and fails on typos or word reordering.\n"

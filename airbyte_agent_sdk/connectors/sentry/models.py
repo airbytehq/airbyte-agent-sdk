@@ -34,14 +34,6 @@ class SentryReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class ProjectAvatar(BaseModel):
-    """Project avatar information."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
-    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
-    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
-
 class ProjectOrganization(BaseModel):
     """Organization this project belongs to."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -49,6 +41,14 @@ class ProjectOrganization(BaseModel):
     id: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
+
+class ProjectAvatar(BaseModel):
+    """Project avatar information."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
+    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
+    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
 
 class Project(BaseModel):
     """A Sentry project (summary view from list endpoint)."""
@@ -101,13 +101,13 @@ class ProjectDetailOrganization(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
 
-class ProjectDetailAvatar(BaseModel):
-    """Project avatar information."""
+class ProjectDetailTeam(BaseModel):
+    """Primary team for this project."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
-    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
-    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    slug: Union[str | None, Any] = Field(default=None)
 
 class ProjectDetailTeamsItem(BaseModel):
     """Nested schema for ProjectDetail.teams_item"""
@@ -117,13 +117,13 @@ class ProjectDetailTeamsItem(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
 
-class ProjectDetailTeam(BaseModel):
-    """Primary team for this project."""
+class ProjectDetailAvatar(BaseModel):
+    """Project avatar information."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    slug: Union[str | None, Any] = Field(default=None)
+    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
+    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
+    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
 
 class ProjectDetail(BaseModel):
     """Detailed project information."""
@@ -262,23 +262,6 @@ class Issue(BaseModel):
     annotations: Union[list[str | None] | None, Any] = Field(default=None)
     subscription_details: Union[dict[str, Any] | None, Any] = Field(default=None, alias="subscriptionDetails")
 
-class EventGroupingconfig(BaseModel):
-    """Grouping configuration."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    enhancements: Union[str | None, Any] = Field(default=None)
-
-class EventUser(BaseModel):
-    """User associated with the event."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    email: Union[str | None, Any] = Field(default=None)
-    username: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    ip_address: Union[str | None, Any] = Field(default=None)
-
 class EventMetadata(BaseModel):
     """Event metadata."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -291,6 +274,23 @@ class EventTagsItem(BaseModel):
 
     key: Union[str | None, Any] = Field(default=None)
     value: Union[str | None, Any] = Field(default=None)
+
+class EventUser(BaseModel):
+    """User associated with the event."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    email: Union[str | None, Any] = Field(default=None)
+    username: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    ip_address: Union[str | None, Any] = Field(default=None)
+
+class EventGroupingconfig(BaseModel):
+    """Grouping configuration."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    enhancements: Union[str | None, Any] = Field(default=None)
 
 class Event(BaseModel):
     """A Sentry event (individual error occurrence)."""
