@@ -689,15 +689,6 @@ class AdUpdateParams(BaseModel):
     tracking_specs: Union[str | None, Any] = Field(default=None)
     bid_amount: Union[str | None, Any] = Field(default=None)
 
-class AdLibraryAdDeliveryByRegionItem(BaseModel):
-    """Nested schema for AdLibraryAd.delivery_by_region_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    region: Union[str | None, Any] = Field(default=None, description="Region name")
-    """Region name"""
-    percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this region")
-    """Percentage of audience in this region"""
-
 class AdLibraryAdEstimatedAudienceSize(BaseModel):
     """Estimated audience size range"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -726,6 +717,15 @@ class AdLibraryAdDemographicDistributionItem(BaseModel):
     """Gender category"""
     percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this demographic")
     """Percentage of audience in this demographic"""
+
+class AdLibraryAdDeliveryByRegionItem(BaseModel):
+    """Nested schema for AdLibraryAd.delivery_by_region_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    region: Union[str | None, Any] = Field(default=None, description="Region name")
+    """Region name"""
+    percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this region")
+    """Percentage of audience in this region"""
 
 class AdLibraryAdImpressions(BaseModel):
     """Number of impressions as a range"""
