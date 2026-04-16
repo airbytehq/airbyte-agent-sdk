@@ -5906,6 +5906,16 @@ components:
     Profile:
       type: object
       x-airbyte-entity-name: profiles
+      x-airbyte-ai-hints:
+        summary: "Advertising profiles representing advertiser accounts across Amazon marketplaces"
+        when_to_use: "Questions about which advertising accounts or marketplaces are available, or when you need a profile ID to query other entities"
+        trigger_phrases: ["my profiles", "advertising accounts", "which marketplaces", "list profiles", "profile ID"]
+        freshness: live
+        search_strategy: "List profiles to discover available advertising accounts. Each profile has a profileId that is required as the Amazon-Advertising-API-Scope header when querying portfolios, campaigns, and other scoped entities. Match profiles by countryCode, accountInfo.name, or accountInfo.type."
+        example_questions:
+          - "List all my advertising profiles across marketplaces"
+          - "Show me the profiles for my seller accounts"
+          - "What marketplaces do I have advertising profiles in?"
       description: |
         An advertising profile represents an advertiser's account in a specific marketplace.
         Profiles are used to scope API calls and manage advertising campaigns.
@@ -5962,6 +5972,15 @@ components:
     Portfolio:
       type: object
       x-airbyte-entity-name: portfolios
+      x-airbyte-ai-hints:
+        summary: "Portfolios that group advertising campaigns together for budget management"
+        when_to_use: "Questions about campaign groupings, portfolio budgets, or organizational structure of ad campaigns"
+        trigger_phrases: ["portfolios", "campaign groups", "portfolio budget", "list portfolios"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list portfolios for that profile."
+        example_questions:
+          - "List all portfolios for one of my profiles"
+          - "Which portfolios are within budget?"
       description: |
         A portfolio is a container for grouping campaigns together for organizational
         and budget management purposes.
@@ -6028,6 +6047,16 @@ components:
     SponsoredProductCampaign:
       type: object
       x-airbyte-entity-name: sponsored_product_campaigns
+      x-airbyte-ai-hints:
+        summary: "Sponsored Products campaigns that promote individual product listings on Amazon"
+        when_to_use: "Questions about advertising campaigns, campaign status, budgets, bidding strategies, or targeting types"
+        trigger_phrases: ["campaigns", "sponsored products", "ad campaigns", "campaign budget", "campaign status"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list campaigns for that profile."
+        example_questions:
+          - "Show me all sponsored product campaigns"
+          - "What campaigns are currently enabled?"
+          - "Find campaigns with a specific targeting type"
       description: |
         A Sponsored Products campaign promotes individual product listings on Amazon.
         Campaigns contain ad groups, which contain ads and targeting settings.
