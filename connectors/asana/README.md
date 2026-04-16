@@ -16,6 +16,16 @@ The Asana connector is optimized to handle prompts like these.
 - Show me the tasks for a recent project
 - Who are the team members in one of my teams?
 - Show me details of my current workspace and its users
+- Create a new task called 'Review Q3 report' in my project
+- Mark the task 'Submit proposal' as completed
+- Update the due date of task X to next Friday
+- Create a new project called 'Product Launch' in my workspace
+- Add a comment on the task saying 'Looks good, approved!'
+- Assign the task to me and set the due date to tomorrow
+- Delete the project 'Old Campaign'
+- Schedule a new team meeting as a task for next Tuesday
+- Add a new team member to my workspace by email
+- Delete the task 'Outdated draft'
 - Summarize my team's workload and task completion rates
 - Find all tasks related to \{client_name\} across my workspaces
 - Analyze the most active projects in my workspace last month
@@ -26,11 +36,6 @@ The Asana connector is optimized to handle prompts like these.
 
 The Asana connector isn't currently able to handle prompts like these.
 
-- Create a new task for [TeamMember]
-- Update the priority of this task
-- Delete the project [ProjectName]
-- Schedule a new team meeting
-- Add a new team member to [Workspace]
 - Move this task to another project
 
 ## Installation
@@ -96,10 +101,10 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Tasks | [List](./REFERENCE.md#tasks-list), [Get](./REFERENCE.md#tasks-get), [Context Store Search](./REFERENCE.md#tasks-context-store-search) |
+| Tasks | [List](./REFERENCE.md#tasks-list), [Create](./REFERENCE.md#tasks-create), [Get](./REFERENCE.md#tasks-get), [Update](./REFERENCE.md#tasks-update), [Delete](./REFERENCE.md#tasks-delete), [Context Store Search](./REFERENCE.md#tasks-context-store-search) |
 | Project Tasks | [List](./REFERENCE.md#project-tasks-list) |
 | Workspace Task Search | [List](./REFERENCE.md#workspace-task-search-list) |
-| Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
+| Projects | [List](./REFERENCE.md#projects-list), [Create](./REFERENCE.md#projects-create), [Get](./REFERENCE.md#projects-get), [Update](./REFERENCE.md#projects-update), [Delete](./REFERENCE.md#projects-delete), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
 | Task Projects | [List](./REFERENCE.md#task-projects-list) |
 | Team Projects | [List](./REFERENCE.md#team-projects-list) |
 | Workspace Projects | [List](./REFERENCE.md#workspace-projects-list) |
@@ -118,6 +123,8 @@ This connector supports the following entities and actions. For more details, se
 | Task Subtasks | [List](./REFERENCE.md#task-subtasks-list) |
 | Task Dependencies | [List](./REFERENCE.md#task-dependencies-list) |
 | Task Dependents | [List](./REFERENCE.md#task-dependents-list) |
+| Task Stories | [Create](./REFERENCE.md#task-stories-create) |
+| Workspace Memberships | [Create](./REFERENCE.md#workspace-memberships-create) |
 
 
 ### Authentication

@@ -8,10 +8,10 @@ The Asana connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Tasks | [List](#tasks-list), [Get](#tasks-get), [Context Store Search](#tasks-context-store-search) |
+| Tasks | [List](#tasks-list), [Create](#tasks-create), [Get](#tasks-get), [Update](#tasks-update), [Delete](#tasks-delete), [Context Store Search](#tasks-context-store-search) |
 | Project Tasks | [List](#project-tasks-list) |
 | Workspace Task Search | [List](#workspace-task-search-list) |
-| Projects | [List](#projects-list), [Get](#projects-get), [Context Store Search](#projects-context-store-search) |
+| Projects | [List](#projects-list), [Create](#projects-create), [Get](#projects-get), [Update](#projects-update), [Delete](#projects-delete), [Context Store Search](#projects-context-store-search) |
 | Task Projects | [List](#task-projects-list) |
 | Team Projects | [List](#team-projects-list) |
 | Workspace Projects | [List](#workspace-projects-list) |
@@ -30,6 +30,8 @@ The Asana connector supports the following entities and actions.
 | Task Subtasks | [List](#task-subtasks-list) |
 | Task Dependencies | [List](#task-dependencies-list) |
 | Task Dependents | [List](#task-dependents-list) |
+| Task Stories | [Create](#task-stories-create) |
+| Workspace Memberships | [Create](#workspace-memberships-create) |
 
 ## Tasks
 
@@ -92,6 +94,76 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
+### Tasks Create
+
+Creates a new task. Every task is required to be created in a specific workspace,
+and this workspace cannot be changed once set. The workspace need not be set explicitly
+if you specify projects or a parent task instead.
+
+
+#### Python SDK
+
+```python
+await asana.tasks.create(
+    data={
+        "name": "<str>",
+        "workspace": "<str>"
+    }
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "tasks",
+    "action": "create",
+    "params": {
+        "data": {
+            "name": "<str>",
+            "workspace": "<str>"
+        }
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `data` | `object` | Yes |  |
+| `data.name` | `string` | Yes | Name of the task |
+| `data.workspace` | `string` | Yes | GID of the workspace to create the task in |
+| `data.projects` | `array<string>` | No | Array of project GIDs to add the task to |
+| `data.assignee` | `string` | No | GID of the user to assign the task to, or 'me' for the current user |
+| `data.notes` | `string` | No | Free-form textual description of the task (plain text, no formatting) |
+| `data.html_notes` | `string` | No | HTML-formatted description of the task |
+| `data.due_on` | `string` | No | Due date in YYYY-MM-DD format |
+| `data.due_at` | `string` | No | Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z) |
+| `data.start_on` | `string` | No | Start date in YYYY-MM-DD format |
+| `data.completed` | `boolean` | No | Whether the task is completed |
+| `data.parent` | `string` | No | GID of the parent task (to create a subtask) |
+| `data.tags` | `array<string>` | No | Array of tag GIDs to add to the task |
+| `data.followers` | `array<string>` | No | Array of user GIDs to add as followers |
+| `data.resource_subtype` | `"default_task" \| "milestone" \| "section" \| "approval"` | No | The subtype of the task: default_task, milestone, section, or approval |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `gid` | `string` |  |
+
+
+</details>
+
 ### Tasks Get
 
 Get a single task by its ID
@@ -138,6 +210,105 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 
 </details>
+
+### Tasks Update
+
+Updates an existing task. Only the fields provided in the data block will be updated;
+any unspecified fields will remain unchanged. When using this method, it is best to
+specify only those fields you wish to change.
+
+
+#### Python SDK
+
+```python
+await asana.tasks.update(
+    data={},
+    task_gid="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "tasks",
+    "action": "update",
+    "params": {
+        "data": {},
+        "task_gid": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `data` | `object` | Yes |  |
+| `data.name` | `string` | No | Name of the task |
+| `data.assignee` | `string` | No | GID of the user to assign the task to, or 'me' for the current user |
+| `data.notes` | `string` | No | Free-form textual description of the task (plain text, no formatting) |
+| `data.html_notes` | `string` | No | HTML-formatted description of the task |
+| `data.due_on` | `string` | No | Due date in YYYY-MM-DD format |
+| `data.due_at` | `string` | No | Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z) |
+| `data.start_on` | `string` | No | Start date in YYYY-MM-DD format |
+| `data.completed` | `boolean` | No | Whether the task is completed |
+| `task_gid` | `string` | Yes | The task to update |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `gid` | `string` |  |
+
+
+</details>
+
+### Tasks Delete
+
+Deletes a specific, existing task. Deleted tasks go into the trash of the user
+making the delete request. Tasks can be recovered from the trash within 30 days;
+afterward they are completely removed from the system.
+
+
+#### Python SDK
+
+```python
+await asana.tasks.delete(
+    task_gid="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "tasks",
+    "action": "delete",
+    "params": {
+        "task_gid": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `task_gid` | `string` | Yes | The task to delete |
+
 
 ### Tasks Context Store Search
 
@@ -465,6 +636,101 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
+### Projects Create
+
+Create a new project in a workspace or team. Every project is required to be
+created in a specific workspace or organization, and this cannot be changed once set.
+
+
+#### Python SDK
+
+```python
+await asana.projects.create(
+    data={
+        "name": "<str>",
+        "workspace": "<str>"
+    }
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "projects",
+    "action": "create",
+    "params": {
+        "data": {
+            "name": "<str>",
+            "workspace": "<str>"
+        }
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `data` | `object` | Yes |  |
+| `data.name` | `string` | Yes | Name of the project |
+| `data.workspace` | `string` | Yes | GID of the workspace to create the project in |
+| `data.team` | `string` | No | GID of the team to share the project with (required for organizations) |
+| `data.notes` | `string` | No | Free-form textual description of the project (plain text) |
+| `data.html_notes` | `string` | No | HTML-formatted description of the project |
+| `data.color` | `string` | No | Color of the project (e.g., dark-pink, dark-green, dark-blue, dark-red, dark-teal, dark-brown, dark-orange, dark-purple, dark-warm-gray, light-pink, light-green, light-blue, light-red, light-teal, light-brown, light-orange, light-purple, light-warm-gray, none) |
+| `data.default_view` | `"list" \| "board" \| "calendar" \| "timeline"` | No | The default view of the project (list, board, calendar, timeline) |
+| `data.due_on` | `string` | No | Due date in YYYY-MM-DD format |
+| `data.start_on` | `string` | No | Start date in YYYY-MM-DD format |
+| `data.privacy_setting` | `"public_to_workspace" \| "private"` | No | Privacy setting: public_to_workspace or private |
+| `data.archived` | `boolean` | No | Whether the project is archived |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `gid` | `string` |  |
+| `archived` | `boolean` |  |
+| `color` | `string \| null` |  |
+| `completed` | `boolean` |  |
+| `completed_at` | `string \| null` |  |
+| `created_at` | `string` |  |
+| `current_status` | `object \| null` |  |
+| `current_status_update` | `object \| null` |  |
+| `custom_fields` | `array` |  |
+| `default_access_level` | `string` |  |
+| `default_view` | `string` |  |
+| `due_on` | `string \| null` |  |
+| `due_date` | `string \| null` |  |
+| `followers` | `array<object>` |  |
+| `members` | `array<object>` |  |
+| `minimum_access_level_for_customization` | `string` |  |
+| `minimum_access_level_for_sharing` | `string` |  |
+| `modified_at` | `string` |  |
+| `name` | `string` |  |
+| `notes` | `string` |  |
+| `owner` | `object` |  |
+| `permalink_url` | `string` |  |
+| `privacy_setting` | `string` |  |
+| `public` | `boolean` |  |
+| `resource_type` | `string` |  |
+| `start_on` | `string \| null` |  |
+| `team` | `object \| null` |  |
+| `workspace` | `object` |  |
+| `icon` | `string \| null` |  |
+| `completed_by` | `object \| null` |  |
+
+
+</details>
+
 ### Projects Get
 
 Get a single project by its ID
@@ -533,11 +799,139 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `public` | `boolean` |  |
 | `resource_type` | `string` |  |
 | `start_on` | `string \| null` |  |
-| `team` | `object` |  |
+| `team` | `object \| null` |  |
 | `workspace` | `object` |  |
+| `icon` | `string \| null` |  |
+| `completed_by` | `object \| null` |  |
 
 
 </details>
+
+### Projects Update
+
+Updates an existing project. Only the fields provided in the data block will be updated;
+any unspecified fields will remain unchanged. When using this method, it is best to
+specify only those fields you wish to change.
+
+
+#### Python SDK
+
+```python
+await asana.projects.update(
+    data={},
+    project_gid="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "projects",
+    "action": "update",
+    "params": {
+        "data": {},
+        "project_gid": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `data` | `object` | Yes |  |
+| `data.name` | `string` | No | Name of the project |
+| `data.notes` | `string` | No | Free-form textual description of the project (plain text) |
+| `data.html_notes` | `string` | No | HTML-formatted description of the project |
+| `data.color` | `string` | No | Color of the project |
+| `data.default_view` | `"list" \| "board" \| "calendar" \| "timeline"` | No | The default view of the project (list, board, calendar, timeline) |
+| `data.due_on` | `string` | No | Due date in YYYY-MM-DD format |
+| `data.start_on` | `string` | No | Start date in YYYY-MM-DD format |
+| `data.archived` | `boolean` | No | Whether the project is archived |
+| `project_gid` | `string` | Yes | The project to update |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `gid` | `string` |  |
+| `archived` | `boolean` |  |
+| `color` | `string \| null` |  |
+| `completed` | `boolean` |  |
+| `completed_at` | `string \| null` |  |
+| `created_at` | `string` |  |
+| `current_status` | `object \| null` |  |
+| `current_status_update` | `object \| null` |  |
+| `custom_fields` | `array` |  |
+| `default_access_level` | `string` |  |
+| `default_view` | `string` |  |
+| `due_on` | `string \| null` |  |
+| `due_date` | `string \| null` |  |
+| `followers` | `array<object>` |  |
+| `members` | `array<object>` |  |
+| `minimum_access_level_for_customization` | `string` |  |
+| `minimum_access_level_for_sharing` | `string` |  |
+| `modified_at` | `string` |  |
+| `name` | `string` |  |
+| `notes` | `string` |  |
+| `owner` | `object` |  |
+| `permalink_url` | `string` |  |
+| `privacy_setting` | `string` |  |
+| `public` | `boolean` |  |
+| `resource_type` | `string` |  |
+| `start_on` | `string \| null` |  |
+| `team` | `object \| null` |  |
+| `workspace` | `object` |  |
+| `icon` | `string \| null` |  |
+| `completed_by` | `object \| null` |  |
+
+
+</details>
+
+### Projects Delete
+
+Deletes a specific, existing project. Returns an empty data record.
+
+
+#### Python SDK
+
+```python
+await asana.projects.delete(
+    project_gid="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "projects",
+    "action": "delete",
+    "params": {
+        "project_gid": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `project_gid` | `string` | Yes | The project to delete |
+
 
 ### Projects Context Store Search
 
@@ -2311,6 +2705,141 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | Field Name | Type | Description |
 |------------|------|-------------|
 | `next_page` | `object \| null` |  |
+
+</details>
+
+## Task Stories
+
+### Task Stories Create
+
+Adds a comment to a task. The comment will be authored by the currently
+authenticated user, and timestamped when the server receives the request.
+
+
+#### Python SDK
+
+```python
+await asana.task_stories.create(
+    data={
+        "text": "<str>"
+    },
+    task_gid="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "task_stories",
+    "action": "create",
+    "params": {
+        "data": {
+            "text": "<str>"
+        },
+        "task_gid": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `data` | `object` | Yes |  |
+| `data.text` | `string` | Yes | The plain text body of the comment |
+| `data.html_text` | `string` | No | HTML-formatted body of the comment |
+| `data.is_pinned` | `boolean` | No | Whether the story should be pinned on the resource |
+| `task_gid` | `string` | Yes | The task to add a comment to |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `gid` | `string` |  |
+| `resource_type` | `string` |  |
+| `resource_subtype` | `string` |  |
+| `text` | `string` |  |
+| `html_text` | `string` |  |
+| `is_pinned` | `boolean` |  |
+| `created_at` | `string` |  |
+| `created_by` | `object` |  |
+| `target` | `object` |  |
+| `type` | `string` |  |
+
+
+</details>
+
+## Workspace Memberships
+
+### Workspace Memberships Create
+
+Add a user to a workspace or organization. The user can be referenced by their
+globally unique user ID or their email address. Returns the full user record
+for the invited user.
+
+
+#### Python SDK
+
+```python
+await asana.workspace_memberships.create(
+    data={
+        "user": "<str>"
+    },
+    workspace_gid="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "workspace_memberships",
+    "action": "create",
+    "params": {
+        "data": {
+            "user": "<str>"
+        },
+        "workspace_gid": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `data` | `object` | Yes |  |
+| `data.user` | `string` | Yes | A user GID or email address to add to the workspace |
+| `workspace_gid` | `string` | Yes | The workspace or organization to add the user to |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `gid` | `string` |  |
+| `email` | `string` |  |
+| `name` | `string` |  |
+| `photo` | `object \| null` |  |
+| `resource_type` | `string` |  |
+| `workspaces` | `array<object>` |  |
+
 
 </details>
 

@@ -110,7 +110,13 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='tasks',
-            actions=[Action.LIST, Action.GET],
+            actions=[
+                Action.LIST,
+                Action.CREATE,
+                Action.GET,
+                Action.UPDATE,
+                Action.DELETE,
+            ],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -179,6 +185,184 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'next_page': '$.next_page'},
+                ),
+                Action.CREATE: EndpointDefinition(
+                    method='POST',
+                    path='/tasks',
+                    action=Action.CREATE,
+                    description='Creates a new task. Every task is required to be created in a specific workspace,\nand this workspace cannot be changed once set. The workspace need not be set explicitly\nif you specify projects or a parent task instead.\n',
+                    body_fields=['data'],
+                    request_schema={
+                        'type': 'object',
+                        'description': 'Parameters for creating a new task',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'required': ['name', 'workspace'],
+                                'properties': {
+                                    'name': {'type': 'string', 'description': 'Name of the task'},
+                                    'workspace': {'type': 'string', 'description': 'GID of the workspace to create the task in'},
+                                    'projects': {
+                                        'type': 'array',
+                                        'description': 'Array of project GIDs to add the task to',
+                                        'items': {'type': 'string'},
+                                    },
+                                    'assignee': {'type': 'string', 'description': "GID of the user to assign the task to, or 'me' for the current user"},
+                                    'notes': {'type': 'string', 'description': 'Free-form textual description of the task (plain text, no formatting)'},
+                                    'html_notes': {'type': 'string', 'description': 'HTML-formatted description of the task'},
+                                    'due_on': {'type': 'string', 'description': 'Due date in YYYY-MM-DD format'},
+                                    'due_at': {'type': 'string', 'description': 'Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z)'},
+                                    'start_on': {'type': 'string', 'description': 'Start date in YYYY-MM-DD format'},
+                                    'completed': {'type': 'boolean', 'description': 'Whether the task is completed'},
+                                    'parent': {'type': 'string', 'description': 'GID of the parent task (to create a subtask)'},
+                                    'tags': {
+                                        'type': 'array',
+                                        'description': 'Array of tag GIDs to add to the task',
+                                        'items': {'type': 'string'},
+                                    },
+                                    'followers': {
+                                        'type': 'array',
+                                        'description': 'Array of user GIDs to add as followers',
+                                        'items': {'type': 'string'},
+                                    },
+                                    'resource_subtype': {
+                                        'type': 'string',
+                                        'description': 'The subtype of the task: default_task, milestone, section, or approval',
+                                        'enum': [
+                                            'default_task',
+                                            'milestone',
+                                            'section',
+                                            'approval',
+                                        ],
+                                    },
+                                },
+                            },
+                        },
+                        'required': ['data'],
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Task response wrapper',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'description': 'Full task object',
+                                'properties': {
+                                    'gid': {
+                                        'type': 'string',
+                                        'actual_time_minutes': {
+                                            'type': ['integer', 'null'],
+                                        },
+                                        'assignee': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                        'assignee_status': {'type': 'string'},
+                                        'assignee_section': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                        'completed': {'type': 'boolean'},
+                                        'completed_at': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'created_at': {'type': 'string'},
+                                        'due_at': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'due_on': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'followers': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                        },
+                                        'hearted': {'type': 'boolean'},
+                                        'hearts': {'type': 'array'},
+                                        'liked': {'type': 'boolean'},
+                                        'likes': {'type': 'array'},
+                                        'memberships': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'project': {
+                                                        'type': 'object',
+                                                        'properties': {
+                                                            'gid': {'type': 'string'},
+                                                            'name': {'type': 'string'},
+                                                            'resource_type': {'type': 'string'},
+                                                        },
+                                                    },
+                                                    'section': {
+                                                        'type': 'object',
+                                                        'properties': {
+                                                            'gid': {'type': 'string'},
+                                                            'name': {'type': 'string'},
+                                                            'resource_type': {'type': 'string'},
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        'modified_at': {'type': 'string'},
+                                        'name': {'type': 'string'},
+                                        'notes': {'type': 'string'},
+                                        'num_hearts': {'type': 'integer'},
+                                        'num_likes': {'type': 'integer'},
+                                        'parent': {
+                                            'type': ['object', 'null'],
+                                        },
+                                        'permalink_url': {'type': 'string'},
+                                        'projects': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                        },
+                                        'resource_type': {'type': 'string'},
+                                        'start_at': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'start_on': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'tags': {'type': 'array'},
+                                        'resource_subtype': {'type': 'string'},
+                                        'workspace': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    record_extractor='$.data',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -309,6 +493,178 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                             },
+                        },
+                    },
+                    record_extractor='$.data',
+                ),
+                Action.UPDATE: EndpointDefinition(
+                    method='PUT',
+                    path='/tasks/{task_gid}',
+                    action=Action.UPDATE,
+                    description='Updates an existing task. Only the fields provided in the data block will be updated;\nany unspecified fields will remain unchanged. When using this method, it is best to\nspecify only those fields you wish to change.\n',
+                    body_fields=['data'],
+                    path_params=['task_gid'],
+                    path_params_schema={
+                        'task_gid': {'type': 'string', 'required': True},
+                    },
+                    request_schema={
+                        'type': 'object',
+                        'description': 'Parameters for updating an existing task',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'properties': {
+                                    'name': {'type': 'string', 'description': 'Name of the task'},
+                                    'assignee': {'type': 'string', 'description': "GID of the user to assign the task to, or 'me' for the current user"},
+                                    'notes': {'type': 'string', 'description': 'Free-form textual description of the task (plain text, no formatting)'},
+                                    'html_notes': {'type': 'string', 'description': 'HTML-formatted description of the task'},
+                                    'due_on': {'type': 'string', 'description': 'Due date in YYYY-MM-DD format'},
+                                    'due_at': {'type': 'string', 'description': 'Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z)'},
+                                    'start_on': {'type': 'string', 'description': 'Start date in YYYY-MM-DD format'},
+                                    'completed': {'type': 'boolean', 'description': 'Whether the task is completed'},
+                                },
+                            },
+                        },
+                        'required': ['data'],
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Task response wrapper',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'description': 'Full task object',
+                                'properties': {
+                                    'gid': {
+                                        'type': 'string',
+                                        'actual_time_minutes': {
+                                            'type': ['integer', 'null'],
+                                        },
+                                        'assignee': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                        'assignee_status': {'type': 'string'},
+                                        'assignee_section': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                        'completed': {'type': 'boolean'},
+                                        'completed_at': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'created_at': {'type': 'string'},
+                                        'due_at': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'due_on': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'followers': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                        },
+                                        'hearted': {'type': 'boolean'},
+                                        'hearts': {'type': 'array'},
+                                        'liked': {'type': 'boolean'},
+                                        'likes': {'type': 'array'},
+                                        'memberships': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'project': {
+                                                        'type': 'object',
+                                                        'properties': {
+                                                            'gid': {'type': 'string'},
+                                                            'name': {'type': 'string'},
+                                                            'resource_type': {'type': 'string'},
+                                                        },
+                                                    },
+                                                    'section': {
+                                                        'type': 'object',
+                                                        'properties': {
+                                                            'gid': {'type': 'string'},
+                                                            'name': {'type': 'string'},
+                                                            'resource_type': {'type': 'string'},
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        'modified_at': {'type': 'string'},
+                                        'name': {'type': 'string'},
+                                        'notes': {'type': 'string'},
+                                        'num_hearts': {'type': 'integer'},
+                                        'num_likes': {'type': 'integer'},
+                                        'parent': {
+                                            'type': ['object', 'null'],
+                                        },
+                                        'permalink_url': {'type': 'string'},
+                                        'projects': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                        },
+                                        'resource_type': {'type': 'string'},
+                                        'start_at': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'start_on': {
+                                            'type': ['string', 'null'],
+                                        },
+                                        'tags': {'type': 'array'},
+                                        'resource_subtype': {'type': 'string'},
+                                        'workspace': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    record_extractor='$.data',
+                ),
+                Action.DELETE: EndpointDefinition(
+                    method='DELETE',
+                    path='/tasks/{task_gid}',
+                    action=Action.DELETE,
+                    description='Deletes a specific, existing task. Deleted tasks go into the trash of the user\nmaking the delete request. Tasks can be recovered from the trash within 30 days;\nafterward they are completely removed from the system.\n',
+                    path_params=['task_gid'],
+                    path_params_schema={
+                        'task_gid': {'type': 'string', 'required': True},
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Empty response returned by delete operations',
+                        'properties': {
+                            'data': {'type': 'object'},
                         },
                     },
                     record_extractor='$.data',
@@ -512,7 +868,13 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='projects',
-            actions=[Action.LIST, Action.GET],
+            actions=[
+                Action.LIST,
+                Action.CREATE,
+                Action.GET,
+                Action.UPDATE,
+                Action.DELETE,
+            ],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -566,6 +928,188 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'next_page': '$.next_page'},
+                ),
+                Action.CREATE: EndpointDefinition(
+                    method='POST',
+                    path='/projects',
+                    action=Action.CREATE,
+                    description='Create a new project in a workspace or team. Every project is required to be\ncreated in a specific workspace or organization, and this cannot be changed once set.\n',
+                    body_fields=['data'],
+                    request_schema={
+                        'type': 'object',
+                        'description': 'Parameters for creating a new project',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'required': ['name', 'workspace'],
+                                'properties': {
+                                    'name': {'type': 'string', 'description': 'Name of the project'},
+                                    'workspace': {'type': 'string', 'description': 'GID of the workspace to create the project in'},
+                                    'team': {'type': 'string', 'description': 'GID of the team to share the project with (required for organizations)'},
+                                    'notes': {'type': 'string', 'description': 'Free-form textual description of the project (plain text)'},
+                                    'html_notes': {'type': 'string', 'description': 'HTML-formatted description of the project'},
+                                    'color': {'type': 'string', 'description': 'Color of the project (e.g., dark-pink, dark-green, dark-blue, dark-red, dark-teal, dark-brown, dark-orange, dark-purple, dark-warm-gray, light-pink, light-green, light-blue, light-red, light-teal, light-brown, light-orange, light-purple, light-warm-gray, none)'},
+                                    'default_view': {
+                                        'type': 'string',
+                                        'description': 'The default view of the project (list, board, calendar, timeline)',
+                                        'enum': [
+                                            'list',
+                                            'board',
+                                            'calendar',
+                                            'timeline',
+                                        ],
+                                    },
+                                    'due_on': {'type': 'string', 'description': 'Due date in YYYY-MM-DD format'},
+                                    'start_on': {'type': 'string', 'description': 'Start date in YYYY-MM-DD format'},
+                                    'privacy_setting': {
+                                        'type': 'string',
+                                        'description': 'Privacy setting: public_to_workspace or private',
+                                        'enum': ['public_to_workspace', 'private'],
+                                    },
+                                    'archived': {'type': 'boolean', 'description': 'Whether the project is archived'},
+                                },
+                            },
+                        },
+                        'required': ['data'],
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Project response wrapper',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'description': 'Full project object',
+                                'properties': {
+                                    'gid': {'type': 'string'},
+                                    'archived': {'type': 'boolean'},
+                                    'color': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'completed': {'type': 'boolean'},
+                                    'completed_at': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'created_at': {'type': 'string'},
+                                    'current_status': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'author': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                            'color': {'type': 'string'},
+                                            'created_at': {'type': 'string'},
+                                            'created_by': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                            'modified_at': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                            'text': {'type': 'string'},
+                                            'title': {'type': 'string'},
+                                        },
+                                    },
+                                    'current_status_update': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                            'resource_subtype': {'type': 'string'},
+                                            'title': {'type': 'string'},
+                                        },
+                                    },
+                                    'custom_fields': {'type': 'array'},
+                                    'default_access_level': {'type': 'string'},
+                                    'default_view': {'type': 'string'},
+                                    'due_on': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'due_date': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'followers': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                    'members': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                    'minimum_access_level_for_customization': {'type': 'string'},
+                                    'minimum_access_level_for_sharing': {'type': 'string'},
+                                    'modified_at': {'type': 'string'},
+                                    'name': {'type': 'string'},
+                                    'notes': {'type': 'string'},
+                                    'owner': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'permalink_url': {'type': 'string'},
+                                    'privacy_setting': {'type': 'string'},
+                                    'public': {'type': 'boolean'},
+                                    'resource_type': {'type': 'string'},
+                                    'start_on': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'team': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'workspace': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'icon': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'completed_by': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    record_extractor='$.data',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -683,7 +1227,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'type': ['string', 'null'],
                                     },
                                     'team': {
-                                        'type': 'object',
+                                        'type': ['object', 'null'],
                                         'properties': {
                                             'gid': {'type': 'string'},
                                             'name': {'type': 'string'},
@@ -698,8 +1242,215 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                             'resource_type': {'type': 'string'},
                                         },
                                     },
+                                    'icon': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'completed_by': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
                                 },
                             },
+                        },
+                    },
+                    record_extractor='$.data',
+                ),
+                Action.UPDATE: EndpointDefinition(
+                    method='PUT',
+                    path='/projects/{project_gid}',
+                    action=Action.UPDATE,
+                    description='Updates an existing project. Only the fields provided in the data block will be updated;\nany unspecified fields will remain unchanged. When using this method, it is best to\nspecify only those fields you wish to change.\n',
+                    body_fields=['data'],
+                    path_params=['project_gid'],
+                    path_params_schema={
+                        'project_gid': {'type': 'string', 'required': True},
+                    },
+                    request_schema={
+                        'type': 'object',
+                        'description': 'Parameters for updating an existing project',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'properties': {
+                                    'name': {'type': 'string', 'description': 'Name of the project'},
+                                    'notes': {'type': 'string', 'description': 'Free-form textual description of the project (plain text)'},
+                                    'html_notes': {'type': 'string', 'description': 'HTML-formatted description of the project'},
+                                    'color': {'type': 'string', 'description': 'Color of the project'},
+                                    'default_view': {
+                                        'type': 'string',
+                                        'description': 'The default view of the project (list, board, calendar, timeline)',
+                                        'enum': [
+                                            'list',
+                                            'board',
+                                            'calendar',
+                                            'timeline',
+                                        ],
+                                    },
+                                    'due_on': {'type': 'string', 'description': 'Due date in YYYY-MM-DD format'},
+                                    'start_on': {'type': 'string', 'description': 'Start date in YYYY-MM-DD format'},
+                                    'archived': {'type': 'boolean', 'description': 'Whether the project is archived'},
+                                },
+                            },
+                        },
+                        'required': ['data'],
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Project response wrapper',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'description': 'Full project object',
+                                'properties': {
+                                    'gid': {'type': 'string'},
+                                    'archived': {'type': 'boolean'},
+                                    'color': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'completed': {'type': 'boolean'},
+                                    'completed_at': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'created_at': {'type': 'string'},
+                                    'current_status': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'author': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                            'color': {'type': 'string'},
+                                            'created_at': {'type': 'string'},
+                                            'created_by': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'gid': {'type': 'string'},
+                                                    'name': {'type': 'string'},
+                                                    'resource_type': {'type': 'string'},
+                                                },
+                                            },
+                                            'modified_at': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                            'text': {'type': 'string'},
+                                            'title': {'type': 'string'},
+                                        },
+                                    },
+                                    'current_status_update': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                            'resource_subtype': {'type': 'string'},
+                                            'title': {'type': 'string'},
+                                        },
+                                    },
+                                    'custom_fields': {'type': 'array'},
+                                    'default_access_level': {'type': 'string'},
+                                    'default_view': {'type': 'string'},
+                                    'due_on': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'due_date': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'followers': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                    'members': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                    'minimum_access_level_for_customization': {'type': 'string'},
+                                    'minimum_access_level_for_sharing': {'type': 'string'},
+                                    'modified_at': {'type': 'string'},
+                                    'name': {'type': 'string'},
+                                    'notes': {'type': 'string'},
+                                    'owner': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'permalink_url': {'type': 'string'},
+                                    'privacy_setting': {'type': 'string'},
+                                    'public': {'type': 'boolean'},
+                                    'resource_type': {'type': 'string'},
+                                    'start_on': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'team': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'workspace': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'icon': {
+                                        'type': ['string', 'null'],
+                                    },
+                                    'completed_by': {
+                                        'type': ['object', 'null'],
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    record_extractor='$.data',
+                ),
+                Action.DELETE: EndpointDefinition(
+                    method='DELETE',
+                    path='/projects/{project_gid}',
+                    action=Action.DELETE,
+                    description='Deletes a specific, existing project. Returns an empty data record.\n',
+                    path_params=['project_gid'],
+                    path_params_schema={
+                        'project_gid': {'type': 'string', 'required': True},
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Empty response returned by delete operations',
+                        'properties': {
+                            'data': {'type': 'object'},
                         },
                     },
                     record_extractor='$.data',
@@ -2032,6 +2783,156 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                 ),
             ],
         ),
+        EntityDefinition(
+            name='task_stories',
+            actions=[Action.CREATE],
+            endpoints={
+                Action.CREATE: EndpointDefinition(
+                    method='POST',
+                    path='/tasks/{task_gid}/stories',
+                    action=Action.CREATE,
+                    description='Adds a comment to a task. The comment will be authored by the currently\nauthenticated user, and timestamped when the server receives the request.\n',
+                    body_fields=['data'],
+                    path_params=['task_gid'],
+                    path_params_schema={
+                        'task_gid': {'type': 'string', 'required': True},
+                    },
+                    request_schema={
+                        'type': 'object',
+                        'description': 'Parameters for creating a comment (story) on a task',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'required': ['text'],
+                                'properties': {
+                                    'text': {'type': 'string', 'description': 'The plain text body of the comment'},
+                                    'html_text': {'type': 'string', 'description': 'HTML-formatted body of the comment'},
+                                    'is_pinned': {'type': 'boolean', 'description': 'Whether the story should be pinned on the resource'},
+                                },
+                            },
+                        },
+                        'required': ['data'],
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'Story response wrapper',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'description': 'A story represents an activity associated with an object in Asana',
+                                'properties': {
+                                    'gid': {'type': 'string'},
+                                    'resource_type': {'type': 'string'},
+                                    'resource_subtype': {'type': 'string'},
+                                    'text': {'type': 'string'},
+                                    'html_text': {'type': 'string'},
+                                    'is_pinned': {'type': 'boolean'},
+                                    'created_at': {'type': 'string'},
+                                    'created_by': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'target': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'gid': {'type': 'string'},
+                                            'name': {'type': 'string'},
+                                            'resource_type': {'type': 'string'},
+                                        },
+                                    },
+                                    'type': {'type': 'string'},
+                                },
+                            },
+                        },
+                    },
+                    record_extractor='$.data',
+                ),
+            },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='task_stories',
+                    target_entity='tasks',
+                    foreign_key='task_gid',
+                    target_key='gid',
+                    cardinality='many_to_one',
+                ),
+            ],
+        ),
+        EntityDefinition(
+            name='workspace_memberships',
+            actions=[Action.CREATE],
+            endpoints={
+                Action.CREATE: EndpointDefinition(
+                    method='POST',
+                    path='/workspaces/{workspace_gid}/addUser',
+                    action=Action.CREATE,
+                    description='Add a user to a workspace or organization. The user can be referenced by their\nglobally unique user ID or their email address. Returns the full user record\nfor the invited user.\n',
+                    body_fields=['data'],
+                    path_params=['workspace_gid'],
+                    path_params_schema={
+                        'workspace_gid': {'type': 'string', 'required': True},
+                    },
+                    request_schema={
+                        'type': 'object',
+                        'description': 'Parameters for adding a user to a workspace or organization',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'required': ['user'],
+                                'properties': {
+                                    'user': {'type': 'string', 'description': 'A user GID or email address to add to the workspace'},
+                                },
+                            },
+                        },
+                        'required': ['data'],
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'User response wrapper',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'description': 'Full user object',
+                                'properties': {
+                                    'gid': {'type': 'string'},
+                                    'email': {'type': 'string'},
+                                    'name': {'type': 'string'},
+                                    'photo': {
+                                        'type': ['object', 'null'],
+                                    },
+                                    'resource_type': {'type': 'string'},
+                                    'workspaces': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'gid': {'type': 'string'},
+                                                'name': {'type': 'string'},
+                                                'resource_type': {'type': 'string'},
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    record_extractor='$.data',
+                ),
+            },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='workspace_memberships',
+                    target_entity='workspaces',
+                    foreign_key='workspace_gid',
+                    target_key='gid',
+                    cardinality='many_to_one',
+                ),
+            ],
+        ),
     ],
     search_field_paths={
         'attachments': [
@@ -2411,6 +3312,16 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
             'Show me the tasks for a recent project',
             'Who are the team members in one of my teams?',
             'Show me details of my current workspace and its users',
+            "Create a new task called 'Review Q3 report' in my project",
+            "Mark the task 'Submit proposal' as completed",
+            'Update the due date of task X to next Friday',
+            "Create a new project called 'Product Launch' in my workspace",
+            "Add a comment on the task saying 'Looks good, approved!'",
+            'Assign the task to me and set the due date to tomorrow',
+            "Delete the project 'Old Campaign'",
+            'Schedule a new team meeting as a task for next Tuesday',
+            'Add a new team member to my workspace by email',
+            "Delete the task 'Outdated draft'",
         ],
         context_store_search=[
             "Summarize my team's workload and task completion rates",
@@ -2426,13 +3337,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
             'Compare task completion rates between my different teams',
             'Identify overdue tasks across all my projects',
         ],
-        unsupported=[
-            'Create a new task for [TeamMember]',
-            'Update the priority of this task',
-            'Delete the project [ProjectName]',
-            'Schedule a new team meeting',
-            'Add a new team member to [Workspace]',
-            'Move this task to another project',
-        ],
+        unsupported=['Move this task to another project'],
     ),
 )

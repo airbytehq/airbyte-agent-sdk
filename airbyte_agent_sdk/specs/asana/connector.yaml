@@ -37,6 +37,16 @@ info:
     - "Show me the tasks for a recent project"
     - "Who are the team members in one of my teams?"
     - "Show me details of my current workspace and its users"
+    - "Create a new task called 'Review Q3 report' in my project"
+    - "Mark the task 'Submit proposal' as completed"
+    - "Update the due date of task X to next Friday"
+    - "Create a new project called 'Product Launch' in my workspace"
+    - "Add a comment on the task saying 'Looks good, approved!'"
+    - "Assign the task to me and set the due date to tomorrow"
+    - "Delete the project 'Old Campaign'"
+    - "Schedule a new team meeting as a task for next Tuesday"
+    - "Add a new team member to my workspace by email"
+    - "Delete the task 'Outdated draft'"
     search:
     - "Summarize my team's workload and task completion rates"
     - "Find all tasks related to {client_name} across my workspaces"
@@ -44,11 +54,6 @@ info:
     - "Compare task completion rates between my different teams"
     - "Identify overdue tasks across all my projects"
     unsupported:
-    - "Create a new task for [TeamMember]"
-    - "Update the priority of this task"
-    - "Delete the project [ProjectName]"
-    - "Schedule a new team meeting"
-    - "Add a new team member to [Workspace]"
     - "Move this task to another project"
 
   x-airbyte-entity-relationships:
@@ -140,6 +145,16 @@ info:
   - source_entity: task_dependents
     target_entity: tasks
     foreign_key: task_gid
+    target_key: gid
+    cardinality: many_to_one
+  - source_entity: task_stories
+    target_entity: tasks
+    foreign_key: task_gid
+    target_key: gid
+    cardinality: many_to_one
+  - source_entity: workspace_memberships
+    target_entity: workspaces
+    foreign_key: workspace_gid
     target_key: gid
     cardinality: many_to_one
   x-airbyte-context-store:
@@ -1795,6 +1810,36 @@ paths:
         "401":
           description: Unauthorized
 
+    post:
+      summary: Create a task
+      description: |
+        Creates a new task. Every task is required to be created in a specific workspace,
+        and this workspace cannot be changed once set. The workspace need not be set explicitly
+        if you specify projects or a parent task instead.
+      operationId: createTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: create
+      x-airbyte-record-extractor: "$.data"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateParams"
+      responses:
+        "201":
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
   "/projects/{project_gid}/tasks":
     get:
       summary: List tasks from a project
@@ -1868,6 +1913,76 @@ paths:
           description: Task not found
         "401":
           description: Unauthorized
+
+    put:
+      summary: Update a task
+      description: |
+        Updates an existing task. Only the fields provided in the data block will be updated;
+        any unspecified fields will remain unchanged. When using this method, it is best to
+        specify only those fields you wish to change.
+      operationId: updateTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: update
+      x-airbyte-record-extractor: "$.data"
+      parameters:
+      - name: task_gid
+        in: path
+        required: true
+        description: The task to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdateParams"
+      responses:
+        "200":
+          description: Task updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Task not found
+
+    delete:
+      summary: Delete a task
+      description: |
+        Deletes a specific, existing task. Deleted tasks go into the trash of the user
+        making the delete request. Tasks can be recovered from the trash within 30 days;
+        afterward they are completely removed from the system.
+      operationId: deleteTask
+      x-airbyte-entity: tasks
+      x-airbyte-action: delete
+      x-airbyte-record-extractor: "$.data"
+      parameters:
+      - name: task_gid
+        in: path
+        required: true
+        description: The task to delete
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Task deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmptyResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Task not found
 
   "/workspaces/{workspace_gid}/tasks/search":
     get:
@@ -2050,6 +2165,35 @@ paths:
         "401":
           description: Unauthorized
 
+    post:
+      summary: Create a project
+      description: |
+        Create a new project in a workspace or team. Every project is required to be
+        created in a specific workspace or organization, and this cannot be changed once set.
+      operationId: createProject
+      x-airbyte-entity: projects
+      x-airbyte-action: create
+      x-airbyte-record-extractor: "$.data"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectCreateParams"
+      responses:
+        "201":
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
   "/projects/{project_gid}":
     get:
       summary: Get a project
@@ -2077,6 +2221,74 @@ paths:
           description: Project not found
         "401":
           description: Unauthorized
+
+    put:
+      summary: Update a project
+      description: |
+        Updates an existing project. Only the fields provided in the data block will be updated;
+        any unspecified fields will remain unchanged. When using this method, it is best to
+        specify only those fields you wish to change.
+      operationId: updateProject
+      x-airbyte-entity: projects
+      x-airbyte-action: update
+      x-airbyte-record-extractor: "$.data"
+      parameters:
+      - name: project_gid
+        in: path
+        required: true
+        description: The project to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdateParams"
+      responses:
+        "200":
+          description: Project updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Project not found
+
+    delete:
+      summary: Delete a project
+      description: |
+        Deletes a specific, existing project. Returns an empty data record.
+      operationId: deleteProject
+      x-airbyte-entity: projects
+      x-airbyte-action: delete
+      x-airbyte-record-extractor: "$.data"
+      parameters:
+      - name: project_gid
+        in: path
+        required: true
+        description: The project to delete
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Project deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmptyResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Project not found
 
   "/tasks/{task_gid}/projects":
     get:
@@ -2901,6 +3113,87 @@ paths:
         "401":
           description: Unauthorized
 
+  # Task stories (comments) endpoint
+  "/tasks/{task_gid}/stories":
+    post:
+      summary: Create a comment on a task
+      description: |
+        Adds a comment to a task. The comment will be authored by the currently
+        authenticated user, and timestamped when the server receives the request.
+      operationId: createTaskStory
+      x-airbyte-entity: task_stories
+      x-airbyte-action: create
+      x-airbyte-record-extractor: "$.data"
+      parameters:
+      - name: task_gid
+        in: path
+        required: true
+        description: The task to add a comment to
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoryCreateParams"
+      responses:
+        "201":
+          description: Story created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoryResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Task not found
+
+  # Workspace membership endpoint
+  "/workspaces/{workspace_gid}/addUser":
+    post:
+      summary: Add a user to a workspace
+      description: |
+        Add a user to a workspace or organization. The user can be referenced by their
+        globally unique user ID or their email address. Returns the full user record
+        for the invited user.
+      operationId: addUserToWorkspace
+      x-airbyte-entity: workspace_memberships
+      x-airbyte-action: create
+      x-airbyte-record-extractor: "$.data"
+      parameters:
+      - name: workspace_gid
+        in: path
+        required: true
+        description: The workspace or organization to add the user to
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspaceAddUserParams"
+      responses:
+        "200":
+          description: User added to workspace
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Workspace not found
+
 components:
   securitySchemes:
     oauth2:
@@ -3296,7 +3589,7 @@ components:
         start_on:
           type: ["string", "null"]
         team:
-          type: object
+          type: ["object", "null"]
           properties:
             gid:
               type: string
@@ -3306,6 +3599,17 @@ components:
               type: string
         workspace:
           type: object
+          properties:
+            gid:
+              type: string
+            name:
+              type: string
+            resource_type:
+              type: string
+        icon:
+          type: ["string", "null"]
+        completed_by:
+          type: ["object", "null"]
           properties:
             gid:
               type: string
@@ -3756,3 +4060,287 @@ components:
               type: string
             uri:
               type: string
+
+    # Write operation schemas
+
+    TaskCreateParams:
+      type: object
+      description: Parameters for creating a new task
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - name
+          - workspace
+          properties:
+            name:
+              type: string
+              description: Name of the task
+            workspace:
+              type: string
+              description: GID of the workspace to create the task in
+            projects:
+              type: array
+              description: Array of project GIDs to add the task to
+              items:
+                type: string
+            assignee:
+              type: string
+              description: GID of the user to assign the task to, or 'me' for the current user
+            notes:
+              type: string
+              description: Free-form textual description of the task (plain text, no formatting)
+            html_notes:
+              type: string
+              description: HTML-formatted description of the task
+            due_on:
+              type: string
+              description: "Due date in YYYY-MM-DD format"
+            due_at:
+              type: string
+              description: "Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z)"
+            start_on:
+              type: string
+              description: "Start date in YYYY-MM-DD format"
+            completed:
+              type: boolean
+              description: Whether the task is completed
+            parent:
+              type: string
+              description: GID of the parent task (to create a subtask)
+            tags:
+              type: array
+              description: Array of tag GIDs to add to the task
+              items:
+                type: string
+            followers:
+              type: array
+              description: Array of user GIDs to add as followers
+              items:
+                type: string
+            resource_subtype:
+              type: string
+              description: "The subtype of the task: default_task, milestone, section, or approval"
+              enum:
+              - default_task
+              - milestone
+              - section
+              - approval
+
+    TaskUpdateParams:
+      type: object
+      description: Parameters for updating an existing task
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of the task
+            assignee:
+              type: string
+              description: GID of the user to assign the task to, or 'me' for the current user
+            notes:
+              type: string
+              description: Free-form textual description of the task (plain text, no formatting)
+            html_notes:
+              type: string
+              description: HTML-formatted description of the task
+            due_on:
+              type: string
+              description: "Due date in YYYY-MM-DD format"
+            due_at:
+              type: string
+              description: "Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z)"
+            start_on:
+              type: string
+              description: "Start date in YYYY-MM-DD format"
+            completed:
+              type: boolean
+              description: Whether the task is completed
+
+    ProjectCreateParams:
+      type: object
+      description: Parameters for creating a new project
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - name
+          - workspace
+          properties:
+            name:
+              type: string
+              description: Name of the project
+            workspace:
+              type: string
+              description: GID of the workspace to create the project in
+            team:
+              type: string
+              description: GID of the team to share the project with (required for organizations)
+            notes:
+              type: string
+              description: Free-form textual description of the project (plain text)
+            html_notes:
+              type: string
+              description: HTML-formatted description of the project
+            color:
+              type: string
+              description: Color of the project (e.g., dark-pink, dark-green, dark-blue, dark-red, dark-teal, dark-brown, dark-orange, dark-purple, dark-warm-gray, light-pink, light-green, light-blue, light-red, light-teal, light-brown, light-orange, light-purple, light-warm-gray, none)
+            default_view:
+              type: string
+              description: The default view of the project (list, board, calendar, timeline)
+              enum:
+              - list
+              - board
+              - calendar
+              - timeline
+            due_on:
+              type: string
+              description: "Due date in YYYY-MM-DD format"
+            start_on:
+              type: string
+              description: "Start date in YYYY-MM-DD format"
+            privacy_setting:
+              type: string
+              description: "Privacy setting: public_to_workspace or private"
+              enum:
+              - public_to_workspace
+              - private
+            archived:
+              type: boolean
+              description: Whether the project is archived
+
+    ProjectUpdateParams:
+      type: object
+      description: Parameters for updating an existing project
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of the project
+            notes:
+              type: string
+              description: Free-form textual description of the project (plain text)
+            html_notes:
+              type: string
+              description: HTML-formatted description of the project
+            color:
+              type: string
+              description: Color of the project
+            default_view:
+              type: string
+              description: The default view of the project (list, board, calendar, timeline)
+              enum:
+              - list
+              - board
+              - calendar
+              - timeline
+            due_on:
+              type: string
+              description: "Due date in YYYY-MM-DD format"
+            start_on:
+              type: string
+              description: "Start date in YYYY-MM-DD format"
+            archived:
+              type: boolean
+              description: Whether the project is archived
+
+    StoryCreateParams:
+      type: object
+      description: Parameters for creating a comment (story) on a task
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - text
+          properties:
+            text:
+              type: string
+              description: The plain text body of the comment
+            html_text:
+              type: string
+              description: HTML-formatted body of the comment
+            is_pinned:
+              type: boolean
+              description: Whether the story should be pinned on the resource
+
+    Story:
+      type: object
+      description: A story represents an activity associated with an object in Asana
+      properties:
+        gid:
+          type: string
+        resource_type:
+          type: string
+        resource_subtype:
+          type: string
+        text:
+          type: string
+        html_text:
+          type: string
+        is_pinned:
+          type: boolean
+        created_at:
+          type: string
+        created_by:
+          type: object
+          properties:
+            gid:
+              type: string
+            name:
+              type: string
+            resource_type:
+              type: string
+        target:
+          type: object
+          properties:
+            gid:
+              type: string
+            name:
+              type: string
+            resource_type:
+              type: string
+        type:
+          type: string
+
+    StoryResponse:
+      type: object
+      description: Story response wrapper
+      properties:
+        data:
+          $ref: "#/components/schemas/Story"
+
+    EmptyResponse:
+      type: object
+      description: Empty response returned by delete operations
+      properties:
+        data:
+          type: object
+
+    WorkspaceAddUserParams:
+      type: object
+      description: Parameters for adding a user to a workspace or organization
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - user
+          properties:
+            user:
+              type: string
+              description: A user GID or email address to add to the workspace

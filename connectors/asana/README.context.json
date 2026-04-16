@@ -69,8 +69,8 @@
   },
   "replication_config": null,
   "custom_description": "Asana is a work management platform that helps teams organize, track, and manage\nprojects and tasks. This connector provides access to tasks, projects, workspaces,\nteams, and users for project tracking, workload analysis, and productivity insights.\n",
-  "supported_questions": "- What tasks are assigned to me this week?\n- List all projects in my workspace\n- Show me the tasks for a recent project\n- Who are the team members in one of my teams?\n- Show me details of my current workspace and its users\n- Summarize my team's workload and task completion rates\n- Find all tasks related to {client_name} across my workspaces\n- Analyze the most active projects in my workspace last month\n- Compare task completion rates between my different teams\n- Identify overdue tasks across all my projects",
-  "unsupported_questions": "- Create a new task for [TeamMember]\n- Update the priority of this task\n- Delete the project [ProjectName]\n- Schedule a new team meeting\n- Add a new team member to [Workspace]\n- Move this task to another project",
+  "supported_questions": "- What tasks are assigned to me this week?\n- List all projects in my workspace\n- Show me the tasks for a recent project\n- Who are the team members in one of my teams?\n- Show me details of my current workspace and its users\n- Create a new task called 'Review Q3 report' in my project\n- Mark the task 'Submit proposal' as completed\n- Update the due date of task X to next Friday\n- Create a new project called 'Product Launch' in my workspace\n- Add a comment on the task saying 'Looks good, approved!'\n- Assign the task to me and set the due date to tomorrow\n- Delete the project 'Old Campaign'\n- Schedule a new team meeting as a task for next Tuesday\n- Add a new team member to my workspace by email\n- Delete the task 'Outdated draft'\n- Summarize my team's workload and task completion rates\n- Find all tasks related to {client_name} across my workspaces\n- Analyze the most active projects in my workspace last month\n- Compare task completion rates between my different teams\n- Identify overdue tasks across all my projects",
+  "unsupported_questions": "- Move this task to another project",
   "first_operation": {
     "method_name": "list_tasks",
     "http_method": "get",
@@ -360,6 +360,111 @@
         "is_download": false
       },
       {
+        "method_name": "create_task",
+        "http_method": "post",
+        "path": "/tasks",
+        "entity": "tasks",
+        "action": "create",
+        "parameters": [
+          {
+            "name": "data",
+            "python_name": "data",
+            "type": "TasksCreateParamsData",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "workspace"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the task"
+                },
+                "workspace": {
+                  "type": "string",
+                  "description": "GID of the workspace to create the task in"
+                },
+                "projects": {
+                  "type": "array",
+                  "description": "Array of project GIDs to add the task to",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "assignee": {
+                  "type": "string",
+                  "description": "GID of the user to assign the task to, or 'me' for the current user"
+                },
+                "notes": {
+                  "type": "string",
+                  "description": "Free-form textual description of the task (plain text, no formatting)"
+                },
+                "html_notes": {
+                  "type": "string",
+                  "description": "HTML-formatted description of the task"
+                },
+                "due_on": {
+                  "type": "string",
+                  "description": "Due date in YYYY-MM-DD format"
+                },
+                "due_at": {
+                  "type": "string",
+                  "description": "Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z)"
+                },
+                "start_on": {
+                  "type": "string",
+                  "description": "Start date in YYYY-MM-DD format"
+                },
+                "completed": {
+                  "type": "boolean",
+                  "description": "Whether the task is completed"
+                },
+                "parent": {
+                  "type": "string",
+                  "description": "GID of the parent task (to create a subtask)"
+                },
+                "tags": {
+                  "type": "array",
+                  "description": "Array of tag GIDs to add to the task",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "followers": {
+                  "type": "array",
+                  "description": "Array of user GIDs to add as followers",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "resource_subtype": {
+                  "type": "string",
+                  "description": "The subtype of the task: default_task, milestone, section, or approval",
+                  "enum": [
+                    "default_task",
+                    "milestone",
+                    "section",
+                    "approval"
+                  ]
+                }
+              }
+            },
+            "required": true,
+            "description": ""
+          }
+        ],
+        "params_type_name": "TasksCreateParams",
+        "response_type": "Task",
+        "description": "Creates a new task. Every task is required to be created in a specific workspace,\nand this workspace cannot be changed once set. The workspace need not be set explicitly\nif you specify projects or a parent task instead.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Task",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
         "method_name": "get_task",
         "http_method": "get",
         "path": "/tasks/{task_gid}",
@@ -384,6 +489,106 @@
         "meta_extractor": null,
         "needs_envelope": null,
         "record_type": "Task",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "update_task",
+        "http_method": "put",
+        "path": "/tasks/{task_gid}",
+        "entity": "tasks",
+        "action": "update",
+        "parameters": [
+          {
+            "name": "data",
+            "python_name": "data",
+            "type": "TasksUpdateParamsData",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the task"
+                },
+                "assignee": {
+                  "type": "string",
+                  "description": "GID of the user to assign the task to, or 'me' for the current user"
+                },
+                "notes": {
+                  "type": "string",
+                  "description": "Free-form textual description of the task (plain text, no formatting)"
+                },
+                "html_notes": {
+                  "type": "string",
+                  "description": "HTML-formatted description of the task"
+                },
+                "due_on": {
+                  "type": "string",
+                  "description": "Due date in YYYY-MM-DD format"
+                },
+                "due_at": {
+                  "type": "string",
+                  "description": "Due date and time in ISO 8601 format (e.g., 2025-03-20T12:00:00.000Z)"
+                },
+                "start_on": {
+                  "type": "string",
+                  "description": "Start date in YYYY-MM-DD format"
+                },
+                "completed": {
+                  "type": "boolean",
+                  "description": "Whether the task is completed"
+                }
+              }
+            },
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "task_gid",
+            "python_name": "task_gid",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The task to update"
+          }
+        ],
+        "params_type_name": "TasksUpdateParams",
+        "response_type": "Task",
+        "description": "Updates an existing task. Only the fields provided in the data block will be updated;\nany unspecified fields will remain unchanged. When using this method, it is best to\nspecify only those fields you wish to change.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Task",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "delete_task",
+        "http_method": "delete",
+        "path": "/tasks/{task_gid}",
+        "entity": "tasks",
+        "action": "delete",
+        "parameters": [
+          {
+            "name": "task_gid",
+            "python_name": "task_gid",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The task to delete"
+          }
+        ],
+        "params_type_name": "TasksDeleteParams",
+        "response_type": "dict[str, Any]",
+        "description": "Deletes a specific, existing task. Deleted tasks go into the trash of the user\nmaking the delete request. Tasks can be recovered from the trash within 30 days;\nafterward they are completely removed from the system.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "dict[str, Any]",
         "meta_fields": null,
         "is_download": false
       }
@@ -845,6 +1050,94 @@
         "is_download": false
       },
       {
+        "method_name": "create_project",
+        "http_method": "post",
+        "path": "/projects",
+        "entity": "projects",
+        "action": "create",
+        "parameters": [
+          {
+            "name": "data",
+            "python_name": "data",
+            "type": "ProjectsCreateParamsData",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "workspace"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the project"
+                },
+                "workspace": {
+                  "type": "string",
+                  "description": "GID of the workspace to create the project in"
+                },
+                "team": {
+                  "type": "string",
+                  "description": "GID of the team to share the project with (required for organizations)"
+                },
+                "notes": {
+                  "type": "string",
+                  "description": "Free-form textual description of the project (plain text)"
+                },
+                "html_notes": {
+                  "type": "string",
+                  "description": "HTML-formatted description of the project"
+                },
+                "color": {
+                  "type": "string",
+                  "description": "Color of the project (e.g., dark-pink, dark-green, dark-blue, dark-red, dark-teal, dark-brown, dark-orange, dark-purple, dark-warm-gray, light-pink, light-green, light-blue, light-red, light-teal, light-brown, light-orange, light-purple, light-warm-gray, none)"
+                },
+                "default_view": {
+                  "type": "string",
+                  "description": "The default view of the project (list, board, calendar, timeline)",
+                  "enum": [
+                    "list",
+                    "board",
+                    "calendar",
+                    "timeline"
+                  ]
+                },
+                "due_on": {
+                  "type": "string",
+                  "description": "Due date in YYYY-MM-DD format"
+                },
+                "start_on": {
+                  "type": "string",
+                  "description": "Start date in YYYY-MM-DD format"
+                },
+                "privacy_setting": {
+                  "type": "string",
+                  "description": "Privacy setting: public_to_workspace or private",
+                  "enum": [
+                    "public_to_workspace",
+                    "private"
+                  ]
+                },
+                "archived": {
+                  "type": "boolean",
+                  "description": "Whether the project is archived"
+                }
+              }
+            },
+            "required": true,
+            "description": ""
+          }
+        ],
+        "params_type_name": "ProjectsCreateParams",
+        "response_type": "Project",
+        "description": "Create a new project in a workspace or team. Every project is required to be\ncreated in a specific workspace or organization, and this cannot be changed once set.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Project",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
         "method_name": "get_project",
         "http_method": "get",
         "path": "/projects/{project_gid}",
@@ -869,6 +1162,112 @@
         "meta_extractor": null,
         "needs_envelope": null,
         "record_type": "Project",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "update_project",
+        "http_method": "put",
+        "path": "/projects/{project_gid}",
+        "entity": "projects",
+        "action": "update",
+        "parameters": [
+          {
+            "name": "data",
+            "python_name": "data",
+            "type": "ProjectsUpdateParamsData",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the project"
+                },
+                "notes": {
+                  "type": "string",
+                  "description": "Free-form textual description of the project (plain text)"
+                },
+                "html_notes": {
+                  "type": "string",
+                  "description": "HTML-formatted description of the project"
+                },
+                "color": {
+                  "type": "string",
+                  "description": "Color of the project"
+                },
+                "default_view": {
+                  "type": "string",
+                  "description": "The default view of the project (list, board, calendar, timeline)",
+                  "enum": [
+                    "list",
+                    "board",
+                    "calendar",
+                    "timeline"
+                  ]
+                },
+                "due_on": {
+                  "type": "string",
+                  "description": "Due date in YYYY-MM-DD format"
+                },
+                "start_on": {
+                  "type": "string",
+                  "description": "Start date in YYYY-MM-DD format"
+                },
+                "archived": {
+                  "type": "boolean",
+                  "description": "Whether the project is archived"
+                }
+              }
+            },
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "project_gid",
+            "python_name": "project_gid",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The project to update"
+          }
+        ],
+        "params_type_name": "ProjectsUpdateParams",
+        "response_type": "Project",
+        "description": "Updates an existing project. Only the fields provided in the data block will be updated;\nany unspecified fields will remain unchanged. When using this method, it is best to\nspecify only those fields you wish to change.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Project",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "delete_project",
+        "http_method": "delete",
+        "path": "/projects/{project_gid}",
+        "entity": "projects",
+        "action": "delete",
+        "parameters": [
+          {
+            "name": "project_gid",
+            "python_name": "project_gid",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The project to delete"
+          }
+        ],
+        "params_type_name": "ProjectsDeleteParams",
+        "response_type": "dict[str, Any]",
+        "description": "Deletes a specific, existing project. Returns an empty data record.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "dict[str, Any]",
         "meta_fields": null,
         "is_download": false
       }
@@ -2318,6 +2717,112 @@
             }
           }
         ],
+        "is_download": false
+      }
+    ],
+    "task_stories": [
+      {
+        "method_name": "create_task_story",
+        "http_method": "post",
+        "path": "/tasks/{task_gid}/stories",
+        "entity": "task_stories",
+        "action": "create",
+        "parameters": [
+          {
+            "name": "data",
+            "python_name": "data",
+            "type": "TaskStoriesCreateParamsData",
+            "schema": {
+              "type": "object",
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "The plain text body of the comment"
+                },
+                "html_text": {
+                  "type": "string",
+                  "description": "HTML-formatted body of the comment"
+                },
+                "is_pinned": {
+                  "type": "boolean",
+                  "description": "Whether the story should be pinned on the resource"
+                }
+              }
+            },
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "task_gid",
+            "python_name": "task_gid",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The task to add a comment to"
+          }
+        ],
+        "params_type_name": "TaskStoriesCreateParams",
+        "response_type": "Story",
+        "description": "Adds a comment to a task. The comment will be authored by the currently\nauthenticated user, and timestamped when the server receives the request.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Story",
+        "meta_fields": null,
+        "is_download": false
+      }
+    ],
+    "workspace_memberships": [
+      {
+        "method_name": "add_user_to_workspace",
+        "http_method": "post",
+        "path": "/workspaces/{workspace_gid}/addUser",
+        "entity": "workspace_memberships",
+        "action": "create",
+        "parameters": [
+          {
+            "name": "data",
+            "python_name": "data",
+            "type": "WorkspaceMembershipsCreateParamsData",
+            "schema": {
+              "type": "object",
+              "required": [
+                "user"
+              ],
+              "properties": {
+                "user": {
+                  "type": "string",
+                  "description": "A user GID or email address to add to the workspace"
+                }
+              }
+            },
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "workspace_gid",
+            "python_name": "workspace_gid",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The workspace or organization to add the user to"
+          }
+        ],
+        "params_type_name": "WorkspaceMembershipsCreateParams",
+        "response_type": "User",
+        "description": "Add a user to a workspace or organization. The user can be referenced by their\nglobally unique user ID or their email address. Returns the full user record\nfor the invited user.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "User",
+        "meta_fields": null,
         "is_download": false
       }
     ]

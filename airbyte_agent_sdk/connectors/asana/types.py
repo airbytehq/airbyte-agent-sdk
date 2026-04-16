@@ -17,6 +17,69 @@ from typing import Any, Literal
 # ===== NESTED PARAM TYPE DEFINITIONS =====
 # Nested parameter schemas discovered during parameter extraction
 
+class TasksCreateParamsData(TypedDict):
+    """Nested schema for TasksCreateParams.data"""
+    name: str
+    workspace: str
+    projects: NotRequired[list[str]]
+    assignee: NotRequired[str]
+    notes: NotRequired[str]
+    html_notes: NotRequired[str]
+    due_on: NotRequired[str]
+    due_at: NotRequired[str]
+    start_on: NotRequired[str]
+    completed: NotRequired[bool]
+    parent: NotRequired[str]
+    tags: NotRequired[list[str]]
+    followers: NotRequired[list[str]]
+    resource_subtype: NotRequired[str]
+
+class TasksUpdateParamsData(TypedDict):
+    """Nested schema for TasksUpdateParams.data"""
+    name: NotRequired[str]
+    assignee: NotRequired[str]
+    notes: NotRequired[str]
+    html_notes: NotRequired[str]
+    due_on: NotRequired[str]
+    due_at: NotRequired[str]
+    start_on: NotRequired[str]
+    completed: NotRequired[bool]
+
+class ProjectsCreateParamsData(TypedDict):
+    """Nested schema for ProjectsCreateParams.data"""
+    name: str
+    workspace: str
+    team: NotRequired[str]
+    notes: NotRequired[str]
+    html_notes: NotRequired[str]
+    color: NotRequired[str]
+    default_view: NotRequired[str]
+    due_on: NotRequired[str]
+    start_on: NotRequired[str]
+    privacy_setting: NotRequired[str]
+    archived: NotRequired[bool]
+
+class ProjectsUpdateParamsData(TypedDict):
+    """Nested schema for ProjectsUpdateParams.data"""
+    name: NotRequired[str]
+    notes: NotRequired[str]
+    html_notes: NotRequired[str]
+    color: NotRequired[str]
+    default_view: NotRequired[str]
+    due_on: NotRequired[str]
+    start_on: NotRequired[str]
+    archived: NotRequired[bool]
+
+class TaskStoriesCreateParamsData(TypedDict):
+    """Nested schema for TaskStoriesCreateParams.data"""
+    text: str
+    html_text: NotRequired[str]
+    is_pinned: NotRequired[bool]
+
+class WorkspaceMembershipsCreateParamsData(TypedDict):
+    """Nested schema for WorkspaceMembershipsCreateParams.data"""
+    user: str
+
 # ===== OPERATION PARAMS TYPE DEFINITIONS =====
 
 class TasksListParams(TypedDict):
@@ -30,6 +93,10 @@ class TasksListParams(TypedDict):
     completed_since: NotRequired[str]
     modified_since: NotRequired[str]
 
+class TasksCreateParams(TypedDict):
+    """Parameters for tasks.create operation"""
+    data: TasksCreateParamsData
+
 class ProjectTasksListParams(TypedDict):
     """Parameters for project_tasks.list operation"""
     project_gid: str
@@ -39,6 +106,15 @@ class ProjectTasksListParams(TypedDict):
 
 class TasksGetParams(TypedDict):
     """Parameters for tasks.get operation"""
+    task_gid: str
+
+class TasksUpdateParams(TypedDict):
+    """Parameters for tasks.update operation"""
+    data: TasksUpdateParamsData
+    task_gid: str
+
+class TasksDeleteParams(TypedDict):
+    """Parameters for tasks.delete operation"""
     task_gid: str
 
 class WorkspaceTaskSearchListParams(TypedDict):
@@ -71,8 +147,21 @@ class ProjectsListParams(TypedDict):
     team: NotRequired[str]
     archived: NotRequired[bool]
 
+class ProjectsCreateParams(TypedDict):
+    """Parameters for projects.create operation"""
+    data: ProjectsCreateParamsData
+
 class ProjectsGetParams(TypedDict):
     """Parameters for projects.get operation"""
+    project_gid: str
+
+class ProjectsUpdateParams(TypedDict):
+    """Parameters for projects.update operation"""
+    data: ProjectsUpdateParamsData
+    project_gid: str
+
+class ProjectsDeleteParams(TypedDict):
+    """Parameters for projects.delete operation"""
     project_gid: str
 
 class TaskProjectsListParams(TypedDict):
@@ -196,6 +285,16 @@ class TaskDependentsListParams(TypedDict):
     task_gid: str
     limit: NotRequired[int]
     offset: NotRequired[str]
+
+class TaskStoriesCreateParams(TypedDict):
+    """Parameters for task_stories.create operation"""
+    data: TaskStoriesCreateParamsData
+    task_gid: str
+
+class WorkspaceMembershipsCreateParams(TypedDict):
+    """Parameters for workspace_memberships.create operation"""
+    data: WorkspaceMembershipsCreateParamsData
+    workspace_gid: str
 
 # ===== SEARCH TYPES =====
 

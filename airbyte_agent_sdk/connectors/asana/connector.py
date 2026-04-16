@@ -25,22 +25,36 @@ from .types import (
     AttachmentsListParams,
     ProjectSectionsListParams,
     ProjectTasksListParams,
+    ProjectsCreateParams,
+    ProjectsCreateParamsData,
+    ProjectsDeleteParams,
     ProjectsGetParams,
     ProjectsListParams,
+    ProjectsUpdateParams,
+    ProjectsUpdateParamsData,
     SectionsGetParams,
     TagsGetParams,
     TaskDependenciesListParams,
     TaskDependentsListParams,
     TaskProjectsListParams,
+    TaskStoriesCreateParams,
+    TaskStoriesCreateParamsData,
     TaskSubtasksListParams,
+    TasksCreateParams,
+    TasksCreateParamsData,
+    TasksDeleteParams,
     TasksGetParams,
     TasksListParams,
+    TasksUpdateParams,
+    TasksUpdateParamsData,
     TeamProjectsListParams,
     TeamUsersListParams,
     TeamsGetParams,
     UserTeamsListParams,
     UsersGetParams,
     UsersListParams,
+    WorkspaceMembershipsCreateParams,
+    WorkspaceMembershipsCreateParamsData,
     WorkspaceProjectsListParams,
     WorkspaceTagsListParams,
     WorkspaceTaskSearchListParams,
@@ -99,6 +113,7 @@ from .models import (
     ProjectCompact,
     Section,
     SectionCompact,
+    Story,
     Tag,
     TagCompact,
     Task,
@@ -175,16 +190,22 @@ class AsanaConnector:
 
     connector_name = "asana"
     connector_version = "0.1.20"
-    sdk_version = "0.1.5"
+    sdk_version = "0.1.6"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
         ("tasks", "list"): True,
+        ("tasks", "create"): None,
         ("project_tasks", "list"): True,
         ("tasks", "get"): None,
+        ("tasks", "update"): None,
+        ("tasks", "delete"): None,
         ("workspace_task_search", "list"): True,
         ("projects", "list"): True,
+        ("projects", "create"): None,
         ("projects", "get"): None,
+        ("projects", "update"): None,
+        ("projects", "delete"): None,
         ("task_projects", "list"): True,
         ("team_projects", "list"): True,
         ("workspace_projects", "list"): True,
@@ -207,17 +228,25 @@ class AsanaConnector:
         ("task_subtasks", "list"): True,
         ("task_dependencies", "list"): True,
         ("task_dependents", "list"): True,
+        ("task_stories", "create"): None,
+        ("workspace_memberships", "create"): None,
     }
 
     # Map of (entity, action) -> {python_param_name: api_param_name}
     # Used to convert snake_case TypedDict keys to API parameter names in execute()
     _PARAM_MAP = {
         ('tasks', 'list'): {'limit': 'limit', 'offset': 'offset', 'project': 'project', 'workspace': 'workspace', 'section': 'section', 'assignee': 'assignee', 'completed_since': 'completed_since', 'modified_since': 'modified_since'},
+        ('tasks', 'create'): {'data': 'data'},
         ('project_tasks', 'list'): {'project_gid': 'project_gid', 'limit': 'limit', 'offset': 'offset', 'completed_since': 'completed_since'},
         ('tasks', 'get'): {'task_gid': 'task_gid'},
+        ('tasks', 'update'): {'data': 'data', 'task_gid': 'task_gid'},
+        ('tasks', 'delete'): {'task_gid': 'task_gid'},
         ('workspace_task_search', 'list'): {'workspace_gid': 'workspace_gid', 'limit': 'limit', 'offset': 'offset', 'text': 'text', 'completed': 'completed', 'assignee_any': 'assignee.any', 'projects_any': 'projects.any', 'sections_any': 'sections.any', 'teams_any': 'teams.any', 'followers_any': 'followers.any', 'created_at_after': 'created_at.after', 'created_at_before': 'created_at.before', 'modified_at_after': 'modified_at.after', 'modified_at_before': 'modified_at.before', 'due_on_after': 'due_on.after', 'due_on_before': 'due_on.before', 'resource_subtype': 'resource_subtype', 'sort_by': 'sort_by', 'sort_ascending': 'sort_ascending'},
         ('projects', 'list'): {'limit': 'limit', 'offset': 'offset', 'workspace': 'workspace', 'team': 'team', 'archived': 'archived'},
+        ('projects', 'create'): {'data': 'data'},
         ('projects', 'get'): {'project_gid': 'project_gid'},
+        ('projects', 'update'): {'data': 'data', 'project_gid': 'project_gid'},
+        ('projects', 'delete'): {'project_gid': 'project_gid'},
         ('task_projects', 'list'): {'task_gid': 'task_gid', 'limit': 'limit', 'offset': 'offset'},
         ('team_projects', 'list'): {'team_gid': 'team_gid', 'limit': 'limit', 'offset': 'offset', 'archived': 'archived'},
         ('workspace_projects', 'list'): {'workspace_gid': 'workspace_gid', 'limit': 'limit', 'offset': 'offset', 'archived': 'archived'},
@@ -240,6 +269,8 @@ class AsanaConnector:
         ('task_subtasks', 'list'): {'task_gid': 'task_gid', 'limit': 'limit', 'offset': 'offset'},
         ('task_dependencies', 'list'): {'task_gid': 'task_gid', 'limit': 'limit', 'offset': 'offset'},
         ('task_dependents', 'list'): {'task_gid': 'task_gid', 'limit': 'limit', 'offset': 'offset'},
+        ('task_stories', 'create'): {'data': 'data', 'task_gid': 'task_gid'},
+        ('workspace_memberships', 'create'): {'data': 'data', 'workspace_gid': 'workspace_gid'},
     }
 
     # Accepted auth_config types for isinstance validation
@@ -366,6 +397,8 @@ class AsanaConnector:
         self.task_subtasks = TaskSubtasksQuery(self)
         self.task_dependencies = TaskDependenciesQuery(self)
         self.task_dependents = TaskDependentsQuery(self)
+        self.task_stories = TaskStoriesQuery(self)
+        self.workspace_memberships = WorkspaceMembershipsQuery(self)
 
     # ===== TYPED EXECUTE METHOD (Recommended Interface) =====
 
@@ -376,6 +409,14 @@ class AsanaConnector:
         action: Literal["list"],
         params: "TasksListParams"
     ) -> "TasksListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["tasks"],
+        action: Literal["create"],
+        params: "TasksCreateParams"
+    ) -> "Task": ...
 
     @overload
     async def execute(
@@ -392,6 +433,22 @@ class AsanaConnector:
         action: Literal["get"],
         params: "TasksGetParams"
     ) -> "Task": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["tasks"],
+        action: Literal["update"],
+        params: "TasksUpdateParams"
+    ) -> "Task": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["tasks"],
+        action: Literal["delete"],
+        params: "TasksDeleteParams"
+    ) -> "dict[str, Any]": ...
 
     @overload
     async def execute(
@@ -413,9 +470,33 @@ class AsanaConnector:
     async def execute(
         self,
         entity: Literal["projects"],
+        action: Literal["create"],
+        params: "ProjectsCreateParams"
+    ) -> "Project": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["projects"],
         action: Literal["get"],
         params: "ProjectsGetParams"
     ) -> "Project": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["projects"],
+        action: Literal["update"],
+        params: "ProjectsUpdateParams"
+    ) -> "Project": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["projects"],
+        action: Literal["delete"],
+        params: "ProjectsDeleteParams"
+    ) -> "dict[str, Any]": ...
 
     @overload
     async def execute(
@@ -593,19 +674,35 @@ class AsanaConnector:
         params: "TaskDependentsListParams"
     ) -> "TaskDependentsListResult": ...
 
+    @overload
+    async def execute(
+        self,
+        entity: Literal["task_stories"],
+        action: Literal["create"],
+        params: "TaskStoriesCreateParams"
+    ) -> "Story": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["workspace_memberships"],
+        action: Literal["create"],
+        params: "WorkspaceMembershipsCreateParams"
+    ) -> "User": ...
+
 
     @overload
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "download", "context_store_search"],
+        action: Literal["list", "create", "get", "update", "delete", "download", "context_store_search"],
         params: Mapping[str, Any]
     ) -> AsanaExecuteResult[Any] | AsanaExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get", "download", "context_store_search"],
+        action: Literal["list", "create", "get", "update", "delete", "download", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -1093,6 +1190,34 @@ class TasksQuery:
 
 
 
+    async def create(
+        self,
+        data: TasksCreateParamsData,
+        **kwargs
+    ) -> Task:
+        """
+        Creates a new task. Every task is required to be created in a specific workspace,
+and this workspace cannot be changed once set. The workspace need not be set explicitly
+if you specify projects or a parent task instead.
+
+
+        Args:
+            data: Parameter data
+            **kwargs: Additional parameters
+
+        Returns:
+            Task
+        """
+        params = {k: v for k, v in {
+            "data": data,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("tasks", "create", params)
+        return result
+
+
+
     async def get(
         self,
         task_gid: str,
@@ -1114,6 +1239,65 @@ class TasksQuery:
         }.items() if v is not None}
 
         result = await self._connector.execute("tasks", "get", params)
+        return result
+
+
+
+    async def update(
+        self,
+        data: TasksUpdateParamsData,
+        task_gid: str,
+        **kwargs
+    ) -> Task:
+        """
+        Updates an existing task. Only the fields provided in the data block will be updated;
+any unspecified fields will remain unchanged. When using this method, it is best to
+specify only those fields you wish to change.
+
+
+        Args:
+            data: Parameter data
+            task_gid: The task to update
+            **kwargs: Additional parameters
+
+        Returns:
+            Task
+        """
+        params = {k: v for k, v in {
+            "data": data,
+            "task_gid": task_gid,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("tasks", "update", params)
+        return result
+
+
+
+    async def delete(
+        self,
+        task_gid: str,
+        **kwargs
+    ) -> dict[str, Any]:
+        """
+        Deletes a specific, existing task. Deleted tasks go into the trash of the user
+making the delete request. Tasks can be recovered from the trash within 30 days;
+afterward they are completely removed from the system.
+
+
+        Args:
+            task_gid: The task to delete
+            **kwargs: Additional parameters
+
+        Returns:
+            dict[str, Any]
+        """
+        params = {k: v for k, v in {
+            "task_gid": task_gid,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("tasks", "delete", params)
         return result
 
 
@@ -1400,6 +1584,33 @@ class ProjectsQuery:
 
 
 
+    async def create(
+        self,
+        data: ProjectsCreateParamsData,
+        **kwargs
+    ) -> Project:
+        """
+        Create a new project in a workspace or team. Every project is required to be
+created in a specific workspace or organization, and this cannot be changed once set.
+
+
+        Args:
+            data: Parameter data
+            **kwargs: Additional parameters
+
+        Returns:
+            Project
+        """
+        params = {k: v for k, v in {
+            "data": data,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("projects", "create", params)
+        return result
+
+
+
     async def get(
         self,
         project_gid: str,
@@ -1421,6 +1632,63 @@ class ProjectsQuery:
         }.items() if v is not None}
 
         result = await self._connector.execute("projects", "get", params)
+        return result
+
+
+
+    async def update(
+        self,
+        data: ProjectsUpdateParamsData,
+        project_gid: str,
+        **kwargs
+    ) -> Project:
+        """
+        Updates an existing project. Only the fields provided in the data block will be updated;
+any unspecified fields will remain unchanged. When using this method, it is best to
+specify only those fields you wish to change.
+
+
+        Args:
+            data: Parameter data
+            project_gid: The project to update
+            **kwargs: Additional parameters
+
+        Returns:
+            Project
+        """
+        params = {k: v for k, v in {
+            "data": data,
+            "project_gid": project_gid,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("projects", "update", params)
+        return result
+
+
+
+    async def delete(
+        self,
+        project_gid: str,
+        **kwargs
+    ) -> dict[str, Any]:
+        """
+        Deletes a specific, existing project. Returns an empty data record.
+
+
+        Args:
+            project_gid: The project to delete
+            **kwargs: Additional parameters
+
+        Returns:
+            dict[str, Any]
+        """
+        params = {k: v for k, v in {
+            "project_gid": project_gid,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("projects", "delete", params)
         return result
 
 
@@ -2775,5 +3043,84 @@ class TaskDependentsQuery:
             data=result.data,
             meta=result.meta
         )
+
+
+
+class TaskStoriesQuery:
+    """
+    Query class for TaskStories entity operations.
+    """
+
+    def __init__(self, connector: AsanaConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def create(
+        self,
+        data: TaskStoriesCreateParamsData,
+        task_gid: str,
+        **kwargs
+    ) -> Story:
+        """
+        Adds a comment to a task. The comment will be authored by the currently
+authenticated user, and timestamped when the server receives the request.
+
+
+        Args:
+            data: Parameter data
+            task_gid: The task to add a comment to
+            **kwargs: Additional parameters
+
+        Returns:
+            Story
+        """
+        params = {k: v for k, v in {
+            "data": data,
+            "task_gid": task_gid,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("task_stories", "create", params)
+        return result
+
+
+
+class WorkspaceMembershipsQuery:
+    """
+    Query class for WorkspaceMemberships entity operations.
+    """
+
+    def __init__(self, connector: AsanaConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def create(
+        self,
+        data: WorkspaceMembershipsCreateParamsData,
+        workspace_gid: str,
+        **kwargs
+    ) -> User:
+        """
+        Add a user to a workspace or organization. The user can be referenced by their
+globally unique user ID or their email address. Returns the full user record
+for the invited user.
+
+
+        Args:
+            data: Parameter data
+            workspace_gid: The workspace or organization to add the user to
+            **kwargs: Additional parameters
+
+        Returns:
+            User
+        """
+        params = {k: v for k, v in {
+            "data": data,
+            "workspace_gid": workspace_gid,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("workspace_memberships", "create", params)
+        return result
 
 
