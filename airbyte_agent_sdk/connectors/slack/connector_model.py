@@ -2027,7 +2027,7 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                                         ],
                                         'freshness': 'live',
                                         'example_questions': ["What's the latest in #ext-marathon?", 'What did Alex say in the channel?'],
-                                        'search_strategy': 'Messages are listed by channel, not searched directly. First find the channel using the channels entity search, then list messages with the channel ID.',
+                                        'search_strategy': 'Messages are searched within a channel scope. First find the channel using the channels entity search, then find messages using the channel_messages entity search filtered on channel_id for that channel. Example filter: {"eq": {"channel_id": "C123"}}.',
                                     },
                                 },
                             },
@@ -2165,7 +2165,7 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                     ],
                     'freshness': 'live',
                     'example_questions': ["What's the latest in #ext-marathon?", 'What did Alex say in the channel?'],
-                    'search_strategy': 'Messages are listed by channel, not searched directly. First find the channel using the channels entity search, then list messages with the channel ID.',
+                    'search_strategy': 'Messages are searched within a channel scope. First find the channel using the channels entity search, then find messages using the channel_messages entity search filtered on channel_id for that channel. Example filter: {"eq": {"channel_id": "C123"}}.',
                 },
             },
             ai_hints={
@@ -2179,7 +2179,7 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 'freshness': 'live',
                 'example_questions': ["What's the latest in #ext-marathon?", 'What did Alex say in the channel?'],
-                'search_strategy': 'Messages are listed by channel, not searched directly. First find the channel using the channels entity search, then list messages with the channel ID.',
+                'search_strategy': 'Messages are searched within a channel scope. First find the channel using the channels entity search, then find messages using the channel_messages entity search filtered on channel_id for that channel. Example filter: {"eq": {"channel_id": "C123"}}.',
             },
         ),
         EntityDefinition(

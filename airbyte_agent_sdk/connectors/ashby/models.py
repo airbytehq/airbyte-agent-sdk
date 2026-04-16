@@ -32,6 +32,13 @@ class AshbyReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
+class CandidateSociallinksItem(BaseModel):
+    """Nested schema for Candidate.socialLinks_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    url: Union[str | None, Any] = Field(default=None)
+
 class CandidatePhonenumbersItem(BaseModel):
     """Nested schema for Candidate.phoneNumbers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -55,13 +62,6 @@ class CandidateTagsItem(BaseModel):
     id: Union[str | None, Any] = Field(default=None)
     title: Union[str | None, Any] = Field(default=None)
     is_archived: Union[bool | None, Any] = Field(default=None, alias="isArchived")
-
-class CandidateSociallinksItem(BaseModel):
-    """Nested schema for Candidate.socialLinks_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    url: Union[str | None, Any] = Field(default=None)
 
 class Candidate(BaseModel):
     """Candidate object"""
