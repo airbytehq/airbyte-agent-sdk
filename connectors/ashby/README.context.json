@@ -1097,5 +1097,76 @@
       }
     ]
   },
-  "search_schemas": {}
+  "search_schemas": {
+    "applications": {
+      "entity": "applications",
+      "data_type_name": "ApplicationsSearchData",
+      "filter_type_name": "ApplicationsSearchFilter",
+      "in_filter_type_name": "ApplicationsInFilter",
+      "any_value_filter_type_name": "ApplicationsAnyValueFilter",
+      "string_filter_type_name": "ApplicationsStringFilter",
+      "sort_filter_type_name": "ApplicationsSortFilter",
+      "result_type_name": "ApplicationsSearchResult",
+      "query_type_name": "ApplicationsSearchQuery",
+      "condition_prefix": "Applications",
+      "condition_type_name": "ApplicationsCondition",
+      "fields": []
+    },
+    "candidates": {
+      "entity": "candidates",
+      "data_type_name": "CandidatesSearchData",
+      "filter_type_name": "CandidatesSearchFilter",
+      "in_filter_type_name": "CandidatesInFilter",
+      "any_value_filter_type_name": "CandidatesAnyValueFilter",
+      "string_filter_type_name": "CandidatesStringFilter",
+      "sort_filter_type_name": "CandidatesSortFilter",
+      "result_type_name": "CandidatesSearchResult",
+      "query_type_name": "CandidatesSearchQuery",
+      "condition_prefix": "Candidates",
+      "condition_type_name": "CandidatesCondition",
+      "fields": []
+    },
+    "job_postings": {
+      "entity": "job_postings",
+      "data_type_name": "JobPostingsSearchData",
+      "filter_type_name": "JobPostingsSearchFilter",
+      "in_filter_type_name": "JobPostingsInFilter",
+      "any_value_filter_type_name": "JobPostingsAnyValueFilter",
+      "string_filter_type_name": "JobPostingsStringFilter",
+      "sort_filter_type_name": "JobPostingsSortFilter",
+      "result_type_name": "JobPostingsSearchResult",
+      "query_type_name": "JobPostingsSearchQuery",
+      "condition_prefix": "JobPostings",
+      "condition_type_name": "JobPostingsCondition",
+      "fields": []
+    },
+    "jobs": {
+      "entity": "jobs",
+      "data_type_name": "JobsSearchData",
+      "filter_type_name": "JobsSearchFilter",
+      "in_filter_type_name": "JobsInFilter",
+      "any_value_filter_type_name": "JobsAnyValueFilter",
+      "string_filter_type_name": "JobsStringFilter",
+      "sort_filter_type_name": "JobsSortFilter",
+      "result_type_name": "JobsSearchResult",
+      "query_type_name": "JobsSearchQuery",
+      "condition_prefix": "Jobs",
+      "condition_type_name": "JobsCondition",
+      "fields": []
+    },
+    "users": {
+      "entity": "users",
+      "data_type_name": "UsersSearchData",
+      "filter_type_name": "UsersSearchFilter",
+      "in_filter_type_name": "UsersInFilter",
+      "any_value_filter_type_name": "UsersAnyValueFilter",
+      "string_filter_type_name": "UsersStringFilter",
+      "sort_filter_type_name": "UsersSortFilter",
+      "result_type_name": "UsersSearchResult",
+      "query_type_name": "UsersSearchQuery",
+      "condition_prefix": "Users",
+      "condition_type_name": "UsersCondition",
+      "fields": []
+    }
+  }
 }

@@ -48,7 +48,19 @@ info:
       - start_date
     replication_config_key_mapping:
       start_date: start_date
-  x-airbyte-skip-context-store: "Will be populated in a follow-up PR with context-store entities"
+  x-airbyte-context-store:
+    disable_compaction: false
+    entities:
+      - entity: applications
+        x-airbyte-name: applications
+      - entity: candidates
+        x-airbyte-name: candidates
+      - entity: job_postings
+        x-airbyte-name: job_postings
+      - entity: jobs
+        x-airbyte-name: jobs
+      - entity: users
+        x-airbyte-name: users
 servers:
 - url: https://api.ashbyhq.com
   description: Ashby API server

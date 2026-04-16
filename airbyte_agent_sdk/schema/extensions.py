@@ -118,7 +118,7 @@ class CacheEntityConfig(BaseModel):
 
     entity: str
     x_airbyte_name: str | None = Field(default=None, alias="x-airbyte-name")
-    fields: list[CacheFieldConfig]
+    fields: list[CacheFieldConfig] = Field(default_factory=list)
 
     @property
     def cache_name(self) -> str:

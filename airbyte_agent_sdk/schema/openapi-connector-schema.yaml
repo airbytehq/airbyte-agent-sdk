@@ -1,4 +1,147 @@
 $defs:
+  AiHints:
+    additionalProperties: false
+    description: 'AI hints for entity schemas — helps LLMs understand when and how
+      to use an entity.
+
+
+      Attached to entity response schemas via x-airbyte-ai-hints extension.
+
+      Used by generate_tool_description() to emit per-entity guidance.'
+    properties:
+      summary:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: One-line description of what this entity contains
+        title: Summary
+      when_to_use:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: When an LLM should query this entity
+        title: When To Use
+      trigger_phrases:
+        description: Example user queries that should trigger this entity
+        items:
+          type: string
+        title: Trigger Phrases
+        type: array
+      freshness:
+        anyOf:
+        - enum:
+          - live
+          - static
+          type: string
+        - type: 'null'
+        default: null
+        description: Whether data is live or static
+        title: Freshness
+      example_questions:
+        description: Example questions answerable by this entity
+        items:
+          type: string
+        title: Example Questions
+        type: array
+      search_strategy:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Hint for LLMs on how to construct effective search queries for
+          this entity
+        title: Search Strategy
+    title: AiHints
+    type: object
+  AirbyteOAuthCredentials:
+    additionalProperties: false
+    description: 'Airbyte OAuth credentials extension (x-airbyte-oauth-credentials).
+
+
+      Describes what OAuth app credentials an organization needs to provide
+
+      to override the default Airbyte-managed OAuth app credentials.'
+    properties:
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      properties:
+        anyOf:
+        - additionalProperties:
+            $ref: '#/$defs/AuthConfigFieldSpec'
+          type: object
+        - type: 'null'
+        default: null
+        title: Properties
+      required:
+        anyOf:
+        - items:
+            type: string
+          type: array
+        - type: 'null'
+        default: null
+        title: Required
+    title: AirbyteOAuthCredentials
+    type: object
+  AuthConfigFieldSpec:
+    additionalProperties: false
+    description: 'Specification for a user-facing authentication config field.
+
+
+      This defines a single input field that users provide for authentication.'
+    properties:
+      type:
+        default: string
+        enum:
+        - string
+        - integer
+        - boolean
+        - number
+        title: Type
+        type: string
+      title:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Title
+      description:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Description
+      format:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Format
+      pattern:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Pattern
+      default:
+        anyOf:
+        - {}
+        - type: 'null'
+        default: null
+        title: Default
+    title: AuthConfigFieldSpec
+    type: object
   AuthConfigSpec:
     additionalProperties: false
     description: 'Airbyte auth configuration extension (x-airbyte-auth-config).
@@ -88,107 +231,20 @@ $defs:
         title: Replication Auth Key Constants
     title: AuthConfigSpec
     type: object
-  AirbyteOAuthCredentials:
-    additionalProperties: false
-    description: 'Airbyte OAuth credentials extension (x-airbyte-oauth-credentials).
-
-
-      Describes what OAuth app credentials an organization needs to provide
-
-      to override the default Airbyte-managed OAuth app credentials.'
-    properties:
-      title:
-        anyOf:
-        - type: string
-        - type: 'null'
-        default: null
-        title: Title
-      description:
-        anyOf:
-        - type: string
-        - type: 'null'
-        default: null
-        title: Description
-      properties:
-        anyOf:
-        - additionalProperties:
-            $ref: '#/$defs/AuthConfigFieldSpec'
-          type: object
-        - type: 'null'
-        default: null
-        title: Properties
-      required:
-        anyOf:
-        - items:
-            type: string
-          type: array
-        - type: 'null'
-        default: null
-        title: Required
-    title: AirbyteOAuthCredentials
-    type: object
-  AuthConfigFieldSpec:
-    additionalProperties: false
-    description: 'Specification for a user-facing authentication config field.
-
-
-      This defines a single input field that users provide for authentication.'
-    properties:
-      type:
-        default: string
-        enum:
-        - string
-        - integer
-        - boolean
-        - number
-        title: Type
-        type: string
-      title:
-        anyOf:
-        - type: string
-        - type: 'null'
-        default: null
-        title: Title
-      description:
-        anyOf:
-        - type: string
-        - type: 'null'
-        default: null
-        title: Description
-      format:
-        anyOf:
-        - type: string
-        - type: 'null'
-        default: null
-        title: Format
-      pattern:
-        anyOf:
-        - type: string
-        - type: 'null'
-        default: null
-        title: Pattern
-      default:
-        anyOf:
-        - {}
-        - type: 'null'
-        default: null
-        title: Default
-    title: AuthConfigFieldSpec
-    type: object
   CacheConfig:
     additionalProperties: false
-    description: "Cache configuration extension (x-airbyte-context-store).\n\nDefines cache-enabled\
-      \ entities and their field mappings for api_search operations.\nSupports optional\
-      \ name aliasing via x-airbyte-name for both entities and fields,\nenabling bidirectional\
-      \ mapping between user-facing names and cache storage names.\n\nThis extension\
-      \ is added to the Info model and provides field-level mapping for\nsearch operations\
-      \ that use cached data.\n\nExample YAML usage:\n    info:\n      title: Stripe\
-      \ API\n      x-airbyte-context-store:\n        entities:\n          - entity: customers\n\
-      \            stream: customers\n            fields:\n              - name: email\n\
-      \                type: [\"null\", \"string\"]\n                description:\
-      \ \"Customer email address\"\n              - name: customer_name\n        \
-      \        x-airbyte-name: name\n                type: [\"null\", \"string\"]\n\
-      \                description: \"Customer full name\""
+    description: "Cache configuration extension (x-airbyte-context-store).\n\nDefines\
+      \ cache-enabled entities and their field mappings for api_search operations.\n\
+      Supports optional name aliasing via x-airbyte-name for both entities and fields,\n\
+      enabling bidirectional mapping between user-facing names and cache storage names.\n\
+      \nThis extension is added to the Info model and provides field-level mapping\
+      \ for\nsearch operations that use cached data.\n\nExample YAML usage:\n    info:\n\
+      \      title: Stripe API\n      x-airbyte-context-store:\n        entities:\n\
+      \          - entity: customers\n            stream: customers\n            fields:\n\
+      \              - name: email\n                type: [\"null\", \"string\"]\n\
+      \                description: \"Customer email address\"\n              - name:\
+      \ customer_name\n                x-airbyte-name: name\n                type:\
+      \ [\"null\", \"string\"]\n                description: \"Customer full name\""
     properties:
       entities:
         items:
@@ -233,7 +289,6 @@ $defs:
         type: array
     required:
     - entity
-    - fields
     title: CacheEntityConfig
     type: object
   CacheFieldConfig:
@@ -695,8 +750,8 @@ $defs:
       - x-airbyte-example-questions: Example questions for AI connector README (Airbyte
       extension)
 
-      - x-airbyte-context-store: Cache configuration for field mapping between API and cache
-      schemas (Airbyte extension)
+      - x-airbyte-context-store: Cache configuration for field mapping between API
+      and cache schemas (Airbyte extension)
 
       - x-airbyte-replication-config: Replication configuration for MULTI mode connectors
       (Airbyte extension)
@@ -817,9 +872,18 @@ $defs:
         - type: string
         - type: 'null'
         default: null
-        description: Reason why this connector does not define x-airbyte-context-store. Connectors
-          must have either x-airbyte-context-store or x-airbyte-skip-context-store with a justification.
+        description: Reason why this connector does not define x-airbyte-context-store.
+          Connectors must have either x-airbyte-context-store or x-airbyte-skip-context-store
+          with a justification.
         title: X-Airbyte-Skip-Context-Store
+      x-airbyte-response-error-check:
+        anyOf:
+        - $ref: '#/$defs/ResponseErrorCheck'
+        - type: 'null'
+        default: null
+        description: Configuration for detecting application-level errors returned
+          with HTTP 200 status. Checks a field in the response body and raises an
+          error when the field matches on_value.
     required:
     - title
     - version
@@ -1441,7 +1505,7 @@ $defs:
 
       Airbyte Extensions:
 
-      See connector_sdk.extensions for documentation:
+      See airbyte_agent_sdk.extensions for documentation:
 
       - AIRBYTE_BODY_TYPE: Body type and configuration (nested structure)'
     properties:
@@ -1507,6 +1571,31 @@ $defs:
     required:
     - description
     title: Response
+    type: object
+  ResponseErrorCheck:
+    additionalProperties: false
+    description: "Configuration for detecting application-level errors returned with\
+      \ HTTP 200 status.\n\nSome APIs (e.g. Slack) return errors as JSON bodies with\
+      \ HTTP 200 instead of using\nHTTP error status codes. This extension allows\
+      \ connectors to declare how to detect\nsuch errors.\n\nExample (Slack):\n  \
+      \  x-airbyte-response-error-check:\n      field: \"ok\"\n      on_value: false\n\
+      \      message_field: \"error\""
+    properties:
+      field:
+        title: Field
+        type: string
+      on_value:
+        title: On Value
+      message_field:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Message Field
+    required:
+    - field
+    - on_value
+    title: ResponseErrorCheck
     type: object
   RetryConfig:
     additionalProperties: false
@@ -1749,6 +1838,11 @@ $defs:
         - type: 'null'
         default: null
         title: X-Airbyte-Stream-Name
+      x-airbyte-ai-hints:
+        anyOf:
+        - $ref: '#/$defs/AiHints'
+        - type: 'null'
+        default: null
     title: Schema
     type: object
   ScopingParamConfig:

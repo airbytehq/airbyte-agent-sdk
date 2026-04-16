@@ -95,13 +95,13 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Candidates | [List](./REFERENCE.md#candidates-list), [Get](./REFERENCE.md#candidates-get) |
-| Applications | [List](./REFERENCE.md#applications-list), [Get](./REFERENCE.md#applications-get) |
-| Jobs | [List](./REFERENCE.md#jobs-list), [Get](./REFERENCE.md#jobs-get) |
+| Candidates | [List](./REFERENCE.md#candidates-list), [Get](./REFERENCE.md#candidates-get), [Context Store Search](./REFERENCE.md#candidates-context-store-search) |
+| Applications | [List](./REFERENCE.md#applications-list), [Get](./REFERENCE.md#applications-get), [Context Store Search](./REFERENCE.md#applications-context-store-search) |
+| Jobs | [List](./REFERENCE.md#jobs-list), [Get](./REFERENCE.md#jobs-get), [Context Store Search](./REFERENCE.md#jobs-context-store-search) |
 | Departments | [List](./REFERENCE.md#departments-list), [Get](./REFERENCE.md#departments-get) |
 | Locations | [List](./REFERENCE.md#locations-list), [Get](./REFERENCE.md#locations-get) |
-| Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get) |
-| Job Postings | [List](./REFERENCE.md#job-postings-list), [Get](./REFERENCE.md#job-postings-get) |
+| Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get), [Context Store Search](./REFERENCE.md#users-context-store-search) |
+| Job Postings | [List](./REFERENCE.md#job-postings-list), [Get](./REFERENCE.md#job-postings-get), [Context Store Search](./REFERENCE.md#job-postings-context-store-search) |
 | Sources | [List](./REFERENCE.md#sources-list) |
 | Archive Reasons | [List](./REFERENCE.md#archive-reasons-list) |
 | Candidate Tags | [List](./REFERENCE.md#candidate-tags-list) |

@@ -32,14 +32,6 @@ class AshbyReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class CandidateTagsItem(BaseModel):
-    """Nested schema for Candidate.tags_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    title: Union[str | None, Any] = Field(default=None)
-    is_archived: Union[bool | None, Any] = Field(default=None, alias="isArchived")
-
 class CandidatePhonenumbersItem(BaseModel):
     """Nested schema for Candidate.phoneNumbers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -48,13 +40,13 @@ class CandidatePhonenumbersItem(BaseModel):
     type_: Union[str | None, Any] = Field(default=None, alias="type")
     is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
 
-class CandidateEmailaddressesItem(BaseModel):
-    """Nested schema for Candidate.emailAddresses_item"""
+class CandidateTagsItem(BaseModel):
+    """Nested schema for Candidate.tags_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    value: Union[str | None, Any] = Field(default=None)
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
+    id: Union[str | None, Any] = Field(default=None)
+    title: Union[str | None, Any] = Field(default=None)
+    is_archived: Union[bool | None, Any] = Field(default=None, alias="isArchived")
 
 class CandidateSociallinksItem(BaseModel):
     """Nested schema for Candidate.socialLinks_item"""
@@ -62,6 +54,14 @@ class CandidateSociallinksItem(BaseModel):
 
     type_: Union[str | None, Any] = Field(default=None, alias="type")
     url: Union[str | None, Any] = Field(default=None)
+
+class CandidateEmailaddressesItem(BaseModel):
+    """Nested schema for Candidate.emailAddresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    value: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
 
 class Candidate(BaseModel):
     """Candidate object"""
@@ -401,6 +401,83 @@ class AshbyExecuteResultWithMeta(AshbyExecuteResult[T], Generic[T, S]):
     """
     meta: S
     """Metadata about the response (e.g., pagination cursors, record counts)."""
+
+# ===== SEARCH DATA MODELS =====
+# Entity-specific Pydantic models for search result data
+
+# Type variable for search data generic
+D = TypeVar('D')
+
+class ApplicationsSearchData(BaseModel):
+    """Search result data for applications entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class CandidatesSearchData(BaseModel):
+    """Search result data for candidates entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class JobPostingsSearchData(BaseModel):
+    """Search result data for job_postings entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class JobsSearchData(BaseModel):
+    """Search result data for jobs entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class UsersSearchData(BaseModel):
+    """Search result data for users entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+# ===== GENERIC SEARCH RESULT TYPES =====
+
+class AirbyteSearchMeta(BaseModel):
+    """Pagination metadata for search responses."""
+    model_config = ConfigDict(extra="allow")
+
+    has_more: bool = False
+    """Whether more results are available."""
+    cursor: str | None = None
+    """Cursor for fetching the next page of results."""
+    took_ms: int | None = None
+    """Time taken to execute the search in milliseconds."""
+
+
+class AirbyteSearchResult(BaseModel, Generic[D]):
+    """Result from Airbyte cache search operations with typed records."""
+    model_config = ConfigDict(extra="allow")
+
+    data: list[D] = Field(default_factory=list)
+    """List of matching records."""
+    meta: AirbyteSearchMeta = Field(default_factory=AirbyteSearchMeta)
+    """Pagination metadata."""
+
+
+# ===== ENTITY-SPECIFIC SEARCH RESULT TYPE ALIASES =====
+
+ApplicationsSearchResult = AirbyteSearchResult[ApplicationsSearchData]
+"""Search result type for applications entity."""
+
+CandidatesSearchResult = AirbyteSearchResult[CandidatesSearchData]
+"""Search result type for candidates entity."""
+
+JobPostingsSearchResult = AirbyteSearchResult[JobPostingsSearchData]
+"""Search result type for job_postings entity."""
+
+JobsSearchResult = AirbyteSearchResult[JobsSearchData]
+"""Search result type for jobs entity."""
+
+UsersSearchResult = AirbyteSearchResult[UsersSearchData]
+"""Search result type for users entity."""
 
 
 

@@ -3331,6 +3331,7 @@ AshbyConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
     ],
+    search_field_paths={},
     example_questions=ExampleQuestions(
         direct=[
             'List all open jobs',
