@@ -98,23 +98,23 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| Repositories | [Get](./REFERENCE.md#repositories-get), [List](./REFERENCE.md#repositories-list), [API Search](./REFERENCE.md#repositories-api_search) |
+| Repositories | [Get](./REFERENCE.md#repositories-get), [List](./REFERENCE.md#repositories-list), [API Search](./REFERENCE.md#repositories-api_search), [Context Store Search](./REFERENCE.md#repositories-context-store-search) |
 | Org Repositories | [List](./REFERENCE.md#org-repositories-list) |
-| Branches | [List](./REFERENCE.md#branches-list), [Get](./REFERENCE.md#branches-get) |
+| Branches | [List](./REFERENCE.md#branches-list), [Get](./REFERENCE.md#branches-get), [Context Store Search](./REFERENCE.md#branches-context-store-search) |
 | Commits | [List](./REFERENCE.md#commits-list), [Get](./REFERENCE.md#commits-get) |
 | Releases | [List](./REFERENCE.md#releases-list), [Get](./REFERENCE.md#releases-get) |
-| Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [API Search](./REFERENCE.md#issues-api_search) |
-| Pull Requests | [List](./REFERENCE.md#pull-requests-list), [Get](./REFERENCE.md#pull-requests-get), [API Search](./REFERENCE.md#pull-requests-api_search) |
+| Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [API Search](./REFERENCE.md#issues-api_search), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
+| Pull Requests | [List](./REFERENCE.md#pull-requests-list), [Get](./REFERENCE.md#pull-requests-get), [API Search](./REFERENCE.md#pull-requests-api_search), [Context Store Search](./REFERENCE.md#pull-requests-context-store-search) |
 | Reviews | [List](./REFERENCE.md#reviews-list) |
-| Comments | [List](./REFERENCE.md#comments-list), [Get](./REFERENCE.md#comments-get) |
+| Comments | [List](./REFERENCE.md#comments-list), [Get](./REFERENCE.md#comments-get), [Context Store Search](./REFERENCE.md#comments-context-store-search) |
 | Pr Comments | [List](./REFERENCE.md#pr-comments-list), [Get](./REFERENCE.md#pr-comments-get) |
 | Labels | [List](./REFERENCE.md#labels-list), [Get](./REFERENCE.md#labels-get) |
 | Milestones | [List](./REFERENCE.md#milestones-list), [Get](./REFERENCE.md#milestones-get) |
-| Organizations | [Get](./REFERENCE.md#organizations-get), [List](./REFERENCE.md#organizations-list) |
-| Users | [Get](./REFERENCE.md#users-get), [List](./REFERENCE.md#users-list), [API Search](./REFERENCE.md#users-api_search) |
-| Teams | [List](./REFERENCE.md#teams-list), [Get](./REFERENCE.md#teams-get) |
-| Tags | [List](./REFERENCE.md#tags-list), [Get](./REFERENCE.md#tags-get) |
-| Stargazers | [List](./REFERENCE.md#stargazers-list) |
+| Organizations | [Get](./REFERENCE.md#organizations-get), [List](./REFERENCE.md#organizations-list), [Context Store Search](./REFERENCE.md#organizations-context-store-search) |
+| Users | [Get](./REFERENCE.md#users-get), [List](./REFERENCE.md#users-list), [API Search](./REFERENCE.md#users-api_search), [Context Store Search](./REFERENCE.md#users-context-store-search) |
+| Teams | [List](./REFERENCE.md#teams-list), [Get](./REFERENCE.md#teams-get), [Context Store Search](./REFERENCE.md#teams-context-store-search) |
+| Tags | [List](./REFERENCE.md#tags-list), [Get](./REFERENCE.md#tags-get), [Context Store Search](./REFERENCE.md#tags-context-store-search) |
+| Stargazers | [List](./REFERENCE.md#stargazers-list), [Context Store Search](./REFERENCE.md#stargazers-context-store-search) |
 | Viewer | [Get](./REFERENCE.md#viewer-get) |
 | Viewer Repositories | [List](./REFERENCE.md#viewer-repositories-list) |
 | Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get) |

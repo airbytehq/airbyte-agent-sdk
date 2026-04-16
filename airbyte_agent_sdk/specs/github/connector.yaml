@@ -61,7 +61,29 @@ info:
       - repositories
     replication_config_key_mapping:
       repositories: repositories
-  x-airbyte-skip-context-store: "Will be populated in a follow-up PR with context-store entities"
+  x-airbyte-context-store:
+    disable_compaction: false
+    entities:
+      - entity: branches
+        x-airbyte-name: branches
+      - entity: comments
+        x-airbyte-name: comments
+      - entity: issues
+        x-airbyte-name: issues
+      - entity: organizations
+        x-airbyte-name: organizations
+      - entity: pull_requests
+        x-airbyte-name: pull_requests
+      - entity: repositories
+        x-airbyte-name: repositories
+      - entity: stargazers
+        x-airbyte-name: stargazers
+      - entity: tags
+        x-airbyte-name: tags
+      - entity: teams
+        x-airbyte-name: teams
+      - entity: users
+        x-airbyte-name: users
 
 servers:
   - url: https://api.github.com

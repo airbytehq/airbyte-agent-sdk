@@ -2902,6 +2902,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
     ],
+    search_field_paths={},
     example_questions=ExampleQuestions(
         direct=[
             'Show me all open issues in my repositories this month',

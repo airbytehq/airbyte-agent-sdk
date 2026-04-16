@@ -90,6 +90,128 @@ class GithubExecuteResultWithMeta(GithubExecuteResult[T], Generic[T, S]):
     meta: S
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
+# ===== SEARCH DATA MODELS =====
+# Entity-specific Pydantic models for search result data
+
+# Type variable for search data generic
+D = TypeVar('D')
+
+class BranchesSearchData(BaseModel):
+    """Search result data for branches entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class CommentsSearchData(BaseModel):
+    """Search result data for comments entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class IssuesSearchData(BaseModel):
+    """Search result data for issues entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class OrganizationsSearchData(BaseModel):
+    """Search result data for organizations entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class PullRequestsSearchData(BaseModel):
+    """Search result data for pull_requests entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class RepositoriesSearchData(BaseModel):
+    """Search result data for repositories entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class StargazersSearchData(BaseModel):
+    """Search result data for stargazers entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class TagsSearchData(BaseModel):
+    """Search result data for tags entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class TeamsSearchData(BaseModel):
+    """Search result data for teams entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class UsersSearchData(BaseModel):
+    """Search result data for users entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+# ===== GENERIC SEARCH RESULT TYPES =====
+
+class AirbyteSearchMeta(BaseModel):
+    """Pagination metadata for search responses."""
+    model_config = ConfigDict(extra="allow")
+
+    has_more: bool = False
+    """Whether more results are available."""
+    cursor: str | None = None
+    """Cursor for fetching the next page of results."""
+    took_ms: int | None = None
+    """Time taken to execute the search in milliseconds."""
+
+
+class AirbyteSearchResult(BaseModel, Generic[D]):
+    """Result from Airbyte cache search operations with typed records."""
+    model_config = ConfigDict(extra="allow")
+
+    data: list[D] = Field(default_factory=list)
+    """List of matching records."""
+    meta: AirbyteSearchMeta = Field(default_factory=AirbyteSearchMeta)
+    """Pagination metadata."""
+
+
+# ===== ENTITY-SPECIFIC SEARCH RESULT TYPE ALIASES =====
+
+BranchesSearchResult = AirbyteSearchResult[BranchesSearchData]
+"""Search result type for branches entity."""
+
+CommentsSearchResult = AirbyteSearchResult[CommentsSearchData]
+"""Search result type for comments entity."""
+
+IssuesSearchResult = AirbyteSearchResult[IssuesSearchData]
+"""Search result type for issues entity."""
+
+OrganizationsSearchResult = AirbyteSearchResult[OrganizationsSearchData]
+"""Search result type for organizations entity."""
+
+PullRequestsSearchResult = AirbyteSearchResult[PullRequestsSearchData]
+"""Search result type for pull_requests entity."""
+
+RepositoriesSearchResult = AirbyteSearchResult[RepositoriesSearchData]
+"""Search result type for repositories entity."""
+
+StargazersSearchResult = AirbyteSearchResult[StargazersSearchData]
+"""Search result type for stargazers entity."""
+
+TagsSearchResult = AirbyteSearchResult[TagsSearchData]
+"""Search result type for tags entity."""
+
+TeamsSearchResult = AirbyteSearchResult[TeamsSearchData]
+"""Search result type for teams entity."""
+
+UsersSearchResult = AirbyteSearchResult[UsersSearchData]
+"""Search result type for users entity."""
+
 
 
 # ===== OPERATION RESULT TYPE ALIASES =====
