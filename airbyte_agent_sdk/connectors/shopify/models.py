@@ -117,6 +117,55 @@ class OrderAddress(BaseModel):
     latitude: Union[float | None, Any] = Field(default=None)
     longitude: Union[float | None, Any] = Field(default=None)
 
+class Transaction(BaseModel):
+    """An order transaction"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int, Any] = Field(default=None)
+    order_id: Union[int | None, Any] = Field(default=None)
+    kind: Union[str | None, Any] = Field(default=None)
+    gateway: Union[str | None, Any] = Field(default=None)
+    status: Union[str | None, Any] = Field(default=None)
+    message: Union[str | None, Any] = Field(default=None)
+    created_at: Union[str | None, Any] = Field(default=None)
+    test: Union[bool | None, Any] = Field(default=None)
+    authorization: Union[str | None, Any] = Field(default=None)
+    location_id: Union[int | None, Any] = Field(default=None)
+    user_id: Union[int | None, Any] = Field(default=None)
+    parent_id: Union[int | None, Any] = Field(default=None)
+    processed_at: Union[str | None, Any] = Field(default=None)
+    device_id: Union[int | None, Any] = Field(default=None)
+    error_code: Union[str | None, Any] = Field(default=None)
+    source_name: Union[str | None, Any] = Field(default=None)
+    receipt: Union[dict[str, Any] | None, Any] = Field(default=None)
+    currency_exchange_adjustment: Union[dict[str, Any] | None, Any] = Field(default=None)
+    amount: Union[str | None, Any] = Field(default=None)
+    currency: Union[str | None, Any] = Field(default=None)
+    payment_id: Union[str | None, Any] = Field(default=None)
+    total_unsettled_set: Union[dict[str, Any] | None, Any] = Field(default=None)
+    manual_payment_gateway: Union[bool | None, Any] = Field(default=None)
+    admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
+
+class Refund(BaseModel):
+    """An order refund"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int, Any] = Field(default=None)
+    order_id: Union[int | None, Any] = Field(default=None)
+    created_at: Union[str | None, Any] = Field(default=None)
+    note: Union[str | None, Any] = Field(default=None)
+    user_id: Union[int | None, Any] = Field(default=None)
+    processed_at: Union[str | None, Any] = Field(default=None)
+    restock: Union[bool | None, Any] = Field(default=None)
+    duties: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
+    total_duties_set: Union[dict[str, Any] | None, Any] = Field(default=None)
+    return_: Union[dict[str, Any] | None, Any] = Field(default=None, alias="return")
+    refund_line_items: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
+    transactions: Union[list[Transaction] | None, Any] = Field(default=None)
+    order_adjustments: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
+    admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
+    refund_shipping_lines: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
+
 class LineItem(BaseModel):
     """LineItem type definition"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -173,55 +222,6 @@ class Fulfillment(BaseModel):
     receipt: Union[dict[str, Any] | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
-
-class Transaction(BaseModel):
-    """An order transaction"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int, Any] = Field(default=None)
-    order_id: Union[int | None, Any] = Field(default=None)
-    kind: Union[str | None, Any] = Field(default=None)
-    gateway: Union[str | None, Any] = Field(default=None)
-    status: Union[str | None, Any] = Field(default=None)
-    message: Union[str | None, Any] = Field(default=None)
-    created_at: Union[str | None, Any] = Field(default=None)
-    test: Union[bool | None, Any] = Field(default=None)
-    authorization: Union[str | None, Any] = Field(default=None)
-    location_id: Union[int | None, Any] = Field(default=None)
-    user_id: Union[int | None, Any] = Field(default=None)
-    parent_id: Union[int | None, Any] = Field(default=None)
-    processed_at: Union[str | None, Any] = Field(default=None)
-    device_id: Union[int | None, Any] = Field(default=None)
-    error_code: Union[str | None, Any] = Field(default=None)
-    source_name: Union[str | None, Any] = Field(default=None)
-    receipt: Union[dict[str, Any] | None, Any] = Field(default=None)
-    currency_exchange_adjustment: Union[dict[str, Any] | None, Any] = Field(default=None)
-    amount: Union[str | None, Any] = Field(default=None)
-    currency: Union[str | None, Any] = Field(default=None)
-    payment_id: Union[str | None, Any] = Field(default=None)
-    total_unsettled_set: Union[dict[str, Any] | None, Any] = Field(default=None)
-    manual_payment_gateway: Union[bool | None, Any] = Field(default=None)
-    admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
-
-class Refund(BaseModel):
-    """An order refund"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int, Any] = Field(default=None)
-    order_id: Union[int | None, Any] = Field(default=None)
-    created_at: Union[str | None, Any] = Field(default=None)
-    note: Union[str | None, Any] = Field(default=None)
-    user_id: Union[int | None, Any] = Field(default=None)
-    processed_at: Union[str | None, Any] = Field(default=None)
-    restock: Union[bool | None, Any] = Field(default=None)
-    duties: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
-    total_duties_set: Union[dict[str, Any] | None, Any] = Field(default=None)
-    return_: Union[dict[str, Any] | None, Any] = Field(default=None, alias="return")
-    refund_line_items: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
-    transactions: Union[list[Transaction] | None, Any] = Field(default=None)
-    order_adjustments: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
-    admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
-    refund_shipping_lines: Union[list[dict[str, Any]] | None, Any] = Field(default=None)
 
 class Order(BaseModel):
     """A Shopify order"""
@@ -1106,6 +1106,290 @@ class ShopifyExecuteResultWithMeta(ShopifyExecuteResult[T], Generic[T, S]):
     """
     meta: S
     """Metadata about the response (e.g., pagination cursors, record counts)."""
+
+# ===== SEARCH DATA MODELS =====
+# Entity-specific Pydantic models for search result data
+
+# Type variable for search data generic
+D = TypeVar('D')
+
+class AbandonedCheckoutsSearchData(BaseModel):
+    """Search result data for abandoned_checkouts entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class CollectsSearchData(BaseModel):
+    """Search result data for collects entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class CountriesSearchData(BaseModel):
+    """Search result data for countries entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class CustomCollectionsSearchData(BaseModel):
+    """Search result data for custom_collections entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class CustomersSearchData(BaseModel):
+    """Search result data for customers entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class DiscountCodesSearchData(BaseModel):
+    """Search result data for discount_codes entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class DraftOrdersSearchData(BaseModel):
+    """Search result data for draft_orders entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class FulfillmentOrdersSearchData(BaseModel):
+    """Search result data for fulfillment_orders entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class FulfillmentsSearchData(BaseModel):
+    """Search result data for fulfillments entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class InventoryItemsSearchData(BaseModel):
+    """Search result data for inventory_items entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class InventoryLevelsSearchData(BaseModel):
+    """Search result data for inventory_levels entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class LocationsSearchData(BaseModel):
+    """Search result data for locations entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldCustomersSearchData(BaseModel):
+    """Search result data for metafield_customers entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldDraftOrdersSearchData(BaseModel):
+    """Search result data for metafield_draft_orders entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldLocationsSearchData(BaseModel):
+    """Search result data for metafield_locations entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldOrdersSearchData(BaseModel):
+    """Search result data for metafield_orders entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldProductImagesSearchData(BaseModel):
+    """Search result data for metafield_product_images entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldProductVariantsSearchData(BaseModel):
+    """Search result data for metafield_product_variants entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldProductsSearchData(BaseModel):
+    """Search result data for metafield_products entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldShopsSearchData(BaseModel):
+    """Search result data for metafield_shops entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class MetafieldSmartCollectionsSearchData(BaseModel):
+    """Search result data for metafield_smart_collections entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class OrderRefundsSearchData(BaseModel):
+    """Search result data for order_refunds entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class PriceRulesSearchData(BaseModel):
+    """Search result data for price_rules entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class ProductImagesSearchData(BaseModel):
+    """Search result data for product_images entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class ProductVariantsSearchData(BaseModel):
+    """Search result data for product_variants entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class ShopSearchData(BaseModel):
+    """Search result data for shop entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class SmartCollectionsSearchData(BaseModel):
+    """Search result data for smart_collections entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class TenderTransactionsSearchData(BaseModel):
+    """Search result data for tender_transactions entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+# ===== GENERIC SEARCH RESULT TYPES =====
+
+class AirbyteSearchMeta(BaseModel):
+    """Pagination metadata for search responses."""
+    model_config = ConfigDict(extra="allow")
+
+    has_more: bool = False
+    """Whether more results are available."""
+    cursor: str | None = None
+    """Cursor for fetching the next page of results."""
+    took_ms: int | None = None
+    """Time taken to execute the search in milliseconds."""
+
+
+class AirbyteSearchResult(BaseModel, Generic[D]):
+    """Result from Airbyte cache search operations with typed records."""
+    model_config = ConfigDict(extra="allow")
+
+    data: list[D] = Field(default_factory=list)
+    """List of matching records."""
+    meta: AirbyteSearchMeta = Field(default_factory=AirbyteSearchMeta)
+    """Pagination metadata."""
+
+
+# ===== ENTITY-SPECIFIC SEARCH RESULT TYPE ALIASES =====
+
+AbandonedCheckoutsSearchResult = AirbyteSearchResult[AbandonedCheckoutsSearchData]
+"""Search result type for abandoned_checkouts entity."""
+
+CollectsSearchResult = AirbyteSearchResult[CollectsSearchData]
+"""Search result type for collects entity."""
+
+CountriesSearchResult = AirbyteSearchResult[CountriesSearchData]
+"""Search result type for countries entity."""
+
+CustomCollectionsSearchResult = AirbyteSearchResult[CustomCollectionsSearchData]
+"""Search result type for custom_collections entity."""
+
+CustomersSearchResult = AirbyteSearchResult[CustomersSearchData]
+"""Search result type for customers entity."""
+
+DiscountCodesSearchResult = AirbyteSearchResult[DiscountCodesSearchData]
+"""Search result type for discount_codes entity."""
+
+DraftOrdersSearchResult = AirbyteSearchResult[DraftOrdersSearchData]
+"""Search result type for draft_orders entity."""
+
+FulfillmentOrdersSearchResult = AirbyteSearchResult[FulfillmentOrdersSearchData]
+"""Search result type for fulfillment_orders entity."""
+
+FulfillmentsSearchResult = AirbyteSearchResult[FulfillmentsSearchData]
+"""Search result type for fulfillments entity."""
+
+InventoryItemsSearchResult = AirbyteSearchResult[InventoryItemsSearchData]
+"""Search result type for inventory_items entity."""
+
+InventoryLevelsSearchResult = AirbyteSearchResult[InventoryLevelsSearchData]
+"""Search result type for inventory_levels entity."""
+
+LocationsSearchResult = AirbyteSearchResult[LocationsSearchData]
+"""Search result type for locations entity."""
+
+MetafieldCustomersSearchResult = AirbyteSearchResult[MetafieldCustomersSearchData]
+"""Search result type for metafield_customers entity."""
+
+MetafieldDraftOrdersSearchResult = AirbyteSearchResult[MetafieldDraftOrdersSearchData]
+"""Search result type for metafield_draft_orders entity."""
+
+MetafieldLocationsSearchResult = AirbyteSearchResult[MetafieldLocationsSearchData]
+"""Search result type for metafield_locations entity."""
+
+MetafieldOrdersSearchResult = AirbyteSearchResult[MetafieldOrdersSearchData]
+"""Search result type for metafield_orders entity."""
+
+MetafieldProductImagesSearchResult = AirbyteSearchResult[MetafieldProductImagesSearchData]
+"""Search result type for metafield_product_images entity."""
+
+MetafieldProductVariantsSearchResult = AirbyteSearchResult[MetafieldProductVariantsSearchData]
+"""Search result type for metafield_product_variants entity."""
+
+MetafieldProductsSearchResult = AirbyteSearchResult[MetafieldProductsSearchData]
+"""Search result type for metafield_products entity."""
+
+MetafieldShopsSearchResult = AirbyteSearchResult[MetafieldShopsSearchData]
+"""Search result type for metafield_shops entity."""
+
+MetafieldSmartCollectionsSearchResult = AirbyteSearchResult[MetafieldSmartCollectionsSearchData]
+"""Search result type for metafield_smart_collections entity."""
+
+OrderRefundsSearchResult = AirbyteSearchResult[OrderRefundsSearchData]
+"""Search result type for order_refunds entity."""
+
+PriceRulesSearchResult = AirbyteSearchResult[PriceRulesSearchData]
+"""Search result type for price_rules entity."""
+
+ProductImagesSearchResult = AirbyteSearchResult[ProductImagesSearchData]
+"""Search result type for product_images entity."""
+
+ProductVariantsSearchResult = AirbyteSearchResult[ProductVariantsSearchData]
+"""Search result type for product_variants entity."""
+
+ShopSearchResult = AirbyteSearchResult[ShopSearchData]
+"""Search result type for shop entity."""
+
+SmartCollectionsSearchResult = AirbyteSearchResult[SmartCollectionsSearchData]
+"""Search result type for smart_collections entity."""
+
+TenderTransactionsSearchResult = AirbyteSearchResult[TenderTransactionsSearchData]
+"""Search result type for tender_transactions entity."""
 
 
 

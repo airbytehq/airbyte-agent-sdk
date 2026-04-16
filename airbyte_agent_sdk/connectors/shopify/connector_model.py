@@ -11784,6 +11784,7 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
             ],
         ),
     ],
+    search_field_paths={},
     example_questions=ExampleQuestions(
         direct=[
             'List all customers in my Shopify store',

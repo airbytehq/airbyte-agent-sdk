@@ -144,7 +144,65 @@ info:
     foreign_key: order_id
     target_key: id
     cardinality: many_to_one
-  x-airbyte-skip-context-store: "Will be populated in a follow-up PR with context-store entities"
+  x-airbyte-context-store:
+    disable_compaction: false
+    entities:
+      - entity: abandoned_checkouts
+        x-airbyte-name: abandoned_checkouts
+      - entity: collects
+        x-airbyte-name: collects
+      - entity: countries
+        x-airbyte-name: countries
+      - entity: custom_collections
+        x-airbyte-name: custom_collections
+      - entity: customers
+        x-airbyte-name: customers
+      - entity: discount_codes
+        x-airbyte-name: discount_codes
+      - entity: draft_orders
+        x-airbyte-name: draft_orders
+      - entity: fulfillment_orders
+        x-airbyte-name: fulfillment_orders
+      - entity: fulfillments
+        x-airbyte-name: fulfillments
+      - entity: inventory_items
+        x-airbyte-name: inventory_items
+      - entity: inventory_levels
+        x-airbyte-name: inventory_levels
+      - entity: locations
+        x-airbyte-name: locations
+      - entity: metafield_customers
+        x-airbyte-name: metafield_customers
+      - entity: metafield_draft_orders
+        x-airbyte-name: metafield_draft_orders
+      - entity: metafield_locations
+        x-airbyte-name: metafield_locations
+      - entity: metafield_orders
+        x-airbyte-name: metafield_orders
+      - entity: metafield_product_images
+        x-airbyte-name: metafield_product_images
+      - entity: metafield_product_variants
+        x-airbyte-name: metafield_product_variants
+      - entity: metafield_products
+        x-airbyte-name: metafield_products
+      - entity: metafield_shops
+        x-airbyte-name: metafield_shops
+      - entity: metafield_smart_collections
+        x-airbyte-name: metafield_smart_collections
+      - entity: order_refunds
+        x-airbyte-name: order_refunds
+      - entity: price_rules
+        x-airbyte-name: price_rules
+      - entity: product_images
+        x-airbyte-name: product_images
+      - entity: product_variants
+        x-airbyte-name: product_variants
+      - entity: shop
+        x-airbyte-name: shop
+      - entity: smart_collections
+        x-airbyte-name: smart_collections
+      - entity: tender_transactions
+        x-airbyte-name: tender_transactions
 servers:
 - url: https://{shop}.myshopify.com/admin/api/2025-01
   description: Shopify Admin REST API Server

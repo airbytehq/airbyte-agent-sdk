@@ -72,6 +72,63 @@ from .types import (
     TenderTransactionsListParams,
     TransactionsGetParams,
     TransactionsListParams,
+    AirbyteSearchParams,
+    AbandonedCheckoutsSearchFilter,
+    AbandonedCheckoutsSearchQuery,
+    CollectsSearchFilter,
+    CollectsSearchQuery,
+    CountriesSearchFilter,
+    CountriesSearchQuery,
+    CustomCollectionsSearchFilter,
+    CustomCollectionsSearchQuery,
+    CustomersSearchFilter,
+    CustomersSearchQuery,
+    DiscountCodesSearchFilter,
+    DiscountCodesSearchQuery,
+    DraftOrdersSearchFilter,
+    DraftOrdersSearchQuery,
+    FulfillmentOrdersSearchFilter,
+    FulfillmentOrdersSearchQuery,
+    FulfillmentsSearchFilter,
+    FulfillmentsSearchQuery,
+    InventoryItemsSearchFilter,
+    InventoryItemsSearchQuery,
+    InventoryLevelsSearchFilter,
+    InventoryLevelsSearchQuery,
+    LocationsSearchFilter,
+    LocationsSearchQuery,
+    MetafieldCustomersSearchFilter,
+    MetafieldCustomersSearchQuery,
+    MetafieldDraftOrdersSearchFilter,
+    MetafieldDraftOrdersSearchQuery,
+    MetafieldLocationsSearchFilter,
+    MetafieldLocationsSearchQuery,
+    MetafieldOrdersSearchFilter,
+    MetafieldOrdersSearchQuery,
+    MetafieldProductImagesSearchFilter,
+    MetafieldProductImagesSearchQuery,
+    MetafieldProductVariantsSearchFilter,
+    MetafieldProductVariantsSearchQuery,
+    MetafieldProductsSearchFilter,
+    MetafieldProductsSearchQuery,
+    MetafieldShopsSearchFilter,
+    MetafieldShopsSearchQuery,
+    MetafieldSmartCollectionsSearchFilter,
+    MetafieldSmartCollectionsSearchQuery,
+    OrderRefundsSearchFilter,
+    OrderRefundsSearchQuery,
+    PriceRulesSearchFilter,
+    PriceRulesSearchQuery,
+    ProductImagesSearchFilter,
+    ProductImagesSearchQuery,
+    ProductVariantsSearchFilter,
+    ProductVariantsSearchQuery,
+    ShopSearchFilter,
+    ShopSearchQuery,
+    SmartCollectionsSearchFilter,
+    SmartCollectionsSearchQuery,
+    TenderTransactionsSearchFilter,
+    TenderTransactionsSearchQuery,
 )
 from .models import ShopifyAuthConfig
 
@@ -135,6 +192,64 @@ from .models import (
     SmartCollection,
     TenderTransaction,
     Transaction,
+    AirbyteSearchMeta,
+    AirbyteSearchResult,
+    AbandonedCheckoutsSearchData,
+    AbandonedCheckoutsSearchResult,
+    CollectsSearchData,
+    CollectsSearchResult,
+    CountriesSearchData,
+    CountriesSearchResult,
+    CustomCollectionsSearchData,
+    CustomCollectionsSearchResult,
+    CustomersSearchData,
+    CustomersSearchResult,
+    DiscountCodesSearchData,
+    DiscountCodesSearchResult,
+    DraftOrdersSearchData,
+    DraftOrdersSearchResult,
+    FulfillmentOrdersSearchData,
+    FulfillmentOrdersSearchResult,
+    FulfillmentsSearchData,
+    FulfillmentsSearchResult,
+    InventoryItemsSearchData,
+    InventoryItemsSearchResult,
+    InventoryLevelsSearchData,
+    InventoryLevelsSearchResult,
+    LocationsSearchData,
+    LocationsSearchResult,
+    MetafieldCustomersSearchData,
+    MetafieldCustomersSearchResult,
+    MetafieldDraftOrdersSearchData,
+    MetafieldDraftOrdersSearchResult,
+    MetafieldLocationsSearchData,
+    MetafieldLocationsSearchResult,
+    MetafieldOrdersSearchData,
+    MetafieldOrdersSearchResult,
+    MetafieldProductImagesSearchData,
+    MetafieldProductImagesSearchResult,
+    MetafieldProductVariantsSearchData,
+    MetafieldProductVariantsSearchResult,
+    MetafieldProductsSearchData,
+    MetafieldProductsSearchResult,
+    MetafieldShopsSearchData,
+    MetafieldShopsSearchResult,
+    MetafieldSmartCollectionsSearchData,
+    MetafieldSmartCollectionsSearchResult,
+    OrderRefundsSearchData,
+    OrderRefundsSearchResult,
+    PriceRulesSearchData,
+    PriceRulesSearchResult,
+    ProductImagesSearchData,
+    ProductImagesSearchResult,
+    ProductVariantsSearchData,
+    ProductVariantsSearchResult,
+    ShopSearchData,
+    ShopSearchResult,
+    SmartCollectionsSearchData,
+    SmartCollectionsSearchResult,
+    TenderTransactionsSearchData,
+    TenderTransactionsSearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -183,7 +298,7 @@ class ShopifyConnector:
 
     connector_name = "shopify"
     connector_version = "0.1.12"
-    sdk_version = "0.1.4"
+    sdk_version = "0.1.5"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -852,14 +967,14 @@ class ShopifyConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any]
     ) -> ShopifyExecuteResult[Any] | ShopifyExecuteResultWithMeta[Any, Any] | Any: ...
 
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "get"],
+        action: Literal["list", "get", "context_store_search"],
         params: Mapping[str, Any] | None = None
     ) -> Any:
         """
@@ -1264,6 +1379,60 @@ class CustomersQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: CustomersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> CustomersSearchResult:
+        """
+        Search customers records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (CustomersSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            CustomersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("customers", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return CustomersSearchResult(
+            data=[
+                CustomersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class OrdersQuery:
     """
     Query class for Orders entity operations.
@@ -1510,6 +1679,60 @@ class ProductVariantsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: ProductVariantsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ProductVariantsSearchResult:
+        """
+        Search product_variants records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ProductVariantsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ProductVariantsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("product_variants", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ProductVariantsSearchResult(
+            data=[
+                ProductVariantsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class ProductImagesQuery:
     """
     Query class for ProductImages entity operations.
@@ -1579,6 +1802,60 @@ class ProductImagesQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: ProductImagesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ProductImagesSearchResult:
+        """
+        Search product_images records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ProductImagesSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ProductImagesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("product_images", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ProductImagesSearchResult(
+            data=[
+                ProductImagesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class AbandonedCheckoutsQuery:
     """
     Query class for AbandonedCheckouts entity operations.
@@ -1634,6 +1911,60 @@ class AbandonedCheckoutsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: AbandonedCheckoutsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> AbandonedCheckoutsSearchResult:
+        """
+        Search abandoned_checkouts records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (AbandonedCheckoutsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            AbandonedCheckoutsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("abandoned_checkouts", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return AbandonedCheckoutsSearchResult(
+            data=[
+                AbandonedCheckoutsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class LocationsQuery:
     """
@@ -1692,6 +2023,60 @@ class LocationsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: LocationsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> LocationsSearchResult:
+        """
+        Search locations records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (LocationsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            LocationsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("locations", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return LocationsSearchResult(
+            data=[
+                LocationsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class InventoryLevelsQuery:
     """
     Query class for InventoryLevels entity operations.
@@ -1732,6 +2117,60 @@ class InventoryLevelsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: InventoryLevelsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> InventoryLevelsSearchResult:
+        """
+        Search inventory_levels records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (InventoryLevelsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            InventoryLevelsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("inventory_levels", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return InventoryLevelsSearchResult(
+            data=[
+                InventoryLevelsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class InventoryItemsQuery:
     """
@@ -1799,6 +2238,60 @@ class InventoryItemsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: InventoryItemsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> InventoryItemsSearchResult:
+        """
+        Search inventory_items records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (InventoryItemsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            InventoryItemsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("inventory_items", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return InventoryItemsSearchResult(
+            data=[
+                InventoryItemsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class ShopQuery:
     """
     Query class for Shop entity operations.
@@ -1826,6 +2319,60 @@ class ShopQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: ShopSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ShopSearchResult:
+        """
+        Search shop records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ShopSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ShopSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("shop", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ShopSearchResult(
+            data=[
+                ShopSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class PriceRulesQuery:
     """
@@ -1905,6 +2452,60 @@ class PriceRulesQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: PriceRulesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> PriceRulesSearchResult:
+        """
+        Search price_rules records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (PriceRulesSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            PriceRulesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("price_rules", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return PriceRulesSearchResult(
+            data=[
+                PriceRulesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class DiscountCodesQuery:
     """
     Query class for DiscountCodes entity operations.
@@ -1973,6 +2574,60 @@ class DiscountCodesQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: DiscountCodesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> DiscountCodesSearchResult:
+        """
+        Search discount_codes records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (DiscountCodesSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            DiscountCodesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("discount_codes", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return DiscountCodesSearchResult(
+            data=[
+                DiscountCodesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class CustomCollectionsQuery:
     """
@@ -2052,6 +2707,60 @@ class CustomCollectionsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: CustomCollectionsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> CustomCollectionsSearchResult:
+        """
+        Search custom_collections records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (CustomCollectionsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            CustomCollectionsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("custom_collections", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return CustomCollectionsSearchResult(
+            data=[
+                CustomCollectionsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SmartCollectionsQuery:
     """
     Query class for SmartCollections entity operations.
@@ -2130,6 +2839,60 @@ class SmartCollectionsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: SmartCollectionsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SmartCollectionsSearchResult:
+        """
+        Search smart_collections records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SmartCollectionsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SmartCollectionsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("smart_collections", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SmartCollectionsSearchResult(
+            data=[
+                SmartCollectionsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class CollectsQuery:
     """
     Query class for Collects entity operations.
@@ -2201,6 +2964,60 @@ class CollectsQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: CollectsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> CollectsSearchResult:
+        """
+        Search collects records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (CollectsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            CollectsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("collects", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return CollectsSearchResult(
+            data=[
+                CollectsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class DraftOrdersQuery:
     """
@@ -2276,6 +3093,60 @@ class DraftOrdersQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: DraftOrdersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> DraftOrdersSearchResult:
+        """
+        Search draft_orders records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (DraftOrdersSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            DraftOrdersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("draft_orders", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return DraftOrdersSearchResult(
+            data=[
+                DraftOrdersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class FulfillmentsQuery:
     """
@@ -2361,6 +3232,60 @@ class FulfillmentsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: FulfillmentsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> FulfillmentsSearchResult:
+        """
+        Search fulfillments records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (FulfillmentsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            FulfillmentsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("fulfillments", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return FulfillmentsSearchResult(
+            data=[
+                FulfillmentsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class OrderRefundsQuery:
     """
     Query class for OrderRefunds entity operations.
@@ -2429,6 +3354,60 @@ class OrderRefundsQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: OrderRefundsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> OrderRefundsSearchResult:
+        """
+        Search order_refunds records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (OrderRefundsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            OrderRefundsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("order_refunds", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return OrderRefundsSearchResult(
+            data=[
+                OrderRefundsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class TransactionsQuery:
     """
@@ -2549,6 +3528,60 @@ class TenderTransactionsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: TenderTransactionsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> TenderTransactionsSearchResult:
+        """
+        Search tender_transactions records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (TenderTransactionsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            TenderTransactionsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("tender_transactions", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return TenderTransactionsSearchResult(
+            data=[
+                TenderTransactionsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class CountriesQuery:
     """
     Query class for Countries entity operations.
@@ -2611,6 +3644,60 @@ class CountriesQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: CountriesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> CountriesSearchResult:
+        """
+        Search countries records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (CountriesSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            CountriesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("countries", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return CountriesSearchResult(
+            data=[
+                CountriesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class MetafieldShopsQuery:
     """
@@ -2687,6 +3774,60 @@ class MetafieldShopsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: MetafieldShopsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldShopsSearchResult:
+        """
+        Search metafield_shops records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldShopsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldShopsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_shops", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldShopsSearchResult(
+            data=[
+                MetafieldShopsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class MetafieldCustomersQuery:
     """
     Query class for MetafieldCustomers entity operations.
@@ -2736,6 +3877,60 @@ class MetafieldCustomersQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: MetafieldCustomersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldCustomersSearchResult:
+        """
+        Search metafield_customers records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldCustomersSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldCustomersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_customers", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldCustomersSearchResult(
+            data=[
+                MetafieldCustomersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class MetafieldProductsQuery:
     """
@@ -2787,6 +3982,60 @@ class MetafieldProductsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: MetafieldProductsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldProductsSearchResult:
+        """
+        Search metafield_products records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldProductsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldProductsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_products", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldProductsSearchResult(
+            data=[
+                MetafieldProductsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class MetafieldOrdersQuery:
     """
     Query class for MetafieldOrders entity operations.
@@ -2836,6 +4085,60 @@ class MetafieldOrdersQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: MetafieldOrdersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldOrdersSearchResult:
+        """
+        Search metafield_orders records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldOrdersSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldOrdersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_orders", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldOrdersSearchResult(
+            data=[
+                MetafieldOrdersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class MetafieldDraftOrdersQuery:
     """
@@ -2887,6 +4190,60 @@ class MetafieldDraftOrdersQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: MetafieldDraftOrdersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldDraftOrdersSearchResult:
+        """
+        Search metafield_draft_orders records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldDraftOrdersSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldDraftOrdersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_draft_orders", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldDraftOrdersSearchResult(
+            data=[
+                MetafieldDraftOrdersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class MetafieldLocationsQuery:
     """
     Query class for MetafieldLocations entity operations.
@@ -2936,6 +4293,60 @@ class MetafieldLocationsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: MetafieldLocationsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldLocationsSearchResult:
+        """
+        Search metafield_locations records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldLocationsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldLocationsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_locations", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldLocationsSearchResult(
+            data=[
+                MetafieldLocationsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class MetafieldProductVariantsQuery:
     """
@@ -2987,6 +4398,60 @@ class MetafieldProductVariantsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: MetafieldProductVariantsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldProductVariantsSearchResult:
+        """
+        Search metafield_product_variants records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldProductVariantsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldProductVariantsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_product_variants", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldProductVariantsSearchResult(
+            data=[
+                MetafieldProductVariantsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class MetafieldSmartCollectionsQuery:
     """
     Query class for MetafieldSmartCollections entity operations.
@@ -3036,6 +4501,60 @@ class MetafieldSmartCollectionsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: MetafieldSmartCollectionsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldSmartCollectionsSearchResult:
+        """
+        Search metafield_smart_collections records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldSmartCollectionsSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldSmartCollectionsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_smart_collections", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldSmartCollectionsSearchResult(
+            data=[
+                MetafieldSmartCollectionsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class MetafieldProductImagesQuery:
     """
@@ -3089,6 +4608,60 @@ class MetafieldProductImagesQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: MetafieldProductImagesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MetafieldProductImagesSearchResult:
+        """
+        Search metafield_product_images records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MetafieldProductImagesSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MetafieldProductImagesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("metafield_product_images", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MetafieldProductImagesSearchResult(
+            data=[
+                MetafieldProductImagesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class CustomerAddressQuery:
     """
@@ -3221,3 +4794,57 @@ class FulfillmentOrdersQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: FulfillmentOrdersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> FulfillmentOrdersSearchResult:
+        """
+        Search fulfillment_orders records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (FulfillmentOrdersSearchFilter):
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            FulfillmentOrdersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("fulfillment_orders", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return FulfillmentOrdersSearchResult(
+            data=[
+                FulfillmentOrdersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
