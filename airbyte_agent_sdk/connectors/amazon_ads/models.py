@@ -124,6 +124,164 @@ class CampaignBudget(BaseModel):
     budget_type: Union[str | None, Any] = Field(default=None, alias="budgetType")
     budget: Union[float | None, Any] = Field(default=None)
 
+class SponsoredProductAdGroup(BaseModel):
+    """An ad group within a Sponsored Products campaign. Ad groups contain ads and targeting
+settings and have a default bid that applies to all ads in the group.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    name: Union[str | None, Any] = Field(default=None)
+    state: Union[str | None, Any] = Field(default=None)
+    default_bid: Union[float | None, Any] = Field(default=None, alias="defaultBid")
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredProductKeyword(BaseModel):
+    """A keyword within a Sponsored Products ad group. Keywords are used in manual targeting
+campaigns to match shopper search queries.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    keyword_id: Union[Any, Any] = Field(default=None, alias="keywordId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    keyword_text: Union[str | None, Any] = Field(default=None, alias="keywordText")
+    match_type: Union[str | None, Any] = Field(default=None, alias="matchType")
+    state: Union[str | None, Any] = Field(default=None)
+    bid: Union[float | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredProductProductAd(BaseModel):
+    """A product ad within a Sponsored Products ad group. Product ads associate an
+advertised product (identified by ASIN or SKU) with an ad group.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    ad_id: Union[Any, Any] = Field(default=None, alias="adId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    asin: Union[str | None, Any] = Field(default=None)
+    sku: Union[str | None, Any] = Field(default=None)
+    state: Union[str | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredProductTargetResolvedexpressionItem(BaseModel):
+    """Nested schema for SponsoredProductTarget.resolvedExpression_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type", description="The resolved expression type")
+    """The resolved expression type"""
+    value: Union[str | None, Any] = Field(default=None, description="The resolved expression value")
+    """The resolved expression value"""
+
+class SponsoredProductTargetExpressionItem(BaseModel):
+    """Nested schema for SponsoredProductTarget.expression_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type", description="The expression type")
+    """The expression type"""
+    value: Union[str | None, Any] = Field(default=None, description="The expression value")
+    """The expression value"""
+
+class SponsoredProductTarget(BaseModel):
+    """A targeting clause within a Sponsored Products ad group. Targeting clauses define
+product or category targeting for the ad group.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    target_id: Union[Any, Any] = Field(default=None, alias="targetId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    expression: Union[list[SponsoredProductTargetExpressionItem] | None, Any] = Field(default=None)
+    resolved_expression: Union[list[SponsoredProductTargetResolvedexpressionItem] | None, Any] = Field(default=None, alias="resolvedExpression")
+    expression_type: Union[str | None, Any] = Field(default=None, alias="expressionType")
+    state: Union[str | None, Any] = Field(default=None)
+    bid: Union[float | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredProductNegativeKeyword(BaseModel):
+    """A negative keyword within a Sponsored Products ad group. Negative keywords prevent
+ads from showing for specific search terms.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    keyword_id: Union[Any, Any] = Field(default=None, alias="keywordId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    keyword_text: Union[str | None, Any] = Field(default=None, alias="keywordText")
+    match_type: Union[str | None, Any] = Field(default=None, alias="matchType")
+    state: Union[str | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredProductNegativeTargetResolvedexpressionItem(BaseModel):
+    """Nested schema for SponsoredProductNegativeTarget.resolvedExpression_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type", description="The resolved expression type")
+    """The resolved expression type"""
+    value: Union[str | None, Any] = Field(default=None, description="The resolved expression value")
+    """The resolved expression value"""
+
+class SponsoredProductNegativeTargetExpressionItem(BaseModel):
+    """Nested schema for SponsoredProductNegativeTarget.expression_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type", description="The expression type")
+    """The expression type"""
+    value: Union[str | None, Any] = Field(default=None, description="The expression value")
+    """The expression value"""
+
+class SponsoredProductNegativeTarget(BaseModel):
+    """A negative targeting clause within a Sponsored Products ad group. Negative targeting
+clauses exclude specific products or categories from targeting.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    target_id: Union[Any, Any] = Field(default=None, alias="targetId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    expression: Union[list[SponsoredProductNegativeTargetExpressionItem] | None, Any] = Field(default=None)
+    resolved_expression: Union[list[SponsoredProductNegativeTargetResolvedexpressionItem] | None, Any] = Field(default=None, alias="resolvedExpression")
+    expression_type: Union[str | None, Any] = Field(default=None, alias="expressionType")
+    state: Union[str | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredBrandsCampaign(BaseModel):
+    """A Sponsored Brands campaign. Sponsored Brands campaigns help drive discovery and sales
+with creative ad experiences that appear in shopping results.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    name: Union[str | None, Any] = Field(default=None)
+    state: Union[str | None, Any] = Field(default=None)
+    budget: Union[float | None, Any] = Field(default=None)
+    budget_type: Union[str | None, Any] = Field(default=None, alias="budgetType")
+    start_date: Union[str | None, Any] = Field(default=None, alias="startDate")
+    end_date: Union[str | None, Any] = Field(default=None, alias="endDate")
+    bid_optimization: Union[bool | None, Any] = Field(default=None, alias="bidOptimization")
+    bid_multiplier: Union[float | None, Any] = Field(default=None, alias="bidMultiplier")
+    portfolio_id: Union[Any, Any] = Field(default=None, alias="portfolioId")
+    cost_type: Union[str | None, Any] = Field(default=None, alias="costType")
+    product_location: Union[str | None, Any] = Field(default=None, alias="productLocation")
+    smart_default: Union[str | None, Any] = Field(default=None, alias="smartDefault")
+    tags: Union[dict[str, Any] | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
+class SponsoredBrandsAdGroup(BaseModel):
+    """An ad group within a Sponsored Brands campaign. Ad groups organize ads and targeting
+within a campaign.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    ad_group_id: Union[Any, Any] = Field(default=None, alias="adGroupId")
+    campaign_id: Union[Any, Any] = Field(default=None, alias="campaignId")
+    name: Union[str | None, Any] = Field(default=None)
+    state: Union[str | None, Any] = Field(default=None)
+    bid: Union[float | None, Any] = Field(default=None)
+    extended_data: Union[dict[str, Any] | None, Any] = Field(default=None, alias="extendedData")
+
 # ===== METADATA TYPE DEFINITIONS (PYDANTIC) =====
 # Meta types for operations that extract metadata (e.g., pagination info)
 
@@ -240,4 +398,28 @@ PortfoliosListResult = AmazonAdsExecuteResult[dict[str, Any]]
 
 SponsoredProductCampaignsListResult = AmazonAdsExecuteResult[dict[str, Any]]
 """Result type for sponsored_product_campaigns.list operation."""
+
+SponsoredProductAdGroupsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_product_ad_groups.list operation."""
+
+SponsoredProductKeywordsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_product_keywords.list operation."""
+
+SponsoredProductProductAdsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_product_product_ads.list operation."""
+
+SponsoredProductTargetsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_product_targets.list operation."""
+
+SponsoredProductNegativeKeywordsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_product_negative_keywords.list operation."""
+
+SponsoredProductNegativeTargetsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_product_negative_targets.list operation."""
+
+SponsoredBrandsCampaignsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_brands_campaigns.list operation."""
+
+SponsoredBrandsAdGroupsListResult = AmazonAdsExecuteResult[dict[str, Any]]
+"""Result type for sponsored_brands_ad_groups.list operation."""
 

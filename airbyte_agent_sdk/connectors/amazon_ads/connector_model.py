@@ -1235,6 +1235,1854 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                 'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list campaigns for that profile.',
             },
         ),
+        EntityDefinition(
+            name='sponsored_product_ad_groups',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sp/adGroups/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored product ad groups for the specified profile.\nAd groups are used to organize ads and targeting within a campaign.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spAdGroup.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spAdGroup.v3+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'adGroups': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'An ad group within a Sponsored Products campaign. Ad groups contain ads and targeting\nsettings and have a default bid that applies to all ads in the group.\n',
+                                    'properties': {
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the ad group',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this ad group belongs to',
+                                        },
+                                        'name': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The name of the ad group',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the ad group (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'defaultBid': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The default bid amount for the ad group',
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the ad group',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_product_ad_groups',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Sponsored Products ad groups that organize ads and targeting within campaigns',
+                                        'when_to_use': 'Questions about ad groups, ad group bids, ad group status, or how ads are organized within campaigns',
+                                        'trigger_phrases': [
+                                            'ad groups',
+                                            'SP ad groups',
+                                            'sponsored product ad groups',
+                                            'ad group bid',
+                                            'ad group status',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all ad groups in my sponsored product campaigns', 'What ad groups are currently enabled?', 'What is the default bid for my ad groups?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list ad groups for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'An ad group within a Sponsored Products campaign. Ad groups contain ads and targeting\nsettings and have a default bid that applies to all ads in the group.\n',
+                'properties': {
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the ad group',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this ad group belongs to',
+                    },
+                    'name': {
+                        'type': ['string', 'null'],
+                        'description': 'The name of the ad group',
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the ad group (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'defaultBid': {
+                        'type': ['number', 'null'],
+                        'description': 'The default bid amount for the ad group',
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the ad group',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_product_ad_groups',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Sponsored Products ad groups that organize ads and targeting within campaigns',
+                    'when_to_use': 'Questions about ad groups, ad group bids, ad group status, or how ads are organized within campaigns',
+                    'trigger_phrases': [
+                        'ad groups',
+                        'SP ad groups',
+                        'sponsored product ad groups',
+                        'ad group bid',
+                        'ad group status',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all ad groups in my sponsored product campaigns', 'What ad groups are currently enabled?', 'What is the default bid for my ad groups?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list ad groups for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Sponsored Products ad groups that organize ads and targeting within campaigns',
+                'when_to_use': 'Questions about ad groups, ad group bids, ad group status, or how ads are organized within campaigns',
+                'trigger_phrases': [
+                    'ad groups',
+                    'SP ad groups',
+                    'sponsored product ad groups',
+                    'ad group bid',
+                    'ad group status',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all ad groups in my sponsored product campaigns', 'What ad groups are currently enabled?', 'What is the default bid for my ad groups?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list ad groups for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_product_keywords',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sp/keywords/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored product keywords for the specified profile.\nKeywords are used in manual targeting campaigns to match shopper search queries.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spKeyword.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spKeyword.v3+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'keywords': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A keyword within a Sponsored Products ad group. Keywords are used in manual targeting\ncampaigns to match shopper search queries.\n',
+                                    'properties': {
+                                        'keywordId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the keyword',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this keyword belongs to',
+                                        },
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The ad group ID this keyword belongs to',
+                                        },
+                                        'keywordText': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The keyword text',
+                                        },
+                                        'matchType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The match type for the keyword (exact, phrase, broad)',
+                                            'enum': [
+                                                'exact',
+                                                'phrase',
+                                                'broad',
+                                                'EXACT',
+                                                'PHRASE',
+                                                'BROAD',
+                                            ],
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the keyword (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'bid': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The bid amount for the keyword',
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the keyword',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_product_keywords',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Keywords used in Sponsored Products campaigns for manual targeting',
+                                        'when_to_use': 'Questions about keywords, keyword bids, match types, or search term targeting',
+                                        'trigger_phrases': [
+                                            'keywords',
+                                            'SP keywords',
+                                            'keyword bids',
+                                            'match type',
+                                            'search terms',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all keywords in my sponsored product campaigns', 'What keywords are currently active?', 'What match types are my keywords using?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list keywords for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A keyword within a Sponsored Products ad group. Keywords are used in manual targeting\ncampaigns to match shopper search queries.\n',
+                'properties': {
+                    'keywordId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the keyword',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this keyword belongs to',
+                    },
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The ad group ID this keyword belongs to',
+                    },
+                    'keywordText': {
+                        'type': ['string', 'null'],
+                        'description': 'The keyword text',
+                    },
+                    'matchType': {
+                        'type': ['string', 'null'],
+                        'description': 'The match type for the keyword (exact, phrase, broad)',
+                        'enum': [
+                            'exact',
+                            'phrase',
+                            'broad',
+                            'EXACT',
+                            'PHRASE',
+                            'BROAD',
+                        ],
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the keyword (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'bid': {
+                        'type': ['number', 'null'],
+                        'description': 'The bid amount for the keyword',
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the keyword',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_product_keywords',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Keywords used in Sponsored Products campaigns for manual targeting',
+                    'when_to_use': 'Questions about keywords, keyword bids, match types, or search term targeting',
+                    'trigger_phrases': [
+                        'keywords',
+                        'SP keywords',
+                        'keyword bids',
+                        'match type',
+                        'search terms',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all keywords in my sponsored product campaigns', 'What keywords are currently active?', 'What match types are my keywords using?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list keywords for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Keywords used in Sponsored Products campaigns for manual targeting',
+                'when_to_use': 'Questions about keywords, keyword bids, match types, or search term targeting',
+                'trigger_phrases': [
+                    'keywords',
+                    'SP keywords',
+                    'keyword bids',
+                    'match type',
+                    'search terms',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all keywords in my sponsored product campaigns', 'What keywords are currently active?', 'What match types are my keywords using?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list keywords for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_product_product_ads',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sp/productAds/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored product ads for the specified profile.\nProduct ads associate an advertised product with an ad group.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spProductAd.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spProductAd.v3+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'productAds': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A product ad within a Sponsored Products ad group. Product ads associate an\nadvertised product (identified by ASIN or SKU) with an ad group.\n',
+                                    'properties': {
+                                        'adId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the product ad',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this product ad belongs to',
+                                        },
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The ad group ID this product ad belongs to',
+                                        },
+                                        'asin': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The ASIN of the advertised product',
+                                        },
+                                        'sku': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The SKU of the advertised product (seller accounts only)',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the product ad (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the product ad',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_product_product_ads',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Product ads that associate products with ad groups in Sponsored Products campaigns',
+                                        'when_to_use': 'Questions about which products are being advertised, product ad status, or ASIN-level ad data',
+                                        'trigger_phrases': [
+                                            'product ads',
+                                            'SP ads',
+                                            'advertised products',
+                                            'ASINs',
+                                            'product listings',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all product ads in my campaigns', 'What ASINs am I currently advertising?', 'Which product ads are enabled?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list product ads for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A product ad within a Sponsored Products ad group. Product ads associate an\nadvertised product (identified by ASIN or SKU) with an ad group.\n',
+                'properties': {
+                    'adId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the product ad',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this product ad belongs to',
+                    },
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The ad group ID this product ad belongs to',
+                    },
+                    'asin': {
+                        'type': ['string', 'null'],
+                        'description': 'The ASIN of the advertised product',
+                    },
+                    'sku': {
+                        'type': ['string', 'null'],
+                        'description': 'The SKU of the advertised product (seller accounts only)',
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the product ad (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the product ad',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_product_product_ads',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Product ads that associate products with ad groups in Sponsored Products campaigns',
+                    'when_to_use': 'Questions about which products are being advertised, product ad status, or ASIN-level ad data',
+                    'trigger_phrases': [
+                        'product ads',
+                        'SP ads',
+                        'advertised products',
+                        'ASINs',
+                        'product listings',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all product ads in my campaigns', 'What ASINs am I currently advertising?', 'Which product ads are enabled?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list product ads for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Product ads that associate products with ad groups in Sponsored Products campaigns',
+                'when_to_use': 'Questions about which products are being advertised, product ad status, or ASIN-level ad data',
+                'trigger_phrases': [
+                    'product ads',
+                    'SP ads',
+                    'advertised products',
+                    'ASINs',
+                    'product listings',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all product ads in my campaigns', 'What ASINs am I currently advertising?', 'Which product ads are enabled?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list product ads for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_product_targets',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sp/targets/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored product targeting clauses for the specified profile.\nTargeting clauses define product or category targeting for ad groups.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spTargetingClause.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spTargetingClause.v3+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'targetingClauses': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A targeting clause within a Sponsored Products ad group. Targeting clauses define\nproduct or category targeting for the ad group.\n',
+                                    'properties': {
+                                        'targetId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the targeting clause',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this target belongs to',
+                                        },
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The ad group ID this target belongs to',
+                                        },
+                                        'expression': {
+                                            'type': ['array', 'null'],
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'type': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The expression type',
+                                                    },
+                                                    'value': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The expression value',
+                                                    },
+                                                },
+                                            },
+                                            'description': 'The targeting expression',
+                                        },
+                                        'resolvedExpression': {
+                                            'type': ['array', 'null'],
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'type': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The resolved expression type',
+                                                    },
+                                                    'value': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The resolved expression value',
+                                                    },
+                                                },
+                                            },
+                                            'description': 'The resolved targeting expression',
+                                        },
+                                        'expressionType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The type of targeting expression (manual, auto)',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the targeting clause (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'bid': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The bid amount for the targeting clause',
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the targeting clause',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_product_targets',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Targeting clauses for product and category targeting in Sponsored Products campaigns',
+                                        'when_to_use': 'Questions about targeting settings, product targeting, category targeting, or targeting bids',
+                                        'trigger_phrases': [
+                                            'targets',
+                                            'targeting',
+                                            'product targeting',
+                                            'category targeting',
+                                            'targeting clauses',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all targeting clauses in my campaigns', 'What products am I targeting?', 'What are my targeting bids?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list targets for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A targeting clause within a Sponsored Products ad group. Targeting clauses define\nproduct or category targeting for the ad group.\n',
+                'properties': {
+                    'targetId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the targeting clause',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this target belongs to',
+                    },
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The ad group ID this target belongs to',
+                    },
+                    'expression': {
+                        'type': ['array', 'null'],
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'type': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The expression type',
+                                },
+                                'value': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The expression value',
+                                },
+                            },
+                        },
+                        'description': 'The targeting expression',
+                    },
+                    'resolvedExpression': {
+                        'type': ['array', 'null'],
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'type': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The resolved expression type',
+                                },
+                                'value': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The resolved expression value',
+                                },
+                            },
+                        },
+                        'description': 'The resolved targeting expression',
+                    },
+                    'expressionType': {
+                        'type': ['string', 'null'],
+                        'description': 'The type of targeting expression (manual, auto)',
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the targeting clause (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'bid': {
+                        'type': ['number', 'null'],
+                        'description': 'The bid amount for the targeting clause',
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the targeting clause',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_product_targets',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Targeting clauses for product and category targeting in Sponsored Products campaigns',
+                    'when_to_use': 'Questions about targeting settings, product targeting, category targeting, or targeting bids',
+                    'trigger_phrases': [
+                        'targets',
+                        'targeting',
+                        'product targeting',
+                        'category targeting',
+                        'targeting clauses',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all targeting clauses in my campaigns', 'What products am I targeting?', 'What are my targeting bids?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list targets for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Targeting clauses for product and category targeting in Sponsored Products campaigns',
+                'when_to_use': 'Questions about targeting settings, product targeting, category targeting, or targeting bids',
+                'trigger_phrases': [
+                    'targets',
+                    'targeting',
+                    'product targeting',
+                    'category targeting',
+                    'targeting clauses',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all targeting clauses in my campaigns', 'What products am I targeting?', 'What are my targeting bids?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list targets for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_product_negative_keywords',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sp/negativeKeywords/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored product negative keywords for the specified profile.\nNegative keywords prevent ads from showing for specific search terms.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spNegativeKeyword.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spNegativeKeyword.v3+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'negativeKeywords': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A negative keyword within a Sponsored Products ad group. Negative keywords prevent\nads from showing for specific search terms.\n',
+                                    'properties': {
+                                        'keywordId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the negative keyword',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this negative keyword belongs to',
+                                        },
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The ad group ID this negative keyword belongs to',
+                                        },
+                                        'keywordText': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The negative keyword text',
+                                        },
+                                        'matchType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The match type for the negative keyword',
+                                            'enum': [
+                                                'negativeExact',
+                                                'negativePhrase',
+                                                'NEGATIVE_EXACT',
+                                                'NEGATIVE_PHRASE',
+                                            ],
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the negative keyword (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the negative keyword',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_product_negative_keywords',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Negative keywords that prevent ads from showing for specific search terms in Sponsored Products',
+                                        'when_to_use': 'Questions about negative keywords, excluded search terms, or keyword exclusions',
+                                        'trigger_phrases': [
+                                            'negative keywords',
+                                            'excluded keywords',
+                                            'keyword exclusions',
+                                            'block keywords',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all negative keywords in my campaigns', 'What search terms am I excluding?', 'Which ad groups have negative keywords?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative keywords for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A negative keyword within a Sponsored Products ad group. Negative keywords prevent\nads from showing for specific search terms.\n',
+                'properties': {
+                    'keywordId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the negative keyword',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this negative keyword belongs to',
+                    },
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The ad group ID this negative keyword belongs to',
+                    },
+                    'keywordText': {
+                        'type': ['string', 'null'],
+                        'description': 'The negative keyword text',
+                    },
+                    'matchType': {
+                        'type': ['string', 'null'],
+                        'description': 'The match type for the negative keyword',
+                        'enum': [
+                            'negativeExact',
+                            'negativePhrase',
+                            'NEGATIVE_EXACT',
+                            'NEGATIVE_PHRASE',
+                        ],
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the negative keyword (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the negative keyword',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_product_negative_keywords',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Negative keywords that prevent ads from showing for specific search terms in Sponsored Products',
+                    'when_to_use': 'Questions about negative keywords, excluded search terms, or keyword exclusions',
+                    'trigger_phrases': [
+                        'negative keywords',
+                        'excluded keywords',
+                        'keyword exclusions',
+                        'block keywords',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all negative keywords in my campaigns', 'What search terms am I excluding?', 'Which ad groups have negative keywords?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative keywords for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Negative keywords that prevent ads from showing for specific search terms in Sponsored Products',
+                'when_to_use': 'Questions about negative keywords, excluded search terms, or keyword exclusions',
+                'trigger_phrases': [
+                    'negative keywords',
+                    'excluded keywords',
+                    'keyword exclusions',
+                    'block keywords',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all negative keywords in my campaigns', 'What search terms am I excluding?', 'Which ad groups have negative keywords?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative keywords for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_product_negative_targets',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sp/negativeTargets/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored product negative targeting clauses for the specified profile.\nNegative targeting clauses exclude specific products or categories from targeting.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spNegativeTargetingClause.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spNegativeTargetingClause.v3+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'negativeTargetingClauses': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A negative targeting clause within a Sponsored Products ad group. Negative targeting\nclauses exclude specific products or categories from targeting.\n',
+                                    'properties': {
+                                        'targetId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the negative targeting clause',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this negative target belongs to',
+                                        },
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The ad group ID this negative target belongs to',
+                                        },
+                                        'expression': {
+                                            'type': ['array', 'null'],
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'type': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The expression type',
+                                                    },
+                                                    'value': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The expression value',
+                                                    },
+                                                },
+                                            },
+                                            'description': 'The negative targeting expression',
+                                        },
+                                        'resolvedExpression': {
+                                            'type': ['array', 'null'],
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'type': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The resolved expression type',
+                                                    },
+                                                    'value': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'The resolved expression value',
+                                                    },
+                                                },
+                                            },
+                                            'description': 'The resolved negative targeting expression',
+                                        },
+                                        'expressionType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The type of targeting expression',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the negative targeting clause (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the negative targeting clause',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_product_negative_targets',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Negative targeting clauses that exclude specific products or categories from Sponsored Products targeting',
+                                        'when_to_use': 'Questions about negative targets, excluded products, excluded categories, or targeting exclusions',
+                                        'trigger_phrases': [
+                                            'negative targets',
+                                            'excluded targets',
+                                            'targeting exclusions',
+                                            'excluded products',
+                                            'excluded categories',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all negative targeting clauses', 'What products or categories am I excluding from targeting?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative targets for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A negative targeting clause within a Sponsored Products ad group. Negative targeting\nclauses exclude specific products or categories from targeting.\n',
+                'properties': {
+                    'targetId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the negative targeting clause',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this negative target belongs to',
+                    },
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The ad group ID this negative target belongs to',
+                    },
+                    'expression': {
+                        'type': ['array', 'null'],
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'type': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The expression type',
+                                },
+                                'value': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The expression value',
+                                },
+                            },
+                        },
+                        'description': 'The negative targeting expression',
+                    },
+                    'resolvedExpression': {
+                        'type': ['array', 'null'],
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'type': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The resolved expression type',
+                                },
+                                'value': {
+                                    'type': ['string', 'null'],
+                                    'description': 'The resolved expression value',
+                                },
+                            },
+                        },
+                        'description': 'The resolved negative targeting expression',
+                    },
+                    'expressionType': {
+                        'type': ['string', 'null'],
+                        'description': 'The type of targeting expression',
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the negative targeting clause (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the negative targeting clause',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_product_negative_targets',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Negative targeting clauses that exclude specific products or categories from Sponsored Products targeting',
+                    'when_to_use': 'Questions about negative targets, excluded products, excluded categories, or targeting exclusions',
+                    'trigger_phrases': [
+                        'negative targets',
+                        'excluded targets',
+                        'targeting exclusions',
+                        'excluded products',
+                        'excluded categories',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all negative targeting clauses', 'What products or categories am I excluding from targeting?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative targets for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Negative targeting clauses that exclude specific products or categories from Sponsored Products targeting',
+                'when_to_use': 'Questions about negative targets, excluded products, excluded categories, or targeting exclusions',
+                'trigger_phrases': [
+                    'negative targets',
+                    'excluded targets',
+                    'targeting exclusions',
+                    'excluded products',
+                    'excluded categories',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all negative targeting clauses', 'What products or categories am I excluding from targeting?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative targets for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_brands_campaigns',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sb/v4/campaigns/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored brands campaigns for the specified profile.\nSponsored Brands campaigns help drive discovery and sales with creative ad experiences.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.sbcampaignresource.v4+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.sbcampaignresource.v4+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'campaigns': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A Sponsored Brands campaign. Sponsored Brands campaigns help drive discovery and sales\nwith creative ad experiences that appear in shopping results.\n',
+                                    'properties': {
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the campaign',
+                                        },
+                                        'name': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The name of the campaign',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the campaign (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'budget': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The budget amount for the campaign',
+                                        },
+                                        'budgetType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The budget type (daily, lifetime)',
+                                            'enum': ['DAILY', 'LIFETIME'],
+                                        },
+                                        'startDate': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The start date of the campaign (YYYYMMDD format)',
+                                        },
+                                        'endDate': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The end date of the campaign (YYYYMMDD format)',
+                                        },
+                                        'bidOptimization': {
+                                            'type': ['boolean', 'null'],
+                                            'description': 'Whether bid optimization is enabled',
+                                        },
+                                        'bidMultiplier': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The bid multiplier for the campaign',
+                                        },
+                                        'portfolioId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                                {'type': 'null'},
+                                            ],
+                                            'description': 'The portfolio ID this campaign belongs to',
+                                        },
+                                        'costType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The cost type for the campaign (CPC, VCPM)',
+                                        },
+                                        'productLocation': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The product location (SOLD_ON_AMAZON, NOT_SOLD_ON_AMAZON)',
+                                        },
+                                        'smartDefault': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The smart default setting',
+                                        },
+                                        'tags': {
+                                            'type': ['object', 'null'],
+                                            'additionalProperties': True,
+                                            'description': 'Tags associated with the campaign',
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the campaign',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_brands_campaigns',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Sponsored Brands campaigns that promote brand awareness with custom creative ad experiences',
+                                        'when_to_use': 'Questions about Sponsored Brands campaigns, brand advertising, brand campaign budgets, or SB campaign status',
+                                        'trigger_phrases': [
+                                            'sponsored brands campaigns',
+                                            'SB campaigns',
+                                            'brand campaigns',
+                                            'brand advertising',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all sponsored brands campaigns', 'What SB campaigns are currently running?', 'What are my sponsored brands campaign budgets?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB campaigns for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A Sponsored Brands campaign. Sponsored Brands campaigns help drive discovery and sales\nwith creative ad experiences that appear in shopping results.\n',
+                'properties': {
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the campaign',
+                    },
+                    'name': {
+                        'type': ['string', 'null'],
+                        'description': 'The name of the campaign',
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the campaign (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'budget': {
+                        'type': ['number', 'null'],
+                        'description': 'The budget amount for the campaign',
+                    },
+                    'budgetType': {
+                        'type': ['string', 'null'],
+                        'description': 'The budget type (daily, lifetime)',
+                        'enum': ['DAILY', 'LIFETIME'],
+                    },
+                    'startDate': {
+                        'type': ['string', 'null'],
+                        'description': 'The start date of the campaign (YYYYMMDD format)',
+                    },
+                    'endDate': {
+                        'type': ['string', 'null'],
+                        'description': 'The end date of the campaign (YYYYMMDD format)',
+                    },
+                    'bidOptimization': {
+                        'type': ['boolean', 'null'],
+                        'description': 'Whether bid optimization is enabled',
+                    },
+                    'bidMultiplier': {
+                        'type': ['number', 'null'],
+                        'description': 'The bid multiplier for the campaign',
+                    },
+                    'portfolioId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                            {'type': 'null'},
+                        ],
+                        'description': 'The portfolio ID this campaign belongs to',
+                    },
+                    'costType': {
+                        'type': ['string', 'null'],
+                        'description': 'The cost type for the campaign (CPC, VCPM)',
+                    },
+                    'productLocation': {
+                        'type': ['string', 'null'],
+                        'description': 'The product location (SOLD_ON_AMAZON, NOT_SOLD_ON_AMAZON)',
+                    },
+                    'smartDefault': {
+                        'type': ['string', 'null'],
+                        'description': 'The smart default setting',
+                    },
+                    'tags': {
+                        'type': ['object', 'null'],
+                        'additionalProperties': True,
+                        'description': 'Tags associated with the campaign',
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the campaign',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_brands_campaigns',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Sponsored Brands campaigns that promote brand awareness with custom creative ad experiences',
+                    'when_to_use': 'Questions about Sponsored Brands campaigns, brand advertising, brand campaign budgets, or SB campaign status',
+                    'trigger_phrases': [
+                        'sponsored brands campaigns',
+                        'SB campaigns',
+                        'brand campaigns',
+                        'brand advertising',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all sponsored brands campaigns', 'What SB campaigns are currently running?', 'What are my sponsored brands campaign budgets?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB campaigns for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Sponsored Brands campaigns that promote brand awareness with custom creative ad experiences',
+                'when_to_use': 'Questions about Sponsored Brands campaigns, brand advertising, brand campaign budgets, or SB campaign status',
+                'trigger_phrases': [
+                    'sponsored brands campaigns',
+                    'SB campaigns',
+                    'brand campaigns',
+                    'brand advertising',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show me all sponsored brands campaigns', 'What SB campaigns are currently running?', 'What are my sponsored brands campaign budgets?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB campaigns for that profile.',
+            },
+        ),
+        EntityDefinition(
+            name='sponsored_brands_ad_groups',
+            actions=[Action.LIST],
+            endpoints={
+                Action.LIST: EndpointDefinition(
+                    method='POST',
+                    path='/sb/v4/adGroups/list',
+                    action=Action.LIST,
+                    description='Returns a list of sponsored brands ad groups for the specified profile.\nAd groups organize ads and targeting within a Sponsored Brands campaign.\n',
+                    body_fields=['stateFilter', 'maxResults', 'nextToken'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
+                    header_params_schema={
+                        'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
+                        'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.sbadgroupresource.v4+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.sbadgroupresource.v4+json',
+                        },
+                    },
+                    request_body_defaults={'maxResults': 100},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'stateFilter': {
+                                'type': 'object',
+                                'properties': {
+                                    'include': {'type': 'string', 'description': 'Comma-separated list of states to include (enabled, paused, archived)'},
+                                },
+                            },
+                            'maxResults': {
+                                'type': 'integer',
+                                'description': 'Maximum number of results to return',
+                                'default': 100,
+                            },
+                            'nextToken': {'type': 'string', 'description': 'Token for pagination'},
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'properties': {
+                            'adGroups': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'An ad group within a Sponsored Brands campaign. Ad groups organize ads and targeting\nwithin a campaign.\n',
+                                    'properties': {
+                                        'adGroupId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the ad group',
+                                        },
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The campaign ID this ad group belongs to',
+                                        },
+                                        'name': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The name of the ad group',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the ad group (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'bid': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The bid amount for the ad group',
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the ad group',
+                                        },
+                                    },
+                                    'x-airbyte-entity-name': 'sponsored_brands_ad_groups',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Ad groups within Sponsored Brands campaigns that organize ads and targeting',
+                                        'when_to_use': 'Questions about Sponsored Brands ad groups, SB ad group bids, or SB ad organization',
+                                        'trigger_phrases': ['SB ad groups', 'sponsored brands ad groups', 'brand ad groups'],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all ad groups in my sponsored brands campaigns', 'What are my SB ad group bids?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB ad groups for that profile.',
+                                    },
+                                },
+                            },
+                            'nextToken': {
+                                'type': ['string', 'null'],
+                                'description': 'Token for pagination',
+                            },
+                        },
+                    },
+                ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'An ad group within a Sponsored Brands campaign. Ad groups organize ads and targeting\nwithin a campaign.\n',
+                'properties': {
+                    'adGroupId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The unique identifier of the ad group',
+                    },
+                    'campaignId': {
+                        'oneOf': [
+                            {'type': 'string'},
+                            {'type': 'integer', 'format': 'int64'},
+                        ],
+                        'description': 'The campaign ID this ad group belongs to',
+                    },
+                    'name': {
+                        'type': ['string', 'null'],
+                        'description': 'The name of the ad group',
+                    },
+                    'state': {
+                        'type': ['string', 'null'],
+                        'description': 'The state of the ad group (enabled, paused, archived)',
+                        'enum': [
+                            'enabled',
+                            'paused',
+                            'archived',
+                            'ENABLED',
+                            'PAUSED',
+                            'ARCHIVED',
+                        ],
+                    },
+                    'bid': {
+                        'type': ['number', 'null'],
+                        'description': 'The bid amount for the ad group',
+                    },
+                    'extendedData': {
+                        'type': ['object', 'null'],
+                        'description': 'Extended data fields for the ad group',
+                    },
+                },
+                'x-airbyte-entity-name': 'sponsored_brands_ad_groups',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Ad groups within Sponsored Brands campaigns that organize ads and targeting',
+                    'when_to_use': 'Questions about Sponsored Brands ad groups, SB ad group bids, or SB ad organization',
+                    'trigger_phrases': ['SB ad groups', 'sponsored brands ad groups', 'brand ad groups'],
+                    'freshness': 'live',
+                    'example_questions': ['Show me all ad groups in my sponsored brands campaigns', 'What are my SB ad group bids?'],
+                    'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB ad groups for that profile.',
+                },
+            },
+            ai_hints={
+                'summary': 'Ad groups within Sponsored Brands campaigns that organize ads and targeting',
+                'when_to_use': 'Questions about Sponsored Brands ad groups, SB ad group bids, or SB ad organization',
+                'trigger_phrases': ['SB ad groups', 'sponsored brands ad groups', 'brand ad groups'],
+                'freshness': 'live',
+                'example_questions': ['Show me all ad groups in my sponsored brands campaigns', 'What are my SB ad group bids?'],
+                'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB ad groups for that profile.',
+            },
+        ),
     ],
     search_field_paths={
         'profiles': [
@@ -2385,9 +4233,26 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
             'What marketplaces do I have advertising profiles in?',
             'List all portfolios for one of my profiles',
             'Show me all sponsored product campaigns',
+            'List all ad groups in my SP campaigns',
+            'Show me all keywords in my sponsored product campaigns',
+            'What product ads are currently running?',
+            'Show me all targeting clauses for my campaigns',
+            'List negative keywords across my ad groups',
+            'Show me all sponsored brands campaigns',
+            'List ad groups in my sponsored brands campaigns',
         ],
-        context_store_search=['What campaigns are currently enabled?', 'Find campaigns with a specific targeting type'],
-        search=['What campaigns are currently enabled?', 'Find campaigns with a specific targeting type'],
+        context_store_search=[
+            'What campaigns are currently enabled?',
+            'Find campaigns with a specific targeting type',
+            'Which ad groups have the highest default bid?',
+            'What keywords are using broad match type?',
+        ],
+        search=[
+            'What campaigns are currently enabled?',
+            'Find campaigns with a specific targeting type',
+            'Which ad groups have the highest default bid?',
+            'What keywords are using broad match type?',
+        ],
         unsupported=[
             'Create a new advertising campaign',
             'Update my campaign budget',

@@ -21,6 +21,38 @@ class SponsoredProductCampaignsListParamsStatefilter(TypedDict):
     """Nested schema for SponsoredProductCampaignsListParams.stateFilter"""
     include: NotRequired[str]
 
+class SponsoredProductAdGroupsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredProductAdGroupsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredProductKeywordsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredProductKeywordsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredProductProductAdsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredProductProductAdsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredProductTargetsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredProductTargetsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredProductNegativeKeywordsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredProductNegativeKeywordsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredProductNegativeTargetsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredProductNegativeTargetsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredBrandsCampaignsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredBrandsCampaignsListParams.stateFilter"""
+    include: NotRequired[str]
+
+class SponsoredBrandsAdGroupsListParamsStatefilter(TypedDict):
+    """Nested schema for SponsoredBrandsAdGroupsListParams.stateFilter"""
+    include: NotRequired[str]
+
 # ===== OPERATION PARAMS TYPE DEFINITIONS =====
 
 class ProfilesListParams(TypedDict):
@@ -48,6 +80,54 @@ class SponsoredProductCampaignsListParams(TypedDict):
 class SponsoredProductCampaignsGetParams(TypedDict):
     """Parameters for sponsored_product_campaigns.get operation"""
     campaign_id: str
+
+class SponsoredProductAdGroupsListParams(TypedDict):
+    """Parameters for sponsored_product_ad_groups.list operation"""
+    state_filter: NotRequired[SponsoredProductAdGroupsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredProductKeywordsListParams(TypedDict):
+    """Parameters for sponsored_product_keywords.list operation"""
+    state_filter: NotRequired[SponsoredProductKeywordsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredProductProductAdsListParams(TypedDict):
+    """Parameters for sponsored_product_product_ads.list operation"""
+    state_filter: NotRequired[SponsoredProductProductAdsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredProductTargetsListParams(TypedDict):
+    """Parameters for sponsored_product_targets.list operation"""
+    state_filter: NotRequired[SponsoredProductTargetsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredProductNegativeKeywordsListParams(TypedDict):
+    """Parameters for sponsored_product_negative_keywords.list operation"""
+    state_filter: NotRequired[SponsoredProductNegativeKeywordsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredProductNegativeTargetsListParams(TypedDict):
+    """Parameters for sponsored_product_negative_targets.list operation"""
+    state_filter: NotRequired[SponsoredProductNegativeTargetsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredBrandsCampaignsListParams(TypedDict):
+    """Parameters for sponsored_brands_campaigns.list operation"""
+    state_filter: NotRequired[SponsoredBrandsCampaignsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
+
+class SponsoredBrandsAdGroupsListParams(TypedDict):
+    """Parameters for sponsored_brands_ad_groups.list operation"""
+    state_filter: NotRequired[SponsoredBrandsAdGroupsListParamsStatefilter]
+    max_results: NotRequired[int]
+    next_token: NotRequired[str]
 
 # ===== SEARCH TYPES =====
 

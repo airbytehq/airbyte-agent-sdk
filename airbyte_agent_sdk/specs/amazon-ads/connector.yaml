@@ -8,8 +8,10 @@ info:
   version: 1.0.10
   description: |
     Amazon Ads is Amazon's advertising platform that enables sellers and vendors to promote their
-    products across Amazon's marketplace. This connector provides access to advertising profiles
-    for managing and analyzing advertising campaigns across different marketplaces.
+    products across Amazon's marketplace. This connector provides access to advertising profiles,
+    portfolios, Sponsored Products campaigns (including ad groups, keywords, product ads, targets,
+    and negative keywords/targets), and Sponsored Brands campaigns and ad groups for managing and
+    analyzing advertising campaigns across different marketplaces.
   x-airbyte-connector-name: amazon-ads
   x-airbyte-connector-definition-id: c6b0a29e-1da9-4512-9002-7bfd0cba2246
   x-airbyte-replication-version: "7.3.14"
@@ -31,9 +33,18 @@ info:
       - "What marketplaces do I have advertising profiles in?"
       - "List all portfolios for one of my profiles"
       - "Show me all sponsored product campaigns"
+      - "List all ad groups in my SP campaigns"
+      - "Show me all keywords in my sponsored product campaigns"
+      - "What product ads are currently running?"
+      - "Show me all targeting clauses for my campaigns"
+      - "List negative keywords across my ad groups"
+      - "Show me all sponsored brands campaigns"
+      - "List ad groups in my sponsored brands campaigns"
     search:
       - "What campaigns are currently enabled?"
       - "Find campaigns with a specific targeting type"
+      - "Which ad groups have the highest default bid?"
+      - "What keywords are using broad match type?"
     unsupported:
       - "Create a new advertising campaign"
       - "Update my campaign budget"
@@ -5860,6 +5871,638 @@ paths:
         "404":
           description: Campaign not found
 
+  # ============================================================================
+  # Sponsored Product Ad Groups Endpoints
+  # ============================================================================
+  /sp/adGroups/list:
+    post:
+      summary: List sponsored product ad groups
+      description: |
+        Returns a list of sponsored product ad groups for the specified profile.
+        Ad groups are used to organize ads and targeting within a campaign.
+      operationId: listSponsoredProductAdGroups
+      x-airbyte-entity: sponsored_product_ad_groups
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Ad Groups
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spAdGroup.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spAdGroup.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product ad groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  adGroups:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductAdGroup"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Product Keywords Endpoints
+  # ============================================================================
+  /sp/keywords/list:
+    post:
+      summary: List sponsored product keywords
+      description: |
+        Returns a list of sponsored product keywords for the specified profile.
+        Keywords are used in manual targeting campaigns to match shopper search queries.
+      operationId: listSponsoredProductKeywords
+      x-airbyte-entity: sponsored_product_keywords
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Keywords
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spKeyword.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spKeyword.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product keywords
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keywords:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductKeyword"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Product Product Ads Endpoints
+  # ============================================================================
+  /sp/productAds/list:
+    post:
+      summary: List sponsored product ads
+      description: |
+        Returns a list of sponsored product ads for the specified profile.
+        Product ads associate an advertised product with an ad group.
+      operationId: listSponsoredProductProductAds
+      x-airbyte-entity: sponsored_product_product_ads
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Ads
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spProductAd.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spProductAd.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product ads
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productAds:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductProductAd"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Product Targets Endpoints
+  # ============================================================================
+  /sp/targets/list:
+    post:
+      summary: List sponsored product targeting clauses
+      description: |
+        Returns a list of sponsored product targeting clauses for the specified profile.
+        Targeting clauses define product or category targeting for ad groups.
+      operationId: listSponsoredProductTargets
+      x-airbyte-entity: sponsored_product_targets
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Targets
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spTargetingClause.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spTargetingClause.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product targeting clauses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  targetingClauses:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductTarget"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Product Negative Keywords Endpoints
+  # ============================================================================
+  /sp/negativeKeywords/list:
+    post:
+      summary: List sponsored product negative keywords
+      description: |
+        Returns a list of sponsored product negative keywords for the specified profile.
+        Negative keywords prevent ads from showing for specific search terms.
+      operationId: listSponsoredProductNegativeKeywords
+      x-airbyte-entity: sponsored_product_negative_keywords
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Negative Keywords
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spNegativeKeyword.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spNegativeKeyword.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product negative keywords
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  negativeKeywords:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductNegativeKeyword"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Product Negative Targets Endpoints
+  # ============================================================================
+  /sp/negativeTargets/list:
+    post:
+      summary: List sponsored product negative targeting clauses
+      description: |
+        Returns a list of sponsored product negative targeting clauses for the specified profile.
+        Negative targeting clauses exclude specific products or categories from targeting.
+      operationId: listSponsoredProductNegativeTargets
+      x-airbyte-entity: sponsored_product_negative_targets
+      x-airbyte-action: list
+      tags:
+        - Sponsored Product Negative Targets
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spNegativeTargetingClause.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spNegativeTargetingClause.v3+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored product negative targeting clauses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  negativeTargetingClauses:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductNegativeTarget"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Brands Campaigns Endpoints
+  # ============================================================================
+  /sb/v4/campaigns/list:
+    post:
+      summary: List sponsored brands campaigns
+      description: |
+        Returns a list of sponsored brands campaigns for the specified profile.
+        Sponsored Brands campaigns help drive discovery and sales with creative ad experiences.
+      operationId: listSponsoredBrandsCampaigns
+      x-airbyte-entity: sponsored_brands_campaigns
+      x-airbyte-action: list
+      tags:
+        - Sponsored Brands Campaigns
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.sbcampaignresource.v4+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.sbcampaignresource.v4+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored brands campaigns
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaigns:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredBrandsCampaign"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
+  # ============================================================================
+  # Sponsored Brands Ad Groups Endpoints
+  # ============================================================================
+  /sb/v4/adGroups/list:
+    post:
+      summary: List sponsored brands ad groups
+      description: |
+        Returns a list of sponsored brands ad groups for the specified profile.
+        Ad groups organize ads and targeting within a Sponsored Brands campaign.
+      operationId: listSponsoredBrandsAdGroups
+      x-airbyte-entity: sponsored_brands_ad_groups
+      x-airbyte-action: list
+      tags:
+        - Sponsored Brands Ad Groups
+      parameters:
+        - name: Amazon-Advertising-API-ClientId
+          in: header
+          required: true
+          description: The client ID associated with the Amazon Ads API application
+          schema:
+            type: string
+        - name: Amazon-Advertising-API-Scope
+          in: header
+          required: true
+          description: The profile ID to scope the request to
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.sbadgroupresource.v4+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.sbadgroupresource.v4+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stateFilter:
+                  type: object
+                  properties:
+                    include:
+                      type: string
+                      description: Comma-separated list of states to include (enabled, paused, archived)
+                maxResults:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 100
+                nextToken:
+                  type: string
+                  description: Token for pagination
+      responses:
+        "200":
+          description: List of sponsored brands ad groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  adGroups:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredBrandsAdGroup"
+                  nextToken:
+                    type: [string, "null"]
+                    description: Token for pagination
+        "401":
+          description: Unauthorized - Invalid or expired access token
+        "403":
+          description: Forbidden - Insufficient permissions
+
 components:
   securitySchemes:
     oauth2:
@@ -6169,3 +6812,515 @@ components:
         budget:
           type: [number, "null"]
           description: The budget amount
+
+    SponsoredProductAdGroup:
+      type: object
+      x-airbyte-entity-name: sponsored_product_ad_groups
+      x-airbyte-ai-hints:
+        summary: "Sponsored Products ad groups that organize ads and targeting within campaigns"
+        when_to_use: "Questions about ad groups, ad group bids, ad group status, or how ads are organized within campaigns"
+        trigger_phrases: ["ad groups", "SP ad groups", "sponsored product ad groups", "ad group bid", "ad group status"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list ad groups for that profile."
+        example_questions:
+          - "Show me all ad groups in my sponsored product campaigns"
+          - "What ad groups are currently enabled?"
+          - "What is the default bid for my ad groups?"
+      description: |
+        An ad group within a Sponsored Products campaign. Ad groups contain ads and targeting
+        settings and have a default bid that applies to all ads in the group.
+      properties:
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the ad group
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this ad group belongs to
+        name:
+          type: [string, "null"]
+          description: The name of the ad group
+        state:
+          type: [string, "null"]
+          description: The state of the ad group (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        defaultBid:
+          type: [number, "null"]
+          description: The default bid amount for the ad group
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the ad group
+
+    SponsoredProductKeyword:
+      type: object
+      x-airbyte-entity-name: sponsored_product_keywords
+      x-airbyte-ai-hints:
+        summary: "Keywords used in Sponsored Products campaigns for manual targeting"
+        when_to_use: "Questions about keywords, keyword bids, match types, or search term targeting"
+        trigger_phrases: ["keywords", "SP keywords", "keyword bids", "match type", "search terms"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list keywords for that profile."
+        example_questions:
+          - "Show me all keywords in my sponsored product campaigns"
+          - "What keywords are currently active?"
+          - "What match types are my keywords using?"
+      description: |
+        A keyword within a Sponsored Products ad group. Keywords are used in manual targeting
+        campaigns to match shopper search queries.
+      properties:
+        keywordId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the keyword
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this keyword belongs to
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The ad group ID this keyword belongs to
+        keywordText:
+          type: [string, "null"]
+          description: The keyword text
+        matchType:
+          type: [string, "null"]
+          description: The match type for the keyword (exact, phrase, broad)
+          enum:
+            - exact
+            - phrase
+            - broad
+            - EXACT
+            - PHRASE
+            - BROAD
+        state:
+          type: [string, "null"]
+          description: The state of the keyword (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        bid:
+          type: [number, "null"]
+          description: The bid amount for the keyword
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the keyword
+
+    SponsoredProductProductAd:
+      type: object
+      x-airbyte-entity-name: sponsored_product_product_ads
+      x-airbyte-ai-hints:
+        summary: "Product ads that associate products with ad groups in Sponsored Products campaigns"
+        when_to_use: "Questions about which products are being advertised, product ad status, or ASIN-level ad data"
+        trigger_phrases: ["product ads", "SP ads", "advertised products", "ASINs", "product listings"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list product ads for that profile."
+        example_questions:
+          - "Show me all product ads in my campaigns"
+          - "What ASINs am I currently advertising?"
+          - "Which product ads are enabled?"
+      description: |
+        A product ad within a Sponsored Products ad group. Product ads associate an
+        advertised product (identified by ASIN or SKU) with an ad group.
+      properties:
+        adId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the product ad
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this product ad belongs to
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The ad group ID this product ad belongs to
+        asin:
+          type: [string, "null"]
+          description: The ASIN of the advertised product
+        sku:
+          type: [string, "null"]
+          description: The SKU of the advertised product (seller accounts only)
+        state:
+          type: [string, "null"]
+          description: The state of the product ad (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the product ad
+
+    SponsoredProductTarget:
+      type: object
+      x-airbyte-entity-name: sponsored_product_targets
+      x-airbyte-ai-hints:
+        summary: "Targeting clauses for product and category targeting in Sponsored Products campaigns"
+        when_to_use: "Questions about targeting settings, product targeting, category targeting, or targeting bids"
+        trigger_phrases: ["targets", "targeting", "product targeting", "category targeting", "targeting clauses"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list targets for that profile."
+        example_questions:
+          - "Show me all targeting clauses in my campaigns"
+          - "What products am I targeting?"
+          - "What are my targeting bids?"
+      description: |
+        A targeting clause within a Sponsored Products ad group. Targeting clauses define
+        product or category targeting for the ad group.
+      properties:
+        targetId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the targeting clause
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this target belongs to
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The ad group ID this target belongs to
+        expression:
+          type: [array, "null"]
+          items:
+            type: object
+            properties:
+              type:
+                type: [string, "null"]
+                description: The expression type
+              value:
+                type: [string, "null"]
+                description: The expression value
+          description: The targeting expression
+        resolvedExpression:
+          type: [array, "null"]
+          items:
+            type: object
+            properties:
+              type:
+                type: [string, "null"]
+                description: The resolved expression type
+              value:
+                type: [string, "null"]
+                description: The resolved expression value
+          description: The resolved targeting expression
+        expressionType:
+          type: [string, "null"]
+          description: The type of targeting expression (manual, auto)
+        state:
+          type: [string, "null"]
+          description: The state of the targeting clause (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        bid:
+          type: [number, "null"]
+          description: The bid amount for the targeting clause
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the targeting clause
+
+    SponsoredProductNegativeKeyword:
+      type: object
+      x-airbyte-entity-name: sponsored_product_negative_keywords
+      x-airbyte-ai-hints:
+        summary: "Negative keywords that prevent ads from showing for specific search terms in Sponsored Products"
+        when_to_use: "Questions about negative keywords, excluded search terms, or keyword exclusions"
+        trigger_phrases: ["negative keywords", "excluded keywords", "keyword exclusions", "block keywords"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative keywords for that profile."
+        example_questions:
+          - "Show me all negative keywords in my campaigns"
+          - "What search terms am I excluding?"
+          - "Which ad groups have negative keywords?"
+      description: |
+        A negative keyword within a Sponsored Products ad group. Negative keywords prevent
+        ads from showing for specific search terms.
+      properties:
+        keywordId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the negative keyword
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this negative keyword belongs to
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The ad group ID this negative keyword belongs to
+        keywordText:
+          type: [string, "null"]
+          description: The negative keyword text
+        matchType:
+          type: [string, "null"]
+          description: The match type for the negative keyword
+          enum:
+            - negativeExact
+            - negativePhrase
+            - NEGATIVE_EXACT
+            - NEGATIVE_PHRASE
+        state:
+          type: [string, "null"]
+          description: The state of the negative keyword (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the negative keyword
+
+    SponsoredProductNegativeTarget:
+      type: object
+      x-airbyte-entity-name: sponsored_product_negative_targets
+      x-airbyte-ai-hints:
+        summary: "Negative targeting clauses that exclude specific products or categories from Sponsored Products targeting"
+        when_to_use: "Questions about negative targets, excluded products, excluded categories, or targeting exclusions"
+        trigger_phrases: ["negative targets", "excluded targets", "targeting exclusions", "excluded products", "excluded categories"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list negative targets for that profile."
+        example_questions:
+          - "Show me all negative targeting clauses"
+          - "What products or categories am I excluding from targeting?"
+      description: |
+        A negative targeting clause within a Sponsored Products ad group. Negative targeting
+        clauses exclude specific products or categories from targeting.
+      properties:
+        targetId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the negative targeting clause
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this negative target belongs to
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The ad group ID this negative target belongs to
+        expression:
+          type: [array, "null"]
+          items:
+            type: object
+            properties:
+              type:
+                type: [string, "null"]
+                description: The expression type
+              value:
+                type: [string, "null"]
+                description: The expression value
+          description: The negative targeting expression
+        resolvedExpression:
+          type: [array, "null"]
+          items:
+            type: object
+            properties:
+              type:
+                type: [string, "null"]
+                description: The resolved expression type
+              value:
+                type: [string, "null"]
+                description: The resolved expression value
+          description: The resolved negative targeting expression
+        expressionType:
+          type: [string, "null"]
+          description: The type of targeting expression
+        state:
+          type: [string, "null"]
+          description: The state of the negative targeting clause (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the negative targeting clause
+
+    SponsoredBrandsCampaign:
+      type: object
+      x-airbyte-entity-name: sponsored_brands_campaigns
+      x-airbyte-ai-hints:
+        summary: "Sponsored Brands campaigns that promote brand awareness with custom creative ad experiences"
+        when_to_use: "Questions about Sponsored Brands campaigns, brand advertising, brand campaign budgets, or SB campaign status"
+        trigger_phrases: ["sponsored brands campaigns", "SB campaigns", "brand campaigns", "brand advertising"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB campaigns for that profile."
+        example_questions:
+          - "Show me all sponsored brands campaigns"
+          - "What SB campaigns are currently running?"
+          - "What are my sponsored brands campaign budgets?"
+      description: |
+        A Sponsored Brands campaign. Sponsored Brands campaigns help drive discovery and sales
+        with creative ad experiences that appear in shopping results.
+      properties:
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the campaign
+        name:
+          type: [string, "null"]
+          description: The name of the campaign
+        state:
+          type: [string, "null"]
+          description: The state of the campaign (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        budget:
+          type: [number, "null"]
+          description: The budget amount for the campaign
+        budgetType:
+          type: [string, "null"]
+          description: The budget type (daily, lifetime)
+          enum:
+            - DAILY
+            - LIFETIME
+        startDate:
+          type: [string, "null"]
+          description: The start date of the campaign (YYYYMMDD format)
+        endDate:
+          type: [string, "null"]
+          description: The end date of the campaign (YYYYMMDD format)
+        bidOptimization:
+          type: [boolean, "null"]
+          description: Whether bid optimization is enabled
+        bidMultiplier:
+          type: [number, "null"]
+          description: The bid multiplier for the campaign
+        portfolioId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+            - type: "null"
+          description: The portfolio ID this campaign belongs to
+        costType:
+          type: [string, "null"]
+          description: The cost type for the campaign (CPC, VCPM)
+        productLocation:
+          type: [string, "null"]
+          description: The product location (SOLD_ON_AMAZON, NOT_SOLD_ON_AMAZON)
+        smartDefault:
+          type: [string, "null"]
+          description: The smart default setting
+        tags:
+          type: [object, "null"]
+          additionalProperties: true
+          description: Tags associated with the campaign
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the campaign
+
+    SponsoredBrandsAdGroup:
+      type: object
+      x-airbyte-entity-name: sponsored_brands_ad_groups
+      x-airbyte-ai-hints:
+        summary: "Ad groups within Sponsored Brands campaigns that organize ads and targeting"
+        when_to_use: "Questions about Sponsored Brands ad groups, SB ad group bids, or SB ad organization"
+        trigger_phrases: ["SB ad groups", "sponsored brands ad groups", "brand ad groups"]
+        freshness: live
+        search_strategy: "The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list SB ad groups for that profile."
+        example_questions:
+          - "Show me all ad groups in my sponsored brands campaigns"
+          - "What are my SB ad group bids?"
+      description: |
+        An ad group within a Sponsored Brands campaign. Ad groups organize ads and targeting
+        within a campaign.
+      properties:
+        adGroupId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The unique identifier of the ad group
+        campaignId:
+          oneOf:
+            - type: string
+            - type: integer
+              format: int64
+          description: The campaign ID this ad group belongs to
+        name:
+          type: [string, "null"]
+          description: The name of the ad group
+        state:
+          type: [string, "null"]
+          description: The state of the ad group (enabled, paused, archived)
+          enum:
+            - enabled
+            - paused
+            - archived
+            - ENABLED
+            - PAUSED
+            - ARCHIVED
+        bid:
+          type: [number, "null"]
+          description: The bid amount for the ad group
+        extendedData:
+          type: [object, "null"]
+          description: Extended data fields for the ad group

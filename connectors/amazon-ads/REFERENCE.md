@@ -11,6 +11,14 @@ The Amazon-Ads connector supports the following entities and actions.
 | Profiles | [List](#profiles-list), [Get](#profiles-get), [Context Store Search](#profiles-context-store-search) |
 | Portfolios | [List](#portfolios-list), [Get](#portfolios-get) |
 | Sponsored Product Campaigns | [List](#sponsored-product-campaigns-list), [Get](#sponsored-product-campaigns-get) |
+| Sponsored Product Ad Groups | [List](#sponsored-product-ad-groups-list) |
+| Sponsored Product Keywords | [List](#sponsored-product-keywords-list) |
+| Sponsored Product Product Ads | [List](#sponsored-product-product-ads-list) |
+| Sponsored Product Targets | [List](#sponsored-product-targets-list) |
+| Sponsored Product Negative Keywords | [List](#sponsored-product-negative-keywords-list) |
+| Sponsored Product Negative Targets | [List](#sponsored-product-negative-targets-list) |
+| Sponsored Brands Campaigns | [List](#sponsored-brands-campaigns-list) |
+| Sponsored Brands Ad Groups | [List](#sponsored-brands-ad-groups-list) |
 
 ## Profiles
 
@@ -378,4 +386,300 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 
 </details>
+
+## Sponsored Product Ad Groups
+
+### Sponsored Product Ad Groups List
+
+Returns a list of sponsored product ad groups for the specified profile.
+Ad groups are used to organize ads and targeting within a campaign.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_product_ad_groups.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_product_ad_groups",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Product Keywords
+
+### Sponsored Product Keywords List
+
+Returns a list of sponsored product keywords for the specified profile.
+Keywords are used in manual targeting campaigns to match shopper search queries.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_product_keywords.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_product_keywords",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Product Product Ads
+
+### Sponsored Product Product Ads List
+
+Returns a list of sponsored product ads for the specified profile.
+Product ads associate an advertised product with an ad group.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_product_product_ads.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_product_product_ads",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Product Targets
+
+### Sponsored Product Targets List
+
+Returns a list of sponsored product targeting clauses for the specified profile.
+Targeting clauses define product or category targeting for ad groups.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_product_targets.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_product_targets",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Product Negative Keywords
+
+### Sponsored Product Negative Keywords List
+
+Returns a list of sponsored product negative keywords for the specified profile.
+Negative keywords prevent ads from showing for specific search terms.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_product_negative_keywords.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_product_negative_keywords",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Product Negative Targets
+
+### Sponsored Product Negative Targets List
+
+Returns a list of sponsored product negative targeting clauses for the specified profile.
+Negative targeting clauses exclude specific products or categories from targeting.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_product_negative_targets.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_product_negative_targets",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Brands Campaigns
+
+### Sponsored Brands Campaigns List
+
+Returns a list of sponsored brands campaigns for the specified profile.
+Sponsored Brands campaigns help drive discovery and sales with creative ad experiences.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_brands_campaigns.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_brands_campaigns",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
+
+## Sponsored Brands Ad Groups
+
+### Sponsored Brands Ad Groups List
+
+Returns a list of sponsored brands ad groups for the specified profile.
+Ad groups organize ads and targeting within a Sponsored Brands campaign.
+
+
+#### Python SDK
+
+```python
+await amazon_ads.sponsored_brands_ad_groups.list()
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "sponsored_brands_ad_groups",
+    "action": "list"
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `stateFilter` | `object` | No |  |
+| `stateFilter.include` | `string` | No | Comma-separated list of states to include (enabled, paused, archived) |
+| `maxResults` | `integer` | No | Maximum number of results to return |
+| `nextToken` | `string` | No | Token for pagination |
+
 

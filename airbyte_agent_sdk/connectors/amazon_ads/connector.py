@@ -24,9 +24,25 @@ from .types import (
     PortfoliosListParams,
     ProfilesGetParams,
     ProfilesListParams,
+    SponsoredBrandsAdGroupsListParams,
+    SponsoredBrandsAdGroupsListParamsStatefilter,
+    SponsoredBrandsCampaignsListParams,
+    SponsoredBrandsCampaignsListParamsStatefilter,
+    SponsoredProductAdGroupsListParams,
+    SponsoredProductAdGroupsListParamsStatefilter,
     SponsoredProductCampaignsGetParams,
     SponsoredProductCampaignsListParams,
     SponsoredProductCampaignsListParamsStatefilter,
+    SponsoredProductKeywordsListParams,
+    SponsoredProductKeywordsListParamsStatefilter,
+    SponsoredProductNegativeKeywordsListParams,
+    SponsoredProductNegativeKeywordsListParamsStatefilter,
+    SponsoredProductNegativeTargetsListParams,
+    SponsoredProductNegativeTargetsListParamsStatefilter,
+    SponsoredProductProductAdsListParams,
+    SponsoredProductProductAdsListParamsStatefilter,
+    SponsoredProductTargetsListParams,
+    SponsoredProductTargetsListParamsStatefilter,
     AirbyteSearchParams,
     ProfilesSearchFilter,
     ProfilesSearchQuery,
@@ -41,6 +57,14 @@ from .models import (
     ProfilesListResult,
     PortfoliosListResult,
     SponsoredProductCampaignsListResult,
+    SponsoredProductAdGroupsListResult,
+    SponsoredProductKeywordsListResult,
+    SponsoredProductProductAdsListResult,
+    SponsoredProductTargetsListResult,
+    SponsoredProductNegativeKeywordsListResult,
+    SponsoredProductNegativeTargetsListResult,
+    SponsoredBrandsCampaignsListResult,
+    SponsoredBrandsAdGroupsListResult,
     Portfolio,
     Profile,
     SponsoredProductCampaign,
@@ -96,7 +120,7 @@ class AmazonAdsConnector:
 
     connector_name = "amazon-ads"
     connector_version = "1.0.10"
-    sdk_version = "0.1.2"
+    sdk_version = "0.1.3"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -106,6 +130,14 @@ class AmazonAdsConnector:
         ("portfolios", "get"): None,
         ("sponsored_product_campaigns", "list"): True,
         ("sponsored_product_campaigns", "get"): None,
+        ("sponsored_product_ad_groups", "list"): True,
+        ("sponsored_product_keywords", "list"): True,
+        ("sponsored_product_product_ads", "list"): True,
+        ("sponsored_product_targets", "list"): True,
+        ("sponsored_product_negative_keywords", "list"): True,
+        ("sponsored_product_negative_targets", "list"): True,
+        ("sponsored_brands_campaigns", "list"): True,
+        ("sponsored_brands_ad_groups", "list"): True,
     }
 
     # Map of (entity, action) -> {python_param_name: api_param_name}
@@ -117,6 +149,14 @@ class AmazonAdsConnector:
         ('portfolios', 'get'): {'portfolio_id': 'portfolioId'},
         ('sponsored_product_campaigns', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
         ('sponsored_product_campaigns', 'get'): {'campaign_id': 'campaignId'},
+        ('sponsored_product_ad_groups', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_product_keywords', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_product_product_ads', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_product_targets', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_product_negative_keywords', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_product_negative_targets', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_brands_campaigns', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
+        ('sponsored_brands_ad_groups', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
     }
 
     # Accepted auth_config types for isinstance validation
@@ -226,6 +266,14 @@ class AmazonAdsConnector:
         self.profiles = ProfilesQuery(self)
         self.portfolios = PortfoliosQuery(self)
         self.sponsored_product_campaigns = SponsoredProductCampaignsQuery(self)
+        self.sponsored_product_ad_groups = SponsoredProductAdGroupsQuery(self)
+        self.sponsored_product_keywords = SponsoredProductKeywordsQuery(self)
+        self.sponsored_product_product_ads = SponsoredProductProductAdsQuery(self)
+        self.sponsored_product_targets = SponsoredProductTargetsQuery(self)
+        self.sponsored_product_negative_keywords = SponsoredProductNegativeKeywordsQuery(self)
+        self.sponsored_product_negative_targets = SponsoredProductNegativeTargetsQuery(self)
+        self.sponsored_brands_campaigns = SponsoredBrandsCampaignsQuery(self)
+        self.sponsored_brands_ad_groups = SponsoredBrandsAdGroupsQuery(self)
 
     # ===== TYPED EXECUTE METHOD (Recommended Interface) =====
 
@@ -276,6 +324,70 @@ class AmazonAdsConnector:
         action: Literal["get"],
         params: "SponsoredProductCampaignsGetParams"
     ) -> "SponsoredProductCampaign": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_product_ad_groups"],
+        action: Literal["list"],
+        params: "SponsoredProductAdGroupsListParams"
+    ) -> "SponsoredProductAdGroupsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_product_keywords"],
+        action: Literal["list"],
+        params: "SponsoredProductKeywordsListParams"
+    ) -> "SponsoredProductKeywordsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_product_product_ads"],
+        action: Literal["list"],
+        params: "SponsoredProductProductAdsListParams"
+    ) -> "SponsoredProductProductAdsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_product_targets"],
+        action: Literal["list"],
+        params: "SponsoredProductTargetsListParams"
+    ) -> "SponsoredProductTargetsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_product_negative_keywords"],
+        action: Literal["list"],
+        params: "SponsoredProductNegativeKeywordsListParams"
+    ) -> "SponsoredProductNegativeKeywordsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_product_negative_targets"],
+        action: Literal["list"],
+        params: "SponsoredProductNegativeTargetsListParams"
+    ) -> "SponsoredProductNegativeTargetsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_brands_campaigns"],
+        action: Literal["list"],
+        params: "SponsoredBrandsCampaignsListParams"
+    ) -> "SponsoredBrandsCampaignsListResult": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["sponsored_brands_ad_groups"],
+        action: Literal["list"],
+        params: "SponsoredBrandsAdGroupsListParams"
+    ) -> "SponsoredBrandsAdGroupsListResult": ...
 
 
     @overload
@@ -981,5 +1093,365 @@ Sponsored Products campaigns promote individual product listings on Amazon.
 
         result = await self._connector.execute("sponsored_product_campaigns", "get", params)
         return result
+
+
+
+class SponsoredProductAdGroupsQuery:
+    """
+    Query class for SponsoredProductAdGroups entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredProductAdGroupsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredProductAdGroupsListResult:
+        """
+        Returns a list of sponsored product ad groups for the specified profile.
+Ad groups are used to organize ads and targeting within a campaign.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredProductAdGroupsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_product_ad_groups", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredProductAdGroupsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredProductKeywordsQuery:
+    """
+    Query class for SponsoredProductKeywords entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredProductKeywordsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredProductKeywordsListResult:
+        """
+        Returns a list of sponsored product keywords for the specified profile.
+Keywords are used in manual targeting campaigns to match shopper search queries.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredProductKeywordsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_product_keywords", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredProductKeywordsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredProductProductAdsQuery:
+    """
+    Query class for SponsoredProductProductAds entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredProductProductAdsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredProductProductAdsListResult:
+        """
+        Returns a list of sponsored product ads for the specified profile.
+Product ads associate an advertised product with an ad group.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredProductProductAdsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_product_product_ads", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredProductProductAdsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredProductTargetsQuery:
+    """
+    Query class for SponsoredProductTargets entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredProductTargetsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredProductTargetsListResult:
+        """
+        Returns a list of sponsored product targeting clauses for the specified profile.
+Targeting clauses define product or category targeting for ad groups.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredProductTargetsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_product_targets", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredProductTargetsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredProductNegativeKeywordsQuery:
+    """
+    Query class for SponsoredProductNegativeKeywords entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredProductNegativeKeywordsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredProductNegativeKeywordsListResult:
+        """
+        Returns a list of sponsored product negative keywords for the specified profile.
+Negative keywords prevent ads from showing for specific search terms.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredProductNegativeKeywordsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_product_negative_keywords", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredProductNegativeKeywordsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredProductNegativeTargetsQuery:
+    """
+    Query class for SponsoredProductNegativeTargets entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredProductNegativeTargetsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredProductNegativeTargetsListResult:
+        """
+        Returns a list of sponsored product negative targeting clauses for the specified profile.
+Negative targeting clauses exclude specific products or categories from targeting.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredProductNegativeTargetsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_product_negative_targets", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredProductNegativeTargetsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredBrandsCampaignsQuery:
+    """
+    Query class for SponsoredBrandsCampaigns entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredBrandsCampaignsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredBrandsCampaignsListResult:
+        """
+        Returns a list of sponsored brands campaigns for the specified profile.
+Sponsored Brands campaigns help drive discovery and sales with creative ad experiences.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredBrandsCampaignsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_brands_campaigns", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredBrandsCampaignsListResult(
+            data=result.data
+        )
+
+
+
+class SponsoredBrandsAdGroupsQuery:
+    """
+    Query class for SponsoredBrandsAdGroups entity operations.
+    """
+
+    def __init__(self, connector: AmazonAdsConnector):
+        """Initialize query with connector reference."""
+        self._connector = connector
+
+    async def list(
+        self,
+        state_filter: SponsoredBrandsAdGroupsListParamsStatefilter | None = None,
+        max_results: int | None = None,
+        next_token: str | None = None,
+        **kwargs
+    ) -> SponsoredBrandsAdGroupsListResult:
+        """
+        Returns a list of sponsored brands ad groups for the specified profile.
+Ad groups organize ads and targeting within a Sponsored Brands campaign.
+
+
+        Args:
+            state_filter: Parameter stateFilter
+            max_results: Maximum number of results to return
+            next_token: Token for pagination
+            **kwargs: Additional parameters
+
+        Returns:
+            SponsoredBrandsAdGroupsListResult
+        """
+        params = {k: v for k, v in {
+            "stateFilter": state_filter,
+            "maxResults": max_results,
+            "nextToken": next_token,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("sponsored_brands_ad_groups", "list", params)
+        # Cast generic envelope to concrete typed result
+        return SponsoredBrandsAdGroupsListResult(
+            data=result.data
+        )
 
 

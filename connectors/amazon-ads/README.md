@@ -3,8 +3,10 @@
 The Amazon-Ads agent connector is a Python package that equips AI agents to interact with Amazon-Ads through strongly typed, well-documented tools. It's ready to use directly in your Python app, in an agent framework, or exposed through an MCP.
 
 Amazon Ads is Amazon's advertising platform that enables sellers and vendors to promote their
-products across Amazon's marketplace. This connector provides access to advertising profiles
-for managing and analyzing advertising campaigns across different marketplaces.
+products across Amazon's marketplace. This connector provides access to advertising profiles,
+portfolios, Sponsored Products campaigns (including ad groups, keywords, product ads, targets,
+and negative keywords/targets), and Sponsored Brands campaigns and ad groups for managing and
+analyzing advertising campaigns across different marketplaces.
 
 
 ## Example questions
@@ -16,8 +18,17 @@ The Amazon-Ads connector is optimized to handle prompts like these.
 - What marketplaces do I have advertising profiles in?
 - List all portfolios for one of my profiles
 - Show me all sponsored product campaigns
+- List all ad groups in my SP campaigns
+- Show me all keywords in my sponsored product campaigns
+- What product ads are currently running?
+- Show me all targeting clauses for my campaigns
+- List negative keywords across my ad groups
+- Show me all sponsored brands campaigns
+- List ad groups in my sponsored brands campaigns
 - What campaigns are currently enabled?
 - Find campaigns with a specific targeting type
+- Which ad groups have the highest default bid?
+- What keywords are using broad match type?
 
 ## Unsupported questions
 
@@ -96,6 +107,14 @@ This connector supports the following entities and actions. For more details, se
 | Profiles | [List](./REFERENCE.md#profiles-list), [Get](./REFERENCE.md#profiles-get), [Context Store Search](./REFERENCE.md#profiles-context-store-search) |
 | Portfolios | [List](./REFERENCE.md#portfolios-list), [Get](./REFERENCE.md#portfolios-get) |
 | Sponsored Product Campaigns | [List](./REFERENCE.md#sponsored-product-campaigns-list), [Get](./REFERENCE.md#sponsored-product-campaigns-get) |
+| Sponsored Product Ad Groups | [List](./REFERENCE.md#sponsored-product-ad-groups-list) |
+| Sponsored Product Keywords | [List](./REFERENCE.md#sponsored-product-keywords-list) |
+| Sponsored Product Product Ads | [List](./REFERENCE.md#sponsored-product-product-ads-list) |
+| Sponsored Product Targets | [List](./REFERENCE.md#sponsored-product-targets-list) |
+| Sponsored Product Negative Keywords | [List](./REFERENCE.md#sponsored-product-negative-keywords-list) |
+| Sponsored Product Negative Targets | [List](./REFERENCE.md#sponsored-product-negative-targets-list) |
+| Sponsored Brands Campaigns | [List](./REFERENCE.md#sponsored-brands-campaigns-list) |
+| Sponsored Brands Ad Groups | [List](./REFERENCE.md#sponsored-brands-ad-groups-list) |
 
 
 ### Authentication
