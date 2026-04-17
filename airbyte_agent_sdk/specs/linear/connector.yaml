@@ -61,6 +61,11 @@ info:
       - "Create a new issue in the 'Backend Improvements' project"
       - "Add a recent issue to a specific project"
       - "Move an issue to a different project"
+      - "Create a new project called 'Q3 Platform Migration'"
+      - "Update the description of the 'Backend Improvements' project"
+      - "Change the target date of a project to next month"
+      - "Mark a project as started"
+      - "Set a project lead for the 'API Redesign' project"
     search:
       - "Analyze the workload distribution across my development team"
       - "What are the top priority issues in our current sprint?"
@@ -1896,6 +1901,102 @@ paths:
         "401":
           description: Unauthorized
 
+  "/graphql:createProject":
+    post:
+      summary: Create a project
+      description: Create a new project via GraphQL mutation
+      operationId: createProject
+      x-airbyte-entity: projects
+      x-airbyte-action: create
+      x-airbyte-record-extractor: $.data.projectCreate
+      x-airbyte-path-override:
+        path: /graphql
+      parameters:
+        - name: x-apollo-operation-name
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "createProject"
+      requestBody:
+        required: true
+        x-airbyte-body-type:
+          type: graphql
+          query: "mutation($name: String!, $teamIds: [String!]!, $description: String, $state: String, $startDate: TimelessDate, $targetDate: TimelessDate, $leadId: String) { projectCreate(input: { name: $name, teamIds: $teamIds, description: $description, state: $state, startDate: $startDate, targetDate: $targetDate, leadId: $leadId }) { success project { id name description state startDate targetDate lead { name email } createdAt updatedAt } } }"
+          variables:
+            name: "{{ name }}"
+            teamIds: "{{ teamIds }}"
+            description: "{{ description }}"
+            state: "{{ state }}"
+            startDate: "{{ startDate }}"
+            targetDate: "{{ targetDate }}"
+            leadId: "{{ leadId }}"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectCreateParams"
+      responses:
+        "200":
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectCreateResponse"
+        "401":
+          description: Unauthorized
+
+  "/graphql:updateProject":
+    post:
+      summary: Update a project
+      description: |
+        Update an existing project via GraphQL mutation. All fields except id are optional for partial updates.
+        Use this to rename projects, change descriptions, update dates, or change the project state.
+      operationId: updateProject
+      x-airbyte-entity: projects
+      x-airbyte-action: update
+      x-airbyte-record-extractor: $.data.projectUpdate
+      x-airbyte-path-override:
+        path: /graphql
+      parameters:
+        - name: x-apollo-operation-name
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "updateProject"
+      requestBody:
+        required: true
+        x-airbyte-body-type:
+          type: graphql
+          query: "mutation($id: String!, $name: String, $description: String, $state: String, $startDate: TimelessDate, $targetDate: TimelessDate, $leadId: String) { projectUpdate(id: $id, input: { name: $name, description: $description, state: $state, startDate: $startDate, targetDate: $targetDate, leadId: $leadId }) { success project { id name description state startDate targetDate lead { name email } createdAt updatedAt } } }"
+          variables:
+            id: "{{ id }}"
+            name: "{{ name }}"
+            description: "{{ description }}"
+            state: "{{ state }}"
+            startDate: "{{ startDate }}"
+            targetDate: "{{ targetDate }}"
+            leadId: "{{ leadId }}"
+          x-airbyte-nullable-variables:
+            - leadId
+            - startDate
+            - targetDate
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdateParams"
+      responses:
+        "200":
+          description: Project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectUpdateResponse"
+        "404":
+          description: Project not found
+        "401":
+          description: Unauthorized
+
   # Teams Resource
   "/graphql:listTeams":
     post:
@@ -2583,6 +2684,102 @@ components:
           properties:
             project:
               $ref: "#/components/schemas/Project"
+
+    # Project Write Schemas
+    ProjectCreateParams:
+      type: object
+      description: Parameters for creating a project
+      required:
+        - name
+        - teamIds
+      properties:
+        name:
+          type: string
+          description: The name of the project
+        teamIds:
+          type: array
+          items:
+            type: string
+          description: The IDs of the teams to associate with this project. Get team IDs from the teams list.
+        description:
+          type: string
+          description: The description of the project (supports markdown)
+        state:
+          type: string
+          description: "The state of the project (backlog, planned, started, paused, completed, canceled)"
+        startDate:
+          type: string
+          format: date
+          description: The planned start date of the project (YYYY-MM-DD format)
+        targetDate:
+          type: string
+          format: date
+          description: The target completion date of the project (YYYY-MM-DD format)
+        leadId:
+          type: string
+          description: The ID of the user to set as project lead. Get user IDs from the users list.
+
+    ProjectUpdateParams:
+      type: object
+      description: |
+        Parameters for updating a project. All fields except id are optional for partial updates.
+        Use this to rename projects, change descriptions, update dates, or change the project state.
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The ID of the project to update
+        name:
+          type: string
+          description: The new name of the project
+        description:
+          type: string
+          description: The new description of the project (supports markdown)
+        state:
+          type: string
+          description: "The new state of the project (backlog, planned, started, paused, completed, canceled)"
+        startDate:
+          type: string
+          format: date
+          description: The new planned start date of the project (YYYY-MM-DD format)
+        targetDate:
+          type: string
+          format: date
+          description: The new target completion date of the project (YYYY-MM-DD format)
+        leadId:
+          type: string
+          description: The ID of the user to set as project lead. Get user IDs from the users list.
+
+    ProjectMutationPayload:
+      type: object
+      description: Project mutation result
+      properties:
+        success:
+          type: boolean
+          description: Whether the mutation was successful
+        project:
+          $ref: "#/components/schemas/Project"
+
+    ProjectCreateResponse:
+      type: object
+      description: GraphQL response for project creation
+      properties:
+        data:
+          type: object
+          properties:
+            projectCreate:
+              $ref: "#/components/schemas/ProjectMutationPayload"
+
+    ProjectUpdateResponse:
+      type: object
+      description: GraphQL response for project update
+      properties:
+        data:
+          type: object
+          properties:
+            projectUpdate:
+              $ref: "#/components/schemas/ProjectMutationPayload"
 
     # Team Schemas
     Team:

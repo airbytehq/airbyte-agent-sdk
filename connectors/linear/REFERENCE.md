@@ -9,7 +9,7 @@ The Linear connector supports the following entities and actions.
 | Entity | Actions |
 |--------|---------|
 | Issues | [List](#issues-list), [Get](#issues-get), [Create](#issues-create), [Update](#issues-update), [Context Store Search](#issues-context-store-search) |
-| Projects | [List](#projects-list), [Get](#projects-get), [Context Store Search](#projects-context-store-search) |
+| Projects | [List](#projects-list), [Get](#projects-get), [Create](#projects-create), [Update](#projects-update), [Context Store Search](#projects-context-store-search) |
 | Teams | [List](#teams-list), [Get](#teams-get), [Context Store Search](#teams-context-store-search) |
 | Workflow States | [List](#workflow-states-list), [Context Store Search](#workflow-states-context-store-search) |
 | Users | [List](#users-list), [Get](#users-get), [Context Store Search](#users-context-store-search) |
@@ -555,6 +555,158 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `lead` | `object \| any` |  |
 | `createdAt` | `string` |  |
 | `updatedAt` | `string` |  |
+
+
+</details>
+
+### Projects Create
+
+Create a new project via GraphQL mutation
+
+#### Python SDK
+
+```python
+await linear.projects.create(
+    name="<str>",
+    team_ids=[],
+    description="<str>",
+    state="<str>",
+    start_date="<str>",
+    target_date="<str>",
+    lead_id="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "projects",
+    "action": "create",
+    "params": {
+        "name": "<str>",
+        "teamIds": [],
+        "description": "<str>",
+        "state": "<str>",
+        "startDate": "<str>",
+        "targetDate": "<str>",
+        "leadId": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `name` | `string` | Yes | The name of the project |
+| `teamIds` | `array<string>` | Yes | The IDs of the teams to associate with this project. Get team IDs from the teams list. |
+| `description` | `string` | No | The description of the project (supports markdown) |
+| `state` | `string` | No | The state of the project (backlog, planned, started, paused, completed, canceled) |
+| `startDate` | `string` | No | The planned start date of the project (YYYY-MM-DD format) |
+| `targetDate` | `string` | No | The target completion date of the project (YYYY-MM-DD format) |
+| `leadId` | `string` | No | The ID of the user to set as project lead. Get user IDs from the users list. |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `success` | `boolean` |  |
+| `project` | `object` |  |
+| `project.id` | `string` |  |
+| `project.name` | `string` |  |
+| `project.description` | `string \| any` |  |
+| `project.state` | `string \| any` |  |
+| `project.startDate` | `string \| any` |  |
+| `project.targetDate` | `string \| any` |  |
+| `project.lead` | `object \| any` |  |
+| `project.createdAt` | `string` |  |
+| `project.updatedAt` | `string` |  |
+
+
+</details>
+
+### Projects Update
+
+Update an existing project via GraphQL mutation. All fields except id are optional for partial updates.
+Use this to rename projects, change descriptions, update dates, or change the project state.
+
+
+#### Python SDK
+
+```python
+await linear.projects.update(
+    id="<str>",
+    name="<str>",
+    description="<str>",
+    state="<str>",
+    start_date="<str>",
+    target_date="<str>",
+    lead_id="<str>"
+)
+```
+
+#### API
+
+```bash
+curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_connector_id}/execute' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {your_auth_token}' \
+--data '{
+    "entity": "projects",
+    "action": "update",
+    "params": {
+        "id": "<str>",
+        "name": "<str>",
+        "description": "<str>",
+        "state": "<str>",
+        "startDate": "<str>",
+        "targetDate": "<str>",
+        "leadId": "<str>"
+    }
+}'
+```
+
+
+#### Parameters
+
+| Parameter Name | Type | Required | Description |
+|----------------|------|----------|-------------|
+| `id` | `string` | Yes | The ID of the project to update |
+| `name` | `string` | No | The new name of the project |
+| `description` | `string` | No | The new description of the project (supports markdown) |
+| `state` | `string` | No | The new state of the project (backlog, planned, started, paused, completed, canceled) |
+| `startDate` | `string` | No | The new planned start date of the project (YYYY-MM-DD format) |
+| `targetDate` | `string` | No | The new target completion date of the project (YYYY-MM-DD format) |
+| `leadId` | `string` | No | The ID of the user to set as project lead. Get user IDs from the users list. |
+
+
+<details>
+<summary><b>Response Schema</b></summary>
+
+#### Records
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `success` | `boolean` |  |
+| `project` | `object` |  |
+| `project.id` | `string` |  |
+| `project.name` | `string` |  |
+| `project.description` | `string \| any` |  |
+| `project.state` | `string \| any` |  |
+| `project.startDate` | `string \| any` |  |
+| `project.targetDate` | `string \| any` |  |
+| `project.lead` | `object \| any` |  |
+| `project.createdAt` | `string` |  |
+| `project.updatedAt` | `string` |  |
 
 
 </details>

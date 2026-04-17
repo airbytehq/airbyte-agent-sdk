@@ -28,8 +28,10 @@ from .types import (
     IssuesGetParams,
     IssuesListParams,
     IssuesUpdateParams,
+    ProjectsCreateParams,
     ProjectsGetParams,
     ProjectsListParams,
+    ProjectsUpdateParams,
     TeamsGetParams,
     TeamsListParams,
     UsersGetParams,
@@ -67,6 +69,7 @@ from .models import (
     Issue,
     IssueMutationPayload,
     Project,
+    ProjectMutationPayload,
     Team,
     User,
     WorkflowState,
@@ -132,7 +135,7 @@ class LinearConnector:
 
     connector_name = "linear"
     connector_version = "0.1.19"
-    sdk_version = "0.1.8"
+    sdk_version = "0.1.9"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -142,6 +145,8 @@ class LinearConnector:
         ("issues", "update"): None,
         ("projects", "list"): True,
         ("projects", "get"): None,
+        ("projects", "create"): None,
+        ("projects", "update"): None,
         ("teams", "list"): True,
         ("teams", "get"): None,
         ("workflow_states", "list"): True,
@@ -162,6 +167,8 @@ class LinearConnector:
         ('issues', 'update'): {'id': 'id', 'title': 'title', 'description': 'description', 'state_id': 'stateId', 'priority': 'priority', 'assignee_id': 'assigneeId', 'project_id': 'projectId'},
         ('projects', 'list'): {'first': 'first', 'after': 'after'},
         ('projects', 'get'): {'id': 'id'},
+        ('projects', 'create'): {'name': 'name', 'team_ids': 'teamIds', 'description': 'description', 'state': 'state', 'start_date': 'startDate', 'target_date': 'targetDate', 'lead_id': 'leadId'},
+        ('projects', 'update'): {'id': 'id', 'name': 'name', 'description': 'description', 'state': 'state', 'start_date': 'startDate', 'target_date': 'targetDate', 'lead_id': 'leadId'},
         ('teams', 'list'): {'first': 'first', 'after': 'after'},
         ('teams', 'get'): {'id': 'id'},
         ('workflow_states', 'list'): {'first': 'first', 'after': 'after'},
@@ -322,6 +329,22 @@ class LinearConnector:
         action: Literal["get"],
         params: "ProjectsGetParams"
     ) -> "Project": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["projects"],
+        action: Literal["create"],
+        params: "ProjectsCreateParams"
+    ) -> "ProjectMutationPayload": ...
+
+    @overload
+    async def execute(
+        self,
+        entity: Literal["projects"],
+        action: Literal["update"],
+        params: "ProjectsUpdateParams"
+    ) -> "ProjectMutationPayload": ...
 
     @overload
     async def execute(
@@ -1055,6 +1078,94 @@ class ProjectsQuery:
         }.items() if v is not None}
 
         result = await self._connector.execute("projects", "get", params)
+        return result
+
+
+
+    async def create(
+        self,
+        name: str,
+        team_ids: list[str],
+        description: str | None = None,
+        state: str | None = None,
+        start_date: str | None = None,
+        target_date: str | None = None,
+        lead_id: str | None = None,
+        **kwargs
+    ) -> ProjectMutationPayload:
+        """
+        Create a new project via GraphQL mutation
+
+        Args:
+            name: The name of the project
+            team_ids: The IDs of the teams to associate with this project. Get team IDs from the teams list.
+            description: The description of the project (supports markdown)
+            state: The state of the project (backlog, planned, started, paused, completed, canceled)
+            start_date: The planned start date of the project (YYYY-MM-DD format)
+            target_date: The target completion date of the project (YYYY-MM-DD format)
+            lead_id: The ID of the user to set as project lead. Get user IDs from the users list.
+            **kwargs: Additional parameters
+
+        Returns:
+            ProjectMutationPayload
+        """
+        params = {k: v for k, v in {
+            "name": name,
+            "teamIds": team_ids,
+            "description": description,
+            "state": state,
+            "startDate": start_date,
+            "targetDate": target_date,
+            "leadId": lead_id,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("projects", "create", params)
+        return result
+
+
+
+    async def update(
+        self,
+        id: str | None = None,
+        name: str | None = None,
+        description: str | None = None,
+        state: str | None = None,
+        start_date: str | None = None,
+        target_date: str | None = None,
+        lead_id: str | None = None,
+        **kwargs
+    ) -> ProjectMutationPayload:
+        """
+        Update an existing project via GraphQL mutation. All fields except id are optional for partial updates.
+Use this to rename projects, change descriptions, update dates, or change the project state.
+
+
+        Args:
+            id: The ID of the project to update
+            name: The new name of the project
+            description: The new description of the project (supports markdown)
+            state: The new state of the project (backlog, planned, started, paused, completed, canceled)
+            start_date: The new planned start date of the project (YYYY-MM-DD format)
+            target_date: The new target completion date of the project (YYYY-MM-DD format)
+            lead_id: The ID of the user to set as project lead. Get user IDs from the users list.
+            **kwargs: Additional parameters
+
+        Returns:
+            ProjectMutationPayload
+        """
+        params = {k: v for k, v in {
+            "id": id,
+            "name": name,
+            "description": description,
+            "state": state,
+            "startDate": start_date,
+            "targetDate": target_date,
+            "leadId": lead_id,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("projects", "update", params)
         return result
 
 

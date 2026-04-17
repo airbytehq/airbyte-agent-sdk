@@ -133,6 +133,63 @@ class ProjectResponse(BaseModel):
 
     data: Union[ProjectResponseData, Any] = Field(default=None)
 
+class ProjectCreateParams(BaseModel):
+    """Parameters for creating a project"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: Union[str, Any] = Field(default=None)
+    team_ids: Union[list[str], Any] = Field(default=None, alias="teamIds")
+    description: Union[str, Any] = Field(default=None)
+    state: Union[str, Any] = Field(default=None)
+    start_date: Union[str, Any] = Field(default=None, alias="startDate")
+    target_date: Union[str, Any] = Field(default=None, alias="targetDate")
+    lead_id: Union[str, Any] = Field(default=None, alias="leadId")
+
+class ProjectUpdateParams(BaseModel):
+    """Parameters for updating a project. All fields except id are optional for partial updates.
+Use this to rename projects, change descriptions, update dates, or change the project state.
+"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str, Any] = Field(default=None)
+    name: Union[str, Any] = Field(default=None)
+    description: Union[str, Any] = Field(default=None)
+    state: Union[str, Any] = Field(default=None)
+    start_date: Union[str, Any] = Field(default=None, alias="startDate")
+    target_date: Union[str, Any] = Field(default=None, alias="targetDate")
+    lead_id: Union[str, Any] = Field(default=None, alias="leadId")
+
+class ProjectMutationPayload(BaseModel):
+    """Project mutation result"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    success: Union[bool, Any] = Field(default=None)
+    project: Union[Project, Any] = Field(default=None)
+
+class ProjectCreateResponseData(BaseModel):
+    """Nested schema for ProjectCreateResponse.data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    project_create: Union[ProjectMutationPayload, Any] = Field(default=None, alias="projectCreate")
+
+class ProjectCreateResponse(BaseModel):
+    """GraphQL response for project creation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: Union[ProjectCreateResponseData, Any] = Field(default=None)
+
+class ProjectUpdateResponseData(BaseModel):
+    """Nested schema for ProjectUpdateResponse.data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    project_update: Union[ProjectMutationPayload, Any] = Field(default=None, alias="projectUpdate")
+
+class ProjectUpdateResponse(BaseModel):
+    """GraphQL response for project update"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: Union[ProjectUpdateResponseData, Any] = Field(default=None)
+
 class Team(BaseModel):
     """Linear team object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)

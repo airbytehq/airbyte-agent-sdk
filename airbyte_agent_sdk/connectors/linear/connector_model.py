@@ -730,7 +730,12 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='projects',
-            actions=[Action.LIST, Action.GET],
+            actions=[
+                Action.LIST,
+                Action.GET,
+                Action.CREATE,
+                Action.UPDATE,
+            ],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='POST',
@@ -954,6 +959,227 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                         'variables': {'id': '{{ id }}'},
                     },
                     record_extractor='$.data.project',
+                ),
+                Action.CREATE: EndpointDefinition(
+                    method='POST',
+                    path='/graphql:createProject',
+                    path_override=PathOverrideConfig(
+                        path='/graphql',
+                    ),
+                    action=Action.CREATE,
+                    description='Create a new project via GraphQL mutation',
+                    header_params=['x-apollo-operation-name'],
+                    header_params_schema={
+                        'x-apollo-operation-name': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'createProject',
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'GraphQL response for project creation',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'properties': {
+                                    'projectCreate': {
+                                        'type': 'object',
+                                        'description': 'Project mutation result',
+                                        'properties': {
+                                            'success': {'type': 'boolean', 'description': 'Whether the mutation was successful'},
+                                            'project': {
+                                                'type': 'object',
+                                                'description': 'Linear project object',
+                                                'properties': {
+                                                    'id': {'type': 'string', 'description': 'Unique project identifier'},
+                                                    'name': {'type': 'string', 'description': 'Project name'},
+                                                    'description': {
+                                                        'oneOf': [
+                                                            {'type': 'string'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project description',
+                                                    },
+                                                    'state': {
+                                                        'oneOf': [
+                                                            {'type': 'string'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project state (planned, started, paused, completed, canceled)',
+                                                    },
+                                                    'startDate': {
+                                                        'oneOf': [
+                                                            {'type': 'string', 'format': 'date'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project start date',
+                                                    },
+                                                    'targetDate': {
+                                                        'oneOf': [
+                                                            {'type': 'string', 'format': 'date'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project target date',
+                                                    },
+                                                    'lead': {
+                                                        'oneOf': [
+                                                            {
+                                                                'type': 'object',
+                                                                'properties': {
+                                                                    'name': {'type': 'string'},
+                                                                    'email': {'type': 'string'},
+                                                                },
+                                                            },
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project lead',
+                                                    },
+                                                    'createdAt': {
+                                                        'type': 'string',
+                                                        'format': 'date-time',
+                                                        'description': 'Creation timestamp',
+                                                    },
+                                                    'updatedAt': {
+                                                        'type': 'string',
+                                                        'format': 'date-time',
+                                                        'description': 'Last update timestamp',
+                                                    },
+                                                },
+                                                'required': ['id', 'name'],
+                                                'x-airbyte-entity-name': 'projects',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    graphql_body={
+                        'type': 'graphql',
+                        'query': 'mutation($name: String!, $teamIds: [String!]!, $description: String, $state: String, $startDate: TimelessDate, $targetDate: TimelessDate, $leadId: String) { projectCreate(input: { name: $name, teamIds: $teamIds, description: $description, state: $state, startDate: $startDate, targetDate: $targetDate, leadId: $leadId }) { success project { id name description state startDate targetDate lead { name email } createdAt updatedAt } } }',
+                        'variables': {
+                            'name': '{{ name }}',
+                            'teamIds': '{{ teamIds }}',
+                            'description': '{{ description }}',
+                            'state': '{{ state }}',
+                            'startDate': '{{ startDate }}',
+                            'targetDate': '{{ targetDate }}',
+                            'leadId': '{{ leadId }}',
+                        },
+                    },
+                    record_extractor='$.data.projectCreate',
+                ),
+                Action.UPDATE: EndpointDefinition(
+                    method='POST',
+                    path='/graphql:updateProject',
+                    path_override=PathOverrideConfig(
+                        path='/graphql',
+                    ),
+                    action=Action.UPDATE,
+                    description='Update an existing project via GraphQL mutation. All fields except id are optional for partial updates.\nUse this to rename projects, change descriptions, update dates, or change the project state.\n',
+                    header_params=['x-apollo-operation-name'],
+                    header_params_schema={
+                        'x-apollo-operation-name': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'updateProject',
+                        },
+                    },
+                    response_schema={
+                        'type': 'object',
+                        'description': 'GraphQL response for project update',
+                        'properties': {
+                            'data': {
+                                'type': 'object',
+                                'properties': {
+                                    'projectUpdate': {
+                                        'type': 'object',
+                                        'description': 'Project mutation result',
+                                        'properties': {
+                                            'success': {'type': 'boolean', 'description': 'Whether the mutation was successful'},
+                                            'project': {
+                                                'type': 'object',
+                                                'description': 'Linear project object',
+                                                'properties': {
+                                                    'id': {'type': 'string', 'description': 'Unique project identifier'},
+                                                    'name': {'type': 'string', 'description': 'Project name'},
+                                                    'description': {
+                                                        'oneOf': [
+                                                            {'type': 'string'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project description',
+                                                    },
+                                                    'state': {
+                                                        'oneOf': [
+                                                            {'type': 'string'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project state (planned, started, paused, completed, canceled)',
+                                                    },
+                                                    'startDate': {
+                                                        'oneOf': [
+                                                            {'type': 'string', 'format': 'date'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project start date',
+                                                    },
+                                                    'targetDate': {
+                                                        'oneOf': [
+                                                            {'type': 'string', 'format': 'date'},
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project target date',
+                                                    },
+                                                    'lead': {
+                                                        'oneOf': [
+                                                            {
+                                                                'type': 'object',
+                                                                'properties': {
+                                                                    'name': {'type': 'string'},
+                                                                    'email': {'type': 'string'},
+                                                                },
+                                                            },
+                                                            {'type': 'null'},
+                                                        ],
+                                                        'description': 'Project lead',
+                                                    },
+                                                    'createdAt': {
+                                                        'type': 'string',
+                                                        'format': 'date-time',
+                                                        'description': 'Creation timestamp',
+                                                    },
+                                                    'updatedAt': {
+                                                        'type': 'string',
+                                                        'format': 'date-time',
+                                                        'description': 'Last update timestamp',
+                                                    },
+                                                },
+                                                'required': ['id', 'name'],
+                                                'x-airbyte-entity-name': 'projects',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    graphql_body={
+                        'type': 'graphql',
+                        'query': 'mutation($id: String!, $name: String, $description: String, $state: String, $startDate: TimelessDate, $targetDate: TimelessDate, $leadId: String) { projectUpdate(id: $id, input: { name: $name, description: $description, state: $state, startDate: $startDate, targetDate: $targetDate, leadId: $leadId }) { success project { id name description state startDate targetDate lead { name email } createdAt updatedAt } } }',
+                        'variables': {
+                            'id': '{{ id }}',
+                            'name': '{{ name }}',
+                            'description': '{{ description }}',
+                            'state': '{{ state }}',
+                            'startDate': '{{ startDate }}',
+                            'targetDate': '{{ targetDate }}',
+                            'leadId': '{{ leadId }}',
+                        },
+                        'nullable_variables': ['leadId', 'startDate', 'targetDate'],
+                    },
+                    record_extractor='$.data.projectUpdate',
                 ),
             },
             entity_schema={
@@ -2407,6 +2633,11 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
             "Create a new issue in the 'Backend Improvements' project",
             'Add a recent issue to a specific project',
             'Move an issue to a different project',
+            "Create a new project called 'Q3 Platform Migration'",
+            "Update the description of the 'Backend Improvements' project",
+            'Change the target date of a project to next month',
+            'Mark a project as started',
+            "Set a project lead for the 'API Redesign' project",
         ],
         context_store_search=[
             'Analyze the workload distribution across my development team',

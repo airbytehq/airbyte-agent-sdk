@@ -52,21 +52,6 @@ class IssueCreateParams(BaseModel):
     assignees: Union[list[str], Any] = Field(default=None)
     milestone: Union[int | None, Any] = Field(default=None)
 
-class IssueResponseReactions(BaseModel):
-    """Reaction counts"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    url: Union[str, Any] = Field(default=None)
-    total_count: Union[int, Any] = Field(default=None)
-    field_1: Union[int, Any] = Field(default=None, alias="+1")
-    field_1: Union[int, Any] = Field(default=None, alias="-1")
-    laugh: Union[int, Any] = Field(default=None)
-    hooray: Union[int, Any] = Field(default=None)
-    confused: Union[int, Any] = Field(default=None)
-    heart: Union[int, Any] = Field(default=None)
-    rocket: Union[int, Any] = Field(default=None)
-    eyes: Union[int, Any] = Field(default=None)
-
 class IssueResponseAssignee(BaseModel):
     """Primary user assigned to this issue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -92,6 +77,15 @@ class IssueResponseLabelsItem(BaseModel):
     default: Union[bool, Any] = Field(default=None)
     description: Union[str | None, Any] = Field(default=None)
 
+class IssueResponseIssueDependenciesSummary(BaseModel):
+    """Summary of issue dependencies"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    blocked_by: Union[int, Any] = Field(default=None)
+    blocking: Union[int, Any] = Field(default=None)
+    total_blocked_by: Union[int, Any] = Field(default=None)
+    total_blocking: Union[int, Any] = Field(default=None)
+
 class IssueResponseAssigneesItem(BaseModel):
     """Nested schema for IssueResponse.assignees_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -104,6 +98,14 @@ class IssueResponseAssigneesItem(BaseModel):
     html_url: Union[str, Any] = Field(default=None)
     type_: Union[str, Any] = Field(default=None, alias="type")
     site_admin: Union[bool, Any] = Field(default=None)
+
+class IssueResponseSubIssuesSummary(BaseModel):
+    """Summary of sub-issues"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total: Union[int, Any] = Field(default=None)
+    completed: Union[int, Any] = Field(default=None)
+    percent_completed: Union[int, Any] = Field(default=None)
 
 class IssueResponseUser(BaseModel):
     """The user who created the issue"""
@@ -118,22 +120,20 @@ class IssueResponseUser(BaseModel):
     type_: Union[str, Any] = Field(default=None, alias="type")
     site_admin: Union[bool, Any] = Field(default=None)
 
-class IssueResponseIssueDependenciesSummary(BaseModel):
-    """Summary of issue dependencies"""
+class IssueResponseReactions(BaseModel):
+    """Reaction counts"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    blocked_by: Union[int, Any] = Field(default=None)
-    blocking: Union[int, Any] = Field(default=None)
-    total_blocked_by: Union[int, Any] = Field(default=None)
-    total_blocking: Union[int, Any] = Field(default=None)
-
-class IssueResponseSubIssuesSummary(BaseModel):
-    """Summary of sub-issues"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    total: Union[int, Any] = Field(default=None)
-    completed: Union[int, Any] = Field(default=None)
-    percent_completed: Union[int, Any] = Field(default=None)
+    url: Union[str, Any] = Field(default=None)
+    total_count: Union[int, Any] = Field(default=None)
+    field_1: Union[int, Any] = Field(default=None, alias="+1")
+    field_1: Union[int, Any] = Field(default=None, alias="-1")
+    laugh: Union[int, Any] = Field(default=None)
+    hooray: Union[int, Any] = Field(default=None)
+    confused: Union[int, Any] = Field(default=None)
+    heart: Union[int, Any] = Field(default=None)
+    rocket: Union[int, Any] = Field(default=None)
+    eyes: Union[int, Any] = Field(default=None)
 
 class IssueResponse(BaseModel):
     """IssueResponse type definition"""

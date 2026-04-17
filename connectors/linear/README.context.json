@@ -32,7 +32,7 @@
   },
   "replication_config": null,
   "custom_description": "Linear is a modern issue tracking and project management tool built for software\ndevelopment teams. This connector provides access to issues, projects, and teams\nfor sprint planning, backlog management, and development workflow analysis.\n",
-  "supported_questions": "- Show me the open issues assigned to my team this week\n- List out all projects I'm currently involved in\n- List all users in my Linear workspace\n- Who is assigned to the most recently updated issue?\n- Create a new issue titled 'Fix login bug'\n- Update the priority of a recent issue to urgent\n- Change the title of a recent issue to 'Updated feature request'\n- Add a comment to a recent issue saying 'This is ready for review'\n- Update my most recent comment to say 'Revised feedback after testing'\n- Create a high priority issue about API performance\n- Assign a recent issue to a teammate\n- Unassign the current assignee from a recent issue\n- Reassign a recent issue from one teammate to another\n- Create a new issue in the 'Backend Improvements' project\n- Add a recent issue to a specific project\n- Move an issue to a different project\n- Analyze the workload distribution across my development team\n- What are the top priority issues in our current sprint?\n- Identify the most active projects in our organization right now\n- Summarize the recent issues for {team_member} in the last two weeks\n- Compare the issue complexity across different teams\n- Which projects have the most unresolved issues?\n- Give me an overview of my team's current project backlog",
+  "supported_questions": "- Show me the open issues assigned to my team this week\n- List out all projects I'm currently involved in\n- List all users in my Linear workspace\n- Who is assigned to the most recently updated issue?\n- Create a new issue titled 'Fix login bug'\n- Update the priority of a recent issue to urgent\n- Change the title of a recent issue to 'Updated feature request'\n- Add a comment to a recent issue saying 'This is ready for review'\n- Update my most recent comment to say 'Revised feedback after testing'\n- Create a high priority issue about API performance\n- Assign a recent issue to a teammate\n- Unassign the current assignee from a recent issue\n- Reassign a recent issue from one teammate to another\n- Create a new issue in the 'Backend Improvements' project\n- Add a recent issue to a specific project\n- Move an issue to a different project\n- Create a new project called 'Q3 Platform Migration'\n- Update the description of the 'Backend Improvements' project\n- Change the target date of a project to next month\n- Mark a project as started\n- Set a project lead for the 'API Redesign' project\n- Analyze the workload distribution across my development team\n- What are the top priority issues in our current sprint?\n- Identify the most active projects in our organization right now\n- Summarize the recent issues for {team_member} in the last two weeks\n- Compare the issue complexity across different teams\n- Which projects have the most unresolved issues?\n- Give me an overview of my team's current project backlog",
   "unsupported_questions": "- Delete an outdated project from our workspace\n- Schedule a sprint planning meeting\n- Delete this issue\n- Remove a comment from an issue",
   "first_operation": {
     "method_name": "list_issues",
@@ -480,6 +480,203 @@
         "meta_extractor": null,
         "needs_envelope": null,
         "record_type": "Project",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "create_project",
+        "http_method": "post",
+        "path": "/graphql:createProject",
+        "entity": "projects",
+        "action": "create",
+        "parameters": [
+          {
+            "name": "name",
+            "python_name": "name",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The name of the project"
+            },
+            "required": true,
+            "description": "The name of the project"
+          },
+          {
+            "name": "teamIds",
+            "python_name": "team_ids",
+            "type": "list[str]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "The IDs of the teams to associate with this project. Get team IDs from the teams list."
+            },
+            "required": true,
+            "description": "The IDs of the teams to associate with this project. Get team IDs from the teams list."
+          },
+          {
+            "name": "description",
+            "python_name": "description",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The description of the project (supports markdown)"
+            },
+            "required": false,
+            "description": "The description of the project (supports markdown)"
+          },
+          {
+            "name": "state",
+            "python_name": "state",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The state of the project (backlog, planned, started, paused, completed, canceled)"
+            },
+            "required": false,
+            "description": "The state of the project (backlog, planned, started, paused, completed, canceled)"
+          },
+          {
+            "name": "startDate",
+            "python_name": "start_date",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The planned start date of the project (YYYY-MM-DD format)"
+            },
+            "required": false,
+            "description": "The planned start date of the project (YYYY-MM-DD format)"
+          },
+          {
+            "name": "targetDate",
+            "python_name": "target_date",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The target completion date of the project (YYYY-MM-DD format)"
+            },
+            "required": false,
+            "description": "The target completion date of the project (YYYY-MM-DD format)"
+          },
+          {
+            "name": "leadId",
+            "python_name": "lead_id",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The ID of the user to set as project lead. Get user IDs from the users list."
+            },
+            "required": false,
+            "description": "The ID of the user to set as project lead. Get user IDs from the users list."
+          }
+        ],
+        "params_type_name": "ProjectsCreateParams",
+        "response_type": "ProjectMutationPayload",
+        "description": "Create a new project via GraphQL mutation",
+        "record_extractor": "$.data.projectCreate",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "ProjectMutationPayload",
+        "meta_fields": null,
+        "is_download": false
+      },
+      {
+        "method_name": "update_project",
+        "http_method": "post",
+        "path": "/graphql:updateProject",
+        "entity": "projects",
+        "action": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "python_name": "id",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The ID of the project to update"
+            },
+            "required": true,
+            "description": "The ID of the project to update"
+          },
+          {
+            "name": "name",
+            "python_name": "name",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The new name of the project"
+            },
+            "required": false,
+            "description": "The new name of the project"
+          },
+          {
+            "name": "description",
+            "python_name": "description",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The new description of the project (supports markdown)"
+            },
+            "required": false,
+            "description": "The new description of the project (supports markdown)"
+          },
+          {
+            "name": "state",
+            "python_name": "state",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The new state of the project (backlog, planned, started, paused, completed, canceled)"
+            },
+            "required": false,
+            "description": "The new state of the project (backlog, planned, started, paused, completed, canceled)"
+          },
+          {
+            "name": "startDate",
+            "python_name": "start_date",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The new planned start date of the project (YYYY-MM-DD format)"
+            },
+            "required": false,
+            "description": "The new planned start date of the project (YYYY-MM-DD format)"
+          },
+          {
+            "name": "targetDate",
+            "python_name": "target_date",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The new target completion date of the project (YYYY-MM-DD format)"
+            },
+            "required": false,
+            "description": "The new target completion date of the project (YYYY-MM-DD format)"
+          },
+          {
+            "name": "leadId",
+            "python_name": "lead_id",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "The ID of the user to set as project lead. Get user IDs from the users list."
+            },
+            "required": false,
+            "description": "The ID of the user to set as project lead. Get user IDs from the users list."
+          }
+        ],
+        "params_type_name": "ProjectsUpdateParams",
+        "response_type": "ProjectMutationPayload",
+        "description": "Update an existing project via GraphQL mutation. All fields except id are optional for partial updates.\nUse this to rename projects, change descriptions, update dates, or change the project state.\n",
+        "record_extractor": "$.data.projectUpdate",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "ProjectMutationPayload",
         "meta_fields": null,
         "is_download": false
       }

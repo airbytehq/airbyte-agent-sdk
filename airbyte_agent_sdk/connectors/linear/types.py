@@ -56,6 +56,26 @@ class ProjectsGetParams(TypedDict):
     """Parameters for projects.get operation"""
     id: str
 
+class ProjectsCreateParams(TypedDict):
+    """Parameters for projects.create operation"""
+    name: str
+    team_ids: list[str]
+    description: NotRequired[str]
+    state: NotRequired[str]
+    start_date: NotRequired[str]
+    target_date: NotRequired[str]
+    lead_id: NotRequired[str]
+
+class ProjectsUpdateParams(TypedDict):
+    """Parameters for projects.update operation"""
+    id: str
+    name: NotRequired[str]
+    description: NotRequired[str]
+    state: NotRequired[str]
+    start_date: NotRequired[str]
+    target_date: NotRequired[str]
+    lead_id: NotRequired[str]
+
 class TeamsListParams(TypedDict):
     """Parameters for teams.list operation"""
     first: NotRequired[int]
