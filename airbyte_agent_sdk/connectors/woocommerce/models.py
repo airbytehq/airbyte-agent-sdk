@@ -34,6 +34,14 @@ class WoocommerceReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
+class CustomerMetaDataItem(BaseModel):
+    """Nested schema for Customer.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[str | None, Any] = Field(default=None)
+
 class CustomerShipping(BaseModel):
     """List of shipping address data"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -47,14 +55,6 @@ class CustomerShipping(BaseModel):
     state: Union[str | None, Any] = Field(default=None)
     postcode: Union[str | None, Any] = Field(default=None)
     country: Union[str | None, Any] = Field(default=None)
-
-class CustomerMetaDataItem(BaseModel):
-    """Nested schema for Customer.meta_data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[str | None, Any] = Field(default=None)
 
 class CustomerBilling(BaseModel):
     """List of billing address data"""
@@ -92,60 +92,6 @@ class Customer(BaseModel):
     avatar_url: Union[str | None, Any] = Field(default=None)
     meta_data: Union[list[CustomerMetaDataItem] | None, Any] = Field(default=None)
 
-class OrderCouponLinesItemMetaDataItem(BaseModel):
-    """Nested schema for OrderCouponLinesItem.meta_data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
-
-class OrderCouponLinesItem(BaseModel):
-    """Nested schema for Order.coupon_lines_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    code: Union[str | None, Any] = Field(default=None)
-    discount: Union[str | None, Any] = Field(default=None)
-    discount_tax: Union[str | None, Any] = Field(default=None)
-    meta_data: Union[list[OrderCouponLinesItemMetaDataItem] | None, Any] = Field(default=None)
-
-class OrderShippingLinesItemTaxesItem(BaseModel):
-    """Nested schema for OrderShippingLinesItem.taxes_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    total: Union[str | None, Any] = Field(default=None)
-    subtotal: Union[str | None, Any] = Field(default=None)
-
-class OrderShippingLinesItemMetaDataItem(BaseModel):
-    """Nested schema for OrderShippingLinesItem.meta_data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
-
-class OrderShippingLinesItem(BaseModel):
-    """Nested schema for Order.shipping_lines_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    method_title: Union[str | None, Any] = Field(default=None)
-    method_id: Union[str | None, Any] = Field(default=None)
-    total: Union[str | None, Any] = Field(default=None)
-    total_tax: Union[str | None, Any] = Field(default=None)
-    taxes: Union[list[OrderShippingLinesItemTaxesItem] | None, Any] = Field(default=None)
-    meta_data: Union[list[OrderShippingLinesItemMetaDataItem] | None, Any] = Field(default=None)
-
-class OrderRefundsItem(BaseModel):
-    """Nested schema for Order.refunds_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    reason: Union[str | None, Any] = Field(default=None)
-    total: Union[str | None, Any] = Field(default=None)
-
 class OrderShipping(BaseModel):
     """Shipping address"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -159,6 +105,22 @@ class OrderShipping(BaseModel):
     state: Union[str | None, Any] = Field(default=None)
     postcode: Union[str | None, Any] = Field(default=None)
     country: Union[str | None, Any] = Field(default=None)
+
+class OrderBilling(BaseModel):
+    """Billing address"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    first_name: Union[str | None, Any] = Field(default=None)
+    last_name: Union[str | None, Any] = Field(default=None)
+    company: Union[str | None, Any] = Field(default=None)
+    address_1: Union[str | None, Any] = Field(default=None)
+    address_2: Union[str | None, Any] = Field(default=None)
+    city: Union[str | None, Any] = Field(default=None)
+    state: Union[str | None, Any] = Field(default=None)
+    postcode: Union[str | None, Any] = Field(default=None)
+    country: Union[str | None, Any] = Field(default=None)
+    email: Union[str | None, Any] = Field(default=None)
+    phone: Union[str | None, Any] = Field(default=None)
 
 class OrderFeeLinesItemMetaDataItem(BaseModel):
     """Nested schema for OrderFeeLinesItem.meta_data_item"""
@@ -189,30 +151,6 @@ class OrderFeeLinesItem(BaseModel):
     taxes: Union[list[OrderFeeLinesItemTaxesItem] | None, Any] = Field(default=None)
     meta_data: Union[list[OrderFeeLinesItemMetaDataItem] | None, Any] = Field(default=None)
 
-class OrderBilling(BaseModel):
-    """Billing address"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    first_name: Union[str | None, Any] = Field(default=None)
-    last_name: Union[str | None, Any] = Field(default=None)
-    company: Union[str | None, Any] = Field(default=None)
-    address_1: Union[str | None, Any] = Field(default=None)
-    address_2: Union[str | None, Any] = Field(default=None)
-    city: Union[str | None, Any] = Field(default=None)
-    state: Union[str | None, Any] = Field(default=None)
-    postcode: Union[str | None, Any] = Field(default=None)
-    country: Union[str | None, Any] = Field(default=None)
-    email: Union[str | None, Any] = Field(default=None)
-    phone: Union[str | None, Any] = Field(default=None)
-
-class OrderMetaDataItem(BaseModel):
-    """Nested schema for Order.meta_data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
-
 class OrderLineItemsItemTaxesItem(BaseModel):
     """Nested schema for OrderLineItemsItem.taxes_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -220,6 +158,13 @@ class OrderLineItemsItemTaxesItem(BaseModel):
     id: Union[int | None, Any] = Field(default=None)
     total: Union[str | None, Any] = Field(default=None)
     subtotal: Union[str | None, Any] = Field(default=None)
+
+class OrderLineItemsItemImage(BaseModel):
+    """Nested schema for OrderLineItemsItem.image"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[Any, Any] = Field(default=None)
+    src: Union[str | None, Any] = Field(default=None)
 
 class OrderLineItemsItemMetaDataItem(BaseModel):
     """Nested schema for OrderLineItemsItem.meta_data_item"""
@@ -230,13 +175,6 @@ class OrderLineItemsItemMetaDataItem(BaseModel):
     value: Union[Any, Any] = Field(default=None)
     display_key: Union[str | None, Any] = Field(default=None)
     display_value: Union[str | None, Any] = Field(default=None)
-
-class OrderLineItemsItemImage(BaseModel):
-    """Nested schema for OrderLineItemsItem.image"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[Any, Any] = Field(default=None)
-    src: Union[str | None, Any] = Field(default=None)
 
 class OrderLineItemsItem(BaseModel):
     """Nested schema for Order.line_items_item"""
@@ -258,6 +196,68 @@ class OrderLineItemsItem(BaseModel):
     price: Union[float | None, Any] = Field(default=None)
     image: Union[OrderLineItemsItemImage | None, Any] = Field(default=None)
     parent_name: Union[str | None, Any] = Field(default=None)
+
+class OrderShippingLinesItemMetaDataItem(BaseModel):
+    """Nested schema for OrderShippingLinesItem.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
+
+class OrderShippingLinesItemTaxesItem(BaseModel):
+    """Nested schema for OrderShippingLinesItem.taxes_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    total: Union[str | None, Any] = Field(default=None)
+    subtotal: Union[str | None, Any] = Field(default=None)
+
+class OrderShippingLinesItem(BaseModel):
+    """Nested schema for Order.shipping_lines_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    method_title: Union[str | None, Any] = Field(default=None)
+    method_id: Union[str | None, Any] = Field(default=None)
+    total: Union[str | None, Any] = Field(default=None)
+    total_tax: Union[str | None, Any] = Field(default=None)
+    taxes: Union[list[OrderShippingLinesItemTaxesItem] | None, Any] = Field(default=None)
+    meta_data: Union[list[OrderShippingLinesItemMetaDataItem] | None, Any] = Field(default=None)
+
+class OrderRefundsItem(BaseModel):
+    """Nested schema for Order.refunds_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    reason: Union[str | None, Any] = Field(default=None)
+    total: Union[str | None, Any] = Field(default=None)
+
+class OrderMetaDataItem(BaseModel):
+    """Nested schema for Order.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
+
+class OrderCouponLinesItemMetaDataItem(BaseModel):
+    """Nested schema for OrderCouponLinesItem.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
+
+class OrderCouponLinesItem(BaseModel):
+    """Nested schema for Order.coupon_lines_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    code: Union[str | None, Any] = Field(default=None)
+    discount: Union[str | None, Any] = Field(default=None)
+    discount_tax: Union[str | None, Any] = Field(default=None)
+    meta_data: Union[list[OrderCouponLinesItemMetaDataItem] | None, Any] = Field(default=None)
 
 class OrderTaxLinesItemMetaDataItem(BaseModel):
     """Nested schema for OrderTaxLinesItem.meta_data_item"""
@@ -347,16 +347,8 @@ class ProductDefaultAttributesItem(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     option: Union[str | None, Any] = Field(default=None)
 
-class ProductMetaDataItem(BaseModel):
-    """Nested schema for Product.meta_data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
-
-class ProductTagsItem(BaseModel):
-    """Nested schema for Product.tags_item"""
+class ProductCategoriesItem(BaseModel):
+    """Nested schema for Product.categories_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[int | None, Any] = Field(default=None)
@@ -370,6 +362,14 @@ class ProductDimensions(BaseModel):
     length: Union[str | None, Any] = Field(default=None)
     width: Union[str | None, Any] = Field(default=None)
     height: Union[str | None, Any] = Field(default=None)
+
+class ProductMetaDataItem(BaseModel):
+    """Nested schema for Product.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
 
 class ProductImagesItem(BaseModel):
     """Nested schema for Product.images_item"""
@@ -395,8 +395,8 @@ class ProductAttributesItem(BaseModel):
     variation: Union[bool | None, Any] = Field(default=None)
     options: Union[list[str | None] | None, Any] = Field(default=None)
 
-class ProductCategoriesItem(BaseModel):
-    """Nested schema for Product.categories_item"""
+class ProductTagsItem(BaseModel):
+    """Nested schema for Product.tags_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[int | None, Any] = Field(default=None)
@@ -585,38 +585,6 @@ class ProductAttribute(BaseModel):
     order_by: Union[str | None, Any] = Field(default=None)
     has_archives: Union[bool | None, Any] = Field(default=None)
 
-class ProductVariationMetaDataItem(BaseModel):
-    """Nested schema for ProductVariation.meta_data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
-
-class ProductVariationDownloadsItem(BaseModel):
-    """Nested schema for ProductVariation.downloads_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    file: Union[str | None, Any] = Field(default=None)
-
-class ProductVariationAttributesItem(BaseModel):
-    """Nested schema for ProductVariation.attributes_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    option: Union[str | None, Any] = Field(default=None)
-
-class ProductVariationDimensions(BaseModel):
-    """Variation dimensions"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    length: Union[str | None, Any] = Field(default=None)
-    width: Union[str | None, Any] = Field(default=None)
-    height: Union[str | None, Any] = Field(default=None)
-
 class ProductVariationImage(BaseModel):
     """Variation image data"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -629,6 +597,38 @@ class ProductVariationImage(BaseModel):
     src: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     alt: Union[str | None, Any] = Field(default=None)
+
+class ProductVariationDimensions(BaseModel):
+    """Variation dimensions"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    length: Union[str | None, Any] = Field(default=None)
+    width: Union[str | None, Any] = Field(default=None)
+    height: Union[str | None, Any] = Field(default=None)
+
+class ProductVariationAttributesItem(BaseModel):
+    """Nested schema for ProductVariation.attributes_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    option: Union[str | None, Any] = Field(default=None)
+
+class ProductVariationDownloadsItem(BaseModel):
+    """Nested schema for ProductVariation.downloads_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    file: Union[str | None, Any] = Field(default=None)
+
+class ProductVariationMetaDataItem(BaseModel):
+    """Nested schema for ProductVariation.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
 
 class ProductVariation(BaseModel):
     """ProductVariation type definition"""
@@ -690,21 +690,27 @@ class OrderNote(BaseModel):
     note: Union[str | None, Any] = Field(default=None)
     customer_note: Union[bool | None, Any] = Field(default=None)
 
-class RefundMetaDataItem(BaseModel):
-    """Nested schema for Refund.meta_data_item"""
+class RefundTaxLinesItem(BaseModel):
+    """Nested schema for Refund.tax_lines_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
+    rate_code: Union[str | None, Any] = Field(default=None)
+    rate_id: Union[int | None, Any] = Field(default=None)
+    label: Union[str | None, Any] = Field(default=None)
+    compound: Union[bool | None, Any] = Field(default=None)
+    tax_total: Union[str | None, Any] = Field(default=None)
+    shipping_tax_total: Union[str | None, Any] = Field(default=None)
 
-class RefundLineItemsItemMetaDataItem(BaseModel):
-    """Nested schema for RefundLineItemsItem.meta_data_item"""
+class RefundShippingLinesItem(BaseModel):
+    """Nested schema for Refund.shipping_lines_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[int | None, Any] = Field(default=None)
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[Any, Any] = Field(default=None)
+    method_title: Union[str | None, Any] = Field(default=None)
+    method_id: Union[str | None, Any] = Field(default=None)
+    total: Union[str | None, Any] = Field(default=None)
+    total_tax: Union[str | None, Any] = Field(default=None)
 
 class RefundLineItemsItemTaxesItem(BaseModel):
     """Nested schema for RefundLineItemsItem.taxes_item"""
@@ -713,6 +719,14 @@ class RefundLineItemsItemTaxesItem(BaseModel):
     id: Union[int | None, Any] = Field(default=None)
     total: Union[str | None, Any] = Field(default=None)
     subtotal: Union[str | None, Any] = Field(default=None)
+
+class RefundLineItemsItemMetaDataItem(BaseModel):
+    """Nested schema for RefundLineItemsItem.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
 
 class RefundLineItemsItem(BaseModel):
     """Nested schema for Refund.line_items_item"""
@@ -733,6 +747,14 @@ class RefundLineItemsItem(BaseModel):
     sku: Union[str | None, Any] = Field(default=None)
     price: Union[float | None, Any] = Field(default=None)
 
+class RefundMetaDataItem(BaseModel):
+    """Nested schema for Refund.meta_data_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int | None, Any] = Field(default=None)
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[Any, Any] = Field(default=None)
+
 class RefundFeeLinesItem(BaseModel):
     """Nested schema for Refund.fee_lines_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -743,28 +765,6 @@ class RefundFeeLinesItem(BaseModel):
     tax_status: Union[str | None, Any] = Field(default=None)
     total: Union[str | None, Any] = Field(default=None)
     total_tax: Union[str | None, Any] = Field(default=None)
-
-class RefundShippingLinesItem(BaseModel):
-    """Nested schema for Refund.shipping_lines_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    method_title: Union[str | None, Any] = Field(default=None)
-    method_id: Union[str | None, Any] = Field(default=None)
-    total: Union[str | None, Any] = Field(default=None)
-    total_tax: Union[str | None, Any] = Field(default=None)
-
-class RefundTaxLinesItem(BaseModel):
-    """Nested schema for Refund.tax_lines_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int | None, Any] = Field(default=None)
-    rate_code: Union[str | None, Any] = Field(default=None)
-    rate_id: Union[int | None, Any] = Field(default=None)
-    label: Union[str | None, Any] = Field(default=None)
-    compound: Union[bool | None, Any] = Field(default=None)
-    tax_total: Union[str | None, Any] = Field(default=None)
-    shipping_tax_total: Union[str | None, Any] = Field(default=None)
 
 class Refund(BaseModel):
     """Refund type definition"""

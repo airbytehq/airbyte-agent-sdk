@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Slack API Connector
-  version: 0.1.19
+  version: 0.1.20
   description: |
     Slack is a business communication platform that offers messaging, file sharing, and integrations
     with other tools. This connector provides read access to users, channels, channel members, channel
@@ -1262,6 +1262,10 @@ components:
             im:history: View messages and other content in direct messages
             mpim:read: View basic information about group direct messages
             mpim:history: View messages and other content in group direct messages
+            chat:write: Send messages on behalf of the authenticated user
+            channels:manage: Create, rename, archive, and set topics or purposes for public channels
+            groups:write: Create, rename, archive, and set topics or purposes for private channels
+            reactions:write: Add emoji reactions to messages
       x-airbyte-oauth-scopes:
         - scope: "users:read"
           mode: read
@@ -1311,6 +1315,26 @@ components:
           entities:
             - channel_messages
             - threads
+        - scope: "chat:write"
+          mode: write
+          entities:
+            - messages
+        - scope: "channels:manage"
+          mode: write
+          entities:
+            - channels
+            - channel_topics
+            - channel_purposes
+        - scope: "groups:write"
+          mode: write
+          entities:
+            - channels
+            - channel_topics
+            - channel_purposes
+        - scope: "reactions:write"
+          mode: write
+          entities:
+            - reactions
       x-airbyte-auth-config:
         title: "OAuth 2.0 Authentication"
         type: object

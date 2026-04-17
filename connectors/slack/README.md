@@ -134,6 +134,6 @@ See the official [Slack API reference](https://api.slack.com/methods).
 
 ## Version information
 
-- **Package version:** 0.1.19
-- **Connector version:** 0.1.19
+- **Package version:** 0.1.20
+- **Connector version:** 0.1.20
 - **Generated with Connector SDK commit SHA:** unknown
