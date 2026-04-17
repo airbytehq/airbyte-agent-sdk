@@ -273,12 +273,13 @@ def has_required_params(endpoint: Any) -> bool:
     """Check if an endpoint has required parameters without defaults.
 
     An endpoint has required params if it has path params (e.g., /v1/customers/{id})
-    or query params marked required with no default value.
+    or query params marked required with no default value and no `config_inject` rule
+    that will auto-populate the value from connector config at runtime.
     """
     if endpoint.path_params:
         return True
     for schema in endpoint.query_params_schema.values():
-        if schema.get("required") and schema.get("default") is None:
+        if schema.get("required") and schema.get("default") is None and not schema.get("config_inject"):
             return True
     return False
 

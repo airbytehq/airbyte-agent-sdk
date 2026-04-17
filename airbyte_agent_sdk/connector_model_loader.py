@@ -468,6 +468,9 @@ def convert_openapi_to_connector_model(spec: OpenAPIConnector) -> ConnectorModel
                         path_params_schema[param.name] = schema_info
                     elif param.in_ == "query":
                         query_params.append(param.name)
+                        config_inject = getattr(param, "x_airbyte_param_config_inject", None)
+                        if config_inject:
+                            schema_info["config_inject"] = config_inject
                         query_params_schema[param.name] = schema_info
                         # Check if this is a deepObject style parameter
                         if hasattr(param, "style") and param.style == "deepObject":

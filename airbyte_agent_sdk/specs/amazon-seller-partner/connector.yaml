@@ -547,7 +547,35 @@ paths:
           description: A list of MarketplaceId values. Used to select orders placed in the specified marketplaces.
           schema:
             type: string
-            default: ATVPDKIKX0DER
+          x-airbyte-param-config-inject:
+            source: region
+            map:
+              US: "ATVPDKIKX0DER"
+              CA: "A2EUQ1WTGCTBG2"
+              MX: "A1AM78C64UM0Y8"
+              BR: "A2Q3Y263D00KWC"
+              NA: "ATVPDKIKX0DER"
+              DE: "A1PA6795UKMFR9"
+              FR: "A13V1IB3VIYZZH"
+              IT: "APJ6JRA9NG5V4"
+              ES: "A1RKKUPIHCS9HS"
+              UK: "A1F83G8C2ARO7P"
+              GB: "A1F83G8C2ARO7P"
+              IN: "A21TJRUUN4KGV"
+              AE: "A2VIGQ35RCS4UG"
+              SA: "A17E79C6D8DWNP"
+              PL: "A1C3SOZRARQ6R3"
+              NL: "A1805IZSGTT6HS"
+              SE: "A2NODRKZP88ZB9"
+              EG: "ARBP9OOSHTCHU"
+              TR: "A33AVAJ2PDY3EV"
+              BE: "AMEN7PMS3EDWL"
+              EU: "A1PA6795UKMFR9"
+              JP: "A1VC38T7YXB528"
+              AU: "A39IBJ37TRP1C6"
+              SG: "A19VAU5U5O7RUS"
+              FE: "A1VC38T7YXB528"
+              ZA: "AE08WJ6YKNBMC"
         - name: CreatedAfter
           in: query
           description: A date used for selecting orders created after the specified date (ISO 8601 format). Required if LastUpdatedAfter is not set.
@@ -761,7 +789,35 @@ paths:
           description: A marketplace identifier.
           schema:
             type: string
-            default: ATVPDKIKX0DER
+          x-airbyte-param-config-inject:
+            source: region
+            map:
+              US: "ATVPDKIKX0DER"
+              CA: "A2EUQ1WTGCTBG2"
+              MX: "A1AM78C64UM0Y8"
+              BR: "A2Q3Y263D00KWC"
+              NA: "ATVPDKIKX0DER"
+              DE: "A1PA6795UKMFR9"
+              FR: "A13V1IB3VIYZZH"
+              IT: "APJ6JRA9NG5V4"
+              ES: "A1RKKUPIHCS9HS"
+              UK: "A1F83G8C2ARO7P"
+              GB: "A1F83G8C2ARO7P"
+              IN: "A21TJRUUN4KGV"
+              AE: "A2VIGQ35RCS4UG"
+              SA: "A17E79C6D8DWNP"
+              PL: "A1C3SOZRARQ6R3"
+              NL: "A1805IZSGTT6HS"
+              SE: "A2NODRKZP88ZB9"
+              EG: "ARBP9OOSHTCHU"
+              TR: "A33AVAJ2PDY3EV"
+              BE: "AMEN7PMS3EDWL"
+              EU: "A1PA6795UKMFR9"
+              JP: "A1VC38T7YXB528"
+              AU: "A39IBJ37TRP1C6"
+              SG: "A19VAU5U5O7RUS"
+              FE: "A1VC38T7YXB528"
+              ZA: "AE08WJ6YKNBMC"
         - name: keywords
           in: query
           description: Keywords to search for in the Amazon catalog.
@@ -833,7 +889,35 @@ paths:
           description: A marketplace identifier.
           schema:
             type: string
-            default: ATVPDKIKX0DER
+          x-airbyte-param-config-inject:
+            source: region
+            map:
+              US: "ATVPDKIKX0DER"
+              CA: "A2EUQ1WTGCTBG2"
+              MX: "A1AM78C64UM0Y8"
+              BR: "A2Q3Y263D00KWC"
+              NA: "ATVPDKIKX0DER"
+              DE: "A1PA6795UKMFR9"
+              FR: "A13V1IB3VIYZZH"
+              IT: "APJ6JRA9NG5V4"
+              ES: "A1RKKUPIHCS9HS"
+              UK: "A1F83G8C2ARO7P"
+              GB: "A1F83G8C2ARO7P"
+              IN: "A21TJRUUN4KGV"
+              AE: "A2VIGQ35RCS4UG"
+              SA: "A17E79C6D8DWNP"
+              PL: "A1C3SOZRARQ6R3"
+              NL: "A1805IZSGTT6HS"
+              SE: "A2NODRKZP88ZB9"
+              EG: "ARBP9OOSHTCHU"
+              TR: "A33AVAJ2PDY3EV"
+              BE: "AMEN7PMS3EDWL"
+              EU: "A1PA6795UKMFR9"
+              JP: "A1VC38T7YXB528"
+              AU: "A39IBJ37TRP1C6"
+              SG: "A19VAU5U5O7RUS"
+              FE: "A1VC38T7YXB528"
+              ZA: "AE08WJ6YKNBMC"
         - name: includedData
           in: query
           description: Data sets to include in the response.
@@ -876,6 +960,35 @@ paths:
           description: A list of marketplace identifiers used to filter reports.
           schema:
             type: string
+          x-airbyte-param-config-inject:
+            source: region
+            map:
+              US: "ATVPDKIKX0DER"
+              CA: "A2EUQ1WTGCTBG2"
+              MX: "A1AM78C64UM0Y8"
+              BR: "A2Q3Y263D00KWC"
+              NA: "ATVPDKIKX0DER"
+              DE: "A1PA6795UKMFR9"
+              FR: "A13V1IB3VIYZZH"
+              IT: "APJ6JRA9NG5V4"
+              ES: "A1RKKUPIHCS9HS"
+              UK: "A1F83G8C2ARO7P"
+              GB: "A1F83G8C2ARO7P"
+              IN: "A21TJRUUN4KGV"
+              AE: "A2VIGQ35RCS4UG"
+              SA: "A17E79C6D8DWNP"
+              PL: "A1C3SOZRARQ6R3"
+              NL: "A1805IZSGTT6HS"
+              SE: "A2NODRKZP88ZB9"
+              EG: "ARBP9OOSHTCHU"
+              TR: "A33AVAJ2PDY3EV"
+              BE: "AMEN7PMS3EDWL"
+              EU: "A1PA6795UKMFR9"
+              JP: "A1VC38T7YXB528"
+              AU: "A39IBJ37TRP1C6"
+              SG: "A19VAU5U5O7RUS"
+              FE: "A1VC38T7YXB528"
+              ZA: "AE08WJ6YKNBMC"
         - name: pageSize
           in: query
           description: Maximum number of reports to return per page.

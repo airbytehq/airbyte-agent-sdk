@@ -114,6 +114,9 @@ class Parameter(BaseModel):
     example: Any | None = None
     examples: Dict[str, Any] | None = None
 
+    # Airbyte extensions
+    x_airbyte_param_config_inject: Dict[str, Any] | None = Field(None, alias="x-airbyte-param-config-inject")
+
 
 class MediaType(BaseModel):
     """

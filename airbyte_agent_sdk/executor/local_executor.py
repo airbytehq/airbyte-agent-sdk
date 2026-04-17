@@ -55,6 +55,8 @@ from .models import (
     find_check_operation,
 )
 
+_logger = logging.getLogger(__name__)
+
 MAX_PARAM_RESOLUTION_DEPTH = 5
 
 CHECK_STATUS_HEALTHY = "healthy"
@@ -1015,17 +1017,42 @@ class LocalExecutor:
 
         return path
 
-    def _extract_query_params(self, allowed_params: list[str], params: dict[str, Any]) -> dict[str, Any]:
-        """Extract query parameters from params.
+    def _extract_query_params(
+        self,
+        allowed_params: list[str],
+        params: dict[str, Any],
+        query_params_schema: dict[str, dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        """Extract query parameters from params, applying config injection.
 
         Args:
             allowed_params: List of allowed query parameter names
             params: All parameters
+            query_params_schema: Schema for query params including config_inject
 
         Returns:
             Dictionary of query parameters
         """
-        return {key: value for key, value in params.items() if key in allowed_params}
+        result = {key: value for key, value in params.items() if key in allowed_params}
+        if query_params_schema:
+            for param_name in allowed_params:
+                if param_name not in result and param_name in query_params_schema:
+                    schema = query_params_schema[param_name]
+                    config_inject = schema.get("config_inject")
+                    if config_inject:
+                        source_key = config_inject["source"]
+                        source_value = self.config_values.get(source_key)
+                        if source_value is not None:
+                            value_map = config_inject.get("map")
+                            if value_map:
+                                mapped = value_map.get(source_value)
+                                if mapped is None:
+                                    mapped = value_map.get(source_value.upper())
+                                if mapped is not None:
+                                    result[param_name] = mapped
+                            else:
+                                result[param_name] = source_value
+        return result
 
     def _extract_body(self, allowed_fields: list[str], params: dict[str, Any]) -> dict[str, Any]:
         """Extract body fields from params, filtering out None values.
@@ -1915,7 +1942,7 @@ class _StandardOperationHandler:
                 # Use path_override if available, otherwise use the OpenAPI path
                 actual_path = endpoint.path_override.path if endpoint.path_override else endpoint.path
                 path = self.ctx.build_path(actual_path, params)
-                query_params = self.ctx.extract_query_params(endpoint.query_params, params)
+                query_params = self.ctx.extract_query_params(endpoint.query_params, params, endpoint.query_params_schema)
 
                 # Serialize deepObject parameters to bracket notation
                 if endpoint.deep_object_params:
@@ -2058,7 +2085,7 @@ class _DownloadOperationHandler:
                 # Common setup for both download modes
                 actual_path = operation.path_override.path if operation.path_override else operation.path
                 path = self.ctx.build_path(actual_path, params)
-                query_params = self.ctx.extract_query_params(operation.query_params, params)
+                query_params = self.ctx.extract_query_params(operation.query_params, params, operation.query_params_schema)
 
                 # Serialize deepObject parameters to bracket notation
                 if operation.deep_object_params:

@@ -82,8 +82,7 @@
         "python_name": "marketplace_ids",
         "type": "str",
         "schema": {
-          "type": "string",
-          "default": "ATVPDKIKX0DER"
+          "type": "string"
         },
         "required": true,
         "description": "A list of MarketplaceId values. Used to select orders placed in the specified marketplaces.",
@@ -210,8 +209,7 @@
             "python_name": "marketplace_ids",
             "type": "str",
             "schema": {
-              "type": "string",
-              "default": "ATVPDKIKX0DER"
+              "type": "string"
             },
             "required": true,
             "description": "A list of MarketplaceId values. Used to select orders placed in the specified marketplaces.",
@@ -578,8 +576,7 @@
             "python_name": "marketplace_ids",
             "type": "str",
             "schema": {
-              "type": "string",
-              "default": "ATVPDKIKX0DER"
+              "type": "string"
             },
             "required": true,
             "description": "A marketplace identifier.",
@@ -719,8 +716,7 @@
             "python_name": "marketplace_ids",
             "type": "str",
             "schema": {
-              "type": "string",
-              "default": "ATVPDKIKX0DER"
+              "type": "string"
             },
             "required": true,
             "description": "A marketplace identifier.",

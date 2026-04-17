@@ -92,14 +92,7 @@ EXECUTE_INSTRUCTIONS = (
     "exclude_fields (blocklist). Both support dot-notation for nested fields "
     '(e.g. "billing.address.city"). Fewer fields = faster + cheaper. '
     "If both provided, select_fields wins."
-    "\n\n"
-    + FILTER_OPERATORS
-    + "\n\n"
-    + ID_RESOLUTION
-    + "\n\n"
-    + PAGINATION
-    + "\n\n"
-    + DATE_RANGES
+    "\n\n" + FILTER_OPERATORS + "\n\n" + ID_RESOLUTION + "\n\n" + PAGINATION + "\n\n" + DATE_RANGES
 )
 
 
@@ -432,9 +425,11 @@ def format_param_signature(endpoint: EndpointProtocol) -> str:
     for name in path_params:
         params.append(f"{name}: string")
 
-    # Query params
+    # Query params (skip config-injected params that are auto-populated)
     for name in query_params:
         schema = query_params_schema.get(name, {})
+        if schema.get("config_inject"):
+            continue
         required = schema.get("required", False)
         param_type = _simplify_type(schema.get("type", "string"))
         params.append(f"{name}{'?' if not required else ''}: {param_type}")
@@ -504,9 +499,11 @@ def describe_entities(model: ConnectorModelProtocol) -> list[dict[str, Any]]:
                         }
                     )
 
-                # Query params
+                # Query params (skip config-injected params that are auto-populated)
                 for param_name in query_params:
                     schema = query_params_schema.get(param_name, {})
+                    if schema.get("config_inject"):
+                        continue
                     action_params.append(
                         {
                             "name": param_name,
