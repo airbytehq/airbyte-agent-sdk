@@ -645,7 +645,7 @@ def test_generate_skill_md_has_operational_content():
     result = generate_skill_md(metadata)
     # Must have YAML frontmatter with only name and description
     assert result.startswith("---")
-    assert "name: airbyte-agent-connectors" in result
+    assert "name: airbyte-agent-sdk" in result
     assert "description:" in result
     # Frontmatter must NOT contain non-standard fields (Claude Code spec)
     # Extract frontmatter block (between first and second ---)
@@ -673,7 +673,7 @@ def test_generate_skill_md_has_operational_content():
     assert "**Version:** 1.2.0" in result
     assert "**License:** Elastic-2.0" in result
     assert "**Compatibility:** Requires Python 3.11+" in result
-    assert "**Repository:** https://github.com/airbytehq/airbyte-agent-connectors" in result
+    assert "**Repository:** https://github.com/airbytehq/airbyte-agent-sdk" in result
     # Must have Reference Documentation table
     assert "## Reference Documentation" in result
     assert "references/getting-started.md" in result

@@ -1,9 +1,9 @@
 {
-  "name": "airbyte-agent-connectors",
+  "name": "airbyte-agent-sdk",
   "owner": { "name": "Airbyte" },
   "plugins": [
     {
-      "name": "airbyte-agent-connectors",
+      "name": "airbyte-agent-sdk",
       "source": "./",
       "description": "Give your AI agents access to 21+ third-party APIs through strongly typed, well-documented tools."
     }

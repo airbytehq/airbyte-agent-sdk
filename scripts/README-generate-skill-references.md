@@ -1,7 +1,7 @@
 # generate_skill_references.py
 
 Auto-generates per-connector reference docs and a connector index for
-`skills/airbyte-agent-connectors/`.
+`skills/airbyte-agent-sdk/`.
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ Tests use `tmp_path` fixtures and never touch the repo's `skills/` directory.
 ## What It Generates
 
 ```
-skills/airbyte-agent-connectors/
+skills/airbyte-agent-sdk/
   SKILL.md                              # Slim summary (<= 500 lines)
   references/
     connector-index.md                  # Full table of all connectors

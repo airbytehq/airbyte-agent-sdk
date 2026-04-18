@@ -64,10 +64,10 @@ OPTIONAL_README_SECTIONS = [
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONNECTORS_DIR = REPO_ROOT / "connectors"
-DEFAULT_SKILLS_DIR = REPO_ROOT / "skills" / "airbyte-agent-connectors"
+DEFAULT_SKILLS_DIR = REPO_ROOT / "skills" / "airbyte-agent-sdk"
 DEFAULT_REFS_DIR = DEFAULT_SKILLS_DIR / "references"
 
-GITHUB_BASE = "https://github.com/airbytehq/airbyte-agent-connectors"
+GITHUB_BASE = "https://github.com/airbytehq/airbyte-agent-sdk"
 
 # Brand-correct display names for connectors whose README H1 uses
 # directory-cased names (e.g. "Google-Analytics-Data-Api") instead of
@@ -775,7 +775,7 @@ def _build_anchor_names(discovered: set[str]) -> tuple[str, int]:
 
 SKILL_MD_TEMPLATE = """\
 ---
-name: airbyte-agent-connectors
+name: airbyte-agent-sdk
 description: |
   Sets up and operates Airbyte Agent Connectors — strongly typed Python packages
   for accessing {count}+ third-party SaaS APIs through a unified entity-action interface.
@@ -826,7 +826,7 @@ Use when:
 
 > **Full table:** See [references/connector-index.md](references/connector-index.md) for all {count} connectors with auth types, key entities, and documentation status.
 
-**If the connector is NOT in the index:** Inform the user that this connector isn't available yet. Point them to [GitHub issues](https://github.com/airbytehq/airbyte-agent-connectors/issues).
+**If the connector is NOT in the index:** Inform the user that this connector isn't available yet. Point them to [GitHub issues](https://github.com/airbytehq/airbyte-agent-sdk/issues).
 
 ---
 
@@ -1050,12 +1050,12 @@ references, or `--connector <name>` for a specific connector.
 - **Version:** 1.2.0
 - **License:** Elastic-2.0
 - **Compatibility:** Requires Python 3.11+. Recommends uv for package management.
-- **Repository:** https://github.com/airbytehq/airbyte-agent-connectors
+- **Repository:** https://github.com/airbytehq/airbyte-agent-sdk
 
 ## Support
 
 - **Slack Community**: [slack.airbyte.com](https://slack.airbyte.com/)
-- **GitHub Issues**: [airbytehq/airbyte-agent-connectors](https://github.com/airbytehq/airbyte-agent-connectors/issues)
+- **GitHub Issues**: [airbytehq/airbyte-agent-sdk](https://github.com/airbytehq/airbyte-agent-sdk/issues)
 - **Documentation**: [docs.airbyte.com/ai-agents](https://docs.airbyte.com/ai-agents)
 """
 
@@ -1281,7 +1281,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--output-dir",
         type=Path,
         default=None,
-        help="Custom output directory (default: skills/airbyte-agent-connectors).",
+        help="Custom output directory (default: skills/airbyte-agent-sdk).",
     )
     parser.add_argument(
         "--connectors-dir",

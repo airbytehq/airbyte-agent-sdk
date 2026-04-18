@@ -1,5 +1,5 @@
 {
-  "name": "airbyte-agent-connectors",
+  "name": "airbyte-agent-sdk",
   "description": "Give your AI agents access to 21+ third-party APIs (Salesforce, HubSpot, GitHub, Slack, Stripe, Jira, and more) through strongly typed, well-documented tools.",
   "version": "1.0.0",
   "author": {
@@ -7,8 +7,8 @@
     "url": "https://airbyte.com"
   },
   "license": "Elastic-2.0",
-  "homepage": "https://github.com/airbytehq/airbyte-agent-connectors",
-  "repository": "https://github.com/airbytehq/airbyte-agent-connectors",
+  "homepage": "https://github.com/airbytehq/airbyte-agent-sdk",
+  "repository": "https://github.com/airbytehq/airbyte-agent-sdk",
   "skills": "./skills/",
   "keywords": [
     "api",
