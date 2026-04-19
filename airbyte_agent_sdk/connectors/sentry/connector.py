@@ -115,7 +115,7 @@ class SentryConnector:
 
     connector_name = "sentry"
     connector_version = "1.0.4"
-    sdk_version = "0.1.22"
+    sdk_version = "0.1.23"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -707,7 +707,8 @@ class ProjectsQuery:
         result = await self._connector.execute("projects", "list", params)
         # Cast generic envelope to concrete typed result
         return ProjectsListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 
@@ -864,7 +865,8 @@ class IssuesQuery:
         result = await self._connector.execute("issues", "list", params)
         # Cast generic envelope to concrete typed result
         return IssuesListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 
@@ -1023,7 +1025,8 @@ class EventsQuery:
         result = await self._connector.execute("events", "list", params)
         # Cast generic envelope to concrete typed result
         return EventsListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 
@@ -1180,7 +1183,8 @@ class ReleasesQuery:
         result = await self._connector.execute("releases", "list", params)
         # Cast generic envelope to concrete typed result
         return ReleasesListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 

@@ -262,6 +262,7 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'projects',
                         },
                     },
+                    meta_extractor={'next': '@link.next'},
                     preferred_for_check=True,
                 ),
                 Action.GET: EndpointDefinition(
@@ -1043,6 +1044,7 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'issues',
                         },
                     },
+                    meta_extractor={'next': '@link.next'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1585,6 +1587,7 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'events',
                         },
                     },
+                    meta_extractor={'next': '@link.next'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2144,6 +2147,7 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             'x-airbyte-stream-name': 'releases',
                         },
                     },
+                    meta_extractor={'next': '@link.next'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',

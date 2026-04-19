@@ -81,10 +81,22 @@
     "response_type": "ProjectsListResult",
     "description": "Return a list of projects available to the authenticated user.",
     "record_extractor": "$",
-    "meta_extractor": null,
+    "meta_extractor": {
+      "next": "@link.next"
+    },
     "needs_envelope": true,
     "record_type": "list[Project]",
-    "meta_fields": null,
+    "meta_fields": [
+      {
+        "name": "next",
+        "python_name": "next",
+        "type": "str | None",
+        "schema": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    ],
     "is_download": false
   },
   "entities_grouped": {
@@ -112,10 +124,22 @@
         "response_type": "ProjectsListResult",
         "description": "Return a list of projects available to the authenticated user.",
         "record_extractor": "$",
-        "meta_extractor": null,
+        "meta_extractor": {
+          "next": "@link.next"
+        },
         "needs_envelope": true,
         "record_type": "list[Project]",
-        "meta_fields": null,
+        "meta_fields": [
+          {
+            "name": "next",
+            "python_name": "next",
+            "type": "str | None",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
         "is_download": false
       },
       {
@@ -223,10 +247,22 @@
         "response_type": "IssuesListResult",
         "description": "Return a list of issues (groups) bound to a project. A default query of is:unresolved is applied. To return results with other statuses send a new query value (i.e. ?query= for all results).",
         "record_extractor": "$",
-        "meta_extractor": null,
+        "meta_extractor": {
+          "next": "@link.next"
+        },
         "needs_envelope": true,
         "record_type": "list[Issue]",
-        "meta_fields": null,
+        "meta_fields": [
+          {
+            "name": "next",
+            "python_name": "next",
+            "type": "str | None",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
         "is_download": false
       },
       {
@@ -324,10 +360,22 @@
         "response_type": "EventsListResult",
         "description": "Return a list of events bound to a project.",
         "record_extractor": "$",
-        "meta_extractor": null,
+        "meta_extractor": {
+          "next": "@link.next"
+        },
         "needs_envelope": true,
         "record_type": "list[Event]",
-        "meta_fields": null,
+        "meta_fields": [
+          {
+            "name": "next",
+            "python_name": "next",
+            "type": "str | None",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
         "is_download": false
       },
       {
@@ -424,10 +472,22 @@
         "response_type": "ReleasesListResult",
         "description": "Return a list of releases for a given organization.",
         "record_extractor": "$",
-        "meta_extractor": null,
+        "meta_extractor": {
+          "next": "@link.next"
+        },
         "needs_envelope": true,
         "record_type": "list[Release]",
-        "meta_fields": null,
+        "meta_fields": [
+          {
+            "name": "next",
+            "python_name": "next",
+            "type": "str | None",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
         "is_download": false
       },
       {

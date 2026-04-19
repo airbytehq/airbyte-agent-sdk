@@ -93,6 +93,12 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `organization` | `object \| null` |  |
 
 
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `next` | `string` |  |
+
 </details>
 
 ### Projects Get
@@ -414,6 +420,12 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `subscriptionDetails` | `object \| null` |  |
 
 
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `next` | `string` |  |
+
 </details>
 
 ### Issues Get
@@ -693,6 +705,12 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `_meta` | `object \| null` |  |
 
 
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `next` | `string` |  |
+
 </details>
 
 ### Events Get
@@ -958,6 +976,12 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `versionInfo` | `object \| null` |  |
 | `currentProjectMeta` | `object \| null` |  |
 
+
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `next` | `string` |  |
 
 </details>
 

@@ -497,6 +497,8 @@ paths:
       x-airbyte-entity: projects
       x-airbyte-action: list
       x-airbyte-preferred-for-check: true
+      x-airbyte-meta-extractor:
+        next: "@link.next"
       parameters:
       - name: cursor
         in: query
@@ -562,6 +564,8 @@ paths:
       operationId: Issues_List
       x-airbyte-entity: issues
       x-airbyte-action: list
+      x-airbyte-meta-extractor:
+        next: "@link.next"
       parameters:
       - name: organization_slug
         in: path
@@ -654,6 +658,8 @@ paths:
       operationId: Events_List
       x-airbyte-entity: events
       x-airbyte-action: list
+      x-airbyte-meta-extractor:
+        next: "@link.next"
       parameters:
       - name: organization_slug
         in: path
@@ -741,6 +747,8 @@ paths:
       operationId: Releases_List
       x-airbyte-entity: releases
       x-airbyte-action: list
+      x-airbyte-meta-extractor:
+        next: "@link.next"
       parameters:
       - name: organization_slug
         in: path

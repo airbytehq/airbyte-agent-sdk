@@ -34,14 +34,6 @@ class SentryReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class ProjectAvatar(BaseModel):
-    """Project avatar information."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
-    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
-    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
-
 class ProjectOrganization(BaseModel):
     """Organization this project belongs to."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -49,6 +41,14 @@ class ProjectOrganization(BaseModel):
     id: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
+
+class ProjectAvatar(BaseModel):
+    """Project avatar information."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
+    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
+    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
 
 class Project(BaseModel):
     """A Sentry project (summary view from list endpoint)."""
@@ -93,16 +93,8 @@ class Project(BaseModel):
     avatar: Union[ProjectAvatar | None, Any] = Field(default=None)
     organization: Union[ProjectOrganization | None, Any] = Field(default=None)
 
-class ProjectDetailAvatar(BaseModel):
-    """Project avatar information."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
-    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
-    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
-
-class ProjectDetailOrganization(BaseModel):
-    """Organization this project belongs to."""
+class ProjectDetailTeamsItem(BaseModel):
+    """Nested schema for ProjectDetail.teams_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
@@ -117,8 +109,16 @@ class ProjectDetailTeam(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
 
-class ProjectDetailTeamsItem(BaseModel):
-    """Nested schema for ProjectDetail.teams_item"""
+class ProjectDetailAvatar(BaseModel):
+    """Project avatar information."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
+    avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
+    avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
+
+class ProjectDetailOrganization(BaseModel):
+    """Organization this project belongs to."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
@@ -262,26 +262,6 @@ class Issue(BaseModel):
     annotations: Union[list[str | None] | None, Any] = Field(default=None)
     subscription_details: Union[dict[str, Any] | None, Any] = Field(default=None, alias="subscriptionDetails")
 
-class EventTagsItem(BaseModel):
-    """Nested schema for Event.tags_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    key: Union[str | None, Any] = Field(default=None)
-    value: Union[str | None, Any] = Field(default=None)
-
-class EventMetadata(BaseModel):
-    """Event metadata."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    title: Union[str | None, Any] = Field(default=None)
-
-class EventGroupingconfig(BaseModel):
-    """Grouping configuration."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    enhancements: Union[str | None, Any] = Field(default=None)
-
 class EventUser(BaseModel):
     """User associated with the event."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -291,6 +271,26 @@ class EventUser(BaseModel):
     username: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     ip_address: Union[str | None, Any] = Field(default=None)
+
+class EventGroupingconfig(BaseModel):
+    """Grouping configuration."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    enhancements: Union[str | None, Any] = Field(default=None)
+
+class EventMetadata(BaseModel):
+    """Event metadata."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    title: Union[str | None, Any] = Field(default=None)
+
+class EventTagsItem(BaseModel):
+    """Nested schema for Event.tags_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    key: Union[str | None, Any] = Field(default=None)
+    value: Union[str | None, Any] = Field(default=None)
 
 class Event(BaseModel):
     """A Sentry event (individual error occurrence)."""
@@ -325,6 +325,13 @@ class Event(BaseModel):
     grouping_config: Union[EventGroupingconfig | None, Any] = Field(default=None, alias="groupingConfig")
     meta: Union[dict[str, Any] | None, Any] = Field(default=None, alias="_meta")
 
+class ReleaseAuthorsItem(BaseModel):
+    """Nested schema for Release.authors_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: Union[str | None, Any] = Field(default=None)
+    email: Union[str | None, Any] = Field(default=None)
+
 class ReleaseVersioninfoVersion(BaseModel):
     """Nested schema for ReleaseVersioninfo.version"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -345,13 +352,6 @@ class ReleaseVersioninfo(BaseModel):
     description: Union[str | None, Any] = Field(default=None)
     package: Union[str | None, Any] = Field(default=None)
     build_hash: Union[str | None, Any] = Field(default=None, alias="buildHash")
-
-class ReleaseAuthorsItem(BaseModel):
-    """Nested schema for Release.authors_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: Union[str | None, Any] = Field(default=None)
-    email: Union[str | None, Any] = Field(default=None)
 
 class ReleaseProjectsItem(BaseModel):
     """Nested schema for Release.projects_item"""
@@ -393,6 +393,30 @@ class Release(BaseModel):
 
 # ===== METADATA TYPE DEFINITIONS (PYDANTIC) =====
 # Meta types for operations that extract metadata (e.g., pagination info)
+
+class ProjectsListResultMeta(BaseModel):
+    """Metadata for projects.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    next: Union[str | None, Any] = Field(default=None)
+
+class IssuesListResultMeta(BaseModel):
+    """Metadata for issues.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    next: Union[str | None, Any] = Field(default=None)
+
+class EventsListResultMeta(BaseModel):
+    """Metadata for events.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    next: Union[str | None, Any] = Field(default=None)
+
+class ReleasesListResultMeta(BaseModel):
+    """Metadata for releases.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    next: Union[str | None, Any] = Field(default=None)
 
 # ===== CHECK RESULT MODEL =====
 
@@ -730,15 +754,15 @@ ReleasesSearchResult = AirbyteSearchResult[ReleasesSearchData]
 # Concrete type aliases for each operation result.
 # These provide simpler, more readable type annotations than using the generic forms.
 
-ProjectsListResult = SentryExecuteResult[list[Project]]
-"""Result type for projects.list operation."""
+ProjectsListResult = SentryExecuteResultWithMeta[list[Project], ProjectsListResultMeta]
+"""Result type for projects.list operation with data and metadata."""
 
-IssuesListResult = SentryExecuteResult[list[Issue]]
-"""Result type for issues.list operation."""
+IssuesListResult = SentryExecuteResultWithMeta[list[Issue], IssuesListResultMeta]
+"""Result type for issues.list operation with data and metadata."""
 
-EventsListResult = SentryExecuteResult[list[Event]]
-"""Result type for events.list operation."""
+EventsListResult = SentryExecuteResultWithMeta[list[Event], EventsListResultMeta]
+"""Result type for events.list operation with data and metadata."""
 
-ReleasesListResult = SentryExecuteResult[list[Release]]
-"""Result type for releases.list operation."""
+ReleasesListResult = SentryExecuteResultWithMeta[list[Release], ReleasesListResultMeta]
+"""Result type for releases.list operation with data and metadata."""
 
