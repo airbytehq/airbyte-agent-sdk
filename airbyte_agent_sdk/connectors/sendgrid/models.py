@@ -145,14 +145,6 @@ class CampaignsList(BaseModel):
     result: Union[list[Campaign], Any] = Field(default=None)
     metadata: Union[CampaignsListMetadata, Any] = Field(default=None, alias="_metadata")
 
-class SingleSendSendTo(BaseModel):
-    """Recipients configuration"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    list_ids: Union[list[str] | None, Any] = Field(default=None)
-    segment_ids: Union[list[str] | None, Any] = Field(default=None)
-    all: Union[bool, Any] = Field(default=None)
-
 class SingleSendEmailConfig(BaseModel):
     """Email configuration details"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -167,6 +159,14 @@ class SingleSendEmailConfig(BaseModel):
     custom_unsubscribe_url: Union[str | None, Any] = Field(default=None)
     sender_id: Union[int | None, Any] = Field(default=None)
     ip_pool: Union[str | None, Any] = Field(default=None)
+
+class SingleSendSendTo(BaseModel):
+    """Recipients configuration"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    list_ids: Union[list[str] | None, Any] = Field(default=None)
+    segment_ids: Union[list[str] | None, Any] = Field(default=None)
+    all: Union[bool, Any] = Field(default=None)
 
 class SingleSend(BaseModel):
     """A SendGrid single send"""
@@ -314,6 +314,12 @@ class SuppressionGroupMember(BaseModel):
 
 # ===== METADATA TYPE DEFINITIONS (PYDANTIC) =====
 # Meta types for operations that extract metadata (e.g., pagination info)
+
+class ContactsListResultMeta(BaseModel):
+    """Metadata for contacts.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    contact_count: Union[int, Any] = Field(default=None)
 
 class ListsListResultMeta(BaseModel):
     """Metadata for lists.Action.LIST operation"""
@@ -702,8 +708,8 @@ TemplatesSearchResult = AirbyteSearchResult[TemplatesSearchData]
 # Concrete type aliases for each operation result.
 # These provide simpler, more readable type annotations than using the generic forms.
 
-ContactsListResult = SendgridExecuteResult[list[Contact]]
-"""Result type for contacts.list operation."""
+ContactsListResult = SendgridExecuteResultWithMeta[list[Contact], ContactsListResultMeta]
+"""Result type for contacts.list operation with data and metadata."""
 
 ListsListResult = SendgridExecuteResultWithMeta[list[List], ListsListResultMeta]
 """Result type for lists.list operation with data and metadata."""

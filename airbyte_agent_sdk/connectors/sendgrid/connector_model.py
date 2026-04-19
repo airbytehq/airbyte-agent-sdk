@@ -164,6 +164,7 @@ SendgridConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.result',
+                    meta_extractor={'contact_count': '$.contact_count'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',

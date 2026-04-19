@@ -79,6 +79,12 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `updated_at` | `null \| string` |  |
 
 
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `contact_count` | `integer` |  |
+
 </details>
 
 ### Contacts Get

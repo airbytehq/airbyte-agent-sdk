@@ -413,6 +413,8 @@ paths:
       x-airbyte-entity: contacts
       x-airbyte-action: list
       x-airbyte-record-extractor: $.result
+      x-airbyte-meta-extractor:
+        contact_count: $.contact_count
       responses:
         "200":
           description: List of contacts

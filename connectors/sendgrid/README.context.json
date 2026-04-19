@@ -60,10 +60,22 @@
     "response_type": "ContactsListResult",
     "description": "Returns a sample of contacts. Use the export endpoint for full lists.",
     "record_extractor": "$.result",
-    "meta_extractor": null,
+    "meta_extractor": {
+      "contact_count": "$.contact_count"
+    },
     "needs_envelope": true,
     "record_type": "list[Contact]",
-    "meta_fields": null,
+    "meta_fields": [
+      {
+        "name": "contact_count",
+        "python_name": "contact_count",
+        "type": "int",
+        "schema": {
+          "type": "integer",
+          "description": "Total number of contacts"
+        }
+      }
+    ],
     "is_download": false
   },
   "entities_grouped": {
@@ -79,10 +91,22 @@
         "response_type": "ContactsListResult",
         "description": "Returns a sample of contacts. Use the export endpoint for full lists.",
         "record_extractor": "$.result",
-        "meta_extractor": null,
+        "meta_extractor": {
+          "contact_count": "$.contact_count"
+        },
         "needs_envelope": true,
         "record_type": "list[Contact]",
-        "meta_fields": null,
+        "meta_fields": [
+          {
+            "name": "contact_count",
+            "python_name": "contact_count",
+            "type": "int",
+            "schema": {
+              "type": "integer",
+              "description": "Total number of contacts"
+            }
+          }
+        ],
         "is_download": false
       },
       {

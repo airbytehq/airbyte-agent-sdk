@@ -181,7 +181,7 @@ class SendgridConnector:
 
     connector_name = "sendgrid"
     connector_version = "1.0.3"
-    sdk_version = "0.1.17"
+    sdk_version = "0.1.18"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -876,7 +876,8 @@ class ContactsQuery:
         result = await self._connector.execute("contacts", "list", params)
         # Cast generic envelope to concrete typed result
         return ContactsListResult(
-            data=result.data
+            data=result.data,
+            meta=result.meta
         )
 
 
