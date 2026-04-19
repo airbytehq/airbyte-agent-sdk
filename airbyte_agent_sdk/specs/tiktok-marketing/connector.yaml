@@ -2253,6 +2253,8 @@ paths:
       x-airbyte-action: list
       x-airbyte-preferred-for-check: true
       x-airbyte-record-extractor: $.data.list
+      x-airbyte-meta-extractor:
+        page_info: $.data.page_info
       parameters:
         - name: advertiser_ids
           in: query
@@ -2294,6 +2296,17 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/Advertiser"
+                      page_info:
+                        type: object
+                        properties:
+                          total_number:
+                            type: integer
+                          page:
+                            type: integer
+                          page_size:
+                            type: integer
+                          total_page:
+                            type: integer
 
   /campaign/get/:
     get:

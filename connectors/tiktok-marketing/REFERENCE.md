@@ -97,6 +97,12 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `promotion_center_city` | `null \| string` |  |
 
 
+#### Meta
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| `page_info` | `object` |  |
+
 </details>
 
 ### Advertisers Context Store Search

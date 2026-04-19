@@ -99,10 +99,35 @@
     "response_type": "AdvertisersListResult",
     "description": "Get advertiser account information",
     "record_extractor": "$.data.list",
-    "meta_extractor": null,
+    "meta_extractor": {
+      "page_info": "$.data.page_info"
+    },
     "needs_envelope": true,
     "record_type": "list[Advertiser]",
-    "meta_fields": null,
+    "meta_fields": [
+      {
+        "name": "page_info",
+        "python_name": "page_info",
+        "type": "dict[str, Any]",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "total_number": {
+              "type": "integer"
+            },
+            "page": {
+              "type": "integer"
+            },
+            "page_size": {
+              "type": "integer"
+            },
+            "total_page": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    ],
     "is_download": false
   },
   "entities_grouped": {
@@ -157,10 +182,35 @@
         "response_type": "AdvertisersListResult",
         "description": "Get advertiser account information",
         "record_extractor": "$.data.list",
-        "meta_extractor": null,
+        "meta_extractor": {
+          "page_info": "$.data.page_info"
+        },
         "needs_envelope": true,
         "record_type": "list[Advertiser]",
-        "meta_fields": null,
+        "meta_fields": [
+          {
+            "name": "page_info",
+            "python_name": "page_info",
+            "type": "dict[str, Any]",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total_number": {
+                  "type": "integer"
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "page_size": {
+                  "type": "integer"
+                },
+                "total_page": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
         "is_download": false
       }
     ],

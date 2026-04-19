@@ -497,6 +497,12 @@ class AdsReportDaily(BaseModel):
 # ===== METADATA TYPE DEFINITIONS (PYDANTIC) =====
 # Meta types for operations that extract metadata (e.g., pagination info)
 
+class AdvertisersListResultMeta(BaseModel):
+    """Metadata for advertisers.Action.LIST operation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    page_info: Union[dict[str, Any], Any] = Field(default=None)
+
 class CampaignsListResultMeta(BaseModel):
     """Metadata for campaigns.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1272,8 +1278,8 @@ AdsReportsDailySearchResult = AirbyteSearchResult[AdsReportsDailySearchData]
 # Concrete type aliases for each operation result.
 # These provide simpler, more readable type annotations than using the generic forms.
 
-AdvertisersListResult = TiktokMarketingExecuteResult[list[Advertiser]]
-"""Result type for advertisers.list operation."""
+AdvertisersListResult = TiktokMarketingExecuteResultWithMeta[list[Advertiser], AdvertisersListResultMeta]
+"""Result type for advertisers.list operation with data and metadata."""
 
 CampaignsListResult = TiktokMarketingExecuteResultWithMeta[list[Campaign], CampaignsListResultMeta]
 """Result type for campaigns.list operation with data and metadata."""
