@@ -113,14 +113,14 @@
     "description": "Get a list of the ad accounts that the authenticated user has access to.",
     "record_extractor": "$.items",
     "meta_extractor": {
-      "bookmark": "$.bookmark"
+      "cursor": "$.bookmark"
     },
     "needs_envelope": true,
     "record_type": "list[AdAccount]",
     "meta_fields": [
       {
-        "name": "bookmark",
-        "python_name": "bookmark",
+        "name": "cursor",
+        "python_name": "cursor",
         "type": "str | None",
         "schema": {
           "type": [
@@ -185,14 +185,14 @@
         "description": "Get a list of the ad accounts that the authenticated user has access to.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[AdAccount]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -289,14 +289,14 @@
         "description": "Get a list of the boards owned by the authenticated user.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[Board]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -423,14 +423,14 @@
         "description": "Get a list of campaigns in the specified ad account.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[Campaign]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -529,14 +529,14 @@
         "description": "Get a list of ad groups in the specified ad account.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[AdGroup]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -635,14 +635,14 @@
         "description": "Get a list of ads in the specified ad account.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[Ad]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -705,14 +705,14 @@
         "description": "Get a list of sections for a specific board.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[BoardSection]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -775,14 +775,14 @@
         "description": "Get a list of pins on a specific board.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[BoardPin]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -835,14 +835,14 @@
         "description": "Get a list of catalogs for the authenticated user.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[Catalog]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -895,14 +895,14 @@
         "description": "Get a list of catalog feeds for the authenticated user.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[CatalogsFeed]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -955,14 +955,14 @@
         "description": "Get a list of catalog product groups for the authenticated user.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[CatalogsProductGroup]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -1025,14 +1025,14 @@
         "description": "Get a list of audiences for the specified ad account.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[Audience]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -1095,14 +1095,14 @@
         "description": "Get a list of conversion tags for the specified ad account.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[ConversionTag]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -1165,14 +1165,14 @@
         "description": "Get a list of customer lists for the specified ad account.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[CustomerList]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [
@@ -1246,14 +1246,14 @@
         "description": "Get a list of keywords for the specified ad account. Requires an ad_group_id filter.",
         "record_extractor": "$.items",
         "meta_extractor": {
-          "bookmark": "$.bookmark"
+          "cursor": "$.bookmark"
         },
         "needs_envelope": true,
         "record_type": "list[Keyword]",
         "meta_fields": [
           {
-            "name": "bookmark",
-            "python_name": "bookmark",
+            "name": "cursor",
+            "python_name": "cursor",
             "type": "str | None",
             "schema": {
               "type": [

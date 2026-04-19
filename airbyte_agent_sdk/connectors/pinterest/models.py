@@ -536,85 +536,85 @@ class AdAccountsListResultMeta(BaseModel):
     """Metadata for ad_accounts.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class BoardsListResultMeta(BaseModel):
     """Metadata for boards.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class CampaignsListResultMeta(BaseModel):
     """Metadata for campaigns.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class AdGroupsListResultMeta(BaseModel):
     """Metadata for ad_groups.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class AdsListResultMeta(BaseModel):
     """Metadata for ads.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class BoardSectionsListResultMeta(BaseModel):
     """Metadata for board_sections.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class BoardPinsListResultMeta(BaseModel):
     """Metadata for board_pins.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class CatalogsListResultMeta(BaseModel):
     """Metadata for catalogs.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class CatalogsFeedsListResultMeta(BaseModel):
     """Metadata for catalogs_feeds.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class CatalogsProductGroupsListResultMeta(BaseModel):
     """Metadata for catalogs_product_groups.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class AudiencesListResultMeta(BaseModel):
     """Metadata for audiences.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class ConversionTagsListResultMeta(BaseModel):
     """Metadata for conversion_tags.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class CustomerListsListResultMeta(BaseModel):
     """Metadata for customer_lists.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 class KeywordsListResultMeta(BaseModel):
     """Metadata for keywords.Action.LIST operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    bookmark: Union[str | None, Any] = Field(default=None)
+    cursor: Union[str | None, Any] = Field(default=None)
 
 # ===== CHECK RESULT MODEL =====
 

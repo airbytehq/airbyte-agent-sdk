@@ -681,7 +681,7 @@ paths:
       x-airbyte-preferred-for-check: true
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: page_size
         in: query
@@ -745,7 +745,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: page_size
         in: query
@@ -812,7 +812,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path
@@ -875,7 +875,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path
@@ -938,7 +938,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path
@@ -1001,7 +1001,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: board_id
         in: path
@@ -1041,7 +1041,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: board_id
         in: path
@@ -1081,7 +1081,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: page_size
         in: query
@@ -1115,7 +1115,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: page_size
         in: query
@@ -1150,7 +1150,7 @@ paths:
       x-airbyte-untested: true
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: page_size
         in: query
@@ -1184,7 +1184,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path
@@ -1224,7 +1224,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path
@@ -1264,7 +1264,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path
@@ -1304,7 +1304,7 @@ paths:
       x-airbyte-action: list
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
-        bookmark: $.bookmark
+        cursor: $.bookmark
       parameters:
       - name: ad_account_id
         in: path

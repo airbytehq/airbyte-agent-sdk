@@ -167,7 +167,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                     preferred_for_check=True,
                 ),
                 Action.GET: EndpointDefinition(
@@ -401,7 +401,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -732,7 +732,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -1074,7 +1074,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -1469,7 +1469,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -1708,7 +1708,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -1873,7 +1873,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -2048,7 +2048,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -2189,7 +2189,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -2344,7 +2344,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                     untested=True,
                 ),
             },
@@ -2519,7 +2519,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -2731,7 +2731,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -2904,7 +2904,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={
@@ -3044,7 +3044,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.items',
-                    meta_extractor={'bookmark': '$.bookmark'},
+                    meta_extractor={'cursor': '$.bookmark'},
                 ),
             },
             entity_schema={

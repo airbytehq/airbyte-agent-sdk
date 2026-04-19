@@ -55,14 +55,6 @@ class AccessibleCustomersList(BaseModel):
 
     resource_names: Union[list[AccessibleCustomerResourceName], Any] = Field(default=None, alias="resourceNames")
 
-class AccountCustomerCallreportingsetting(BaseModel):
-    """Nested schema for AccountCustomer.callReportingSetting"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    call_conversion_action: Union[str, Any] = Field(default=None, alias="callConversionAction")
-    call_conversion_reporting_enabled: Union[bool, Any] = Field(default=None, alias="callConversionReportingEnabled")
-    call_reporting_enabled: Union[bool, Any] = Field(default=None, alias="callReportingEnabled")
-
 class AccountCustomerConversiontrackingsetting(BaseModel):
     """Nested schema for AccountCustomer.conversionTrackingSetting"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -75,6 +67,14 @@ class AccountCustomerRemarketingsetting(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     google_global_site_tag: Union[str, Any] = Field(default=None, alias="googleGlobalSiteTag")
+
+class AccountCustomerCallreportingsetting(BaseModel):
+    """Nested schema for AccountCustomer.callReportingSetting"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    call_conversion_action: Union[str, Any] = Field(default=None, alias="callConversionAction")
+    call_conversion_reporting_enabled: Union[bool, Any] = Field(default=None, alias="callConversionReportingEnabled")
+    call_reporting_enabled: Union[bool, Any] = Field(default=None, alias="callReportingEnabled")
 
 class AccountCustomer(BaseModel):
     """Nested schema for Account.customer"""
@@ -128,20 +128,6 @@ class CampaignCampaignbudget(BaseModel):
     amount_micros: Union[str, Any] = Field(default=None, alias="amountMicros", description="Budget amount in micros")
     """Budget amount in micros"""
 
-class CampaignMetrics(BaseModel):
-    """Nested schema for Campaign.metrics"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    clicks: Union[str, Any] = Field(default=None)
-    ctr: Union[float, Any] = Field(default=None)
-    conversions: Union[float, Any] = Field(default=None)
-    conversions_value: Union[float, Any] = Field(default=None, alias="conversionsValue")
-    cost_micros: Union[str, Any] = Field(default=None, alias="costMicros")
-    impressions: Union[str, Any] = Field(default=None)
-    average_cpc: Union[float, Any] = Field(default=None, alias="averageCpc")
-    average_cpm: Union[float, Any] = Field(default=None, alias="averageCpm")
-    interactions: Union[str, Any] = Field(default=None)
-
 class CampaignSegments(BaseModel):
     """Nested schema for Campaign.segments"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -184,6 +170,20 @@ class CampaignCampaign(BaseModel):
     labels: Union[list[str], Any] = Field(default=None)
     network_settings: Union[CampaignCampaignNetworksettings, Any] = Field(default=None, alias="networkSettings")
 
+class CampaignMetrics(BaseModel):
+    """Nested schema for Campaign.metrics"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    clicks: Union[str, Any] = Field(default=None)
+    ctr: Union[float, Any] = Field(default=None)
+    conversions: Union[float, Any] = Field(default=None)
+    conversions_value: Union[float, Any] = Field(default=None, alias="conversionsValue")
+    cost_micros: Union[str, Any] = Field(default=None, alias="costMicros")
+    impressions: Union[str, Any] = Field(default=None)
+    average_cpc: Union[float, Any] = Field(default=None, alias="averageCpc")
+    average_cpm: Union[float, Any] = Field(default=None, alias="averageCpm")
+    interactions: Union[str, Any] = Field(default=None)
+
 class Campaign(BaseModel):
     """Google Ads campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -201,21 +201,6 @@ class CampaignSearchResponse(BaseModel):
     next_page_token: Union[str, Any] = Field(default=None, alias="nextPageToken")
     field_mask: Union[str, Any] = Field(default=None, alias="fieldMask")
     query_resource_consumption: Union[str, Any] = Field(default=None, alias="queryResourceConsumption")
-
-class AdGroupCampaign(BaseModel):
-    """Nested schema for AdGroup.campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str, Any] = Field(default=None, description="Parent campaign ID")
-    """Parent campaign ID"""
-    resource_name: Union[str, Any] = Field(default=None, alias="resourceName", description="Parent campaign resource name")
-    """Parent campaign resource name"""
-
-class AdGroupMetrics(BaseModel):
-    """Nested schema for AdGroup.metrics"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    cost_micros: Union[str, Any] = Field(default=None, alias="costMicros")
 
 class AdGroupAdgroup(BaseModel):
     """Nested schema for AdGroup.adGroup"""
@@ -244,11 +229,26 @@ class AdGroupAdgroup(BaseModel):
     target_roas: Union[float, Any] = Field(default=None, alias="targetRoas")
     tracking_url_template: Union[str, Any] = Field(default=None, alias="trackingUrlTemplate")
 
+class AdGroupCampaign(BaseModel):
+    """Nested schema for AdGroup.campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str, Any] = Field(default=None, description="Parent campaign ID")
+    """Parent campaign ID"""
+    resource_name: Union[str, Any] = Field(default=None, alias="resourceName", description="Parent campaign resource name")
+    """Parent campaign resource name"""
+
 class AdGroupSegments(BaseModel):
     """Nested schema for AdGroup.segments"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     date: Union[str, Any] = Field(default=None)
+
+class AdGroupMetrics(BaseModel):
+    """Nested schema for AdGroup.metrics"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    cost_micros: Union[str, Any] = Field(default=None, alias="costMicros")
 
 class AdGroup(BaseModel):
     """Google Ads ad group"""
@@ -268,11 +268,12 @@ class AdGroupSearchResponse(BaseModel):
     field_mask: Union[str, Any] = Field(default=None, alias="fieldMask")
     query_resource_consumption: Union[str, Any] = Field(default=None, alias="queryResourceConsumption")
 
-class AdGroupAdSegments(BaseModel):
-    """Nested schema for AdGroupAd.segments"""
+class AdGroupAdAdgroupadPolicysummary(BaseModel):
+    """Nested schema for AdGroupAdAdgroupad.policySummary"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    date: Union[str, Any] = Field(default=None)
+    approval_status: Union[str, Any] = Field(default=None, alias="approvalStatus")
+    review_status: Union[str, Any] = Field(default=None, alias="reviewStatus")
 
 class AdGroupAdAdgroupadAd(BaseModel):
     """Nested schema for AdGroupAdAdgroupad.ad"""
@@ -288,13 +289,6 @@ class AdGroupAdAdgroupadAd(BaseModel):
     final_url_suffix: Union[str, Any] = Field(default=None, alias="finalUrlSuffix")
     tracking_url_template: Union[str, Any] = Field(default=None, alias="trackingUrlTemplate")
     resource_name: Union[str, Any] = Field(default=None, alias="resourceName")
-
-class AdGroupAdAdgroupadPolicysummary(BaseModel):
-    """Nested schema for AdGroupAdAdgroupad.policySummary"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    approval_status: Union[str, Any] = Field(default=None, alias="approvalStatus")
-    review_status: Union[str, Any] = Field(default=None, alias="reviewStatus")
 
 class AdGroupAdAdgroupad(BaseModel):
     """Nested schema for AdGroupAd.adGroupAd"""
@@ -316,6 +310,12 @@ class AdGroupAdAdgroup(BaseModel):
     """Parent ad group ID"""
     resource_name: Union[str, Any] = Field(default=None, alias="resourceName", description="Parent ad group resource name")
     """Parent ad group resource name"""
+
+class AdGroupAdSegments(BaseModel):
+    """Nested schema for AdGroupAd.segments"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    date: Union[str, Any] = Field(default=None)
 
 class AdGroupAd(BaseModel):
     """Google Ads ad group ad"""
@@ -381,6 +381,12 @@ class AdGroupLabelAdgrouplabel(BaseModel):
     label: Union[str, Any] = Field(default=None)
     resource_name: Union[str, Any] = Field(default=None, alias="resourceName")
 
+class AdGroupLabelAdgroup(BaseModel):
+    """Nested schema for AdGroupLabel.adGroup"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str, Any] = Field(default=None)
+
 class AdGroupLabelLabel(BaseModel):
     """Nested schema for AdGroupLabel.label"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -388,12 +394,6 @@ class AdGroupLabelLabel(BaseModel):
     id: Union[str, Any] = Field(default=None)
     name: Union[str, Any] = Field(default=None)
     resource_name: Union[str, Any] = Field(default=None, alias="resourceName")
-
-class AdGroupLabelAdgroup(BaseModel):
-    """Nested schema for AdGroupLabel.adGroup"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str, Any] = Field(default=None)
 
 class AdGroupLabel(BaseModel):
     """Ad group label association"""
@@ -412,12 +412,12 @@ class AdGroupLabelSearchResponse(BaseModel):
     field_mask: Union[str, Any] = Field(default=None, alias="fieldMask")
     query_resource_consumption: Union[str, Any] = Field(default=None, alias="queryResourceConsumption")
 
-class AdGroupAdLabelAdgroupadlabel(BaseModel):
-    """Nested schema for AdGroupAdLabel.adGroupAdLabel"""
+class AdGroupAdLabelLabel(BaseModel):
+    """Nested schema for AdGroupAdLabel.label"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    ad_group_ad: Union[str, Any] = Field(default=None, alias="adGroupAd")
-    label: Union[str, Any] = Field(default=None)
+    id: Union[str, Any] = Field(default=None)
+    name: Union[str, Any] = Field(default=None)
     resource_name: Union[str, Any] = Field(default=None, alias="resourceName")
 
 class AdGroupAdLabelAdgroupadAd(BaseModel):
@@ -432,12 +432,12 @@ class AdGroupAdLabelAdgroupad(BaseModel):
 
     ad: Union[AdGroupAdLabelAdgroupadAd, Any] = Field(default=None)
 
-class AdGroupAdLabelLabel(BaseModel):
-    """Nested schema for AdGroupAdLabel.label"""
+class AdGroupAdLabelAdgroupadlabel(BaseModel):
+    """Nested schema for AdGroupAdLabel.adGroupAdLabel"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: Union[str, Any] = Field(default=None)
-    name: Union[str, Any] = Field(default=None)
+    ad_group_ad: Union[str, Any] = Field(default=None, alias="adGroupAd")
+    label: Union[str, Any] = Field(default=None)
     resource_name: Union[str, Any] = Field(default=None, alias="resourceName")
 
 class AdGroupAdLabel(BaseModel):
