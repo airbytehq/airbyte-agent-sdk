@@ -30,4 +30,4 @@ Or in Claude Code:
 /install airbytehq/airbyte-agent-sdk
 ```
 
-See [`skills/airbyte-agent-connectors/`](./skills/airbyte-agent-connectors/) for the skill source.
+See [`.claude/skills/`](./.claude/skills/) for the skill source.
