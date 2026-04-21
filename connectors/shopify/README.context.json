@@ -3415,7 +3415,88 @@
       "query_type_name": "AbandonedCheckoutsSearchQuery",
       "condition_prefix": "AbandonedCheckouts",
       "condition_type_name": "AbandonedCheckoutsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the abandoned checkout"
+        },
+        {
+          "name": "token",
+          "python_name": "token",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique token identifying the checkout"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Email address provided for the checkout"
+        },
+        {
+          "name": "phone",
+          "python_name": "phone",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Phone number provided for the checkout"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify-assigned display name for the checkout (e.g. `#C12345`)"
+        },
+        {
+          "name": "currency",
+          "python_name": "currency",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 4217 currency code for the checkout totals"
+        },
+        {
+          "name": "total_price",
+          "python_name": "total_price",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Total price of the checkout in the shop's currency"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the checkout was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the checkout was last updated"
+        },
+        {
+          "name": "completed_at",
+          "python_name": "completed_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the checkout was completed, if applicable"
+        }
+      ]
     },
     "collects": {
       "entity": "collects",
@@ -3429,7 +3510,56 @@
       "query_type_name": "CollectsSearchQuery",
       "condition_prefix": "Collects",
       "condition_type_name": "CollectsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the collect"
+        },
+        {
+          "name": "collection_id",
+          "python_name": "collection_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the collection the product belongs to"
+        },
+        {
+          "name": "product_id",
+          "python_name": "product_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the product in the collection"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Position of the product within the collection"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the collect was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the collect was last updated"
+        }
+      ]
     },
     "countries": {
       "entity": "countries",
@@ -3443,7 +3573,40 @@
       "query_type_name": "CountriesSearchQuery",
       "condition_prefix": "Countries",
       "condition_type_name": "CountriesCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the country tax row"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable country name"
+        },
+        {
+          "name": "code",
+          "python_name": "code",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 3166-1 alpha-2 country code"
+        },
+        {
+          "name": "tax_name",
+          "python_name": "tax_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Localized name of the tax applied in this country"
+        }
+      ]
     },
     "custom_collections": {
       "entity": "custom_collections",
@@ -3457,7 +3620,64 @@
       "query_type_name": "CustomCollectionsSearchQuery",
       "condition_prefix": "CustomCollections",
       "condition_type_name": "CustomCollectionsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the custom collection"
+        },
+        {
+          "name": "handle",
+          "python_name": "handle",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "URL-friendly handle for the custom collection"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display title of the custom collection"
+        },
+        {
+          "name": "sort_order",
+          "python_name": "sort_order",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "How products are sorted within the collection (e.g. `best-selling`)"
+        },
+        {
+          "name": "published_scope",
+          "python_name": "published_scope",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Publishing scope (`web` or `global`)"
+        },
+        {
+          "name": "published_at",
+          "python_name": "published_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the collection was published"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the collection was last updated"
+        }
+      ]
     },
     "customers": {
       "entity": "customers",
@@ -3471,7 +3691,96 @@
       "query_type_name": "CustomersSearchQuery",
       "condition_prefix": "Customers",
       "condition_type_name": "CustomersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the customer"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary email address of the customer"
+        },
+        {
+          "name": "phone",
+          "python_name": "phone",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary phone number of the customer"
+        },
+        {
+          "name": "first_name",
+          "python_name": "first_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "First name of the customer"
+        },
+        {
+          "name": "last_name",
+          "python_name": "last_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last name of the customer"
+        },
+        {
+          "name": "state",
+          "python_name": "state",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Account state (`disabled`, `invited`, `enabled`, `declined`)"
+        },
+        {
+          "name": "orders_count",
+          "python_name": "orders_count",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Number of orders placed by the customer"
+        },
+        {
+          "name": "total_spent",
+          "python_name": "total_spent",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Total lifetime amount spent by the customer"
+        },
+        {
+          "name": "currency",
+          "python_name": "currency",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 4217 currency code for the customer's total spend"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the customer record was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the customer record was last updated"
+        }
+      ]
     },
     "discount_codes": {
       "entity": "discount_codes",
@@ -3485,7 +3794,56 @@
       "query_type_name": "DiscountCodesSearchQuery",
       "condition_prefix": "DiscountCodes",
       "condition_type_name": "DiscountCodesCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the discount code"
+        },
+        {
+          "name": "price_rule_id",
+          "python_name": "price_rule_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the parent price rule"
+        },
+        {
+          "name": "code",
+          "python_name": "code",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Discount code string shoppers enter at checkout"
+        },
+        {
+          "name": "usage_count",
+          "python_name": "usage_count",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Number of times the code has been redeemed"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the code was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the code was last updated"
+        }
+      ]
     },
     "draft_orders": {
       "entity": "draft_orders",
@@ -3499,7 +3857,88 @@
       "query_type_name": "DraftOrdersSearchQuery",
       "condition_prefix": "DraftOrders",
       "condition_type_name": "DraftOrdersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the draft order"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify-assigned display name for the draft order (e.g. `#D12345`)"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Email address associated with the draft order"
+        },
+        {
+          "name": "status",
+          "python_name": "status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Status of the draft order (`open`, `invoice_sent`, `completed`)"
+        },
+        {
+          "name": "currency",
+          "python_name": "currency",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 4217 currency code for the draft order totals"
+        },
+        {
+          "name": "total_price",
+          "python_name": "total_price",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Total price of the draft order"
+        },
+        {
+          "name": "order_id",
+          "python_name": "order_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the completed order, if the draft has been completed"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the draft order was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the draft order was last updated"
+        },
+        {
+          "name": "completed_at",
+          "python_name": "completed_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the draft order was completed, if applicable"
+        }
+      ]
     },
     "fulfillment_orders": {
       "entity": "fulfillment_orders",
@@ -3513,7 +3952,72 @@
       "query_type_name": "FulfillmentOrdersSearchQuery",
       "condition_prefix": "FulfillmentOrders",
       "condition_type_name": "FulfillmentOrdersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the fulfillment order"
+        },
+        {
+          "name": "order_id",
+          "python_name": "order_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the parent order"
+        },
+        {
+          "name": "shop_id",
+          "python_name": "shop_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the shop that owns the fulfillment order"
+        },
+        {
+          "name": "assigned_location_id",
+          "python_name": "assigned_location_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the location assigned to fulfill the order"
+        },
+        {
+          "name": "status",
+          "python_name": "status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"
+        },
+        {
+          "name": "request_status",
+          "python_name": "request_status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the fulfillment order was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the fulfillment order was last updated"
+        }
+      ]
     },
     "fulfillments": {
       "entity": "fulfillments",
@@ -3527,7 +4031,80 @@
       "query_type_name": "FulfillmentsSearchQuery",
       "condition_prefix": "Fulfillments",
       "condition_type_name": "FulfillmentsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the fulfillment"
+        },
+        {
+          "name": "order_id",
+          "python_name": "order_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the parent order"
+        },
+        {
+          "name": "status",
+          "python_name": "status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"
+        },
+        {
+          "name": "shipment_status",
+          "python_name": "shipment_status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Carrier shipment status (e.g. `delivered`, `in_transit`)"
+        },
+        {
+          "name": "tracking_company",
+          "python_name": "tracking_company",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the shipping carrier"
+        },
+        {
+          "name": "tracking_number",
+          "python_name": "tracking_number",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary tracking number for the shipment"
+        },
+        {
+          "name": "location_id",
+          "python_name": "location_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the fulfilling location"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the fulfillment was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the fulfillment was last updated"
+        }
+      ]
     },
     "inventory_items": {
       "entity": "inventory_items",
@@ -3541,7 +4118,64 @@
       "query_type_name": "InventoryItemsSearchQuery",
       "condition_prefix": "InventoryItems",
       "condition_type_name": "InventoryItemsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the inventory item"
+        },
+        {
+          "name": "sku",
+          "python_name": "sku",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Stock keeping unit associated with the inventory item"
+        },
+        {
+          "name": "tracked",
+          "python_name": "tracked",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether Shopify is tracking inventory for this item"
+        },
+        {
+          "name": "requires_shipping",
+          "python_name": "requires_shipping",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the item requires shipping"
+        },
+        {
+          "name": "country_code_of_origin",
+          "python_name": "country_code_of_origin",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO country code of the item's country of origin"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the inventory item was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the inventory item was last updated"
+        }
+      ]
     },
     "inventory_levels": {
       "entity": "inventory_levels",
@@ -3555,7 +4189,40 @@
       "query_type_name": "InventoryLevelsSearchQuery",
       "condition_prefix": "InventoryLevels",
       "condition_type_name": "InventoryLevelsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "inventory_item_id",
+          "python_name": "inventory_item_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the inventory item"
+        },
+        {
+          "name": "location_id",
+          "python_name": "location_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the location holding the inventory"
+        },
+        {
+          "name": "available",
+          "python_name": "available",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Number of units available at the location"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the inventory level was last updated"
+        }
+      ]
     },
     "locations": {
       "entity": "locations",
@@ -3569,7 +4236,96 @@
       "query_type_name": "LocationsSearchQuery",
       "condition_prefix": "Locations",
       "condition_type_name": "LocationsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the location"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display name of the location"
+        },
+        {
+          "name": "address1",
+          "python_name": "address1",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary street address of the location"
+        },
+        {
+          "name": "city",
+          "python_name": "city",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "City of the location"
+        },
+        {
+          "name": "province",
+          "python_name": "province",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Province, state, or region of the location"
+        },
+        {
+          "name": "country",
+          "python_name": "country",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Country name of the location"
+        },
+        {
+          "name": "country_code",
+          "python_name": "country_code",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 3166-1 alpha-2 country code of the location"
+        },
+        {
+          "name": "phone",
+          "python_name": "phone",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Phone number for the location"
+        },
+        {
+          "name": "active",
+          "python_name": "active",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the location is currently active"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the location was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the location was last updated"
+        }
+      ]
     },
     "metafield_customers": {
       "entity": "metafield_customers",
@@ -3583,7 +4339,88 @@
       "query_type_name": "MetafieldCustomersSearchQuery",
       "condition_prefix": "MetafieldCustomers",
       "condition_type_name": "MetafieldCustomersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_draft_orders": {
       "entity": "metafield_draft_orders",
@@ -3597,7 +4434,88 @@
       "query_type_name": "MetafieldDraftOrdersSearchQuery",
       "condition_prefix": "MetafieldDraftOrders",
       "condition_type_name": "MetafieldDraftOrdersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_locations": {
       "entity": "metafield_locations",
@@ -3611,7 +4529,88 @@
       "query_type_name": "MetafieldLocationsSearchQuery",
       "condition_prefix": "MetafieldLocations",
       "condition_type_name": "MetafieldLocationsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_orders": {
       "entity": "metafield_orders",
@@ -3625,7 +4624,88 @@
       "query_type_name": "MetafieldOrdersSearchQuery",
       "condition_prefix": "MetafieldOrders",
       "condition_type_name": "MetafieldOrdersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_product_images": {
       "entity": "metafield_product_images",
@@ -3639,7 +4719,88 @@
       "query_type_name": "MetafieldProductImagesSearchQuery",
       "condition_prefix": "MetafieldProductImages",
       "condition_type_name": "MetafieldProductImagesCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_product_variants": {
       "entity": "metafield_product_variants",
@@ -3653,7 +4814,88 @@
       "query_type_name": "MetafieldProductVariantsSearchQuery",
       "condition_prefix": "MetafieldProductVariants",
       "condition_type_name": "MetafieldProductVariantsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_products": {
       "entity": "metafield_products",
@@ -3667,7 +4909,88 @@
       "query_type_name": "MetafieldProductsSearchQuery",
       "condition_prefix": "MetafieldProducts",
       "condition_type_name": "MetafieldProductsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_shops": {
       "entity": "metafield_shops",
@@ -3681,7 +5004,88 @@
       "query_type_name": "MetafieldShopsSearchQuery",
       "condition_prefix": "MetafieldShops",
       "condition_type_name": "MetafieldShopsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "metafield_smart_collections": {
       "entity": "metafield_smart_collections",
@@ -3695,7 +5099,88 @@
       "query_type_name": "MetafieldSmartCollectionsSearchQuery",
       "condition_prefix": "MetafieldSmartCollections",
       "condition_type_name": "MetafieldSmartCollectionsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the metafield"
+        },
+        {
+          "name": "namespace",
+          "python_name": "namespace",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Namespace group for the metafield"
+        },
+        {
+          "name": "key",
+          "python_name": "key",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Key of the metafield within its namespace"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Serialized value stored in the metafield"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Human-readable description of the metafield"
+        },
+        {
+          "name": "owner_id",
+          "python_name": "owner_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the resource that owns this metafield"
+        },
+        {
+          "name": "owner_resource",
+          "python_name": "owner_resource",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Resource type that owns this metafield (e.g. `product`, `customer`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the metafield was last updated"
+        }
+      ]
     },
     "order_refunds": {
       "entity": "order_refunds",
@@ -3709,7 +5194,56 @@
       "query_type_name": "OrderRefundsSearchQuery",
       "condition_prefix": "OrderRefunds",
       "condition_type_name": "OrderRefundsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the refund"
+        },
+        {
+          "name": "order_id",
+          "python_name": "order_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the refunded order"
+        },
+        {
+          "name": "user_id",
+          "python_name": "user_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the staff user who processed the refund"
+        },
+        {
+          "name": "note",
+          "python_name": "note",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Merchant-provided note explaining the refund"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the refund was created"
+        },
+        {
+          "name": "processed_at",
+          "python_name": "processed_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the refund was processed"
+        }
+      ]
     },
     "price_rules": {
       "entity": "price_rules",
@@ -3723,7 +5257,96 @@
       "query_type_name": "PriceRulesSearchQuery",
       "condition_prefix": "PriceRules",
       "condition_type_name": "PriceRulesCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the price rule"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Administrative title of the price rule"
+        },
+        {
+          "name": "value_type",
+          "python_name": "value_type",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "How the discount value is interpreted (`fixed_amount` or `percentage`)"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Discount value applied by the rule"
+        },
+        {
+          "name": "target_type",
+          "python_name": "target_type",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Type of target the rule applies to (`line_item` or `shipping_line`)"
+        },
+        {
+          "name": "target_selection",
+          "python_name": "target_selection",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Which target items the rule applies to (`all` or `entitled`)"
+        },
+        {
+          "name": "allocation_method",
+          "python_name": "allocation_method",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "How the discount is allocated (`each` or `across`)"
+        },
+        {
+          "name": "starts_at",
+          "python_name": "starts_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the rule starts being active"
+        },
+        {
+          "name": "ends_at",
+          "python_name": "ends_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the rule stops being active, if applicable"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the rule was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the rule was last updated"
+        }
+      ]
     },
     "product_images": {
       "entity": "product_images",
@@ -3737,7 +5360,80 @@
       "query_type_name": "ProductImagesSearchQuery",
       "condition_prefix": "ProductImages",
       "condition_type_name": "ProductImagesCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the product image"
+        },
+        {
+          "name": "product_id",
+          "python_name": "product_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the product the image belongs to"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Display position of the image within the product"
+        },
+        {
+          "name": "alt",
+          "python_name": "alt",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Alt text for the image"
+        },
+        {
+          "name": "width",
+          "python_name": "width",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Image width in pixels"
+        },
+        {
+          "name": "height",
+          "python_name": "height",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Image height in pixels"
+        },
+        {
+          "name": "src",
+          "python_name": "src",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Public URL of the image"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the image was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the image was last updated"
+        }
+      ]
     },
     "product_variants": {
       "entity": "product_variants",
@@ -3751,7 +5447,88 @@
       "query_type_name": "ProductVariantsSearchQuery",
       "condition_prefix": "ProductVariants",
       "condition_type_name": "ProductVariantsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the product variant"
+        },
+        {
+          "name": "product_id",
+          "python_name": "product_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the parent product"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display title of the variant"
+        },
+        {
+          "name": "sku",
+          "python_name": "sku",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Stock keeping unit for the variant"
+        },
+        {
+          "name": "price",
+          "python_name": "price",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Price of the variant in the shop's currency"
+        },
+        {
+          "name": "compare_at_price",
+          "python_name": "compare_at_price",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Original (compare-at) price of the variant, if set"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Display position of the variant within the product"
+        },
+        {
+          "name": "inventory_policy",
+          "python_name": "inventory_policy",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Behaviour when out of stock (`deny` or `continue`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the variant was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the variant was last updated"
+        }
+      ]
     },
     "shop": {
       "entity": "shop",
@@ -3765,7 +5542,96 @@
       "query_type_name": "ShopSearchQuery",
       "condition_prefix": "Shop",
       "condition_type_name": "ShopCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the shop"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display name of the shop"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary contact email for the shop"
+        },
+        {
+          "name": "domain",
+          "python_name": "domain",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Custom domain configured for the shop, if any"
+        },
+        {
+          "name": "myshopify_domain",
+          "python_name": "myshopify_domain",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Canonical `*.myshopify.com` domain for the shop"
+        },
+        {
+          "name": "country_code",
+          "python_name": "country_code",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 3166-1 alpha-2 country code of the shop"
+        },
+        {
+          "name": "currency",
+          "python_name": "currency",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 4217 currency code used by the shop"
+        },
+        {
+          "name": "timezone",
+          "python_name": "timezone",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"
+        },
+        {
+          "name": "plan_name",
+          "python_name": "plan_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Shopify plan identifier (e.g. `shopify_plus`, `basic`)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the shop was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the shop was last updated"
+        }
+      ]
     },
     "smart_collections": {
       "entity": "smart_collections",
@@ -3779,7 +5645,64 @@
       "query_type_name": "SmartCollectionsSearchQuery",
       "condition_prefix": "SmartCollections",
       "condition_type_name": "SmartCollectionsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the smart collection"
+        },
+        {
+          "name": "handle",
+          "python_name": "handle",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "URL-friendly handle for the smart collection"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display title of the smart collection"
+        },
+        {
+          "name": "sort_order",
+          "python_name": "sort_order",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "How products are sorted within the collection"
+        },
+        {
+          "name": "published_scope",
+          "python_name": "published_scope",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Publishing scope (`web` or `global`)"
+        },
+        {
+          "name": "published_at",
+          "python_name": "published_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the collection was published"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the collection was last updated"
+        }
+      ]
     },
     "tender_transactions": {
       "entity": "tender_transactions",
@@ -3793,7 +5716,72 @@
       "query_type_name": "TenderTransactionsSearchQuery",
       "condition_prefix": "TenderTransactions",
       "condition_type_name": "TenderTransactionsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the tender transaction"
+        },
+        {
+          "name": "order_id",
+          "python_name": "order_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the order the transaction belongs to"
+        },
+        {
+          "name": "user_id",
+          "python_name": "user_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Identifier of the staff user who processed the transaction"
+        },
+        {
+          "name": "amount",
+          "python_name": "amount",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Amount of the transaction in the shop's currency"
+        },
+        {
+          "name": "currency",
+          "python_name": "currency",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 4217 currency code for the transaction amount"
+        },
+        {
+          "name": "payment_method",
+          "python_name": "payment_method",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Payment method used (e.g. `credit_card`, `paypal`)"
+        },
+        {
+          "name": "test",
+          "python_name": "test",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the transaction was a test transaction"
+        },
+        {
+          "name": "processed_at",
+          "python_name": "processed_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ISO 8601 timestamp when the transaction was processed"
+        }
+      ]
     }
   }
 }

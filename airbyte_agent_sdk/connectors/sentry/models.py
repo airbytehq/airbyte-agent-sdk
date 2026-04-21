@@ -93,6 +93,14 @@ class Project(BaseModel):
     avatar: Union[ProjectAvatar | None, Any] = Field(default=None)
     organization: Union[ProjectOrganization | None, Any] = Field(default=None)
 
+class ProjectDetailTeamsItem(BaseModel):
+    """Nested schema for ProjectDetail.teams_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    slug: Union[str | None, Any] = Field(default=None)
+
 class ProjectDetailOrganization(BaseModel):
     """Organization this project belongs to."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -111,14 +119,6 @@ class ProjectDetailAvatar(BaseModel):
 
 class ProjectDetailTeam(BaseModel):
     """Primary team for this project."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    slug: Union[str | None, Any] = Field(default=None)
-
-class ProjectDetailTeamsItem(BaseModel):
-    """Nested schema for ProjectDetail.teams_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
@@ -209,6 +209,14 @@ class ProjectDetail(BaseModel):
     highlight_preset: Union[dict[str, Any] | None, Any] = Field(default=None, alias="highlightPreset")
     debug_files_role: Union[str | None, Any] = Field(default=None, alias="debugFilesRole")
 
+class IssueProject(BaseModel):
+    """Project this issue belongs to."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    slug: Union[str | None, Any] = Field(default=None)
+
 class IssueMetadata(BaseModel):
     """Issue metadata."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -217,14 +225,6 @@ class IssueMetadata(BaseModel):
     type_: Union[str | None, Any] = Field(default=None, alias="type")
     value: Union[str | None, Any] = Field(default=None)
     filename: Union[str | None, Any] = Field(default=None)
-
-class IssueProject(BaseModel):
-    """Project this issue belongs to."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    slug: Union[str | None, Any] = Field(default=None)
 
 class Issue(BaseModel):
     """A Sentry issue (group of similar events)."""
@@ -262,11 +262,12 @@ class Issue(BaseModel):
     annotations: Union[list[str | None] | None, Any] = Field(default=None)
     subscription_details: Union[dict[str, Any] | None, Any] = Field(default=None, alias="subscriptionDetails")
 
-class EventMetadata(BaseModel):
-    """Event metadata."""
+class EventGroupingconfig(BaseModel):
+    """Grouping configuration."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    title: Union[str | None, Any] = Field(default=None)
+    id: Union[str | None, Any] = Field(default=None)
+    enhancements: Union[str | None, Any] = Field(default=None)
 
 class EventUser(BaseModel):
     """User associated with the event."""
@@ -285,12 +286,11 @@ class EventTagsItem(BaseModel):
     key: Union[str | None, Any] = Field(default=None)
     value: Union[str | None, Any] = Field(default=None)
 
-class EventGroupingconfig(BaseModel):
-    """Grouping configuration."""
+class EventMetadata(BaseModel):
+    """Event metadata."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: Union[str | None, Any] = Field(default=None)
-    enhancements: Union[str | None, Any] = Field(default=None)
+    title: Union[str | None, Any] = Field(default=None)
 
 class Event(BaseModel):
     """A Sentry event (individual error occurrence)."""

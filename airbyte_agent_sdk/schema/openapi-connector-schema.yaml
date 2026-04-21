@@ -287,6 +287,15 @@ $defs:
           $ref: '#/$defs/CacheFieldConfig'
         title: Fields
         type: array
+      x-airbyte-skip-searchable-fields:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        description: Reason why this entity does not define searchable fields. Entities
+          in x-airbyte-context-store must either declare at least one field or set
+          x-airbyte-skip-searchable-fields with a justification.
+        title: X-Airbyte-Skip-Searchable-Fields
     required:
     - entity
     title: CacheEntityConfig

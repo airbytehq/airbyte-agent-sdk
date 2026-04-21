@@ -847,6 +847,58 @@ def _meta_extractor_has_pagination_field(meta: Dict[str, str] | None) -> bool:
     return False
 
 
+def _check_cache_entity_fields(raw_spec: Dict[str, Any]) -> Tuple[List[str], List[str]]:
+    """Validate that each x-airbyte-context-store entity declares at least one searchable field.
+
+    Every entity under `info.x-airbyte-context-store.entities` must either:
+    1. declare a non-empty `fields` list, so agents have a concrete signal of what they
+       can filter on; or
+    2. explicitly opt out via `x-airbyte-skip-searchable-fields: "<justification>"` with a
+       non-empty string explaining why the entity has no per-field search surface.
+
+    Returns a tuple of (errors, warnings). Errors block readiness; warnings surface
+    opt-out justifications so they remain visible in the readiness report.
+    """
+    errors: List[str] = []
+    warnings: List[str] = []
+
+    cache_config = raw_spec.get("info", {}).get("x-airbyte-context-store")
+    if not isinstance(cache_config, dict):
+        return errors, warnings
+
+    entities = cache_config.get("entities") or []
+    if not isinstance(entities, list):
+        return errors, warnings
+
+    for entity in entities:
+        if not isinstance(entity, dict):
+            continue
+        entity_name = entity.get("entity") or "<unnamed>"
+
+        skip = entity.get("x-airbyte-skip-searchable-fields")
+        if skip is not None:
+            justification = skip.strip() if isinstance(skip, str) else ""
+            if not justification:
+                errors.append(
+                    f"Cache entity '{entity_name}': x-airbyte-skip-searchable-fields is set but empty. "
+                    "Provide a non-empty justification string, or remove the extension and declare "
+                    "at least one entry under fields."
+                )
+                continue
+            warnings.append(f"Cache entity '{entity_name}': searchable-fields opt-out via " f"x-airbyte-skip-searchable-fields: {justification}")
+            continue
+
+        fields = entity.get("fields")
+        if not isinstance(fields, list) or len(fields) == 0:
+            errors.append(
+                f"Cache entity '{entity_name}' has no searchable fields declared. "
+                "Add at least one entry under fields, or set x-airbyte-skip-searchable-fields "
+                "with a non-empty justification if the entity genuinely has no per-field search surface."
+            )
+
+    return errors, warnings
+
+
 def _check_list_pagination_coverage(config: ConnectorModel) -> Tuple[List[str], List[str]]:
     """Validate that every list operation declares pagination metadata.
 
@@ -1234,14 +1286,21 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
         total_warnings += 1
 
     # Check x-airbyte-context-store presence (must have context-store or explicit skip reason)
-    cache_config = raw_spec.get("info", {}).get("x-airbyte-context-store")
-    skip_context_store = raw_spec.get("info", {}).get("x-airbyte-skip-context-store")
+    info_section = raw_spec.get("info", {})
+    cache_config = info_section.get("x-airbyte-context-store")
+    skip_context_store = info_section.get("x-airbyte-skip-context-store")
     cache_presence_errors: list[str] = []
-    if not cache_config and not skip_context_store:
+    if cache_config is None and not skip_context_store:
         cache_presence_errors.append(
             "Connector is missing x-airbyte-context-store. "
             "Either add x-airbyte-context-store with entity definitions to enable api_search, "
             "or add x-airbyte-skip-context-store with a justification to opt out."
+        )
+    elif cache_config is not None and not cache_config.get("entities"):
+        cache_presence_errors.append(
+            "x-airbyte-context-store.entities is empty. "
+            "Either declare at least one entity with searchable fields, "
+            "or remove x-airbyte-context-store and add x-airbyte-skip-context-store with a justification to opt out."
         )
     total_errors += len(cache_presence_errors)
 
@@ -1273,6 +1332,12 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
     total_errors += len(list_pagination_errors)
     total_warnings += len(list_pagination_warnings)
 
+    # Check that every cache entity declares at least one searchable field
+    # or opts out via x-airbyte-skip-searchable-fields with a justification.
+    cache_field_errors, cache_field_warnings = _check_cache_entity_fields(raw_spec)
+    total_errors += len(cache_field_errors)
+    total_warnings += len(cache_field_warnings)
+
     # Update success criteria to include replication, cache, auth scheme, and coverage validation
     success = (
         operations_missing_cassettes == 0
@@ -1281,6 +1346,7 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
         and len(replication_errors) == 0
         and len(cache_presence_errors) == 0
         and len(cache_errors) == 0
+        and len(cache_field_errors) == 0
         and auth_valid
         and len(relationship_coverage_errors) == 0
         and len(list_pagination_errors) == 0
@@ -1309,10 +1375,12 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
     readiness_errors = list(relationship_coverage_errors)  # copy to avoid mutating original
     readiness_errors.extend(cache_presence_errors)
     readiness_errors.extend(list_pagination_errors)
+    readiness_errors.extend(cache_field_errors)
 
     # Add coverage warnings to readiness_warnings (errors already counted above)
     readiness_warnings.extend(relationship_coverage_warnings)
     readiness_warnings.extend(list_pagination_warnings)
+    readiness_warnings.extend(cache_field_warnings)
 
     # Check entity relationship target_entity references
     relationship_warnings = _check_entity_relationships(config)

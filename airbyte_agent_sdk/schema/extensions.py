@@ -119,6 +119,13 @@ class CacheEntityConfig(BaseModel):
     entity: str
     x_airbyte_name: str | None = Field(default=None, alias="x-airbyte-name")
     fields: list[CacheFieldConfig] = Field(default_factory=list)
+    x_airbyte_skip_searchable_fields: str | None = Field(
+        default=None,
+        alias="x-airbyte-skip-searchable-fields",
+        description="Reason why this entity does not define searchable fields. "
+        "Entities in x-airbyte-context-store must either declare at least one field "
+        "or set x-airbyte-skip-searchable-fields with a justification.",
+    )
 
     @property
     def cache_name(self) -> str:
@@ -318,9 +325,7 @@ class EntityRelationshipConfig(BaseModel):
     cardinality: Literal["one_to_one", "one_to_many", "many_to_one", "many_to_many"] | None = Field(
         None, description="Optional relationship cardinality"
     )
-    description: str | None = Field(
-        None, description="Human-readable description of the relationship"
-    )
+    description: str | None = Field(None, description="Human-readable description of the relationship")
 
     def format_line(self) -> str:
         """Format as a human-readable line for tool descriptions."""
@@ -353,6 +358,4 @@ class ScopingParamConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     param: str = Field(description="Path parameter name to resolve from config")
-    config_key: str | None = Field(
-        None, description="Config key to read. Defaults to param name if omitted."
-    )
+    config_key: str | None = Field(None, description="Config key to read. Defaults to param name if omitted.")

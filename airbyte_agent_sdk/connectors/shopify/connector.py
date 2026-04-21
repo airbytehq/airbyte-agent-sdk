@@ -298,7 +298,7 @@ class ShopifyConnector:
 
     connector_name = "shopify"
     connector_version = "0.1.12"
-    sdk_version = "0.1.36"
+    sdk_version = "0.1.37"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1393,6 +1393,17 @@ class CustomersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (CustomersSearchFilter):
+        - id: Unique identifier for the customer
+        - email: Primary email address of the customer
+        - phone: Primary phone number of the customer
+        - first_name: First name of the customer
+        - last_name: Last name of the customer
+        - state: Account state (`disabled`, `invited`, `enabled`, `declined`)
+        - orders_count: Number of orders placed by the customer
+        - total_spent: Total lifetime amount spent by the customer
+        - currency: ISO 4217 currency code for the customer's total spend
+        - created_at: ISO 8601 timestamp when the customer record was created
+        - updated_at: ISO 8601 timestamp when the customer record was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1693,6 +1704,16 @@ class ProductVariantsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (ProductVariantsSearchFilter):
+        - id: Unique identifier for the product variant
+        - product_id: Identifier of the parent product
+        - title: Display title of the variant
+        - sku: Stock keeping unit for the variant
+        - price: Price of the variant in the shop's currency
+        - compare_at_price: Original (compare-at) price of the variant, if set
+        - position: Display position of the variant within the product
+        - inventory_policy: Behaviour when out of stock (`deny` or `continue`)
+        - created_at: ISO 8601 timestamp when the variant was created
+        - updated_at: ISO 8601 timestamp when the variant was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1816,6 +1837,15 @@ class ProductImagesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (ProductImagesSearchFilter):
+        - id: Unique identifier for the product image
+        - product_id: Identifier of the product the image belongs to
+        - position: Display position of the image within the product
+        - alt: Alt text for the image
+        - width: Image width in pixels
+        - height: Image height in pixels
+        - src: Public URL of the image
+        - created_at: ISO 8601 timestamp when the image was created
+        - updated_at: ISO 8601 timestamp when the image was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1926,6 +1956,16 @@ class AbandonedCheckoutsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (AbandonedCheckoutsSearchFilter):
+        - id: Unique identifier for the abandoned checkout
+        - token: Unique token identifying the checkout
+        - email: Email address provided for the checkout
+        - phone: Phone number provided for the checkout
+        - name: Shopify-assigned display name for the checkout (e.g. `#C12345`)
+        - currency: ISO 4217 currency code for the checkout totals
+        - total_price: Total price of the checkout in the shop's currency
+        - created_at: ISO 8601 timestamp when the checkout was created
+        - updated_at: ISO 8601 timestamp when the checkout was last updated
+        - completed_at: ISO 8601 timestamp when the checkout was completed, if applicable
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2037,6 +2077,17 @@ class LocationsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (LocationsSearchFilter):
+        - id: Unique identifier for the location
+        - name: Display name of the location
+        - address1: Primary street address of the location
+        - city: City of the location
+        - province: Province, state, or region of the location
+        - country: Country name of the location
+        - country_code: ISO 3166-1 alpha-2 country code of the location
+        - phone: Phone number for the location
+        - active: Whether the location is currently active
+        - created_at: ISO 8601 timestamp when the location was created
+        - updated_at: ISO 8601 timestamp when the location was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2132,6 +2183,10 @@ class InventoryLevelsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (InventoryLevelsSearchFilter):
+        - inventory_item_id: Identifier of the inventory item
+        - location_id: Identifier of the location holding the inventory
+        - available: Number of units available at the location
+        - updated_at: ISO 8601 timestamp when the inventory level was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2252,6 +2307,13 @@ class InventoryItemsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (InventoryItemsSearchFilter):
+        - id: Unique identifier for the inventory item
+        - sku: Stock keeping unit associated with the inventory item
+        - tracked: Whether Shopify is tracking inventory for this item
+        - requires_shipping: Whether the item requires shipping
+        - country_code_of_origin: ISO country code of the item's country of origin
+        - created_at: ISO 8601 timestamp when the inventory item was created
+        - updated_at: ISO 8601 timestamp when the inventory item was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2334,6 +2396,17 @@ class ShopQuery:
         Only available in hosted execution mode.
 
         Available filter fields (ShopSearchFilter):
+        - id: Unique identifier for the shop
+        - name: Display name of the shop
+        - email: Primary contact email for the shop
+        - domain: Custom domain configured for the shop, if any
+        - myshopify_domain: Canonical `*.myshopify.com` domain for the shop
+        - country_code: ISO 3166-1 alpha-2 country code of the shop
+        - currency: ISO 4217 currency code used by the shop
+        - timezone: Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)
+        - plan_name: Shopify plan identifier (e.g. `shopify_plus`, `basic`)
+        - created_at: ISO 8601 timestamp when the shop was created
+        - updated_at: ISO 8601 timestamp when the shop was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2466,6 +2539,17 @@ class PriceRulesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (PriceRulesSearchFilter):
+        - id: Unique identifier for the price rule
+        - title: Administrative title of the price rule
+        - value_type: How the discount value is interpreted (`fixed_amount` or `percentage`)
+        - value: Discount value applied by the rule
+        - target_type: Type of target the rule applies to (`line_item` or `shipping_line`)
+        - target_selection: Which target items the rule applies to (`all` or `entitled`)
+        - allocation_method: How the discount is allocated (`each` or `across`)
+        - starts_at: ISO 8601 timestamp when the rule starts being active
+        - ends_at: ISO 8601 timestamp when the rule stops being active, if applicable
+        - created_at: ISO 8601 timestamp when the rule was created
+        - updated_at: ISO 8601 timestamp when the rule was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2589,6 +2673,12 @@ class DiscountCodesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (DiscountCodesSearchFilter):
+        - id: Unique identifier for the discount code
+        - price_rule_id: Identifier of the parent price rule
+        - code: Discount code string shoppers enter at checkout
+        - usage_count: Number of times the code has been redeemed
+        - created_at: ISO 8601 timestamp when the code was created
+        - updated_at: ISO 8601 timestamp when the code was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2721,6 +2811,13 @@ class CustomCollectionsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (CustomCollectionsSearchFilter):
+        - id: Unique identifier for the custom collection
+        - handle: URL-friendly handle for the custom collection
+        - title: Display title of the custom collection
+        - sort_order: How products are sorted within the collection (e.g. `best-selling`)
+        - published_scope: Publishing scope (`web` or `global`)
+        - published_at: ISO 8601 timestamp when the collection was published
+        - updated_at: ISO 8601 timestamp when the collection was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2853,6 +2950,13 @@ class SmartCollectionsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (SmartCollectionsSearchFilter):
+        - id: Unique identifier for the smart collection
+        - handle: URL-friendly handle for the smart collection
+        - title: Display title of the smart collection
+        - sort_order: How products are sorted within the collection
+        - published_scope: Publishing scope (`web` or `global`)
+        - published_at: ISO 8601 timestamp when the collection was published
+        - updated_at: ISO 8601 timestamp when the collection was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2979,6 +3083,12 @@ class CollectsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (CollectsSearchFilter):
+        - id: Unique identifier for the collect
+        - collection_id: Identifier of the collection the product belongs to
+        - product_id: Identifier of the product in the collection
+        - position: Position of the product within the collection
+        - created_at: ISO 8601 timestamp when the collect was created
+        - updated_at: ISO 8601 timestamp when the collect was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3108,6 +3218,16 @@ class DraftOrdersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (DraftOrdersSearchFilter):
+        - id: Unique identifier for the draft order
+        - name: Shopify-assigned display name for the draft order (e.g. `#D12345`)
+        - email: Email address associated with the draft order
+        - status: Status of the draft order (`open`, `invoice_sent`, `completed`)
+        - currency: ISO 4217 currency code for the draft order totals
+        - total_price: Total price of the draft order
+        - order_id: Identifier of the completed order, if the draft has been completed
+        - created_at: ISO 8601 timestamp when the draft order was created
+        - updated_at: ISO 8601 timestamp when the draft order was last updated
+        - completed_at: ISO 8601 timestamp when the draft order was completed, if applicable
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3246,6 +3366,15 @@ class FulfillmentsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (FulfillmentsSearchFilter):
+        - id: Unique identifier for the fulfillment
+        - order_id: Identifier of the parent order
+        - status: Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)
+        - shipment_status: Carrier shipment status (e.g. `delivered`, `in_transit`)
+        - tracking_company: Name of the shipping carrier
+        - tracking_number: Primary tracking number for the shipment
+        - location_id: Identifier of the fulfilling location
+        - created_at: ISO 8601 timestamp when the fulfillment was created
+        - updated_at: ISO 8601 timestamp when the fulfillment was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3369,6 +3498,12 @@ class OrderRefundsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (OrderRefundsSearchFilter):
+        - id: Unique identifier for the refund
+        - order_id: Identifier of the refunded order
+        - user_id: Identifier of the staff user who processed the refund
+        - note: Merchant-provided note explaining the refund
+        - created_at: ISO 8601 timestamp when the refund was created
+        - processed_at: ISO 8601 timestamp when the refund was processed
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3542,6 +3677,14 @@ class TenderTransactionsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (TenderTransactionsSearchFilter):
+        - id: Unique identifier for the tender transaction
+        - order_id: Identifier of the order the transaction belongs to
+        - user_id: Identifier of the staff user who processed the transaction
+        - amount: Amount of the transaction in the shop's currency
+        - currency: ISO 4217 currency code for the transaction amount
+        - payment_method: Payment method used (e.g. `credit_card`, `paypal`)
+        - test: Whether the transaction was a test transaction
+        - processed_at: ISO 8601 timestamp when the transaction was processed
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3659,6 +3802,10 @@ class CountriesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (CountriesSearchFilter):
+        - id: Unique identifier for the country tax row
+        - name: Human-readable country name
+        - code: ISO 3166-1 alpha-2 country code
+        - tax_name: Localized name of the tax applied in this country
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3788,6 +3935,16 @@ class MetafieldShopsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldShopsSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3892,6 +4049,16 @@ class MetafieldCustomersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldCustomersSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3996,6 +4163,16 @@ class MetafieldProductsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldProductsSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4100,6 +4277,16 @@ class MetafieldOrdersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldOrdersSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4204,6 +4391,16 @@ class MetafieldDraftOrdersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldDraftOrdersSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4308,6 +4505,16 @@ class MetafieldLocationsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldLocationsSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4412,6 +4619,16 @@ class MetafieldProductVariantsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldProductVariantsSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4516,6 +4733,16 @@ class MetafieldSmartCollectionsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldSmartCollectionsSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4623,6 +4850,16 @@ class MetafieldProductImagesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (MetafieldProductImagesSearchFilter):
+        - id: Unique identifier for the metafield
+        - namespace: Namespace group for the metafield
+        - key: Key of the metafield within its namespace
+        - value: Serialized value stored in the metafield
+        - type_: Shopify metafield type (e.g. `single_line_text_field`, `json`)
+        - description: Human-readable description of the metafield
+        - owner_id: Identifier of the resource that owns this metafield
+        - owner_resource: Resource type that owns this metafield (e.g. `product`, `customer`)
+        - created_at: ISO 8601 timestamp when the metafield was created
+        - updated_at: ISO 8601 timestamp when the metafield was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -4809,6 +5046,14 @@ class FulfillmentOrdersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (FulfillmentOrdersSearchFilter):
+        - id: Unique identifier for the fulfillment order
+        - order_id: Identifier of the parent order
+        - shop_id: Identifier of the shop that owns the fulfillment order
+        - assigned_location_id: Identifier of the location assigned to fulfill the order
+        - status: Fulfillment order status (e.g. `open`, `in_progress`, `closed`)
+        - request_status: Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)
+        - created_at: ISO 8601 timestamp when the fulfillment order was created
+        - updated_at: ISO 8601 timestamp when the fulfillment order was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,

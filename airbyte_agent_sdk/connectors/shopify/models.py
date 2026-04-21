@@ -327,6 +327,22 @@ class OrderList(BaseModel):
 
     orders: Union[list[Order], Any] = Field(default=None)
 
+class ProductImage(BaseModel):
+    """A product image"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int, Any] = Field(default=None)
+    product_id: Union[int | None, Any] = Field(default=None)
+    position: Union[int | None, Any] = Field(default=None)
+    created_at: Union[str | None, Any] = Field(default=None)
+    updated_at: Union[str | None, Any] = Field(default=None)
+    alt: Union[str | None, Any] = Field(default=None)
+    width: Union[int | None, Any] = Field(default=None)
+    height: Union[int | None, Any] = Field(default=None)
+    src: Union[str | None, Any] = Field(default=None)
+    variant_ids: Union[list[int] | None, Any] = Field(default=None)
+    admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
+
 class ProductVariant(BaseModel):
     """A product variant"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -356,22 +372,6 @@ class ProductVariant(BaseModel):
     inventory_quantity: Union[int | None, Any] = Field(default=None)
     old_inventory_quantity: Union[int | None, Any] = Field(default=None)
     requires_shipping: Union[bool | None, Any] = Field(default=None)
-    admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
-
-class ProductImage(BaseModel):
-    """A product image"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int, Any] = Field(default=None)
-    product_id: Union[int | None, Any] = Field(default=None)
-    position: Union[int | None, Any] = Field(default=None)
-    created_at: Union[str | None, Any] = Field(default=None)
-    updated_at: Union[str | None, Any] = Field(default=None)
-    alt: Union[str | None, Any] = Field(default=None)
-    width: Union[int | None, Any] = Field(default=None)
-    height: Union[int | None, Any] = Field(default=None)
-    src: Union[str | None, Any] = Field(default=None)
-    variant_ids: Union[list[int] | None, Any] = Field(default=None)
     admin_graphql_api_id: Union[str | None, Any] = Field(default=None)
 
 class Product(BaseModel):
@@ -1117,168 +1117,658 @@ class AbandonedCheckoutsSearchData(BaseModel):
     """Search result data for abandoned_checkouts entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the abandoned checkout"""
+    token: str | None = None
+    """Unique token identifying the checkout"""
+    email: str | None = None
+    """Email address provided for the checkout"""
+    phone: str | None = None
+    """Phone number provided for the checkout"""
+    name: str | None = None
+    """Shopify-assigned display name for the checkout (e.g. `#C12345`)"""
+    currency: str | None = None
+    """ISO 4217 currency code for the checkout totals"""
+    total_price: str | None = None
+    """Total price of the checkout in the shop's currency"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the checkout was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the checkout was last updated"""
+    completed_at: str | None = None
+    """ISO 8601 timestamp when the checkout was completed, if applicable"""
 
 
 class CollectsSearchData(BaseModel):
     """Search result data for collects entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the collect"""
+    collection_id: int | None = None
+    """Identifier of the collection the product belongs to"""
+    product_id: int | None = None
+    """Identifier of the product in the collection"""
+    position: int | None = None
+    """Position of the product within the collection"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the collect was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the collect was last updated"""
 
 
 class CountriesSearchData(BaseModel):
     """Search result data for countries entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the country tax row"""
+    name: str | None = None
+    """Human-readable country name"""
+    code: str | None = None
+    """ISO 3166-1 alpha-2 country code"""
+    tax_name: str | None = None
+    """Localized name of the tax applied in this country"""
 
 
 class CustomCollectionsSearchData(BaseModel):
     """Search result data for custom_collections entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the custom collection"""
+    handle: str | None = None
+    """URL-friendly handle for the custom collection"""
+    title: str | None = None
+    """Display title of the custom collection"""
+    sort_order: str | None = None
+    """How products are sorted within the collection (e.g. `best-selling`)"""
+    published_scope: str | None = None
+    """Publishing scope (`web` or `global`)"""
+    published_at: str | None = None
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class CustomersSearchData(BaseModel):
     """Search result data for customers entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the customer"""
+    email: str | None = None
+    """Primary email address of the customer"""
+    phone: str | None = None
+    """Primary phone number of the customer"""
+    first_name: str | None = None
+    """First name of the customer"""
+    last_name: str | None = None
+    """Last name of the customer"""
+    state: str | None = None
+    """Account state (`disabled`, `invited`, `enabled`, `declined`)"""
+    orders_count: int | None = None
+    """Number of orders placed by the customer"""
+    total_spent: str | None = None
+    """Total lifetime amount spent by the customer"""
+    currency: str | None = None
+    """ISO 4217 currency code for the customer's total spend"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the customer record was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the customer record was last updated"""
 
 
 class DiscountCodesSearchData(BaseModel):
     """Search result data for discount_codes entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the discount code"""
+    price_rule_id: int | None = None
+    """Identifier of the parent price rule"""
+    code: str | None = None
+    """Discount code string shoppers enter at checkout"""
+    usage_count: int | None = None
+    """Number of times the code has been redeemed"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the code was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the code was last updated"""
 
 
 class DraftOrdersSearchData(BaseModel):
     """Search result data for draft_orders entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the draft order"""
+    name: str | None = None
+    """Shopify-assigned display name for the draft order (e.g. `#D12345`)"""
+    email: str | None = None
+    """Email address associated with the draft order"""
+    status: str | None = None
+    """Status of the draft order (`open`, `invoice_sent`, `completed`)"""
+    currency: str | None = None
+    """ISO 4217 currency code for the draft order totals"""
+    total_price: str | None = None
+    """Total price of the draft order"""
+    order_id: int | None = None
+    """Identifier of the completed order, if the draft has been completed"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the draft order was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the draft order was last updated"""
+    completed_at: str | None = None
+    """ISO 8601 timestamp when the draft order was completed, if applicable"""
 
 
 class FulfillmentOrdersSearchData(BaseModel):
     """Search result data for fulfillment_orders entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the fulfillment order"""
+    order_id: int | None = None
+    """Identifier of the parent order"""
+    shop_id: int | None = None
+    """Identifier of the shop that owns the fulfillment order"""
+    assigned_location_id: int | None = None
+    """Identifier of the location assigned to fulfill the order"""
+    status: str | None = None
+    """Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"""
+    request_status: str | None = None
+    """Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the fulfillment order was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the fulfillment order was last updated"""
 
 
 class FulfillmentsSearchData(BaseModel):
     """Search result data for fulfillments entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the fulfillment"""
+    order_id: int | None = None
+    """Identifier of the parent order"""
+    status: str | None = None
+    """Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"""
+    shipment_status: str | None = None
+    """Carrier shipment status (e.g. `delivered`, `in_transit`)"""
+    tracking_company: str | None = None
+    """Name of the shipping carrier"""
+    tracking_number: str | None = None
+    """Primary tracking number for the shipment"""
+    location_id: int | None = None
+    """Identifier of the fulfilling location"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the fulfillment was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the fulfillment was last updated"""
 
 
 class InventoryItemsSearchData(BaseModel):
     """Search result data for inventory_items entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the inventory item"""
+    sku: str | None = None
+    """Stock keeping unit associated with the inventory item"""
+    tracked: bool | None = None
+    """Whether Shopify is tracking inventory for this item"""
+    requires_shipping: bool | None = None
+    """Whether the item requires shipping"""
+    country_code_of_origin: str | None = None
+    """ISO country code of the item's country of origin"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the inventory item was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the inventory item was last updated"""
 
 
 class InventoryLevelsSearchData(BaseModel):
     """Search result data for inventory_levels entity."""
     model_config = ConfigDict(extra="allow")
 
+    inventory_item_id: int | None = None
+    """Identifier of the inventory item"""
+    location_id: int | None = None
+    """Identifier of the location holding the inventory"""
+    available: int | None = None
+    """Number of units available at the location"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the inventory level was last updated"""
 
 
 class LocationsSearchData(BaseModel):
     """Search result data for locations entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the location"""
+    name: str | None = None
+    """Display name of the location"""
+    address1: str | None = None
+    """Primary street address of the location"""
+    city: str | None = None
+    """City of the location"""
+    province: str | None = None
+    """Province, state, or region of the location"""
+    country: str | None = None
+    """Country name of the location"""
+    country_code: str | None = None
+    """ISO 3166-1 alpha-2 country code of the location"""
+    phone: str | None = None
+    """Phone number for the location"""
+    active: bool | None = None
+    """Whether the location is currently active"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the location was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the location was last updated"""
 
 
 class MetafieldCustomersSearchData(BaseModel):
     """Search result data for metafield_customers entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldDraftOrdersSearchData(BaseModel):
     """Search result data for metafield_draft_orders entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldLocationsSearchData(BaseModel):
     """Search result data for metafield_locations entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldOrdersSearchData(BaseModel):
     """Search result data for metafield_orders entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductImagesSearchData(BaseModel):
     """Search result data for metafield_product_images entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductVariantsSearchData(BaseModel):
     """Search result data for metafield_product_variants entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductsSearchData(BaseModel):
     """Search result data for metafield_products entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldShopsSearchData(BaseModel):
     """Search result data for metafield_shops entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldSmartCollectionsSearchData(BaseModel):
     """Search result data for metafield_smart_collections entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the metafield"""
+    namespace: str | None = None
+    """Namespace group for the metafield"""
+    key: str | None = None
+    """Key of the metafield within its namespace"""
+    value: str | None = None
+    """Serialized value stored in the metafield"""
+    type_: str | None = None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None = None
+    """Human-readable description of the metafield"""
+    owner_id: int | None = None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None = None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class OrderRefundsSearchData(BaseModel):
     """Search result data for order_refunds entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the refund"""
+    order_id: int | None = None
+    """Identifier of the refunded order"""
+    user_id: int | None = None
+    """Identifier of the staff user who processed the refund"""
+    note: str | None = None
+    """Merchant-provided note explaining the refund"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the refund was created"""
+    processed_at: str | None = None
+    """ISO 8601 timestamp when the refund was processed"""
 
 
 class PriceRulesSearchData(BaseModel):
     """Search result data for price_rules entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the price rule"""
+    title: str | None = None
+    """Administrative title of the price rule"""
+    value_type: str | None = None
+    """How the discount value is interpreted (`fixed_amount` or `percentage`)"""
+    value: str | None = None
+    """Discount value applied by the rule"""
+    target_type: str | None = None
+    """Type of target the rule applies to (`line_item` or `shipping_line`)"""
+    target_selection: str | None = None
+    """Which target items the rule applies to (`all` or `entitled`)"""
+    allocation_method: str | None = None
+    """How the discount is allocated (`each` or `across`)"""
+    starts_at: str | None = None
+    """ISO 8601 timestamp when the rule starts being active"""
+    ends_at: str | None = None
+    """ISO 8601 timestamp when the rule stops being active, if applicable"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the rule was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the rule was last updated"""
 
 
 class ProductImagesSearchData(BaseModel):
     """Search result data for product_images entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the product image"""
+    product_id: int | None = None
+    """Identifier of the product the image belongs to"""
+    position: int | None = None
+    """Display position of the image within the product"""
+    alt: str | None = None
+    """Alt text for the image"""
+    width: int | None = None
+    """Image width in pixels"""
+    height: int | None = None
+    """Image height in pixels"""
+    src: str | None = None
+    """Public URL of the image"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the image was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the image was last updated"""
 
 
 class ProductVariantsSearchData(BaseModel):
     """Search result data for product_variants entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the product variant"""
+    product_id: int | None = None
+    """Identifier of the parent product"""
+    title: str | None = None
+    """Display title of the variant"""
+    sku: str | None = None
+    """Stock keeping unit for the variant"""
+    price: str | None = None
+    """Price of the variant in the shop's currency"""
+    compare_at_price: str | None = None
+    """Original (compare-at) price of the variant, if set"""
+    position: int | None = None
+    """Display position of the variant within the product"""
+    inventory_policy: str | None = None
+    """Behaviour when out of stock (`deny` or `continue`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the variant was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the variant was last updated"""
 
 
 class ShopSearchData(BaseModel):
     """Search result data for shop entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the shop"""
+    name: str | None = None
+    """Display name of the shop"""
+    email: str | None = None
+    """Primary contact email for the shop"""
+    domain: str | None = None
+    """Custom domain configured for the shop, if any"""
+    myshopify_domain: str | None = None
+    """Canonical `*.myshopify.com` domain for the shop"""
+    country_code: str | None = None
+    """ISO 3166-1 alpha-2 country code of the shop"""
+    currency: str | None = None
+    """ISO 4217 currency code used by the shop"""
+    timezone: str | None = None
+    """Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"""
+    plan_name: str | None = None
+    """Shopify plan identifier (e.g. `shopify_plus`, `basic`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the shop was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the shop was last updated"""
 
 
 class SmartCollectionsSearchData(BaseModel):
     """Search result data for smart_collections entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the smart collection"""
+    handle: str | None = None
+    """URL-friendly handle for the smart collection"""
+    title: str | None = None
+    """Display title of the smart collection"""
+    sort_order: str | None = None
+    """How products are sorted within the collection"""
+    published_scope: str | None = None
+    """Publishing scope (`web` or `global`)"""
+    published_at: str | None = None
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class TenderTransactionsSearchData(BaseModel):
     """Search result data for tender_transactions entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: int | None = None
+    """Unique identifier for the tender transaction"""
+    order_id: int | None = None
+    """Identifier of the order the transaction belongs to"""
+    user_id: int | None = None
+    """Identifier of the staff user who processed the transaction"""
+    amount: str | None = None
+    """Amount of the transaction in the shop's currency"""
+    currency: str | None = None
+    """ISO 4217 currency code for the transaction amount"""
+    payment_method: str | None = None
+    """Payment method used (e.g. `credit_card`, `paypal`)"""
+    test: bool | None = None
+    """Whether the transaction was a test transaction"""
+    processed_at: str | None = None
+    """ISO 8601 timestamp when the transaction was processed"""
 
 
 # ===== GENERIC SEARCH RESULT TYPES =====

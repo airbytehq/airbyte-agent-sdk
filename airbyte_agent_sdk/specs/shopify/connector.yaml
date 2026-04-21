@@ -149,60 +149,823 @@ info:
     entities:
       - entity: abandoned_checkouts
         x-airbyte-name: abandoned_checkouts
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the abandoned checkout"
+          - name: token
+            type: ["null", "string"]
+            description: "Unique token identifying the checkout"
+          - name: email
+            type: ["null", "string"]
+            description: "Email address provided for the checkout"
+          - name: phone
+            type: ["null", "string"]
+            description: "Phone number provided for the checkout"
+          - name: name
+            type: ["null", "string"]
+            description: "Shopify-assigned display name for the checkout (e.g. `#C12345`)"
+          - name: currency
+            type: ["null", "string"]
+            description: "ISO 4217 currency code for the checkout totals"
+          - name: total_price
+            type: ["null", "string"]
+            description: "Total price of the checkout in the shop's currency"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the checkout was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the checkout was last updated"
+          - name: completed_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the checkout was completed, if applicable"
       - entity: collects
         x-airbyte-name: collects
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the collect"
+          - name: collection_id
+            type: ["null", "integer"]
+            description: "Identifier of the collection the product belongs to"
+          - name: product_id
+            type: ["null", "integer"]
+            description: "Identifier of the product in the collection"
+          - name: position
+            type: ["null", "integer"]
+            description: "Position of the product within the collection"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the collect was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the collect was last updated"
       - entity: countries
         x-airbyte-name: countries
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the country tax row"
+          - name: name
+            type: ["null", "string"]
+            description: "Human-readable country name"
+          - name: code
+            type: ["null", "string"]
+            description: "ISO 3166-1 alpha-2 country code"
+          - name: tax_name
+            type: ["null", "string"]
+            description: "Localized name of the tax applied in this country"
       - entity: custom_collections
         x-airbyte-name: custom_collections
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the custom collection"
+          - name: handle
+            type: ["null", "string"]
+            description: "URL-friendly handle for the custom collection"
+          - name: title
+            type: ["null", "string"]
+            description: "Display title of the custom collection"
+          - name: sort_order
+            type: ["null", "string"]
+            description: "How products are sorted within the collection (e.g. `best-selling`)"
+          - name: published_scope
+            type: ["null", "string"]
+            description: "Publishing scope (`web` or `global`)"
+          - name: published_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the collection was published"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the collection was last updated"
       - entity: customers
         x-airbyte-name: customers
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the customer"
+          - name: email
+            type: ["null", "string"]
+            description: "Primary email address of the customer"
+          - name: phone
+            type: ["null", "string"]
+            description: "Primary phone number of the customer"
+          - name: first_name
+            type: ["null", "string"]
+            description: "First name of the customer"
+          - name: last_name
+            type: ["null", "string"]
+            description: "Last name of the customer"
+          - name: state
+            type: ["null", "string"]
+            description: "Account state (`disabled`, `invited`, `enabled`, `declined`)"
+          - name: orders_count
+            type: ["null", "integer"]
+            description: "Number of orders placed by the customer"
+          - name: total_spent
+            type: ["null", "string"]
+            description: "Total lifetime amount spent by the customer"
+          - name: currency
+            type: ["null", "string"]
+            description: "ISO 4217 currency code for the customer's total spend"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the customer record was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the customer record was last updated"
       - entity: discount_codes
         x-airbyte-name: discount_codes
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the discount code"
+          - name: price_rule_id
+            type: ["null", "integer"]
+            description: "Identifier of the parent price rule"
+          - name: code
+            type: ["null", "string"]
+            description: "Discount code string shoppers enter at checkout"
+          - name: usage_count
+            type: ["null", "integer"]
+            description: "Number of times the code has been redeemed"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the code was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the code was last updated"
       - entity: draft_orders
         x-airbyte-name: draft_orders
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the draft order"
+          - name: name
+            type: ["null", "string"]
+            description: "Shopify-assigned display name for the draft order (e.g. `#D12345`)"
+          - name: email
+            type: ["null", "string"]
+            description: "Email address associated with the draft order"
+          - name: status
+            type: ["null", "string"]
+            description: "Status of the draft order (`open`, `invoice_sent`, `completed`)"
+          - name: currency
+            type: ["null", "string"]
+            description: "ISO 4217 currency code for the draft order totals"
+          - name: total_price
+            type: ["null", "string"]
+            description: "Total price of the draft order"
+          - name: order_id
+            type: ["null", "integer"]
+            description: "Identifier of the completed order, if the draft has been completed"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the draft order was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the draft order was last updated"
+          - name: completed_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the draft order was completed, if applicable"
       - entity: fulfillment_orders
         x-airbyte-name: fulfillment_orders
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the fulfillment order"
+          - name: order_id
+            type: ["null", "integer"]
+            description: "Identifier of the parent order"
+          - name: shop_id
+            type: ["null", "integer"]
+            description: "Identifier of the shop that owns the fulfillment order"
+          - name: assigned_location_id
+            type: ["null", "integer"]
+            description: "Identifier of the location assigned to fulfill the order"
+          - name: status
+            type: ["null", "string"]
+            description: "Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"
+          - name: request_status
+            type: ["null", "string"]
+            description: "Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the fulfillment order was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the fulfillment order was last updated"
       - entity: fulfillments
         x-airbyte-name: fulfillments
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the fulfillment"
+          - name: order_id
+            type: ["null", "integer"]
+            description: "Identifier of the parent order"
+          - name: status
+            type: ["null", "string"]
+            description: "Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"
+          - name: shipment_status
+            type: ["null", "string"]
+            description: "Carrier shipment status (e.g. `delivered`, `in_transit`)"
+          - name: tracking_company
+            type: ["null", "string"]
+            description: "Name of the shipping carrier"
+          - name: tracking_number
+            type: ["null", "string"]
+            description: "Primary tracking number for the shipment"
+          - name: location_id
+            type: ["null", "integer"]
+            description: "Identifier of the fulfilling location"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the fulfillment was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the fulfillment was last updated"
       - entity: inventory_items
         x-airbyte-name: inventory_items
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the inventory item"
+          - name: sku
+            type: ["null", "string"]
+            description: "Stock keeping unit associated with the inventory item"
+          - name: tracked
+            type: ["null", "boolean"]
+            description: "Whether Shopify is tracking inventory for this item"
+          - name: requires_shipping
+            type: ["null", "boolean"]
+            description: "Whether the item requires shipping"
+          - name: country_code_of_origin
+            type: ["null", "string"]
+            description: "ISO country code of the item's country of origin"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the inventory item was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the inventory item was last updated"
       - entity: inventory_levels
         x-airbyte-name: inventory_levels
+        fields:
+          - name: inventory_item_id
+            type: ["null", "integer"]
+            description: "Identifier of the inventory item"
+          - name: location_id
+            type: ["null", "integer"]
+            description: "Identifier of the location holding the inventory"
+          - name: available
+            type: ["null", "integer"]
+            description: "Number of units available at the location"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the inventory level was last updated"
       - entity: locations
         x-airbyte-name: locations
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the location"
+          - name: name
+            type: ["null", "string"]
+            description: "Display name of the location"
+          - name: address1
+            type: ["null", "string"]
+            description: "Primary street address of the location"
+          - name: city
+            type: ["null", "string"]
+            description: "City of the location"
+          - name: province
+            type: ["null", "string"]
+            description: "Province, state, or region of the location"
+          - name: country
+            type: ["null", "string"]
+            description: "Country name of the location"
+          - name: country_code
+            type: ["null", "string"]
+            description: "ISO 3166-1 alpha-2 country code of the location"
+          - name: phone
+            type: ["null", "string"]
+            description: "Phone number for the location"
+          - name: active
+            type: ["null", "boolean"]
+            description: "Whether the location is currently active"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the location was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the location was last updated"
       - entity: metafield_customers
         x-airbyte-name: metafield_customers
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_draft_orders
         x-airbyte-name: metafield_draft_orders
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_locations
         x-airbyte-name: metafield_locations
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_orders
         x-airbyte-name: metafield_orders
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_product_images
         x-airbyte-name: metafield_product_images
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_product_variants
         x-airbyte-name: metafield_product_variants
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_products
         x-airbyte-name: metafield_products
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_shops
         x-airbyte-name: metafield_shops
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: metafield_smart_collections
         x-airbyte-name: metafield_smart_collections
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the metafield"
+          - name: namespace
+            type: ["null", "string"]
+            description: "Namespace group for the metafield"
+          - name: key
+            type: ["null", "string"]
+            description: "Key of the metafield within its namespace"
+          - name: value
+            type: ["null", "string"]
+            description: "Serialized value stored in the metafield"
+          - name: type
+            type: ["null", "string"]
+            description: "Shopify metafield type (e.g. `single_line_text_field`, `json`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Human-readable description of the metafield"
+          - name: owner_id
+            type: ["null", "integer"]
+            description: "Identifier of the resource that owns this metafield"
+          - name: owner_resource
+            type: ["null", "string"]
+            description: "Resource type that owns this metafield (e.g. `product`, `customer`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: order_refunds
         x-airbyte-name: order_refunds
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the refund"
+          - name: order_id
+            type: ["null", "integer"]
+            description: "Identifier of the refunded order"
+          - name: user_id
+            type: ["null", "integer"]
+            description: "Identifier of the staff user who processed the refund"
+          - name: note
+            type: ["null", "string"]
+            description: "Merchant-provided note explaining the refund"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the refund was created"
+          - name: processed_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the refund was processed"
       - entity: price_rules
         x-airbyte-name: price_rules
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the price rule"
+          - name: title
+            type: ["null", "string"]
+            description: "Administrative title of the price rule"
+          - name: value_type
+            type: ["null", "string"]
+            description: "How the discount value is interpreted (`fixed_amount` or `percentage`)"
+          - name: value
+            type: ["null", "string"]
+            description: "Discount value applied by the rule"
+          - name: target_type
+            type: ["null", "string"]
+            description: "Type of target the rule applies to (`line_item` or `shipping_line`)"
+          - name: target_selection
+            type: ["null", "string"]
+            description: "Which target items the rule applies to (`all` or `entitled`)"
+          - name: allocation_method
+            type: ["null", "string"]
+            description: "How the discount is allocated (`each` or `across`)"
+          - name: starts_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the rule starts being active"
+          - name: ends_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the rule stops being active, if applicable"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the rule was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the rule was last updated"
       - entity: product_images
         x-airbyte-name: product_images
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the product image"
+          - name: product_id
+            type: ["null", "integer"]
+            description: "Identifier of the product the image belongs to"
+          - name: position
+            type: ["null", "integer"]
+            description: "Display position of the image within the product"
+          - name: alt
+            type: ["null", "string"]
+            description: "Alt text for the image"
+          - name: width
+            type: ["null", "integer"]
+            description: "Image width in pixels"
+          - name: height
+            type: ["null", "integer"]
+            description: "Image height in pixels"
+          - name: src
+            type: ["null", "string"]
+            description: "Public URL of the image"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the image was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the image was last updated"
       - entity: product_variants
         x-airbyte-name: product_variants
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the product variant"
+          - name: product_id
+            type: ["null", "integer"]
+            description: "Identifier of the parent product"
+          - name: title
+            type: ["null", "string"]
+            description: "Display title of the variant"
+          - name: sku
+            type: ["null", "string"]
+            description: "Stock keeping unit for the variant"
+          - name: price
+            type: ["null", "string"]
+            description: "Price of the variant in the shop's currency"
+          - name: compare_at_price
+            type: ["null", "string"]
+            description: "Original (compare-at) price of the variant, if set"
+          - name: position
+            type: ["null", "integer"]
+            description: "Display position of the variant within the product"
+          - name: inventory_policy
+            type: ["null", "string"]
+            description: "Behaviour when out of stock (`deny` or `continue`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the variant was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the variant was last updated"
       - entity: shop
         x-airbyte-name: shop
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the shop"
+          - name: name
+            type: ["null", "string"]
+            description: "Display name of the shop"
+          - name: email
+            type: ["null", "string"]
+            description: "Primary contact email for the shop"
+          - name: domain
+            type: ["null", "string"]
+            description: "Custom domain configured for the shop, if any"
+          - name: myshopify_domain
+            type: ["null", "string"]
+            description: "Canonical `*.myshopify.com` domain for the shop"
+          - name: country_code
+            type: ["null", "string"]
+            description: "ISO 3166-1 alpha-2 country code of the shop"
+          - name: currency
+            type: ["null", "string"]
+            description: "ISO 4217 currency code used by the shop"
+          - name: timezone
+            type: ["null", "string"]
+            description: "Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"
+          - name: plan_name
+            type: ["null", "string"]
+            description: "Shopify plan identifier (e.g. `shopify_plus`, `basic`)"
+          - name: created_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the shop was created"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the shop was last updated"
       - entity: smart_collections
         x-airbyte-name: smart_collections
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the smart collection"
+          - name: handle
+            type: ["null", "string"]
+            description: "URL-friendly handle for the smart collection"
+          - name: title
+            type: ["null", "string"]
+            description: "Display title of the smart collection"
+          - name: sort_order
+            type: ["null", "string"]
+            description: "How products are sorted within the collection"
+          - name: published_scope
+            type: ["null", "string"]
+            description: "Publishing scope (`web` or `global`)"
+          - name: published_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the collection was published"
+          - name: updated_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the collection was last updated"
       - entity: tender_transactions
         x-airbyte-name: tender_transactions
+        fields:
+          - name: id
+            type: ["null", "integer"]
+            description: "Unique identifier for the tender transaction"
+          - name: order_id
+            type: ["null", "integer"]
+            description: "Identifier of the order the transaction belongs to"
+          - name: user_id
+            type: ["null", "integer"]
+            description: "Identifier of the staff user who processed the transaction"
+          - name: amount
+            type: ["null", "string"]
+            description: "Amount of the transaction in the shop's currency"
+          - name: currency
+            type: ["null", "string"]
+            description: "ISO 4217 currency code for the transaction amount"
+          - name: payment_method
+            type: ["null", "string"]
+            description: "Payment method used (e.g. `credit_card`, `paypal`)"
+          - name: test
+            type: ["null", "boolean"]
+            description: "Whether the transaction was a test transaction"
+          - name: processed_at
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the transaction was processed"
 servers:
 - url: https://{shop}.myshopify.com/admin/api/2025-01
   description: Shopify Admin REST API Server

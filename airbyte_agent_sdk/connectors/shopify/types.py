@@ -348,22 +348,122 @@ AirbyteSortOrder = Literal["asc", "desc"]
 
 class AbandonedCheckoutsSearchFilter(TypedDict, total=False):
     """Available fields for filtering abandoned_checkouts search queries."""
+    id: int | None
+    """Unique identifier for the abandoned checkout"""
+    token: str | None
+    """Unique token identifying the checkout"""
+    email: str | None
+    """Email address provided for the checkout"""
+    phone: str | None
+    """Phone number provided for the checkout"""
+    name: str | None
+    """Shopify-assigned display name for the checkout (e.g. `#C12345`)"""
+    currency: str | None
+    """ISO 4217 currency code for the checkout totals"""
+    total_price: str | None
+    """Total price of the checkout in the shop's currency"""
+    created_at: str | None
+    """ISO 8601 timestamp when the checkout was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the checkout was last updated"""
+    completed_at: str | None
+    """ISO 8601 timestamp when the checkout was completed, if applicable"""
 
 
 class AbandonedCheckoutsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the abandoned checkout"""
+    token: list[str]
+    """Unique token identifying the checkout"""
+    email: list[str]
+    """Email address provided for the checkout"""
+    phone: list[str]
+    """Phone number provided for the checkout"""
+    name: list[str]
+    """Shopify-assigned display name for the checkout (e.g. `#C12345`)"""
+    currency: list[str]
+    """ISO 4217 currency code for the checkout totals"""
+    total_price: list[str]
+    """Total price of the checkout in the shop's currency"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the checkout was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the checkout was last updated"""
+    completed_at: list[str]
+    """ISO 8601 timestamp when the checkout was completed, if applicable"""
 
 
 class AbandonedCheckoutsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the abandoned checkout"""
+    token: Any
+    """Unique token identifying the checkout"""
+    email: Any
+    """Email address provided for the checkout"""
+    phone: Any
+    """Phone number provided for the checkout"""
+    name: Any
+    """Shopify-assigned display name for the checkout (e.g. `#C12345`)"""
+    currency: Any
+    """ISO 4217 currency code for the checkout totals"""
+    total_price: Any
+    """Total price of the checkout in the shop's currency"""
+    created_at: Any
+    """ISO 8601 timestamp when the checkout was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the checkout was last updated"""
+    completed_at: Any
+    """ISO 8601 timestamp when the checkout was completed, if applicable"""
 
 
 class AbandonedCheckoutsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the abandoned checkout"""
+    token: str
+    """Unique token identifying the checkout"""
+    email: str
+    """Email address provided for the checkout"""
+    phone: str
+    """Phone number provided for the checkout"""
+    name: str
+    """Shopify-assigned display name for the checkout (e.g. `#C12345`)"""
+    currency: str
+    """ISO 4217 currency code for the checkout totals"""
+    total_price: str
+    """Total price of the checkout in the shop's currency"""
+    created_at: str
+    """ISO 8601 timestamp when the checkout was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the checkout was last updated"""
+    completed_at: str
+    """ISO 8601 timestamp when the checkout was completed, if applicable"""
 
 
 class AbandonedCheckoutsSortFilter(TypedDict, total=False):
     """Available fields for sorting abandoned_checkouts search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the abandoned checkout"""
+    token: AirbyteSortOrder
+    """Unique token identifying the checkout"""
+    email: AirbyteSortOrder
+    """Email address provided for the checkout"""
+    phone: AirbyteSortOrder
+    """Phone number provided for the checkout"""
+    name: AirbyteSortOrder
+    """Shopify-assigned display name for the checkout (e.g. `#C12345`)"""
+    currency: AirbyteSortOrder
+    """ISO 4217 currency code for the checkout totals"""
+    total_price: AirbyteSortOrder
+    """Total price of the checkout in the shop's currency"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the checkout was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the checkout was last updated"""
+    completed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the checkout was completed, if applicable"""
 
 
 # Entity-specific condition types for abandoned_checkouts
@@ -463,22 +563,82 @@ class AbandonedCheckoutsSearchQuery(TypedDict, total=False):
 
 class CollectsSearchFilter(TypedDict, total=False):
     """Available fields for filtering collects search queries."""
+    id: int | None
+    """Unique identifier for the collect"""
+    collection_id: int | None
+    """Identifier of the collection the product belongs to"""
+    product_id: int | None
+    """Identifier of the product in the collection"""
+    position: int | None
+    """Position of the product within the collection"""
+    created_at: str | None
+    """ISO 8601 timestamp when the collect was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the collect was last updated"""
 
 
 class CollectsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the collect"""
+    collection_id: list[int]
+    """Identifier of the collection the product belongs to"""
+    product_id: list[int]
+    """Identifier of the product in the collection"""
+    position: list[int]
+    """Position of the product within the collection"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the collect was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the collect was last updated"""
 
 
 class CollectsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the collect"""
+    collection_id: Any
+    """Identifier of the collection the product belongs to"""
+    product_id: Any
+    """Identifier of the product in the collection"""
+    position: Any
+    """Position of the product within the collection"""
+    created_at: Any
+    """ISO 8601 timestamp when the collect was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the collect was last updated"""
 
 
 class CollectsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the collect"""
+    collection_id: str
+    """Identifier of the collection the product belongs to"""
+    product_id: str
+    """Identifier of the product in the collection"""
+    position: str
+    """Position of the product within the collection"""
+    created_at: str
+    """ISO 8601 timestamp when the collect was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the collect was last updated"""
 
 
 class CollectsSortFilter(TypedDict, total=False):
     """Available fields for sorting collects search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the collect"""
+    collection_id: AirbyteSortOrder
+    """Identifier of the collection the product belongs to"""
+    product_id: AirbyteSortOrder
+    """Identifier of the product in the collection"""
+    position: AirbyteSortOrder
+    """Position of the product within the collection"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the collect was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the collect was last updated"""
 
 
 # Entity-specific condition types for collects
@@ -578,22 +738,62 @@ class CollectsSearchQuery(TypedDict, total=False):
 
 class CountriesSearchFilter(TypedDict, total=False):
     """Available fields for filtering countries search queries."""
+    id: int | None
+    """Unique identifier for the country tax row"""
+    name: str | None
+    """Human-readable country name"""
+    code: str | None
+    """ISO 3166-1 alpha-2 country code"""
+    tax_name: str | None
+    """Localized name of the tax applied in this country"""
 
 
 class CountriesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the country tax row"""
+    name: list[str]
+    """Human-readable country name"""
+    code: list[str]
+    """ISO 3166-1 alpha-2 country code"""
+    tax_name: list[str]
+    """Localized name of the tax applied in this country"""
 
 
 class CountriesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the country tax row"""
+    name: Any
+    """Human-readable country name"""
+    code: Any
+    """ISO 3166-1 alpha-2 country code"""
+    tax_name: Any
+    """Localized name of the tax applied in this country"""
 
 
 class CountriesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the country tax row"""
+    name: str
+    """Human-readable country name"""
+    code: str
+    """ISO 3166-1 alpha-2 country code"""
+    tax_name: str
+    """Localized name of the tax applied in this country"""
 
 
 class CountriesSortFilter(TypedDict, total=False):
     """Available fields for sorting countries search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the country tax row"""
+    name: AirbyteSortOrder
+    """Human-readable country name"""
+    code: AirbyteSortOrder
+    """ISO 3166-1 alpha-2 country code"""
+    tax_name: AirbyteSortOrder
+    """Localized name of the tax applied in this country"""
 
 
 # Entity-specific condition types for countries
@@ -693,22 +893,92 @@ class CountriesSearchQuery(TypedDict, total=False):
 
 class CustomCollectionsSearchFilter(TypedDict, total=False):
     """Available fields for filtering custom_collections search queries."""
+    id: int | None
+    """Unique identifier for the custom collection"""
+    handle: str | None
+    """URL-friendly handle for the custom collection"""
+    title: str | None
+    """Display title of the custom collection"""
+    sort_order: str | None
+    """How products are sorted within the collection (e.g. `best-selling`)"""
+    published_scope: str | None
+    """Publishing scope (`web` or `global`)"""
+    published_at: str | None
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class CustomCollectionsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the custom collection"""
+    handle: list[str]
+    """URL-friendly handle for the custom collection"""
+    title: list[str]
+    """Display title of the custom collection"""
+    sort_order: list[str]
+    """How products are sorted within the collection (e.g. `best-selling`)"""
+    published_scope: list[str]
+    """Publishing scope (`web` or `global`)"""
+    published_at: list[str]
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class CustomCollectionsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the custom collection"""
+    handle: Any
+    """URL-friendly handle for the custom collection"""
+    title: Any
+    """Display title of the custom collection"""
+    sort_order: Any
+    """How products are sorted within the collection (e.g. `best-selling`)"""
+    published_scope: Any
+    """Publishing scope (`web` or `global`)"""
+    published_at: Any
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: Any
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class CustomCollectionsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the custom collection"""
+    handle: str
+    """URL-friendly handle for the custom collection"""
+    title: str
+    """Display title of the custom collection"""
+    sort_order: str
+    """How products are sorted within the collection (e.g. `best-selling`)"""
+    published_scope: str
+    """Publishing scope (`web` or `global`)"""
+    published_at: str
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: str
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class CustomCollectionsSortFilter(TypedDict, total=False):
     """Available fields for sorting custom_collections search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the custom collection"""
+    handle: AirbyteSortOrder
+    """URL-friendly handle for the custom collection"""
+    title: AirbyteSortOrder
+    """Display title of the custom collection"""
+    sort_order: AirbyteSortOrder
+    """How products are sorted within the collection (e.g. `best-selling`)"""
+    published_scope: AirbyteSortOrder
+    """Publishing scope (`web` or `global`)"""
+    published_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 # Entity-specific condition types for custom_collections
@@ -808,22 +1078,132 @@ class CustomCollectionsSearchQuery(TypedDict, total=False):
 
 class CustomersSearchFilter(TypedDict, total=False):
     """Available fields for filtering customers search queries."""
+    id: int | None
+    """Unique identifier for the customer"""
+    email: str | None
+    """Primary email address of the customer"""
+    phone: str | None
+    """Primary phone number of the customer"""
+    first_name: str | None
+    """First name of the customer"""
+    last_name: str | None
+    """Last name of the customer"""
+    state: str | None
+    """Account state (`disabled`, `invited`, `enabled`, `declined`)"""
+    orders_count: int | None
+    """Number of orders placed by the customer"""
+    total_spent: str | None
+    """Total lifetime amount spent by the customer"""
+    currency: str | None
+    """ISO 4217 currency code for the customer's total spend"""
+    created_at: str | None
+    """ISO 8601 timestamp when the customer record was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the customer record was last updated"""
 
 
 class CustomersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the customer"""
+    email: list[str]
+    """Primary email address of the customer"""
+    phone: list[str]
+    """Primary phone number of the customer"""
+    first_name: list[str]
+    """First name of the customer"""
+    last_name: list[str]
+    """Last name of the customer"""
+    state: list[str]
+    """Account state (`disabled`, `invited`, `enabled`, `declined`)"""
+    orders_count: list[int]
+    """Number of orders placed by the customer"""
+    total_spent: list[str]
+    """Total lifetime amount spent by the customer"""
+    currency: list[str]
+    """ISO 4217 currency code for the customer's total spend"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the customer record was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the customer record was last updated"""
 
 
 class CustomersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the customer"""
+    email: Any
+    """Primary email address of the customer"""
+    phone: Any
+    """Primary phone number of the customer"""
+    first_name: Any
+    """First name of the customer"""
+    last_name: Any
+    """Last name of the customer"""
+    state: Any
+    """Account state (`disabled`, `invited`, `enabled`, `declined`)"""
+    orders_count: Any
+    """Number of orders placed by the customer"""
+    total_spent: Any
+    """Total lifetime amount spent by the customer"""
+    currency: Any
+    """ISO 4217 currency code for the customer's total spend"""
+    created_at: Any
+    """ISO 8601 timestamp when the customer record was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the customer record was last updated"""
 
 
 class CustomersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the customer"""
+    email: str
+    """Primary email address of the customer"""
+    phone: str
+    """Primary phone number of the customer"""
+    first_name: str
+    """First name of the customer"""
+    last_name: str
+    """Last name of the customer"""
+    state: str
+    """Account state (`disabled`, `invited`, `enabled`, `declined`)"""
+    orders_count: str
+    """Number of orders placed by the customer"""
+    total_spent: str
+    """Total lifetime amount spent by the customer"""
+    currency: str
+    """ISO 4217 currency code for the customer's total spend"""
+    created_at: str
+    """ISO 8601 timestamp when the customer record was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the customer record was last updated"""
 
 
 class CustomersSortFilter(TypedDict, total=False):
     """Available fields for sorting customers search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the customer"""
+    email: AirbyteSortOrder
+    """Primary email address of the customer"""
+    phone: AirbyteSortOrder
+    """Primary phone number of the customer"""
+    first_name: AirbyteSortOrder
+    """First name of the customer"""
+    last_name: AirbyteSortOrder
+    """Last name of the customer"""
+    state: AirbyteSortOrder
+    """Account state (`disabled`, `invited`, `enabled`, `declined`)"""
+    orders_count: AirbyteSortOrder
+    """Number of orders placed by the customer"""
+    total_spent: AirbyteSortOrder
+    """Total lifetime amount spent by the customer"""
+    currency: AirbyteSortOrder
+    """ISO 4217 currency code for the customer's total spend"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the customer record was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the customer record was last updated"""
 
 
 # Entity-specific condition types for customers
@@ -923,22 +1303,82 @@ class CustomersSearchQuery(TypedDict, total=False):
 
 class DiscountCodesSearchFilter(TypedDict, total=False):
     """Available fields for filtering discount_codes search queries."""
+    id: int | None
+    """Unique identifier for the discount code"""
+    price_rule_id: int | None
+    """Identifier of the parent price rule"""
+    code: str | None
+    """Discount code string shoppers enter at checkout"""
+    usage_count: int | None
+    """Number of times the code has been redeemed"""
+    created_at: str | None
+    """ISO 8601 timestamp when the code was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the code was last updated"""
 
 
 class DiscountCodesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the discount code"""
+    price_rule_id: list[int]
+    """Identifier of the parent price rule"""
+    code: list[str]
+    """Discount code string shoppers enter at checkout"""
+    usage_count: list[int]
+    """Number of times the code has been redeemed"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the code was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the code was last updated"""
 
 
 class DiscountCodesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the discount code"""
+    price_rule_id: Any
+    """Identifier of the parent price rule"""
+    code: Any
+    """Discount code string shoppers enter at checkout"""
+    usage_count: Any
+    """Number of times the code has been redeemed"""
+    created_at: Any
+    """ISO 8601 timestamp when the code was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the code was last updated"""
 
 
 class DiscountCodesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the discount code"""
+    price_rule_id: str
+    """Identifier of the parent price rule"""
+    code: str
+    """Discount code string shoppers enter at checkout"""
+    usage_count: str
+    """Number of times the code has been redeemed"""
+    created_at: str
+    """ISO 8601 timestamp when the code was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the code was last updated"""
 
 
 class DiscountCodesSortFilter(TypedDict, total=False):
     """Available fields for sorting discount_codes search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the discount code"""
+    price_rule_id: AirbyteSortOrder
+    """Identifier of the parent price rule"""
+    code: AirbyteSortOrder
+    """Discount code string shoppers enter at checkout"""
+    usage_count: AirbyteSortOrder
+    """Number of times the code has been redeemed"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the code was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the code was last updated"""
 
 
 # Entity-specific condition types for discount_codes
@@ -1038,22 +1478,122 @@ class DiscountCodesSearchQuery(TypedDict, total=False):
 
 class DraftOrdersSearchFilter(TypedDict, total=False):
     """Available fields for filtering draft_orders search queries."""
+    id: int | None
+    """Unique identifier for the draft order"""
+    name: str | None
+    """Shopify-assigned display name for the draft order (e.g. `#D12345`)"""
+    email: str | None
+    """Email address associated with the draft order"""
+    status: str | None
+    """Status of the draft order (`open`, `invoice_sent`, `completed`)"""
+    currency: str | None
+    """ISO 4217 currency code for the draft order totals"""
+    total_price: str | None
+    """Total price of the draft order"""
+    order_id: int | None
+    """Identifier of the completed order, if the draft has been completed"""
+    created_at: str | None
+    """ISO 8601 timestamp when the draft order was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the draft order was last updated"""
+    completed_at: str | None
+    """ISO 8601 timestamp when the draft order was completed, if applicable"""
 
 
 class DraftOrdersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the draft order"""
+    name: list[str]
+    """Shopify-assigned display name for the draft order (e.g. `#D12345`)"""
+    email: list[str]
+    """Email address associated with the draft order"""
+    status: list[str]
+    """Status of the draft order (`open`, `invoice_sent`, `completed`)"""
+    currency: list[str]
+    """ISO 4217 currency code for the draft order totals"""
+    total_price: list[str]
+    """Total price of the draft order"""
+    order_id: list[int]
+    """Identifier of the completed order, if the draft has been completed"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the draft order was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the draft order was last updated"""
+    completed_at: list[str]
+    """ISO 8601 timestamp when the draft order was completed, if applicable"""
 
 
 class DraftOrdersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the draft order"""
+    name: Any
+    """Shopify-assigned display name for the draft order (e.g. `#D12345`)"""
+    email: Any
+    """Email address associated with the draft order"""
+    status: Any
+    """Status of the draft order (`open`, `invoice_sent`, `completed`)"""
+    currency: Any
+    """ISO 4217 currency code for the draft order totals"""
+    total_price: Any
+    """Total price of the draft order"""
+    order_id: Any
+    """Identifier of the completed order, if the draft has been completed"""
+    created_at: Any
+    """ISO 8601 timestamp when the draft order was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the draft order was last updated"""
+    completed_at: Any
+    """ISO 8601 timestamp when the draft order was completed, if applicable"""
 
 
 class DraftOrdersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the draft order"""
+    name: str
+    """Shopify-assigned display name for the draft order (e.g. `#D12345`)"""
+    email: str
+    """Email address associated with the draft order"""
+    status: str
+    """Status of the draft order (`open`, `invoice_sent`, `completed`)"""
+    currency: str
+    """ISO 4217 currency code for the draft order totals"""
+    total_price: str
+    """Total price of the draft order"""
+    order_id: str
+    """Identifier of the completed order, if the draft has been completed"""
+    created_at: str
+    """ISO 8601 timestamp when the draft order was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the draft order was last updated"""
+    completed_at: str
+    """ISO 8601 timestamp when the draft order was completed, if applicable"""
 
 
 class DraftOrdersSortFilter(TypedDict, total=False):
     """Available fields for sorting draft_orders search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the draft order"""
+    name: AirbyteSortOrder
+    """Shopify-assigned display name for the draft order (e.g. `#D12345`)"""
+    email: AirbyteSortOrder
+    """Email address associated with the draft order"""
+    status: AirbyteSortOrder
+    """Status of the draft order (`open`, `invoice_sent`, `completed`)"""
+    currency: AirbyteSortOrder
+    """ISO 4217 currency code for the draft order totals"""
+    total_price: AirbyteSortOrder
+    """Total price of the draft order"""
+    order_id: AirbyteSortOrder
+    """Identifier of the completed order, if the draft has been completed"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the draft order was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the draft order was last updated"""
+    completed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the draft order was completed, if applicable"""
 
 
 # Entity-specific condition types for draft_orders
@@ -1153,22 +1693,102 @@ class DraftOrdersSearchQuery(TypedDict, total=False):
 
 class FulfillmentOrdersSearchFilter(TypedDict, total=False):
     """Available fields for filtering fulfillment_orders search queries."""
+    id: int | None
+    """Unique identifier for the fulfillment order"""
+    order_id: int | None
+    """Identifier of the parent order"""
+    shop_id: int | None
+    """Identifier of the shop that owns the fulfillment order"""
+    assigned_location_id: int | None
+    """Identifier of the location assigned to fulfill the order"""
+    status: str | None
+    """Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"""
+    request_status: str | None
+    """Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the fulfillment order was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the fulfillment order was last updated"""
 
 
 class FulfillmentOrdersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the fulfillment order"""
+    order_id: list[int]
+    """Identifier of the parent order"""
+    shop_id: list[int]
+    """Identifier of the shop that owns the fulfillment order"""
+    assigned_location_id: list[int]
+    """Identifier of the location assigned to fulfill the order"""
+    status: list[str]
+    """Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"""
+    request_status: list[str]
+    """Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the fulfillment order was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the fulfillment order was last updated"""
 
 
 class FulfillmentOrdersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the fulfillment order"""
+    order_id: Any
+    """Identifier of the parent order"""
+    shop_id: Any
+    """Identifier of the shop that owns the fulfillment order"""
+    assigned_location_id: Any
+    """Identifier of the location assigned to fulfill the order"""
+    status: Any
+    """Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"""
+    request_status: Any
+    """Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the fulfillment order was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the fulfillment order was last updated"""
 
 
 class FulfillmentOrdersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the fulfillment order"""
+    order_id: str
+    """Identifier of the parent order"""
+    shop_id: str
+    """Identifier of the shop that owns the fulfillment order"""
+    assigned_location_id: str
+    """Identifier of the location assigned to fulfill the order"""
+    status: str
+    """Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"""
+    request_status: str
+    """Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"""
+    created_at: str
+    """ISO 8601 timestamp when the fulfillment order was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the fulfillment order was last updated"""
 
 
 class FulfillmentOrdersSortFilter(TypedDict, total=False):
     """Available fields for sorting fulfillment_orders search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the fulfillment order"""
+    order_id: AirbyteSortOrder
+    """Identifier of the parent order"""
+    shop_id: AirbyteSortOrder
+    """Identifier of the shop that owns the fulfillment order"""
+    assigned_location_id: AirbyteSortOrder
+    """Identifier of the location assigned to fulfill the order"""
+    status: AirbyteSortOrder
+    """Fulfillment order status (e.g. `open`, `in_progress`, `closed`)"""
+    request_status: AirbyteSortOrder
+    """Status of the fulfillment request (e.g. `unsubmitted`, `submitted`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the fulfillment order was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the fulfillment order was last updated"""
 
 
 # Entity-specific condition types for fulfillment_orders
@@ -1268,22 +1888,112 @@ class FulfillmentOrdersSearchQuery(TypedDict, total=False):
 
 class FulfillmentsSearchFilter(TypedDict, total=False):
     """Available fields for filtering fulfillments search queries."""
+    id: int | None
+    """Unique identifier for the fulfillment"""
+    order_id: int | None
+    """Identifier of the parent order"""
+    status: str | None
+    """Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"""
+    shipment_status: str | None
+    """Carrier shipment status (e.g. `delivered`, `in_transit`)"""
+    tracking_company: str | None
+    """Name of the shipping carrier"""
+    tracking_number: str | None
+    """Primary tracking number for the shipment"""
+    location_id: int | None
+    """Identifier of the fulfilling location"""
+    created_at: str | None
+    """ISO 8601 timestamp when the fulfillment was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the fulfillment was last updated"""
 
 
 class FulfillmentsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the fulfillment"""
+    order_id: list[int]
+    """Identifier of the parent order"""
+    status: list[str]
+    """Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"""
+    shipment_status: list[str]
+    """Carrier shipment status (e.g. `delivered`, `in_transit`)"""
+    tracking_company: list[str]
+    """Name of the shipping carrier"""
+    tracking_number: list[str]
+    """Primary tracking number for the shipment"""
+    location_id: list[int]
+    """Identifier of the fulfilling location"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the fulfillment was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the fulfillment was last updated"""
 
 
 class FulfillmentsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the fulfillment"""
+    order_id: Any
+    """Identifier of the parent order"""
+    status: Any
+    """Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"""
+    shipment_status: Any
+    """Carrier shipment status (e.g. `delivered`, `in_transit`)"""
+    tracking_company: Any
+    """Name of the shipping carrier"""
+    tracking_number: Any
+    """Primary tracking number for the shipment"""
+    location_id: Any
+    """Identifier of the fulfilling location"""
+    created_at: Any
+    """ISO 8601 timestamp when the fulfillment was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the fulfillment was last updated"""
 
 
 class FulfillmentsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the fulfillment"""
+    order_id: str
+    """Identifier of the parent order"""
+    status: str
+    """Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"""
+    shipment_status: str
+    """Carrier shipment status (e.g. `delivered`, `in_transit`)"""
+    tracking_company: str
+    """Name of the shipping carrier"""
+    tracking_number: str
+    """Primary tracking number for the shipment"""
+    location_id: str
+    """Identifier of the fulfilling location"""
+    created_at: str
+    """ISO 8601 timestamp when the fulfillment was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the fulfillment was last updated"""
 
 
 class FulfillmentsSortFilter(TypedDict, total=False):
     """Available fields for sorting fulfillments search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the fulfillment"""
+    order_id: AirbyteSortOrder
+    """Identifier of the parent order"""
+    status: AirbyteSortOrder
+    """Fulfillment status (e.g. `pending`, `open`, `success`, `cancelled`)"""
+    shipment_status: AirbyteSortOrder
+    """Carrier shipment status (e.g. `delivered`, `in_transit`)"""
+    tracking_company: AirbyteSortOrder
+    """Name of the shipping carrier"""
+    tracking_number: AirbyteSortOrder
+    """Primary tracking number for the shipment"""
+    location_id: AirbyteSortOrder
+    """Identifier of the fulfilling location"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the fulfillment was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the fulfillment was last updated"""
 
 
 # Entity-specific condition types for fulfillments
@@ -1383,22 +2093,92 @@ class FulfillmentsSearchQuery(TypedDict, total=False):
 
 class InventoryItemsSearchFilter(TypedDict, total=False):
     """Available fields for filtering inventory_items search queries."""
+    id: int | None
+    """Unique identifier for the inventory item"""
+    sku: str | None
+    """Stock keeping unit associated with the inventory item"""
+    tracked: bool | None
+    """Whether Shopify is tracking inventory for this item"""
+    requires_shipping: bool | None
+    """Whether the item requires shipping"""
+    country_code_of_origin: str | None
+    """ISO country code of the item's country of origin"""
+    created_at: str | None
+    """ISO 8601 timestamp when the inventory item was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the inventory item was last updated"""
 
 
 class InventoryItemsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the inventory item"""
+    sku: list[str]
+    """Stock keeping unit associated with the inventory item"""
+    tracked: list[bool]
+    """Whether Shopify is tracking inventory for this item"""
+    requires_shipping: list[bool]
+    """Whether the item requires shipping"""
+    country_code_of_origin: list[str]
+    """ISO country code of the item's country of origin"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the inventory item was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the inventory item was last updated"""
 
 
 class InventoryItemsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the inventory item"""
+    sku: Any
+    """Stock keeping unit associated with the inventory item"""
+    tracked: Any
+    """Whether Shopify is tracking inventory for this item"""
+    requires_shipping: Any
+    """Whether the item requires shipping"""
+    country_code_of_origin: Any
+    """ISO country code of the item's country of origin"""
+    created_at: Any
+    """ISO 8601 timestamp when the inventory item was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the inventory item was last updated"""
 
 
 class InventoryItemsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the inventory item"""
+    sku: str
+    """Stock keeping unit associated with the inventory item"""
+    tracked: str
+    """Whether Shopify is tracking inventory for this item"""
+    requires_shipping: str
+    """Whether the item requires shipping"""
+    country_code_of_origin: str
+    """ISO country code of the item's country of origin"""
+    created_at: str
+    """ISO 8601 timestamp when the inventory item was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the inventory item was last updated"""
 
 
 class InventoryItemsSortFilter(TypedDict, total=False):
     """Available fields for sorting inventory_items search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the inventory item"""
+    sku: AirbyteSortOrder
+    """Stock keeping unit associated with the inventory item"""
+    tracked: AirbyteSortOrder
+    """Whether Shopify is tracking inventory for this item"""
+    requires_shipping: AirbyteSortOrder
+    """Whether the item requires shipping"""
+    country_code_of_origin: AirbyteSortOrder
+    """ISO country code of the item's country of origin"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the inventory item was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the inventory item was last updated"""
 
 
 # Entity-specific condition types for inventory_items
@@ -1498,22 +2278,62 @@ class InventoryItemsSearchQuery(TypedDict, total=False):
 
 class InventoryLevelsSearchFilter(TypedDict, total=False):
     """Available fields for filtering inventory_levels search queries."""
+    inventory_item_id: int | None
+    """Identifier of the inventory item"""
+    location_id: int | None
+    """Identifier of the location holding the inventory"""
+    available: int | None
+    """Number of units available at the location"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the inventory level was last updated"""
 
 
 class InventoryLevelsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    inventory_item_id: list[int]
+    """Identifier of the inventory item"""
+    location_id: list[int]
+    """Identifier of the location holding the inventory"""
+    available: list[int]
+    """Number of units available at the location"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the inventory level was last updated"""
 
 
 class InventoryLevelsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    inventory_item_id: Any
+    """Identifier of the inventory item"""
+    location_id: Any
+    """Identifier of the location holding the inventory"""
+    available: Any
+    """Number of units available at the location"""
+    updated_at: Any
+    """ISO 8601 timestamp when the inventory level was last updated"""
 
 
 class InventoryLevelsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    inventory_item_id: str
+    """Identifier of the inventory item"""
+    location_id: str
+    """Identifier of the location holding the inventory"""
+    available: str
+    """Number of units available at the location"""
+    updated_at: str
+    """ISO 8601 timestamp when the inventory level was last updated"""
 
 
 class InventoryLevelsSortFilter(TypedDict, total=False):
     """Available fields for sorting inventory_levels search results."""
+    inventory_item_id: AirbyteSortOrder
+    """Identifier of the inventory item"""
+    location_id: AirbyteSortOrder
+    """Identifier of the location holding the inventory"""
+    available: AirbyteSortOrder
+    """Number of units available at the location"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the inventory level was last updated"""
 
 
 # Entity-specific condition types for inventory_levels
@@ -1613,22 +2433,132 @@ class InventoryLevelsSearchQuery(TypedDict, total=False):
 
 class LocationsSearchFilter(TypedDict, total=False):
     """Available fields for filtering locations search queries."""
+    id: int | None
+    """Unique identifier for the location"""
+    name: str | None
+    """Display name of the location"""
+    address1: str | None
+    """Primary street address of the location"""
+    city: str | None
+    """City of the location"""
+    province: str | None
+    """Province, state, or region of the location"""
+    country: str | None
+    """Country name of the location"""
+    country_code: str | None
+    """ISO 3166-1 alpha-2 country code of the location"""
+    phone: str | None
+    """Phone number for the location"""
+    active: bool | None
+    """Whether the location is currently active"""
+    created_at: str | None
+    """ISO 8601 timestamp when the location was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the location was last updated"""
 
 
 class LocationsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the location"""
+    name: list[str]
+    """Display name of the location"""
+    address1: list[str]
+    """Primary street address of the location"""
+    city: list[str]
+    """City of the location"""
+    province: list[str]
+    """Province, state, or region of the location"""
+    country: list[str]
+    """Country name of the location"""
+    country_code: list[str]
+    """ISO 3166-1 alpha-2 country code of the location"""
+    phone: list[str]
+    """Phone number for the location"""
+    active: list[bool]
+    """Whether the location is currently active"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the location was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the location was last updated"""
 
 
 class LocationsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the location"""
+    name: Any
+    """Display name of the location"""
+    address1: Any
+    """Primary street address of the location"""
+    city: Any
+    """City of the location"""
+    province: Any
+    """Province, state, or region of the location"""
+    country: Any
+    """Country name of the location"""
+    country_code: Any
+    """ISO 3166-1 alpha-2 country code of the location"""
+    phone: Any
+    """Phone number for the location"""
+    active: Any
+    """Whether the location is currently active"""
+    created_at: Any
+    """ISO 8601 timestamp when the location was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the location was last updated"""
 
 
 class LocationsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the location"""
+    name: str
+    """Display name of the location"""
+    address1: str
+    """Primary street address of the location"""
+    city: str
+    """City of the location"""
+    province: str
+    """Province, state, or region of the location"""
+    country: str
+    """Country name of the location"""
+    country_code: str
+    """ISO 3166-1 alpha-2 country code of the location"""
+    phone: str
+    """Phone number for the location"""
+    active: str
+    """Whether the location is currently active"""
+    created_at: str
+    """ISO 8601 timestamp when the location was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the location was last updated"""
 
 
 class LocationsSortFilter(TypedDict, total=False):
     """Available fields for sorting locations search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the location"""
+    name: AirbyteSortOrder
+    """Display name of the location"""
+    address1: AirbyteSortOrder
+    """Primary street address of the location"""
+    city: AirbyteSortOrder
+    """City of the location"""
+    province: AirbyteSortOrder
+    """Province, state, or region of the location"""
+    country: AirbyteSortOrder
+    """Country name of the location"""
+    country_code: AirbyteSortOrder
+    """ISO 3166-1 alpha-2 country code of the location"""
+    phone: AirbyteSortOrder
+    """Phone number for the location"""
+    active: AirbyteSortOrder
+    """Whether the location is currently active"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the location was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the location was last updated"""
 
 
 # Entity-specific condition types for locations
@@ -1728,22 +2658,122 @@ class LocationsSearchQuery(TypedDict, total=False):
 
 class MetafieldCustomersSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_customers search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldCustomersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldCustomersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldCustomersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldCustomersSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_customers search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_customers
@@ -1843,22 +2873,122 @@ class MetafieldCustomersSearchQuery(TypedDict, total=False):
 
 class MetafieldDraftOrdersSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_draft_orders search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldDraftOrdersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldDraftOrdersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldDraftOrdersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldDraftOrdersSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_draft_orders search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_draft_orders
@@ -1958,22 +3088,122 @@ class MetafieldDraftOrdersSearchQuery(TypedDict, total=False):
 
 class MetafieldLocationsSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_locations search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldLocationsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldLocationsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldLocationsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldLocationsSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_locations search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_locations
@@ -2073,22 +3303,122 @@ class MetafieldLocationsSearchQuery(TypedDict, total=False):
 
 class MetafieldOrdersSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_orders search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldOrdersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldOrdersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldOrdersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldOrdersSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_orders search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_orders
@@ -2188,22 +3518,122 @@ class MetafieldOrdersSearchQuery(TypedDict, total=False):
 
 class MetafieldProductImagesSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_product_images search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductImagesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductImagesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductImagesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductImagesSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_product_images search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_product_images
@@ -2303,22 +3733,122 @@ class MetafieldProductImagesSearchQuery(TypedDict, total=False):
 
 class MetafieldProductVariantsSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_product_variants search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductVariantsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductVariantsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductVariantsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductVariantsSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_product_variants search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_product_variants
@@ -2418,22 +3948,122 @@ class MetafieldProductVariantsSearchQuery(TypedDict, total=False):
 
 class MetafieldProductsSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_products search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldProductsSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_products search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_products
@@ -2533,22 +4163,122 @@ class MetafieldProductsSearchQuery(TypedDict, total=False):
 
 class MetafieldShopsSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_shops search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldShopsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldShopsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldShopsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldShopsSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_shops search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_shops
@@ -2648,22 +4378,122 @@ class MetafieldShopsSearchQuery(TypedDict, total=False):
 
 class MetafieldSmartCollectionsSearchFilter(TypedDict, total=False):
     """Available fields for filtering metafield_smart_collections search queries."""
+    id: int | None
+    """Unique identifier for the metafield"""
+    namespace: str | None
+    """Namespace group for the metafield"""
+    key: str | None
+    """Key of the metafield within its namespace"""
+    value: str | None
+    """Serialized value stored in the metafield"""
+    type_: str | None
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str | None
+    """Human-readable description of the metafield"""
+    owner_id: int | None
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str | None
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldSmartCollectionsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the metafield"""
+    namespace: list[str]
+    """Namespace group for the metafield"""
+    key: list[str]
+    """Key of the metafield within its namespace"""
+    value: list[str]
+    """Serialized value stored in the metafield"""
+    type_: list[str]
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: list[str]
+    """Human-readable description of the metafield"""
+    owner_id: list[int]
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: list[str]
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldSmartCollectionsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the metafield"""
+    namespace: Any
+    """Namespace group for the metafield"""
+    key: Any
+    """Key of the metafield within its namespace"""
+    value: Any
+    """Serialized value stored in the metafield"""
+    type_: Any
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: Any
+    """Human-readable description of the metafield"""
+    owner_id: Any
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: Any
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldSmartCollectionsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the metafield"""
+    namespace: str
+    """Namespace group for the metafield"""
+    key: str
+    """Key of the metafield within its namespace"""
+    value: str
+    """Serialized value stored in the metafield"""
+    type_: str
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: str
+    """Human-readable description of the metafield"""
+    owner_id: str
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: str
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: str
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 class MetafieldSmartCollectionsSortFilter(TypedDict, total=False):
     """Available fields for sorting metafield_smart_collections search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the metafield"""
+    namespace: AirbyteSortOrder
+    """Namespace group for the metafield"""
+    key: AirbyteSortOrder
+    """Key of the metafield within its namespace"""
+    value: AirbyteSortOrder
+    """Serialized value stored in the metafield"""
+    type_: AirbyteSortOrder
+    """Shopify metafield type (e.g. `single_line_text_field`, `json`)"""
+    description: AirbyteSortOrder
+    """Human-readable description of the metafield"""
+    owner_id: AirbyteSortOrder
+    """Identifier of the resource that owns this metafield"""
+    owner_resource: AirbyteSortOrder
+    """Resource type that owns this metafield (e.g. `product`, `customer`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the metafield was last updated"""
 
 
 # Entity-specific condition types for metafield_smart_collections
@@ -2763,22 +4593,82 @@ class MetafieldSmartCollectionsSearchQuery(TypedDict, total=False):
 
 class OrderRefundsSearchFilter(TypedDict, total=False):
     """Available fields for filtering order_refunds search queries."""
+    id: int | None
+    """Unique identifier for the refund"""
+    order_id: int | None
+    """Identifier of the refunded order"""
+    user_id: int | None
+    """Identifier of the staff user who processed the refund"""
+    note: str | None
+    """Merchant-provided note explaining the refund"""
+    created_at: str | None
+    """ISO 8601 timestamp when the refund was created"""
+    processed_at: str | None
+    """ISO 8601 timestamp when the refund was processed"""
 
 
 class OrderRefundsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the refund"""
+    order_id: list[int]
+    """Identifier of the refunded order"""
+    user_id: list[int]
+    """Identifier of the staff user who processed the refund"""
+    note: list[str]
+    """Merchant-provided note explaining the refund"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the refund was created"""
+    processed_at: list[str]
+    """ISO 8601 timestamp when the refund was processed"""
 
 
 class OrderRefundsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the refund"""
+    order_id: Any
+    """Identifier of the refunded order"""
+    user_id: Any
+    """Identifier of the staff user who processed the refund"""
+    note: Any
+    """Merchant-provided note explaining the refund"""
+    created_at: Any
+    """ISO 8601 timestamp when the refund was created"""
+    processed_at: Any
+    """ISO 8601 timestamp when the refund was processed"""
 
 
 class OrderRefundsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the refund"""
+    order_id: str
+    """Identifier of the refunded order"""
+    user_id: str
+    """Identifier of the staff user who processed the refund"""
+    note: str
+    """Merchant-provided note explaining the refund"""
+    created_at: str
+    """ISO 8601 timestamp when the refund was created"""
+    processed_at: str
+    """ISO 8601 timestamp when the refund was processed"""
 
 
 class OrderRefundsSortFilter(TypedDict, total=False):
     """Available fields for sorting order_refunds search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the refund"""
+    order_id: AirbyteSortOrder
+    """Identifier of the refunded order"""
+    user_id: AirbyteSortOrder
+    """Identifier of the staff user who processed the refund"""
+    note: AirbyteSortOrder
+    """Merchant-provided note explaining the refund"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the refund was created"""
+    processed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the refund was processed"""
 
 
 # Entity-specific condition types for order_refunds
@@ -2878,22 +4768,132 @@ class OrderRefundsSearchQuery(TypedDict, total=False):
 
 class PriceRulesSearchFilter(TypedDict, total=False):
     """Available fields for filtering price_rules search queries."""
+    id: int | None
+    """Unique identifier for the price rule"""
+    title: str | None
+    """Administrative title of the price rule"""
+    value_type: str | None
+    """How the discount value is interpreted (`fixed_amount` or `percentage`)"""
+    value: str | None
+    """Discount value applied by the rule"""
+    target_type: str | None
+    """Type of target the rule applies to (`line_item` or `shipping_line`)"""
+    target_selection: str | None
+    """Which target items the rule applies to (`all` or `entitled`)"""
+    allocation_method: str | None
+    """How the discount is allocated (`each` or `across`)"""
+    starts_at: str | None
+    """ISO 8601 timestamp when the rule starts being active"""
+    ends_at: str | None
+    """ISO 8601 timestamp when the rule stops being active, if applicable"""
+    created_at: str | None
+    """ISO 8601 timestamp when the rule was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the rule was last updated"""
 
 
 class PriceRulesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the price rule"""
+    title: list[str]
+    """Administrative title of the price rule"""
+    value_type: list[str]
+    """How the discount value is interpreted (`fixed_amount` or `percentage`)"""
+    value: list[str]
+    """Discount value applied by the rule"""
+    target_type: list[str]
+    """Type of target the rule applies to (`line_item` or `shipping_line`)"""
+    target_selection: list[str]
+    """Which target items the rule applies to (`all` or `entitled`)"""
+    allocation_method: list[str]
+    """How the discount is allocated (`each` or `across`)"""
+    starts_at: list[str]
+    """ISO 8601 timestamp when the rule starts being active"""
+    ends_at: list[str]
+    """ISO 8601 timestamp when the rule stops being active, if applicable"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the rule was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the rule was last updated"""
 
 
 class PriceRulesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the price rule"""
+    title: Any
+    """Administrative title of the price rule"""
+    value_type: Any
+    """How the discount value is interpreted (`fixed_amount` or `percentage`)"""
+    value: Any
+    """Discount value applied by the rule"""
+    target_type: Any
+    """Type of target the rule applies to (`line_item` or `shipping_line`)"""
+    target_selection: Any
+    """Which target items the rule applies to (`all` or `entitled`)"""
+    allocation_method: Any
+    """How the discount is allocated (`each` or `across`)"""
+    starts_at: Any
+    """ISO 8601 timestamp when the rule starts being active"""
+    ends_at: Any
+    """ISO 8601 timestamp when the rule stops being active, if applicable"""
+    created_at: Any
+    """ISO 8601 timestamp when the rule was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the rule was last updated"""
 
 
 class PriceRulesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the price rule"""
+    title: str
+    """Administrative title of the price rule"""
+    value_type: str
+    """How the discount value is interpreted (`fixed_amount` or `percentage`)"""
+    value: str
+    """Discount value applied by the rule"""
+    target_type: str
+    """Type of target the rule applies to (`line_item` or `shipping_line`)"""
+    target_selection: str
+    """Which target items the rule applies to (`all` or `entitled`)"""
+    allocation_method: str
+    """How the discount is allocated (`each` or `across`)"""
+    starts_at: str
+    """ISO 8601 timestamp when the rule starts being active"""
+    ends_at: str
+    """ISO 8601 timestamp when the rule stops being active, if applicable"""
+    created_at: str
+    """ISO 8601 timestamp when the rule was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the rule was last updated"""
 
 
 class PriceRulesSortFilter(TypedDict, total=False):
     """Available fields for sorting price_rules search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the price rule"""
+    title: AirbyteSortOrder
+    """Administrative title of the price rule"""
+    value_type: AirbyteSortOrder
+    """How the discount value is interpreted (`fixed_amount` or `percentage`)"""
+    value: AirbyteSortOrder
+    """Discount value applied by the rule"""
+    target_type: AirbyteSortOrder
+    """Type of target the rule applies to (`line_item` or `shipping_line`)"""
+    target_selection: AirbyteSortOrder
+    """Which target items the rule applies to (`all` or `entitled`)"""
+    allocation_method: AirbyteSortOrder
+    """How the discount is allocated (`each` or `across`)"""
+    starts_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the rule starts being active"""
+    ends_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the rule stops being active, if applicable"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the rule was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the rule was last updated"""
 
 
 # Entity-specific condition types for price_rules
@@ -2993,22 +4993,112 @@ class PriceRulesSearchQuery(TypedDict, total=False):
 
 class ProductImagesSearchFilter(TypedDict, total=False):
     """Available fields for filtering product_images search queries."""
+    id: int | None
+    """Unique identifier for the product image"""
+    product_id: int | None
+    """Identifier of the product the image belongs to"""
+    position: int | None
+    """Display position of the image within the product"""
+    alt: str | None
+    """Alt text for the image"""
+    width: int | None
+    """Image width in pixels"""
+    height: int | None
+    """Image height in pixels"""
+    src: str | None
+    """Public URL of the image"""
+    created_at: str | None
+    """ISO 8601 timestamp when the image was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the image was last updated"""
 
 
 class ProductImagesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the product image"""
+    product_id: list[int]
+    """Identifier of the product the image belongs to"""
+    position: list[int]
+    """Display position of the image within the product"""
+    alt: list[str]
+    """Alt text for the image"""
+    width: list[int]
+    """Image width in pixels"""
+    height: list[int]
+    """Image height in pixels"""
+    src: list[str]
+    """Public URL of the image"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the image was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the image was last updated"""
 
 
 class ProductImagesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the product image"""
+    product_id: Any
+    """Identifier of the product the image belongs to"""
+    position: Any
+    """Display position of the image within the product"""
+    alt: Any
+    """Alt text for the image"""
+    width: Any
+    """Image width in pixels"""
+    height: Any
+    """Image height in pixels"""
+    src: Any
+    """Public URL of the image"""
+    created_at: Any
+    """ISO 8601 timestamp when the image was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the image was last updated"""
 
 
 class ProductImagesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the product image"""
+    product_id: str
+    """Identifier of the product the image belongs to"""
+    position: str
+    """Display position of the image within the product"""
+    alt: str
+    """Alt text for the image"""
+    width: str
+    """Image width in pixels"""
+    height: str
+    """Image height in pixels"""
+    src: str
+    """Public URL of the image"""
+    created_at: str
+    """ISO 8601 timestamp when the image was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the image was last updated"""
 
 
 class ProductImagesSortFilter(TypedDict, total=False):
     """Available fields for sorting product_images search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the product image"""
+    product_id: AirbyteSortOrder
+    """Identifier of the product the image belongs to"""
+    position: AirbyteSortOrder
+    """Display position of the image within the product"""
+    alt: AirbyteSortOrder
+    """Alt text for the image"""
+    width: AirbyteSortOrder
+    """Image width in pixels"""
+    height: AirbyteSortOrder
+    """Image height in pixels"""
+    src: AirbyteSortOrder
+    """Public URL of the image"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the image was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the image was last updated"""
 
 
 # Entity-specific condition types for product_images
@@ -3108,22 +5198,122 @@ class ProductImagesSearchQuery(TypedDict, total=False):
 
 class ProductVariantsSearchFilter(TypedDict, total=False):
     """Available fields for filtering product_variants search queries."""
+    id: int | None
+    """Unique identifier for the product variant"""
+    product_id: int | None
+    """Identifier of the parent product"""
+    title: str | None
+    """Display title of the variant"""
+    sku: str | None
+    """Stock keeping unit for the variant"""
+    price: str | None
+    """Price of the variant in the shop's currency"""
+    compare_at_price: str | None
+    """Original (compare-at) price of the variant, if set"""
+    position: int | None
+    """Display position of the variant within the product"""
+    inventory_policy: str | None
+    """Behaviour when out of stock (`deny` or `continue`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the variant was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the variant was last updated"""
 
 
 class ProductVariantsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the product variant"""
+    product_id: list[int]
+    """Identifier of the parent product"""
+    title: list[str]
+    """Display title of the variant"""
+    sku: list[str]
+    """Stock keeping unit for the variant"""
+    price: list[str]
+    """Price of the variant in the shop's currency"""
+    compare_at_price: list[str]
+    """Original (compare-at) price of the variant, if set"""
+    position: list[int]
+    """Display position of the variant within the product"""
+    inventory_policy: list[str]
+    """Behaviour when out of stock (`deny` or `continue`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the variant was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the variant was last updated"""
 
 
 class ProductVariantsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the product variant"""
+    product_id: Any
+    """Identifier of the parent product"""
+    title: Any
+    """Display title of the variant"""
+    sku: Any
+    """Stock keeping unit for the variant"""
+    price: Any
+    """Price of the variant in the shop's currency"""
+    compare_at_price: Any
+    """Original (compare-at) price of the variant, if set"""
+    position: Any
+    """Display position of the variant within the product"""
+    inventory_policy: Any
+    """Behaviour when out of stock (`deny` or `continue`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the variant was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the variant was last updated"""
 
 
 class ProductVariantsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the product variant"""
+    product_id: str
+    """Identifier of the parent product"""
+    title: str
+    """Display title of the variant"""
+    sku: str
+    """Stock keeping unit for the variant"""
+    price: str
+    """Price of the variant in the shop's currency"""
+    compare_at_price: str
+    """Original (compare-at) price of the variant, if set"""
+    position: str
+    """Display position of the variant within the product"""
+    inventory_policy: str
+    """Behaviour when out of stock (`deny` or `continue`)"""
+    created_at: str
+    """ISO 8601 timestamp when the variant was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the variant was last updated"""
 
 
 class ProductVariantsSortFilter(TypedDict, total=False):
     """Available fields for sorting product_variants search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the product variant"""
+    product_id: AirbyteSortOrder
+    """Identifier of the parent product"""
+    title: AirbyteSortOrder
+    """Display title of the variant"""
+    sku: AirbyteSortOrder
+    """Stock keeping unit for the variant"""
+    price: AirbyteSortOrder
+    """Price of the variant in the shop's currency"""
+    compare_at_price: AirbyteSortOrder
+    """Original (compare-at) price of the variant, if set"""
+    position: AirbyteSortOrder
+    """Display position of the variant within the product"""
+    inventory_policy: AirbyteSortOrder
+    """Behaviour when out of stock (`deny` or `continue`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the variant was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the variant was last updated"""
 
 
 # Entity-specific condition types for product_variants
@@ -3223,22 +5413,132 @@ class ProductVariantsSearchQuery(TypedDict, total=False):
 
 class ShopSearchFilter(TypedDict, total=False):
     """Available fields for filtering shop search queries."""
+    id: int | None
+    """Unique identifier for the shop"""
+    name: str | None
+    """Display name of the shop"""
+    email: str | None
+    """Primary contact email for the shop"""
+    domain: str | None
+    """Custom domain configured for the shop, if any"""
+    myshopify_domain: str | None
+    """Canonical `*.myshopify.com` domain for the shop"""
+    country_code: str | None
+    """ISO 3166-1 alpha-2 country code of the shop"""
+    currency: str | None
+    """ISO 4217 currency code used by the shop"""
+    timezone: str | None
+    """Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"""
+    plan_name: str | None
+    """Shopify plan identifier (e.g. `shopify_plus`, `basic`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the shop was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the shop was last updated"""
 
 
 class ShopInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the shop"""
+    name: list[str]
+    """Display name of the shop"""
+    email: list[str]
+    """Primary contact email for the shop"""
+    domain: list[str]
+    """Custom domain configured for the shop, if any"""
+    myshopify_domain: list[str]
+    """Canonical `*.myshopify.com` domain for the shop"""
+    country_code: list[str]
+    """ISO 3166-1 alpha-2 country code of the shop"""
+    currency: list[str]
+    """ISO 4217 currency code used by the shop"""
+    timezone: list[str]
+    """Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"""
+    plan_name: list[str]
+    """Shopify plan identifier (e.g. `shopify_plus`, `basic`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the shop was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the shop was last updated"""
 
 
 class ShopAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the shop"""
+    name: Any
+    """Display name of the shop"""
+    email: Any
+    """Primary contact email for the shop"""
+    domain: Any
+    """Custom domain configured for the shop, if any"""
+    myshopify_domain: Any
+    """Canonical `*.myshopify.com` domain for the shop"""
+    country_code: Any
+    """ISO 3166-1 alpha-2 country code of the shop"""
+    currency: Any
+    """ISO 4217 currency code used by the shop"""
+    timezone: Any
+    """Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"""
+    plan_name: Any
+    """Shopify plan identifier (e.g. `shopify_plus`, `basic`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the shop was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the shop was last updated"""
 
 
 class ShopStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the shop"""
+    name: str
+    """Display name of the shop"""
+    email: str
+    """Primary contact email for the shop"""
+    domain: str
+    """Custom domain configured for the shop, if any"""
+    myshopify_domain: str
+    """Canonical `*.myshopify.com` domain for the shop"""
+    country_code: str
+    """ISO 3166-1 alpha-2 country code of the shop"""
+    currency: str
+    """ISO 4217 currency code used by the shop"""
+    timezone: str
+    """Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"""
+    plan_name: str
+    """Shopify plan identifier (e.g. `shopify_plus`, `basic`)"""
+    created_at: str
+    """ISO 8601 timestamp when the shop was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the shop was last updated"""
 
 
 class ShopSortFilter(TypedDict, total=False):
     """Available fields for sorting shop search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the shop"""
+    name: AirbyteSortOrder
+    """Display name of the shop"""
+    email: AirbyteSortOrder
+    """Primary contact email for the shop"""
+    domain: AirbyteSortOrder
+    """Custom domain configured for the shop, if any"""
+    myshopify_domain: AirbyteSortOrder
+    """Canonical `*.myshopify.com` domain for the shop"""
+    country_code: AirbyteSortOrder
+    """ISO 3166-1 alpha-2 country code of the shop"""
+    currency: AirbyteSortOrder
+    """ISO 4217 currency code used by the shop"""
+    timezone: AirbyteSortOrder
+    """Timezone configured for the shop (e.g. `(GMT-05:00) Eastern Time`)"""
+    plan_name: AirbyteSortOrder
+    """Shopify plan identifier (e.g. `shopify_plus`, `basic`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the shop was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the shop was last updated"""
 
 
 # Entity-specific condition types for shop
@@ -3338,22 +5638,92 @@ class ShopSearchQuery(TypedDict, total=False):
 
 class SmartCollectionsSearchFilter(TypedDict, total=False):
     """Available fields for filtering smart_collections search queries."""
+    id: int | None
+    """Unique identifier for the smart collection"""
+    handle: str | None
+    """URL-friendly handle for the smart collection"""
+    title: str | None
+    """Display title of the smart collection"""
+    sort_order: str | None
+    """How products are sorted within the collection"""
+    published_scope: str | None
+    """Publishing scope (`web` or `global`)"""
+    published_at: str | None
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class SmartCollectionsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the smart collection"""
+    handle: list[str]
+    """URL-friendly handle for the smart collection"""
+    title: list[str]
+    """Display title of the smart collection"""
+    sort_order: list[str]
+    """How products are sorted within the collection"""
+    published_scope: list[str]
+    """Publishing scope (`web` or `global`)"""
+    published_at: list[str]
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class SmartCollectionsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the smart collection"""
+    handle: Any
+    """URL-friendly handle for the smart collection"""
+    title: Any
+    """Display title of the smart collection"""
+    sort_order: Any
+    """How products are sorted within the collection"""
+    published_scope: Any
+    """Publishing scope (`web` or `global`)"""
+    published_at: Any
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: Any
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class SmartCollectionsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the smart collection"""
+    handle: str
+    """URL-friendly handle for the smart collection"""
+    title: str
+    """Display title of the smart collection"""
+    sort_order: str
+    """How products are sorted within the collection"""
+    published_scope: str
+    """Publishing scope (`web` or `global`)"""
+    published_at: str
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: str
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 class SmartCollectionsSortFilter(TypedDict, total=False):
     """Available fields for sorting smart_collections search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the smart collection"""
+    handle: AirbyteSortOrder
+    """URL-friendly handle for the smart collection"""
+    title: AirbyteSortOrder
+    """Display title of the smart collection"""
+    sort_order: AirbyteSortOrder
+    """How products are sorted within the collection"""
+    published_scope: AirbyteSortOrder
+    """Publishing scope (`web` or `global`)"""
+    published_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the collection was published"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the collection was last updated"""
 
 
 # Entity-specific condition types for smart_collections
@@ -3453,22 +5823,102 @@ class SmartCollectionsSearchQuery(TypedDict, total=False):
 
 class TenderTransactionsSearchFilter(TypedDict, total=False):
     """Available fields for filtering tender_transactions search queries."""
+    id: int | None
+    """Unique identifier for the tender transaction"""
+    order_id: int | None
+    """Identifier of the order the transaction belongs to"""
+    user_id: int | None
+    """Identifier of the staff user who processed the transaction"""
+    amount: str | None
+    """Amount of the transaction in the shop's currency"""
+    currency: str | None
+    """ISO 4217 currency code for the transaction amount"""
+    payment_method: str | None
+    """Payment method used (e.g. `credit_card`, `paypal`)"""
+    test: bool | None
+    """Whether the transaction was a test transaction"""
+    processed_at: str | None
+    """ISO 8601 timestamp when the transaction was processed"""
 
 
 class TenderTransactionsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Unique identifier for the tender transaction"""
+    order_id: list[int]
+    """Identifier of the order the transaction belongs to"""
+    user_id: list[int]
+    """Identifier of the staff user who processed the transaction"""
+    amount: list[str]
+    """Amount of the transaction in the shop's currency"""
+    currency: list[str]
+    """ISO 4217 currency code for the transaction amount"""
+    payment_method: list[str]
+    """Payment method used (e.g. `credit_card`, `paypal`)"""
+    test: list[bool]
+    """Whether the transaction was a test transaction"""
+    processed_at: list[str]
+    """ISO 8601 timestamp when the transaction was processed"""
 
 
 class TenderTransactionsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the tender transaction"""
+    order_id: Any
+    """Identifier of the order the transaction belongs to"""
+    user_id: Any
+    """Identifier of the staff user who processed the transaction"""
+    amount: Any
+    """Amount of the transaction in the shop's currency"""
+    currency: Any
+    """ISO 4217 currency code for the transaction amount"""
+    payment_method: Any
+    """Payment method used (e.g. `credit_card`, `paypal`)"""
+    test: Any
+    """Whether the transaction was a test transaction"""
+    processed_at: Any
+    """ISO 8601 timestamp when the transaction was processed"""
 
 
 class TenderTransactionsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the tender transaction"""
+    order_id: str
+    """Identifier of the order the transaction belongs to"""
+    user_id: str
+    """Identifier of the staff user who processed the transaction"""
+    amount: str
+    """Amount of the transaction in the shop's currency"""
+    currency: str
+    """ISO 4217 currency code for the transaction amount"""
+    payment_method: str
+    """Payment method used (e.g. `credit_card`, `paypal`)"""
+    test: str
+    """Whether the transaction was a test transaction"""
+    processed_at: str
+    """ISO 8601 timestamp when the transaction was processed"""
 
 
 class TenderTransactionsSortFilter(TypedDict, total=False):
     """Available fields for sorting tender_transactions search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the tender transaction"""
+    order_id: AirbyteSortOrder
+    """Identifier of the order the transaction belongs to"""
+    user_id: AirbyteSortOrder
+    """Identifier of the staff user who processed the transaction"""
+    amount: AirbyteSortOrder
+    """Amount of the transaction in the shop's currency"""
+    currency: AirbyteSortOrder
+    """ISO 4217 currency code for the transaction amount"""
+    payment_method: AirbyteSortOrder
+    """Payment method used (e.g. `credit_card`, `paypal`)"""
+    test: AirbyteSortOrder
+    """Whether the transaction was a test transaction"""
+    processed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the transaction was processed"""
 
 
 # Entity-specific condition types for tender_transactions
