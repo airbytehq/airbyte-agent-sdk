@@ -2567,5 +2567,580 @@
       }
     ]
   },
-  "search_schemas": {}
+  "search_schemas": {
+    "issues": {
+      "entity": "issues",
+      "data_type_name": "IssuesSearchData",
+      "filter_type_name": "IssuesSearchFilter",
+      "in_filter_type_name": "IssuesInFilter",
+      "any_value_filter_type_name": "IssuesAnyValueFilter",
+      "string_filter_type_name": "IssuesStringFilter",
+      "sort_filter_type_name": "IssuesSortFilter",
+      "result_type_name": "IssuesSearchResult",
+      "query_type_name": "IssuesSearchQuery",
+      "condition_prefix": "Issues",
+      "condition_type_name": "IssuesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the issue"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Title of the issue"
+        },
+        {
+          "name": "state",
+          "python_name": "state",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Current state of the issue (e.g. new, in_progress, closed)"
+        },
+        {
+          "name": "source",
+          "python_name": "source",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Channel the issue originated from (e.g. email, slack)"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Type classification of the issue"
+        },
+        {
+          "name": "number",
+          "python_name": "number",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Human-readable issue number within the workspace"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the issue was created, in ISO 8601 format"
+        },
+        {
+          "name": "latest_message_time",
+          "python_name": "latest_message_time",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp of the most recent message on the issue, in ISO 8601 format"
+        },
+        {
+          "name": "resolution_time",
+          "python_name": "resolution_time",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the issue was resolved, in ISO 8601 format"
+        },
+        {
+          "name": "snoozed_until_time",
+          "python_name": "snoozed_until_time",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp the issue is snoozed until, in ISO 8601 format"
+        },
+        {
+          "name": "customer_portal_visible",
+          "python_name": "customer_portal_visible",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the issue is visible in the customer portal"
+        }
+      ]
+    },
+    "messages": {
+      "entity": "messages",
+      "data_type_name": "MessagesSearchData",
+      "filter_type_name": "MessagesSearchFilter",
+      "in_filter_type_name": "MessagesInFilter",
+      "any_value_filter_type_name": "MessagesAnyValueFilter",
+      "string_filter_type_name": "MessagesStringFilter",
+      "sort_filter_type_name": "MessagesSortFilter",
+      "result_type_name": "MessagesSearchResult",
+      "query_type_name": "MessagesSearchQuery",
+      "condition_prefix": "Messages",
+      "condition_type_name": "MessagesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the message"
+        },
+        {
+          "name": "timestamp",
+          "python_name": "timestamp",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp the message was posted, in ISO 8601 format"
+        },
+        {
+          "name": "is_private",
+          "python_name": "is_private",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the message is an internal note (not visible to the customer)"
+        },
+        {
+          "name": "source",
+          "python_name": "source",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Channel the message was sent through (e.g. email, slack)"
+        },
+        {
+          "name": "thread_id",
+          "python_name": "thread_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the thread this message belongs to"
+        }
+      ]
+    },
+    "accounts": {
+      "entity": "accounts",
+      "data_type_name": "AccountsSearchData",
+      "filter_type_name": "AccountsSearchFilter",
+      "in_filter_type_name": "AccountsInFilter",
+      "any_value_filter_type_name": "AccountsAnyValueFilter",
+      "string_filter_type_name": "AccountsStringFilter",
+      "sort_filter_type_name": "AccountsSortFilter",
+      "result_type_name": "AccountsSearchResult",
+      "query_type_name": "AccountsSearchQuery",
+      "condition_prefix": "Accounts",
+      "condition_type_name": "AccountsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the account"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the account (customer organization)"
+        },
+        {
+          "name": "domain",
+          "python_name": "domain",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary domain associated with the account"
+        },
+        {
+          "name": "primary_domain",
+          "python_name": "primary_domain",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Canonical primary domain for the account"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Classification of the account (e.g. customer, prospect)"
+        },
+        {
+          "name": "is_disabled",
+          "python_name": "is_disabled",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the account has been disabled"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the account was created, in ISO 8601 format"
+        },
+        {
+          "name": "latest_customer_activity_time",
+          "python_name": "latest_customer_activity_time",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp of the most recent activity from this account, in ISO 8601 format"
+        }
+      ]
+    },
+    "contacts": {
+      "entity": "contacts",
+      "data_type_name": "ContactsSearchData",
+      "filter_type_name": "ContactsSearchFilter",
+      "in_filter_type_name": "ContactsInFilter",
+      "any_value_filter_type_name": "ContactsAnyValueFilter",
+      "string_filter_type_name": "ContactsStringFilter",
+      "sort_filter_type_name": "ContactsSortFilter",
+      "result_type_name": "ContactsSearchResult",
+      "query_type_name": "ContactsSearchQuery",
+      "condition_prefix": "Contacts",
+      "condition_type_name": "ContactsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the contact"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Full name of the contact"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary email address of the contact"
+        },
+        {
+          "name": "primary_phone_number",
+          "python_name": "primary_phone_number",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary phone number of the contact"
+        },
+        {
+          "name": "portal_role",
+          "python_name": "portal_role",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Role the contact has in the customer portal"
+        }
+      ]
+    },
+    "teams": {
+      "entity": "teams",
+      "data_type_name": "TeamsSearchData",
+      "filter_type_name": "TeamsSearchFilter",
+      "in_filter_type_name": "TeamsInFilter",
+      "any_value_filter_type_name": "TeamsAnyValueFilter",
+      "string_filter_type_name": "TeamsStringFilter",
+      "sort_filter_type_name": "TeamsSortFilter",
+      "result_type_name": "TeamsSearchResult",
+      "query_type_name": "TeamsSearchQuery",
+      "condition_prefix": "Teams",
+      "condition_type_name": "TeamsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the team"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the team"
+        }
+      ]
+    },
+    "tags": {
+      "entity": "tags",
+      "data_type_name": "TagsSearchData",
+      "filter_type_name": "TagsSearchFilter",
+      "in_filter_type_name": "TagsInFilter",
+      "any_value_filter_type_name": "TagsAnyValueFilter",
+      "string_filter_type_name": "TagsStringFilter",
+      "sort_filter_type_name": "TagsSortFilter",
+      "result_type_name": "TagsSearchResult",
+      "query_type_name": "TagsSearchQuery",
+      "condition_prefix": "Tags",
+      "condition_type_name": "TagsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the tag"
+        },
+        {
+          "name": "value",
+          "python_name": "value",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display value of the tag"
+        },
+        {
+          "name": "object_type",
+          "python_name": "object_type",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Type of object this tag applies to (e.g. issue, account)"
+        }
+      ]
+    },
+    "users": {
+      "entity": "users",
+      "data_type_name": "UsersSearchData",
+      "filter_type_name": "UsersSearchFilter",
+      "in_filter_type_name": "UsersInFilter",
+      "any_value_filter_type_name": "UsersAnyValueFilter",
+      "string_filter_type_name": "UsersStringFilter",
+      "sort_filter_type_name": "UsersSortFilter",
+      "result_type_name": "UsersSearchResult",
+      "query_type_name": "UsersSearchQuery",
+      "condition_prefix": "Users",
+      "condition_type_name": "UsersCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the user"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Full name of the user"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary email address of the user"
+        },
+        {
+          "name": "role_id",
+          "python_name": "role_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the user's role"
+        },
+        {
+          "name": "status",
+          "python_name": "status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Current status of the user (e.g. active, disabled)"
+        }
+      ]
+    },
+    "custom_fields": {
+      "entity": "custom_fields",
+      "data_type_name": "CustomFieldsSearchData",
+      "filter_type_name": "CustomFieldsSearchFilter",
+      "in_filter_type_name": "CustomFieldsInFilter",
+      "any_value_filter_type_name": "CustomFieldsAnyValueFilter",
+      "string_filter_type_name": "CustomFieldsStringFilter",
+      "sort_filter_type_name": "CustomFieldsSortFilter",
+      "result_type_name": "CustomFieldsSearchResult",
+      "query_type_name": "CustomFieldsSearchQuery",
+      "condition_prefix": "CustomFields",
+      "condition_type_name": "CustomFieldsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the custom field"
+        },
+        {
+          "name": "label",
+          "python_name": "label",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display label of the custom field"
+        },
+        {
+          "name": "slug",
+          "python_name": "slug",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "URL-safe identifier for the custom field"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Data type of the custom field (e.g. text, select)"
+        },
+        {
+          "name": "object_type",
+          "python_name": "object_type",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Type of object this custom field applies to (e.g. issue, account)"
+        },
+        {
+          "name": "is_read_only",
+          "python_name": "is_read_only",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the custom field is read-only"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the custom field was created, in ISO 8601 format"
+        }
+      ]
+    },
+    "ticket_forms": {
+      "entity": "ticket_forms",
+      "data_type_name": "TicketFormsSearchData",
+      "filter_type_name": "TicketFormsSearchFilter",
+      "in_filter_type_name": "TicketFormsInFilter",
+      "any_value_filter_type_name": "TicketFormsAnyValueFilter",
+      "string_filter_type_name": "TicketFormsStringFilter",
+      "sort_filter_type_name": "TicketFormsSortFilter",
+      "result_type_name": "TicketFormsSearchResult",
+      "query_type_name": "TicketFormsSearchQuery",
+      "condition_prefix": "TicketForms",
+      "condition_type_name": "TicketFormsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the ticket form"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display name of the ticket form"
+        },
+        {
+          "name": "slug",
+          "python_name": "slug",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "URL-safe identifier for the ticket form"
+        },
+        {
+          "name": "is_public",
+          "python_name": "is_public",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the ticket form is publicly accessible"
+        }
+      ]
+    },
+    "user_roles": {
+      "entity": "user_roles",
+      "data_type_name": "UserRolesSearchData",
+      "filter_type_name": "UserRolesSearchFilter",
+      "in_filter_type_name": "UserRolesInFilter",
+      "any_value_filter_type_name": "UserRolesAnyValueFilter",
+      "string_filter_type_name": "UserRolesStringFilter",
+      "sort_filter_type_name": "UserRolesSortFilter",
+      "result_type_name": "UserRolesSearchResult",
+      "query_type_name": "UserRolesSearchQuery",
+      "condition_prefix": "UserRoles",
+      "condition_type_name": "UserRolesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the user role"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display name of the user role"
+        },
+        {
+          "name": "slug",
+          "python_name": "slug",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "URL-safe identifier for the user role"
+        }
+      ]
+    }
+  }
 }

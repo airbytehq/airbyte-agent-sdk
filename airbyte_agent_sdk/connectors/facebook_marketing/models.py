@@ -476,15 +476,6 @@ class PixelOwnerBusiness(BaseModel):
     name: Union[str | None, Any] = Field(default=None, description="Owner business name")
     """Owner business name"""
 
-class PixelCreator(BaseModel):
-    """User who created the pixel"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None, description="Creator user ID")
-    """Creator user ID"""
-    name: Union[str | None, Any] = Field(default=None, description="Creator user name")
-    """Creator user name"""
-
 class PixelOwnerAdAccount(BaseModel):
     """Ad account that owns the pixel"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -493,6 +484,15 @@ class PixelOwnerAdAccount(BaseModel):
     """Owner ad account ID"""
     id: Union[str | None, Any] = Field(default=None, description="Owner ad account ID (with act_ prefix)")
     """Owner ad account ID (with act_ prefix)"""
+
+class PixelCreator(BaseModel):
+    """User who created the pixel"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None, description="Creator user ID")
+    """Creator user ID"""
+    name: Union[str | None, Any] = Field(default=None, description="Creator user name")
+    """Creator user name"""
 
 class Pixel(BaseModel):
     """Facebook Ads Pixel"""

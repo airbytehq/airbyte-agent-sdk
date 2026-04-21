@@ -16,7 +16,95 @@ info:
   x-airbyte-connector-definition-id: f7833dac-fc18-4feb-a2a9-94b22001edc6
   x-airbyte-replication-version: "0.0.49"
   x-airbyte-replication-compatibility: ">=0.0.49, <1.0.0"
-  x-airbyte-skip-context-store: "File-based connector, no structured streams for caching"
+  x-airbyte-context-store:
+    entities:
+      - entity: profile
+        x-airbyte-name: profile
+        fields:
+          - name: emailAddress
+            type:
+              - "string"
+              - "null"
+            description: "Email address of the authenticated Gmail account"
+          - name: historyId
+            type:
+              - "string"
+              - "null"
+            description: "Mailbox history record identifier used for incremental sync"
+          - name: messagesTotal
+            type:
+              - "number"
+              - "null"
+            description: "Total number of messages currently in the mailbox"
+          - name: threadsTotal
+            type:
+              - "number"
+              - "null"
+            description: "Total number of threads currently in the mailbox"
+      - entity: messages
+        x-airbyte-name: messages
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the message"
+          - name: threadId
+            type:
+              - "string"
+              - "null"
+            description: "Identifier of the thread this message belongs to"
+      - entity: labels
+        x-airbyte-name: labels
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the label"
+          - name: name
+            type:
+              - "string"
+              - "null"
+            description: "Display name of the label"
+          - name: type
+            type:
+              - "string"
+              - "null"
+            description: "Label type: `system` or `user`"
+          - name: labelListVisibility
+            type:
+              - "string"
+              - "null"
+            description: "Visibility of the label in the label list"
+          - name: messageListVisibility
+            type:
+              - "string"
+              - "null"
+            description: "Visibility of the label when viewing a message list"
+      - entity: drafts
+        x-airbyte-name: drafts
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the draft"
+          - name: message
+            type:
+              - "object"
+              - "null"
+            description: "Draft message payload (headers, body, and metadata)"
+      - entity: threads
+        x-airbyte-name: threads
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the thread"
+          - name: historyId
+            type:
+              - "string"
+              - "null"
+            description: "Mailbox history record identifier for the thread"
+          - name: snippet
+            type:
+              - "string"
+              - "null"
+            description: "Short snippet of the thread's most recent message"
   x-airbyte-example-questions:
     direct:
       - "List my recent emails"

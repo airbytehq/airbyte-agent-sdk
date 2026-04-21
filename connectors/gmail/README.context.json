@@ -1144,5 +1144,209 @@
       }
     ]
   },
-  "search_schemas": {}
+  "search_schemas": {
+    "profile": {
+      "entity": "profile",
+      "data_type_name": "ProfileSearchData",
+      "filter_type_name": "ProfileSearchFilter",
+      "in_filter_type_name": "ProfileInFilter",
+      "any_value_filter_type_name": "ProfileAnyValueFilter",
+      "string_filter_type_name": "ProfileStringFilter",
+      "sort_filter_type_name": "ProfileSortFilter",
+      "result_type_name": "ProfileSearchResult",
+      "query_type_name": "ProfileSearchQuery",
+      "condition_prefix": "Profile",
+      "condition_type_name": "ProfileCondition",
+      "fields": [
+        {
+          "name": "emailAddress",
+          "python_name": "email_address",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Email address of the authenticated Gmail account"
+        },
+        {
+          "name": "historyId",
+          "python_name": "history_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Mailbox history record identifier used for incremental sync"
+        },
+        {
+          "name": "messagesTotal",
+          "python_name": "messages_total",
+          "type": "float | None",
+          "json_type": "number | null",
+          "example_value_json": "0.0",
+          "description": "Total number of messages currently in the mailbox"
+        },
+        {
+          "name": "threadsTotal",
+          "python_name": "threads_total",
+          "type": "float | None",
+          "json_type": "number | null",
+          "example_value_json": "0.0",
+          "description": "Total number of threads currently in the mailbox"
+        }
+      ]
+    },
+    "messages": {
+      "entity": "messages",
+      "data_type_name": "MessagesSearchData",
+      "filter_type_name": "MessagesSearchFilter",
+      "in_filter_type_name": "MessagesInFilter",
+      "any_value_filter_type_name": "MessagesAnyValueFilter",
+      "string_filter_type_name": "MessagesStringFilter",
+      "sort_filter_type_name": "MessagesSortFilter",
+      "result_type_name": "MessagesSearchResult",
+      "query_type_name": "MessagesSearchQuery",
+      "condition_prefix": "Messages",
+      "condition_type_name": "MessagesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the message"
+        },
+        {
+          "name": "threadId",
+          "python_name": "thread_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the thread this message belongs to"
+        }
+      ]
+    },
+    "labels": {
+      "entity": "labels",
+      "data_type_name": "LabelsSearchData",
+      "filter_type_name": "LabelsSearchFilter",
+      "in_filter_type_name": "LabelsInFilter",
+      "any_value_filter_type_name": "LabelsAnyValueFilter",
+      "string_filter_type_name": "LabelsStringFilter",
+      "sort_filter_type_name": "LabelsSortFilter",
+      "result_type_name": "LabelsSearchResult",
+      "query_type_name": "LabelsSearchQuery",
+      "condition_prefix": "Labels",
+      "condition_type_name": "LabelsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the label"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Display name of the label"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Label type: `system` or `user`"
+        },
+        {
+          "name": "labelListVisibility",
+          "python_name": "label_list_visibility",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Visibility of the label in the label list"
+        },
+        {
+          "name": "messageListVisibility",
+          "python_name": "message_list_visibility",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Visibility of the label when viewing a message list"
+        }
+      ]
+    },
+    "drafts": {
+      "entity": "drafts",
+      "data_type_name": "DraftsSearchData",
+      "filter_type_name": "DraftsSearchFilter",
+      "in_filter_type_name": "DraftsInFilter",
+      "any_value_filter_type_name": "DraftsAnyValueFilter",
+      "string_filter_type_name": "DraftsStringFilter",
+      "sort_filter_type_name": "DraftsSortFilter",
+      "result_type_name": "DraftsSearchResult",
+      "query_type_name": "DraftsSearchQuery",
+      "condition_prefix": "Drafts",
+      "condition_type_name": "DraftsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the draft"
+        },
+        {
+          "name": "message",
+          "python_name": "message",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "Draft message payload (headers, body, and metadata)"
+        }
+      ]
+    },
+    "threads": {
+      "entity": "threads",
+      "data_type_name": "ThreadsSearchData",
+      "filter_type_name": "ThreadsSearchFilter",
+      "in_filter_type_name": "ThreadsInFilter",
+      "any_value_filter_type_name": "ThreadsAnyValueFilter",
+      "string_filter_type_name": "ThreadsStringFilter",
+      "sort_filter_type_name": "ThreadsSortFilter",
+      "result_type_name": "ThreadsSearchResult",
+      "query_type_name": "ThreadsSearchQuery",
+      "condition_prefix": "Threads",
+      "condition_type_name": "ThreadsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the thread"
+        },
+        {
+          "name": "historyId",
+          "python_name": "history_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Mailbox history record identifier for the thread"
+        },
+        {
+          "name": "snippet",
+          "python_name": "snippet",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Short snippet of the thread's most recent message"
+        }
+      ]
+    }
+  }
 }

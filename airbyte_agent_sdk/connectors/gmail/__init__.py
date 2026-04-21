@@ -8,6 +8,18 @@ from .connector import GmailConnector
 from .models import (
     GmailAuthConfig,
     GmailReplicationConfig,
+    AirbyteSearchMeta,
+    AirbyteSearchResult,
+    ProfileSearchData,
+    ProfileSearchResult,
+    MessagesSearchData,
+    MessagesSearchResult,
+    LabelsSearchData,
+    LabelsSearchResult,
+    DraftsSearchData,
+    DraftsSearchResult,
+    ThreadsSearchData,
+    ThreadsSearchResult,
 )
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -16,4 +28,16 @@ __all__ = [
     "AirbyteAuthConfig",
     "GmailAuthConfig",
     "GmailReplicationConfig",
+    "AirbyteSearchMeta",
+    "AirbyteSearchResult",
+    "ProfileSearchData",
+    "ProfileSearchResult",
+    "MessagesSearchData",
+    "MessagesSearchResult",
+    "LabelsSearchData",
+    "LabelsSearchResult",
+    "DraftsSearchData",
+    "DraftsSearchResult",
+    "ThreadsSearchData",
+    "ThreadsSearchResult",
 ]

@@ -46,6 +46,44 @@ class IncidentCustomFieldEntriesItem(BaseModel):
     custom_field: Union[IncidentCustomFieldEntriesItemCustomField | None, Any] = Field(default=None)
     values: Union[list[Any] | None, Any] = Field(default=None)
 
+class IncidentDurationMetricsItemDurationMetric(BaseModel):
+    """Nested schema for IncidentDurationMetricsItem.duration_metric"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+
+class IncidentDurationMetricsItem(BaseModel):
+    """Nested schema for Incident.duration_metrics_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    duration_metric: Union[IncidentDurationMetricsItemDurationMetric | None, Any] = Field(default=None)
+
+class IncidentIncidentType(BaseModel):
+    """Type of the incident"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    description: Union[str | None, Any] = Field(default=None)
+    create_in_triage: Union[str | None, Any] = Field(default=None)
+    is_default: Union[bool | None, Any] = Field(default=None)
+    private_incidents_only: Union[bool | None, Any] = Field(default=None)
+    created_at: Union[str | None, Any] = Field(default=None)
+    updated_at: Union[str | None, Any] = Field(default=None)
+
+class IncidentIncidentStatus(BaseModel):
+    """Current status of the incident"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    description: Union[str | None, Any] = Field(default=None)
+    category: Union[str | None, Any] = Field(default=None)
+    rank: Union[float | None, Any] = Field(default=None)
+    created_at: Union[str | None, Any] = Field(default=None)
+    updated_at: Union[str | None, Any] = Field(default=None)
+
 class IncidentIncidentRoleAssignmentsItemAssignee(BaseModel):
     """Nested schema for IncidentIncidentRoleAssignmentsItem.assignee"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -77,29 +115,21 @@ class IncidentIncidentRoleAssignmentsItem(BaseModel):
     assignee: Union[IncidentIncidentRoleAssignmentsItemAssignee | None, Any] = Field(default=None)
     role: Union[IncidentIncidentRoleAssignmentsItemRole | None, Any] = Field(default=None)
 
-class IncidentSeverity(BaseModel):
-    """Severity of the incident"""
+class IncidentCreatorUser(BaseModel):
+    """Nested schema for IncidentCreator.user"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
-    description: Union[str | None, Any] = Field(default=None)
-    rank: Union[float | None, Any] = Field(default=None)
-    created_at: Union[str | None, Any] = Field(default=None)
-    updated_at: Union[str | None, Any] = Field(default=None)
+    email: Union[str | None, Any] = Field(default=None)
+    role: Union[str | None, Any] = Field(default=None)
+    slack_user_id: Union[str | None, Any] = Field(default=None)
 
-class IncidentDurationMetricsItemDurationMetric(BaseModel):
-    """Nested schema for IncidentDurationMetricsItem.duration_metric"""
+class IncidentCreator(BaseModel):
+    """The user who created the incident"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-
-class IncidentDurationMetricsItem(BaseModel):
-    """Nested schema for Incident.duration_metrics_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    duration_metric: Union[IncidentDurationMetricsItemDurationMetric | None, Any] = Field(default=None)
+    user: Union[IncidentCreatorUser | None, Any] = Field(default=None)
 
 class IncidentIncidentTimestampValuesItemIncidentTimestamp(BaseModel):
     """Nested schema for IncidentIncidentTimestampValuesItem.incident_timestamp"""
@@ -122,44 +152,14 @@ class IncidentIncidentTimestampValuesItem(BaseModel):
     incident_timestamp: Union[IncidentIncidentTimestampValuesItemIncidentTimestamp | None, Any] = Field(default=None)
     value: Union[IncidentIncidentTimestampValuesItemValue | None, Any] = Field(default=None)
 
-class IncidentIncidentStatus(BaseModel):
-    """Current status of the incident"""
+class IncidentSeverity(BaseModel):
+    """Severity of the incident"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
     description: Union[str | None, Any] = Field(default=None)
-    category: Union[str | None, Any] = Field(default=None)
     rank: Union[float | None, Any] = Field(default=None)
-    created_at: Union[str | None, Any] = Field(default=None)
-    updated_at: Union[str | None, Any] = Field(default=None)
-
-class IncidentCreatorUser(BaseModel):
-    """Nested schema for IncidentCreator.user"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    email: Union[str | None, Any] = Field(default=None)
-    role: Union[str | None, Any] = Field(default=None)
-    slack_user_id: Union[str | None, Any] = Field(default=None)
-
-class IncidentCreator(BaseModel):
-    """The user who created the incident"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    user: Union[IncidentCreatorUser | None, Any] = Field(default=None)
-
-class IncidentIncidentType(BaseModel):
-    """Type of the incident"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    description: Union[str | None, Any] = Field(default=None)
-    create_in_triage: Union[str | None, Any] = Field(default=None)
-    is_default: Union[bool | None, Any] = Field(default=None)
-    private_incidents_only: Union[bool | None, Any] = Field(default=None)
     created_at: Union[str | None, Any] = Field(default=None)
     updated_at: Union[str | None, Any] = Field(default=None)
 
@@ -242,6 +242,24 @@ class Alert(BaseModel):
     resolved_at: Union[str | None, Any] = Field(default=None)
     attributes: Union[list[AlertAttributesItem] | None, Any] = Field(default=None)
 
+class EscalationRelatedIncidentsItem(BaseModel):
+    """Nested schema for Escalation.related_incidents_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    reference: Union[str | None, Any] = Field(default=None)
+    summary: Union[str | None, Any] = Field(default=None)
+    external_id: Union[int | None, Any] = Field(default=None)
+    status_category: Union[str | None, Any] = Field(default=None)
+    visibility: Union[str | None, Any] = Field(default=None)
+
+class EscalationPriority(BaseModel):
+    """Priority of the escalation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: Union[str | None, Any] = Field(default=None)
+
 class EscalationEventsItemChannelsItem(BaseModel):
     """Nested schema for EscalationEventsItem.channels_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -287,22 +305,18 @@ class EscalationRelatedAlertsItem(BaseModel):
     updated_at: Union[str | None, Any] = Field(default=None)
     resolved_at: Union[str | None, Any] = Field(default=None)
 
-class EscalationRelatedIncidentsItem(BaseModel):
-    """Nested schema for Escalation.related_incidents_item"""
+class EscalationCreatorAlert(BaseModel):
+    """Nested schema for EscalationCreator.alert"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    reference: Union[str | None, Any] = Field(default=None)
-    summary: Union[str | None, Any] = Field(default=None)
-    external_id: Union[int | None, Any] = Field(default=None)
-    status_category: Union[str | None, Any] = Field(default=None)
-    visibility: Union[str | None, Any] = Field(default=None)
+    title: Union[str | None, Any] = Field(default=None)
 
-class EscalationPriority(BaseModel):
-    """Priority of the escalation"""
+class EscalationCreatorWorkflow(BaseModel):
+    """Nested schema for EscalationCreator.workflow"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
+    id: Union[str | None, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
 
 class EscalationCreatorUser(BaseModel):
@@ -314,20 +328,6 @@ class EscalationCreatorUser(BaseModel):
     email: Union[str | None, Any] = Field(default=None)
     role: Union[str | None, Any] = Field(default=None)
     slack_user_id: Union[str | None, Any] = Field(default=None)
-
-class EscalationCreatorWorkflow(BaseModel):
-    """Nested schema for EscalationCreator.workflow"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-
-class EscalationCreatorAlert(BaseModel):
-    """Nested schema for EscalationCreator.alert"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    title: Union[str | None, Any] = Field(default=None)
 
 class EscalationCreator(BaseModel):
     """The creator of this escalation"""
@@ -374,17 +374,6 @@ class User(BaseModel):
     base_role: Union[UserBaseRole | None, Any] = Field(default=None)
     custom_roles: Union[list[Any] | None, Any] = Field(default=None)
 
-class IncidentUpdateNewSeverity(BaseModel):
-    """New severity set by this update"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    description: Union[str | None, Any] = Field(default=None)
-    rank: Union[float | None, Any] = Field(default=None)
-    created_at: Union[str | None, Any] = Field(default=None)
-    updated_at: Union[str | None, Any] = Field(default=None)
-
 class IncidentUpdateNewIncidentStatus(BaseModel):
     """New incident status set by this update"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -393,6 +382,17 @@ class IncidentUpdateNewIncidentStatus(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     description: Union[str | None, Any] = Field(default=None)
     category: Union[str | None, Any] = Field(default=None)
+    rank: Union[float | None, Any] = Field(default=None)
+    created_at: Union[str | None, Any] = Field(default=None)
+    updated_at: Union[str | None, Any] = Field(default=None)
+
+class IncidentUpdateNewSeverity(BaseModel):
+    """New severity set by this update"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    description: Union[str | None, Any] = Field(default=None)
     rank: Union[float | None, Any] = Field(default=None)
     created_at: Union[str | None, Any] = Field(default=None)
     updated_at: Union[str | None, Any] = Field(default=None)

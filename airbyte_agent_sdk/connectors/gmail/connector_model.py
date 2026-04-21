@@ -2242,6 +2242,24 @@ GmailConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
     ],
+    search_field_paths={
+        'profile': [
+            'emailAddress',
+            'historyId',
+            'messagesTotal',
+            'threadsTotal',
+        ],
+        'messages': ['id', 'threadId'],
+        'labels': [
+            'id',
+            'name',
+            'type',
+            'labelListVisibility',
+            'messageListVisibility',
+        ],
+        'drafts': ['id', 'message'],
+        'threads': ['id', 'historyId', 'snippet'],
+    },
     example_questions=ExampleQuestions(
         direct=[
             'List my recent emails',

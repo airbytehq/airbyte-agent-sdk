@@ -921,6 +921,234 @@ class PylonExecuteResultWithMeta(PylonExecuteResult[T], Generic[T, S]):
     meta: S
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
+# ===== SEARCH DATA MODELS =====
+# Entity-specific Pydantic models for search result data
+
+# Type variable for search data generic
+D = TypeVar('D')
+
+class IssuesSearchData(BaseModel):
+    """Search result data for issues entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the issue"""
+    title: str | None = None
+    """Title of the issue"""
+    state: str | None = None
+    """Current state of the issue (e.g. new, in_progress, closed)"""
+    source: str | None = None
+    """Channel the issue originated from (e.g. email, slack)"""
+    type_: str | None = None
+    """Type classification of the issue"""
+    number: int | None = None
+    """Human-readable issue number within the workspace"""
+    created_at: str | None = None
+    """Timestamp when the issue was created, in ISO 8601 format"""
+    latest_message_time: str | None = None
+    """Timestamp of the most recent message on the issue, in ISO 8601 format"""
+    resolution_time: str | None = None
+    """Timestamp when the issue was resolved, in ISO 8601 format"""
+    snoozed_until_time: str | None = None
+    """Timestamp the issue is snoozed until, in ISO 8601 format"""
+    customer_portal_visible: bool | None = None
+    """Whether the issue is visible in the customer portal"""
+
+
+class MessagesSearchData(BaseModel):
+    """Search result data for messages entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the message"""
+    timestamp: str | None = None
+    """Timestamp the message was posted, in ISO 8601 format"""
+    is_private: bool | None = None
+    """Whether the message is an internal note (not visible to the customer)"""
+    source: str | None = None
+    """Channel the message was sent through (e.g. email, slack)"""
+    thread_id: str | None = None
+    """Identifier of the thread this message belongs to"""
+
+
+class AccountsSearchData(BaseModel):
+    """Search result data for accounts entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the account"""
+    name: str | None = None
+    """Name of the account (customer organization)"""
+    domain: str | None = None
+    """Primary domain associated with the account"""
+    primary_domain: str | None = None
+    """Canonical primary domain for the account"""
+    type_: str | None = None
+    """Classification of the account (e.g. customer, prospect)"""
+    is_disabled: bool | None = None
+    """Whether the account has been disabled"""
+    created_at: str | None = None
+    """Timestamp when the account was created, in ISO 8601 format"""
+    latest_customer_activity_time: str | None = None
+    """Timestamp of the most recent activity from this account, in ISO 8601 format"""
+
+
+class ContactsSearchData(BaseModel):
+    """Search result data for contacts entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the contact"""
+    name: str | None = None
+    """Full name of the contact"""
+    email: str | None = None
+    """Primary email address of the contact"""
+    primary_phone_number: str | None = None
+    """Primary phone number of the contact"""
+    portal_role: str | None = None
+    """Role the contact has in the customer portal"""
+
+
+class TeamsSearchData(BaseModel):
+    """Search result data for teams entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the team"""
+    name: str | None = None
+    """Name of the team"""
+
+
+class TagsSearchData(BaseModel):
+    """Search result data for tags entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the tag"""
+    value: str | None = None
+    """Display value of the tag"""
+    object_type: str | None = None
+    """Type of object this tag applies to (e.g. issue, account)"""
+
+
+class UsersSearchData(BaseModel):
+    """Search result data for users entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the user"""
+    name: str | None = None
+    """Full name of the user"""
+    email: str | None = None
+    """Primary email address of the user"""
+    role_id: str | None = None
+    """Identifier of the user's role"""
+    status: str | None = None
+    """Current status of the user (e.g. active, disabled)"""
+
+
+class CustomFieldsSearchData(BaseModel):
+    """Search result data for custom_fields entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the custom field"""
+    label: str | None = None
+    """Display label of the custom field"""
+    slug: str | None = None
+    """URL-safe identifier for the custom field"""
+    type_: str | None = None
+    """Data type of the custom field (e.g. text, select)"""
+    object_type: str | None = None
+    """Type of object this custom field applies to (e.g. issue, account)"""
+    is_read_only: bool | None = None
+    """Whether the custom field is read-only"""
+    created_at: str | None = None
+    """Timestamp when the custom field was created, in ISO 8601 format"""
+
+
+class TicketFormsSearchData(BaseModel):
+    """Search result data for ticket_forms entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the ticket form"""
+    name: str | None = None
+    """Display name of the ticket form"""
+    slug: str | None = None
+    """URL-safe identifier for the ticket form"""
+    is_public: bool | None = None
+    """Whether the ticket form is publicly accessible"""
+
+
+class UserRolesSearchData(BaseModel):
+    """Search result data for user_roles entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the user role"""
+    name: str | None = None
+    """Display name of the user role"""
+    slug: str | None = None
+    """URL-safe identifier for the user role"""
+
+
+# ===== GENERIC SEARCH RESULT TYPES =====
+
+class AirbyteSearchMeta(BaseModel):
+    """Pagination metadata for search responses."""
+    model_config = ConfigDict(extra="allow")
+
+    has_more: bool = False
+    """Whether more results are available."""
+    cursor: str | None = None
+    """Cursor for fetching the next page of results."""
+    took_ms: int | None = None
+    """Time taken to execute the search in milliseconds."""
+
+
+class AirbyteSearchResult(BaseModel, Generic[D]):
+    """Result from Airbyte cache search operations with typed records."""
+    model_config = ConfigDict(extra="allow")
+
+    data: list[D] = Field(default_factory=list)
+    """List of matching records."""
+    meta: AirbyteSearchMeta = Field(default_factory=AirbyteSearchMeta)
+    """Pagination metadata."""
+
+
+# ===== ENTITY-SPECIFIC SEARCH RESULT TYPE ALIASES =====
+
+IssuesSearchResult = AirbyteSearchResult[IssuesSearchData]
+"""Search result type for issues entity."""
+
+MessagesSearchResult = AirbyteSearchResult[MessagesSearchData]
+"""Search result type for messages entity."""
+
+AccountsSearchResult = AirbyteSearchResult[AccountsSearchData]
+"""Search result type for accounts entity."""
+
+ContactsSearchResult = AirbyteSearchResult[ContactsSearchData]
+"""Search result type for contacts entity."""
+
+TeamsSearchResult = AirbyteSearchResult[TeamsSearchData]
+"""Search result type for teams entity."""
+
+TagsSearchResult = AirbyteSearchResult[TagsSearchData]
+"""Search result type for tags entity."""
+
+UsersSearchResult = AirbyteSearchResult[UsersSearchData]
+"""Search result type for users entity."""
+
+CustomFieldsSearchResult = AirbyteSearchResult[CustomFieldsSearchData]
+"""Search result type for custom_fields entity."""
+
+TicketFormsSearchResult = AirbyteSearchResult[TicketFormsSearchData]
+"""Search result type for ticket_forms entity."""
+
+UserRolesSearchResult = AirbyteSearchResult[UserRolesSearchData]
+"""Search result type for user_roles entity."""
+
 
 
 # ===== OPERATION RESULT TYPE ALIASES =====

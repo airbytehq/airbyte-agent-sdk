@@ -12,7 +12,283 @@ info:
   x-airbyte-connector-definition-id: f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6
   x-airbyte-replication-version: "0.0.3"
   x-airbyte-replication-compatibility: ">=0.0.3, <1.0.0"
-  x-airbyte-skip-context-store: "No Airbyte streams found for this connector"
+  x-airbyte-context-store:
+    entities:
+      - entity: issues
+        x-airbyte-name: issues
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the issue"
+          - name: title
+            type:
+              - "null"
+              - "string"
+            description: "Title of the issue"
+          - name: state
+            type:
+              - "null"
+              - "string"
+            description: "Current state of the issue (e.g. new, in_progress, closed)"
+          - name: source
+            type:
+              - "null"
+              - "string"
+            description: "Channel the issue originated from (e.g. email, slack)"
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "Type classification of the issue"
+          - name: number
+            type:
+              - "null"
+              - "integer"
+            description: "Human-readable issue number within the workspace"
+          - name: created_at
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the issue was created, in ISO 8601 format"
+          - name: latest_message_time
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp of the most recent message on the issue, in ISO 8601 format"
+          - name: resolution_time
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the issue was resolved, in ISO 8601 format"
+          - name: snoozed_until_time
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp the issue is snoozed until, in ISO 8601 format"
+          - name: customer_portal_visible
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the issue is visible in the customer portal"
+      - entity: messages
+        x-airbyte-name: issue_messages
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the message"
+          - name: timestamp
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp the message was posted, in ISO 8601 format"
+          - name: is_private
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the message is an internal note (not visible to the customer)"
+          - name: source
+            type:
+              - "null"
+              - "string"
+            description: "Channel the message was sent through (e.g. email, slack)"
+          - name: thread_id
+            type:
+              - "null"
+              - "string"
+            description: "Identifier of the thread this message belongs to"
+      - entity: accounts
+        x-airbyte-name: accounts
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the account"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the account (customer organization)"
+          - name: domain
+            type:
+              - "null"
+              - "string"
+            description: "Primary domain associated with the account"
+          - name: primary_domain
+            type:
+              - "null"
+              - "string"
+            description: "Canonical primary domain for the account"
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "Classification of the account (e.g. customer, prospect)"
+          - name: is_disabled
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the account has been disabled"
+          - name: created_at
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the account was created, in ISO 8601 format"
+          - name: latest_customer_activity_time
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp of the most recent activity from this account, in ISO 8601 format"
+      - entity: contacts
+        x-airbyte-name: contacts
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the contact"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Full name of the contact"
+          - name: email
+            type:
+              - "null"
+              - "string"
+            description: "Primary email address of the contact"
+          - name: primary_phone_number
+            type:
+              - "null"
+              - "string"
+            description: "Primary phone number of the contact"
+          - name: portal_role
+            type:
+              - "null"
+              - "string"
+            description: "Role the contact has in the customer portal"
+      - entity: teams
+        x-airbyte-name: teams
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the team"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the team"
+      - entity: tags
+        x-airbyte-name: tags
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the tag"
+          - name: value
+            type:
+              - "null"
+              - "string"
+            description: "Display value of the tag"
+          - name: object_type
+            type:
+              - "null"
+              - "string"
+            description: "Type of object this tag applies to (e.g. issue, account)"
+      - entity: users
+        x-airbyte-name: users
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the user"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Full name of the user"
+          - name: email
+            type:
+              - "null"
+              - "string"
+            description: "Primary email address of the user"
+          - name: role_id
+            type:
+              - "null"
+              - "string"
+            description: "Identifier of the user's role"
+          - name: status
+            type:
+              - "null"
+              - "string"
+            description: "Current status of the user (e.g. active, disabled)"
+      - entity: custom_fields
+        x-airbyte-name: custom_fields
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the custom field"
+          - name: label
+            type:
+              - "null"
+              - "string"
+            description: "Display label of the custom field"
+          - name: slug
+            type:
+              - "null"
+              - "string"
+            description: "URL-safe identifier for the custom field"
+          - name: type
+            type:
+              - "null"
+              - "string"
+            description: "Data type of the custom field (e.g. text, select)"
+          - name: object_type
+            type:
+              - "null"
+              - "string"
+            description: "Type of object this custom field applies to (e.g. issue, account)"
+          - name: is_read_only
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the custom field is read-only"
+          - name: created_at
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the custom field was created, in ISO 8601 format"
+      - entity: ticket_forms
+        x-airbyte-name: ticket_forms
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the ticket form"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Display name of the ticket form"
+          - name: slug
+            type:
+              - "null"
+              - "string"
+            description: "URL-safe identifier for the ticket form"
+          - name: is_public
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the ticket form is publicly accessible"
+      - entity: user_roles
+        x-airbyte-name: user_roles
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the user role"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Display name of the user role"
+          - name: slug
+            type:
+              - "null"
+              - "string"
+            description: "URL-safe identifier for the user role"
   x-airbyte-external-documentation-urls:
   - type: api_reference
     title: Pylon API Reference

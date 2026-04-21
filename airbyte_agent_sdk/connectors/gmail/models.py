@@ -319,6 +319,115 @@ class GmailExecuteResultWithMeta(GmailExecuteResult[T], Generic[T, S]):
     meta: S
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
+# ===== SEARCH DATA MODELS =====
+# Entity-specific Pydantic models for search result data
+
+# Type variable for search data generic
+D = TypeVar('D')
+
+class ProfileSearchData(BaseModel):
+    """Search result data for profile entity."""
+    model_config = ConfigDict(extra="allow")
+
+    email_address: str | None = None
+    """Email address of the authenticated Gmail account"""
+    history_id: str | None = None
+    """Mailbox history record identifier used for incremental sync"""
+    messages_total: float | None = None
+    """Total number of messages currently in the mailbox"""
+    threads_total: float | None = None
+    """Total number of threads currently in the mailbox"""
+
+
+class MessagesSearchData(BaseModel):
+    """Search result data for messages entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the message"""
+    thread_id: str | None = None
+    """Identifier of the thread this message belongs to"""
+
+
+class LabelsSearchData(BaseModel):
+    """Search result data for labels entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the label"""
+    name: str | None = None
+    """Display name of the label"""
+    type_: str | None = None
+    """Label type: `system` or `user`"""
+    label_list_visibility: str | None = None
+    """Visibility of the label in the label list"""
+    message_list_visibility: str | None = None
+    """Visibility of the label when viewing a message list"""
+
+
+class DraftsSearchData(BaseModel):
+    """Search result data for drafts entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the draft"""
+    message: dict[str, Any] | None = None
+    """Draft message payload (headers, body, and metadata)"""
+
+
+class ThreadsSearchData(BaseModel):
+    """Search result data for threads entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """Unique identifier for the thread"""
+    history_id: str | None = None
+    """Mailbox history record identifier for the thread"""
+    snippet: str | None = None
+    """Short snippet of the thread's most recent message"""
+
+
+# ===== GENERIC SEARCH RESULT TYPES =====
+
+class AirbyteSearchMeta(BaseModel):
+    """Pagination metadata for search responses."""
+    model_config = ConfigDict(extra="allow")
+
+    has_more: bool = False
+    """Whether more results are available."""
+    cursor: str | None = None
+    """Cursor for fetching the next page of results."""
+    took_ms: int | None = None
+    """Time taken to execute the search in milliseconds."""
+
+
+class AirbyteSearchResult(BaseModel, Generic[D]):
+    """Result from Airbyte cache search operations with typed records."""
+    model_config = ConfigDict(extra="allow")
+
+    data: list[D] = Field(default_factory=list)
+    """List of matching records."""
+    meta: AirbyteSearchMeta = Field(default_factory=AirbyteSearchMeta)
+    """Pagination metadata."""
+
+
+# ===== ENTITY-SPECIFIC SEARCH RESULT TYPE ALIASES =====
+
+ProfileSearchResult = AirbyteSearchResult[ProfileSearchData]
+"""Search result type for profile entity."""
+
+MessagesSearchResult = AirbyteSearchResult[MessagesSearchData]
+"""Search result type for messages entity."""
+
+LabelsSearchResult = AirbyteSearchResult[LabelsSearchData]
+"""Search result type for labels entity."""
+
+DraftsSearchResult = AirbyteSearchResult[DraftsSearchData]
+"""Search result type for drafts entity."""
+
+ThreadsSearchResult = AirbyteSearchResult[ThreadsSearchData]
+"""Search result type for threads entity."""
+
 
 
 # ===== OPERATION RESULT TYPE ALIASES =====
