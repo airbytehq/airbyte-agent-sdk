@@ -1967,6 +1967,24 @@ components:
           token: "${access_token}"
         replication_auth_key_mapping:
           access_token: "access_token"
+      x-airbyte-oauth-scopes:
+        - mode: read
+          entities:
+            - contacts
+            - companies
+            - conversations
+            - conversation_parts
+            - teams
+            - tags
+            - segments
+        - mode: write
+          entities:
+            - contacts
+            - companies
+            - conversations
+            - notes
+            - internal_articles
+            - tags
 
   schemas:
     # ============================================
