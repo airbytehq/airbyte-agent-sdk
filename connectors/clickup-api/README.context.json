@@ -1160,5 +1160,485 @@
       }
     ]
   },
-  "search_schemas": {}
+  "search_schemas": {
+    "user": {
+      "entity": "user",
+      "data_type_name": "UserSearchData",
+      "filter_type_name": "UserSearchFilter",
+      "in_filter_type_name": "UserInFilter",
+      "any_value_filter_type_name": "UserAnyValueFilter",
+      "string_filter_type_name": "UserStringFilter",
+      "sort_filter_type_name": "UserSortFilter",
+      "result_type_name": "UserSearchResult",
+      "query_type_name": "UserSearchQuery",
+      "condition_prefix": "User",
+      "condition_type_name": "UserCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Unique identifier for the user"
+        },
+        {
+          "name": "username",
+          "python_name": "username",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Display name of the user"
+        }
+      ]
+    },
+    "teams": {
+      "entity": "teams",
+      "data_type_name": "TeamsSearchData",
+      "filter_type_name": "TeamsSearchFilter",
+      "in_filter_type_name": "TeamsInFilter",
+      "any_value_filter_type_name": "TeamsAnyValueFilter",
+      "string_filter_type_name": "TeamsStringFilter",
+      "sort_filter_type_name": "TeamsSortFilter",
+      "result_type_name": "TeamsSearchResult",
+      "query_type_name": "TeamsSearchQuery",
+      "condition_prefix": "Teams",
+      "condition_type_name": "TeamsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the team (workspace)"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the team"
+        }
+      ]
+    },
+    "spaces": {
+      "entity": "spaces",
+      "data_type_name": "SpacesSearchData",
+      "filter_type_name": "SpacesSearchFilter",
+      "in_filter_type_name": "SpacesInFilter",
+      "any_value_filter_type_name": "SpacesAnyValueFilter",
+      "string_filter_type_name": "SpacesStringFilter",
+      "sort_filter_type_name": "SpacesSortFilter",
+      "result_type_name": "SpacesSearchResult",
+      "query_type_name": "SpacesSearchQuery",
+      "condition_prefix": "Spaces",
+      "condition_type_name": "SpacesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the space"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the space"
+        },
+        {
+          "name": "private",
+          "python_name": "private",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the space is private"
+        }
+      ]
+    },
+    "folders": {
+      "entity": "folders",
+      "data_type_name": "FoldersSearchData",
+      "filter_type_name": "FoldersSearchFilter",
+      "in_filter_type_name": "FoldersInFilter",
+      "any_value_filter_type_name": "FoldersAnyValueFilter",
+      "string_filter_type_name": "FoldersStringFilter",
+      "sort_filter_type_name": "FoldersSortFilter",
+      "result_type_name": "FoldersSearchResult",
+      "query_type_name": "FoldersSearchQuery",
+      "condition_prefix": "Folders",
+      "condition_type_name": "FoldersCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the folder"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the folder"
+        },
+        {
+          "name": "hidden",
+          "python_name": "hidden",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the folder is hidden from the sidebar"
+        },
+        {
+          "name": "task_count",
+          "python_name": "task_count",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Number of tasks contained in the folder"
+        }
+      ]
+    },
+    "lists": {
+      "entity": "lists",
+      "data_type_name": "ListsSearchData",
+      "filter_type_name": "ListsSearchFilter",
+      "in_filter_type_name": "ListsInFilter",
+      "any_value_filter_type_name": "ListsAnyValueFilter",
+      "string_filter_type_name": "ListsStringFilter",
+      "sort_filter_type_name": "ListsSortFilter",
+      "result_type_name": "ListsSearchResult",
+      "query_type_name": "ListsSearchQuery",
+      "condition_prefix": "Lists",
+      "condition_type_name": "ListsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the list"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the list"
+        },
+        {
+          "name": "archived",
+          "python_name": "archived",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the list has been archived"
+        },
+        {
+          "name": "due_date",
+          "python_name": "due_date",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Due date for the list, in ClickUp timestamp format"
+        },
+        {
+          "name": "start_date",
+          "python_name": "start_date",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Start date for the list, in ClickUp timestamp format"
+        },
+        {
+          "name": "priority",
+          "python_name": "priority",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Priority assigned to the list"
+        },
+        {
+          "name": "task_count",
+          "python_name": "task_count",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Number of tasks contained in the list"
+        }
+      ]
+    },
+    "tasks": {
+      "entity": "tasks",
+      "data_type_name": "TasksSearchData",
+      "filter_type_name": "TasksSearchFilter",
+      "in_filter_type_name": "TasksInFilter",
+      "any_value_filter_type_name": "TasksAnyValueFilter",
+      "string_filter_type_name": "TasksStringFilter",
+      "sort_filter_type_name": "TasksSortFilter",
+      "result_type_name": "TasksSearchResult",
+      "query_type_name": "TasksSearchQuery",
+      "condition_prefix": "Tasks",
+      "condition_type_name": "TasksCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the task"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the task"
+        },
+        {
+          "name": "date_created",
+          "python_name": "date_created",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Creation timestamp of the task, in ClickUp timestamp format"
+        },
+        {
+          "name": "date_updated",
+          "python_name": "date_updated",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last update timestamp of the task, in ClickUp timestamp format"
+        },
+        {
+          "name": "date_closed",
+          "python_name": "date_closed",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the task was closed, in ClickUp timestamp format"
+        },
+        {
+          "name": "due_date",
+          "python_name": "due_date",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Due date for the task, in ClickUp timestamp format"
+        },
+        {
+          "name": "start_date",
+          "python_name": "start_date",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Start date for the task, in ClickUp timestamp format"
+        },
+        {
+          "name": "parent",
+          "python_name": "parent",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ID of the parent task, if this task is a subtask"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Permalink URL to view the task in ClickUp"
+        }
+      ]
+    },
+    "comments": {
+      "entity": "comments",
+      "data_type_name": "CommentsSearchData",
+      "filter_type_name": "CommentsSearchFilter",
+      "in_filter_type_name": "CommentsInFilter",
+      "any_value_filter_type_name": "CommentsAnyValueFilter",
+      "string_filter_type_name": "CommentsStringFilter",
+      "sort_filter_type_name": "CommentsSortFilter",
+      "result_type_name": "CommentsSearchResult",
+      "query_type_name": "CommentsSearchQuery",
+      "condition_prefix": "Comments",
+      "condition_type_name": "CommentsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the comment"
+        },
+        {
+          "name": "comment_text",
+          "python_name": "comment_text",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Plain-text content of the comment"
+        },
+        {
+          "name": "date",
+          "python_name": "date",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the comment was posted, in ClickUp timestamp format"
+        },
+        {
+          "name": "reply_count",
+          "python_name": "reply_count",
+          "type": "float | None",
+          "json_type": "null | number",
+          "example_value_json": "0.0",
+          "description": "Number of replies on the comment"
+        }
+      ]
+    },
+    "goals": {
+      "entity": "goals",
+      "data_type_name": "GoalsSearchData",
+      "filter_type_name": "GoalsSearchFilter",
+      "in_filter_type_name": "GoalsInFilter",
+      "any_value_filter_type_name": "GoalsAnyValueFilter",
+      "string_filter_type_name": "GoalsStringFilter",
+      "sort_filter_type_name": "GoalsSortFilter",
+      "result_type_name": "GoalsSearchResult",
+      "query_type_name": "GoalsSearchQuery",
+      "condition_prefix": "Goals",
+      "condition_type_name": "GoalsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str",
+          "json_type": "string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the goal"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the goal"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Description of the goal"
+        },
+        {
+          "name": "archived",
+          "python_name": "archived",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the goal has been archived"
+        },
+        {
+          "name": "pinned",
+          "python_name": "pinned",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the goal is pinned to the top of the list"
+        },
+        {
+          "name": "private",
+          "python_name": "private",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the goal is private to its owners"
+        },
+        {
+          "name": "date_created",
+          "python_name": "date_created",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Creation timestamp of the goal, in ClickUp timestamp format"
+        },
+        {
+          "name": "due_date",
+          "python_name": "due_date",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Due date for the goal, in ClickUp timestamp format"
+        },
+        {
+          "name": "percent_completed",
+          "python_name": "percent_completed",
+          "type": "float | None",
+          "json_type": "null | number",
+          "example_value_json": "0.0",
+          "description": "Completion percentage of the goal, between 0 and 100"
+        },
+        {
+          "name": "team_id",
+          "python_name": "team_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the team that owns the goal"
+        }
+      ]
+    },
+    "time_tracking": {
+      "entity": "time_tracking",
+      "data_type_name": "TimeTrackingSearchData",
+      "filter_type_name": "TimeTrackingSearchFilter",
+      "in_filter_type_name": "TimeTrackingInFilter",
+      "any_value_filter_type_name": "TimeTrackingAnyValueFilter",
+      "string_filter_type_name": "TimeTrackingStringFilter",
+      "sort_filter_type_name": "TimeTrackingSortFilter",
+      "result_type_name": "TimeTrackingSearchResult",
+      "query_type_name": "TimeTrackingSearchQuery",
+      "condition_prefix": "TimeTracking",
+      "condition_type_name": "TimeTrackingCondition",
+      "fields": [
+        {
+          "name": "time",
+          "python_name": "time",
+          "type": "float | None",
+          "json_type": "number | null",
+          "example_value_json": "0.0",
+          "description": "Total tracked time in milliseconds"
+        },
+        {
+          "name": "user",
+          "python_name": "user",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "User who tracked the time"
+        }
+      ]
+    }
+  }
 }

@@ -110,17 +110,17 @@ This connector supports the following entities and actions. For more details, se
 
 | Entity | Actions |
 |--------|---------|
-| User | [Get](./REFERENCE.md#user-get) |
-| Teams | [List](./REFERENCE.md#teams-list) |
-| Spaces | [List](./REFERENCE.md#spaces-list), [Get](./REFERENCE.md#spaces-get) |
-| Folders | [List](./REFERENCE.md#folders-list), [Get](./REFERENCE.md#folders-get) |
-| Lists | [List](./REFERENCE.md#lists-list), [Get](./REFERENCE.md#lists-get) |
-| Tasks | [List](./REFERENCE.md#tasks-list), [Get](./REFERENCE.md#tasks-get), [API Search](./REFERENCE.md#tasks-api_search) |
-| Comments | [List](./REFERENCE.md#comments-list), [Create](./REFERENCE.md#comments-create), [Get](./REFERENCE.md#comments-get), [Update](./REFERENCE.md#comments-update) |
-| Goals | [List](./REFERENCE.md#goals-list), [Get](./REFERENCE.md#goals-get) |
+| User | [Get](./REFERENCE.md#user-get), [Context Store Search](./REFERENCE.md#user-context-store-search) |
+| Teams | [List](./REFERENCE.md#teams-list), [Context Store Search](./REFERENCE.md#teams-context-store-search) |
+| Spaces | [List](./REFERENCE.md#spaces-list), [Get](./REFERENCE.md#spaces-get), [Context Store Search](./REFERENCE.md#spaces-context-store-search) |
+| Folders | [List](./REFERENCE.md#folders-list), [Get](./REFERENCE.md#folders-get), [Context Store Search](./REFERENCE.md#folders-context-store-search) |
+| Lists | [List](./REFERENCE.md#lists-list), [Get](./REFERENCE.md#lists-get), [Context Store Search](./REFERENCE.md#lists-context-store-search) |
+| Tasks | [List](./REFERENCE.md#tasks-list), [Get](./REFERENCE.md#tasks-get), [API Search](./REFERENCE.md#tasks-api_search), [Context Store Search](./REFERENCE.md#tasks-context-store-search) |
+| Comments | [List](./REFERENCE.md#comments-list), [Create](./REFERENCE.md#comments-create), [Get](./REFERENCE.md#comments-get), [Update](./REFERENCE.md#comments-update), [Context Store Search](./REFERENCE.md#comments-context-store-search) |
+| Goals | [List](./REFERENCE.md#goals-list), [Get](./REFERENCE.md#goals-get), [Context Store Search](./REFERENCE.md#goals-context-store-search) |
 | Views | [List](./REFERENCE.md#views-list), [Get](./REFERENCE.md#views-get) |
 | View Tasks | [List](./REFERENCE.md#view-tasks-list) |
-| Time Tracking | [List](./REFERENCE.md#time-tracking-list), [Get](./REFERENCE.md#time-tracking-get) |
+| Time Tracking | [List](./REFERENCE.md#time-tracking-list), [Get](./REFERENCE.md#time-tracking-get), [Context Store Search](./REFERENCE.md#time-tracking-context-store-search) |
 | Members | [List](./REFERENCE.md#members-list) |
 | Docs | [List](./REFERENCE.md#docs-list), [Get](./REFERENCE.md#docs-get) |
 

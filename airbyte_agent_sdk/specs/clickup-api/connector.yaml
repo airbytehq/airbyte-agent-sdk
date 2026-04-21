@@ -11,7 +11,246 @@ info:
   x-airbyte-connector-definition-id: 311a7a27-3fb5-4f7e-8265-5e4afe258b66
   x-airbyte-replication-version: "0.3.43"
   x-airbyte-replication-compatibility: ">=0.3.43, <1.0.0"
-  x-airbyte-skip-context-store: "No suggested streams in Airbyte registry for this connector"
+  x-airbyte-context-store:
+    entities:
+      - entity: user
+        x-airbyte-name: user
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "integer"
+            description: "Unique identifier for the user"
+          - name: username
+            type:
+              - "null"
+              - "string"
+            description: "Display name of the user"
+      - entity: teams
+        x-airbyte-name: team
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the team (workspace)"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the team"
+      - entity: spaces
+        x-airbyte-name: space
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the space"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the space"
+          - name: private
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the space is private"
+      - entity: folders
+        x-airbyte-name: folder
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the folder"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the folder"
+          - name: hidden
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the folder is hidden from the sidebar"
+          - name: task_count
+            type:
+              - "null"
+              - "string"
+            description: "Number of tasks contained in the folder"
+      - entity: lists
+        x-airbyte-name: list
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the list"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the list"
+          - name: archived
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the list has been archived"
+          - name: due_date
+            type:
+              - "null"
+              - "string"
+            description: "Due date for the list, in ClickUp timestamp format"
+          - name: start_date
+            type:
+              - "null"
+              - "string"
+            description: "Start date for the list, in ClickUp timestamp format"
+          - name: priority
+            type:
+              - "null"
+              - "string"
+            description: "Priority assigned to the list"
+          - name: task_count
+            type:
+              - "null"
+              - "integer"
+            description: "Number of tasks contained in the list"
+      - entity: tasks
+        x-airbyte-name: task
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the task"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the task"
+          - name: date_created
+            type:
+              - "null"
+              - "string"
+            description: "Creation timestamp of the task, in ClickUp timestamp format"
+          - name: date_updated
+            type:
+              - "null"
+              - "string"
+            description: "Last update timestamp of the task, in ClickUp timestamp format"
+          - name: date_closed
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the task was closed, in ClickUp timestamp format"
+          - name: due_date
+            type:
+              - "null"
+              - "string"
+            description: "Due date for the task, in ClickUp timestamp format"
+          - name: start_date
+            type:
+              - "null"
+              - "string"
+            description: "Start date for the task, in ClickUp timestamp format"
+          - name: parent
+            type:
+              - "null"
+              - "string"
+            description: "ID of the parent task, if this task is a subtask"
+          - name: url
+            type:
+              - "null"
+              - "string"
+            description: "Permalink URL to view the task in ClickUp"
+      - entity: comments
+        x-airbyte-name: list_comments
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the comment"
+          - name: comment_text
+            type:
+              - "null"
+              - "string"
+            description: "Plain-text content of the comment"
+          - name: date
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the comment was posted, in ClickUp timestamp format"
+          - name: reply_count
+            type:
+              - "null"
+              - "number"
+            description: "Number of replies on the comment"
+      - entity: goals
+        x-airbyte-name: team_goals
+        fields:
+          - name: id
+            type: string
+            description: "Unique identifier for the goal"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Name of the goal"
+          - name: description
+            type:
+              - "null"
+              - "string"
+            description: "Description of the goal"
+          - name: archived
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the goal has been archived"
+          - name: pinned
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the goal is pinned to the top of the list"
+          - name: private
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the goal is private to its owners"
+          - name: date_created
+            type:
+              - "null"
+              - "string"
+            description: "Creation timestamp of the goal, in ClickUp timestamp format"
+          - name: due_date
+            type:
+              - "null"
+              - "string"
+            description: "Due date for the goal, in ClickUp timestamp format"
+          - name: percent_completed
+            type:
+              - "null"
+              - "number"
+            description: "Completion percentage of the goal, between 0 and 100"
+          - name: team_id
+            type:
+              - "null"
+              - "string"
+            description: "Identifier of the team that owns the goal"
+      - entity: time_tracking
+        x-airbyte-name: time_tracking
+        fields:
+          - name: time
+            type:
+              - "number"
+              - "null"
+            description: "Total tracked time in milliseconds"
+          - name: user
+            type:
+              - "object"
+              - "null"
+            description: "User who tracked the time"
   x-airbyte-external-documentation-urls:
   - type: api_reference
     title: ClickUp API v2 Reference
