@@ -1,5 +1,5 @@
 {
-  "name": "airbyte-agent-connectors",
+  "name": "airbyte-agent-sdk",
   "description": "Give your AI agents access to third-party APIs (Salesforce, HubSpot, GitHub, Slack, Stripe, Jira, Notion, Intercom, Zendesk, and more) through strongly typed, well-documented tools.",
   "version": "1.0.1",
   "author": {

@@ -30,7 +30,7 @@ npx skills add airbytehq/airbyte-agent-sdk
 
 ```
 /plugin marketplace add airbytehq/airbyte-agent-sdk
-/plugin install airbyte-agent-connectors@airbyte-agent-connectors
+/plugin install airbyte-agent-sdk@airbyte-agent-sdk
 ```
 
 **Codex** (clone + symlink):
