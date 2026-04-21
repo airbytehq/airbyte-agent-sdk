@@ -52,6 +52,40 @@ class IssueCreateParams(BaseModel):
     assignees: Union[list[str], Any] = Field(default=None)
     milestone: Union[int | None, Any] = Field(default=None)
 
+class IssueResponseUser(BaseModel):
+    """The user who created the issue"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    login: Union[str, Any] = Field(default=None)
+    id: Union[int, Any] = Field(default=None)
+    node_id: Union[str, Any] = Field(default=None)
+    avatar_url: Union[str, Any] = Field(default=None)
+    url: Union[str, Any] = Field(default=None)
+    html_url: Union[str, Any] = Field(default=None)
+    type_: Union[str, Any] = Field(default=None, alias="type")
+    site_admin: Union[bool, Any] = Field(default=None)
+
+class IssueResponseAssigneesItem(BaseModel):
+    """Nested schema for IssueResponse.assignees_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    login: Union[str, Any] = Field(default=None)
+    id: Union[int, Any] = Field(default=None)
+    node_id: Union[str, Any] = Field(default=None)
+    avatar_url: Union[str, Any] = Field(default=None)
+    url: Union[str, Any] = Field(default=None)
+    html_url: Union[str, Any] = Field(default=None)
+    type_: Union[str, Any] = Field(default=None, alias="type")
+    site_admin: Union[bool, Any] = Field(default=None)
+
+class IssueResponseSubIssuesSummary(BaseModel):
+    """Summary of sub-issues"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total: Union[int, Any] = Field(default=None)
+    completed: Union[int, Any] = Field(default=None)
+    percent_completed: Union[int, Any] = Field(default=None)
+
 class IssueResponseReactions(BaseModel):
     """Reaction counts"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -66,14 +100,6 @@ class IssueResponseReactions(BaseModel):
     heart: Union[int, Any] = Field(default=None)
     rocket: Union[int, Any] = Field(default=None)
     eyes: Union[int, Any] = Field(default=None)
-
-class IssueResponseSubIssuesSummary(BaseModel):
-    """Summary of sub-issues"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    total: Union[int, Any] = Field(default=None)
-    completed: Union[int, Any] = Field(default=None)
-    percent_completed: Union[int, Any] = Field(default=None)
 
 class IssueResponseAssignee(BaseModel):
     """Primary user assigned to this issue"""
@@ -108,32 +134,6 @@ class IssueResponseLabelsItem(BaseModel):
     color: Union[str, Any] = Field(default=None)
     default: Union[bool, Any] = Field(default=None)
     description: Union[str | None, Any] = Field(default=None)
-
-class IssueResponseAssigneesItem(BaseModel):
-    """Nested schema for IssueResponse.assignees_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    login: Union[str, Any] = Field(default=None)
-    id: Union[int, Any] = Field(default=None)
-    node_id: Union[str, Any] = Field(default=None)
-    avatar_url: Union[str, Any] = Field(default=None)
-    url: Union[str, Any] = Field(default=None)
-    html_url: Union[str, Any] = Field(default=None)
-    type_: Union[str, Any] = Field(default=None, alias="type")
-    site_admin: Union[bool, Any] = Field(default=None)
-
-class IssueResponseUser(BaseModel):
-    """The user who created the issue"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    login: Union[str, Any] = Field(default=None)
-    id: Union[int, Any] = Field(default=None)
-    node_id: Union[str, Any] = Field(default=None)
-    avatar_url: Union[str, Any] = Field(default=None)
-    url: Union[str, Any] = Field(default=None)
-    html_url: Union[str, Any] = Field(default=None)
-    type_: Union[str, Any] = Field(default=None, alias="type")
-    site_admin: Union[bool, Any] = Field(default=None)
 
 class IssueResponse(BaseModel):
     """IssueResponse type definition"""
@@ -192,6 +192,19 @@ class CommentCreateParams(BaseModel):
 
     body: Union[str, Any] = Field(default=None)
 
+class CommentResponseUser(BaseModel):
+    """The user who created the comment"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    login: Union[str, Any] = Field(default=None)
+    id: Union[int, Any] = Field(default=None)
+    node_id: Union[str, Any] = Field(default=None)
+    avatar_url: Union[str, Any] = Field(default=None)
+    url: Union[str, Any] = Field(default=None)
+    html_url: Union[str, Any] = Field(default=None)
+    type_: Union[str, Any] = Field(default=None, alias="type")
+    site_admin: Union[bool, Any] = Field(default=None)
+
 class CommentResponseReactions(BaseModel):
     """Reaction counts"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -206,19 +219,6 @@ class CommentResponseReactions(BaseModel):
     heart: Union[int, Any] = Field(default=None)
     rocket: Union[int, Any] = Field(default=None)
     eyes: Union[int, Any] = Field(default=None)
-
-class CommentResponseUser(BaseModel):
-    """The user who created the comment"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    login: Union[str, Any] = Field(default=None)
-    id: Union[int, Any] = Field(default=None)
-    node_id: Union[str, Any] = Field(default=None)
-    avatar_url: Union[str, Any] = Field(default=None)
-    url: Union[str, Any] = Field(default=None)
-    html_url: Union[str, Any] = Field(default=None)
-    type_: Union[str, Any] = Field(default=None, alias="type")
-    site_admin: Union[bool, Any] = Field(default=None)
 
 class CommentResponse(BaseModel):
     """CommentResponse type definition"""
@@ -248,14 +248,6 @@ class PullRequestCreateParams(BaseModel):
     draft: Union[bool, Any] = Field(default=None)
     maintainer_can_modify: Union[bool, Any] = Field(default=None)
 
-class PullRequestResponseBase(BaseModel):
-    """The base branch"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    label: Union[str, Any] = Field(default=None)
-    ref: Union[str, Any] = Field(default=None)
-    sha: Union[str, Any] = Field(default=None)
-
 class PullRequestResponseUser(BaseModel):
     """The user who created the pull request"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -269,6 +261,14 @@ class PullRequestResponseUser(BaseModel):
     type_: Union[str, Any] = Field(default=None, alias="type")
     site_admin: Union[bool, Any] = Field(default=None)
 
+class PullRequestResponseBase(BaseModel):
+    """The base branch"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    label: Union[str, Any] = Field(default=None)
+    ref: Union[str, Any] = Field(default=None)
+    sha: Union[str, Any] = Field(default=None)
+
 class PullRequestResponseHead(BaseModel):
     """The head branch"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -276,18 +276,6 @@ class PullRequestResponseHead(BaseModel):
     label: Union[str, Any] = Field(default=None)
     ref: Union[str, Any] = Field(default=None)
     sha: Union[str, Any] = Field(default=None)
-
-class PullRequestResponseLabelsItem(BaseModel):
-    """Nested schema for PullRequestResponse.labels_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[int, Any] = Field(default=None)
-    node_id: Union[str, Any] = Field(default=None)
-    url: Union[str, Any] = Field(default=None)
-    name: Union[str, Any] = Field(default=None)
-    color: Union[str, Any] = Field(default=None)
-    default: Union[bool, Any] = Field(default=None)
-    description: Union[str | None, Any] = Field(default=None)
 
 class PullRequestResponseAssigneesItem(BaseModel):
     """Nested schema for PullRequestResponse.assignees_item"""
@@ -301,6 +289,18 @@ class PullRequestResponseAssigneesItem(BaseModel):
     html_url: Union[str, Any] = Field(default=None)
     type_: Union[str, Any] = Field(default=None, alias="type")
     site_admin: Union[bool, Any] = Field(default=None)
+
+class PullRequestResponseLabelsItem(BaseModel):
+    """Nested schema for PullRequestResponse.labels_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[int, Any] = Field(default=None)
+    node_id: Union[str, Any] = Field(default=None)
+    url: Union[str, Any] = Field(default=None)
+    name: Union[str, Any] = Field(default=None)
+    color: Union[str, Any] = Field(default=None)
+    default: Union[bool, Any] = Field(default=None)
+    description: Union[str | None, Any] = Field(default=None)
 
 class PullRequestResponse(BaseModel):
     """PullRequestResponse type definition"""
@@ -583,60 +583,218 @@ class BranchesSearchData(BaseModel):
     """Search result data for branches entity."""
     model_config = ConfigDict(extra="allow")
 
+    name: str | None = None
+    """Branch name (e.g. `main`, `feature/foo`)"""
+    prefix: str | None = None
+    """Git ref prefix for the branch (typically `refs/heads/`)"""
 
 
 class CommentsSearchData(BaseModel):
     """Search result data for comments entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the comment"""
+    database_id: int | None = None
+    """REST API numeric identifier for the comment"""
+    body: str | None = None
+    """Markdown body of the comment"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the comment was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the comment was last updated"""
+    url: str | None = None
+    """Permalink to the comment on GitHub"""
+    is_minimized: bool | None = None
+    """Whether the comment has been hidden/collapsed"""
 
 
 class IssuesSearchData(BaseModel):
     """Search result data for issues entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the issue"""
+    database_id: int | None = None
+    """REST API numeric identifier for the issue"""
+    number: int | None = None
+    """Repository-scoped issue number"""
+    title: str | None = None
+    """Issue title"""
+    state: str | None = None
+    """Issue state: `OPEN` or `CLOSED`"""
+    state_reason: str | None = None
+    """Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the issue was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the issue was last updated"""
+    closed_at: str | None = None
+    """ISO 8601 timestamp when the issue was closed, if applicable"""
+    locked: bool | None = None
+    """Whether the conversation on the issue is locked"""
+    url: str | None = None
+    """Permalink to the issue on GitHub"""
 
 
 class OrganizationsSearchData(BaseModel):
     """Search result data for organizations entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the organization"""
+    database_id: int | None = None
+    """REST API numeric identifier for the organization"""
+    login: str | None = None
+    """Organization login/handle (unique URL slug)"""
+    name: str | None = None
+    """Display name of the organization"""
+    description: str | None = None
+    """Short public description of the organization"""
+    email: str | None = None
+    """Public contact email for the organization, if set"""
+    location: str | None = None
+    """Public location of the organization, if set"""
+    is_verified: bool | None = None
+    """Whether the organization has a verified domain"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the organization was created"""
 
 
 class PullRequestsSearchData(BaseModel):
     """Search result data for pull_requests entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the pull request"""
+    database_id: int | None = None
+    """REST API numeric identifier for the pull request"""
+    number: int | None = None
+    """Repository-scoped pull request number"""
+    title: str | None = None
+    """Pull request title"""
+    state: str | None = None
+    """Pull request state: `OPEN`, `CLOSED`, or `MERGED`"""
+    is_draft: bool | None = None
+    """Whether the pull request is still a draft"""
+    merged: bool | None = None
+    """Whether the pull request has been merged"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the pull request was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the pull request was last updated"""
+    closed_at: str | None = None
+    """ISO 8601 timestamp when the pull request was closed, if applicable"""
+    merged_at: str | None = None
+    """ISO 8601 timestamp when the pull request was merged, if applicable"""
+    base_ref_name: str | None = None
+    """Name of the branch being merged into"""
+    head_ref_name: str | None = None
+    """Name of the branch with the proposed changes"""
+    url: str | None = None
+    """Permalink to the pull request on GitHub"""
 
 
 class RepositoriesSearchData(BaseModel):
     """Search result data for repositories entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the repository"""
+    name: str | None = None
+    """Short repository name (without owner)"""
+    name_with_owner: str | None = None
+    """Fully-qualified `owner/name` identifier for the repository"""
+    description: str | None = None
+    """Short description of the repository"""
+    url: str | None = None
+    """Canonical GitHub URL for the repository"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the repository was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the repository was last updated"""
+    pushed_at: str | None = None
+    """ISO 8601 timestamp of the most recent push to the repository"""
+    fork_count: int | None = None
+    """Number of forks of the repository"""
+    stargazer_count: int | None = None
+    """Number of users who have starred the repository"""
+    is_private: bool | None = None
+    """Whether the repository is private"""
+    is_fork: bool | None = None
+    """Whether the repository is a fork of another repository"""
+    is_archived: bool | None = None
+    """Whether the repository has been archived"""
 
 
 class StargazersSearchData(BaseModel):
     """Search result data for stargazers entity."""
     model_config = ConfigDict(extra="allow")
 
+    starred_at: str | None = None
+    """ISO 8601 timestamp when the user starred the repository"""
 
 
 class TagsSearchData(BaseModel):
     """Search result data for tags entity."""
     model_config = ConfigDict(extra="allow")
 
+    name: str | None = None
+    """Tag name (e.g. `v1.2.3`)"""
+    prefix: str | None = None
+    """Git ref prefix for the tag (typically `refs/tags/`)"""
 
 
 class TeamsSearchData(BaseModel):
     """Search result data for teams entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the team"""
+    database_id: int | None = None
+    """REST API numeric identifier for the team"""
+    slug: str | None = None
+    """URL-friendly slug for the team within its organization"""
+    name: str | None = None
+    """Display name of the team"""
+    description: str | None = None
+    """Short description of the team"""
+    privacy: str | None = None
+    """Team visibility: `SECRET` or `VISIBLE`"""
+    url: str | None = None
+    """Permalink to the team on GitHub"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the team was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the team was last updated"""
 
 
 class UsersSearchData(BaseModel):
     """Search result data for users entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """GraphQL node ID of the user"""
+    database_id: int | None = None
+    """REST API numeric identifier for the user"""
+    login: str | None = None
+    """User login/handle"""
+    name: str | None = None
+    """Public display name of the user, if set"""
+    email: str | None = None
+    """Public email address of the user, if set"""
+    company: str | None = None
+    """Public company affiliation of the user, if set"""
+    location: str | None = None
+    """Public location of the user, if set"""
+    twitter_username: str | None = None
+    """Public Twitter/X username of the user, if set"""
+    url: str | None = None
+    """Permalink to the user's profile on GitHub"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the user account was created"""
+    is_hireable: bool | None = None
+    """Whether the user has marked themselves as available for hire"""
 
 
 # ===== GENERIC SEARCH RESULT TYPES =====

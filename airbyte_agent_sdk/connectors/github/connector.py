@@ -201,7 +201,7 @@ class GithubConnector:
 
     connector_name = "github"
     connector_version = "0.1.18"
-    sdk_version = "0.1.35"
+    sdk_version = "0.1.36"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1424,6 +1424,19 @@ If not provided, uses default fields.
         Only available in hosted execution mode.
 
         Available filter fields (RepositoriesSearchFilter):
+        - id: GraphQL node ID of the repository
+        - name: Short repository name (without owner)
+        - name_with_owner: Fully-qualified `owner/name` identifier for the repository
+        - description: Short description of the repository
+        - url: Canonical GitHub URL for the repository
+        - created_at: ISO 8601 timestamp when the repository was created
+        - updated_at: ISO 8601 timestamp when the repository was last updated
+        - pushed_at: ISO 8601 timestamp of the most recent push to the repository
+        - fork_count: Number of forks of the repository
+        - stargazer_count: Number of users who have starred the repository
+        - is_private: Whether the repository is private
+        - is_fork: Whether the repository is a fork of another repository
+        - is_archived: Whether the repository has been archived
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1609,6 +1622,8 @@ class BranchesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (BranchesSearchFilter):
+        - name: Branch name (e.g. `main`, `feature/foo`)
+        - prefix: Git ref prefix for the branch (typically `refs/heads/`)
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2060,6 +2075,17 @@ Any user with push access can update an issue.
         Only available in hosted execution mode.
 
         Available filter fields (IssuesSearchFilter):
+        - id: GraphQL node ID of the issue
+        - database_id: REST API numeric identifier for the issue
+        - number: Repository-scoped issue number
+        - title: Issue title
+        - state: Issue state: `OPEN` or `CLOSED`
+        - state_reason: Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)
+        - created_at: ISO 8601 timestamp when the issue was created
+        - updated_at: ISO 8601 timestamp when the issue was last updated
+        - closed_at: ISO 8601 timestamp when the issue was closed, if applicable
+        - locked: Whether the conversation on the issue is locked
+        - url: Permalink to the issue on GitHub
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2237,6 +2263,13 @@ where each comment includes both 'id' (node ID) and 'databaseId' (numeric ID).
         Only available in hosted execution mode.
 
         Available filter fields (CommentsSearchFilter):
+        - id: GraphQL node ID of the comment
+        - database_id: REST API numeric identifier for the comment
+        - body: Markdown body of the comment
+        - created_at: ISO 8601 timestamp when the comment was created
+        - updated_at: ISO 8601 timestamp when the comment was last updated
+        - url: Permalink to the comment on GitHub
+        - is_minimized: Whether the comment has been hidden/collapsed
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2464,6 +2497,20 @@ To open or update a pull request in a public repository, you must have write acc
         Only available in hosted execution mode.
 
         Available filter fields (PullRequestsSearchFilter):
+        - id: GraphQL node ID of the pull request
+        - database_id: REST API numeric identifier for the pull request
+        - number: Repository-scoped pull request number
+        - title: Pull request title
+        - state: Pull request state: `OPEN`, `CLOSED`, or `MERGED`
+        - is_draft: Whether the pull request is still a draft
+        - merged: Whether the pull request has been merged
+        - created_at: ISO 8601 timestamp when the pull request was created
+        - updated_at: ISO 8601 timestamp when the pull request was last updated
+        - closed_at: ISO 8601 timestamp when the pull request was closed, if applicable
+        - merged_at: ISO 8601 timestamp when the pull request was merged, if applicable
+        - base_ref_name: Name of the branch being merged into
+        - head_ref_name: Name of the branch with the proposed changes
+        - url: Permalink to the pull request on GitHub
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -2903,6 +2950,15 @@ class OrganizationsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (OrganizationsSearchFilter):
+        - id: GraphQL node ID of the organization
+        - database_id: REST API numeric identifier for the organization
+        - login: Organization login/handle (unique URL slug)
+        - name: Display name of the organization
+        - description: Short public description of the organization
+        - email: Public contact email for the organization, if set
+        - location: Public location of the organization, if set
+        - is_verified: Whether the organization has a verified domain
+        - created_at: ISO 8601 timestamp when the organization was created
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3070,6 +3126,17 @@ class UsersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (UsersSearchFilter):
+        - id: GraphQL node ID of the user
+        - database_id: REST API numeric identifier for the user
+        - login: User login/handle
+        - name: Public display name of the user, if set
+        - email: Public email address of the user, if set
+        - company: Public company affiliation of the user, if set
+        - location: Public location of the user, if set
+        - twitter_username: Public Twitter/X username of the user, if set
+        - url: Permalink to the user's profile on GitHub
+        - created_at: ISO 8601 timestamp when the user account was created
+        - is_hireable: Whether the user has marked themselves as available for hire
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3202,6 +3269,15 @@ class TeamsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (TeamsSearchFilter):
+        - id: GraphQL node ID of the team
+        - database_id: REST API numeric identifier for the team
+        - slug: URL-friendly slug for the team within its organization
+        - name: Display name of the team
+        - description: Short description of the team
+        - privacy: Team visibility: `SECRET` or `VISIBLE`
+        - url: Permalink to the team on GitHub
+        - created_at: ISO 8601 timestamp when the team was created
+        - updated_at: ISO 8601 timestamp when the team was last updated
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3340,6 +3416,8 @@ class TagsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (TagsSearchFilter):
+        - name: Tag name (e.g. `v1.2.3`)
+        - prefix: Git ref prefix for the tag (typically `refs/tags/`)
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -3444,6 +3522,7 @@ class StargazersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (StargazersSearchFilter):
+        - starred_at: ISO 8601 timestamp when the user starred the repository
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,

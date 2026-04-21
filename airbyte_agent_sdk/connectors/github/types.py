@@ -394,22 +394,42 @@ AirbyteSortOrder = Literal["asc", "desc"]
 
 class BranchesSearchFilter(TypedDict, total=False):
     """Available fields for filtering branches search queries."""
+    name: str | None
+    """Branch name (e.g. `main`, `feature/foo`)"""
+    prefix: str | None
+    """Git ref prefix for the branch (typically `refs/heads/`)"""
 
 
 class BranchesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    name: list[str]
+    """Branch name (e.g. `main`, `feature/foo`)"""
+    prefix: list[str]
+    """Git ref prefix for the branch (typically `refs/heads/`)"""
 
 
 class BranchesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    name: Any
+    """Branch name (e.g. `main`, `feature/foo`)"""
+    prefix: Any
+    """Git ref prefix for the branch (typically `refs/heads/`)"""
 
 
 class BranchesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    name: str
+    """Branch name (e.g. `main`, `feature/foo`)"""
+    prefix: str
+    """Git ref prefix for the branch (typically `refs/heads/`)"""
 
 
 class BranchesSortFilter(TypedDict, total=False):
     """Available fields for sorting branches search results."""
+    name: AirbyteSortOrder
+    """Branch name (e.g. `main`, `feature/foo`)"""
+    prefix: AirbyteSortOrder
+    """Git ref prefix for the branch (typically `refs/heads/`)"""
 
 
 # Entity-specific condition types for branches
@@ -509,22 +529,92 @@ class BranchesSearchQuery(TypedDict, total=False):
 
 class CommentsSearchFilter(TypedDict, total=False):
     """Available fields for filtering comments search queries."""
+    id: str | None
+    """GraphQL node ID of the comment"""
+    database_id: int | None
+    """REST API numeric identifier for the comment"""
+    body: str | None
+    """Markdown body of the comment"""
+    created_at: str | None
+    """ISO 8601 timestamp when the comment was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the comment was last updated"""
+    url: str | None
+    """Permalink to the comment on GitHub"""
+    is_minimized: bool | None
+    """Whether the comment has been hidden/collapsed"""
 
 
 class CommentsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the comment"""
+    database_id: list[int]
+    """REST API numeric identifier for the comment"""
+    body: list[str]
+    """Markdown body of the comment"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the comment was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the comment was last updated"""
+    url: list[str]
+    """Permalink to the comment on GitHub"""
+    is_minimized: list[bool]
+    """Whether the comment has been hidden/collapsed"""
 
 
 class CommentsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the comment"""
+    database_id: Any
+    """REST API numeric identifier for the comment"""
+    body: Any
+    """Markdown body of the comment"""
+    created_at: Any
+    """ISO 8601 timestamp when the comment was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the comment was last updated"""
+    url: Any
+    """Permalink to the comment on GitHub"""
+    is_minimized: Any
+    """Whether the comment has been hidden/collapsed"""
 
 
 class CommentsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the comment"""
+    database_id: str
+    """REST API numeric identifier for the comment"""
+    body: str
+    """Markdown body of the comment"""
+    created_at: str
+    """ISO 8601 timestamp when the comment was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the comment was last updated"""
+    url: str
+    """Permalink to the comment on GitHub"""
+    is_minimized: str
+    """Whether the comment has been hidden/collapsed"""
 
 
 class CommentsSortFilter(TypedDict, total=False):
     """Available fields for sorting comments search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the comment"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the comment"""
+    body: AirbyteSortOrder
+    """Markdown body of the comment"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the comment was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the comment was last updated"""
+    url: AirbyteSortOrder
+    """Permalink to the comment on GitHub"""
+    is_minimized: AirbyteSortOrder
+    """Whether the comment has been hidden/collapsed"""
 
 
 # Entity-specific condition types for comments
@@ -624,22 +714,132 @@ class CommentsSearchQuery(TypedDict, total=False):
 
 class IssuesSearchFilter(TypedDict, total=False):
     """Available fields for filtering issues search queries."""
+    id: str | None
+    """GraphQL node ID of the issue"""
+    database_id: int | None
+    """REST API numeric identifier for the issue"""
+    number: int | None
+    """Repository-scoped issue number"""
+    title: str | None
+    """Issue title"""
+    state: str | None
+    """Issue state: `OPEN` or `CLOSED`"""
+    state_reason: str | None
+    """Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)"""
+    created_at: str | None
+    """ISO 8601 timestamp when the issue was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the issue was last updated"""
+    closed_at: str | None
+    """ISO 8601 timestamp when the issue was closed, if applicable"""
+    locked: bool | None
+    """Whether the conversation on the issue is locked"""
+    url: str | None
+    """Permalink to the issue on GitHub"""
 
 
 class IssuesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the issue"""
+    database_id: list[int]
+    """REST API numeric identifier for the issue"""
+    number: list[int]
+    """Repository-scoped issue number"""
+    title: list[str]
+    """Issue title"""
+    state: list[str]
+    """Issue state: `OPEN` or `CLOSED`"""
+    state_reason: list[str]
+    """Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the issue was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the issue was last updated"""
+    closed_at: list[str]
+    """ISO 8601 timestamp when the issue was closed, if applicable"""
+    locked: list[bool]
+    """Whether the conversation on the issue is locked"""
+    url: list[str]
+    """Permalink to the issue on GitHub"""
 
 
 class IssuesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the issue"""
+    database_id: Any
+    """REST API numeric identifier for the issue"""
+    number: Any
+    """Repository-scoped issue number"""
+    title: Any
+    """Issue title"""
+    state: Any
+    """Issue state: `OPEN` or `CLOSED`"""
+    state_reason: Any
+    """Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)"""
+    created_at: Any
+    """ISO 8601 timestamp when the issue was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the issue was last updated"""
+    closed_at: Any
+    """ISO 8601 timestamp when the issue was closed, if applicable"""
+    locked: Any
+    """Whether the conversation on the issue is locked"""
+    url: Any
+    """Permalink to the issue on GitHub"""
 
 
 class IssuesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the issue"""
+    database_id: str
+    """REST API numeric identifier for the issue"""
+    number: str
+    """Repository-scoped issue number"""
+    title: str
+    """Issue title"""
+    state: str
+    """Issue state: `OPEN` or `CLOSED`"""
+    state_reason: str
+    """Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)"""
+    created_at: str
+    """ISO 8601 timestamp when the issue was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the issue was last updated"""
+    closed_at: str
+    """ISO 8601 timestamp when the issue was closed, if applicable"""
+    locked: str
+    """Whether the conversation on the issue is locked"""
+    url: str
+    """Permalink to the issue on GitHub"""
 
 
 class IssuesSortFilter(TypedDict, total=False):
     """Available fields for sorting issues search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the issue"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the issue"""
+    number: AirbyteSortOrder
+    """Repository-scoped issue number"""
+    title: AirbyteSortOrder
+    """Issue title"""
+    state: AirbyteSortOrder
+    """Issue state: `OPEN` or `CLOSED`"""
+    state_reason: AirbyteSortOrder
+    """Reason the issue is in its current state (e.g. `COMPLETED`, `NOT_PLANNED`)"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the issue was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the issue was last updated"""
+    closed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the issue was closed, if applicable"""
+    locked: AirbyteSortOrder
+    """Whether the conversation on the issue is locked"""
+    url: AirbyteSortOrder
+    """Permalink to the issue on GitHub"""
 
 
 # Entity-specific condition types for issues
@@ -739,22 +939,112 @@ class IssuesSearchQuery(TypedDict, total=False):
 
 class OrganizationsSearchFilter(TypedDict, total=False):
     """Available fields for filtering organizations search queries."""
+    id: str | None
+    """GraphQL node ID of the organization"""
+    database_id: int | None
+    """REST API numeric identifier for the organization"""
+    login: str | None
+    """Organization login/handle (unique URL slug)"""
+    name: str | None
+    """Display name of the organization"""
+    description: str | None
+    """Short public description of the organization"""
+    email: str | None
+    """Public contact email for the organization, if set"""
+    location: str | None
+    """Public location of the organization, if set"""
+    is_verified: bool | None
+    """Whether the organization has a verified domain"""
+    created_at: str | None
+    """ISO 8601 timestamp when the organization was created"""
 
 
 class OrganizationsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the organization"""
+    database_id: list[int]
+    """REST API numeric identifier for the organization"""
+    login: list[str]
+    """Organization login/handle (unique URL slug)"""
+    name: list[str]
+    """Display name of the organization"""
+    description: list[str]
+    """Short public description of the organization"""
+    email: list[str]
+    """Public contact email for the organization, if set"""
+    location: list[str]
+    """Public location of the organization, if set"""
+    is_verified: list[bool]
+    """Whether the organization has a verified domain"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the organization was created"""
 
 
 class OrganizationsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the organization"""
+    database_id: Any
+    """REST API numeric identifier for the organization"""
+    login: Any
+    """Organization login/handle (unique URL slug)"""
+    name: Any
+    """Display name of the organization"""
+    description: Any
+    """Short public description of the organization"""
+    email: Any
+    """Public contact email for the organization, if set"""
+    location: Any
+    """Public location of the organization, if set"""
+    is_verified: Any
+    """Whether the organization has a verified domain"""
+    created_at: Any
+    """ISO 8601 timestamp when the organization was created"""
 
 
 class OrganizationsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the organization"""
+    database_id: str
+    """REST API numeric identifier for the organization"""
+    login: str
+    """Organization login/handle (unique URL slug)"""
+    name: str
+    """Display name of the organization"""
+    description: str
+    """Short public description of the organization"""
+    email: str
+    """Public contact email for the organization, if set"""
+    location: str
+    """Public location of the organization, if set"""
+    is_verified: str
+    """Whether the organization has a verified domain"""
+    created_at: str
+    """ISO 8601 timestamp when the organization was created"""
 
 
 class OrganizationsSortFilter(TypedDict, total=False):
     """Available fields for sorting organizations search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the organization"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the organization"""
+    login: AirbyteSortOrder
+    """Organization login/handle (unique URL slug)"""
+    name: AirbyteSortOrder
+    """Display name of the organization"""
+    description: AirbyteSortOrder
+    """Short public description of the organization"""
+    email: AirbyteSortOrder
+    """Public contact email for the organization, if set"""
+    location: AirbyteSortOrder
+    """Public location of the organization, if set"""
+    is_verified: AirbyteSortOrder
+    """Whether the organization has a verified domain"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the organization was created"""
 
 
 # Entity-specific condition types for organizations
@@ -854,22 +1144,162 @@ class OrganizationsSearchQuery(TypedDict, total=False):
 
 class PullRequestsSearchFilter(TypedDict, total=False):
     """Available fields for filtering pull_requests search queries."""
+    id: str | None
+    """GraphQL node ID of the pull request"""
+    database_id: int | None
+    """REST API numeric identifier for the pull request"""
+    number: int | None
+    """Repository-scoped pull request number"""
+    title: str | None
+    """Pull request title"""
+    state: str | None
+    """Pull request state: `OPEN`, `CLOSED`, or `MERGED`"""
+    is_draft: bool | None
+    """Whether the pull request is still a draft"""
+    merged: bool | None
+    """Whether the pull request has been merged"""
+    created_at: str | None
+    """ISO 8601 timestamp when the pull request was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the pull request was last updated"""
+    closed_at: str | None
+    """ISO 8601 timestamp when the pull request was closed, if applicable"""
+    merged_at: str | None
+    """ISO 8601 timestamp when the pull request was merged, if applicable"""
+    base_ref_name: str | None
+    """Name of the branch being merged into"""
+    head_ref_name: str | None
+    """Name of the branch with the proposed changes"""
+    url: str | None
+    """Permalink to the pull request on GitHub"""
 
 
 class PullRequestsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the pull request"""
+    database_id: list[int]
+    """REST API numeric identifier for the pull request"""
+    number: list[int]
+    """Repository-scoped pull request number"""
+    title: list[str]
+    """Pull request title"""
+    state: list[str]
+    """Pull request state: `OPEN`, `CLOSED`, or `MERGED`"""
+    is_draft: list[bool]
+    """Whether the pull request is still a draft"""
+    merged: list[bool]
+    """Whether the pull request has been merged"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the pull request was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the pull request was last updated"""
+    closed_at: list[str]
+    """ISO 8601 timestamp when the pull request was closed, if applicable"""
+    merged_at: list[str]
+    """ISO 8601 timestamp when the pull request was merged, if applicable"""
+    base_ref_name: list[str]
+    """Name of the branch being merged into"""
+    head_ref_name: list[str]
+    """Name of the branch with the proposed changes"""
+    url: list[str]
+    """Permalink to the pull request on GitHub"""
 
 
 class PullRequestsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the pull request"""
+    database_id: Any
+    """REST API numeric identifier for the pull request"""
+    number: Any
+    """Repository-scoped pull request number"""
+    title: Any
+    """Pull request title"""
+    state: Any
+    """Pull request state: `OPEN`, `CLOSED`, or `MERGED`"""
+    is_draft: Any
+    """Whether the pull request is still a draft"""
+    merged: Any
+    """Whether the pull request has been merged"""
+    created_at: Any
+    """ISO 8601 timestamp when the pull request was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the pull request was last updated"""
+    closed_at: Any
+    """ISO 8601 timestamp when the pull request was closed, if applicable"""
+    merged_at: Any
+    """ISO 8601 timestamp when the pull request was merged, if applicable"""
+    base_ref_name: Any
+    """Name of the branch being merged into"""
+    head_ref_name: Any
+    """Name of the branch with the proposed changes"""
+    url: Any
+    """Permalink to the pull request on GitHub"""
 
 
 class PullRequestsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the pull request"""
+    database_id: str
+    """REST API numeric identifier for the pull request"""
+    number: str
+    """Repository-scoped pull request number"""
+    title: str
+    """Pull request title"""
+    state: str
+    """Pull request state: `OPEN`, `CLOSED`, or `MERGED`"""
+    is_draft: str
+    """Whether the pull request is still a draft"""
+    merged: str
+    """Whether the pull request has been merged"""
+    created_at: str
+    """ISO 8601 timestamp when the pull request was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the pull request was last updated"""
+    closed_at: str
+    """ISO 8601 timestamp when the pull request was closed, if applicable"""
+    merged_at: str
+    """ISO 8601 timestamp when the pull request was merged, if applicable"""
+    base_ref_name: str
+    """Name of the branch being merged into"""
+    head_ref_name: str
+    """Name of the branch with the proposed changes"""
+    url: str
+    """Permalink to the pull request on GitHub"""
 
 
 class PullRequestsSortFilter(TypedDict, total=False):
     """Available fields for sorting pull_requests search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the pull request"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the pull request"""
+    number: AirbyteSortOrder
+    """Repository-scoped pull request number"""
+    title: AirbyteSortOrder
+    """Pull request title"""
+    state: AirbyteSortOrder
+    """Pull request state: `OPEN`, `CLOSED`, or `MERGED`"""
+    is_draft: AirbyteSortOrder
+    """Whether the pull request is still a draft"""
+    merged: AirbyteSortOrder
+    """Whether the pull request has been merged"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the pull request was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the pull request was last updated"""
+    closed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the pull request was closed, if applicable"""
+    merged_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the pull request was merged, if applicable"""
+    base_ref_name: AirbyteSortOrder
+    """Name of the branch being merged into"""
+    head_ref_name: AirbyteSortOrder
+    """Name of the branch with the proposed changes"""
+    url: AirbyteSortOrder
+    """Permalink to the pull request on GitHub"""
 
 
 # Entity-specific condition types for pull_requests
@@ -969,22 +1399,152 @@ class PullRequestsSearchQuery(TypedDict, total=False):
 
 class RepositoriesSearchFilter(TypedDict, total=False):
     """Available fields for filtering repositories search queries."""
+    id: str | None
+    """GraphQL node ID of the repository"""
+    name: str | None
+    """Short repository name (without owner)"""
+    name_with_owner: str | None
+    """Fully-qualified `owner/name` identifier for the repository"""
+    description: str | None
+    """Short description of the repository"""
+    url: str | None
+    """Canonical GitHub URL for the repository"""
+    created_at: str | None
+    """ISO 8601 timestamp when the repository was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the repository was last updated"""
+    pushed_at: str | None
+    """ISO 8601 timestamp of the most recent push to the repository"""
+    fork_count: int | None
+    """Number of forks of the repository"""
+    stargazer_count: int | None
+    """Number of users who have starred the repository"""
+    is_private: bool | None
+    """Whether the repository is private"""
+    is_fork: bool | None
+    """Whether the repository is a fork of another repository"""
+    is_archived: bool | None
+    """Whether the repository has been archived"""
 
 
 class RepositoriesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the repository"""
+    name: list[str]
+    """Short repository name (without owner)"""
+    name_with_owner: list[str]
+    """Fully-qualified `owner/name` identifier for the repository"""
+    description: list[str]
+    """Short description of the repository"""
+    url: list[str]
+    """Canonical GitHub URL for the repository"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the repository was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the repository was last updated"""
+    pushed_at: list[str]
+    """ISO 8601 timestamp of the most recent push to the repository"""
+    fork_count: list[int]
+    """Number of forks of the repository"""
+    stargazer_count: list[int]
+    """Number of users who have starred the repository"""
+    is_private: list[bool]
+    """Whether the repository is private"""
+    is_fork: list[bool]
+    """Whether the repository is a fork of another repository"""
+    is_archived: list[bool]
+    """Whether the repository has been archived"""
 
 
 class RepositoriesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the repository"""
+    name: Any
+    """Short repository name (without owner)"""
+    name_with_owner: Any
+    """Fully-qualified `owner/name` identifier for the repository"""
+    description: Any
+    """Short description of the repository"""
+    url: Any
+    """Canonical GitHub URL for the repository"""
+    created_at: Any
+    """ISO 8601 timestamp when the repository was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the repository was last updated"""
+    pushed_at: Any
+    """ISO 8601 timestamp of the most recent push to the repository"""
+    fork_count: Any
+    """Number of forks of the repository"""
+    stargazer_count: Any
+    """Number of users who have starred the repository"""
+    is_private: Any
+    """Whether the repository is private"""
+    is_fork: Any
+    """Whether the repository is a fork of another repository"""
+    is_archived: Any
+    """Whether the repository has been archived"""
 
 
 class RepositoriesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the repository"""
+    name: str
+    """Short repository name (without owner)"""
+    name_with_owner: str
+    """Fully-qualified `owner/name` identifier for the repository"""
+    description: str
+    """Short description of the repository"""
+    url: str
+    """Canonical GitHub URL for the repository"""
+    created_at: str
+    """ISO 8601 timestamp when the repository was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the repository was last updated"""
+    pushed_at: str
+    """ISO 8601 timestamp of the most recent push to the repository"""
+    fork_count: str
+    """Number of forks of the repository"""
+    stargazer_count: str
+    """Number of users who have starred the repository"""
+    is_private: str
+    """Whether the repository is private"""
+    is_fork: str
+    """Whether the repository is a fork of another repository"""
+    is_archived: str
+    """Whether the repository has been archived"""
 
 
 class RepositoriesSortFilter(TypedDict, total=False):
     """Available fields for sorting repositories search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the repository"""
+    name: AirbyteSortOrder
+    """Short repository name (without owner)"""
+    name_with_owner: AirbyteSortOrder
+    """Fully-qualified `owner/name` identifier for the repository"""
+    description: AirbyteSortOrder
+    """Short description of the repository"""
+    url: AirbyteSortOrder
+    """Canonical GitHub URL for the repository"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the repository was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the repository was last updated"""
+    pushed_at: AirbyteSortOrder
+    """ISO 8601 timestamp of the most recent push to the repository"""
+    fork_count: AirbyteSortOrder
+    """Number of forks of the repository"""
+    stargazer_count: AirbyteSortOrder
+    """Number of users who have starred the repository"""
+    is_private: AirbyteSortOrder
+    """Whether the repository is private"""
+    is_fork: AirbyteSortOrder
+    """Whether the repository is a fork of another repository"""
+    is_archived: AirbyteSortOrder
+    """Whether the repository has been archived"""
 
 
 # Entity-specific condition types for repositories
@@ -1084,22 +1644,32 @@ class RepositoriesSearchQuery(TypedDict, total=False):
 
 class StargazersSearchFilter(TypedDict, total=False):
     """Available fields for filtering stargazers search queries."""
+    starred_at: str | None
+    """ISO 8601 timestamp when the user starred the repository"""
 
 
 class StargazersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    starred_at: list[str]
+    """ISO 8601 timestamp when the user starred the repository"""
 
 
 class StargazersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    starred_at: Any
+    """ISO 8601 timestamp when the user starred the repository"""
 
 
 class StargazersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    starred_at: str
+    """ISO 8601 timestamp when the user starred the repository"""
 
 
 class StargazersSortFilter(TypedDict, total=False):
     """Available fields for sorting stargazers search results."""
+    starred_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the user starred the repository"""
 
 
 # Entity-specific condition types for stargazers
@@ -1199,22 +1769,42 @@ class StargazersSearchQuery(TypedDict, total=False):
 
 class TagsSearchFilter(TypedDict, total=False):
     """Available fields for filtering tags search queries."""
+    name: str | None
+    """Tag name (e.g. `v1.2.3`)"""
+    prefix: str | None
+    """Git ref prefix for the tag (typically `refs/tags/`)"""
 
 
 class TagsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    name: list[str]
+    """Tag name (e.g. `v1.2.3`)"""
+    prefix: list[str]
+    """Git ref prefix for the tag (typically `refs/tags/`)"""
 
 
 class TagsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    name: Any
+    """Tag name (e.g. `v1.2.3`)"""
+    prefix: Any
+    """Git ref prefix for the tag (typically `refs/tags/`)"""
 
 
 class TagsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    name: str
+    """Tag name (e.g. `v1.2.3`)"""
+    prefix: str
+    """Git ref prefix for the tag (typically `refs/tags/`)"""
 
 
 class TagsSortFilter(TypedDict, total=False):
     """Available fields for sorting tags search results."""
+    name: AirbyteSortOrder
+    """Tag name (e.g. `v1.2.3`)"""
+    prefix: AirbyteSortOrder
+    """Git ref prefix for the tag (typically `refs/tags/`)"""
 
 
 # Entity-specific condition types for tags
@@ -1314,22 +1904,112 @@ class TagsSearchQuery(TypedDict, total=False):
 
 class TeamsSearchFilter(TypedDict, total=False):
     """Available fields for filtering teams search queries."""
+    id: str | None
+    """GraphQL node ID of the team"""
+    database_id: int | None
+    """REST API numeric identifier for the team"""
+    slug: str | None
+    """URL-friendly slug for the team within its organization"""
+    name: str | None
+    """Display name of the team"""
+    description: str | None
+    """Short description of the team"""
+    privacy: str | None
+    """Team visibility: `SECRET` or `VISIBLE`"""
+    url: str | None
+    """Permalink to the team on GitHub"""
+    created_at: str | None
+    """ISO 8601 timestamp when the team was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the team was last updated"""
 
 
 class TeamsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the team"""
+    database_id: list[int]
+    """REST API numeric identifier for the team"""
+    slug: list[str]
+    """URL-friendly slug for the team within its organization"""
+    name: list[str]
+    """Display name of the team"""
+    description: list[str]
+    """Short description of the team"""
+    privacy: list[str]
+    """Team visibility: `SECRET` or `VISIBLE`"""
+    url: list[str]
+    """Permalink to the team on GitHub"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the team was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the team was last updated"""
 
 
 class TeamsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the team"""
+    database_id: Any
+    """REST API numeric identifier for the team"""
+    slug: Any
+    """URL-friendly slug for the team within its organization"""
+    name: Any
+    """Display name of the team"""
+    description: Any
+    """Short description of the team"""
+    privacy: Any
+    """Team visibility: `SECRET` or `VISIBLE`"""
+    url: Any
+    """Permalink to the team on GitHub"""
+    created_at: Any
+    """ISO 8601 timestamp when the team was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the team was last updated"""
 
 
 class TeamsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the team"""
+    database_id: str
+    """REST API numeric identifier for the team"""
+    slug: str
+    """URL-friendly slug for the team within its organization"""
+    name: str
+    """Display name of the team"""
+    description: str
+    """Short description of the team"""
+    privacy: str
+    """Team visibility: `SECRET` or `VISIBLE`"""
+    url: str
+    """Permalink to the team on GitHub"""
+    created_at: str
+    """ISO 8601 timestamp when the team was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the team was last updated"""
 
 
 class TeamsSortFilter(TypedDict, total=False):
     """Available fields for sorting teams search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the team"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the team"""
+    slug: AirbyteSortOrder
+    """URL-friendly slug for the team within its organization"""
+    name: AirbyteSortOrder
+    """Display name of the team"""
+    description: AirbyteSortOrder
+    """Short description of the team"""
+    privacy: AirbyteSortOrder
+    """Team visibility: `SECRET` or `VISIBLE`"""
+    url: AirbyteSortOrder
+    """Permalink to the team on GitHub"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the team was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the team was last updated"""
 
 
 # Entity-specific condition types for teams
@@ -1429,22 +2109,132 @@ class TeamsSearchQuery(TypedDict, total=False):
 
 class UsersSearchFilter(TypedDict, total=False):
     """Available fields for filtering users search queries."""
+    id: str | None
+    """GraphQL node ID of the user"""
+    database_id: int | None
+    """REST API numeric identifier for the user"""
+    login: str | None
+    """User login/handle"""
+    name: str | None
+    """Public display name of the user, if set"""
+    email: str | None
+    """Public email address of the user, if set"""
+    company: str | None
+    """Public company affiliation of the user, if set"""
+    location: str | None
+    """Public location of the user, if set"""
+    twitter_username: str | None
+    """Public Twitter/X username of the user, if set"""
+    url: str | None
+    """Permalink to the user's profile on GitHub"""
+    created_at: str | None
+    """ISO 8601 timestamp when the user account was created"""
+    is_hireable: bool | None
+    """Whether the user has marked themselves as available for hire"""
 
 
 class UsersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the user"""
+    database_id: list[int]
+    """REST API numeric identifier for the user"""
+    login: list[str]
+    """User login/handle"""
+    name: list[str]
+    """Public display name of the user, if set"""
+    email: list[str]
+    """Public email address of the user, if set"""
+    company: list[str]
+    """Public company affiliation of the user, if set"""
+    location: list[str]
+    """Public location of the user, if set"""
+    twitter_username: list[str]
+    """Public Twitter/X username of the user, if set"""
+    url: list[str]
+    """Permalink to the user's profile on GitHub"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the user account was created"""
+    is_hireable: list[bool]
+    """Whether the user has marked themselves as available for hire"""
 
 
 class UsersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the user"""
+    database_id: Any
+    """REST API numeric identifier for the user"""
+    login: Any
+    """User login/handle"""
+    name: Any
+    """Public display name of the user, if set"""
+    email: Any
+    """Public email address of the user, if set"""
+    company: Any
+    """Public company affiliation of the user, if set"""
+    location: Any
+    """Public location of the user, if set"""
+    twitter_username: Any
+    """Public Twitter/X username of the user, if set"""
+    url: Any
+    """Permalink to the user's profile on GitHub"""
+    created_at: Any
+    """ISO 8601 timestamp when the user account was created"""
+    is_hireable: Any
+    """Whether the user has marked themselves as available for hire"""
 
 
 class UsersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the user"""
+    database_id: str
+    """REST API numeric identifier for the user"""
+    login: str
+    """User login/handle"""
+    name: str
+    """Public display name of the user, if set"""
+    email: str
+    """Public email address of the user, if set"""
+    company: str
+    """Public company affiliation of the user, if set"""
+    location: str
+    """Public location of the user, if set"""
+    twitter_username: str
+    """Public Twitter/X username of the user, if set"""
+    url: str
+    """Permalink to the user's profile on GitHub"""
+    created_at: str
+    """ISO 8601 timestamp when the user account was created"""
+    is_hireable: str
+    """Whether the user has marked themselves as available for hire"""
 
 
 class UsersSortFilter(TypedDict, total=False):
     """Available fields for sorting users search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the user"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the user"""
+    login: AirbyteSortOrder
+    """User login/handle"""
+    name: AirbyteSortOrder
+    """Public display name of the user, if set"""
+    email: AirbyteSortOrder
+    """Public email address of the user, if set"""
+    company: AirbyteSortOrder
+    """Public company affiliation of the user, if set"""
+    location: AirbyteSortOrder
+    """Public location of the user, if set"""
+    twitter_username: AirbyteSortOrder
+    """Public Twitter/X username of the user, if set"""
+    url: AirbyteSortOrder
+    """Permalink to the user's profile on GitHub"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the user account was created"""
+    is_hireable: AirbyteSortOrder
+    """Whether the user has marked themselves as available for hire"""
 
 
 # Entity-specific condition types for users
