@@ -32,6 +32,14 @@ class AshbyReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
+class CandidateEmailaddressesItem(BaseModel):
+    """Nested schema for Candidate.emailAddresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    value: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
+
 class CandidateTagsItem(BaseModel):
     """Nested schema for Candidate.tags_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -46,14 +54,6 @@ class CandidateSociallinksItem(BaseModel):
 
     type_: Union[str | None, Any] = Field(default=None, alias="type")
     url: Union[str | None, Any] = Field(default=None)
-
-class CandidateEmailaddressesItem(BaseModel):
-    """Nested schema for Candidate.emailAddresses_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    value: Union[str | None, Any] = Field(default=None)
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
 
 class CandidatePhonenumbersItem(BaseModel):
     """Nested schema for Candidate.phoneNumbers_item"""
@@ -412,30 +412,78 @@ class ApplicationsSearchData(BaseModel):
     """Search result data for applications entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """Unique identifier for the application"""
+    status: str | None = None
+    """Current application status (e.g. active, archived, hired)"""
+    archive_reason: str | None = None
+    """Reason the application was archived, if applicable"""
+    created_at: str | None = None
+    """Timestamp when the application was created, in ISO 8601 format"""
+    updated_at: str | None = None
+    """Timestamp when the application was last updated, in ISO 8601 format"""
 
 
 class CandidatesSearchData(BaseModel):
     """Search result data for candidates entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """Unique identifier for the candidate"""
+    name: str | None = None
+    """Full name of the candidate"""
+    company: str | None = None
+    """Candidate's current company"""
+    position: str | None = None
+    """Candidate's current position or title"""
+    school: str | None = None
+    """School associated with the candidate's education"""
 
 
 class JobPostingsSearchData(BaseModel):
     """Search result data for job_postings entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """Unique identifier for the job posting"""
+    title: str | None = None
+    """Title of the job posting"""
+    is_listed: bool | None = None
+    """Whether the job posting is currently published/listed"""
+    job_id: str | None = None
+    """Identifier of the job this posting belongs to"""
+    location_name: str | None = None
+    """Name of the location associated with the posting"""
 
 
 class JobsSearchData(BaseModel):
     """Search result data for jobs entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """Unique identifier for the job"""
+    title: str | None = None
+    """Title of the job"""
+    status: str | None = None
+    """Current status of the job (e.g. open, closed, draft)"""
+    department_id: str | None = None
+    """Identifier of the department the job belongs to"""
+    location_id: str | None = None
+    """Identifier of the primary location of the job"""
 
 
 class UsersSearchData(BaseModel):
     """Search result data for users entity."""
     model_config = ConfigDict(extra="allow")
 
+    id: str | None = None
+    """Unique identifier for the user"""
+    first_name: str | None = None
+    """First name of the user"""
+    last_name: str | None = None
+    """Last name of the user"""
+    email: str | None = None
+    """Primary email address of the user"""
 
 
 # ===== GENERIC SEARCH RESULT TYPES =====

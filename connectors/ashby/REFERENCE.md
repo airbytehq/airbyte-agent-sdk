@@ -164,6 +164,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 | Field Name | Type | Description |
 |------------|------|-------------|
+| `id` | `string` | Unique identifier for the candidate |
+| `name` | `string` | Full name of the candidate |
+| `company` | `string` | Candidate's current company |
+| `position` | `string` | Candidate's current position or title |
+| `school` | `string` | School associated with the candidate's education |
 
 <details>
 <summary><b>Response Schema</b></summary>
@@ -175,6 +180,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `meta.has_more` | `boolean` | Whether additional pages are available |
 | `meta.cursor` | `string \| null` | Cursor for next page of results |
 | `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+| `data[].id` | `string` | Unique identifier for the candidate |
+| `data[].name` | `string` | Full name of the candidate |
+| `data[].company` | `string` | Candidate's current company |
+| `data[].position` | `string` | Candidate's current position or title |
+| `data[].school` | `string` | School associated with the candidate's education |
 
 </details>
 
@@ -322,6 +332,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 | Field Name | Type | Description |
 |------------|------|-------------|
+| `id` | `string` | Unique identifier for the application |
+| `status` | `string` | Current application status (e.g. active, archived, hired) |
+| `archiveReason` | `string` | Reason the application was archived, if applicable |
+| `createdAt` | `string` | Timestamp when the application was created, in ISO 8601 format |
+| `updatedAt` | `string` | Timestamp when the application was last updated, in ISO 8601 format |
 
 <details>
 <summary><b>Response Schema</b></summary>
@@ -333,6 +348,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `meta.has_more` | `boolean` | Whether additional pages are available |
 | `meta.cursor` | `string \| null` | Cursor for next page of results |
 | `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+| `data[].id` | `string` | Unique identifier for the application |
+| `data[].status` | `string` | Current application status (e.g. active, archived, hired) |
+| `data[].archiveReason` | `string` | Reason the application was archived, if applicable |
+| `data[].createdAt` | `string` | Timestamp when the application was created, in ISO 8601 format |
+| `data[].updatedAt` | `string` | Timestamp when the application was last updated, in ISO 8601 format |
 
 </details>
 
@@ -483,6 +503,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 | Field Name | Type | Description |
 |------------|------|-------------|
+| `id` | `string` | Unique identifier for the job |
+| `title` | `string` | Title of the job |
+| `status` | `string` | Current status of the job (e.g. open, closed, draft) |
+| `departmentId` | `string` | Identifier of the department the job belongs to |
+| `locationId` | `string` | Identifier of the primary location of the job |
 
 <details>
 <summary><b>Response Schema</b></summary>
@@ -494,6 +519,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `meta.has_more` | `boolean` | Whether additional pages are available |
 | `meta.cursor` | `string \| null` | Cursor for next page of results |
 | `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+| `data[].id` | `string` | Unique identifier for the job |
+| `data[].title` | `string` | Title of the job |
+| `data[].status` | `string` | Current status of the job (e.g. open, closed, draft) |
+| `data[].departmentId` | `string` | Identifier of the department the job belongs to |
+| `data[].locationId` | `string` | Identifier of the primary location of the job |
 
 </details>
 
@@ -822,6 +852,10 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 | Field Name | Type | Description |
 |------------|------|-------------|
+| `id` | `string` | Unique identifier for the user |
+| `firstName` | `string` | First name of the user |
+| `lastName` | `string` | Last name of the user |
+| `email` | `string` | Primary email address of the user |
 
 <details>
 <summary><b>Response Schema</b></summary>
@@ -833,6 +867,10 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `meta.has_more` | `boolean` | Whether additional pages are available |
 | `meta.cursor` | `string \| null` | Cursor for next page of results |
 | `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+| `data[].id` | `string` | Unique identifier for the user |
+| `data[].firstName` | `string` | First name of the user |
+| `data[].lastName` | `string` | Last name of the user |
+| `data[].email` | `string` | Primary email address of the user |
 
 </details>
 
@@ -982,6 +1020,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 | Field Name | Type | Description |
 |------------|------|-------------|
+| `id` | `string` | Unique identifier for the job posting |
+| `title` | `string` | Title of the job posting |
+| `isListed` | `boolean` | Whether the job posting is currently published/listed |
+| `jobId` | `string` | Identifier of the job this posting belongs to |
+| `locationName` | `string` | Name of the location associated with the posting |
 
 <details>
 <summary><b>Response Schema</b></summary>
@@ -993,6 +1036,11 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `meta.has_more` | `boolean` | Whether additional pages are available |
 | `meta.cursor` | `string \| null` | Cursor for next page of results |
 | `meta.took_ms` | `number \| null` | Query execution time in milliseconds |
+| `data[].id` | `string` | Unique identifier for the job posting |
+| `data[].title` | `string` | Title of the job posting |
+| `data[].isListed` | `boolean` | Whether the job posting is currently published/listed |
+| `data[].jobId` | `string` | Identifier of the job this posting belongs to |
+| `data[].locationName` | `string` | Name of the location associated with the posting |
 
 </details>
 

@@ -53,14 +53,139 @@ info:
     entities:
       - entity: applications
         x-airbyte-name: applications
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the application"
+          - name: status
+            type:
+              - "null"
+              - "string"
+            description: "Current application status (e.g. active, archived, hired)"
+          - name: archiveReason
+            type:
+              - "null"
+              - "string"
+            description: "Reason the application was archived, if applicable"
+          - name: createdAt
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the application was created, in ISO 8601 format"
+          - name: updatedAt
+            type:
+              - "null"
+              - "string"
+            description: "Timestamp when the application was last updated, in ISO 8601 format"
       - entity: candidates
         x-airbyte-name: candidates
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the candidate"
+          - name: name
+            type:
+              - "null"
+              - "string"
+            description: "Full name of the candidate"
+          - name: company
+            type:
+              - "null"
+              - "string"
+            description: "Candidate's current company"
+          - name: position
+            type:
+              - "null"
+              - "string"
+            description: "Candidate's current position or title"
+          - name: school
+            type:
+              - "null"
+              - "string"
+            description: "School associated with the candidate's education"
       - entity: job_postings
         x-airbyte-name: job_postings
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the job posting"
+          - name: title
+            type:
+              - "null"
+              - "string"
+            description: "Title of the job posting"
+          - name: isListed
+            type:
+              - "null"
+              - "boolean"
+            description: "Whether the job posting is currently published/listed"
+          - name: jobId
+            type:
+              - "null"
+              - "string"
+            description: "Identifier of the job this posting belongs to"
+          - name: locationName
+            type:
+              - "null"
+              - "string"
+            description: "Name of the location associated with the posting"
       - entity: jobs
         x-airbyte-name: jobs
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the job"
+          - name: title
+            type:
+              - "null"
+              - "string"
+            description: "Title of the job"
+          - name: status
+            type:
+              - "null"
+              - "string"
+            description: "Current status of the job (e.g. open, closed, draft)"
+          - name: departmentId
+            type:
+              - "null"
+              - "string"
+            description: "Identifier of the department the job belongs to"
+          - name: locationId
+            type:
+              - "null"
+              - "string"
+            description: "Identifier of the primary location of the job"
       - entity: users
         x-airbyte-name: users
+        fields:
+          - name: id
+            type:
+              - "null"
+              - "string"
+            description: "Unique identifier for the user"
+          - name: firstName
+            type:
+              - "null"
+              - "string"
+            description: "First name of the user"
+          - name: lastName
+            type:
+              - "null"
+              - "string"
+            description: "Last name of the user"
+          - name: email
+            type:
+              - "null"
+              - "string"
+            description: "Primary email address of the user"
 servers:
 - url: https://api.ashbyhq.com
   description: Ashby API server

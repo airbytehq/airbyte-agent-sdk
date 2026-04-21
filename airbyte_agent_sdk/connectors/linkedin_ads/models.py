@@ -96,15 +96,15 @@ class AccountsList(BaseModel):
     elements: Union[list[Account], Any] = Field(default=None)
     metadata: Union[AccountsListMetadata, Any] = Field(default=None)
 
-class AccountUserChangeauditstampsLastmodified(BaseModel):
-    """Nested schema for AccountUserChangeauditstamps.lastModified"""
+class AccountUserChangeauditstampsCreated(BaseModel):
+    """Nested schema for AccountUserChangeauditstamps.created"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     actor: Union[str | None, Any] = Field(default=None)
     time: Union[int | None, Any] = Field(default=None)
 
-class AccountUserChangeauditstampsCreated(BaseModel):
-    """Nested schema for AccountUserChangeauditstamps.created"""
+class AccountUserChangeauditstampsLastmodified(BaseModel):
+    """Nested schema for AccountUserChangeauditstamps.lastModified"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     actor: Union[str | None, Any] = Field(default=None)
@@ -139,15 +139,36 @@ class AccountUsersList(BaseModel):
     elements: Union[list[AccountUser], Any] = Field(default=None)
     metadata: Union[AccountUsersListMetadata, Any] = Field(default=None)
 
-class CampaignUnitcost(BaseModel):
-    """Cost per unit (bid amount)"""
+class CampaignChangeauditstampsLastmodified(BaseModel):
+    """Nested schema for CampaignChangeauditstamps.lastModified"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    amount: Union[str | None, Any] = Field(default=None)
-    currency_code: Union[str | None, Any] = Field(default=None, alias="currencyCode")
+    actor: Union[str | None, Any] = Field(default=None)
+    time: Union[int | None, Any] = Field(default=None)
 
-class CampaignDailybudget(BaseModel):
-    """Daily budget configuration"""
+class CampaignChangeauditstampsCreated(BaseModel):
+    """Nested schema for CampaignChangeauditstamps.created"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    actor: Union[str | None, Any] = Field(default=None)
+    time: Union[int | None, Any] = Field(default=None)
+
+class CampaignChangeauditstamps(BaseModel):
+    """Creation and last modification audit stamps"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    created: Union[CampaignChangeauditstampsCreated | None, Any] = Field(default=None)
+    last_modified: Union[CampaignChangeauditstampsLastmodified | None, Any] = Field(default=None, alias="lastModified")
+
+class CampaignRunschedule(BaseModel):
+    """Campaign run schedule"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    start: Union[int | None, Any] = Field(default=None)
+    end: Union[int | None, Any] = Field(default=None)
+
+class CampaignUnitcost(BaseModel):
+    """Cost per unit (bid amount)"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     amount: Union[str | None, Any] = Field(default=None)
@@ -166,27 +187,6 @@ class CampaignVersion(BaseModel):
 
     version_tag: Union[str | None, Any] = Field(default=None, alias="versionTag")
 
-class CampaignChangeauditstampsCreated(BaseModel):
-    """Nested schema for CampaignChangeauditstamps.created"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    actor: Union[str | None, Any] = Field(default=None)
-    time: Union[int | None, Any] = Field(default=None)
-
-class CampaignChangeauditstampsLastmodified(BaseModel):
-    """Nested schema for CampaignChangeauditstamps.lastModified"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    actor: Union[str | None, Any] = Field(default=None)
-    time: Union[int | None, Any] = Field(default=None)
-
-class CampaignChangeauditstamps(BaseModel):
-    """Creation and last modification audit stamps"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    created: Union[CampaignChangeauditstampsCreated | None, Any] = Field(default=None)
-    last_modified: Union[CampaignChangeauditstampsLastmodified | None, Any] = Field(default=None, alias="lastModified")
-
 class CampaignTotalbudget(BaseModel):
     """Total budget configuration"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -194,12 +194,12 @@ class CampaignTotalbudget(BaseModel):
     amount: Union[str | None, Any] = Field(default=None)
     currency_code: Union[str | None, Any] = Field(default=None, alias="currencyCode")
 
-class CampaignRunschedule(BaseModel):
-    """Campaign run schedule"""
+class CampaignDailybudget(BaseModel):
+    """Daily budget configuration"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    start: Union[int | None, Any] = Field(default=None)
-    end: Union[int | None, Any] = Field(default=None)
+    amount: Union[str | None, Any] = Field(default=None)
+    currency_code: Union[str | None, Any] = Field(default=None, alias="currencyCode")
 
 class Campaign(BaseModel):
     """LinkedIn ad campaign object"""
@@ -248,20 +248,6 @@ class CampaignsList(BaseModel):
     elements: Union[list[Campaign], Any] = Field(default=None)
     metadata: Union[CampaignsListMetadata, Any] = Field(default=None)
 
-class CampaignGroupTotalbudget(BaseModel):
-    """Total budget for the campaign group"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    amount: Union[str | None, Any] = Field(default=None)
-    currency_code: Union[str | None, Any] = Field(default=None, alias="currencyCode")
-
-class CampaignGroupRunschedule(BaseModel):
-    """Campaign group run schedule"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    start: Union[int | None, Any] = Field(default=None)
-    end: Union[int | None, Any] = Field(default=None)
-
 class CampaignGroupChangeauditstampsLastmodified(BaseModel):
     """Nested schema for CampaignGroupChangeauditstamps.lastModified"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -282,6 +268,20 @@ class CampaignGroupChangeauditstamps(BaseModel):
 
     created: Union[CampaignGroupChangeauditstampsCreated | None, Any] = Field(default=None)
     last_modified: Union[CampaignGroupChangeauditstampsLastmodified | None, Any] = Field(default=None, alias="lastModified")
+
+class CampaignGroupTotalbudget(BaseModel):
+    """Total budget for the campaign group"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    amount: Union[str | None, Any] = Field(default=None)
+    currency_code: Union[str | None, Any] = Field(default=None, alias="currencyCode")
+
+class CampaignGroupRunschedule(BaseModel):
+    """Campaign group run schedule"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    start: Union[int | None, Any] = Field(default=None)
+    end: Union[int | None, Any] = Field(default=None)
 
 class CampaignGroup(BaseModel):
     """LinkedIn ad campaign group object"""

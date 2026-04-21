@@ -3331,7 +3331,42 @@ AshbyConnectorModel: ConnectorModel = ConnectorModel(
             },
         ),
     ],
-    search_field_paths={},
+    search_field_paths={
+        'applications': [
+            'id',
+            'status',
+            'archiveReason',
+            'createdAt',
+            'updatedAt',
+        ],
+        'candidates': [
+            'id',
+            'name',
+            'company',
+            'position',
+            'school',
+        ],
+        'job_postings': [
+            'id',
+            'title',
+            'isListed',
+            'jobId',
+            'locationName',
+        ],
+        'jobs': [
+            'id',
+            'title',
+            'status',
+            'departmentId',
+            'locationId',
+        ],
+        'users': [
+            'id',
+            'firstName',
+            'lastName',
+            'email',
+        ],
+    },
     example_questions=ExampleQuestions(
         direct=[
             'List all open jobs',

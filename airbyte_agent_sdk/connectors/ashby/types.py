@@ -116,22 +116,72 @@ AirbyteSortOrder = Literal["asc", "desc"]
 
 class ApplicationsSearchFilter(TypedDict, total=False):
     """Available fields for filtering applications search queries."""
+    id: str | None
+    """Unique identifier for the application"""
+    status: str | None
+    """Current application status (e.g. active, archived, hired)"""
+    archive_reason: str | None
+    """Reason the application was archived, if applicable"""
+    created_at: str | None
+    """Timestamp when the application was created, in ISO 8601 format"""
+    updated_at: str | None
+    """Timestamp when the application was last updated, in ISO 8601 format"""
 
 
 class ApplicationsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """Unique identifier for the application"""
+    status: list[str]
+    """Current application status (e.g. active, archived, hired)"""
+    archive_reason: list[str]
+    """Reason the application was archived, if applicable"""
+    created_at: list[str]
+    """Timestamp when the application was created, in ISO 8601 format"""
+    updated_at: list[str]
+    """Timestamp when the application was last updated, in ISO 8601 format"""
 
 
 class ApplicationsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the application"""
+    status: Any
+    """Current application status (e.g. active, archived, hired)"""
+    archive_reason: Any
+    """Reason the application was archived, if applicable"""
+    created_at: Any
+    """Timestamp when the application was created, in ISO 8601 format"""
+    updated_at: Any
+    """Timestamp when the application was last updated, in ISO 8601 format"""
 
 
 class ApplicationsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the application"""
+    status: str
+    """Current application status (e.g. active, archived, hired)"""
+    archive_reason: str
+    """Reason the application was archived, if applicable"""
+    created_at: str
+    """Timestamp when the application was created, in ISO 8601 format"""
+    updated_at: str
+    """Timestamp when the application was last updated, in ISO 8601 format"""
 
 
 class ApplicationsSortFilter(TypedDict, total=False):
     """Available fields for sorting applications search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the application"""
+    status: AirbyteSortOrder
+    """Current application status (e.g. active, archived, hired)"""
+    archive_reason: AirbyteSortOrder
+    """Reason the application was archived, if applicable"""
+    created_at: AirbyteSortOrder
+    """Timestamp when the application was created, in ISO 8601 format"""
+    updated_at: AirbyteSortOrder
+    """Timestamp when the application was last updated, in ISO 8601 format"""
 
 
 # Entity-specific condition types for applications
@@ -231,22 +281,72 @@ class ApplicationsSearchQuery(TypedDict, total=False):
 
 class CandidatesSearchFilter(TypedDict, total=False):
     """Available fields for filtering candidates search queries."""
+    id: str | None
+    """Unique identifier for the candidate"""
+    name: str | None
+    """Full name of the candidate"""
+    company: str | None
+    """Candidate's current company"""
+    position: str | None
+    """Candidate's current position or title"""
+    school: str | None
+    """School associated with the candidate's education"""
 
 
 class CandidatesInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """Unique identifier for the candidate"""
+    name: list[str]
+    """Full name of the candidate"""
+    company: list[str]
+    """Candidate's current company"""
+    position: list[str]
+    """Candidate's current position or title"""
+    school: list[str]
+    """School associated with the candidate's education"""
 
 
 class CandidatesAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the candidate"""
+    name: Any
+    """Full name of the candidate"""
+    company: Any
+    """Candidate's current company"""
+    position: Any
+    """Candidate's current position or title"""
+    school: Any
+    """School associated with the candidate's education"""
 
 
 class CandidatesStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the candidate"""
+    name: str
+    """Full name of the candidate"""
+    company: str
+    """Candidate's current company"""
+    position: str
+    """Candidate's current position or title"""
+    school: str
+    """School associated with the candidate's education"""
 
 
 class CandidatesSortFilter(TypedDict, total=False):
     """Available fields for sorting candidates search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the candidate"""
+    name: AirbyteSortOrder
+    """Full name of the candidate"""
+    company: AirbyteSortOrder
+    """Candidate's current company"""
+    position: AirbyteSortOrder
+    """Candidate's current position or title"""
+    school: AirbyteSortOrder
+    """School associated with the candidate's education"""
 
 
 # Entity-specific condition types for candidates
@@ -346,22 +446,72 @@ class CandidatesSearchQuery(TypedDict, total=False):
 
 class JobPostingsSearchFilter(TypedDict, total=False):
     """Available fields for filtering job_postings search queries."""
+    id: str | None
+    """Unique identifier for the job posting"""
+    title: str | None
+    """Title of the job posting"""
+    is_listed: bool | None
+    """Whether the job posting is currently published/listed"""
+    job_id: str | None
+    """Identifier of the job this posting belongs to"""
+    location_name: str | None
+    """Name of the location associated with the posting"""
 
 
 class JobPostingsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """Unique identifier for the job posting"""
+    title: list[str]
+    """Title of the job posting"""
+    is_listed: list[bool]
+    """Whether the job posting is currently published/listed"""
+    job_id: list[str]
+    """Identifier of the job this posting belongs to"""
+    location_name: list[str]
+    """Name of the location associated with the posting"""
 
 
 class JobPostingsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the job posting"""
+    title: Any
+    """Title of the job posting"""
+    is_listed: Any
+    """Whether the job posting is currently published/listed"""
+    job_id: Any
+    """Identifier of the job this posting belongs to"""
+    location_name: Any
+    """Name of the location associated with the posting"""
 
 
 class JobPostingsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the job posting"""
+    title: str
+    """Title of the job posting"""
+    is_listed: str
+    """Whether the job posting is currently published/listed"""
+    job_id: str
+    """Identifier of the job this posting belongs to"""
+    location_name: str
+    """Name of the location associated with the posting"""
 
 
 class JobPostingsSortFilter(TypedDict, total=False):
     """Available fields for sorting job_postings search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the job posting"""
+    title: AirbyteSortOrder
+    """Title of the job posting"""
+    is_listed: AirbyteSortOrder
+    """Whether the job posting is currently published/listed"""
+    job_id: AirbyteSortOrder
+    """Identifier of the job this posting belongs to"""
+    location_name: AirbyteSortOrder
+    """Name of the location associated with the posting"""
 
 
 # Entity-specific condition types for job_postings
@@ -461,22 +611,72 @@ class JobPostingsSearchQuery(TypedDict, total=False):
 
 class JobsSearchFilter(TypedDict, total=False):
     """Available fields for filtering jobs search queries."""
+    id: str | None
+    """Unique identifier for the job"""
+    title: str | None
+    """Title of the job"""
+    status: str | None
+    """Current status of the job (e.g. open, closed, draft)"""
+    department_id: str | None
+    """Identifier of the department the job belongs to"""
+    location_id: str | None
+    """Identifier of the primary location of the job"""
 
 
 class JobsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """Unique identifier for the job"""
+    title: list[str]
+    """Title of the job"""
+    status: list[str]
+    """Current status of the job (e.g. open, closed, draft)"""
+    department_id: list[str]
+    """Identifier of the department the job belongs to"""
+    location_id: list[str]
+    """Identifier of the primary location of the job"""
 
 
 class JobsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the job"""
+    title: Any
+    """Title of the job"""
+    status: Any
+    """Current status of the job (e.g. open, closed, draft)"""
+    department_id: Any
+    """Identifier of the department the job belongs to"""
+    location_id: Any
+    """Identifier of the primary location of the job"""
 
 
 class JobsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the job"""
+    title: str
+    """Title of the job"""
+    status: str
+    """Current status of the job (e.g. open, closed, draft)"""
+    department_id: str
+    """Identifier of the department the job belongs to"""
+    location_id: str
+    """Identifier of the primary location of the job"""
 
 
 class JobsSortFilter(TypedDict, total=False):
     """Available fields for sorting jobs search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the job"""
+    title: AirbyteSortOrder
+    """Title of the job"""
+    status: AirbyteSortOrder
+    """Current status of the job (e.g. open, closed, draft)"""
+    department_id: AirbyteSortOrder
+    """Identifier of the department the job belongs to"""
+    location_id: AirbyteSortOrder
+    """Identifier of the primary location of the job"""
 
 
 # Entity-specific condition types for jobs
@@ -576,22 +776,62 @@ class JobsSearchQuery(TypedDict, total=False):
 
 class UsersSearchFilter(TypedDict, total=False):
     """Available fields for filtering users search queries."""
+    id: str | None
+    """Unique identifier for the user"""
+    first_name: str | None
+    """First name of the user"""
+    last_name: str | None
+    """Last name of the user"""
+    email: str | None
+    """Primary email address of the user"""
 
 
 class UsersInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """Unique identifier for the user"""
+    first_name: list[str]
+    """First name of the user"""
+    last_name: list[str]
+    """Last name of the user"""
+    email: list[str]
+    """Primary email address of the user"""
 
 
 class UsersAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Unique identifier for the user"""
+    first_name: Any
+    """First name of the user"""
+    last_name: Any
+    """Last name of the user"""
+    email: Any
+    """Primary email address of the user"""
 
 
 class UsersStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Unique identifier for the user"""
+    first_name: str
+    """First name of the user"""
+    last_name: str
+    """Last name of the user"""
+    email: str
+    """Primary email address of the user"""
 
 
 class UsersSortFilter(TypedDict, total=False):
     """Available fields for sorting users search results."""
+    id: AirbyteSortOrder
+    """Unique identifier for the user"""
+    first_name: AirbyteSortOrder
+    """First name of the user"""
+    last_name: AirbyteSortOrder
+    """Last name of the user"""
+    email: AirbyteSortOrder
+    """Primary email address of the user"""
 
 
 # Entity-specific condition types for users

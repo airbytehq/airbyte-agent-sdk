@@ -1110,7 +1110,48 @@
       "query_type_name": "ApplicationsSearchQuery",
       "condition_prefix": "Applications",
       "condition_type_name": "ApplicationsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the application"
+        },
+        {
+          "name": "status",
+          "python_name": "status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Current application status (e.g. active, archived, hired)"
+        },
+        {
+          "name": "archiveReason",
+          "python_name": "archive_reason",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Reason the application was archived, if applicable"
+        },
+        {
+          "name": "createdAt",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the application was created, in ISO 8601 format"
+        },
+        {
+          "name": "updatedAt",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the application was last updated, in ISO 8601 format"
+        }
+      ]
     },
     "candidates": {
       "entity": "candidates",
@@ -1124,7 +1165,48 @@
       "query_type_name": "CandidatesSearchQuery",
       "condition_prefix": "Candidates",
       "condition_type_name": "CandidatesCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the candidate"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Full name of the candidate"
+        },
+        {
+          "name": "company",
+          "python_name": "company",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Candidate's current company"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Candidate's current position or title"
+        },
+        {
+          "name": "school",
+          "python_name": "school",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "School associated with the candidate's education"
+        }
+      ]
     },
     "job_postings": {
       "entity": "job_postings",
@@ -1138,7 +1220,48 @@
       "query_type_name": "JobPostingsSearchQuery",
       "condition_prefix": "JobPostings",
       "condition_type_name": "JobPostingsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the job posting"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Title of the job posting"
+        },
+        {
+          "name": "isListed",
+          "python_name": "is_listed",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the job posting is currently published/listed"
+        },
+        {
+          "name": "jobId",
+          "python_name": "job_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the job this posting belongs to"
+        },
+        {
+          "name": "locationName",
+          "python_name": "location_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the location associated with the posting"
+        }
+      ]
     },
     "jobs": {
       "entity": "jobs",
@@ -1152,7 +1275,48 @@
       "query_type_name": "JobsSearchQuery",
       "condition_prefix": "Jobs",
       "condition_type_name": "JobsCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the job"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Title of the job"
+        },
+        {
+          "name": "status",
+          "python_name": "status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Current status of the job (e.g. open, closed, draft)"
+        },
+        {
+          "name": "departmentId",
+          "python_name": "department_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the department the job belongs to"
+        },
+        {
+          "name": "locationId",
+          "python_name": "location_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Identifier of the primary location of the job"
+        }
+      ]
     },
     "users": {
       "entity": "users",
@@ -1166,7 +1330,40 @@
       "query_type_name": "UsersSearchQuery",
       "condition_prefix": "Users",
       "condition_type_name": "UsersCondition",
-      "fields": []
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the user"
+        },
+        {
+          "name": "firstName",
+          "python_name": "first_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "First name of the user"
+        },
+        {
+          "name": "lastName",
+          "python_name": "last_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last name of the user"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary email address of the user"
+        }
+      ]
     }
   }
 }

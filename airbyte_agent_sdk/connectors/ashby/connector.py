@@ -144,7 +144,7 @@ class AshbyConnector:
 
     connector_name = "ashby"
     connector_version = "0.1.4"
-    sdk_version = "0.1.40"
+    sdk_version = "0.1.41"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -884,6 +884,11 @@ class CandidatesQuery:
         Only available in hosted execution mode.
 
         Available filter fields (CandidatesSearchFilter):
+        - id: Unique identifier for the candidate
+        - name: Full name of the candidate
+        - company: Candidate's current company
+        - position: Candidate's current position or title
+        - school: School associated with the candidate's education
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1004,6 +1009,11 @@ class ApplicationsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (ApplicationsSearchFilter):
+        - id: Unique identifier for the application
+        - status: Current application status (e.g. active, archived, hired)
+        - archive_reason: Reason the application was archived, if applicable
+        - created_at: Timestamp when the application was created, in ISO 8601 format
+        - updated_at: Timestamp when the application was last updated, in ISO 8601 format
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1124,6 +1134,11 @@ class JobsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (JobsSearchFilter):
+        - id: Unique identifier for the job
+        - title: Title of the job
+        - status: Current status of the job (e.g. open, closed, draft)
+        - department_id: Identifier of the department the job belongs to
+        - location_id: Identifier of the primary location of the job
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1376,6 +1391,10 @@ class UsersQuery:
         Only available in hosted execution mode.
 
         Available filter fields (UsersSearchFilter):
+        - id: Unique identifier for the user
+        - first_name: First name of the user
+        - last_name: Last name of the user
+        - email: Primary email address of the user
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1496,6 +1515,11 @@ class JobPostingsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (JobPostingsSearchFilter):
+        - id: Unique identifier for the job posting
+        - title: Title of the job posting
+        - is_listed: Whether the job posting is currently published/listed
+        - job_id: Identifier of the job this posting belongs to
+        - location_name: Name of the location associated with the posting
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
