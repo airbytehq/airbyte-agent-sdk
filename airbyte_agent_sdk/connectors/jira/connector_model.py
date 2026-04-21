@@ -4154,6 +4154,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.transitions',
+                    no_pagination='Jira Cloud /issue/{issueIdOrKey}/transitions returns the full set of available workflow transitions for a single issue in one response; the endpoint does not expose pagination parameters and the response envelope has no next-page cursor or total count.',
                 ),
                 Action.CREATE: EndpointDefinition(
                     method='POST',

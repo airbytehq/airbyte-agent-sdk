@@ -1515,6 +1515,7 @@ paths:
       x-airbyte-entity: issue_transitions
       x-airbyte-action: list
       x-airbyte-record-extractor: $.transitions
+      x-airbyte-no-pagination: "Jira Cloud /issue/{issueIdOrKey}/transitions returns the full set of available workflow transitions for a single issue in one response; the endpoint does not expose pagination parameters and the response envelope has no next-page cursor or total count."
       parameters:
         - name: issueIdOrKey
           in: path
