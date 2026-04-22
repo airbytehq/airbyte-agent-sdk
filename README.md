@@ -37,7 +37,7 @@ npx skills add airbytehq/airbyte-agent-sdk
 
 ```bash
 git clone https://github.com/airbytehq/airbyte-agent-sdk ~/.codex/skills/airbyte-agent-sdk-src
-ln -s ~/.codex/skills/airbyte-agent-sdk-src/.codex/skills/* ~/.codex/skills/
+ln -s ~/.codex/skills/airbyte-agent-sdk-src/connector-sdk/.claude/skills/* ~/.codex/skills/
 ```
 
 See [docs.airbyte.com/ai-agents/about/](https://docs.airbyte.com/ai-agents/about/) for full documentation.
