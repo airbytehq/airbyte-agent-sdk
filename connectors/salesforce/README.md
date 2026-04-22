@@ -127,6 +127,6 @@ See the official [Salesforce API reference](https://developer.salesforce.com/doc
 
 ## Version information
 
-- **Package version:** 1.0.16
-- **Connector version:** 1.0.16
+- **Package version:** 1.0.17
+- **Connector version:** 1.0.17
 - **Generated with Connector SDK commit SHA:** unknown

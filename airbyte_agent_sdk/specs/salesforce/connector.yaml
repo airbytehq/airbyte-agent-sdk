@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Salesforce CRM API Connector
-  version: 1.0.16
+  version: 1.0.17
   description: |
     Salesforce is a cloud-based CRM platform that helps businesses manage customer
     relationships, sales pipelines, and business operations. This connector provides
@@ -2413,24 +2413,6 @@ components:
           scopes:
             api: Access and manage your data
             refresh_token: Perform requests on your behalf at any time
-      # Salesforce OAuth grants full access without scope parameters; entries below are for UI entity display only.
-      x-airbyte-oauth-scopes:
-        - mode: read
-          entities:
-            - sobjects
-            - accounts
-            - attachments
-            - campaigns
-            - cases
-            - contacts
-            - content_versions
-            - events
-            - leads
-            - notes
-            - opportunities
-            - query
-            - reports
-            - tasks
       x-airbyte-token-refresh:
         auth_style: body
         body_format: form

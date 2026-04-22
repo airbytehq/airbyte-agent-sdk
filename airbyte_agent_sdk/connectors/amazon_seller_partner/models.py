@@ -45,12 +45,10 @@ class OrderAutomatedshippingsettings(BaseModel):
 
     has_automated_shipping_settings: Union[bool, Any] = Field(default=None, alias="HasAutomatedShippingSettings")
 
-class OrderDefaultshipfromlocationaddress(BaseModel):
-    """Default ship-from address"""
+class OrderShippingaddress(BaseModel):
+    """Shipping address for the order"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    name: Union[str, Any] = Field(default=None, alias="Name")
-    address_line1: Union[str, Any] = Field(default=None, alias="AddressLine1")
     city: Union[str, Any] = Field(default=None, alias="City")
     state_or_region: Union[str, Any] = Field(default=None, alias="StateOrRegion")
     postal_code: Union[str, Any] = Field(default=None, alias="PostalCode")
@@ -63,10 +61,12 @@ class OrderOrdertotal(BaseModel):
     currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
     amount: Union[str, Any] = Field(default=None, alias="Amount")
 
-class OrderShippingaddress(BaseModel):
-    """Shipping address for the order"""
+class OrderDefaultshipfromlocationaddress(BaseModel):
+    """Default ship-from address"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
+    name: Union[str, Any] = Field(default=None, alias="Name")
+    address_line1: Union[str, Any] = Field(default=None, alias="AddressLine1")
     city: Union[str, Any] = Field(default=None, alias="City")
     state_or_region: Union[str, Any] = Field(default=None, alias="StateOrRegion")
     postal_code: Union[str, Any] = Field(default=None, alias="PostalCode")
@@ -131,6 +131,62 @@ class OrderItemPromotiondiscounttax(BaseModel):
     currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
     amount: Union[str, Any] = Field(default=None, alias="Amount")
 
+class OrderItemCodfee(BaseModel):
+    """Cash on delivery fee"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemCodfeediscount(BaseModel):
+    """Cash on delivery fee discount"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemItemprice(BaseModel):
+    """Item price"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemProductinfo(BaseModel):
+    """Product information"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    number_of_items: Union[str, Any] = Field(default=None, alias="NumberOfItems")
+
+class OrderItemBuyerinfoBuyercustomizedinfo(BaseModel):
+    """Nested schema for OrderItemBuyerinfo.BuyerCustomizedInfo"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    customized_url: Union[str, Any] = Field(default=None, alias="CustomizedURL")
+
+class OrderItemBuyerinfoGiftwrapprice(BaseModel):
+    """Nested schema for OrderItemBuyerinfo.GiftWrapPrice"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemBuyerinfo(BaseModel):
+    """Buyer information for the item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    buyer_customized_info: Union[OrderItemBuyerinfoBuyercustomizedinfo, Any] = Field(default=None, alias="BuyerCustomizedInfo")
+    gift_message_text: Union[str, Any] = Field(default=None, alias="GiftMessageText")
+    gift_wrap_price: Union[OrderItemBuyerinfoGiftwrapprice, Any] = Field(default=None, alias="GiftWrapPrice")
+    gift_wrap_level: Union[str, Any] = Field(default=None, alias="GiftWrapLevel")
+
+class OrderItemBuyerrequestedcancel(BaseModel):
+    """Buyer cancellation request information"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    is_buyer_requested_cancel: Union[str, Any] = Field(default=None, alias="IsBuyerRequestedCancel")
+    buyer_cancel_reason: Union[str, Any] = Field(default=None, alias="BuyerCancelReason")
+
 class OrderItemPointsgrantedPointsmonetaryvalue(BaseModel):
     """Nested schema for OrderItemPointsgranted.PointsMonetaryValue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -145,92 +201,8 @@ class OrderItemPointsgranted(BaseModel):
     points_number: Union[int, Any] = Field(default=None, alias="PointsNumber")
     points_monetary_value: Union[OrderItemPointsgrantedPointsmonetaryvalue, Any] = Field(default=None, alias="PointsMonetaryValue")
 
-class OrderItemShippingdiscounttax(BaseModel):
-    """Shipping discount tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemItemtax(BaseModel):
-    """Item tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemShippingtax(BaseModel):
-    """Shipping tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemCodfee(BaseModel):
-    """Cash on delivery fee"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemBuyerrequestedcancel(BaseModel):
-    """Buyer cancellation request information"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    is_buyer_requested_cancel: Union[str, Any] = Field(default=None, alias="IsBuyerRequestedCancel")
-    buyer_cancel_reason: Union[str, Any] = Field(default=None, alias="BuyerCancelReason")
-
-class OrderItemProductinfo(BaseModel):
-    """Product information"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    number_of_items: Union[str, Any] = Field(default=None, alias="NumberOfItems")
-
-class OrderItemShippingdiscount(BaseModel):
-    """Shipping discount"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemItemprice(BaseModel):
-    """Item price"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemCodfeediscount(BaseModel):
-    """Cash on delivery fee discount"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemBuyerinfoGiftwrapprice(BaseModel):
-    """Nested schema for OrderItemBuyerinfo.GiftWrapPrice"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    amount: Union[str, Any] = Field(default=None, alias="Amount")
-
-class OrderItemBuyerinfoBuyercustomizedinfo(BaseModel):
-    """Nested schema for OrderItemBuyerinfo.BuyerCustomizedInfo"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    customized_url: Union[str, Any] = Field(default=None, alias="CustomizedURL")
-
-class OrderItemBuyerinfo(BaseModel):
-    """Buyer information for the item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    buyer_customized_info: Union[OrderItemBuyerinfoBuyercustomizedinfo, Any] = Field(default=None, alias="BuyerCustomizedInfo")
-    gift_message_text: Union[str, Any] = Field(default=None, alias="GiftMessageText")
-    gift_wrap_price: Union[OrderItemBuyerinfoGiftwrapprice, Any] = Field(default=None, alias="GiftWrapPrice")
-    gift_wrap_level: Union[str, Any] = Field(default=None, alias="GiftWrapLevel")
-
-class OrderItemShippingprice(BaseModel):
-    """Shipping price"""
+class OrderItemPromotiondiscount(BaseModel):
+    """Promotion discount"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
@@ -243,8 +215,36 @@ class OrderItemTaxcollection(BaseModel):
     model: Union[str, Any] = Field(default=None, alias="Model")
     responsible_party: Union[str, Any] = Field(default=None, alias="ResponsibleParty")
 
-class OrderItemPromotiondiscount(BaseModel):
-    """Promotion discount"""
+class OrderItemShippingdiscounttax(BaseModel):
+    """Shipping discount tax"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemShippingtax(BaseModel):
+    """Shipping tax"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemShippingdiscount(BaseModel):
+    """Shipping discount"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemShippingprice(BaseModel):
+    """Shipping price"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    amount: Union[str, Any] = Field(default=None, alias="Amount")
+
+class OrderItemItemtax(BaseModel):
+    """Item tax"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
@@ -302,6 +302,13 @@ class OrderItemsList(BaseModel):
 
     payload: Union[OrderItemsListPayload, Any] = Field(default=None)
 
+class FinancialEventGroupBeginningbalance(BaseModel):
+    """Beginning balance"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    currency_amount: Union[float, Any] = Field(default=None, alias="CurrencyAmount")
+
 class FinancialEventGroupOriginaltotal(BaseModel):
     """Original total in seller's currency"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -311,13 +318,6 @@ class FinancialEventGroupOriginaltotal(BaseModel):
 
 class FinancialEventGroupConvertedtotal(BaseModel):
     """Converted total"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    currency_amount: Union[float, Any] = Field(default=None, alias="CurrencyAmount")
-
-class FinancialEventGroupBeginningbalance(BaseModel):
-    """Beginning balance"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
@@ -352,6 +352,21 @@ class FinancialEventGroupList(BaseModel):
 
     payload: Union[FinancialEventGroupListPayload, Any] = Field(default=None)
 
+class FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItemAmount(BaseModel):
+    """Nested schema for FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItem.Amount"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
+    currency_amount: Union[float, Any] = Field(default=None, alias="CurrencyAmount")
+
+class FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItem(BaseModel):
+    """Nested schema for FinancialEventsDebtrecoveryeventlistItem.ChargeInstrumentList_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    description: Union[str, Any] = Field(default=None, alias="Description")
+    tail: Union[str, Any] = Field(default=None, alias="Tail")
+    amount: Union[FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItemAmount, Any] = Field(default=None, alias="Amount")
+
 class FinancialEventsDebtrecoveryeventlistItemRecoveryamount(BaseModel):
     """Nested schema for FinancialEventsDebtrecoveryeventlistItem.RecoveryAmount"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -381,21 +396,6 @@ class FinancialEventsDebtrecoveryeventlistItemDebtrecoveryitemlistItem(BaseModel
     original_amount: Union[FinancialEventsDebtrecoveryeventlistItemDebtrecoveryitemlistItemOriginalamount, Any] = Field(default=None, alias="OriginalAmount")
     group_begin_date: Union[str, Any] = Field(default=None, alias="GroupBeginDate")
     group_end_date: Union[str, Any] = Field(default=None, alias="GroupEndDate")
-
-class FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItemAmount(BaseModel):
-    """Nested schema for FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItem.Amount"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: Union[str, Any] = Field(default=None, alias="CurrencyCode")
-    currency_amount: Union[float, Any] = Field(default=None, alias="CurrencyAmount")
-
-class FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItem(BaseModel):
-    """Nested schema for FinancialEventsDebtrecoveryeventlistItem.ChargeInstrumentList_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    description: Union[str, Any] = Field(default=None, alias="Description")
-    tail: Union[str, Any] = Field(default=None, alias="Tail")
-    amount: Union[FinancialEventsDebtrecoveryeventlistItemChargeinstrumentlistItemAmount, Any] = Field(default=None, alias="Amount")
 
 class FinancialEventsDebtrecoveryeventlistItem(BaseModel):
     """Nested schema for FinancialEvents.DebtRecoveryEventList_item"""
@@ -525,6 +525,13 @@ class CatalogItem(BaseModel):
     summaries: Union[list[CatalogItemSummariesItem], Any] = Field(default=None)
     vendor_details: Union[list[dict[str, Any]], Any] = Field(default=None, alias="vendorDetails")
 
+class CatalogItemsListRefinementsBrandsItem(BaseModel):
+    """Nested schema for CatalogItemsListRefinements.brands_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    number_of_results: Union[int, Any] = Field(default=None, alias="numberOfResults")
+    brand_name: Union[str, Any] = Field(default=None, alias="brandName")
+
 class CatalogItemsListRefinementsClassificationsItem(BaseModel):
     """Nested schema for CatalogItemsListRefinements.classifications_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -532,13 +539,6 @@ class CatalogItemsListRefinementsClassificationsItem(BaseModel):
     number_of_results: Union[int, Any] = Field(default=None, alias="numberOfResults")
     display_name: Union[str, Any] = Field(default=None, alias="displayName")
     classification_id: Union[str, Any] = Field(default=None, alias="classificationId")
-
-class CatalogItemsListRefinementsBrandsItem(BaseModel):
-    """Nested schema for CatalogItemsListRefinements.brands_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    number_of_results: Union[int, Any] = Field(default=None, alias="numberOfResults")
-    brand_name: Union[str, Any] = Field(default=None, alias="brandName")
 
 class CatalogItemsListRefinements(BaseModel):
     """Nested schema for CatalogItemsList.refinements"""

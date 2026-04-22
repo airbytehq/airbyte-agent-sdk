@@ -138,12 +138,6 @@ class ListsList(BaseModel):
     data: Union[list[List], Any] = Field(default=None)
     links: Union[ListsListLinks | None, Any] = Field(default=None)
 
-class CampaignLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class CampaignAttributes(BaseModel):
     """Campaign attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -170,6 +164,12 @@ class CampaignAttributes(BaseModel):
     """Last update timestamp"""
     send_time: Union[str | None, Any] = Field(default=None, description="Actual send time")
     """Actual send time"""
+
+class CampaignLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
 
 class Campaign(BaseModel):
     """A Klaviyo campaign"""
@@ -200,19 +200,6 @@ class EventLinks(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     self: Union[str | None, Any] = Field(default=None)
-
-class EventAttributes(BaseModel):
-    """Event attributes"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    timestamp: Union[Any, Any] = Field(default=None, description="Event timestamp (can be ISO string or Unix timestamp)")
-    """Event timestamp (can be ISO string or Unix timestamp)"""
-    datetime: Union[str | None, Any] = Field(default=None, description="Event datetime")
-    """Event datetime"""
-    uuid: Union[str | None, Any] = Field(default=None, description="Event UUID")
-    """Event UUID"""
-    event_properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom event properties")
-    """Custom event properties"""
 
 class EventRelationshipsProfileData(BaseModel):
     """Nested schema for EventRelationshipsProfile.data"""
@@ -246,6 +233,19 @@ class EventRelationships(BaseModel):
 
     profile: Union[EventRelationshipsProfile | None, Any] = Field(default=None)
     metric: Union[EventRelationshipsMetric | None, Any] = Field(default=None)
+
+class EventAttributes(BaseModel):
+    """Event attributes"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    timestamp: Union[Any, Any] = Field(default=None, description="Event timestamp (can be ISO string or Unix timestamp)")
+    """Event timestamp (can be ISO string or Unix timestamp)"""
+    datetime: Union[str | None, Any] = Field(default=None, description="Event datetime")
+    """Event datetime"""
+    uuid: Union[str | None, Any] = Field(default=None, description="Event UUID")
+    """Event UUID"""
+    event_properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom event properties")
+    """Custom event properties"""
 
 class Event(BaseModel):
     """A Klaviyo event representing an action taken by a profile"""
