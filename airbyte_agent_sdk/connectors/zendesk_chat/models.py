@@ -142,6 +142,13 @@ class Ban(BaseModel):
     reason: Union[str | None, Any] = Field(default=None)
     created_at: Union[str | None, Any] = Field(default=None)
 
+class WebpathItem(BaseModel):
+    """WebpathItem type definition"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    from_: Union[str | None, Any] = Field(default=None, alias="from")
+    timestamp: Union[str | None, Any] = Field(default=None)
+
 class ChatEngagement(BaseModel):
     """ChatEngagement type definition"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -162,13 +169,6 @@ class ChatEngagement(BaseModel):
     response_time: Union[Any, Any] = Field(default=None)
     skills_requested: Union[list[int] | None, Any] = Field(default=None)
     skills_fulfilled: Union[bool | None, Any] = Field(default=None)
-
-class WebpathItem(BaseModel):
-    """WebpathItem type definition"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    from_: Union[str | None, Any] = Field(default=None, alias="from")
-    timestamp: Union[str | None, Any] = Field(default=None)
 
 class ChatHistoryItem(BaseModel):
     """ChatHistoryItem type definition"""
