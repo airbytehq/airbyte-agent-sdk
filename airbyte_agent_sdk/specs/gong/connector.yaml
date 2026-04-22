@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Gong API Connector
-  version: 0.1.21
+  version: 0.1.22
   description: |
     Gong is a revenue intelligence platform that captures and analyzes customer interactions
     across calls, emails, and web conferences. This connector provides access to users,
@@ -1482,6 +1482,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       description: User object
       properties:
         id:
@@ -1586,6 +1587,7 @@ components:
     Call:
       type: object
       x-airbyte-entity-name: calls
+      x-airbyte-stream-name: calls
       description: Call object
       properties:
         id:
@@ -1708,6 +1710,7 @@ components:
     CallTranscript:
       type: object
       x-airbyte-entity-name: call_transcripts
+      x-airbyte-stream-name: callTranscripts
       x-airbyte-ai-hints:
         summary: "Speaker-attributed call transcripts with timestamps"
         when_to_use: "Questions about what was said on calls, conversation content, or speaker dialogue"
@@ -1761,6 +1764,7 @@ components:
     ExtensiveCall:
       type: object
       x-airbyte-entity-name: calls_extensive
+      x-airbyte-stream-name: extensiveCalls
       x-airbyte-ai-hints:
         summary: "Detailed call data including participants, interaction stats, collaboration, and content analysis"
         when_to_use: "Questions about call details, talk ratios, participant info, or content analysis"
@@ -2264,6 +2268,7 @@ components:
     Scorecard:
       type: object
       x-airbyte-entity-name: settings_scorecards
+      x-airbyte-stream-name: scorecards
       description: Scorecard configuration
       properties:
         scorecardId:
@@ -2581,6 +2586,7 @@ components:
     AnsweredScorecard:
       type: object
       x-airbyte-entity-name: stats_activity_scorecards
+      x-airbyte-stream-name: answeredScorecards
       x-airbyte-ai-hints:
         summary: "Completed scorecards with scores and reviewer details"
         when_to_use: "Questions about scorecard results, call evaluations, or quality scores"

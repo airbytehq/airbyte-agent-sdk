@@ -32,12 +32,15 @@ class TypeformReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class FormWorkspace(BaseModel):
-    """Workspace details where the form belongs"""
+class FormWelcomeScreensItemProperties(BaseModel):
+    """Nested schema for FormWelcomeScreensItem.properties"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    href: Union[str | None, Any] = Field(default=None, description="URL of the workspace")
-    """URL of the workspace"""
+    show_button: Union[bool | None, Any] = Field(default=None)
+    share_icons: Union[bool | None, Any] = Field(default=None)
+    button_mode: Union[str | None, Any] = Field(default=None)
+    button_text: Union[str | None, Any] = Field(default=None)
+    redirect_url: Union[str | None, Any] = Field(default=None)
 
 class FormWelcomeScreensItemAttachment(BaseModel):
     """Nested schema for FormWelcomeScreensItem.attachment"""
@@ -78,16 +81,6 @@ class FormWelcomeScreensItemLayout(BaseModel):
     attachment: Union[FormWelcomeScreensItemLayoutAttachment | None, Any] = Field(default=None)
     properties: Union[FormWelcomeScreensItemLayoutProperties | None, Any] = Field(default=None)
 
-class FormWelcomeScreensItemProperties(BaseModel):
-    """Nested schema for FormWelcomeScreensItem.properties"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    show_button: Union[bool | None, Any] = Field(default=None)
-    share_icons: Union[bool | None, Any] = Field(default=None)
-    button_mode: Union[str | None, Any] = Field(default=None)
-    button_text: Union[str | None, Any] = Field(default=None)
-    redirect_url: Union[str | None, Any] = Field(default=None)
-
 class FormWelcomeScreensItem(BaseModel):
     """Nested schema for Form.welcome_screens_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -99,12 +92,112 @@ class FormWelcomeScreensItem(BaseModel):
     attachment: Union[FormWelcomeScreensItemAttachment | None, Any] = Field(default=None)
     layout: Union[FormWelcomeScreensItemLayout | None, Any] = Field(default=None)
 
-class FormSelf(BaseModel):
-    """Self-referential link to this form"""
+class FormTheme(BaseModel):
+    """Theme settings for the form"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    href: Union[str | None, Any] = Field(default=None, description="URL of this form resource")
-    """URL of this form resource"""
+    href: Union[str | None, Any] = Field(default=None, description="URL of the theme")
+    """URL of the theme"""
+
+class FormLinks(BaseModel):
+    """Links to related resources"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    display: Union[str | None, Any] = Field(default=None)
+
+class FormSettingsCuiSettings(BaseModel):
+    """Nested schema for FormSettings.cui_settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avatar: Union[str | None, Any] = Field(default=None)
+    is_typing_emulation_disabled: Union[bool | None, Any] = Field(default=None)
+    typing_emulation_speed: Union[str | None, Any] = Field(default=None)
+
+class FormSettingsCapabilitiesE2eEncryption(BaseModel):
+    """Nested schema for FormSettingsCapabilities.e2e_encryption"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: Union[bool | None, Any] = Field(default=None)
+    modifiable: Union[bool | None, Any] = Field(default=None)
+
+class FormSettingsCapabilities(BaseModel):
+    """Nested schema for FormSettings.capabilities"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    e2e_encryption: Union[FormSettingsCapabilitiesE2eEncryption | None, Any] = Field(default=None)
+
+class FormSettingsNotificationsRespondent(BaseModel):
+    """Nested schema for FormSettingsNotifications.respondent"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: Union[bool | None, Any] = Field(default=None)
+    recipients: Union[list[str | None] | None, Any] = Field(default=None)
+    subject: Union[str | None, Any] = Field(default=None)
+    message: Union[str | None, Any] = Field(default=None)
+    reply_to: Union[str | None, Any] = Field(default=None)
+
+class FormSettingsNotificationsSelf(BaseModel):
+    """Nested schema for FormSettingsNotifications.self"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: Union[bool | None, Any] = Field(default=None)
+    recipients: Union[list[str | None] | None, Any] = Field(default=None)
+    subject: Union[str | None, Any] = Field(default=None)
+    message: Union[str | None, Any] = Field(default=None)
+    reply_to: Union[str | None, Any] = Field(default=None)
+
+class FormSettingsNotifications(BaseModel):
+    """Nested schema for FormSettings.notifications"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[FormSettingsNotificationsSelf | None, Any] = Field(default=None)
+    respondent: Union[FormSettingsNotificationsRespondent | None, Any] = Field(default=None)
+
+class FormSettingsMetaImage(BaseModel):
+    """Nested schema for FormSettingsMeta.image"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    href: Union[str | None, Any] = Field(default=None)
+
+class FormSettingsMeta(BaseModel):
+    """Meta information"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    allow_indexing: Union[bool | None, Any] = Field(default=None)
+    title: Union[str | None, Any] = Field(default=None)
+    description: Union[str | None, Any] = Field(default=None)
+    image: Union[FormSettingsMetaImage | None, Any] = Field(default=None)
+
+class FormSettings(BaseModel):
+    """Settings and configurations for the form"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    language: Union[str | None, Any] = Field(default=None, description="Language of the form")
+    """Language of the form"""
+    progress_bar: Union[str | None, Any] = Field(default=None, description="Progress bar settings")
+    """Progress bar settings"""
+    meta: Union[FormSettingsMeta | None, Any] = Field(default=None, description="Meta information")
+    """Meta information"""
+    hide_navigation: Union[bool | None, Any] = Field(default=None)
+    is_public: Union[bool | None, Any] = Field(default=None)
+    is_trial: Union[bool | None, Any] = Field(default=None)
+    show_progress_bar: Union[bool | None, Any] = Field(default=None)
+    show_typeform_branding: Union[bool | None, Any] = Field(default=None)
+    are_uploads_public: Union[bool | None, Any] = Field(default=None)
+    show_time_to_complete: Union[bool | None, Any] = Field(default=None)
+    redirect_after_submit_url: Union[str | None, Any] = Field(default=None)
+    google_analytics: Union[str | None, Any] = Field(default=None)
+    facebook_pixel: Union[str | None, Any] = Field(default=None)
+    google_tag_manager: Union[str | None, Any] = Field(default=None)
+    capabilities: Union[FormSettingsCapabilities | None, Any] = Field(default=None)
+    notifications: Union[FormSettingsNotifications | None, Any] = Field(default=None)
+    cui_settings: Union[FormSettingsCuiSettings | None, Any] = Field(default=None)
+
+class FormFieldsItemValidations(BaseModel):
+    """Nested schema for FormFieldsItem.validations"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    required: Union[bool | None, Any] = Field(default=None)
 
 class FormFieldsItemAttachment(BaseModel):
     """Nested schema for FormFieldsItem.attachment"""
@@ -113,11 +206,13 @@ class FormFieldsItemAttachment(BaseModel):
     type_: Union[str | None, Any] = Field(default=None, alias="type")
     href: Union[str | None, Any] = Field(default=None)
 
-class FormFieldsItemValidations(BaseModel):
-    """Nested schema for FormFieldsItem.validations"""
+class FormFieldsItemLayoutAttachment(BaseModel):
+    """Nested schema for FormFieldsItemLayout.attachment"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    required: Union[bool | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    href: Union[str | None, Any] = Field(default=None)
+    scale: Union[float | None, Any] = Field(default=None)
 
 class FormFieldsItemLayoutPropertiesFocalPoint(BaseModel):
     """Nested schema for FormFieldsItemLayoutProperties.focal_point"""
@@ -133,14 +228,6 @@ class FormFieldsItemLayoutProperties(BaseModel):
     brightness: Union[float | None, Any] = Field(default=None)
     description: Union[str | None, Any] = Field(default=None)
     focal_point: Union[FormFieldsItemLayoutPropertiesFocalPoint | None, Any] = Field(default=None)
-
-class FormFieldsItemLayoutAttachment(BaseModel):
-    """Nested schema for FormFieldsItemLayout.attachment"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    href: Union[str | None, Any] = Field(default=None)
-    scale: Union[float | None, Any] = Field(default=None)
 
 class FormFieldsItemLayout(BaseModel):
     """Nested schema for FormFieldsItem.layout"""
@@ -182,123 +269,19 @@ class FormFieldsItem(BaseModel):
     attachment: Union[FormFieldsItemAttachment | None, Any] = Field(default=None)
     layout: Union[FormFieldsItemLayout | None, Any] = Field(default=None)
 
-class FormSettingsNotificationsRespondent(BaseModel):
-    """Nested schema for FormSettingsNotifications.respondent"""
+class FormWorkspace(BaseModel):
+    """Workspace details where the form belongs"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    enabled: Union[bool | None, Any] = Field(default=None)
-    recipients: Union[list[str | None] | None, Any] = Field(default=None)
-    subject: Union[str | None, Any] = Field(default=None)
-    message: Union[str | None, Any] = Field(default=None)
-    reply_to: Union[str | None, Any] = Field(default=None)
+    href: Union[str | None, Any] = Field(default=None, description="URL of the workspace")
+    """URL of the workspace"""
 
-class FormSettingsNotificationsSelf(BaseModel):
-    """Nested schema for FormSettingsNotifications.self"""
+class FormSelf(BaseModel):
+    """Self-referential link to this form"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    enabled: Union[bool | None, Any] = Field(default=None)
-    recipients: Union[list[str | None] | None, Any] = Field(default=None)
-    subject: Union[str | None, Any] = Field(default=None)
-    message: Union[str | None, Any] = Field(default=None)
-    reply_to: Union[str | None, Any] = Field(default=None)
-
-class FormSettingsNotifications(BaseModel):
-    """Nested schema for FormSettings.notifications"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[FormSettingsNotificationsSelf | None, Any] = Field(default=None)
-    respondent: Union[FormSettingsNotificationsRespondent | None, Any] = Field(default=None)
-
-class FormSettingsCuiSettings(BaseModel):
-    """Nested schema for FormSettings.cui_settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avatar: Union[str | None, Any] = Field(default=None)
-    is_typing_emulation_disabled: Union[bool | None, Any] = Field(default=None)
-    typing_emulation_speed: Union[str | None, Any] = Field(default=None)
-
-class FormSettingsMetaImage(BaseModel):
-    """Nested schema for FormSettingsMeta.image"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    href: Union[str | None, Any] = Field(default=None)
-
-class FormSettingsMeta(BaseModel):
-    """Meta information"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    allow_indexing: Union[bool | None, Any] = Field(default=None)
-    title: Union[str | None, Any] = Field(default=None)
-    description: Union[str | None, Any] = Field(default=None)
-    image: Union[FormSettingsMetaImage | None, Any] = Field(default=None)
-
-class FormSettingsCapabilitiesE2eEncryption(BaseModel):
-    """Nested schema for FormSettingsCapabilities.e2e_encryption"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: Union[bool | None, Any] = Field(default=None)
-    modifiable: Union[bool | None, Any] = Field(default=None)
-
-class FormSettingsCapabilities(BaseModel):
-    """Nested schema for FormSettings.capabilities"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    e2e_encryption: Union[FormSettingsCapabilitiesE2eEncryption | None, Any] = Field(default=None)
-
-class FormSettings(BaseModel):
-    """Settings and configurations for the form"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    language: Union[str | None, Any] = Field(default=None, description="Language of the form")
-    """Language of the form"""
-    progress_bar: Union[str | None, Any] = Field(default=None, description="Progress bar settings")
-    """Progress bar settings"""
-    meta: Union[FormSettingsMeta | None, Any] = Field(default=None, description="Meta information")
-    """Meta information"""
-    hide_navigation: Union[bool | None, Any] = Field(default=None)
-    is_public: Union[bool | None, Any] = Field(default=None)
-    is_trial: Union[bool | None, Any] = Field(default=None)
-    show_progress_bar: Union[bool | None, Any] = Field(default=None)
-    show_typeform_branding: Union[bool | None, Any] = Field(default=None)
-    are_uploads_public: Union[bool | None, Any] = Field(default=None)
-    show_time_to_complete: Union[bool | None, Any] = Field(default=None)
-    redirect_after_submit_url: Union[str | None, Any] = Field(default=None)
-    google_analytics: Union[str | None, Any] = Field(default=None)
-    facebook_pixel: Union[str | None, Any] = Field(default=None)
-    google_tag_manager: Union[str | None, Any] = Field(default=None)
-    capabilities: Union[FormSettingsCapabilities | None, Any] = Field(default=None)
-    notifications: Union[FormSettingsNotifications | None, Any] = Field(default=None)
-    cui_settings: Union[FormSettingsCuiSettings | None, Any] = Field(default=None)
-
-class FormTheme(BaseModel):
-    """Theme settings for the form"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    href: Union[str | None, Any] = Field(default=None, description="URL of the theme")
-    """URL of the theme"""
-
-class FormLinks(BaseModel):
-    """Links to related resources"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    display: Union[str | None, Any] = Field(default=None)
-
-class FormThankyouScreensItemProperties(BaseModel):
-    """Nested schema for FormThankyouScreensItem.properties"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    show_button: Union[bool | None, Any] = Field(default=None)
-    share_icons: Union[bool | None, Any] = Field(default=None)
-    button_mode: Union[str | None, Any] = Field(default=None)
-    button_text: Union[str | None, Any] = Field(default=None)
-    redirect_url: Union[str | None, Any] = Field(default=None)
-
-class FormThankyouScreensItemAttachment(BaseModel):
-    """Nested schema for FormThankyouScreensItem.attachment"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    placement: Union[str | None, Any] = Field(default=None)
+    href: Union[str | None, Any] = Field(default=None, description="URL of this form resource")
+    """URL of this form resource"""
 
 class FormThankyouScreensItemLayoutPropertiesFocalPoint(BaseModel):
     """Nested schema for FormThankyouScreensItemLayoutProperties.focal_point"""
@@ -332,6 +315,23 @@ class FormThankyouScreensItemLayout(BaseModel):
     attachment: Union[FormThankyouScreensItemLayoutAttachment | None, Any] = Field(default=None)
     properties: Union[FormThankyouScreensItemLayoutProperties | None, Any] = Field(default=None)
 
+class FormThankyouScreensItemProperties(BaseModel):
+    """Nested schema for FormThankyouScreensItem.properties"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    show_button: Union[bool | None, Any] = Field(default=None)
+    share_icons: Union[bool | None, Any] = Field(default=None)
+    button_mode: Union[str | None, Any] = Field(default=None)
+    button_text: Union[str | None, Any] = Field(default=None)
+    redirect_url: Union[str | None, Any] = Field(default=None)
+
+class FormThankyouScreensItemAttachment(BaseModel):
+    """Nested schema for FormThankyouScreensItem.attachment"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    placement: Union[str | None, Any] = Field(default=None)
+
 class FormThankyouScreensItem(BaseModel):
     """Nested schema for Form.thankyou_screens_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -343,6 +343,13 @@ class FormThankyouScreensItem(BaseModel):
     attachment: Union[FormThankyouScreensItemAttachment | None, Any] = Field(default=None)
     layout: Union[FormThankyouScreensItemLayout | None, Any] = Field(default=None)
 
+class FormLogicItemActionsItemDetailsValue(BaseModel):
+    """Nested schema for FormLogicItemActionsItemDetails.value"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    value: Union[str | None, Any] = Field(default=None)
+
 class FormLogicItemActionsItemDetailsTo(BaseModel):
     """Nested schema for FormLogicItemActionsItemDetails.to"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -352,13 +359,6 @@ class FormLogicItemActionsItemDetailsTo(BaseModel):
 
 class FormLogicItemActionsItemDetailsTarget(BaseModel):
     """Nested schema for FormLogicItemActionsItemDetails.target"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    value: Union[str | None, Any] = Field(default=None)
-
-class FormLogicItemActionsItemDetailsValue(BaseModel):
-    """Nested schema for FormLogicItemActionsItemDetails.value"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     type_: Union[str | None, Any] = Field(default=None, alias="type")
@@ -488,12 +488,6 @@ class ResponseAnswersItem(BaseModel):
     url: Union[str | None, Any] = Field(default=None)
     payment: Union[ResponseAnswersItemPayment | None, Any] = Field(default=None)
 
-class ResponseCalculated(BaseModel):
-    """Calculated data related to the response"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    score: Union[int | None, Any] = Field(default=None)
-
 class ResponseMetadata(BaseModel):
     """Metadata related to the response"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -502,6 +496,12 @@ class ResponseMetadata(BaseModel):
     platform: Union[str | None, Any] = Field(default=None)
     referer: Union[str | None, Any] = Field(default=None)
     network_id: Union[str | None, Any] = Field(default=None)
+
+class ResponseCalculated(BaseModel):
+    """Calculated data related to the response"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    score: Union[int | None, Any] = Field(default=None)
 
 class Response(BaseModel):
     """A single form response/submission"""

@@ -36,7 +36,7 @@ from uuid import (
 GongConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('32382e40-3b49-4b99-9c5c-4076501914e7'),
     name='gong',
-    version='0.1.21',
+    version='0.1.22',
     base_url='https://api.gong.io',
     auth=AuthConfig(
         options=[
@@ -114,6 +114,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -201,6 +202,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'users',
+                                    'x-airbyte-stream-name': 'users',
                                 },
                             },
                             'records': {
@@ -310,6 +312,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'users',
+                                'x-airbyte-stream-name': 'users',
                             },
                             'requestId': {'type': 'string', 'description': 'Request identifier'},
                         },
@@ -387,10 +390,12 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
             name='calls',
+            stream_name='calls',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -467,6 +472,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'calls',
+                                    'x-airbyte-stream-name': 'calls',
                                 },
                             },
                             'records': {
@@ -555,6 +561,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'calls',
+                                'x-airbyte-stream-name': 'calls',
                             },
                             'requestId': {'type': 'string', 'description': 'Request identifier'},
                         },
@@ -611,10 +618,12 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'calls',
+                'x-airbyte-stream-name': 'calls',
             },
         ),
         EntityDefinition(
             name='calls_extensive',
+            stream_name='extensiveCalls',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -903,6 +912,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'calls_extensive',
+                                    'x-airbyte-stream-name': 'extensiveCalls',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Detailed call data including participants, interaction stats, collaboration, and content analysis',
                                         'when_to_use': 'Questions about call details, talk ratios, participant info, or content analysis',
@@ -1130,6 +1140,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'calls_extensive',
+                'x-airbyte-stream-name': 'extensiveCalls',
                 'x-airbyte-ai-hints': {
                     'summary': 'Detailed call data including participants, interaction stats, collaboration, and content analysis',
                     'when_to_use': 'Questions about call details, talk ratios, participant info, or content analysis',
@@ -1392,6 +1403,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'calls_extensive',
+                                    'x-airbyte-stream-name': 'extensiveCalls',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Detailed call data including participants, interaction stats, collaboration, and content analysis',
                                         'when_to_use': 'Questions about call details, talk ratios, participant info, or content analysis',
@@ -1663,6 +1675,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'calls_extensive',
+                                    'x-airbyte-stream-name': 'extensiveCalls',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Detailed call data including participants, interaction stats, collaboration, and content analysis',
                                         'when_to_use': 'Questions about call details, talk ratios, participant info, or content analysis',
@@ -1744,6 +1757,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='call_transcripts',
+            stream_name='callTranscripts',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1816,6 +1830,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'call_transcripts',
+                                    'x-airbyte-stream-name': 'callTranscripts',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Speaker-attributed call transcripts with timestamps',
                                         'when_to_use': 'Questions about what was said on calls, conversation content, or speaker dialogue',
@@ -1884,6 +1899,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'call_transcripts',
+                'x-airbyte-stream-name': 'callTranscripts',
                 'x-airbyte-ai-hints': {
                     'summary': 'Speaker-attributed call transcripts with timestamps',
                     'when_to_use': 'Questions about what was said on calls, conversation content, or speaker dialogue',
@@ -2370,6 +2386,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='settings_scorecards',
+            stream_name='scorecards',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2463,6 +2480,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'settings_scorecards',
+                                    'x-airbyte-stream-name': 'scorecards',
                                 },
                             },
                         },
@@ -2500,6 +2518,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'settings_scorecards',
+                'x-airbyte-stream-name': 'scorecards',
             },
         ),
         EntityDefinition(
@@ -3007,6 +3026,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='stats_activity_scorecards',
+            stream_name='answeredScorecards',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3123,6 +3143,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                                         'visibility': {'type': 'string', 'description': 'Visibility setting (public, private)'},
                                     },
                                     'x-airbyte-entity-name': 'stats_activity_scorecards',
+                                    'x-airbyte-stream-name': 'answeredScorecards',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Completed scorecards with scores and reviewer details',
                                         'when_to_use': 'Questions about scorecard results, call evaluations, or quality scores',
@@ -3198,6 +3219,7 @@ GongConnectorModel: ConnectorModel = ConnectorModel(
                     'visibility': {'type': 'string', 'description': 'Visibility setting (public, private)'},
                 },
                 'x-airbyte-entity-name': 'stats_activity_scorecards',
+                'x-airbyte-stream-name': 'answeredScorecards',
                 'x-airbyte-ai-hints': {
                     'summary': 'Completed scorecards with scores and reviewer details',
                     'when_to_use': 'Questions about scorecard results, call evaluations, or quality scores',
