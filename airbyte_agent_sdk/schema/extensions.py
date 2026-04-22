@@ -222,7 +222,7 @@ class ReplicationConfig(BaseModel):
         alias="replication_config_key_mapping",
         description="Mapping from replication_config field names to source_config field names",
     )
-    replication_config_constants: dict[str, str] = Field(
+    replication_config_constants: dict[str, str | int | float | bool] = Field(
         default_factory=dict,
         alias="replication_config_constants",
         description="System-set constant values injected into the Airbyte source config; never shown in the user-facing form",

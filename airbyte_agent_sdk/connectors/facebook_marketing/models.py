@@ -54,6 +54,15 @@ class CurrentUser(BaseModel):
     id: Union[str, Any] = Field(default=None)
     name: Union[str | None, Any] = Field(default=None)
 
+class AdLabel(BaseModel):
+    """AdLabel type definition"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    created_time: Union[str | None, Any] = Field(default=None)
+    updated_time: Union[str | None, Any] = Field(default=None)
+
 class IssueInfo(BaseModel):
     """IssueInfo type definition"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -63,15 +72,6 @@ class IssueInfo(BaseModel):
     error_summary: Union[str | None, Any] = Field(default=None)
     error_type: Union[str | None, Any] = Field(default=None)
     level: Union[str | None, Any] = Field(default=None)
-
-class AdLabel(BaseModel):
-    """AdLabel type definition"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    created_time: Union[str | None, Any] = Field(default=None)
-    updated_time: Union[str | None, Any] = Field(default=None)
 
 class Campaign(BaseModel):
     """Facebook Ad Campaign"""
@@ -689,24 +689,6 @@ class AdUpdateParams(BaseModel):
     tracking_specs: Union[str | None, Any] = Field(default=None)
     bid_amount: Union[str | None, Any] = Field(default=None)
 
-class AdLibraryAdDeliveryByRegionItem(BaseModel):
-    """Nested schema for AdLibraryAd.delivery_by_region_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    region: Union[str | None, Any] = Field(default=None, description="Region name")
-    """Region name"""
-    percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this region")
-    """Percentage of audience in this region"""
-
-class AdLibraryAdImpressions(BaseModel):
-    """Number of impressions as a range"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    lower_bound: Union[int | None, Any] = Field(default=None, description="Lower bound of impressions")
-    """Lower bound of impressions"""
-    upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of impressions")
-    """Upper bound of impressions"""
-
 class AdLibraryAdSpend(BaseModel):
     """Amount spent on the ad as a range"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -724,6 +706,24 @@ class AdLibraryAdEstimatedAudienceSize(BaseModel):
     """Lower bound of the estimated audience size"""
     upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of the estimated audience size")
     """Upper bound of the estimated audience size"""
+
+class AdLibraryAdImpressions(BaseModel):
+    """Number of impressions as a range"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    lower_bound: Union[int | None, Any] = Field(default=None, description="Lower bound of impressions")
+    """Lower bound of impressions"""
+    upper_bound: Union[int | None, Any] = Field(default=None, description="Upper bound of impressions")
+    """Upper bound of impressions"""
+
+class AdLibraryAdDeliveryByRegionItem(BaseModel):
+    """Nested schema for AdLibraryAd.delivery_by_region_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    region: Union[str | None, Any] = Field(default=None, description="Region name")
+    """Region name"""
+    percentage: Union[str | None, Any] = Field(default=None, description="Percentage of audience in this region")
+    """Percentage of audience in this region"""
 
 class AdLibraryAdDemographicDistributionItem(BaseModel):
     """Nested schema for AdLibraryAd.demographic_distribution_item"""
