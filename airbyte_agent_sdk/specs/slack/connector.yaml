@@ -94,6 +94,10 @@ info:
       start_date: start_date
       lookback_window: lookback_window
       join_channels: join_channels
+    replication_config_constants:
+      start_date: "2024-01-01T00:00:00Z"
+      lookback_window: 0
+      join_channels: false
 
   x-airbyte-context-store:
     disable_compaction: true
