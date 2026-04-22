@@ -1469,6 +1469,13 @@ $defs:
           field names
         title: Replication Config Key Mapping
         type: object
+      replication_config_constants:
+        additionalProperties:
+          type: string
+        description: System-set constant values injected into the Airbyte source config;
+          never shown in the user-facing form
+        title: Replication Config Constants
+        type: object
     title: ReplicationConfig
     type: object
   ReplicationConfigProperty:

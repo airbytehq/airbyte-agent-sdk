@@ -222,6 +222,11 @@ class ReplicationConfig(BaseModel):
         alias="replication_config_key_mapping",
         description="Mapping from replication_config field names to source_config field names",
     )
+    replication_config_constants: dict[str, str] = Field(
+        default_factory=dict,
+        alias="replication_config_constants",
+        description="System-set constant values injected into the Airbyte source config; never shown in the user-facing form",
+    )
 
     @model_validator(mode="after")
     def validate_replication_config_key_mapping(self) -> "ReplicationConfig":
