@@ -141,6 +141,7 @@ class Info(BaseModel):
     - x-airbyte-external-documentation-urls: List of external documentation URLs (Airbyte extension)
     - x-airbyte-retry-config: Retry configuration for transient errors (Airbyte extension)
     - x-airbyte-example-questions: Example questions for AI connector README (Airbyte extension)
+    - x-airbyte-auth-tooltip: Short, non-technical multiline string shown to end users in the embedded widget to describe how to authenticate the connector (Airbyte extension)
     - x-airbyte-context-store: Cache configuration for field mapping between API and cache schemas (Airbyte extension)
     - x-airbyte-replication-config: Replication configuration for MULTI mode connectors (Airbyte extension)
     - x-airbyte-entity-relationships: Entity relationship declarations (Airbyte extension)
@@ -162,6 +163,15 @@ class Info(BaseModel):
     x_airbyte_external_documentation_urls: list[DocUrl] = Field(..., alias="x-airbyte-external-documentation-urls")
     x_airbyte_retry_config: RetryConfig | None = Field(None, alias="x-airbyte-retry-config")
     x_airbyte_example_questions: ExampleQuestions | None = Field(None, alias="x-airbyte-example-questions")
+    x_airbyte_auth_tooltip: str | dict[str, str] | None = Field(
+        default=None,
+        alias="x-airbyte-auth-tooltip",
+        description="Short, non-technical guidance on how to authenticate the connector, shown to end "
+        "users in the embedded widget. Provide a single multiline string to show the same message for "
+        "every auth method, or a mapping keyed by the credentials discriminator value (e.g. the const "
+        "on `credentials.auth_type` or `credentials.option_title`) to show a different message per "
+        "auth method.",
+    )
     x_airbyte_context_store: CacheConfig | None = Field(None, alias="x-airbyte-context-store")
     x_airbyte_entity_relationships: list[EntityRelationshipConfig] = Field(default_factory=list, alias="x-airbyte-entity-relationships")
     x_airbyte_scoping: list[ScopingParamConfig] = Field(default_factory=list, alias="x-airbyte-scoping")

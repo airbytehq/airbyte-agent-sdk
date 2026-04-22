@@ -60,6 +60,11 @@ info:
       - "Schedule a team review for this code"
       - "Merge a pull request"
       - "Delete an issue or comment"
+  x-airbyte-auth-tooltip:
+    "OAuth Credentials": |
+      [Install the Airbyte GitHub App](https://github.com/apps/airbyte-agent-engine)
+      and grant it access to the repositories you want to sync before this
+      connection will work.
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from GitHub.

@@ -759,6 +759,10 @@ $defs:
       - x-airbyte-example-questions: Example questions for AI connector README (Airbyte
       extension)
 
+      - x-airbyte-auth-tooltip: Short, non-technical multiline string shown to end
+      users in the embedded widget to describe how to authenticate the connector (Airbyte
+      extension)
+
       - x-airbyte-context-store: Cache configuration for field mapping between API
       and cache schemas (Airbyte extension)
 
@@ -826,6 +830,20 @@ $defs:
         - $ref: '#/$defs/ExampleQuestions'
         - type: 'null'
         default: null
+      x-airbyte-auth-tooltip:
+        anyOf:
+        - type: string
+        - additionalProperties:
+            type: string
+          type: object
+        - type: 'null'
+        default: null
+        description: Short, non-technical guidance on how to authenticate the connector,
+          shown to end users in the embedded widget. Provide a single multiline string
+          to show the same message for every auth method, or a mapping keyed by the
+          credentials discriminator value (e.g. the const on `credentials.auth_type`
+          or `credentials.option_title`) to show a different message per auth method.
+        title: X-Airbyte-Auth-Tooltip
       x-airbyte-context-store:
         anyOf:
         - $ref: '#/$defs/CacheConfig'
