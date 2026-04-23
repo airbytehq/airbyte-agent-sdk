@@ -1387,15 +1387,41 @@ components:
             api:calls:read:basic: Read basic call data
             api:calls:read:extensive: Read extensive call data
             api:calls:read:transcript: Read call transcripts
-            api:calls:read:media-url: Read call media URLs
             api:users:read: Read user data
-            api:workspaces:read: Read workspace data
-            api:stats:user-actions:read: Read user activity statistics
-            api:stats:interaction:read: Read interaction statistics
+            api:stats:scorecards: Read scorecards statistics
+            api:stats:interaction: Read interaction statistics
             api:settings:scorecards:read: Read scorecard settings
-            api:settings:trackers:read: Read tracker settings
-            api:library:read: Read library content
-            api:coaching:read: Read coaching data
+      x-airbyte-oauth-scopes:
+        - scope: "api:calls:read:basic"
+          mode: read
+          entities:
+            - calls
+        - scope: "api:calls:read:extensive"
+          mode: read
+          entities:
+            - calls_extensive
+        - scope: "api:calls:read:transcript"
+          mode: read
+          entities:
+            - call_transcripts
+        - scope: "api:users:read"
+          mode: read
+          entities:
+            - users
+        - scope: "api:stats:scorecards"
+          mode: read
+          entities:
+            - stats_activity_aggregate
+            - stats_activity_day_by_day
+            - stats_activity_scorecards
+        - scope: "api:stats:interaction"
+          mode: read
+          entities:
+            - stats_interaction
+        - scope: "api:settings:scorecards:read"
+          mode: read
+          entities:
+            - settings_scorecards
       x-airbyte-token-refresh:
         auth_style: basic
         body_format: form
