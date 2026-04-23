@@ -11,7 +11,7 @@ from pathlib import Path
 
 import click
 
-from .codegen.generator import ConnectorGenerator
+from .codegen.generator import ConnectorGenerator, write_connect_stub
 from .secrets import (
     SecretResolutionError,
 )
@@ -111,6 +111,32 @@ def generate_sdk(spec_path: Path, output: Path | None):
     except Exception as e:
         click.echo(f"\n✗ Error generating SDK module: {e}", err=True)
         raise click.Abort()
+
+
+@cli.command(name="generate-connect-stub")
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="SDK package source dir (default: auto-detect)",
+)
+def generate_connect_stub(output: Path | None):
+    """
+    Regenerate connect.pyi with a Literal[<slug>] overload per generated connector.
+
+    Scans the SDK's connectors/ subdirectory and writes connect.pyi so static type
+    checkers narrow connect("<slug>", ...) to the correct typed connector class.
+    """
+    if output is None:
+        output = Path(__file__).parent
+
+    try:
+        count = write_connect_stub(output)
+    except Exception as e:
+        click.echo(f"\n✗ Error writing connect.pyi: {e}", err=True)
+        raise click.Abort()
+
+    click.echo(f"✓ Wrote connect.pyi with {count} overload{'s' if count != 1 else ''} → {output}/connect.pyi")
 
 
 @cli.group()

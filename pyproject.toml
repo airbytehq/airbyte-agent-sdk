@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "airbyte-agent-sdk"
-version = "0.1.56"
+version = "0.1.57"
 description = "Core SDK for Airbyte connectors with declarative YAML execution"
 authors = [{ name = "Airbyte", email = "contact@airbyte.io" }]
 readme = "README.md"
@@ -45,7 +45,7 @@ where = ["."]
 include = ["airbyte_agent_sdk*"]
 
 [tool.setuptools.package-data]
-airbyte_agent_sdk = ["py.typed", "codegen/templates/*.jinja2", "specs/*/connector.yaml"]
+airbyte_agent_sdk = ["py.typed", "*.pyi", "codegen/templates/*.jinja2", "specs/*/connector.yaml"]
 
 [dependency-groups]
 dev = ["pytest-cov>=7.0.0"]

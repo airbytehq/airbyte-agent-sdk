@@ -2159,7 +2159,7 @@ class ConnectorGenerator:
 
     def _get_class_name(self, connector_name: str) -> str:
         """Generate class name from connector name."""
-        return to_pascal_case(connector_name) + "Connector"
+        return connector_class_name(connector_name)
 
     def _get_envelope_prefix(self, connector_name: str) -> str:
         """Generate envelope prefix from connector name.
@@ -3101,3 +3101,51 @@ class ConnectorGenerator:
             "description": replication_config.description or "",
             "fields": fields,
         }
+
+
+def connector_class_name(connector_name: str) -> str:
+    """Class name emitted for a connector slug (e.g. 'zendesk-support' -> 'ZendeskSupportConnector').
+
+    Shared by the per-connector generator and the connect.pyi aggregator so both sides
+    agree on the name of the exported class.
+    """
+    return to_pascal_case(connector_name) + "Connector"
+
+
+def write_connect_stub(sdk_package_dir: Path) -> int:
+    """Write connect.pyi aggregating Literal overloads for every generated connector.
+
+    Scans sdk_package_dir/connectors/ for submodules with an __init__.py and emits a
+    connect.pyi stub alongside connect.py. Each discovered connector contributes a
+    Literal[<slug>] overload returning its typed connector class; connectors without
+    a generated submodule fall through to the HostedExecutor fallback overload.
+
+    Args:
+        sdk_package_dir: The airbyte_agent_sdk/ package source directory.
+
+    Returns:
+        The number of connector overloads emitted into connect.pyi.
+    """
+    connectors_dir = sdk_package_dir / "connectors"
+    entries: list[dict[str, str]] = []
+    if connectors_dir.is_dir():
+        for child in connectors_dir.iterdir():
+            if not child.is_dir():
+                continue
+            if not (child / "__init__.py").exists():
+                continue
+            module = child.name
+            slug = module.replace("_", "-")
+            entries.append({"slug": slug, "module": module, "class_name": connector_class_name(slug)})
+
+    entries.sort(key=lambda e: e["slug"])
+
+    env = Environment(
+        loader=PackageLoader("airbyte_agent_sdk.codegen", "templates"),
+        autoescape=select_autoescape(),
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    template = env.get_template("connect.pyi.jinja2")
+    (sdk_package_dir / "connect.pyi").write_text(template.render(connectors=entries))
+    return len(entries)

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, overload
+from typing import overload
 
 from airbyte_agent_sdk.config import resolve_credentials
 from airbyte_agent_sdk.connector_model_loader import load_connector_model
@@ -10,22 +10,6 @@ from airbyte_agent_sdk.executor.hosted_executor import HostedExecutor
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
 from . import registry
-
-if TYPE_CHECKING:
-    from airbyte_agent_sdk.connectors.stripe import StripeConnector
-
-
-@overload
-def connect(
-    connector_name: Literal["stripe"],
-    *,
-    client_id: str | None = ...,
-    client_secret: str | None = ...,
-    workspace_name: str | None = ...,
-    connector_id: str | None = ...,
-    organization_id: str | None = ...,
-    auth_config: AirbyteAuthConfig | None = ...,
-) -> StripeConnector: ...
 
 
 @overload
@@ -50,7 +34,7 @@ def connect(
     connector_id: str | None = None,
     organization_id: str | None = None,
     auth_config: AirbyteAuthConfig | None = None,
-) -> StripeConnector | HostedExecutor:
+) -> HostedExecutor:
     """Create a typed connector or `HostedExecutor` for a connector by name.
 
     When a generated typed connector package exists (e.g. `StripeConnector`),
@@ -93,6 +77,10 @@ def connect(
     Returns:
         A typed connector (e.g. `StripeConnector`) if a generated package exists,
         or a [`HostedExecutor`](#HostedExecutor) for connectors with only a YAML spec.
+        Static type checkers see the narrowed return type via the generated
+        `connect.pyi` stub (one `Literal["<slug>"]` overload per connector); the
+        `-> HostedExecutor` annotation on this runtime `def` is the fallback used
+        in dev checkouts where `connect.pyi` has not been generated yet.
 
     Raises:
         ValueError: If `connector_name` is not in the bundled registry, or if no
