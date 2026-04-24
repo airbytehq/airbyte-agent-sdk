@@ -98,7 +98,7 @@ class AirbyteCloudClient:
             organization_id="00000000-0000-0000-0000-000000000123",
         )
 
-        # Get a connector ID (workspace_name maps to customer_name on the wire)
+        # Get a connector ID
         connector_id = await client.get_connector_id(
             workspace_name="my-workspace",
             connector_definition_id="550e8400-e29b-41d4-a716-446655440000"
@@ -535,7 +535,7 @@ class AirbyteCloudClient:
         _raise_with_body(response)
         return response.json()
 
-    async def list_workspace_connectors(self, customer_name: str) -> list[dict[str, Any]]:
+    async def list_workspace_connectors(self, workspace_name: str) -> list[dict[str, Any]]:
         """List connector instances for a workspace.
 
         Raises:
@@ -550,7 +550,7 @@ class AirbyteCloudClient:
         headers = self._build_headers(token=token)
         response = await self._http_client.get(
             url,
-            params={"customer_name": customer_name},
+            params={"workspace_name": workspace_name},
             headers=headers,
         )
         _raise_with_body(response)

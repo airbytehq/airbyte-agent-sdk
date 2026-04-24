@@ -130,7 +130,7 @@ class Workspace:
             definition_id = str(model.id)
 
             connector_id = await self._cloud_client.get_connector_id(
-                customer_name=self._workspace_name,
+                workspace_name=self._workspace_name,
                 connector_definition_id=definition_id,
             )
 
@@ -155,7 +155,7 @@ class Workspace:
         return await self._cloud_client.create_source(
             name=source_name,
             connector_definition_id=definition_id,
-            customer_name=self._workspace_name,
+            workspace_name=self._workspace_name,
             credentials=credentials,
             replication_config=replication_config,
             source_template_id=source_template_id,
