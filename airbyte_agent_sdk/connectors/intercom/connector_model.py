@@ -51,6 +51,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='contacts',
+            stream_name='contacts',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -431,6 +432,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'contacts',
                                 },
                             },
                             'total_count': {
@@ -865,6 +867,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'contacts',
+                        'x-airbyte-stream-name': 'contacts',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -1223,6 +1226,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'contacts',
+                        'x-airbyte-stream-name': 'contacts',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -1614,6 +1618,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'contacts',
+                        'x-airbyte-stream-name': 'contacts',
                     },
                 ),
             },
@@ -1807,10 +1812,12 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'contacts',
+                'x-airbyte-stream-name': 'contacts',
             },
         ),
         EntityDefinition(
             name='conversations',
+            stream_name='conversations',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1950,6 +1957,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                                     },
                                                                 },
                                                                 'x-airbyte-entity-name': 'tags',
+                                                                'x-airbyte-stream-name': 'tags',
                                                             },
                                                         },
                                                     },
@@ -2452,6 +2460,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                                     },
                                                                 },
                                                                 'x-airbyte-entity-name': 'conversation_parts',
+                                                                'x-airbyte-stream-name': 'conversation_parts',
                                                             },
                                                         },
                                                         'total_count': {
@@ -2470,6 +2479,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'conversations',
+                                    'x-airbyte-stream-name': 'conversations',
                                 },
                             },
                             'total_count': {
@@ -2637,6 +2647,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'tags',
+                                                    'x-airbyte-stream-name': 'tags',
                                                 },
                                             },
                                         },
@@ -3139,6 +3150,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'conversation_parts',
+                                                    'x-airbyte-stream-name': 'conversation_parts',
                                                 },
                                             },
                                             'total_count': {
@@ -3157,6 +3169,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'conversations',
+                        'x-airbyte-stream-name': 'conversations',
                     },
                 ),
             },
@@ -3274,10 +3287,12 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'conversations',
+                'x-airbyte-stream-name': 'conversations',
             },
         ),
         EntityDefinition(
             name='companies',
+            stream_name='companies',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -3453,6 +3468,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                                     },
                                                                 },
                                                                 'x-airbyte-entity-name': 'tags',
+                                                                'x-airbyte-stream-name': 'tags',
                                                             },
                                                         },
                                                     },
@@ -3503,6 +3519,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                                     },
                                                                 },
                                                                 'x-airbyte-entity-name': 'segments',
+                                                                'x-airbyte-stream-name': 'segments',
                                                             },
                                                         },
                                                     },
@@ -3517,6 +3534,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'companies',
+                                    'x-airbyte-stream-name': 'companies',
                                 },
                             },
                             'total_count': {
@@ -3739,6 +3757,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'tags',
+                                                    'x-airbyte-stream-name': 'tags',
                                                 },
                                             },
                                         },
@@ -3789,6 +3808,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'segments',
+                                                    'x-airbyte-stream-name': 'segments',
                                                 },
                                             },
                                         },
@@ -3803,6 +3823,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'companies',
+                        'x-airbyte-stream-name': 'companies',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -3956,6 +3977,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'tags',
+                                                    'x-airbyte-stream-name': 'tags',
                                                 },
                                             },
                                         },
@@ -4006,6 +4028,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'segments',
+                                                    'x-airbyte-stream-name': 'segments',
                                                 },
                                             },
                                         },
@@ -4020,6 +4043,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'companies',
+                        'x-airbyte-stream-name': 'companies',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -4198,6 +4222,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'tags',
+                                                    'x-airbyte-stream-name': 'tags',
                                                 },
                                             },
                                         },
@@ -4248,6 +4273,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                                         },
                                                     },
                                                     'x-airbyte-entity-name': 'segments',
+                                                    'x-airbyte-stream-name': 'segments',
                                                 },
                                             },
                                         },
@@ -4262,6 +4288,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'companies',
+                        'x-airbyte-stream-name': 'companies',
                     },
                 ),
             },
@@ -4351,10 +4378,12 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'companies',
+                'x-airbyte-stream-name': 'companies',
             },
         ),
         EntityDefinition(
             name='teams',
+            stream_name='teams',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4421,6 +4450,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'teams',
+                                    'x-airbyte-stream-name': 'teams',
                                 },
                             },
                         },
@@ -4486,6 +4516,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'teams',
+                        'x-airbyte-stream-name': 'teams',
                     },
                 ),
             },
@@ -4515,10 +4546,12 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'teams',
+                'x-airbyte-stream-name': 'teams',
             },
         ),
         EntityDefinition(
             name='admins',
+            stream_name='admins',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4607,6 +4640,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'admins',
+                                    'x-airbyte-stream-name': 'admins',
                                 },
                             },
                         },
@@ -4694,6 +4728,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'admins',
+                        'x-airbyte-stream-name': 'admins',
                     },
                 ),
             },
@@ -4747,10 +4782,12 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'admins',
+                'x-airbyte-stream-name': 'admins',
             },
         ),
         EntityDefinition(
             name='tags',
+            stream_name='tags',
             actions=[Action.LIST, Action.CREATE, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4814,6 +4851,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tags',
+                                    'x-airbyte-stream-name': 'tags',
                                 },
                             },
                         },
@@ -4880,6 +4918,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'tags',
+                        'x-airbyte-stream-name': 'tags',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -4937,6 +4976,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'tags',
+                        'x-airbyte-stream-name': 'tags',
                     },
                 ),
             },
@@ -4965,6 +5005,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'tags',
+                'x-airbyte-stream-name': 'tags',
             },
         ),
         EntityDefinition(
@@ -5100,6 +5141,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='segments',
+            stream_name='segments',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5164,6 +5206,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'segments',
+                                    'x-airbyte-stream-name': 'segments',
                                 },
                             },
                         },
@@ -5219,6 +5262,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'segments',
+                        'x-airbyte-stream-name': 'segments',
                     },
                 ),
             },
@@ -5253,6 +5297,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'segments',
+                'x-airbyte-stream-name': 'segments',
             },
         ),
         EntityDefinition(

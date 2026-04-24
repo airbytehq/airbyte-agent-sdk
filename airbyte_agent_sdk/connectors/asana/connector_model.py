@@ -110,6 +110,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='tasks',
+            stream_name='tasks',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -181,6 +182,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -698,6 +700,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'tasks',
+                'x-airbyte-stream-name': 'tasks',
             },
         ),
         EntityDefinition(
@@ -753,6 +756,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -885,6 +889,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -913,6 +918,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='projects',
+            stream_name='projects',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -961,6 +967,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Project name'},
                                     },
                                     'x-airbyte-entity-name': 'projects',
+                                    'x-airbyte-stream-name': 'projects',
                                 },
                             },
                             'next_page': {
@@ -1512,6 +1519,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'name': {'type': 'string', 'description': 'Project name'},
                 },
                 'x-airbyte-entity-name': 'projects',
+                'x-airbyte-stream-name': 'projects',
             },
         ),
         EntityDefinition(
@@ -1553,6 +1561,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Project name'},
                                     },
                                     'x-airbyte-entity-name': 'projects',
+                                    'x-airbyte-stream-name': 'projects',
                                 },
                             },
                             'next_page': {
@@ -1619,6 +1628,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Project name'},
                                     },
                                     'x-airbyte-entity-name': 'projects',
+                                    'x-airbyte-stream-name': 'projects',
                                 },
                             },
                             'next_page': {
@@ -1685,6 +1695,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Project name'},
                                     },
                                     'x-airbyte-entity-name': 'projects',
+                                    'x-airbyte-stream-name': 'projects',
                                 },
                             },
                             'next_page': {
@@ -1713,6 +1724,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='workspaces',
+            stream_name='workspaces',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1746,6 +1758,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Workspace name'},
                                     },
                                     'x-airbyte-entity-name': 'workspaces',
+                                    'x-airbyte-stream-name': 'workspaces',
                                 },
                             },
                             'next_page': {
@@ -1803,10 +1816,12 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'name': {'type': 'string', 'description': 'Workspace name'},
                 },
                 'x-airbyte-entity-name': 'workspaces',
+                'x-airbyte-stream-name': 'workspaces',
             },
         ),
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1847,6 +1862,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'User name'},
                                     },
                                     'x-airbyte-entity-name': 'users',
+                                    'x-airbyte-stream-name': 'users',
                                 },
                             },
                             'next_page': {
@@ -1913,6 +1929,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'name': {'type': 'string', 'description': 'User name'},
                 },
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
@@ -1954,6 +1971,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'User name'},
                                     },
                                     'x-airbyte-entity-name': 'users',
+                                    'x-airbyte-stream-name': 'users',
                                 },
                             },
                             'next_page': {
@@ -2019,6 +2037,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'User name'},
                                     },
                                     'x-airbyte-entity-name': 'users',
+                                    'x-airbyte-stream-name': 'users',
                                 },
                             },
                             'next_page': {
@@ -2047,6 +2066,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='teams',
+            stream_name='teams',
             actions=[Action.GET],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -2094,6 +2114,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'name': {'type': 'string', 'description': 'Team name'},
                 },
                 'x-airbyte-entity-name': 'teams',
+                'x-airbyte-stream-name': 'teams',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -2144,6 +2165,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Team name'},
                                     },
                                     'x-airbyte-entity-name': 'teams',
+                                    'x-airbyte-stream-name': 'teams',
                                 },
                             },
                             'next_page': {
@@ -2210,6 +2232,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Team name'},
                                     },
                                     'x-airbyte-entity-name': 'teams',
+                                    'x-airbyte-stream-name': 'teams',
                                 },
                             },
                             'next_page': {
@@ -2245,6 +2268,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='attachments',
+            stream_name='attachments',
             actions=[Action.LIST, Action.GET, Action.DOWNLOAD],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2280,6 +2304,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'resource_subtype': {'type': 'string', 'description': 'The type of the attachment (e.g., external, dropbox, gdrive, asana, etc.)'},
                                     },
                                     'x-airbyte-entity-name': 'attachments',
+                                    'x-airbyte-stream-name': 'attachments',
                                 },
                             },
                             'next_page': {
@@ -2382,6 +2407,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'resource_subtype': {'type': 'string', 'description': 'The type of the attachment (e.g., external, dropbox, gdrive, asana, etc.)'},
                 },
                 'x-airbyte-entity-name': 'attachments',
+                'x-airbyte-stream-name': 'attachments',
             },
         ),
         EntityDefinition(
@@ -2423,6 +2449,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Tag name'},
                                     },
                                     'x-airbyte-entity-name': 'tags',
+                                    'x-airbyte-stream-name': 'tags',
                                 },
                             },
                             'next_page': {
@@ -2507,6 +2534,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='tags',
+            stream_name='tags',
             actions=[Action.GET, Action.UPDATE, Action.DELETE],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -2631,6 +2659,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'name': {'type': 'string', 'description': 'Tag name'},
                 },
                 'x-airbyte-entity-name': 'tags',
+                'x-airbyte-stream-name': 'tags',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -2690,6 +2719,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -2755,6 +2785,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         'name': {'type': 'string', 'description': 'Section name'},
                                     },
                                     'x-airbyte-entity-name': 'sections',
+                                    'x-airbyte-stream-name': 'sections',
                                 },
                             },
                             'next_page': {
@@ -2835,6 +2866,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sections',
+            stream_name='sections',
             actions=[Action.GET, Action.UPDATE, Action.DELETE],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -2949,6 +2981,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     'name': {'type': 'string', 'description': 'Section name'},
                 },
                 'x-airbyte-entity-name': 'sections',
+                'x-airbyte-stream-name': 'sections',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -3013,6 +3046,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -3122,6 +3156,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -3196,6 +3231,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {
@@ -3270,6 +3306,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'tasks',
                                 },
                             },
                             'next_page': {

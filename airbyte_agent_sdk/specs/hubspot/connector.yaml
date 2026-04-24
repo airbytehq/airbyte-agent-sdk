@@ -1327,6 +1327,7 @@ components:
     Contact:
       type: object
       x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: contacts
       description: HubSpot contact object
       properties:
         id:
@@ -1397,6 +1398,7 @@ components:
     Company:
       type: object
       x-airbyte-entity-name: companies
+      x-airbyte-stream-name: companies
       description: HubSpot company object
       properties:
         id:
@@ -1465,6 +1467,7 @@ components:
     Deal:
       type: object
       x-airbyte-entity-name: deals
+      x-airbyte-stream-name: deals
       description: HubSpot deal object
       properties:
         id:
@@ -1539,6 +1542,7 @@ components:
     Ticket:
       type: object
       x-airbyte-entity-name: tickets
+      x-airbyte-stream-name: tickets
       description: HubSpot ticket object
       properties:
         id:

@@ -1476,6 +1476,7 @@ components:
     Ticket:
       type: object
       x-airbyte-entity-name: tickets
+      x-airbyte-stream-name: tickets
       description: Zendesk Support ticket object
       properties:
         id:
@@ -1651,6 +1652,7 @@ components:
     DeletedTicket:
       type: object
       x-airbyte-entity-name: deleted_tickets
+      x-airbyte-stream-name: deleted_tickets
       description: Zendesk Support deleted ticket object
       properties:
         id:
@@ -1700,6 +1702,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       description: Zendesk Support user object
       properties:
         id:
@@ -1861,6 +1864,7 @@ components:
     Organization:
       type: object
       x-airbyte-entity-name: organizations
+      x-airbyte-stream-name: organizations
       description: Zendesk Support organization object
       properties:
         id:
@@ -1926,6 +1930,7 @@ components:
     Group:
       type: object
       x-airbyte-entity-name: groups
+      x-airbyte-stream-name: groups
       description: Zendesk Support group object
       properties:
         id:
@@ -1964,6 +1969,7 @@ components:
     TicketComment:
       type: object
       x-airbyte-entity-name: ticket_comments
+      x-airbyte-stream-name: ticket_comments
       description: Zendesk Support ticket comment object
       properties:
         id:
@@ -2069,6 +2075,7 @@ components:
     TicketAudit:
       type: object
       x-airbyte-entity-name: ticket_audits
+      x-airbyte-stream-name: ticket_audits
       description: Zendesk Support ticket audit object
       properties:
         id:
@@ -2102,6 +2109,7 @@ components:
     TicketMetric:
       type: object
       x-airbyte-entity-name: ticket_metrics
+      x-airbyte-stream-name: ticket_metrics
       description: Zendesk Support ticket metric object
       properties:
         id:
@@ -2194,6 +2202,7 @@ components:
     TicketField:
       type: object
       x-airbyte-entity-name: ticket_fields
+      x-airbyte-stream-name: ticket_fields
       description: Zendesk Support ticket field object
       properties:
         id:
@@ -2290,6 +2299,7 @@ components:
     Brand:
       type: object
       x-airbyte-entity-name: brands
+      x-airbyte-stream-name: brands
       description: Zendesk Support brand object
       properties:
         id:
@@ -2406,6 +2416,7 @@ components:
     Macro:
       type: object
       x-airbyte-entity-name: macros
+      x-airbyte-stream-name: macros
       description: Zendesk Support macro object
       properties:
         id:
@@ -2454,6 +2465,7 @@ components:
     Trigger:
       type: object
       x-airbyte-entity-name: triggers
+      x-airbyte-stream-name: triggers
       description: Zendesk Support trigger object
       properties:
         id:
@@ -2505,6 +2517,7 @@ components:
     Automation:
       type: object
       x-airbyte-entity-name: automations
+      x-airbyte-stream-name: automations
       description: Zendesk Support automation object
       properties:
         id:
@@ -2548,6 +2561,7 @@ components:
     Tag:
       type: object
       x-airbyte-entity-name: tags
+      x-airbyte-stream-name: tags
       description: Zendesk Support tag object
       properties:
         name:
@@ -2563,6 +2577,7 @@ components:
     SatisfactionRating:
       type: object
       x-airbyte-entity-name: satisfaction_ratings
+      x-airbyte-stream-name: satisfaction_ratings
       description: Zendesk Support satisfaction rating object
       properties:
         id:
@@ -2625,6 +2640,7 @@ components:
     GroupMembership:
       type: object
       x-airbyte-entity-name: group_memberships
+      x-airbyte-stream-name: group_memberships
       description: Zendesk Support group membership object
       properties:
         id:
@@ -2657,6 +2673,7 @@ components:
     OrganizationMembership:
       type: object
       x-airbyte-entity-name: organization_memberships
+      x-airbyte-stream-name: organization_memberships
       description: Zendesk Support organization membership object
       properties:
         id:
@@ -2695,6 +2712,7 @@ components:
     SLAPolicy:
       type: object
       x-airbyte-entity-name: sla_policies
+      x-airbyte-stream-name: sla_policies
       description: Zendesk Support SLA policy object
       properties:
         id:
@@ -2735,6 +2753,7 @@ components:
     TicketForm:
       type: object
       x-airbyte-entity-name: ticket_forms
+      x-airbyte-stream-name: ticket_forms
       description: Zendesk Support ticket form object
       properties:
         id:
@@ -2805,6 +2824,7 @@ components:
     Article:
       type: object
       x-airbyte-entity-name: articles
+      x-airbyte-stream-name: articles
       description: Help Center article object
       properties:
         id:
@@ -2866,6 +2886,7 @@ components:
     ArticleAttachment:
       type: object
       x-airbyte-entity-name: article_attachments
+      x-airbyte-stream-name: article_attachments
       description: Article attachment object
       properties:
         id:

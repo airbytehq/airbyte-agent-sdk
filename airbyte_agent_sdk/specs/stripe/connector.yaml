@@ -3226,6 +3226,7 @@ components:
     Customer:
       type: object
       x-airbyte-entity-name: customers
+      x-airbyte-stream-name: customers
       properties:
         id:
           type: string
@@ -3681,6 +3682,7 @@ components:
     Invoice:
       type: object
       x-airbyte-entity-name: invoices
+      x-airbyte-stream-name: invoices
       properties:
         id:
           type: string
@@ -4676,6 +4678,7 @@ components:
     Charge:
       type: object
       x-airbyte-entity-name: charges
+      x-airbyte-stream-name: charges
       properties:
         id:
           type: string
@@ -5027,6 +5030,7 @@ components:
     Subscription:
       type: object
       x-airbyte-entity-name: subscriptions
+      x-airbyte-stream-name: subscriptions
       properties:
         id:
           type: string
@@ -5498,6 +5502,7 @@ components:
     Refund:
       type: object
       x-airbyte-entity-name: refunds
+      x-airbyte-stream-name: refunds
       properties:
         id:
           type: string
@@ -5875,6 +5880,7 @@ components:
     Product:
       type: object
       x-airbyte-entity-name: products
+      x-airbyte-stream-name: products
       properties:
         id:
           type: string
@@ -6377,6 +6383,7 @@ components:
     BalanceTransaction:
       type: object
       x-airbyte-entity-name: balance_transactions
+      x-airbyte-stream-name: balance_transactions
       properties:
         id:
           type: string
@@ -6466,6 +6473,7 @@ components:
     PaymentIntent:
       type: object
       x-airbyte-entity-name: payment_intents
+      x-airbyte-stream-name: payment_intents
       properties:
         id:
           type: string
@@ -6568,6 +6576,7 @@ components:
     Dispute:
       type: object
       x-airbyte-entity-name: disputes
+      x-airbyte-stream-name: disputes
       properties:
         id:
           type: string
@@ -6661,6 +6670,7 @@ components:
     Payout:
       type: object
       x-airbyte-entity-name: payouts
+      x-airbyte-stream-name: payouts
       properties:
         id:
           type: string
@@ -7103,6 +7113,7 @@ components:
     Price:
       type: object
       x-airbyte-entity-name: prices
+      x-airbyte-stream-name: prices
       properties:
         id:
           type: string
@@ -7243,6 +7254,7 @@ components:
     CheckoutSession:
       type: object
       x-airbyte-entity-name: checkout_sessions
+      x-airbyte-stream-name: checkout_sessions
       properties:
         id:
           type: string

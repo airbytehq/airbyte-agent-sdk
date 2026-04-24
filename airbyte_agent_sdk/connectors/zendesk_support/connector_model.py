@@ -98,6 +98,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='tickets',
+            stream_name='tickets',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -296,6 +297,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'tickets',
+                                    'x-airbyte-stream-name': 'tickets',
                                 },
                             },
                             'next_page': {
@@ -551,6 +553,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'tickets',
+                                'x-airbyte-stream-name': 'tickets',
                             },
                         },
                     },
@@ -706,6 +709,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'tickets',
+                                'x-airbyte-stream-name': 'tickets',
                             },
                         },
                     },
@@ -946,6 +950,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'tickets',
+                                'x-airbyte-stream-name': 'tickets',
                             },
                         },
                     },
@@ -1090,10 +1095,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'tickets',
+                'x-airbyte-stream-name': 'tickets',
             },
         ),
         EntityDefinition(
             name='ticket_comments',
+            stream_name='ticket_comments',
             actions=[Action.CREATE, Action.LIST],
             endpoints={
                 Action.CREATE: EndpointDefinition(
@@ -1275,6 +1282,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'tickets',
+                                'x-airbyte-stream-name': 'tickets',
                             },
                         },
                     },
@@ -1351,6 +1359,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'ticket_comments',
+                                    'x-airbyte-stream-name': 'ticket_comments',
                                 },
                             },
                             'next_page': {
@@ -1399,6 +1408,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_comments',
+                'x-airbyte-stream-name': 'ticket_comments',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1531,6 +1541,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='deleted_tickets',
+            stream_name='deleted_tickets',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1612,6 +1623,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'deleted_tickets',
+                                    'x-airbyte-stream-name': 'deleted_tickets',
                                 },
                             },
                             'next_page': {
@@ -1672,10 +1684,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'deleted_tickets',
+                'x-airbyte-stream-name': 'deleted_tickets',
             },
         ),
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -1828,6 +1842,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'users',
+                                    'x-airbyte-stream-name': 'users',
                                 },
                             },
                             'next_page': {
@@ -2001,6 +2016,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'users',
+                                'x-airbyte-stream-name': 'users',
                             },
                         },
                     },
@@ -2128,6 +2144,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'users',
+                                'x-airbyte-stream-name': 'users',
                             },
                         },
                     },
@@ -2289,6 +2306,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'users',
+                                'x-airbyte-stream-name': 'users',
                             },
                         },
                     },
@@ -2405,10 +2423,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
             name='organizations',
+            stream_name='organizations',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2484,6 +2504,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'organizations',
+                                    'x-airbyte-stream-name': 'organizations',
                                 },
                             },
                             'next_page': {
@@ -2565,6 +2586,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'organizations',
+                                'x-airbyte-stream-name': 'organizations',
                             },
                         },
                     },
@@ -2620,10 +2642,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'organizations',
+                'x-airbyte-stream-name': 'organizations',
             },
         ),
         EntityDefinition(
             name='groups',
+            stream_name='groups',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2679,6 +2703,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'groups',
+                                    'x-airbyte-stream-name': 'groups',
                                 },
                             },
                             'next_page': {
@@ -2735,6 +2760,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'groups',
+                                'x-airbyte-stream-name': 'groups',
                             },
                         },
                     },
@@ -2765,6 +2791,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'groups',
+                'x-airbyte-stream-name': 'groups',
             },
         ),
         EntityDefinition(
@@ -2869,6 +2896,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='ticket_audits',
+            stream_name='ticket_audits',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2921,6 +2949,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'ticket_audits',
+                                    'x-airbyte-stream-name': 'ticket_audits',
                                 },
                             },
                             'next_page': {
@@ -2964,6 +2993,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_audits',
+                'x-airbyte-stream-name': 'ticket_audits',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -2976,6 +3006,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='ticket_metrics',
+            stream_name='ticket_metrics',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3067,6 +3098,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'ticket_metrics',
+                                    'x-airbyte-stream-name': 'ticket_metrics',
                                 },
                             },
                             'next_page': {
@@ -3153,10 +3185,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_metrics',
+                'x-airbyte-stream-name': 'ticket_metrics',
             },
         ),
         EntityDefinition(
             name='ticket_fields',
+            stream_name='ticket_fields',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3241,6 +3275,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'ticket_fields',
+                                    'x-airbyte-stream-name': 'ticket_fields',
                                 },
                             },
                             'next_page': {
@@ -3330,6 +3365,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'ticket_fields',
+                                'x-airbyte-stream-name': 'ticket_fields',
                             },
                         },
                     },
@@ -3393,10 +3429,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_fields',
+                'x-airbyte-stream-name': 'ticket_fields',
             },
         ),
         EntityDefinition(
             name='brands',
+            stream_name='brands',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3464,6 +3502,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'brands',
+                                    'x-airbyte-stream-name': 'brands',
                                 },
                             },
                             'next_page': {
@@ -3537,6 +3576,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'brands',
+                                'x-airbyte-stream-name': 'brands',
                             },
                         },
                     },
@@ -3584,6 +3624,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'brands',
+                'x-airbyte-stream-name': 'brands',
             },
         ),
         EntityDefinition(
@@ -3785,6 +3826,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='macros',
+            stream_name='macros',
             actions=[Action.GET, Action.LIST],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -3832,6 +3874,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'macros',
+                                'x-airbyte-stream-name': 'macros',
                             },
                         },
                     },
@@ -3928,6 +3971,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'macros',
+                                    'x-airbyte-stream-name': 'macros',
                                 },
                             },
                             'next_page': {
@@ -3982,10 +4026,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'macros',
+                'x-airbyte-stream-name': 'macros',
             },
         ),
         EntityDefinition(
             name='triggers',
+            stream_name='triggers',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4073,6 +4119,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'triggers',
+                                    'x-airbyte-stream-name': 'triggers',
                                 },
                             },
                             'next_page': {
@@ -4139,6 +4186,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'triggers',
+                                'x-airbyte-stream-name': 'triggers',
                             },
                         },
                     },
@@ -4179,10 +4227,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'triggers',
+                'x-airbyte-stream-name': 'triggers',
             },
         ),
         EntityDefinition(
             name='automations',
+            stream_name='automations',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4263,6 +4313,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'automations',
+                                    'x-airbyte-stream-name': 'automations',
                                 },
                             },
                             'next_page': {
@@ -4324,6 +4375,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'automations',
+                                'x-airbyte-stream-name': 'automations',
                             },
                         },
                     },
@@ -4359,10 +4411,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'automations',
+                'x-airbyte-stream-name': 'automations',
             },
         ),
         EntityDefinition(
             name='tags',
+            stream_name='tags',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4398,6 +4452,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['name'],
                                     'x-airbyte-entity-name': 'tags',
+                                    'x-airbyte-stream-name': 'tags',
                                 },
                             },
                             'next_page': {
@@ -4428,10 +4483,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['name'],
                 'x-airbyte-entity-name': 'tags',
+                'x-airbyte-stream-name': 'tags',
             },
         ),
         EntityDefinition(
             name='satisfaction_ratings',
+            stream_name='satisfaction_ratings',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4523,6 +4580,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'satisfaction_ratings',
+                                    'x-airbyte-stream-name': 'satisfaction_ratings',
                                 },
                             },
                             'next_page': {
@@ -4601,6 +4659,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'satisfaction_ratings',
+                                'x-airbyte-stream-name': 'satisfaction_ratings',
                             },
                         },
                     },
@@ -4653,10 +4712,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'satisfaction_ratings',
+                'x-airbyte-stream-name': 'satisfaction_ratings',
             },
         ),
         EntityDefinition(
             name='group_memberships',
+            stream_name='group_memberships',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4705,6 +4766,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'group_memberships',
+                                    'x-airbyte-stream-name': 'group_memberships',
                                 },
                             },
                             'next_page': {
@@ -4748,10 +4810,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'group_memberships',
+                'x-airbyte-stream-name': 'group_memberships',
             },
         ),
         EntityDefinition(
             name='organization_memberships',
+            stream_name='organization_memberships',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4802,6 +4866,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'organization_memberships',
+                                    'x-airbyte-stream-name': 'organization_memberships',
                                 },
                             },
                             'next_page': {
@@ -4847,10 +4912,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'organization_memberships',
+                'x-airbyte-stream-name': 'organization_memberships',
             },
         ),
         EntityDefinition(
             name='sla_policies',
+            stream_name='sla_policies',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4905,6 +4972,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'sla_policies',
+                                    'x-airbyte-stream-name': 'sla_policies',
                                 },
                             },
                             'next_page': {
@@ -4965,6 +5033,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'sla_policies',
+                                'x-airbyte-stream-name': 'sla_policies',
                             },
                         },
                     },
@@ -4999,10 +5068,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'sla_policies',
+                'x-airbyte-stream-name': 'sla_policies',
             },
         ),
         EntityDefinition(
             name='ticket_forms',
+            stream_name='ticket_forms',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5084,6 +5155,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'ticket_forms',
+                                    'x-airbyte-stream-name': 'ticket_forms',
                                 },
                             },
                             'next_page': {
@@ -5164,6 +5236,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'ticket_forms',
+                                'x-airbyte-stream-name': 'ticket_forms',
                             },
                         },
                     },
@@ -5218,10 +5291,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'ticket_forms',
+                'x-airbyte-stream-name': 'ticket_forms',
             },
         ),
         EntityDefinition(
             name='articles',
+            stream_name='articles',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5304,6 +5379,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'articles',
+                                    'x-airbyte-stream-name': 'articles',
                                 },
                             },
                             'next_page': {
@@ -5371,6 +5447,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id'],
                                 'x-airbyte-entity-name': 'articles',
+                                'x-airbyte-stream-name': 'articles',
                             },
                         },
                     },
@@ -5412,10 +5489,12 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'articles',
+                'x-airbyte-stream-name': 'articles',
             },
         ),
         EntityDefinition(
             name='article_attachments',
+            stream_name='article_attachments',
             actions=[Action.LIST, Action.GET, Action.DOWNLOAD],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5479,6 +5558,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id', 'file_name'],
                                     'x-airbyte-entity-name': 'article_attachments',
+                                    'x-airbyte-stream-name': 'article_attachments',
                                 },
                             },
                             'next_page': {
@@ -5545,6 +5625,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                                 'required': ['id', 'file_name'],
                                 'x-airbyte-entity-name': 'article_attachments',
+                                'x-airbyte-stream-name': 'article_attachments',
                             },
                         },
                     },
@@ -5599,6 +5680,7 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'file_name'],
                 'x-airbyte-entity-name': 'article_attachments',
+                'x-airbyte-stream-name': 'article_attachments',
             },
             relationships=[
                 EntityRelationshipConfig(

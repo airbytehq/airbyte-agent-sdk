@@ -3731,6 +3731,7 @@ components:
     TaskCompact:
       type: object
       x-airbyte-entity-name: tasks
+      x-airbyte-stream-name: tasks
       description: Compact task object
       properties:
         gid:
@@ -3908,6 +3909,7 @@ components:
     ProjectCompact:
       type: object
       x-airbyte-entity-name: projects
+      x-airbyte-stream-name: projects
       description: Compact project object
       properties:
         gid:
@@ -4102,6 +4104,7 @@ components:
     WorkspaceCompact:
       type: object
       x-airbyte-entity-name: workspaces
+      x-airbyte-stream-name: workspaces
       description: Compact workspace object
       properties:
         gid:
@@ -4160,6 +4163,7 @@ components:
     UserCompact:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       description: Compact user object
       properties:
         gid:
@@ -4227,6 +4231,7 @@ components:
     TeamCompact:
       type: object
       x-airbyte-entity-name: teams
+      x-airbyte-stream-name: teams
       description: Compact team object
       properties:
         gid:
@@ -4290,6 +4295,7 @@ components:
     AttachmentCompact:
       type: object
       x-airbyte-entity-name: attachments
+      x-airbyte-stream-name: attachments
       description: Compact attachment object
       properties:
         gid:
@@ -4386,6 +4392,7 @@ components:
     TagCompact:
       type: object
       x-airbyte-entity-name: tags
+      x-airbyte-stream-name: tags
       description: Compact tag object
       properties:
         gid:
@@ -4457,6 +4464,7 @@ components:
     SectionCompact:
       type: object
       x-airbyte-entity-name: sections
+      x-airbyte-stream-name: sections
       description: Compact section object
       properties:
         gid:

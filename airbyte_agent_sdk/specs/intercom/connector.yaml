@@ -2023,6 +2023,7 @@ components:
     Contact:
       type: object
       x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: contacts
       description: Contact object representing a user or lead
       properties:
         type:
@@ -2338,6 +2339,7 @@ components:
     Conversation:
       type: object
       x-airbyte-entity-name: conversations
+      x-airbyte-stream-name: conversations
       description: Conversation object
       properties:
         type:
@@ -2729,6 +2731,7 @@ components:
     ConversationPart:
       type: object
       x-airbyte-entity-name: conversation_parts
+      x-airbyte-stream-name: conversation_parts
       description: Conversation part (message, note, action)
       properties:
         type:
@@ -2777,6 +2780,7 @@ components:
     Company:
       type: object
       x-airbyte-entity-name: companies
+      x-airbyte-stream-name: companies
       description: Company object
       properties:
         type:
@@ -2926,6 +2930,7 @@ components:
     Team:
       type: object
       x-airbyte-entity-name: teams
+      x-airbyte-stream-name: teams
       description: Team object
       properties:
         type:
@@ -2980,6 +2985,7 @@ components:
     Admin:
       type: object
       x-airbyte-entity-name: admins
+      x-airbyte-stream-name: admins
       description: Admin object
       properties:
         type:
@@ -3048,6 +3054,7 @@ components:
     Tag:
       type: object
       x-airbyte-entity-name: tags
+      x-airbyte-stream-name: tags
       description: Tag object
       properties:
         type:
@@ -3085,6 +3092,7 @@ components:
     Segment:
       type: object
       x-airbyte-entity-name: segments
+      x-airbyte-stream-name: segments
       description: Segment object
       properties:
         type:

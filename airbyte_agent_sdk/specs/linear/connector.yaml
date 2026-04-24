@@ -2475,6 +2475,7 @@ components:
     Issue:
       type: object
       x-airbyte-entity-name: issues
+      x-airbyte-stream-name: issues
       x-airbyte-ai-hints:
         summary: "Engineering issues, bugs, feature requests, and feedback intake items"
         when_to_use: "Engineering, bug, or roadmap questions about tracked issues"
@@ -2598,6 +2599,7 @@ components:
     Project:
       type: object
       x-airbyte-entity-name: projects
+      x-airbyte-stream-name: projects
       description: Linear project object
       required:
         - id
@@ -2785,6 +2787,7 @@ components:
     Team:
       type: object
       x-airbyte-entity-name: teams
+      x-airbyte-stream-name: teams
       description: Linear team object
       required:
         - id
@@ -2858,6 +2861,7 @@ components:
     WorkflowState:
       type: object
       x-airbyte-entity-name: workflow_states
+      x-airbyte-stream-name: workflow_states
       description: Linear workflow state object representing a status in a team's workflow
       required:
         - id
@@ -3085,6 +3089,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       description: Linear user object
       required:
         - id
@@ -3159,6 +3164,7 @@ components:
     Comment:
       type: object
       x-airbyte-entity-name: comments
+      x-airbyte-stream-name: comments
       description: Linear comment object
       required:
         - id

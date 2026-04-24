@@ -107,6 +107,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='contacts',
+            stream_name='contacts',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -208,6 +209,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'contacts',
                                 },
                             },
                             'paging': {
@@ -319,6 +321,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'contacts',
+                        'x-airbyte-stream-name': 'contacts',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -492,6 +495,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'contacts',
                                 },
                             },
                             'paging': {
@@ -584,10 +588,12 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'contacts',
+                'x-airbyte-stream-name': 'contacts',
             },
         ),
         EntityDefinition(
             name='companies',
+            stream_name='companies',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -686,6 +692,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'companies',
+                                    'x-airbyte-stream-name': 'companies',
                                 },
                             },
                             'paging': {
@@ -793,6 +800,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'companies',
+                        'x-airbyte-stream-name': 'companies',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -963,6 +971,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'companies',
+                                    'x-airbyte-stream-name': 'companies',
                                 },
                             },
                             'paging': {
@@ -1052,10 +1061,12 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'companies',
+                'x-airbyte-stream-name': 'companies',
             },
         ),
         EntityDefinition(
             name='deals',
+            stream_name='deals',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1163,6 +1174,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'deals',
+                                    'x-airbyte-stream-name': 'deals',
                                 },
                             },
                             'paging': {
@@ -1279,6 +1291,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'deals',
+                        'x-airbyte-stream-name': 'deals',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -1458,6 +1471,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'deals',
+                                    'x-airbyte-stream-name': 'deals',
                                 },
                             },
                             'paging': {
@@ -1556,10 +1570,12 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'deals',
+                'x-airbyte-stream-name': 'deals',
             },
         ),
         EntityDefinition(
             name='tickets',
+            stream_name='tickets',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1670,6 +1686,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tickets',
+                                    'x-airbyte-stream-name': 'tickets',
                                 },
                             },
                             'paging': {
@@ -1789,6 +1806,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'tickets',
+                        'x-airbyte-stream-name': 'tickets',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -1971,6 +1989,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tickets',
+                                    'x-airbyte-stream-name': 'tickets',
                                 },
                             },
                             'paging': {
@@ -2072,6 +2091,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'tickets',
+                'x-airbyte-stream-name': 'tickets',
             },
         ),
         EntityDefinition(

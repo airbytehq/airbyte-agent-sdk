@@ -58,6 +58,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='issues',
+            stream_name='issues',
             actions=[
                 Action.LIST,
                 Action.GET,
@@ -190,6 +191,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     },
                                                     'required': ['id', 'title'],
                                                     'x-airbyte-entity-name': 'issues',
+                                                    'x-airbyte-stream-name': 'issues',
                                                     'x-airbyte-ai-hints': {
                                                         'summary': 'Engineering issues, bugs, feature requests, and feedback intake items',
                                                         'when_to_use': 'Engineering, bug, or roadmap questions about tracked issues',
@@ -345,6 +347,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                         'required': ['id', 'title'],
                                         'x-airbyte-entity-name': 'issues',
+                                        'x-airbyte-stream-name': 'issues',
                                         'x-airbyte-ai-hints': {
                                             'summary': 'Engineering issues, bugs, feature requests, and feedback intake items',
                                             'when_to_use': 'Engineering, bug, or roadmap questions about tracked issues',
@@ -700,6 +703,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'title'],
                 'x-airbyte-entity-name': 'issues',
+                'x-airbyte-stream-name': 'issues',
                 'x-airbyte-ai-hints': {
                     'summary': 'Engineering issues, bugs, feature requests, and feedback intake items',
                     'when_to_use': 'Engineering, bug, or roadmap questions about tracked issues',
@@ -732,6 +736,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='projects',
+            stream_name='projects',
             actions=[
                 Action.LIST,
                 Action.GET,
@@ -838,6 +843,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     },
                                                     'required': ['id', 'name'],
                                                     'x-airbyte-entity-name': 'projects',
+                                                    'x-airbyte-stream-name': 'projects',
                                                 },
                                             },
                                             'pageInfo': {
@@ -952,6 +958,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                         'required': ['id', 'name'],
                                         'x-airbyte-entity-name': 'projects',
+                                        'x-airbyte-stream-name': 'projects',
                                     },
                                 },
                             },
@@ -1052,6 +1059,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                                 'required': ['id', 'name'],
                                                 'x-airbyte-entity-name': 'projects',
+                                                'x-airbyte-stream-name': 'projects',
                                             },
                                         },
                                     },
@@ -1162,6 +1170,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                                 'required': ['id', 'name'],
                                                 'x-airbyte-entity-name': 'projects',
+                                                'x-airbyte-stream-name': 'projects',
                                             },
                                         },
                                     },
@@ -1246,10 +1255,12 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'name'],
                 'x-airbyte-entity-name': 'projects',
+                'x-airbyte-stream-name': 'projects',
             },
         ),
         EntityDefinition(
             name='teams',
+            stream_name='teams',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1325,6 +1336,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     },
                                                     'required': ['id', 'name', 'key'],
                                                     'x-airbyte-entity-name': 'teams',
+                                                    'x-airbyte-stream-name': 'teams',
                                                 },
                                             },
                                             'pageInfo': {
@@ -1413,6 +1425,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                         'required': ['id', 'name', 'key'],
                                         'x-airbyte-entity-name': 'teams',
+                                        'x-airbyte-stream-name': 'teams',
                                     },
                                 },
                             },
@@ -1460,10 +1473,12 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'name', 'key'],
                 'x-airbyte-entity-name': 'teams',
+                'x-airbyte-stream-name': 'teams',
             },
         ),
         EntityDefinition(
             name='workflow_states',
+            stream_name='workflow_states',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1552,6 +1567,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     },
                                                     'required': ['id', 'name', 'type'],
                                                     'x-airbyte-entity-name': 'workflow_states',
+                                                    'x-airbyte-stream-name': 'workflow_states',
                                                 },
                                             },
                                             'pageInfo': {
@@ -1627,10 +1643,12 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'name', 'type'],
                 'x-airbyte-entity-name': 'workflow_states',
+                'x-airbyte-stream-name': 'workflow_states',
             },
         ),
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1701,6 +1719,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                     },
                                                     'required': ['id', 'name', 'email'],
                                                     'x-airbyte-entity-name': 'users',
+                                                    'x-airbyte-stream-name': 'users',
                                                 },
                                             },
                                             'pageInfo': {
@@ -1784,6 +1803,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                         'required': ['id', 'name', 'email'],
                                         'x-airbyte-entity-name': 'users',
+                                        'x-airbyte-stream-name': 'users',
                                     },
                                 },
                             },
@@ -1826,10 +1846,12 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'name', 'email'],
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
             name='comments',
+            stream_name='comments',
             actions=[
                 Action.LIST,
                 Action.GET,
@@ -1926,6 +1948,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                             },
                                                             'required': ['id', 'body'],
                                                             'x-airbyte-entity-name': 'comments',
+                                                            'x-airbyte-stream-name': 'comments',
                                                         },
                                                     },
                                                     'pageInfo': {
@@ -2032,6 +2055,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                         'required': ['id', 'body'],
                                         'x-airbyte-entity-name': 'comments',
+                                        'x-airbyte-stream-name': 'comments',
                                     },
                                 },
                             },
@@ -2118,6 +2142,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                                 'required': ['id', 'body'],
                                                 'x-airbyte-entity-name': 'comments',
+                                                'x-airbyte-stream-name': 'comments',
                                             },
                                         },
                                     },
@@ -2206,6 +2231,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                                 'required': ['id', 'body'],
                                                 'x-airbyte-entity-name': 'comments',
+                                                'x-airbyte-stream-name': 'comments',
                                             },
                                         },
                                     },
@@ -2267,6 +2293,7 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id', 'body'],
                 'x-airbyte-entity-name': 'comments',
+                'x-airbyte-stream-name': 'comments',
             },
             relationships=[
                 EntityRelationshipConfig(

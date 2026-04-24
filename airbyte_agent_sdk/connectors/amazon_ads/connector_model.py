@@ -73,6 +73,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='profiles',
+            stream_name='profiles',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -158,6 +159,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'profiles',
+                            'x-airbyte-stream-name': 'profiles',
                             'x-airbyte-ai-hints': {
                                 'summary': 'Advertising profiles representing advertiser accounts across Amazon marketplaces',
                                 'when_to_use': 'Questions about which advertising accounts or marketplaces are available, or when you need a profile ID to query other entities',
@@ -258,6 +260,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'profiles',
+                        'x-airbyte-stream-name': 'profiles',
                         'x-airbyte-ai-hints': {
                             'summary': 'Advertising profiles representing advertiser accounts across Amazon marketplaces',
                             'when_to_use': 'Questions about which advertising accounts or marketplaces are available, or when you need a profile ID to query other entities',
@@ -309,6 +312,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'profiles',
+                'x-airbyte-stream-name': 'profiles',
                 'x-airbyte-ai-hints': {
                     'summary': 'Advertising profiles representing advertiser accounts across Amazon marketplaces',
                     'when_to_use': 'Questions about which advertising accounts or marketplaces are available, or when you need a profile ID to query other entities',
@@ -341,6 +345,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='portfolios',
+            stream_name='portfolios',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -449,6 +454,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'portfolios',
+                                    'x-airbyte-stream-name': 'portfolios',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Portfolios that group advertising campaigns together for budget management',
                                         'when_to_use': 'Questions about campaign groupings, portfolio budgets, or organizational structure of ad campaigns',
@@ -569,6 +575,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'portfolios',
+                        'x-airbyte-stream-name': 'portfolios',
                         'x-airbyte-ai-hints': {
                             'summary': 'Portfolios that group advertising campaigns together for budget management',
                             'when_to_use': 'Questions about campaign groupings, portfolio budgets, or organizational structure of ad campaigns',
@@ -639,6 +646,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'portfolios',
+                'x-airbyte-stream-name': 'portfolios',
                 'x-airbyte-ai-hints': {
                     'summary': 'Portfolios that group advertising campaigns together for budget management',
                     'when_to_use': 'Questions about campaign groupings, portfolio budgets, or organizational structure of ad campaigns',
@@ -669,6 +677,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_product_campaigns',
+            stream_name='sponsored_product_campaigns',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -888,6 +897,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_product_campaigns',
+                                    'x-airbyte-stream-name': 'sponsored_product_campaigns',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Sponsored Products campaigns that promote individual product listings on Amazon',
                                         'when_to_use': 'Questions about advertising campaigns, campaign status, budgets, bidding strategies, or targeting types',
@@ -1098,6 +1108,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'sponsored_product_campaigns',
+                        'x-airbyte-stream-name': 'sponsored_product_campaigns',
                         'x-airbyte-ai-hints': {
                             'summary': 'Sponsored Products campaigns that promote individual product listings on Amazon',
                             'when_to_use': 'Questions about advertising campaigns, campaign status, budgets, bidding strategies, or targeting types',
@@ -1220,6 +1231,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_product_campaigns',
+                'x-airbyte-stream-name': 'sponsored_product_campaigns',
                 'x-airbyte-ai-hints': {
                     'summary': 'Sponsored Products campaigns that promote individual product listings on Amazon',
                     'when_to_use': 'Questions about advertising campaigns, campaign status, budgets, bidding strategies, or targeting types',
@@ -1252,6 +1264,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_product_ad_groups',
+            stream_name='sponsored_product_ad_groups',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1347,6 +1360,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_product_ad_groups',
+                                    'x-airbyte-stream-name': 'sponsored_product_ad_groups',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Sponsored Products ad groups that organize ads and targeting within campaigns',
                                         'when_to_use': 'Questions about ad groups, ad group bids, ad group status, or how ads are organized within campaigns',
@@ -1416,6 +1430,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_product_ad_groups',
+                'x-airbyte-stream-name': 'sponsored_product_ad_groups',
                 'x-airbyte-ai-hints': {
                     'summary': 'Sponsored Products ad groups that organize ads and targeting within campaigns',
                     'when_to_use': 'Questions about ad groups, ad group bids, ad group status, or how ads are organized within campaigns',
@@ -1448,6 +1463,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_product_keywords',
+            stream_name='sponsored_product_keywords',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1562,6 +1578,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_product_keywords',
+                                    'x-airbyte-stream-name': 'sponsored_product_keywords',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Keywords used in Sponsored Products campaigns for manual targeting',
                                         'when_to_use': 'Questions about keywords, keyword bids, match types, or search term targeting',
@@ -1650,6 +1667,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_product_keywords',
+                'x-airbyte-stream-name': 'sponsored_product_keywords',
                 'x-airbyte-ai-hints': {
                     'summary': 'Keywords used in Sponsored Products campaigns for manual targeting',
                     'when_to_use': 'Questions about keywords, keyword bids, match types, or search term targeting',
@@ -1682,6 +1700,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_product_product_ads',
+            stream_name='sponsored_product_ads',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1784,6 +1803,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_product_product_ads',
+                                    'x-airbyte-stream-name': 'sponsored_product_ads',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Product ads that associate products with ad groups in Sponsored Products campaigns',
                                         'when_to_use': 'Questions about which products are being advertised, product ad status, or ASIN-level ad data',
@@ -1860,6 +1880,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_product_product_ads',
+                'x-airbyte-stream-name': 'sponsored_product_ads',
                 'x-airbyte-ai-hints': {
                     'summary': 'Product ads that associate products with ad groups in Sponsored Products campaigns',
                     'when_to_use': 'Questions about which products are being advertised, product ad status, or ASIN-level ad data',
@@ -1892,6 +1913,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_product_targets',
+            stream_name='sponsored_product_targetings',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2028,6 +2050,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_product_targets',
+                                    'x-airbyte-stream-name': 'sponsored_product_targetings',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Targeting clauses for product and category targeting in Sponsored Products campaigns',
                                         'when_to_use': 'Questions about targeting settings, product targeting, category targeting, or targeting bids',
@@ -2138,6 +2161,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_product_targets',
+                'x-airbyte-stream-name': 'sponsored_product_targetings',
                 'x-airbyte-ai-hints': {
                     'summary': 'Targeting clauses for product and category targeting in Sponsored Products campaigns',
                     'when_to_use': 'Questions about targeting settings, product targeting, category targeting, or targeting bids',
@@ -2170,6 +2194,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_product_negative_keywords',
+            stream_name='sponsored_product_negative_keywords',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2278,6 +2303,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_product_negative_keywords',
+                                    'x-airbyte-stream-name': 'sponsored_product_negative_keywords',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Negative keywords that prevent ads from showing for specific search terms in Sponsored Products',
                                         'when_to_use': 'Questions about negative keywords, excluded search terms, or keyword exclusions',
@@ -2359,6 +2385,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_product_negative_keywords',
+                'x-airbyte-stream-name': 'sponsored_product_negative_keywords',
                 'x-airbyte-ai-hints': {
                     'summary': 'Negative keywords that prevent ads from showing for specific search terms in Sponsored Products',
                     'when_to_use': 'Questions about negative keywords, excluded search terms, or keyword exclusions',
@@ -2659,6 +2686,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_brands_campaigns',
+            stream_name='sponsored_brands_campaigns',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2793,6 +2821,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_brands_campaigns',
+                                    'x-airbyte-stream-name': 'sponsored_brands_campaigns',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Sponsored Brands campaigns that promote brand awareness with custom creative ad experiences',
                                         'when_to_use': 'Questions about Sponsored Brands campaigns, brand advertising, brand campaign budgets, or SB campaign status',
@@ -2900,6 +2929,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_brands_campaigns',
+                'x-airbyte-stream-name': 'sponsored_brands_campaigns',
                 'x-airbyte-ai-hints': {
                     'summary': 'Sponsored Brands campaigns that promote brand awareness with custom creative ad experiences',
                     'when_to_use': 'Questions about Sponsored Brands campaigns, brand advertising, brand campaign budgets, or SB campaign status',
@@ -2930,6 +2960,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='sponsored_brands_ad_groups',
+            stream_name='sponsored_brands_ad_groups',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3025,6 +3056,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sponsored_brands_ad_groups',
+                                    'x-airbyte-stream-name': 'sponsored_brands_ad_groups',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Ad groups within Sponsored Brands campaigns that organize ads and targeting',
                                         'when_to_use': 'Questions about Sponsored Brands ad groups, SB ad group bids, or SB ad organization',
@@ -3088,6 +3120,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sponsored_brands_ad_groups',
+                'x-airbyte-stream-name': 'sponsored_brands_ad_groups',
                 'x-airbyte-ai-hints': {
                     'summary': 'Ad groups within Sponsored Brands campaigns that organize ads and targeting',
                     'when_to_use': 'Questions about Sponsored Brands ad groups, SB ad group bids, or SB ad organization',

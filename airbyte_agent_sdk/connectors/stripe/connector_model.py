@@ -52,6 +52,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='customers',
+            stream_name='customers',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -980,6 +981,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                                             },
                                                         },
                                                         'x-airbyte-entity-name': 'subscriptions',
+                                                        'x-airbyte-stream-name': 'subscriptions',
                                                     },
                                                 },
                                                 'has_more': {'type': 'boolean', 'description': 'True if this list has another page of items after this one'},
@@ -996,6 +998,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'customers',
+                                    'x-airbyte-stream-name': 'customers',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -1931,6 +1934,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                             },
                                             'x-airbyte-entity-name': 'subscriptions',
+                                            'x-airbyte-stream-name': 'subscriptions',
                                         },
                                     },
                                     'has_more': {'type': 'boolean', 'description': 'True if this list has another page of items after this one'},
@@ -1947,6 +1951,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'customers',
+                        'x-airbyte-stream-name': 'customers',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -2843,6 +2848,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                             },
                                             'x-airbyte-entity-name': 'subscriptions',
+                                            'x-airbyte-stream-name': 'subscriptions',
                                         },
                                     },
                                     'has_more': {'type': 'boolean', 'description': 'True if this list has another page of items after this one'},
@@ -2859,6 +2865,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'customers',
+                        'x-airbyte-stream-name': 'customers',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -3790,6 +3797,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                                 },
                                             },
                                             'x-airbyte-entity-name': 'subscriptions',
+                                            'x-airbyte-stream-name': 'subscriptions',
                                         },
                                     },
                                     'has_more': {'type': 'boolean', 'description': 'True if this list has another page of items after this one'},
@@ -3806,6 +3814,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'customers',
+                        'x-airbyte-stream-name': 'customers',
                     },
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -4740,6 +4749,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                                             },
                                                         },
                                                         'x-airbyte-entity-name': 'subscriptions',
+                                                        'x-airbyte-stream-name': 'subscriptions',
                                                     },
                                                 },
                                                 'has_more': {'type': 'boolean', 'description': 'True if this list has another page of items after this one'},
@@ -4756,6 +4766,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'customers',
+                                    'x-airbyte-stream-name': 'customers',
                                 },
                             },
                             'has_more': {'type': 'boolean', 'description': 'Whether there are more results available'},
@@ -5150,10 +5161,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'customers',
+                'x-airbyte-stream-name': 'customers',
             },
         ),
         EntityDefinition(
             name='invoices',
+            stream_name='invoices',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -6279,6 +6292,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'invoices',
+                                    'x-airbyte-stream-name': 'invoices',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -7394,6 +7408,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'invoices',
+                        'x-airbyte-stream-name': 'invoices',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -8467,6 +8482,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'invoices',
+                        'x-airbyte-stream-name': 'invoices',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -9556,6 +9572,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'invoices',
+                                    'x-airbyte-stream-name': 'invoices',
                                 },
                             },
                             'has_more': {'type': 'boolean', 'description': 'Whether there are more results available'},
@@ -10630,6 +10647,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'invoices',
+                'x-airbyte-stream-name': 'invoices',
             },
         ),
         EntityDefinition(
@@ -11715,6 +11733,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'invoices',
+                        'x-airbyte-stream-name': 'invoices',
                     },
                 ),
             },
@@ -12796,12 +12815,14 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'invoices',
+                        'x-airbyte-stream-name': 'invoices',
                     },
                 ),
             },
         ),
         EntityDefinition(
             name='charges',
+            stream_name='charges',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -13214,6 +13235,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'charges',
+                                    'x-airbyte-stream-name': 'charges',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -13606,6 +13628,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'charges',
+                        'x-airbyte-stream-name': 'charges',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -14007,6 +14030,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'charges',
+                                    'x-airbyte-stream-name': 'charges',
                                 },
                             },
                             'has_more': {'type': 'boolean', 'description': 'Whether there are more results available'},
@@ -14393,10 +14417,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'charges',
+                'x-airbyte-stream-name': 'charges',
             },
         ),
         EntityDefinition(
             name='subscriptions',
+            stream_name='subscriptions',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -14988,6 +15014,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'subscriptions',
+                                    'x-airbyte-stream-name': 'subscriptions',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -15570,6 +15597,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'subscriptions',
+                        'x-airbyte-stream-name': 'subscriptions',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -16102,6 +16130,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'subscriptions',
+                        'x-airbyte-stream-name': 'subscriptions',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -16682,6 +16711,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'subscriptions',
+                        'x-airbyte-stream-name': 'subscriptions',
                     },
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -17214,6 +17244,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'subscriptions',
+                        'x-airbyte-stream-name': 'subscriptions',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -17762,6 +17793,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'subscriptions',
+                                    'x-airbyte-stream-name': 'subscriptions',
                                 },
                             },
                             'has_more': {'type': 'boolean', 'description': 'Whether there are more results available'},
@@ -18295,10 +18327,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'subscriptions',
+                'x-airbyte-stream-name': 'subscriptions',
             },
         ),
         EntityDefinition(
             name='refunds',
+            stream_name='refunds',
             actions=[Action.LIST, Action.CREATE, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -18770,6 +18804,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'refunds',
+                                    'x-airbyte-stream-name': 'refunds',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -19246,6 +19281,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'refunds',
+                        'x-airbyte-stream-name': 'refunds',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -19689,6 +19725,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'refunds',
+                        'x-airbyte-stream-name': 'refunds',
                     },
                 ),
             },
@@ -20124,10 +20161,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'refunds',
+                'x-airbyte-stream-name': 'refunds',
             },
         ),
         EntityDefinition(
             name='products',
+            stream_name='products',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -20278,6 +20317,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'products',
+                                    'x-airbyte-stream-name': 'products',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -20450,6 +20490,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'products',
+                        'x-airbyte-stream-name': 'products',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -20558,6 +20599,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'products',
+                        'x-airbyte-stream-name': 'products',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -20726,6 +20768,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'products',
+                        'x-airbyte-stream-name': 'products',
                     },
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -20872,6 +20915,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'products',
+                                    'x-airbyte-stream-name': 'products',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -20983,6 +21027,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'products',
+                'x-airbyte-stream-name': 'products',
             },
         ),
         EntityDefinition(
@@ -21511,6 +21556,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='balance_transactions',
+            stream_name='balance_transactions',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -21614,6 +21660,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         'type': {'type': 'string', 'description': 'Transaction type'},
                                     },
                                     'x-airbyte-entity-name': 'balance_transactions',
+                                    'x-airbyte-stream-name': 'balance_transactions',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -21693,6 +21740,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'type': {'type': 'string', 'description': 'Transaction type'},
                         },
                         'x-airbyte-entity-name': 'balance_transactions',
+                        'x-airbyte-stream-name': 'balance_transactions',
                     },
                 ),
             },
@@ -21757,10 +21805,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     'type': {'type': 'string', 'description': 'Transaction type'},
                 },
                 'x-airbyte-entity-name': 'balance_transactions',
+                'x-airbyte-stream-name': 'balance_transactions',
             },
         ),
         EntityDefinition(
             name='payment_intents',
+            stream_name='payment_intents',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -21867,6 +21917,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                                     },
                                     'x-airbyte-entity-name': 'payment_intents',
+                                    'x-airbyte-stream-name': 'payment_intents',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -21989,6 +22040,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                         },
                         'x-airbyte-entity-name': 'payment_intents',
+                        'x-airbyte-stream-name': 'payment_intents',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -22062,6 +22114,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                         },
                         'x-airbyte-entity-name': 'payment_intents',
+                        'x-airbyte-stream-name': 'payment_intents',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -22165,6 +22218,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                         },
                         'x-airbyte-entity-name': 'payment_intents',
+                        'x-airbyte-stream-name': 'payment_intents',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -22254,6 +22308,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                                     },
                                     'x-airbyte-entity-name': 'payment_intents',
+                                    'x-airbyte-stream-name': 'payment_intents',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -22330,6 +22385,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                 },
                 'x-airbyte-entity-name': 'payment_intents',
+                'x-airbyte-stream-name': 'payment_intents',
             },
         ),
         EntityDefinition(
@@ -22417,6 +22473,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                         },
                         'x-airbyte-entity-name': 'payment_intents',
+                        'x-airbyte-stream-name': 'payment_intents',
                     },
                 ),
             },
@@ -22513,12 +22570,14 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'status': {'type': 'string', 'description': 'Status of this PaymentIntent'},
                         },
                         'x-airbyte-entity-name': 'payment_intents',
+                        'x-airbyte-stream-name': 'payment_intents',
                     },
                 ),
             },
         ),
         EntityDefinition(
             name='prices',
+            stream_name='prices',
             actions=[Action.CREATE],
             endpoints={
                 Action.CREATE: EndpointDefinition(
@@ -22678,6 +22737,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'prices',
+                        'x-airbyte-stream-name': 'prices',
                     },
                 ),
             },
@@ -22771,10 +22831,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'prices',
+                'x-airbyte-stream-name': 'prices',
             },
         ),
         EntityDefinition(
             name='checkout_sessions',
+            stream_name='checkout_sessions',
             actions=[Action.CREATE],
             endpoints={
                 Action.CREATE: EndpointDefinition(
@@ -22890,6 +22952,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'checkout_sessions',
+                        'x-airbyte-stream-name': 'checkout_sessions',
                     },
                 ),
             },
@@ -22958,6 +23021,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'checkout_sessions',
+                'x-airbyte-stream-name': 'checkout_sessions',
             },
         ),
         EntityDefinition(
@@ -23181,6 +23245,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='disputes',
+            stream_name='disputes',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -23280,6 +23345,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         'status': {'type': 'string', 'description': 'Current status of dispute'},
                                     },
                                     'x-airbyte-entity-name': 'disputes',
+                                    'x-airbyte-stream-name': 'disputes',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -23359,6 +23425,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'status': {'type': 'string', 'description': 'Current status of dispute'},
                         },
                         'x-airbyte-entity-name': 'disputes',
+                        'x-airbyte-stream-name': 'disputes',
                     },
                 ),
             },
@@ -23423,10 +23490,12 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     'status': {'type': 'string', 'description': 'Current status of dispute'},
                 },
                 'x-airbyte-entity-name': 'disputes',
+                'x-airbyte-stream-name': 'disputes',
             },
         ),
         EntityDefinition(
             name='payouts',
+            stream_name='payouts',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -23570,6 +23639,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                                         'type': {'type': 'string', 'description': 'The type of the payout'},
                                     },
                                     'x-airbyte-entity-name': 'payouts',
+                                    'x-airbyte-stream-name': 'payouts',
                                 },
                             },
                             'has_more': {'type': 'boolean'},
@@ -23682,6 +23752,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                             'type': {'type': 'string', 'description': 'The type of the payout'},
                         },
                         'x-airbyte-entity-name': 'payouts',
+                        'x-airbyte-stream-name': 'payouts',
                     },
                 ),
             },
@@ -23779,6 +23850,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                     'type': {'type': 'string', 'description': 'The type of the payout'},
                 },
                 'x-airbyte-entity-name': 'payouts',
+                'x-airbyte-stream-name': 'payouts',
             },
         ),
     ],

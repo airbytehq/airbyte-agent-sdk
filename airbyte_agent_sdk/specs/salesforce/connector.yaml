@@ -2535,6 +2535,7 @@ components:
     Account:
       type: object
       x-airbyte-entity-name: accounts
+      x-airbyte-stream-name: Account
       description: Salesforce Account object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2576,6 +2577,7 @@ components:
     Contact:
       type: object
       x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: Contact
       description: Salesforce Contact object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2612,6 +2614,7 @@ components:
     Lead:
       type: object
       x-airbyte-entity-name: leads
+      x-airbyte-stream-name: Lead
       description: Salesforce Lead object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2648,6 +2651,7 @@ components:
     Opportunity:
       type: object
       x-airbyte-entity-name: opportunities
+      x-airbyte-stream-name: Opportunity
       description: Salesforce Opportunity object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2684,6 +2688,7 @@ components:
     Task:
       type: object
       x-airbyte-entity-name: tasks
+      x-airbyte-stream-name: Task
       description: Salesforce Task object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2720,6 +2725,7 @@ components:
     Event:
       type: object
       x-airbyte-entity-name: events
+      x-airbyte-stream-name: Event
       description: Salesforce Event object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2756,6 +2762,7 @@ components:
     Campaign:
       type: object
       x-airbyte-entity-name: campaigns
+      x-airbyte-stream-name: Campaign
       description: Salesforce Campaign object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2792,6 +2799,7 @@ components:
     Case:
       type: object
       x-airbyte-entity-name: cases
+      x-airbyte-stream-name: Case
       description: Salesforce Case object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2830,6 +2838,7 @@ components:
     Note:
       type: object
       x-airbyte-entity-name: notes
+      x-airbyte-stream-name: Note
       description: Salesforce Note object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2866,6 +2875,7 @@ components:
     ContentVersion:
       type: object
       x-airbyte-entity-name: content_versions
+      x-airbyte-stream-name: ContentVersion
       description: Salesforce ContentVersion object - represents a file version in Salesforce Files
       additionalProperties: true
       properties:
@@ -2919,6 +2929,7 @@ components:
     Attachment:
       type: object
       x-airbyte-entity-name: attachments
+      x-airbyte-stream-name: Attachment
       description: Salesforce Attachment object - legacy file attachment on a record
       additionalProperties: true
       properties:
@@ -2966,6 +2977,7 @@ components:
     Report:
       type: object
       x-airbyte-entity-name: reports
+      x-airbyte-stream-name: Report
       description: Salesforce Report metadata from the Analytics API
       additionalProperties: true
       properties:

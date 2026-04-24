@@ -208,6 +208,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='accounts',
+            stream_name='Account',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -251,6 +252,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'accounts',
+                                    'x-airbyte-stream-name': 'Account',
                                 },
                             },
                         },
@@ -287,6 +289,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'accounts',
+                        'x-airbyte-stream-name': 'Account',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -343,10 +346,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'accounts',
+                'x-airbyte-stream-name': 'Account',
             },
         ),
         EntityDefinition(
             name='contacts',
+            stream_name='Contact',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -390,6 +395,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'Contact',
                                 },
                             },
                         },
@@ -426,6 +432,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'contacts',
+                        'x-airbyte-stream-name': 'Contact',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -482,10 +489,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'contacts',
+                'x-airbyte-stream-name': 'Contact',
             },
         ),
         EntityDefinition(
             name='leads',
+            stream_name='Lead',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -529,6 +538,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'leads',
+                                    'x-airbyte-stream-name': 'Lead',
                                 },
                             },
                         },
@@ -565,6 +575,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'leads',
+                        'x-airbyte-stream-name': 'Lead',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -621,10 +632,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'leads',
+                'x-airbyte-stream-name': 'Lead',
             },
         ),
         EntityDefinition(
             name='opportunities',
+            stream_name='Opportunity',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -668,6 +681,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'opportunities',
+                                    'x-airbyte-stream-name': 'Opportunity',
                                 },
                             },
                         },
@@ -704,6 +718,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'opportunities',
+                        'x-airbyte-stream-name': 'Opportunity',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -760,10 +775,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'opportunities',
+                'x-airbyte-stream-name': 'Opportunity',
             },
         ),
         EntityDefinition(
             name='tasks',
+            stream_name='Task',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -807,6 +824,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'Task',
                                 },
                             },
                         },
@@ -843,6 +861,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'tasks',
+                        'x-airbyte-stream-name': 'Task',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -899,10 +918,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'tasks',
+                'x-airbyte-stream-name': 'Task',
             },
         ),
         EntityDefinition(
             name='events',
+            stream_name='Event',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -946,6 +967,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'events',
+                                    'x-airbyte-stream-name': 'Event',
                                 },
                             },
                         },
@@ -982,6 +1004,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'events',
+                        'x-airbyte-stream-name': 'Event',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -1038,10 +1061,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'events',
+                'x-airbyte-stream-name': 'Event',
             },
         ),
         EntityDefinition(
             name='campaigns',
+            stream_name='Campaign',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1085,6 +1110,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'campaigns',
+                                    'x-airbyte-stream-name': 'Campaign',
                                 },
                             },
                         },
@@ -1121,6 +1147,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'campaigns',
+                        'x-airbyte-stream-name': 'Campaign',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -1177,10 +1204,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'campaigns',
+                'x-airbyte-stream-name': 'Campaign',
             },
         ),
         EntityDefinition(
             name='cases',
+            stream_name='Case',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1225,6 +1254,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'cases',
+                                    'x-airbyte-stream-name': 'Case',
                                 },
                             },
                         },
@@ -1262,6 +1292,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'cases',
+                        'x-airbyte-stream-name': 'Case',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -1319,10 +1350,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'cases',
+                'x-airbyte-stream-name': 'Case',
             },
         ),
         EntityDefinition(
             name='notes',
+            stream_name='Note',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1366,6 +1399,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'notes',
+                                    'x-airbyte-stream-name': 'Note',
                                 },
                             },
                         },
@@ -1402,6 +1436,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'notes',
+                        'x-airbyte-stream-name': 'Note',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -1458,10 +1493,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'notes',
+                'x-airbyte-stream-name': 'Note',
             },
         ),
         EntityDefinition(
             name='content_versions',
+            stream_name='ContentVersion',
             actions=[Action.LIST, Action.GET, Action.DOWNLOAD],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1510,6 +1547,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'content_versions',
+                                    'x-airbyte-stream-name': 'ContentVersion',
                                 },
                             },
                         },
@@ -1551,6 +1589,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'content_versions',
+                        'x-airbyte-stream-name': 'ContentVersion',
                     },
                 ),
                 Action.DOWNLOAD: EndpointDefinition(
@@ -1585,10 +1624,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'content_versions',
+                'x-airbyte-stream-name': 'ContentVersion',
             },
         ),
         EntityDefinition(
             name='attachments',
+            stream_name='Attachment',
             actions=[Action.LIST, Action.GET, Action.DOWNLOAD],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1635,6 +1676,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'attachments',
+                                    'x-airbyte-stream-name': 'Attachment',
                                 },
                             },
                         },
@@ -1674,6 +1716,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'attachments',
+                        'x-airbyte-stream-name': 'Attachment',
                     },
                 ),
                 Action.DOWNLOAD: EndpointDefinition(
@@ -1706,10 +1749,12 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'attachments',
+                'x-airbyte-stream-name': 'Attachment',
             },
         ),
         EntityDefinition(
             name='reports',
+            stream_name='Report',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1743,6 +1788,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'additionalProperties': True,
                             'x-airbyte-entity-name': 'reports',
+                            'x-airbyte-stream-name': 'Report',
                         },
                     },
                     no_pagination='Salesforce Analytics /analytics/reports returns the full list of report metadata in a single response; the Analytics Reports listing endpoint does not expose pagination parameters.',
@@ -1835,6 +1881,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'reports',
+                'x-airbyte-stream-name': 'Report',
             },
         ),
         EntityDefinition(
