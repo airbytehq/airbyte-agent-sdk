@@ -138,12 +138,6 @@ class ListsList(BaseModel):
     data: Union[list[List], Any] = Field(default=None)
     links: Union[ListsListLinks | None, Any] = Field(default=None)
 
-class CampaignLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class CampaignAttributes(BaseModel):
     """Campaign attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -171,6 +165,12 @@ class CampaignAttributes(BaseModel):
     send_time: Union[str | None, Any] = Field(default=None, description="Actual send time")
     """Actual send time"""
 
+class CampaignLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: Union[str | None, Any] = Field(default=None)
+
 class Campaign(BaseModel):
     """A Klaviyo campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -195,12 +195,6 @@ class CampaignsList(BaseModel):
     data: Union[list[Campaign], Any] = Field(default=None)
     links: Union[CampaignsListLinks | None, Any] = Field(default=None)
 
-class EventLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: Union[str | None, Any] = Field(default=None)
-
 class EventAttributes(BaseModel):
     """Event attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -214,18 +208,11 @@ class EventAttributes(BaseModel):
     event_properties: Union[dict[str, Any] | None, Any] = Field(default=None, description="Custom event properties")
     """Custom event properties"""
 
-class EventRelationshipsMetricData(BaseModel):
-    """Nested schema for EventRelationshipsMetric.data"""
+class EventLinks(BaseModel):
+    """Related links"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    id: Union[str | None, Any] = Field(default=None)
-
-class EventRelationshipsMetric(BaseModel):
-    """Nested schema for EventRelationships.metric"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: Union[EventRelationshipsMetricData | None, Any] = Field(default=None)
+    self: Union[str | None, Any] = Field(default=None)
 
 class EventRelationshipsProfileData(BaseModel):
     """Nested schema for EventRelationshipsProfile.data"""
@@ -239,6 +226,19 @@ class EventRelationshipsProfile(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     data: Union[EventRelationshipsProfileData | None, Any] = Field(default=None)
+
+class EventRelationshipsMetricData(BaseModel):
+    """Nested schema for EventRelationshipsMetric.data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    id: Union[str | None, Any] = Field(default=None)
+
+class EventRelationshipsMetric(BaseModel):
+    """Nested schema for EventRelationships.metric"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: Union[EventRelationshipsMetricData | None, Any] = Field(default=None)
 
 class EventRelationships(BaseModel):
     """Related resources"""

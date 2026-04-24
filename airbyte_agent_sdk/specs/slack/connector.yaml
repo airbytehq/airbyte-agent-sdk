@@ -61,9 +61,11 @@ info:
       - "Unarchive a channel"
   x-airbyte-auth-tooltip:
     "API Token Credentials": |
-      Bot tokens only expose the entities we've mapped into the Context Store.
-      Your token itself may have access to additional Slack data that isn't
-      shown here.
+      Bot tokens always start with `xoxb-`. Slack supports multiple token types, but we require bot tokens. Do not use other token types.
+
+      The list of entities might be different depending on how you authenticate.
+    "Default OAuth2.0 authorization": |
+      The list of entities might be different depending on how you authenticate.
   x-airbyte-skip-suggested-streams:
     - channel_members
   x-airbyte-external-documentation-urls:

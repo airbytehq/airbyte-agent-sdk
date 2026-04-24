@@ -289,14 +289,14 @@ class TimeEntryUser(BaseModel):
     name: Union[str | None, Any] = Field(default=None, description="User name")
     """User name"""
 
-class TimeEntryTask(BaseModel):
-    """The task associated with the time entry"""
+class TimeEntryInvoice(BaseModel):
+    """The invoice associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: Union[int | None, Any] = Field(default=None, description="Task ID")
-    """Task ID"""
-    name: Union[str | None, Any] = Field(default=None, description="Task name")
-    """Task name"""
+    id: Union[int | None, Any] = Field(default=None, description="Invoice ID")
+    """Invoice ID"""
+    number: Union[str | None, Any] = Field(default=None, description="Invoice number")
+    """Invoice number"""
 
 class TimeEntryProject(BaseModel):
     """The project associated with the time entry"""
@@ -307,14 +307,14 @@ class TimeEntryProject(BaseModel):
     name: Union[str | None, Any] = Field(default=None, description="Project name")
     """Project name"""
 
-class TimeEntryInvoice(BaseModel):
-    """The invoice associated with the time entry"""
+class TimeEntryTask(BaseModel):
+    """The task associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: Union[int | None, Any] = Field(default=None, description="Invoice ID")
-    """Invoice ID"""
-    number: Union[str | None, Any] = Field(default=None, description="Invoice number")
-    """Invoice number"""
+    id: Union[int | None, Any] = Field(default=None, description="Task ID")
+    """Task ID"""
+    name: Union[str | None, Any] = Field(default=None, description="Task name")
+    """Task name"""
 
 class TimeEntry(BaseModel):
     """A Harvest time entry"""
