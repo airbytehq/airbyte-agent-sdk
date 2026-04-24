@@ -152,6 +152,21 @@ class BlogPostBody(BaseModel):
     atlas_doc_format: Union[dict[str, Any], Any] = Field(default=None, description="Atlas doc format body")
     """Atlas doc format body"""
 
+class BlogPostLinks(BaseModel):
+    """Links related to the blog post"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    webui: Union[str, Any] = Field(default=None, description="Web UI link")
+    """Web UI link"""
+    editui: Union[str, Any] = Field(default=None, description="Edit UI link")
+    """Edit UI link"""
+    edituiv2: Union[str, Any] = Field(default=None, description="Edit UI v2 link")
+    """Edit UI v2 link"""
+    tinyui: Union[str, Any] = Field(default=None, description="Tiny UI link")
+    """Tiny UI link"""
+    base: Union[str, Any] = Field(default=None, description="Base URL")
+    """Base URL"""
+
 class BlogPostVersion(BaseModel):
     """Version information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -168,21 +183,6 @@ class BlogPostVersion(BaseModel):
     """ID of the version author"""
     ncs_step_version: Union[Any, Any] = Field(default=None, alias="ncsStepVersion", description="NCS step version")
     """NCS step version"""
-
-class BlogPostLinks(BaseModel):
-    """Links related to the blog post"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    webui: Union[str, Any] = Field(default=None, description="Web UI link")
-    """Web UI link"""
-    editui: Union[str, Any] = Field(default=None, description="Edit UI link")
-    """Edit UI link"""
-    edituiv2: Union[str, Any] = Field(default=None, description="Edit UI v2 link")
-    """Edit UI v2 link"""
-    tinyui: Union[str, Any] = Field(default=None, description="Tiny UI link")
-    """Tiny UI link"""
-    base: Union[str, Any] = Field(default=None, description="Base URL")
-    """Base URL"""
 
 class BlogPost(BaseModel):
     """Confluence blog post object"""
@@ -252,15 +252,6 @@ class GroupsList(BaseModel):
     size: Union[int, Any] = Field(default=None)
     links: Union[GroupsListLinks, Any] = Field(default=None, alias="_links")
 
-class AuditRecordAffectedobject(BaseModel):
-    """Object affected by the audit event"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: Union[str, Any] = Field(default=None, description="Name of the affected object")
-    """Name of the affected object"""
-    object_type: Union[str, Any] = Field(default=None, alias="objectType", description="Type of the affected object")
-    """Type of the affected object"""
-
 class AuditRecordAuthor(BaseModel):
     """User who triggered the audit event"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -279,6 +270,15 @@ class AuditRecordAuthor(BaseModel):
     """Whether the author is an external collaborator"""
     operations: Union[Any, Any] = Field(default=None, description="Operations available for the author")
     """Operations available for the author"""
+
+class AuditRecordAffectedobject(BaseModel):
+    """Object affected by the audit event"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: Union[str, Any] = Field(default=None, description="Name of the affected object")
+    """Name of the affected object"""
+    object_type: Union[str, Any] = Field(default=None, alias="objectType", description="Type of the affected object")
+    """Type of the affected object"""
 
 class AuditRecordAssociatedobjectsItem(BaseModel):
     """Nested schema for AuditRecord.associatedObjects_item"""

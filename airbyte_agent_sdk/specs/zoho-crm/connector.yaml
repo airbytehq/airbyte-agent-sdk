@@ -1877,6 +1877,7 @@ components:
     Lead:
       type: object
       x-airbyte-entity-name: leads
+      x-airbyte-stream-name: incremental_leads_zoho_crm_stream
       description: Zoho CRM lead object
       required:
         - id
@@ -1992,6 +1993,7 @@ components:
     Contact:
       type: object
       x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: incremental_contacts_zoho_crm_stream
       description: Zoho CRM contact object
       required:
         - id
@@ -2109,6 +2111,7 @@ components:
     Account:
       type: object
       x-airbyte-entity-name: accounts
+      x-airbyte-stream-name: incremental_accounts_zoho_crm_stream
       description: Zoho CRM account (company) object
       required:
         - id
@@ -2231,6 +2234,7 @@ components:
     Deal:
       type: object
       x-airbyte-entity-name: deals
+      x-airbyte-stream-name: incremental_deals_zoho_crm_stream
       description: Zoho CRM deal (opportunity) object
       required:
         - id
@@ -2325,6 +2329,7 @@ components:
     Campaign:
       type: object
       x-airbyte-entity-name: campaigns
+      x-airbyte-stream-name: incremental_campaigns_zoho_crm_stream
       description: Zoho CRM campaign object
       required:
         - id
@@ -2406,6 +2411,7 @@ components:
     Task:
       type: object
       x-airbyte-entity-name: tasks
+      x-airbyte-stream-name: incremental_tasks_zoho_crm_stream
       description: Zoho CRM task object
       required:
         - id
@@ -2489,6 +2495,7 @@ components:
     Event:
       type: object
       x-airbyte-entity-name: events
+      x-airbyte-stream-name: incremental_events_zoho_crm_stream
       description: Zoho CRM event (meeting/calendar) object
       required:
         - id
@@ -2587,6 +2594,7 @@ components:
     Call:
       type: object
       x-airbyte-entity-name: calls
+      x-airbyte-stream-name: incremental_calls_zoho_crm_stream
       description: Zoho CRM call object
       required:
         - id
@@ -2672,6 +2680,7 @@ components:
     Product:
       type: object
       x-airbyte-entity-name: products
+      x-airbyte-stream-name: incremental_products_zoho_crm_stream
       description: Zoho CRM product object
       required:
         - id
@@ -2783,6 +2792,7 @@ components:
     Quote:
       type: object
       x-airbyte-entity-name: quotes
+      x-airbyte-stream-name: incremental_quotes_zoho_crm_stream
       description: Zoho CRM quote object
       required:
         - id
@@ -2905,6 +2915,7 @@ components:
     Invoice:
       type: object
       x-airbyte-entity-name: invoices
+      x-airbyte-stream-name: incremental_invoices_zoho_crm_stream
       description: Zoho CRM invoice object
       required:
         - id

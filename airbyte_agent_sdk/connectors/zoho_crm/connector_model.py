@@ -76,6 +76,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='leads',
+            stream_name='incremental_leads_zoho_crm_stream',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -279,6 +280,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'leads',
+                                    'x-airbyte-stream-name': 'incremental_leads_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -577,6 +579,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'leads',
+                                    'x-airbyte-stream-name': 'incremental_leads_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -838,10 +841,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'leads',
+                'x-airbyte-stream-name': 'incremental_leads_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='contacts',
+            stream_name='incremental_contacts_zoho_crm_stream',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -1055,6 +1060,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'incremental_contacts_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -1361,6 +1367,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'incremental_contacts_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -1624,10 +1631,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'contacts',
+                'x-airbyte-stream-name': 'incremental_contacts_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='accounts',
+            stream_name='incremental_accounts_zoho_crm_stream',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -1848,6 +1857,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'accounts',
+                                    'x-airbyte-stream-name': 'incremental_accounts_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -2163,6 +2173,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'accounts',
+                                    'x-airbyte-stream-name': 'incremental_accounts_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -2435,10 +2446,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'accounts',
+                'x-airbyte-stream-name': 'incremental_accounts_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='deals',
+            stream_name='incremental_deals_zoho_crm_stream',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -2634,6 +2647,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'deals',
+                                    'x-airbyte-stream-name': 'incremental_deals_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -2916,6 +2930,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'deals',
+                                    'x-airbyte-stream-name': 'incremental_deals_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -3141,10 +3156,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'deals',
+                'x-airbyte-stream-name': 'incremental_deals_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='campaigns',
+            stream_name='incremental_campaigns_zoho_crm_stream',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3297,6 +3314,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'campaigns',
+                                    'x-airbyte-stream-name': 'incremental_campaigns_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -3441,6 +3459,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'campaigns',
+                                    'x-airbyte-stream-name': 'incremental_campaigns_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -3546,10 +3565,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'campaigns',
+                'x-airbyte-stream-name': 'incremental_campaigns_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='tasks',
+            stream_name='incremental_tasks_zoho_crm_stream',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -3725,6 +3746,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'incremental_tasks_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -3984,6 +4006,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'incremental_tasks_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -4193,10 +4216,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'tasks',
+                'x-airbyte-stream-name': 'incremental_tasks_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='events',
+            stream_name='incremental_events_zoho_crm_stream',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4378,6 +4403,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'events',
+                                    'x-airbyte-stream-name': 'incremental_events_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -4551,6 +4577,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'events',
+                                    'x-airbyte-stream-name': 'incremental_events_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -4671,10 +4698,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'events',
+                'x-airbyte-stream-name': 'incremental_events_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='calls',
+            stream_name='incremental_calls_zoho_crm_stream',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4848,6 +4877,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'calls',
+                                    'x-airbyte-stream-name': 'incremental_calls_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -5013,6 +5043,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'calls',
+                                    'x-airbyte-stream-name': 'incremental_calls_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -5125,10 +5156,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'calls',
+                'x-airbyte-stream-name': 'incremental_calls_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='products',
+            stream_name='incremental_products_zoho_crm_stream',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5334,6 +5367,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'products',
+                                    'x-airbyte-stream-name': 'incremental_products_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -5531,6 +5565,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'products',
+                                    'x-airbyte-stream-name': 'incremental_products_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -5675,10 +5710,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'products',
+                'x-airbyte-stream-name': 'incremental_products_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='quotes',
+            stream_name='incremental_quotes_zoho_crm_stream',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5909,6 +5946,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'quotes',
+                                    'x-airbyte-stream-name': 'incremental_quotes_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -6131,6 +6169,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'quotes',
+                                    'x-airbyte-stream-name': 'incremental_quotes_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -6293,10 +6332,12 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'quotes',
+                'x-airbyte-stream-name': 'incremental_quotes_zoho_crm_stream',
             },
         ),
         EntityDefinition(
             name='invoices',
+            stream_name='incremental_invoices_zoho_crm_stream',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -6553,6 +6594,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'invoices',
+                                    'x-airbyte-stream-name': 'incremental_invoices_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -6801,6 +6843,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'invoices',
+                                    'x-airbyte-stream-name': 'incremental_invoices_zoho_crm_stream',
                                 },
                             },
                             'info': {
@@ -6982,6 +7025,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'invoices',
+                'x-airbyte-stream-name': 'incremental_invoices_zoho_crm_stream',
             },
         ),
     ],
