@@ -73,6 +73,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='organizations',
+            stream_name='organizations',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -132,6 +133,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'organizations',
+                                            'x-airbyte-stream-name': 'organizations',
                                         },
                                     },
                                 },
@@ -209,6 +211,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'organizations',
+                                            'x-airbyte-stream-name': 'organizations',
                                         },
                                     },
                                 },
@@ -259,10 +262,12 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'organizations',
+                'x-airbyte-stream-name': 'organizations',
             },
         ),
         EntityDefinition(
             name='adaccounts',
+            stream_name='adaccounts',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -317,6 +322,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'adaccounts',
+                                            'x-airbyte-stream-name': 'adaccounts',
                                         },
                                     },
                                 },
@@ -384,6 +390,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'adaccounts',
+                                            'x-airbyte-stream-name': 'adaccounts',
                                         },
                                     },
                                 },
@@ -425,6 +432,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'adaccounts',
+                'x-airbyte-stream-name': 'adaccounts',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -437,6 +445,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='campaigns',
+            stream_name='campaigns',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -489,6 +498,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'campaigns',
+                                            'x-airbyte-stream-name': 'campaigns',
                                         },
                                     },
                                 },
@@ -554,6 +564,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'campaigns',
+                                            'x-airbyte-stream-name': 'campaigns',
                                         },
                                     },
                                 },
@@ -593,6 +604,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'campaigns',
+                'x-airbyte-stream-name': 'campaigns',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -605,6 +617,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='adsquads',
+            stream_name='adsquads',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -713,6 +726,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'adsquads',
+                                            'x-airbyte-stream-name': 'adsquads',
                                         },
                                     },
                                 },
@@ -834,6 +848,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'adsquads',
+                                            'x-airbyte-stream-name': 'adsquads',
                                         },
                                     },
                                 },
@@ -929,6 +944,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'adsquads',
+                'x-airbyte-stream-name': 'adsquads',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -941,6 +957,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='ads',
+            stream_name='ads',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -989,6 +1006,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'ads',
+                                            'x-airbyte-stream-name': 'ads',
                                         },
                                     },
                                 },
@@ -1050,6 +1068,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'ads',
+                                            'x-airbyte-stream-name': 'ads',
                                         },
                                     },
                                 },
@@ -1085,6 +1104,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'ads',
+                'x-airbyte-stream-name': 'ads',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1097,6 +1117,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='creatives',
+            stream_name='creatives',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1164,6 +1185,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'creatives',
+                                            'x-airbyte-stream-name': 'creatives',
                                         },
                                     },
                                 },
@@ -1244,6 +1266,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'creatives',
+                                            'x-airbyte-stream-name': 'creatives',
                                         },
                                     },
                                 },
@@ -1298,6 +1321,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'creatives',
+                'x-airbyte-stream-name': 'creatives',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1310,6 +1334,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='media',
+            stream_name='media',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1367,6 +1392,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'media',
+                                            'x-airbyte-stream-name': 'media',
                                         },
                                     },
                                 },
@@ -1437,6 +1463,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'media',
+                                            'x-airbyte-stream-name': 'media',
                                         },
                                     },
                                 },
@@ -1481,6 +1508,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'media',
+                'x-airbyte-stream-name': 'media',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1493,6 +1521,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='segments',
+            stream_name='segments',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1540,6 +1569,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'segments',
+                                            'x-airbyte-stream-name': 'segments',
                                         },
                                     },
                                 },
@@ -1600,6 +1630,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                                 'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                                             },
                                             'x-airbyte-entity-name': 'segments',
+                                            'x-airbyte-stream-name': 'segments',
                                         },
                                     },
                                 },
@@ -1634,6 +1665,7 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     'updated_at': {'type': 'string', 'description': 'Last update timestamp'},
                 },
                 'x-airbyte-entity-name': 'segments',
+                'x-airbyte-stream-name': 'segments',
             },
             relationships=[
                 EntityRelationshipConfig(

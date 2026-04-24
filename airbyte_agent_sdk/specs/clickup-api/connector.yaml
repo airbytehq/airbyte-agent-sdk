@@ -1188,6 +1188,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: user
+      x-airbyte-stream-name: user
       properties:
         id:
           type: integer
@@ -1239,6 +1240,7 @@ components:
     Team:
       type: object
       x-airbyte-entity-name: teams
+      x-airbyte-stream-name: team
       properties:
         id:
           type: string
@@ -1338,6 +1340,7 @@ components:
     Space:
       type: object
       x-airbyte-entity-name: spaces
+      x-airbyte-stream-name: space
       properties:
         id:
           type: string
@@ -1603,6 +1606,7 @@ components:
     Folder:
       type: object
       x-airbyte-entity-name: folders
+      x-airbyte-stream-name: folder
       properties:
         id:
           type: string
@@ -1786,6 +1790,7 @@ components:
     List:
       type: object
       x-airbyte-entity-name: lists
+      x-airbyte-stream-name: list
       properties:
         id:
           type: string
@@ -1930,6 +1935,7 @@ components:
     Task:
       type: object
       x-airbyte-entity-name: tasks
+      x-airbyte-stream-name: task
       properties:
         id:
           type: string
@@ -2520,6 +2526,7 @@ components:
     TimeEntry:
       type: object
       x-airbyte-entity-name: time_tracking
+      x-airbyte-stream-name: time_tracking
       properties:
         id:
           type: string

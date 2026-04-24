@@ -57,6 +57,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='issues',
+            stream_name='issues',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -377,6 +378,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'issues',
+                                    'x-airbyte-stream-name': 'issues',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Customer support threads, open issues, response timelines, and who replied',
                                         'when_to_use': 'Support issue or customer response questions',
@@ -735,6 +737,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'issues',
+                                'x-airbyte-stream-name': 'issues',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Customer support threads, open issues, response timelines, and who replied',
                                     'when_to_use': 'Support issue or customer response questions',
@@ -1054,6 +1057,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'issues',
+                                'x-airbyte-stream-name': 'issues',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Customer support threads, open issues, response timelines, and who replied',
                                     'when_to_use': 'Support issue or customer response questions',
@@ -1395,6 +1399,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'issues',
+                                'x-airbyte-stream-name': 'issues',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Customer support threads, open issues, response timelines, and who replied',
                                     'when_to_use': 'Support issue or customer response questions',
@@ -1613,6 +1618,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'issues',
+                'x-airbyte-stream-name': 'issues',
                 'x-airbyte-ai-hints': {
                     'summary': 'Customer support threads, open issues, response timelines, and who replied',
                     'when_to_use': 'Support issue or customer response questions',
@@ -2009,6 +2015,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'issues',
+                                'x-airbyte-stream-name': 'issues',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Customer support threads, open issues, response timelines, and who replied',
                                     'when_to_use': 'Support issue or customer response questions',
@@ -2345,6 +2352,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'issues',
+                                'x-airbyte-stream-name': 'issues',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Customer support threads, open issues, response timelines, and who replied',
                                     'when_to_use': 'Support issue or customer response questions',
@@ -2663,6 +2671,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='accounts',
+            stream_name='accounts',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -2777,6 +2786,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'accounts',
+                                    'x-airbyte-stream-name': 'accounts',
                                 },
                             },
                             'pagination': {
@@ -2925,6 +2935,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'accounts',
+                                'x-airbyte-stream-name': 'accounts',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3035,6 +3046,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'accounts',
+                                'x-airbyte-stream-name': 'accounts',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3175,6 +3187,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'accounts',
+                                'x-airbyte-stream-name': 'accounts',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3246,10 +3259,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'accounts',
+                'x-airbyte-stream-name': 'accounts',
             },
         ),
         EntityDefinition(
             name='contacts',
+            stream_name='contacts',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -3343,6 +3358,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'contacts',
+                                    'x-airbyte-stream-name': 'contacts',
                                 },
                             },
                             'pagination': {
@@ -3457,6 +3473,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'contacts',
+                                'x-airbyte-stream-name': 'contacts',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3546,6 +3563,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'contacts',
+                                'x-airbyte-stream-name': 'contacts',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3645,6 +3663,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'contacts',
+                                'x-airbyte-stream-name': 'contacts',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3703,10 +3722,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'contacts',
+                'x-airbyte-stream-name': 'contacts',
             },
         ),
         EntityDefinition(
             name='teams',
+            stream_name='teams',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -3755,6 +3776,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'teams',
+                                    'x-airbyte-stream-name': 'teams',
                                 },
                             },
                             'pagination': {
@@ -3815,6 +3837,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'teams',
+                                'x-airbyte-stream-name': 'teams',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3859,6 +3882,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'teams',
+                                'x-airbyte-stream-name': 'teams',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3911,6 +3935,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'teams',
+                                'x-airbyte-stream-name': 'teams',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -3932,10 +3957,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'teams',
+                'x-airbyte-stream-name': 'teams',
             },
         ),
         EntityDefinition(
             name='tags',
+            stream_name='tags',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -3975,6 +4002,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tags',
+                                    'x-airbyte-stream-name': 'tags',
                                 },
                             },
                             'pagination': {
@@ -4029,6 +4057,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'tags',
+                                'x-airbyte-stream-name': 'tags',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -4064,6 +4093,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'tags',
+                                'x-airbyte-stream-name': 'tags',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -4108,6 +4138,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'tags',
+                                'x-airbyte-stream-name': 'tags',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -4132,10 +4163,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'tags',
+                'x-airbyte-stream-name': 'tags',
             },
         ),
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4183,6 +4216,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'users',
+                                    'x-airbyte-stream-name': 'users',
                                 },
                             },
                             'pagination': {
@@ -4244,6 +4278,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'users',
+                                'x-airbyte-stream-name': 'users',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -4282,10 +4317,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
             name='custom_fields',
+            stream_name='custom_fields',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4407,6 +4444,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'custom_fields',
+                                    'x-airbyte-stream-name': 'custom_fields',
                                 },
                             },
                             'pagination': {
@@ -4537,6 +4575,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'custom_fields',
+                                'x-airbyte-stream-name': 'custom_fields',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },
@@ -4607,10 +4646,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'custom_fields',
+                'x-airbyte-stream-name': 'custom_fields',
             },
         ),
         EntityDefinition(
             name='ticket_forms',
+            stream_name='ticket_forms',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4678,6 +4719,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ticket_forms',
+                                    'x-airbyte-stream-name': 'ticket_forms',
                                 },
                             },
                             'pagination': {
@@ -4728,10 +4770,12 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ticket_forms',
+                'x-airbyte-stream-name': 'ticket_forms',
             },
         ),
         EntityDefinition(
             name='user_roles',
+            stream_name='user_roles',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4762,6 +4806,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'user_roles',
+                                    'x-airbyte-stream-name': 'user_roles',
                                 },
                             },
                             'pagination': {
@@ -4795,6 +4840,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'user_roles',
+                'x-airbyte-stream-name': 'user_roles',
             },
         ),
         EntityDefinition(
@@ -5431,6 +5477,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'users',
+                                'x-airbyte-stream-name': 'users',
                             },
                             'request_id': {'type': 'string', 'description': 'The request ID for tracking'},
                         },

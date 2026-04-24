@@ -56,6 +56,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='spaces',
+            stream_name='space',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -168,6 +169,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'spaces',
+                                    'x-airbyte-stream-name': 'space',
                                 },
                             },
                             '_links': {
@@ -254,6 +256,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'spaces',
+                        'x-airbyte-stream-name': 'space',
                     },
                 ),
             },
@@ -311,10 +314,12 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'spaces',
+                'x-airbyte-stream-name': 'space',
             },
         ),
         EntityDefinition(
             name='pages',
+            stream_name='pages',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -465,6 +470,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'pages',
+                                    'x-airbyte-stream-name': 'pages',
                                 },
                             },
                             '_links': {
@@ -577,6 +583,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'pages',
+                        'x-airbyte-stream-name': 'pages',
                     },
                 ),
             },
@@ -660,10 +667,12 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'pages',
+                'x-airbyte-stream-name': 'pages',
             },
         ),
         EntityDefinition(
             name='blog_posts',
+            stream_name='blog_posts',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -786,6 +795,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'blog_posts',
+                                    'x-airbyte-stream-name': 'blog_posts',
                                 },
                             },
                             '_links': {
@@ -875,6 +885,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'blog_posts',
+                        'x-airbyte-stream-name': 'blog_posts',
                     },
                 ),
             },
@@ -935,10 +946,12 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'blog_posts',
+                'x-airbyte-stream-name': 'blog_posts',
             },
         ),
         EntityDefinition(
             name='groups',
+            stream_name='group',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -987,6 +1000,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'groups',
+                                    'x-airbyte-stream-name': 'group',
                                 },
                             },
                             'start': {'type': 'integer', 'description': 'Starting index'},
@@ -1031,10 +1045,12 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'groups',
+                'x-airbyte-stream-name': 'group',
             },
         ),
         EntityDefinition(
             name='audit',
+            stream_name='audit',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1125,6 +1141,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'audit',
+                                    'x-airbyte-stream-name': 'audit',
                                 },
                             },
                             'start': {'type': 'integer', 'description': 'Starting index'},
@@ -1202,6 +1219,7 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'audit',
+                'x-airbyte-stream-name': 'audit',
             },
         ),
     ],

@@ -817,6 +817,7 @@ components:
     Ticket:
       type: object
       x-airbyte-entity-name: tickets
+      x-airbyte-stream-name: tickets
       description: A Freshdesk support ticket
       required:
         - id
@@ -963,6 +964,7 @@ components:
     Contact:
       type: object
       x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: contacts
       description: A Freshdesk contact (customer)
       required:
         - id
@@ -1077,6 +1079,7 @@ components:
     Agent:
       type: object
       x-airbyte-entity-name: agents
+      x-airbyte-stream-name: agents
       description: A Freshdesk agent
       required:
         - id
@@ -1209,6 +1212,7 @@ components:
     Group:
       type: object
       x-airbyte-entity-name: groups
+      x-airbyte-stream-name: groups
       description: A Freshdesk group
       required:
         - id
@@ -1260,6 +1264,7 @@ components:
     Company:
       type: object
       x-airbyte-entity-name: companies
+      x-airbyte-stream-name: companies
       description: A Freshdesk company
       required:
         - id
@@ -1315,6 +1320,7 @@ components:
     Role:
       type: object
       x-airbyte-entity-name: roles
+      x-airbyte-stream-name: roles
       description: A Freshdesk role
       required:
         - id
@@ -1346,6 +1352,7 @@ components:
     SatisfactionRating:
       type: object
       x-airbyte-entity-name: satisfaction_ratings
+      x-airbyte-stream-name: satisfaction_ratings
       description: A Freshdesk satisfaction rating
       required:
         - id
@@ -1386,6 +1393,7 @@ components:
     Survey:
       type: object
       x-airbyte-entity-name: surveys
+      x-airbyte-stream-name: surveys
       description: A Freshdesk survey
       required:
         - id
@@ -1428,6 +1436,7 @@ components:
     TimeEntry:
       type: object
       x-airbyte-entity-name: time_entries
+      x-airbyte-stream-name: time_entries
       description: A Freshdesk time entry
       required:
         - id
@@ -1479,6 +1488,7 @@ components:
     TicketField:
       type: object
       x-airbyte-entity-name: ticket_fields
+      x-airbyte-stream-name: ticket_fields
       description: A Freshdesk ticket field definition
       required:
         - id

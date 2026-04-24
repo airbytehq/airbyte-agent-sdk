@@ -80,6 +80,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='accounts',
+            stream_name='accounts',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -214,6 +215,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'accounts',
+                                    'x-airbyte-stream-name': 'accounts',
                                 },
                             },
                             'metadata': {
@@ -342,6 +344,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'accounts',
+                        'x-airbyte-stream-name': 'accounts',
                     },
                 ),
             },
@@ -442,10 +445,12 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'accounts',
+                'x-airbyte-stream-name': 'accounts',
             },
         ),
         EntityDefinition(
             name='account_users',
+            stream_name='account_users',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -541,6 +546,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'account_users',
+                                    'x-airbyte-stream-name': 'account_users',
                                 },
                             },
                             'metadata': {
@@ -602,10 +608,12 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'account_users',
+                'x-airbyte-stream-name': 'account_users',
             },
         ),
         EntityDefinition(
             name='campaigns',
+            stream_name='campaigns',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -845,6 +853,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'campaigns',
+                                    'x-airbyte-stream-name': 'campaigns',
                                 },
                             },
                             'metadata': {
@@ -1074,6 +1083,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'campaigns',
+                        'x-airbyte-stream-name': 'campaigns',
                     },
                 ),
             },
@@ -1270,6 +1280,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'campaigns',
+                'x-airbyte-stream-name': 'campaigns',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1282,6 +1293,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='campaign_groups',
+            stream_name='campaign_groups',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1421,6 +1433,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'campaign_groups',
+                                    'x-airbyte-stream-name': 'campaign_groups',
                                 },
                             },
                             'metadata': {
@@ -1550,6 +1563,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'campaign_groups',
+                        'x-airbyte-stream-name': 'campaign_groups',
                     },
                 ),
             },
@@ -1646,6 +1660,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'campaign_groups',
+                'x-airbyte-stream-name': 'campaign_groups',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1658,6 +1673,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='creatives',
+            stream_name='creatives',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1788,6 +1804,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'creatives',
+                                    'x-airbyte-stream-name': 'creatives',
                                 },
                             },
                             'metadata': {
@@ -1903,6 +1920,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'creatives',
+                        'x-airbyte-stream-name': 'creatives',
                     },
                     untested=True,
                 ),
@@ -1991,6 +2009,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'creatives',
+                'x-airbyte-stream-name': 'creatives',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -2003,6 +2022,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='conversions',
+            stream_name='conversions',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2152,6 +2172,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'additionalProperties': True,
                                     'x-airbyte-entity-name': 'conversions',
+                                    'x-airbyte-stream-name': 'conversions',
                                 },
                             },
                             'paging': {
@@ -2285,6 +2306,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'additionalProperties': True,
                         'x-airbyte-entity-name': 'conversions',
+                        'x-airbyte-stream-name': 'conversions',
                     },
                     untested=True,
                 ),
@@ -2385,6 +2407,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'additionalProperties': True,
                 'x-airbyte-entity-name': 'conversions',
+                'x-airbyte-stream-name': 'conversions',
             },
         ),
         EntityDefinition(

@@ -53,6 +53,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='candidates',
+            stream_name='candidates',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -195,6 +196,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                             },
                             'x-airbyte-entity-name': 'candidates',
+                            'x-airbyte-stream-name': 'candidates',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -326,6 +328,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                         },
                         'x-airbyte-entity-name': 'candidates',
+                        'x-airbyte-stream-name': 'candidates',
                     },
                 ),
             },
@@ -416,10 +419,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                 },
                 'x-airbyte-entity-name': 'candidates',
+                'x-airbyte-stream-name': 'candidates',
             },
         ),
         EntityDefinition(
             name='applications',
+            stream_name='applications',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -576,6 +581,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                             },
                             'x-airbyte-entity-name': 'applications',
+                            'x-airbyte-stream-name': 'applications',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -691,6 +697,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                         },
                         'x-airbyte-entity-name': 'applications',
+                        'x-airbyte-stream-name': 'applications',
                     },
                 ),
             },
@@ -766,10 +773,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                 },
                 'x-airbyte-entity-name': 'applications',
+                'x-airbyte-stream-name': 'applications',
             },
         ),
         EntityDefinition(
             name='jobs',
+            stream_name='jobs',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -852,6 +861,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'jobs',
+                            'x-airbyte-stream-name': 'jobs',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -922,6 +932,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'jobs',
+                        'x-airbyte-stream-name': 'jobs',
                     },
                 ),
             },
@@ -982,10 +993,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'jobs',
+                'x-airbyte-stream-name': 'jobs',
             },
         ),
         EntityDefinition(
             name='offers',
+            stream_name='offers',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1073,6 +1086,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                             },
                             'x-airbyte-entity-name': 'offers',
+                            'x-airbyte-stream-name': 'offers',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -1127,6 +1141,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                         },
                         'x-airbyte-entity-name': 'offers',
+                        'x-airbyte-stream-name': 'offers',
                     },
                     untested=True,
                 ),
@@ -1172,10 +1187,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                 },
                 'x-airbyte-entity-name': 'offers',
+                'x-airbyte-stream-name': 'offers',
             },
         ),
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1279,6 +1296,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'users',
+                            'x-airbyte-stream-name': 'users',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -1343,6 +1361,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'users',
+                        'x-airbyte-stream-name': 'users',
                     },
                 ),
             },
@@ -1397,10 +1416,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
             name='departments',
+            stream_name='departments',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1456,6 +1477,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'departments',
+                            'x-airbyte-stream-name': 'departments',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -1499,6 +1521,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'departments',
+                        'x-airbyte-stream-name': 'departments',
                     },
                 ),
             },
@@ -1532,10 +1555,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'departments',
+                'x-airbyte-stream-name': 'departments',
             },
         ),
         EntityDefinition(
             name='offices',
+            stream_name='offices',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1599,6 +1624,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'offices',
+                            'x-airbyte-stream-name': 'offices',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -1650,6 +1676,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'offices',
+                        'x-airbyte-stream-name': 'offices',
                     },
                 ),
             },
@@ -1691,10 +1718,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'offices',
+                'x-airbyte-stream-name': 'offices',
             },
         ),
         EntityDefinition(
             name='job_posts',
+            stream_name='job_posts',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1776,6 +1805,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'job_posts',
+                            'x-airbyte-stream-name': 'job_posts',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -1838,6 +1868,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'job_posts',
+                        'x-airbyte-stream-name': 'job_posts',
                     },
                     untested=True,
                 ),
@@ -1891,10 +1922,12 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'job_posts',
+                'x-airbyte-stream-name': 'job_posts',
             },
         ),
         EntityDefinition(
             name='sources',
+            stream_name='sources',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1932,6 +1965,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'sources',
+                            'x-airbyte-stream-name': 'sources',
                         },
                     },
                     meta_extractor={'next': '@link.next'},
@@ -1949,6 +1983,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sources',
+                'x-airbyte-stream-name': 'sources',
             },
         ),
         EntityDefinition(
@@ -2316,6 +2351,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                         },
                         'x-airbyte-entity-name': 'applications',
+                        'x-airbyte-stream-name': 'applications',
                     },
                     file_field='attachments[{attachment_index}].url',
                 ),
@@ -2460,6 +2496,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                             'custom_fields': {'type': 'object', 'description': 'Custom field values'},
                         },
                         'x-airbyte-entity-name': 'candidates',
+                        'x-airbyte-stream-name': 'candidates',
                     },
                     file_field='attachments[{attachment_index}].url',
                 ),

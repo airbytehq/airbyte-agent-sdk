@@ -53,6 +53,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='accounts',
+            stream_name='accounts',
             actions=[Action.GET],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -224,6 +225,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['account_key'],
                         'x-airbyte-entity-name': 'accounts',
+                        'x-airbyte-stream-name': 'accounts',
                     },
                     record_extractor='$',
                 ),
@@ -259,10 +261,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['account_key'],
                 'x-airbyte-entity-name': 'accounts',
+                'x-airbyte-stream-name': 'accounts',
             },
         ),
         EntityDefinition(
             name='agents',
+            stream_name='agents',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -365,6 +369,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'agents',
+                            'x-airbyte-stream-name': 'agents',
                         },
                     },
                     record_extractor='$',
@@ -463,6 +468,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'agents',
+                        'x-airbyte-stream-name': 'agents',
                     },
                     record_extractor='$',
                 ),
@@ -539,10 +545,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'agents',
+                'x-airbyte-stream-name': 'agents',
             },
         ),
         EntityDefinition(
             name='agent_timeline',
+            stream_name='agent_timeline',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -591,6 +599,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['agent_id'],
                                     'x-airbyte-entity-name': 'agent_timeline',
+                                    'x-airbyte-stream-name': 'agent_timeline',
                                 },
                             },
                             'next_page': {
@@ -627,10 +636,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['agent_id'],
                 'x-airbyte-entity-name': 'agent_timeline',
+                'x-airbyte-stream-name': 'agent_timeline',
             },
         ),
         EntityDefinition(
             name='bans',
+            stream_name='bans',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -681,6 +692,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'bans',
+                                    'x-airbyte-stream-name': 'bans',
                                 },
                             },
                             'visitor': {
@@ -713,6 +725,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'bans',
+                                    'x-airbyte-stream-name': 'bans',
                                 },
                             },
                         },
@@ -757,6 +770,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'bans',
+                        'x-airbyte-stream-name': 'bans',
                     },
                     record_extractor='$',
                 ),
@@ -789,10 +803,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'bans',
+                'x-airbyte-stream-name': 'bans',
             },
         ),
         EntityDefinition(
             name='chats',
+            stream_name='chats',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1204,6 +1220,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'chats',
+                                    'x-airbyte-stream-name': 'chats',
                                 },
                             },
                             'next_page': {
@@ -1614,6 +1631,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'chats',
+                        'x-airbyte-stream-name': 'chats',
                     },
                     record_extractor='$',
                 ),
@@ -1729,10 +1747,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'chats',
+                'x-airbyte-stream-name': 'chats',
             },
         ),
         EntityDefinition(
             name='departments',
+            stream_name='departments',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1775,6 +1795,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'departments',
+                            'x-airbyte-stream-name': 'departments',
                         },
                     },
                     record_extractor='$',
@@ -1822,6 +1843,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'departments',
+                        'x-airbyte-stream-name': 'departments',
                     },
                     record_extractor='$',
                 ),
@@ -1852,10 +1874,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'departments',
+                'x-airbyte-stream-name': 'departments',
             },
         ),
         EntityDefinition(
             name='goals',
+            stream_name='goals',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1893,6 +1917,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'goals',
+                            'x-airbyte-stream-name': 'goals',
                         },
                     },
                     record_extractor='$',
@@ -1935,6 +1960,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'goals',
+                        'x-airbyte-stream-name': 'goals',
                     },
                     record_extractor='$',
                 ),
@@ -1967,10 +1993,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'goals',
+                'x-airbyte-stream-name': 'goals',
             },
         ),
         EntityDefinition(
             name='roles',
+            stream_name='roles',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2002,6 +2030,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'roles',
+                            'x-airbyte-stream-name': 'roles',
                         },
                     },
                     record_extractor='$',
@@ -2038,6 +2067,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'roles',
+                        'x-airbyte-stream-name': 'roles',
                     },
                     record_extractor='$',
                 ),
@@ -2064,10 +2094,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'roles',
+                'x-airbyte-stream-name': 'roles',
             },
         ),
         EntityDefinition(
             name='routing_settings',
+            stream_name='routing_settings',
             actions=[Action.GET],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -2101,6 +2133,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'routing_settings',
+                                'x-airbyte-stream-name': 'routing_settings',
                             },
                         },
                     },
@@ -2130,10 +2163,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'routing_settings',
+                'x-airbyte-stream-name': 'routing_settings',
             },
         ),
         EntityDefinition(
             name='shortcuts',
+            stream_name='shortcuts',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2174,6 +2209,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'shortcuts',
+                            'x-airbyte-stream-name': 'shortcuts',
                         },
                     },
                     record_extractor='$',
@@ -2219,6 +2255,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'shortcuts',
+                        'x-airbyte-stream-name': 'shortcuts',
                     },
                     record_extractor='$',
                 ),
@@ -2254,10 +2291,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'shortcuts',
+                'x-airbyte-stream-name': 'shortcuts',
             },
         ),
         EntityDefinition(
             name='skills',
+            stream_name='skills',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2287,6 +2326,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'skills',
+                            'x-airbyte-stream-name': 'skills',
                         },
                     },
                     record_extractor='$',
@@ -2321,6 +2361,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         },
                         'required': ['id'],
                         'x-airbyte-entity-name': 'skills',
+                        'x-airbyte-stream-name': 'skills',
                     },
                     record_extractor='$',
                 ),
@@ -2345,10 +2386,12 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'skills',
+                'x-airbyte-stream-name': 'skills',
             },
         ),
         EntityDefinition(
             name='triggers',
+            stream_name='triggers',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2393,6 +2436,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                             },
                             'required': ['id'],
                             'x-airbyte-entity-name': 'triggers',
+                            'x-airbyte-stream-name': 'triggers',
                         },
                     },
                     record_extractor='$',
@@ -2434,6 +2478,7 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'triggers',
+                'x-airbyte-stream-name': 'triggers',
             },
         ),
     ],

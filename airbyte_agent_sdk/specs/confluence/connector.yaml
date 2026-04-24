@@ -782,6 +782,7 @@ components:
     Space:
       type: object
       x-airbyte-entity-name: spaces
+      x-airbyte-stream-name: space
       description: Confluence space object
       properties:
         id:
@@ -869,6 +870,7 @@ components:
     Page:
       type: object
       x-airbyte-entity-name: pages
+      x-airbyte-stream-name: pages
       description: Confluence page object
       properties:
         id:
@@ -987,6 +989,7 @@ components:
     BlogPost:
       type: object
       x-airbyte-entity-name: blog_posts
+      x-airbyte-stream-name: blog_posts
       description: Confluence blog post object
       properties:
         id:
@@ -1084,6 +1087,7 @@ components:
     Group:
       type: object
       x-airbyte-entity-name: groups
+      x-airbyte-stream-name: group
       description: Confluence group object
       properties:
         type:
@@ -1144,6 +1148,7 @@ components:
     AuditRecord:
       type: object
       x-airbyte-entity-name: audit
+      x-airbyte-stream-name: audit
       description: Confluence audit record
       properties:
         author:

@@ -279,6 +279,7 @@ components:
     Account:
       type: object
       x-airbyte-entity-name: accounts
+      x-airbyte-stream-name: accounts
       description: Zendesk Chat account information
       properties:
         account_key:
@@ -486,6 +487,7 @@ components:
     Agent:
       type: object
       x-airbyte-entity-name: agents
+      x-airbyte-stream-name: agents
       description: Zendesk Chat agent
       properties:
         id:
@@ -589,6 +591,7 @@ components:
     AgentTimeline:
       type: object
       x-airbyte-entity-name: agent_timeline
+      x-airbyte-stream-name: agent_timeline
       description: Agent activity timeline entry
       properties:
         agent_id:
@@ -618,6 +621,7 @@ components:
     Ban:
       type: object
       x-airbyte-entity-name: bans
+      x-airbyte-stream-name: bans
       description: Banned visitor
       properties:
         id:
@@ -656,6 +660,7 @@ components:
     Chat:
       type: object
       x-airbyte-entity-name: chats
+      x-airbyte-stream-name: chats
       description: Chat conversation transcript
       properties:
         id:
@@ -1098,6 +1103,7 @@ components:
     Department:
       type: object
       x-airbyte-entity-name: departments
+      x-airbyte-stream-name: departments
       properties:
         id:
           type: integer
@@ -1138,6 +1144,7 @@ components:
     Goal:
       type: object
       x-airbyte-entity-name: goals
+      x-airbyte-stream-name: goals
       properties:
         id:
           type: integer
@@ -1176,6 +1183,7 @@ components:
     Role:
       type: object
       x-airbyte-entity-name: roles
+      x-airbyte-stream-name: roles
       properties:
         id:
           type: integer
@@ -1206,6 +1214,7 @@ components:
     RoutingSettings:
       type: object
       x-airbyte-entity-name: routing_settings
+      x-airbyte-stream-name: routing_settings
       properties:
         routing_mode:
           type:
@@ -1236,6 +1245,7 @@ components:
     Shortcut:
       type: object
       x-airbyte-entity-name: shortcuts
+      x-airbyte-stream-name: shortcuts
       properties:
         id:
           type: string
@@ -1281,6 +1291,7 @@ components:
     Skill:
       type: object
       x-airbyte-entity-name: skills
+      x-airbyte-stream-name: skills
       properties:
         id:
           type: integer
@@ -1309,6 +1320,7 @@ components:
     Trigger:
       type: object
       x-airbyte-entity-name: triggers
+      x-airbyte-stream-name: triggers
       properties:
         id:
           type: integer

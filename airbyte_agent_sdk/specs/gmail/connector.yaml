@@ -913,6 +913,7 @@ components:
     Profile:
       type: object
       x-airbyte-entity-name: profile
+      x-airbyte-stream-name: profile
       description: Gmail user profile information
       properties:
         emailAddress:
@@ -985,6 +986,7 @@ components:
     Message:
       type: object
       x-airbyte-entity-name: messages
+      x-airbyte-stream-name: messages
       description: A Gmail email message
       properties:
         id:
@@ -1060,6 +1062,7 @@ components:
     Label:
       type: object
       x-airbyte-entity-name: labels
+      x-airbyte-stream-name: labels
       description: A Gmail label used to organize messages and threads
       properties:
         id:
@@ -1121,6 +1124,7 @@ components:
     Draft:
       type: object
       x-airbyte-entity-name: drafts
+      x-airbyte-stream-name: drafts
       description: A Gmail draft message
       properties:
         id:
@@ -1165,6 +1169,7 @@ components:
     Thread:
       type: object
       x-airbyte-entity-name: threads
+      x-airbyte-stream-name: threads
       description: A Gmail thread (email conversation)
       properties:
         id:

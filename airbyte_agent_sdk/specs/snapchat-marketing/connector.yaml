@@ -1325,6 +1325,7 @@ components:
     Organization:
       type: object
       x-airbyte-entity-name: organizations
+      x-airbyte-stream-name: organizations
       description: Snapchat organization object
       properties:
         id:
@@ -1412,6 +1413,7 @@ components:
     AdAccount:
       type: object
       x-airbyte-entity-name: adaccounts
+      x-airbyte-stream-name: adaccounts
       description: Snapchat ad account object
       properties:
         id:
@@ -1472,6 +1474,7 @@ components:
     Campaign:
       type: object
       x-airbyte-entity-name: campaigns
+      x-airbyte-stream-name: campaigns
       description: Snapchat campaign object
       properties:
         id:
@@ -1524,6 +1527,7 @@ components:
     AdSquad:
       type: object
       x-airbyte-entity-name: adsquads
+      x-airbyte-stream-name: adsquads
       description: Snapchat ad squad object
       properties:
         id:
@@ -1657,6 +1661,7 @@ components:
     Ad:
       type: object
       x-airbyte-entity-name: ads
+      x-airbyte-stream-name: ads
       description: Snapchat ad object
       properties:
         id:
@@ -1703,6 +1708,7 @@ components:
     Creative:
       type: object
       x-airbyte-entity-name: creatives
+      x-airbyte-stream-name: creatives
       description: Snapchat creative object
       properties:
         id:
@@ -1785,6 +1791,7 @@ components:
     Media:
       type: object
       x-airbyte-entity-name: media
+      x-airbyte-stream-name: media
       description: Snapchat media object
       properties:
         id:
@@ -1851,6 +1858,7 @@ components:
     Segment:
       type: object
       x-airbyte-entity-name: segments
+      x-airbyte-stream-name: segments
       description: Snapchat audience segment object
       properties:
         id:

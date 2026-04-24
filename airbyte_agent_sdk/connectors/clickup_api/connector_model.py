@@ -54,6 +54,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='user',
+            stream_name='user',
             actions=[Action.GET],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -96,6 +97,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'user',
+                                'x-airbyte-stream-name': 'user',
                             },
                         },
                     },
@@ -135,10 +137,12 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'user',
+                'x-airbyte-stream-name': 'user',
             },
         ),
         EntityDefinition(
             name='teams',
+            stream_name='team',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -224,6 +228,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'teams',
+                                    'x-airbyte-stream-name': 'team',
                                 },
                             },
                         },
@@ -305,10 +310,12 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'teams',
+                'x-airbyte-stream-name': 'team',
             },
         ),
         EntityDefinition(
             name='spaces',
+            stream_name='space',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -535,6 +542,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         'archived': {'type': 'boolean', 'description': 'Whether the space is archived'},
                                     },
                                     'x-airbyte-entity-name': 'spaces',
+                                    'x-airbyte-stream-name': 'space',
                                 },
                             },
                         },
@@ -761,6 +769,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                             'archived': {'type': 'boolean', 'description': 'Whether the space is archived'},
                         },
                         'x-airbyte-entity-name': 'spaces',
+                        'x-airbyte-stream-name': 'space',
                     },
                 ),
             },
@@ -974,6 +983,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     'archived': {'type': 'boolean', 'description': 'Whether the space is archived'},
                 },
                 'x-airbyte-entity-name': 'spaces',
+                'x-airbyte-stream-name': 'space',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -986,6 +996,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='folders',
+            stream_name='folder',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1131,6 +1142,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'folders',
+                                    'x-airbyte-stream-name': 'folder',
                                 },
                             },
                         },
@@ -1276,6 +1288,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'folders',
+                        'x-airbyte-stream-name': 'folder',
                     },
                 ),
             },
@@ -1408,6 +1421,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'folders',
+                'x-airbyte-stream-name': 'folder',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1420,6 +1434,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='lists',
+            stream_name='list',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1538,6 +1553,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'lists',
+                                    'x-airbyte-stream-name': 'list',
                                 },
                             },
                         },
@@ -1656,6 +1672,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'lists',
+                        'x-airbyte-stream-name': 'list',
                     },
                 ),
             },
@@ -1761,6 +1778,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'lists',
+                'x-airbyte-stream-name': 'list',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -1773,6 +1791,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='tasks',
+            stream_name='task',
             actions=[Action.LIST, Action.GET, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2002,6 +2021,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'task',
                                 },
                             },
                             'last_page': {
@@ -2232,6 +2252,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'tasks',
+                        'x-airbyte-stream-name': 'task',
                     },
                 ),
                 Action.API_SEARCH: EndpointDefinition(
@@ -2505,6 +2526,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'task',
                                 },
                             },
                             'last_page': {
@@ -2722,6 +2744,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'tasks',
+                'x-airbyte-stream-name': 'task',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -3646,6 +3669,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
+                                    'x-airbyte-stream-name': 'task',
                                 },
                             },
                             'last_page': {
@@ -3670,6 +3694,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='time_tracking',
+            stream_name='time_tracking',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3727,6 +3752,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'time_tracking',
+                                    'x-airbyte-stream-name': 'time_tracking',
                                 },
                             },
                         },
@@ -3782,6 +3808,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'time_tracking',
+                                'x-airbyte-stream-name': 'time_tracking',
                             },
                         },
                     },
@@ -3824,6 +3851,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'time_tracking',
+                'x-airbyte-stream-name': 'time_tracking',
             },
             relationships=[
                 EntityRelationshipConfig(

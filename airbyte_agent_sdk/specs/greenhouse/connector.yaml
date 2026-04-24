@@ -2907,6 +2907,7 @@ components:
     Candidate:
       type: object
       x-airbyte-entity-name: candidates
+      x-airbyte-stream-name: candidates
       description: Greenhouse candidate object
       properties:
         id:
@@ -2998,6 +2999,7 @@ components:
     Application:
       type: object
       x-airbyte-entity-name: applications
+      x-airbyte-stream-name: applications
       description: Greenhouse application object
       properties:
         id:
@@ -3076,6 +3078,7 @@ components:
     Job:
       type: object
       x-airbyte-entity-name: jobs
+      x-airbyte-stream-name: jobs
       description: Greenhouse job object
       properties:
         id:
@@ -3137,6 +3140,7 @@ components:
     Offer:
       type: object
       x-airbyte-entity-name: offers
+      x-airbyte-stream-name: offers
       description: Greenhouse offer object
       properties:
         id:
@@ -3186,6 +3190,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       description: Greenhouse user object
       properties:
         id:
@@ -3245,6 +3250,7 @@ components:
     Department:
       type: object
       x-airbyte-entity-name: departments
+      x-airbyte-stream-name: departments
       description: Greenhouse department object
       properties:
         id:
@@ -3276,6 +3282,7 @@ components:
     Office:
       type: object
       x-airbyte-entity-name: offices
+      x-airbyte-stream-name: offices
       description: Greenhouse office object
       properties:
         id:
@@ -3313,6 +3320,7 @@ components:
     JobPost:
       type: object
       x-airbyte-entity-name: job_posts
+      x-airbyte-stream-name: job_posts
       description: Greenhouse job post object
       properties:
         id:
@@ -3369,6 +3377,7 @@ components:
     Source:
       type: object
       x-airbyte-entity-name: sources
+      x-airbyte-stream-name: sources
       description: Greenhouse source object
       properties:
         id:

@@ -59,6 +59,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='issues',
+            stream_name='issues',
             actions=[
                 Action.API_SEARCH,
                 Action.CREATE,
@@ -258,6 +259,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'issues',
+                                    'x-airbyte-stream-name': 'issues',
                                 },
                                 'description': 'Array of issue objects',
                             },
@@ -599,6 +601,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'issues',
+                        'x-airbyte-stream-name': 'issues',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -882,6 +885,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'issues',
+                        'x-airbyte-stream-name': 'issues',
                     },
                     no_content_response=True,
                 ),
@@ -1065,10 +1069,12 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'issues',
+                'x-airbyte-stream-name': 'issues',
             },
         ),
         EntityDefinition(
             name='projects',
+            stream_name='projects',
             actions=[Action.API_SEARCH, Action.GET],
             endpoints={
                 Action.API_SEARCH: EndpointDefinition(
@@ -1355,6 +1361,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'projects',
+                                    'x-airbyte-stream-name': 'projects',
                                 },
                                 'description': 'Array of project objects',
                             },
@@ -1538,6 +1545,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'projects',
+                        'x-airbyte-stream-name': 'projects',
                     },
                 ),
             },
@@ -1702,10 +1710,12 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'projects',
+                'x-airbyte-stream-name': 'projects',
             },
         ),
         EntityDefinition(
             name='users',
+            stream_name='users',
             actions=[Action.GET, Action.LIST, Action.API_SEARCH],
             endpoints={
                 Action.GET: EndpointDefinition(
@@ -1835,6 +1845,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'users',
+                        'x-airbyte-stream-name': 'users',
                     },
                 ),
                 Action.LIST: EndpointDefinition(
@@ -1979,6 +1990,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'users',
+                            'x-airbyte-stream-name': 'users',
                         },
                     },
                     no_pagination='Jira Cloud /users endpoint paginates via startAt/maxResults query parameters but returns a raw JSON array with no wrapper object, so the response exposes no next-page cursor or total count; pagination termination is derived client-side from page-size exhaustion (fewer than maxResults users returned).',
@@ -2135,6 +2147,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'users',
+                            'x-airbyte-stream-name': 'users',
                         },
                     },
                 ),
@@ -2256,10 +2269,12 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'users',
+                'x-airbyte-stream-name': 'users',
             },
         ),
         EntityDefinition(
             name='issue_fields',
+            stream_name='issue_fields',
             actions=[Action.LIST, Action.API_SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2362,6 +2377,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                 },
                             },
                             'x-airbyte-entity-name': 'issue_fields',
+                            'x-airbyte-stream-name': 'issue_fields',
                         },
                     },
                     no_pagination='Jira Cloud /field endpoint returns the full collection of system and custom fields in a single response; the API does not expose pagination on this endpoint.',
@@ -2533,6 +2549,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'issue_fields',
+                                    'x-airbyte-stream-name': 'issue_fields',
                                 },
                                 'description': 'Array of field objects',
                             },
@@ -2633,10 +2650,12 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'issue_fields',
+                'x-airbyte-stream-name': 'issue_fields',
             },
         ),
         EntityDefinition(
             name='issue_comments',
+            stream_name='issue_comments',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -2810,6 +2829,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'issue_comments',
+                                    'x-airbyte-stream-name': 'issue_comments',
                                 },
                                 'description': 'Array of comment objects',
                             },
@@ -3017,6 +3037,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'issue_comments',
+                        'x-airbyte-stream-name': 'issue_comments',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -3152,6 +3173,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'issue_comments',
+                        'x-airbyte-stream-name': 'issue_comments',
                     },
                 ),
                 Action.UPDATE: EndpointDefinition(
@@ -3350,6 +3372,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'issue_comments',
+                        'x-airbyte-stream-name': 'issue_comments',
                     },
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -3484,6 +3507,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'issue_comments',
+                'x-airbyte-stream-name': 'issue_comments',
             },
             relationships=[
                 EntityRelationshipConfig(

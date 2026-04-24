@@ -1770,6 +1770,7 @@ components:
     Issue:
       type: object
       x-airbyte-entity-name: issues
+      x-airbyte-stream-name: issues
       x-airbyte-ai-hints:
         summary: "Customer support threads, open issues, response timelines, and who replied"
         when_to_use: "Support issue or customer response questions"
@@ -2049,6 +2050,7 @@ components:
     Account:
       type: object
       x-airbyte-entity-name: accounts
+      x-airbyte-stream-name: accounts
       properties:
         id:
           type: string
@@ -2194,6 +2196,7 @@ components:
     Contact:
       type: object
       x-airbyte-entity-name: contacts
+      x-airbyte-stream-name: contacts
       properties:
         id:
           type: string
@@ -2262,6 +2265,7 @@ components:
     Team:
       type: object
       x-airbyte-entity-name: teams
+      x-airbyte-stream-name: teams
       properties:
         id:
           type: string
@@ -2300,6 +2304,7 @@ components:
     Tag:
       type: object
       x-airbyte-entity-name: tags
+      x-airbyte-stream-name: tags
       properties:
         id:
           type: string
@@ -2339,6 +2344,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       properties:
         id:
           type: string
@@ -2421,6 +2427,7 @@ components:
     CustomField:
       type: object
       x-airbyte-entity-name: custom_fields
+      x-airbyte-stream-name: custom_fields
       properties:
         id:
           type: string
@@ -2510,6 +2517,7 @@ components:
     TicketForm:
       type: object
       x-airbyte-entity-name: ticket_forms
+      x-airbyte-stream-name: ticket_forms
       properties:
         id:
           type: string
@@ -2551,6 +2559,7 @@ components:
     UserRole:
       type: object
       x-airbyte-entity-name: user_roles
+      x-airbyte-stream-name: user_roles
       properties:
         id:
           type: string

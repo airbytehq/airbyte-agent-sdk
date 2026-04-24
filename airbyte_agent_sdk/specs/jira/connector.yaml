@@ -1781,6 +1781,7 @@ components:
     Project:
       type: object
       x-airbyte-entity-name: projects
+      x-airbyte-stream-name: projects
       description: Jira project object
       properties:
         id:
@@ -2042,6 +2043,7 @@ components:
     Issue:
       type: object
       x-airbyte-entity-name: issues
+      x-airbyte-stream-name: issues
       description: Jira issue object
       properties:
         id:
@@ -2304,6 +2306,7 @@ components:
     User:
       type: object
       x-airbyte-entity-name: users
+      x-airbyte-stream-name: users
       description: Jira user object
       properties:
         self:
@@ -2451,6 +2454,7 @@ components:
     IssueField:
       type: object
       x-airbyte-entity-name: issue_fields
+      x-airbyte-stream-name: issue_fields
       description: Jira issue field object (custom or system field)
       properties:
         id:
@@ -2590,6 +2594,7 @@ components:
     IssueComment:
       type: object
       x-airbyte-entity-name: issue_comments
+      x-airbyte-stream-name: issue_comments
       description: Jira issue comment object
       properties:
         id:

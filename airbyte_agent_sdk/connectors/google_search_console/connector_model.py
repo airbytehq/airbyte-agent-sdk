@@ -78,6 +78,7 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='sites',
+            stream_name='sites',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -105,6 +106,7 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sites',
+                                    'x-airbyte-stream-name': 'sites',
                                 },
                             },
                         },
@@ -136,6 +138,7 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'sites',
+                        'x-airbyte-stream-name': 'sites',
                     },
                 ),
             },
@@ -153,10 +156,12 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sites',
+                'x-airbyte-stream-name': 'sites',
             },
         ),
         EntityDefinition(
             name='sitemaps',
+            stream_name='sitemaps',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -234,6 +239,7 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'sitemaps',
+                                    'x-airbyte-stream-name': 'sitemaps',
                                 },
                             },
                         },
@@ -311,6 +317,7 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                         'x-airbyte-entity-name': 'sitemaps',
+                        'x-airbyte-stream-name': 'sitemaps',
                     },
                 ),
             },
@@ -357,6 +364,7 @@ GoogleSearchConsoleConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'sitemaps',
+                'x-airbyte-stream-name': 'sitemaps',
             },
             relationships=[
                 EntityRelationshipConfig(

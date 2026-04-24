@@ -886,6 +886,7 @@ components:
     Site:
       type: object
       x-airbyte-entity-name: sites
+      x-airbyte-stream-name: sites
       description: A Search Console site resource.
       properties:
         siteUrl:
@@ -937,6 +938,7 @@ components:
     Sitemap:
       type: object
       x-airbyte-entity-name: sitemaps
+      x-airbyte-stream-name: sitemaps
       description: A sitemap resource with details about a submitted sitemap.
       properties:
         path:

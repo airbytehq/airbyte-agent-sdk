@@ -1343,6 +1343,7 @@ components:
     Account:
       type: object
       x-airbyte-entity-name: accounts
+      x-airbyte-stream-name: accounts
       description: LinkedIn ad account object
       properties:
         id:
@@ -1473,6 +1474,7 @@ components:
     AccountUser:
       type: object
       x-airbyte-entity-name: account_users
+      x-airbyte-stream-name: account_users
       description: LinkedIn ad account user object
       properties:
         account:
@@ -1541,6 +1543,7 @@ components:
     Campaign:
       type: object
       x-airbyte-entity-name: campaigns
+      x-airbyte-stream-name: campaigns
       description: LinkedIn ad campaign object
       properties:
         id:
@@ -1786,6 +1789,7 @@ components:
     CampaignGroup:
       type: object
       x-airbyte-entity-name: campaign_groups
+      x-airbyte-stream-name: campaign_groups
       description: LinkedIn ad campaign group object
       properties:
         id:
@@ -1911,6 +1915,7 @@ components:
     Creative:
       type: object
       x-airbyte-entity-name: creatives
+      x-airbyte-stream-name: creatives
       description: LinkedIn ad creative object
       properties:
         id:
@@ -2027,6 +2032,7 @@ components:
     Conversion:
       type: object
       x-airbyte-entity-name: conversions
+      x-airbyte-stream-name: conversions
       description: LinkedIn ad conversion tracking rule
       properties:
         id:
