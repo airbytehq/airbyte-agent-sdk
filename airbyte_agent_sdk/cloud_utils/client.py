@@ -116,6 +116,8 @@ class AirbyteCloudClient:
     DEFAULT_API_BASE_URL = "https://api.airbyte.ai"
     AUTHORIZATION_HEADER = "Authorization"
     ORGANIZATION_ID_HEADER = "X-Organization-Id"
+    SDK_SOURCE_HEADER = "X-ADP-Agent-SDK"
+    SDK_SOURCE_HEADER_VALUE = "airbyte-agent-sdk"
 
     def __init__(
         self,
@@ -149,7 +151,9 @@ class AirbyteCloudClient:
 
     def _build_headers(self, token: str | None = None) -> dict[str, str]:
         """Build request headers for Airbyte API calls."""
-        headers: dict[str, str] = {}
+        headers: dict[str, str] = {
+            self.SDK_SOURCE_HEADER: self.SDK_SOURCE_HEADER_VALUE,
+        }
         if token is not None:
             headers[self.AUTHORIZATION_HEADER] = f"Bearer {token}"
         if self._organization_id:
@@ -451,7 +455,7 @@ class AirbyteCloudClient:
             )
         """
         token = await self.get_bearer_token()
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = self._build_headers(token=token)
 
         if credentials is None:
             url = f"{self.API_BASE_URL}/api/v1/oauth/credentials/connector_type/{connector_type}"

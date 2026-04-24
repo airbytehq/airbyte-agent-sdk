@@ -39,14 +39,6 @@ class CandidateSociallinksItem(BaseModel):
     type_: Union[str | None, Any] = Field(default=None, alias="type")
     url: Union[str | None, Any] = Field(default=None)
 
-class CandidatePhonenumbersItem(BaseModel):
-    """Nested schema for Candidate.phoneNumbers_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    value: Union[str | None, Any] = Field(default=None)
-    type_: Union[str | None, Any] = Field(default=None, alias="type")
-    is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
-
 class CandidateTagsItem(BaseModel):
     """Nested schema for Candidate.tags_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -57,6 +49,14 @@ class CandidateTagsItem(BaseModel):
 
 class CandidateEmailaddressesItem(BaseModel):
     """Nested schema for Candidate.emailAddresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    value: Union[str | None, Any] = Field(default=None)
+    type_: Union[str | None, Any] = Field(default=None, alias="type")
+    is_primary: Union[bool | None, Any] = Field(default=None, alias="isPrimary")
+
+class CandidatePhonenumbersItem(BaseModel):
+    """Nested schema for Candidate.phoneNumbers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     value: Union[str | None, Any] = Field(default=None)
