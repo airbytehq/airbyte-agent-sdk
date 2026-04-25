@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 from airbyte_agent_sdk import registry
@@ -10,6 +11,24 @@ from airbyte_agent_sdk.config import resolve_credentials
 from airbyte_agent_sdk.connector_model_loader import load_connector_model
 from airbyte_agent_sdk.executor.hosted_executor import HostedExecutor
 from airbyte_agent_sdk.executor.models import AskResult, AutomationInfo, ConnectorInfo, WorkflowInfo
+
+_AUTOMATION_FANOUT_CONCURRENCY = 10
+
+
+def _automation_info_from_dict(data: dict[str, Any]) -> AutomationInfo:
+    return AutomationInfo(
+        id=str(data["id"]),
+        workflow_id=str(data["workflow_id"]),
+        workspace_id=str(data["workspace_id"]),
+        enabled=data["enabled"],
+        trigger_type=data["trigger_type"],
+        cron_expression=data.get("cron_expression"),
+        timezone=data.get("timezone", "UTC"),
+        completion_webhook_url=data.get("completion_webhook_url"),
+        trigger_webhook_url=data.get("trigger_webhook_url"),
+        created_at=data.get("created_at"),
+        updated_at=data.get("updated_at"),
+    )
 
 
 class Workspace:
@@ -249,26 +268,51 @@ class Workspace:
 
     # ---- Automation CRUD -----------------------------------------------------
 
-    async def list_automations(self, workflow_id: str) -> list[AutomationInfo]:
-        """List automations for a workflow."""
+    async def list_automations(
+        self,
+        workflow_id: str | None = None,
+    ) -> list[AutomationInfo]:
+        """List automations.
+
+        When `workflow_id` is a non-`None` string, returns automations for that
+        single workflow (workflow-scoped path, unchanged behavior).
+
+        When `workflow_id` is omitted or passed explicitly as `None`, returns all
+        automations across every workflow in the workspace via a bounded-concurrency
+        fan-out over `list_workflows()`. Omission and explicit `None` are treated
+        identically.
+
+        Concurrent per-workflow HTTP requests are bounded by
+        `_AUTOMATION_FANOUT_CONCURRENCY`. The first per-workflow error propagates
+        to the caller immediately; sibling in-flight requests continue to
+        completion in the background (their results are discarded). Workflows
+        deleted mid-flight surface as an error rather than being silently
+        filtered.
+
+        Result ordering: automations are grouped per workflow in the order
+        returned by `list_workflows()`; ordering within a workflow matches the
+        backend response.
+        """
         workspace_id = await self._resolve_workspace_id()
-        data = await self._cloud_client.list_automations(workflow_id, workspace_id)
-        return [
-            AutomationInfo(
-                id=str(a["id"]),
-                workflow_id=str(a["workflow_id"]),
-                workspace_id=str(a["workspace_id"]),
-                enabled=a["enabled"],
-                trigger_type=a["trigger_type"],
-                cron_expression=a.get("cron_expression"),
-                timezone=a.get("timezone", "UTC"),
-                completion_webhook_url=a.get("completion_webhook_url"),
-                trigger_webhook_url=a.get("trigger_webhook_url"),
-                created_at=a.get("created_at"),
-                updated_at=a.get("updated_at"),
-            )
-            for a in data
-        ]
+
+        if workflow_id is not None:
+            data = await self._cloud_client.list_automations(workflow_id, workspace_id)
+            return [_automation_info_from_dict(a) for a in data]
+
+        workflows = await self._cloud_client.list_workflows(workspace_id)
+        if not workflows:
+            return []
+
+        semaphore = asyncio.Semaphore(_AUTOMATION_FANOUT_CONCURRENCY)
+
+        async def _fetch(wf_id: str) -> list[dict[str, Any]]:
+            async with semaphore:
+                return await self._cloud_client.list_automations(wf_id, workspace_id)
+
+        results = await asyncio.gather(
+            *(_fetch(str(w["id"])) for w in workflows),
+        )
+        return [_automation_info_from_dict(a) for group in results for a in group]
 
     async def create_automation(
         self,

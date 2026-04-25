@@ -93,6 +93,14 @@ class Project(BaseModel):
     avatar: Union[ProjectAvatar | None, Any] = Field(default=None)
     organization: Union[ProjectOrganization | None, Any] = Field(default=None)
 
+class ProjectDetailOrganization(BaseModel):
+    """Organization this project belongs to."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: Union[str | None, Any] = Field(default=None)
+    name: Union[str | None, Any] = Field(default=None)
+    slug: Union[str | None, Any] = Field(default=None)
+
 class ProjectDetailAvatar(BaseModel):
     """Project avatar information."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -100,14 +108,6 @@ class ProjectDetailAvatar(BaseModel):
     avatar_type: Union[str | None, Any] = Field(default=None, alias="avatarType")
     avatar_uuid: Union[str | None, Any] = Field(default=None, alias="avatarUuid")
     avatar_url: Union[str | None, Any] = Field(default=None, alias="avatarUrl")
-
-class ProjectDetailTeam(BaseModel):
-    """Primary team for this project."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: Union[str | None, Any] = Field(default=None)
-    name: Union[str | None, Any] = Field(default=None)
-    slug: Union[str | None, Any] = Field(default=None)
 
 class ProjectDetailTeamsItem(BaseModel):
     """Nested schema for ProjectDetail.teams_item"""
@@ -117,8 +117,8 @@ class ProjectDetailTeamsItem(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     slug: Union[str | None, Any] = Field(default=None)
 
-class ProjectDetailOrganization(BaseModel):
-    """Organization this project belongs to."""
+class ProjectDetailTeam(BaseModel):
+    """Primary team for this project."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
@@ -272,18 +272,18 @@ class EventUser(BaseModel):
     name: Union[str | None, Any] = Field(default=None)
     ip_address: Union[str | None, Any] = Field(default=None)
 
-class EventMetadata(BaseModel):
-    """Event metadata."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    title: Union[str | None, Any] = Field(default=None)
-
 class EventGroupingconfig(BaseModel):
     """Grouping configuration."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: Union[str | None, Any] = Field(default=None)
     enhancements: Union[str | None, Any] = Field(default=None)
+
+class EventMetadata(BaseModel):
+    """Event metadata."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    title: Union[str | None, Any] = Field(default=None)
 
 class EventTagsItem(BaseModel):
     """Nested schema for Event.tags_item"""
