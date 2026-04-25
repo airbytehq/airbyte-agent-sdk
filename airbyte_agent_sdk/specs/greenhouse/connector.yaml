@@ -2908,6 +2908,15 @@ components:
       type: object
       x-airbyte-entity-name: candidates
       x-airbyte-stream-name: candidates
+      x-airbyte-ai-hints:
+        summary: "Job candidates with application history and contact details"
+        when_to_use: "Looking up candidate information or hiring pipeline data"
+        trigger_phrases: ["greenhouse candidate", "applicant", "who applied"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find a candidate in Greenhouse"
+          - "List recent candidates"
       description: Greenhouse candidate object
       properties:
         id:
@@ -3000,6 +3009,14 @@ components:
       type: object
       x-airbyte-entity-name: applications
       x-airbyte-stream-name: applications
+      x-airbyte-ai-hints:
+        summary: "Job applications with stage, status, and interview details"
+        when_to_use: "Questions about application status or hiring pipeline progress"
+        trigger_phrases: ["application status", "hiring stage", "interview status"]
+        freshness: live
+        search_strategy: "Filter by candidate, job, or status"
+        example_questions:
+          - "What stage is an application in?"
       description: Greenhouse application object
       properties:
         id:
@@ -3079,6 +3096,14 @@ components:
       type: object
       x-airbyte-entity-name: jobs
       x-airbyte-stream-name: jobs
+      x-airbyte-ai-hints:
+        summary: "Job positions with status, department, and hiring plan"
+        when_to_use: "Questions about open positions or job details"
+        trigger_phrases: ["greenhouse job", "open position", "job opening"]
+        freshness: live
+        search_strategy: "Search by title or filter by department and status"
+        example_questions:
+          - "What jobs are open in Greenhouse?"
       description: Greenhouse job object
       properties:
         id:
@@ -3141,6 +3166,14 @@ components:
       type: object
       x-airbyte-entity-name: offers
       x-airbyte-stream-name: offers
+      x-airbyte-ai-hints:
+        summary: "Job offers extended to candidates with terms and status"
+        when_to_use: "Questions about offers made or offer status"
+        trigger_phrases: ["offer", "job offer", "offer status"]
+        freshness: live
+        search_strategy: "Filter by candidate or status"
+        example_questions:
+          - "Show pending offers"
       description: Greenhouse offer object
       properties:
         id:
@@ -3191,6 +3224,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Greenhouse users (recruiters, coordinators, hiring managers)"
+        when_to_use: "Looking up recruiter or hiring team details"
+        trigger_phrases: ["greenhouse user", "recruiter", "hiring manager"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the recruiters in Greenhouse?"
       description: Greenhouse user object
       properties:
         id:
@@ -3251,6 +3292,14 @@ components:
       type: object
       x-airbyte-entity-name: departments
       x-airbyte-stream-name: departments
+      x-airbyte-ai-hints:
+        summary: "Departments in the organization for job categorization"
+        when_to_use: "Questions about department structure or hiring by department"
+        trigger_phrases: ["department", "hiring department"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What departments are in Greenhouse?"
       description: Greenhouse department object
       properties:
         id:
@@ -3283,6 +3332,14 @@ components:
       type: object
       x-airbyte-entity-name: offices
       x-airbyte-stream-name: offices
+      x-airbyte-ai-hints:
+        summary: "Office locations for job postings and hiring"
+        when_to_use: "Questions about office locations or where roles are based"
+        trigger_phrases: ["office", "office location", "job location"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What office locations are configured?"
       description: Greenhouse office object
       properties:
         id:
@@ -3321,6 +3378,14 @@ components:
       type: object
       x-airbyte-entity-name: job_posts
       x-airbyte-stream-name: job_posts
+      x-airbyte-ai-hints:
+        summary: "Published job postings visible on the careers page"
+        when_to_use: "Questions about live job postings or careers page content"
+        trigger_phrases: ["job post", "careers page", "published job"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "What jobs are posted on the careers page?"
       description: Greenhouse job post object
       properties:
         id:
@@ -3378,6 +3443,14 @@ components:
       type: object
       x-airbyte-entity-name: sources
       x-airbyte-stream-name: sources
+      x-airbyte-ai-hints:
+        summary: "Candidate sourcing channels (referrals, job boards, agencies)"
+        when_to_use: "Questions about where candidates are coming from"
+        trigger_phrases: ["candidate source", "referral", "sourcing channel"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What sourcing channels are tracked in Greenhouse?"
       description: Greenhouse source object
       properties:
         id:
@@ -3393,6 +3466,14 @@ components:
     ScheduledInterview:
       type: object
       x-airbyte-entity-name: scheduled_interviews
+      x-airbyte-ai-hints:
+        summary: "Scheduled interviews with time, interviewer, and stage details"
+        when_to_use: "Questions about upcoming interviews or interview schedules"
+        trigger_phrases: ["interview schedule", "upcoming interview", "scheduled interview"]
+        freshness: live
+        search_strategy: "Filter by date or candidate"
+        example_questions:
+          - "What interviews are scheduled?"
       description: Greenhouse scheduled interview object
       properties:
         id:

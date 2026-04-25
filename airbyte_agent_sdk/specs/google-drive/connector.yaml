@@ -1200,6 +1200,15 @@ components:
     File:
       type: object
       x-airbyte-entity-name: files
+      x-airbyte-ai-hints:
+        summary: "Files and folders in Google Drive with sharing and metadata"
+        when_to_use: "Looking for files, documents, or folders in Google Drive"
+        trigger_phrases: ["google drive file", "document", "find file", "shared file"]
+        freshness: live
+        search_strategy: "Search by name or filter by MIME type, folder, or owner"
+        example_questions:
+          - "Find a file in Google Drive"
+          - "Show recently modified files"
       description: The metadata for a file
       properties:
         kind:
@@ -1609,6 +1618,14 @@ components:
     Drive:
       type: object
       x-airbyte-entity-name: drives
+      x-airbyte-ai-hints:
+        summary: "Shared drives in Google Workspace"
+        when_to_use: "Questions about shared drives or team drive membership"
+        trigger_phrases: ["shared drive", "team drive"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What shared drives do I have access to?"
       description: Representation of a shared drive
       properties:
         kind:
@@ -1730,6 +1747,14 @@ components:
     Permission:
       type: object
       x-airbyte-entity-name: permissions
+      x-airbyte-ai-hints:
+        summary: "File and folder sharing permissions in Google Drive"
+        when_to_use: "Questions about who has access to files or sharing settings"
+        trigger_phrases: ["file permissions", "who has access", "sharing settings"]
+        freshness: live
+        search_strategy: "Filter by file"
+        example_questions:
+          - "Who has access to this file?"
       description: A permission for a file
       properties:
         kind:
@@ -1821,6 +1846,14 @@ components:
     Comment:
       type: object
       x-airbyte-entity-name: comments
+      x-airbyte-ai-hints:
+        summary: "Comments on Google Drive files"
+        when_to_use: "Looking for comments or discussions on files"
+        trigger_phrases: ["file comment", "drive comment"]
+        freshness: live
+        search_strategy: "Filter by file"
+        example_questions:
+          - "What comments are on this file?"
       description: A comment on a file
       properties:
         kind:
@@ -1899,6 +1932,14 @@ components:
     Reply:
       type: object
       x-airbyte-entity-name: replies
+      x-airbyte-ai-hints:
+        summary: "Replies to comments on Google Drive files"
+        when_to_use: "Looking for reply threads on file comments"
+        trigger_phrases: ["comment reply", "reply thread"]
+        freshness: live
+        search_strategy: "Filter by comment"
+        example_questions:
+          - "What replies are on this comment?"
       description: A reply to a comment on a file
       properties:
         kind:
@@ -1953,6 +1994,14 @@ components:
     Revision:
       type: object
       x-airbyte-entity-name: revisions
+      x-airbyte-ai-hints:
+        summary: "File version history and revisions in Google Drive"
+        when_to_use: "Questions about file change history or previous versions"
+        trigger_phrases: ["file revision", "version history", "previous version"]
+        freshness: live
+        search_strategy: "Filter by file"
+        example_questions:
+          - "Show the revision history for a file"
       description: The metadata for a revision to a file
       properties:
         kind:
@@ -2023,6 +2072,14 @@ components:
     Change:
       type: object
       x-airbyte-entity-name: changes
+      x-airbyte-ai-hints:
+        summary: "Recent file changes in Google Drive"
+        when_to_use: "Questions about recently modified or added files"
+        trigger_phrases: ["recent changes", "what changed", "modified files"]
+        freshness: live
+        search_strategy: "Filter by date range"
+        example_questions:
+          - "What files changed recently in Google Drive?"
       description: A change to a file or shared drive
       properties:
         kind:
@@ -2094,6 +2151,14 @@ components:
     About:
       type: object
       x-airbyte-entity-name: about
+      x-airbyte-ai-hints:
+        summary: "Google Drive storage quota and account information"
+        when_to_use: "Questions about storage usage or account limits"
+        trigger_phrases: ["storage quota", "drive space", "how much storage"]
+        freshness: live
+        search_strategy: "Retrieve account info"
+        example_questions:
+          - "How much Google Drive storage am I using?"
       description: Information about the user, the user's Drive, and system capabilities
       properties:
         kind:

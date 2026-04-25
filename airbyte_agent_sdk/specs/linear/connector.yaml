@@ -2600,6 +2600,15 @@ components:
       type: object
       x-airbyte-entity-name: projects
       x-airbyte-stream-name: projects
+      x-airbyte-ai-hints:
+        summary: "Linear projects grouping issues by initiative or milestone"
+        when_to_use: "Questions about project progress, milestones, or initiative status"
+        trigger_phrases: ["linear project", "project status", "milestone", "initiative"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What Linear projects are in progress?"
+          - "Show project status"
       description: Linear project object
       required:
         - id
@@ -2788,6 +2797,14 @@ components:
       type: object
       x-airbyte-entity-name: teams
       x-airbyte-stream-name: teams
+      x-airbyte-ai-hints:
+        summary: "Linear teams with workflow configuration and membership"
+        when_to_use: "Questions about team structure or workflow settings"
+        trigger_phrases: ["linear team", "which team", "team members"]
+        freshness: live
+        search_strategy: "Search by name or key"
+        example_questions:
+          - "What teams are in Linear?"
       description: Linear team object
       required:
         - id
@@ -2862,6 +2879,14 @@ components:
       type: object
       x-airbyte-entity-name: workflow_states
       x-airbyte-stream-name: workflow_states
+      x-airbyte-ai-hints:
+        summary: "Workflow states (statuses) configured for Linear teams"
+        when_to_use: "Questions about issue statuses or workflow configuration"
+        trigger_phrases: ["workflow state", "issue status", "status definition"]
+        freshness: static
+        search_strategy: "Filter by team"
+        example_questions:
+          - "What statuses are available for issues?"
       description: Linear workflow state object representing a status in a team's workflow
       required:
         - id
@@ -3090,6 +3115,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Linear users with display name, email, and role"
+        when_to_use: "Looking up team members in Linear"
+        trigger_phrases: ["linear user", "who is", "team member"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find a user in Linear"
       description: Linear user object
       required:
         - id
@@ -3165,6 +3198,14 @@ components:
       type: object
       x-airbyte-entity-name: comments
       x-airbyte-stream-name: comments
+      x-airbyte-ai-hints:
+        summary: "Comments on Linear issues"
+        when_to_use: "Looking for discussion or updates on specific issues"
+        trigger_phrases: ["linear comment", "issue comment", "issue discussion"]
+        freshness: live
+        search_strategy: "Filter by issue"
+        example_questions:
+          - "What comments are on this issue?"
       description: Linear comment object
       required:
         - id

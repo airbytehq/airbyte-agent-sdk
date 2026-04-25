@@ -1200,6 +1200,14 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: customer
+      x-airbyte-ai-hints:
+        summary: "Google Ads accounts with billing and campaign settings"
+        when_to_use: "Questions about ad account details or account-level settings"
+        trigger_phrases: ["google ads account", "ad account", "account settings"]
+        freshness: live
+        search_strategy: "List accessible accounts"
+        example_questions:
+          - "What Google Ads accounts do I have?"
       description: Google Ads customer account
       properties:
         customer:
@@ -1283,6 +1291,15 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaign
+      x-airbyte-ai-hints:
+        summary: "Google Ads campaigns with budget, bidding, and performance data"
+        when_to_use: "Questions about ad campaigns, budgets, or campaign status"
+        trigger_phrases: ["google ads campaign", "ad campaign", "campaign budget"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "List active Google Ads campaigns"
+          - "What is the budget for a campaign?"
       description: Google Ads campaign
       properties:
         campaign:
@@ -1392,6 +1409,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_groups
       x-airbyte-stream-name: ad_group
+      x-airbyte-ai-hints:
+        summary: "Ad groups organizing ads and keywords within campaigns"
+        when_to_use: "Questions about ad group configuration or keyword grouping"
+        trigger_phrases: ["ad group", "keyword group"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "What ad groups are in this campaign?"
       description: Google Ads ad group
       properties:
         campaign:
@@ -1481,6 +1506,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_group_ads
       x-airbyte-stream-name: ad_group_ad
+      x-airbyte-ai-hints:
+        summary: "Individual ads within Google Ads ad groups"
+        when_to_use: "Questions about specific ad content or ad-level status"
+        trigger_phrases: ["google ad", "ad copy", "ad status"]
+        freshness: live
+        search_strategy: "Filter by ad group or campaign"
+        example_questions:
+          - "Show ads in this ad group"
       description: Google Ads ad group ad
       properties:
         adGroup:
@@ -1567,6 +1600,14 @@ components:
       type: object
       x-airbyte-entity-name: campaign_labels
       x-airbyte-stream-name: campaign_label
+      x-airbyte-ai-hints:
+        summary: "Labels applied to Google Ads campaigns for organization"
+        when_to_use: "Questions about campaign labeling or categorization"
+        trigger_phrases: ["campaign label", "campaign tag"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "What labels are on this campaign?"
       description: Campaign label association
       properties:
         campaign:
@@ -1613,6 +1654,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_group_labels
       x-airbyte-stream-name: ad_group_label
+      x-airbyte-ai-hints:
+        summary: "Labels applied to ad groups for organization"
+        when_to_use: "Questions about ad group labeling"
+        trigger_phrases: ["ad group label", "group tag"]
+        freshness: live
+        search_strategy: "Filter by ad group"
+        example_questions:
+          - "What labels are on this ad group?"
       description: Ad group label association
       properties:
         adGroup:
@@ -1659,6 +1708,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_group_ad_labels
       x-airbyte-stream-name: ad_group_ad_label
+      x-airbyte-ai-hints:
+        summary: "Labels applied to individual ads"
+        when_to_use: "Questions about ad-level labeling"
+        trigger_phrases: ["ad label"]
+        freshness: live
+        search_strategy: "Filter by ad"
+        example_questions:
+          - "What labels are on this ad?"
       description: Ad group ad label association
       properties:
         adGroupAd:

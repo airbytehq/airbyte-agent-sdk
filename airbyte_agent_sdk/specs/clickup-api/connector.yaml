@@ -1189,6 +1189,14 @@ components:
       type: object
       x-airbyte-entity-name: user
       x-airbyte-stream-name: user
+      x-airbyte-ai-hints:
+        summary: "ClickUp user profile and workspace access details"
+        when_to_use: "Looking up the current user or workspace membership"
+        trigger_phrases: ["clickup user", "my profile", "who am I"]
+        freshness: live
+        search_strategy: "Retrieve the authenticated user profile"
+        example_questions:
+          - "Who is the current ClickUp user?"
       properties:
         id:
           type: integer
@@ -1241,6 +1249,14 @@ components:
       type: object
       x-airbyte-entity-name: teams
       x-airbyte-stream-name: team
+      x-airbyte-ai-hints:
+        summary: "ClickUp workspaces (called teams in the API)"
+        when_to_use: "Questions about available workspaces or organizational boundaries"
+        trigger_phrases: ["clickup workspace", "clickup team", "which workspace"]
+        freshness: live
+        search_strategy: "List all available workspaces"
+        example_questions:
+          - "What ClickUp workspaces do I have?"
       properties:
         id:
           type: string
@@ -1341,6 +1357,14 @@ components:
       type: object
       x-airbyte-entity-name: spaces
       x-airbyte-stream-name: space
+      x-airbyte-ai-hints:
+        summary: "ClickUp spaces organizing projects within a workspace"
+        when_to_use: "Questions about project spaces or organizational structure"
+        trigger_phrases: ["clickup space", "project space"]
+        freshness: live
+        search_strategy: "Search by name within a workspace"
+        example_questions:
+          - "What spaces are in my ClickUp workspace?"
       properties:
         id:
           type: string
@@ -1607,6 +1631,14 @@ components:
       type: object
       x-airbyte-entity-name: folders
       x-airbyte-stream-name: folder
+      x-airbyte-ai-hints:
+        summary: "Folders organizing lists within ClickUp spaces"
+        when_to_use: "Questions about folder structure or project groupings"
+        trigger_phrases: ["clickup folder", "project folder"]
+        freshness: live
+        search_strategy: "Filter by space"
+        example_questions:
+          - "What folders are in this space?"
       properties:
         id:
           type: string
@@ -1791,6 +1823,14 @@ components:
       type: object
       x-airbyte-entity-name: lists
       x-airbyte-stream-name: list
+      x-airbyte-ai-hints:
+        summary: "ClickUp lists containing tasks"
+        when_to_use: "Questions about task lists or containers for work items"
+        trigger_phrases: ["clickup list", "task list"]
+        freshness: live
+        search_strategy: "Filter by space or folder"
+        example_questions:
+          - "What lists are available?"
       properties:
         id:
           type: string
@@ -1936,6 +1976,15 @@ components:
       type: object
       x-airbyte-entity-name: tasks
       x-airbyte-stream-name: task
+      x-airbyte-ai-hints:
+        summary: "ClickUp tasks with assignees, due dates, statuses, and priorities"
+        when_to_use: "Questions about task assignments, status, or deadlines"
+        trigger_phrases: ["clickup task", "assigned task", "task status", "due date"]
+        freshness: live
+        search_strategy: "Search by name or filter by assignee, status, or list"
+        example_questions:
+          - "What tasks are assigned to me?"
+          - "Show overdue tasks in ClickUp"
       properties:
         id:
           type: string
@@ -2206,6 +2255,14 @@ components:
     Comment:
       type: object
       x-airbyte-entity-name: comments
+      x-airbyte-ai-hints:
+        summary: "Comments on ClickUp tasks"
+        when_to_use: "Looking for discussion or notes on specific tasks"
+        trigger_phrases: ["clickup comment", "task comment", "task discussion"]
+        freshness: live
+        search_strategy: "Filter by task"
+        example_questions:
+          - "What comments are on this task?"
       properties:
         id:
           type: string
@@ -2305,6 +2362,14 @@ components:
     Goal:
       type: object
       x-airbyte-entity-name: goals
+      x-airbyte-ai-hints:
+        summary: "Goals and targets tracked in ClickUp"
+        when_to_use: "Questions about team goals, OKRs, or targets"
+        trigger_phrases: ["clickup goal", "target", "OKR", "objective"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What goals are set in ClickUp?"
       properties:
         id:
           type: string
@@ -2411,6 +2476,14 @@ components:
     View:
       type: object
       x-airbyte-entity-name: views
+      x-airbyte-ai-hints:
+        summary: "Saved views for filtering and displaying ClickUp data"
+        when_to_use: "Questions about saved views or display configurations"
+        trigger_phrases: ["clickup view", "saved view", "board view"]
+        freshness: live
+        search_strategy: "Filter by space or list"
+        example_questions:
+          - "What views are saved in ClickUp?"
       properties:
         id:
           type: string
@@ -2527,6 +2600,15 @@ components:
       type: object
       x-airbyte-entity-name: time_tracking
       x-airbyte-stream-name: time_tracking
+      x-airbyte-ai-hints:
+        summary: "Time tracking entries on ClickUp tasks"
+        when_to_use: "Questions about logged hours or time tracking data"
+        trigger_phrases: ["time tracking", "hours logged", "time entry", "time spent"]
+        freshness: live
+        search_strategy: "Filter by task or assignee"
+        example_questions:
+          - "How much time was logged on a task?"
+          - "Show time entries for this week"
       properties:
         id:
           type: string
@@ -2592,6 +2674,14 @@ components:
     Member:
       type: object
       x-airbyte-entity-name: members
+      x-airbyte-ai-hints:
+        summary: "Workspace or list members in ClickUp"
+        when_to_use: "Questions about team membership or access"
+        trigger_phrases: ["clickup member", "workspace member", "who has access"]
+        freshness: live
+        search_strategy: "Filter by list or workspace"
+        example_questions:
+          - "Who are the members of this workspace?"
       properties:
         id:
           type: integer
@@ -2630,6 +2720,15 @@ components:
     Doc:
       type: object
       x-airbyte-entity-name: docs
+      x-airbyte-ai-hints:
+        summary: "ClickUp Docs — documents and wiki pages"
+        when_to_use: "Questions about documentation or wiki content in ClickUp"
+        trigger_phrases: ["clickup doc", "document", "wiki page"]
+        freshness: live
+        search_strategy: "Search by name or content"
+        example_questions:
+          - "Find a document in ClickUp"
+          - "What docs are in this space?"
       properties:
         id:
           type: string

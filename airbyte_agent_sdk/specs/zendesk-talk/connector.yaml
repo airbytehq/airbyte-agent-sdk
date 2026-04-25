@@ -1208,6 +1208,14 @@ components:
       type: object
       x-airbyte-entity-name: phone_numbers
       x-airbyte-stream-name: phone_numbers
+      x-airbyte-ai-hints:
+        summary: "Phone numbers configured in Zendesk Talk"
+        when_to_use: "Questions about available phone numbers or number configuration"
+        trigger_phrases: ["talk phone number", "zendesk number"]
+        freshness: static
+        search_strategy: "List all numbers"
+        example_questions:
+          - "What phone numbers are in Zendesk Talk?"
       properties:
         id:
           type: ["null", "integer"]
@@ -1345,6 +1353,14 @@ components:
       type: object
       x-airbyte-entity-name: addresses
       x-airbyte-stream-name: addresses
+      x-airbyte-ai-hints:
+        summary: "Physical addresses for Zendesk Talk compliance"
+        when_to_use: "Questions about registered addresses"
+        trigger_phrases: ["talk address", "registered address"]
+        freshness: static
+        search_strategy: "List all addresses"
+        example_questions:
+          - "What addresses are registered?"
       properties:
         id:
           type: ["null", "integer"]
@@ -1398,6 +1414,14 @@ components:
       type: object
       x-airbyte-entity-name: greetings
       x-airbyte-stream-name: greetings
+      x-airbyte-ai-hints:
+        summary: "Voice greetings and hold music for Zendesk Talk"
+        when_to_use: "Questions about call greetings or hold music"
+        trigger_phrases: ["greeting", "hold music", "voicemail greeting"]
+        freshness: static
+        search_strategy: "List all greetings"
+        example_questions:
+          - "What greetings are configured?"
       properties:
         id:
           type: ["null", "string"]
@@ -1467,6 +1491,14 @@ components:
       type: object
       x-airbyte-entity-name: greeting_categories
       x-airbyte-stream-name: greeting_categories
+      x-airbyte-ai-hints:
+        summary: "Categories organizing Zendesk Talk greetings"
+        when_to_use: "Questions about greeting categorization"
+        trigger_phrases: ["greeting category"]
+        freshness: static
+        search_strategy: "List all categories"
+        example_questions:
+          - "What greeting categories exist?"
       properties:
         id:
           type: ["null", "integer"]
@@ -1499,6 +1531,14 @@ components:
       type: object
       x-airbyte-entity-name: ivrs
       x-airbyte-stream-name: ivrs
+      x-airbyte-ai-hints:
+        summary: "Interactive Voice Response menus for call routing"
+        when_to_use: "Questions about IVR configuration or phone menu setup"
+        trigger_phrases: ["IVR", "phone menu", "call menu"]
+        freshness: static
+        search_strategy: "List all IVRs"
+        example_questions:
+          - "What IVR menus are configured?"
       properties:
         id:
           type: ["null", "integer"]
@@ -1574,6 +1614,14 @@ components:
       type: object
       x-airbyte-entity-name: agents_activity
       x-airbyte-stream-name: agents_activity
+      x-airbyte-ai-hints:
+        summary: "Real-time agent activity data for Zendesk Talk"
+        when_to_use: "Questions about agent call activity or availability"
+        trigger_phrases: ["agent activity", "who is on a call"]
+        freshness: live
+        search_strategy: "List current agent activity"
+        example_questions:
+          - "What are agents doing right now?"
       properties:
         agent_id:
           type: ["null", "integer"]
@@ -1672,6 +1720,14 @@ components:
       type: object
       x-airbyte-entity-name: agents_overview
       x-airbyte-stream-name: agents_overview
+      x-airbyte-ai-hints:
+        summary: "Overview statistics for Talk agents (calls handled, wait time)"
+        when_to_use: "Questions about agent performance or call handling metrics"
+        trigger_phrases: ["agent overview", "agent stats", "calls handled"]
+        freshness: live
+        search_strategy: "Retrieve agent overview"
+        example_questions:
+          - "How many calls has an agent handled?"
       properties:
         average_calls_accepted:
           type: ["null", "integer"]
@@ -1753,6 +1809,14 @@ components:
       type: object
       x-airbyte-entity-name: account_overview
       x-airbyte-stream-name: account_overview
+      x-airbyte-ai-hints:
+        summary: "Account-level Talk statistics (total calls, wait times, etc.)"
+        when_to_use: "Questions about overall call center performance"
+        trigger_phrases: ["talk overview", "call center stats", "account stats"]
+        freshness: live
+        search_strategy: "Retrieve account overview"
+        example_questions:
+          - "What is the overall call center performance?"
       properties:
         average_call_duration:
           type: ["null", "integer"]
@@ -1834,6 +1898,14 @@ components:
       type: object
       x-airbyte-entity-name: current_queue_activity
       x-airbyte-stream-name: current_queue_activity
+      x-airbyte-ai-hints:
+        summary: "Current call queue activity and wait times"
+        when_to_use: "Questions about current queue length or wait times"
+        trigger_phrases: ["queue activity", "current queue", "wait time"]
+        freshness: live
+        search_strategy: "Retrieve current queue status"
+        example_questions:
+          - "How many callers are in the queue?"
       properties:
         agents_online:
           type: ["null", "integer"]
@@ -1870,6 +1942,15 @@ components:
       type: object
       x-airbyte-entity-name: calls
       x-airbyte-stream-name: calls
+      x-airbyte-ai-hints:
+        summary: "Call records in Zendesk Talk with duration and disposition"
+        when_to_use: "Questions about call history, call logs, or call details"
+        trigger_phrases: ["talk call", "call log", "call history"]
+        freshness: live
+        search_strategy: "Filter by date, agent, or direction"
+        example_questions:
+          - "Show recent calls"
+          - "How many calls were made today?"
       properties:
         id:
           type: ["null", "integer"]
@@ -2037,6 +2118,14 @@ components:
       type: object
       x-airbyte-entity-name: call_legs
       x-airbyte-stream-name: call_legs
+      x-airbyte-ai-hints:
+        summary: "Individual call legs within Zendesk Talk calls (transfers, conferences)"
+        when_to_use: "Questions about call routing details or transfer history"
+        trigger_phrases: ["call leg", "call transfer", "call routing"]
+        freshness: live
+        search_strategy: "Filter by call"
+        example_questions:
+          - "Show call legs for a call"
       properties:
         id:
           type: ["null", "integer"]

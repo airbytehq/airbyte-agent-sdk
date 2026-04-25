@@ -2281,6 +2281,14 @@ components:
       type: object
       x-airbyte-entity-name: customers
       x-airbyte-stream-name: customers
+      x-airbyte-ai-hints:
+        summary: "WooCommerce customers with billing, shipping, and order history"
+        when_to_use: "Looking up customer details or purchase history"
+        trigger_phrases: ["woocommerce customer", "buyer"]
+        freshness: live
+        search_strategy: "Search by email or name"
+        example_questions:
+          - "Find a customer in WooCommerce"
       properties:
         id:
           type: ["null", "integer"]
@@ -2386,6 +2394,14 @@ components:
       type: object
       x-airbyte-entity-name: orders
       x-airbyte-stream-name: orders
+      x-airbyte-ai-hints:
+        summary: "WooCommerce orders with line items, payment, and fulfillment status"
+        when_to_use: "Questions about orders, order status, or fulfillment"
+        trigger_phrases: ["woocommerce order", "order status", "purchase"]
+        freshness: live
+        search_strategy: "Filter by status, date, or customer"
+        example_questions:
+          - "Show recent WooCommerce orders"
       properties:
         id:
           type: ["null", "integer"]
@@ -2771,6 +2787,14 @@ components:
       type: object
       x-airbyte-entity-name: products
       x-airbyte-stream-name: products
+      x-airbyte-ai-hints:
+        summary: "WooCommerce products with pricing, inventory, and category details"
+        when_to_use: "Questions about products, pricing, or catalog"
+        trigger_phrases: ["woocommerce product", "product details", "catalog"]
+        freshness: live
+        search_strategy: "Search by name or filter by category"
+        example_questions:
+          - "List WooCommerce products"
       properties:
         id:
           type: ["null", "integer"]
@@ -3089,6 +3113,14 @@ components:
       type: object
       x-airbyte-entity-name: coupons
       x-airbyte-stream-name: coupons
+      x-airbyte-ai-hints:
+        summary: "Discount coupons for WooCommerce promotions"
+        when_to_use: "Questions about discount codes or promotions"
+        trigger_phrases: ["woocommerce coupon", "discount", "promo code"]
+        freshness: live
+        search_strategy: "Search by code"
+        example_questions:
+          - "What coupons are available?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3202,6 +3234,14 @@ components:
       type: object
       x-airbyte-entity-name: product_categories
       x-airbyte-stream-name: product_categories
+      x-airbyte-ai-hints:
+        summary: "Product category hierarchy in WooCommerce"
+        when_to_use: "Questions about product categorization or catalog structure"
+        trigger_phrases: ["product category", "catalog category"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What product categories exist?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3255,6 +3295,14 @@ components:
       type: object
       x-airbyte-entity-name: product_tags
       x-airbyte-stream-name: product_tags
+      x-airbyte-ai-hints:
+        summary: "Tags applied to WooCommerce products"
+        when_to_use: "Questions about product tags or labeling"
+        trigger_phrases: ["product tag"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What product tags exist?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3279,6 +3327,14 @@ components:
       type: object
       x-airbyte-entity-name: product_reviews
       x-airbyte-stream-name: product_reviews
+      x-airbyte-ai-hints:
+        summary: "Customer reviews on WooCommerce products"
+        when_to_use: "Questions about product reviews or customer feedback"
+        trigger_phrases: ["product review", "customer review", "rating"]
+        freshness: live
+        search_strategy: "Filter by product or rating"
+        example_questions:
+          - "Show reviews for a product"
       properties:
         id:
           type: ["null", "integer"]
@@ -3329,6 +3385,14 @@ components:
       type: object
       x-airbyte-entity-name: product_attributes
       x-airbyte-stream-name: product_attributes
+      x-airbyte-ai-hints:
+        summary: "Product attributes (size, color, etc.) for WooCommerce variations"
+        when_to_use: "Questions about product attributes or variation options"
+        trigger_phrases: ["product attribute", "variation attribute"]
+        freshness: static
+        search_strategy: "List all attributes"
+        example_questions:
+          - "What product attributes are defined?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3356,6 +3420,14 @@ components:
       type: object
       x-airbyte-entity-name: product_variations
       x-airbyte-stream-name: product_variations
+      x-airbyte-ai-hints:
+        summary: "Product variations (size/color combos) with SKU and pricing"
+        when_to_use: "Questions about product variants, SKUs, or option-level data"
+        trigger_phrases: ["product variation", "SKU", "variant"]
+        freshness: live
+        search_strategy: "Filter by product"
+        example_questions:
+          - "What variations does a product have?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3547,6 +3619,14 @@ components:
       type: object
       x-airbyte-entity-name: order_notes
       x-airbyte-stream-name: order_notes
+      x-airbyte-ai-hints:
+        summary: "Notes on WooCommerce orders (admin and customer-facing)"
+        when_to_use: "Looking for order notes or communication history"
+        trigger_phrases: ["order note", "order comment"]
+        freshness: live
+        search_strategy: "Filter by order"
+        example_questions:
+          - "What notes are on this order?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3574,6 +3654,14 @@ components:
       type: object
       x-airbyte-entity-name: refunds
       x-airbyte-stream-name: refunds
+      x-airbyte-ai-hints:
+        summary: "Refunds processed for WooCommerce orders"
+        when_to_use: "Questions about refunds or return processing"
+        trigger_phrases: ["woocommerce refund", "order refund"]
+        freshness: live
+        search_strategy: "Filter by order"
+        example_questions:
+          - "What refunds were processed?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3720,6 +3808,14 @@ components:
       type: object
       x-airbyte-entity-name: payment_gateways
       x-airbyte-stream-name: payment_gateways
+      x-airbyte-ai-hints:
+        summary: "Payment gateway configurations in WooCommerce"
+        when_to_use: "Questions about available payment methods or gateway settings"
+        trigger_phrases: ["payment gateway", "payment method"]
+        freshness: static
+        search_strategy: "List all gateways"
+        example_questions:
+          - "What payment gateways are configured?"
       properties:
         id:
           type: ["null", "string"]
@@ -3781,6 +3877,14 @@ components:
       type: object
       x-airbyte-entity-name: shipping_methods
       x-airbyte-stream-name: shipping_methods
+      x-airbyte-ai-hints:
+        summary: "Shipping methods configured in WooCommerce"
+        when_to_use: "Questions about shipping options or delivery methods"
+        trigger_phrases: ["shipping method", "delivery method"]
+        freshness: static
+        search_strategy: "List all methods"
+        example_questions:
+          - "What shipping methods are available?"
       properties:
         id:
           type: ["null", "string"]
@@ -3799,6 +3903,14 @@ components:
       type: object
       x-airbyte-entity-name: shipping_zones
       x-airbyte-stream-name: shipping_zones
+      x-airbyte-ai-hints:
+        summary: "Shipping zones defining geographic regions and rates"
+        when_to_use: "Questions about shipping zone configuration or regional rates"
+        trigger_phrases: ["shipping zone", "delivery zone"]
+        freshness: static
+        search_strategy: "List all zones"
+        example_questions:
+          - "What shipping zones are configured?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3817,6 +3929,14 @@ components:
       type: object
       x-airbyte-entity-name: tax_rates
       x-airbyte-stream-name: tax_rates
+      x-airbyte-ai-hints:
+        summary: "Tax rates configured in WooCommerce"
+        when_to_use: "Questions about tax configuration or tax rates"
+        trigger_phrases: ["tax rate", "sales tax"]
+        freshness: static
+        search_strategy: "Filter by country or class"
+        example_questions:
+          - "What tax rates are configured?"
       properties:
         id:
           type: ["null", "integer"]
@@ -3872,6 +3992,14 @@ components:
       type: object
       x-airbyte-entity-name: tax_classes
       x-airbyte-stream-name: tax_classes
+      x-airbyte-ai-hints:
+        summary: "Tax classes for categorizing products by tax treatment"
+        when_to_use: "Questions about tax classification"
+        trigger_phrases: ["tax class"]
+        freshness: static
+        search_strategy: "List all tax classes"
+        example_questions:
+          - "What tax classes exist?"
       properties:
         slug:
           type: ["null", "string"]

@@ -882,6 +882,14 @@ components:
       type: object
       x-airbyte-entity-name: projects
       x-airbyte-stream-name: projects
+      x-airbyte-ai-hints:
+        summary: "Sentry projects tracking errors for specific applications"
+        when_to_use: "Questions about available projects or project configuration"
+        trigger_phrases: ["sentry project", "error tracking project"]
+        freshness: live
+        search_strategy: "Search by name or slug"
+        example_questions:
+          - "What projects are in Sentry?"
       description: A Sentry project (summary view from list endpoint).
       properties:
         id:
@@ -1114,6 +1122,14 @@ components:
       type: object
       x-airbyte-entity-name: project_detail
       x-airbyte-stream-name: project_detail
+      x-airbyte-ai-hints:
+        summary: "Detailed Sentry project configuration and stats"
+        when_to_use: "Looking up detailed project settings or statistics"
+        trigger_phrases: ["project detail", "project settings", "project stats"]
+        freshness: live
+        search_strategy: "Retrieve by project slug"
+        example_questions:
+          - "Show details for a Sentry project"
       description: Detailed project information.
       properties:
         id:
@@ -1602,6 +1618,15 @@ components:
       type: object
       x-airbyte-entity-name: issues
       x-airbyte-stream-name: issues
+      x-airbyte-ai-hints:
+        summary: "Sentry issues (error groups) with frequency and status"
+        when_to_use: "Questions about errors, crashes, or bug frequency"
+        trigger_phrases: ["sentry issue", "error", "crash", "bug frequency"]
+        freshness: live
+        search_strategy: "Search by title or filter by project, status, or frequency"
+        example_questions:
+          - "What are the top Sentry issues?"
+          - "Show unresolved errors"
       description: A Sentry issue (group of similar events).
       properties:
         id:
@@ -1798,6 +1823,14 @@ components:
       type: object
       x-airbyte-entity-name: events
       x-airbyte-stream-name: events
+      x-airbyte-ai-hints:
+        summary: "Individual error events with stack traces and context"
+        when_to_use: "Investigating specific error occurrences or stack traces"
+        trigger_phrases: ["error event", "stack trace", "crash event"]
+        freshness: live
+        search_strategy: "Filter by issue or project"
+        example_questions:
+          - "Show the latest error events"
       description: A Sentry event (individual error occurrence).
       properties:
         id:
@@ -2007,6 +2040,15 @@ components:
       type: object
       x-airbyte-entity-name: releases
       x-airbyte-stream-name: releases
+      x-airbyte-ai-hints:
+        summary: "Software releases tracked in Sentry with deployment and error data"
+        when_to_use: "Questions about release health, deploy tracking, or regression detection"
+        trigger_phrases: ["sentry release", "release health", "deploy", "regression"]
+        freshness: live
+        search_strategy: "Filter by project or search by version"
+        example_questions:
+          - "What is the latest release?"
+          - "Did the new release introduce errors?"
       description: A Sentry release.
       properties:
         id:

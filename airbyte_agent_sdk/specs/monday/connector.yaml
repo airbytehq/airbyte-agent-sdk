@@ -1498,6 +1498,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Monday.com users with role and team membership"
+        when_to_use: "Looking up team members in Monday.com"
+        trigger_phrases: ["monday user", "team member"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the Monday.com users?"
       description: Monday.com user object
       properties:
         id:
@@ -1580,6 +1588,15 @@ components:
       type: object
       x-airbyte-entity-name: boards
       x-airbyte-stream-name: boards
+      x-airbyte-ai-hints:
+        summary: "Monday.com boards organizing items and workflows"
+        when_to_use: "Questions about available boards or project tracking surfaces"
+        trigger_phrases: ["monday board", "project board", "workspace board"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What boards are in Monday.com?"
+          - "Find a specific board"
       description: Monday.com board object
       properties:
         id:
@@ -1713,6 +1730,15 @@ components:
       type: object
       x-airbyte-entity-name: items
       x-airbyte-stream-name: items
+      x-airbyte-ai-hints:
+        summary: "Items (tasks/rows) on Monday.com boards with column values"
+        when_to_use: "Questions about tasks, work items, or board rows"
+        trigger_phrases: ["monday item", "board item", "task", "work item"]
+        freshness: live
+        search_strategy: "Search by name or filter by board and column values"
+        example_questions:
+          - "Show items on a Monday board"
+          - "Find items assigned to me"
       description: Monday.com item object
       properties:
         id:
@@ -1780,6 +1806,14 @@ components:
       type: object
       x-airbyte-entity-name: teams
       x-airbyte-stream-name: teams
+      x-airbyte-ai-hints:
+        summary: "Teams in Monday.com for organizing users"
+        when_to_use: "Questions about team structure or membership"
+        trigger_phrases: ["monday team"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What teams are in Monday.com?"
       description: Monday.com team object
       properties:
         id:
@@ -1804,6 +1838,14 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Tags for categorizing items on Monday.com boards"
+        when_to_use: "Questions about available tags or item categorization"
+        trigger_phrases: ["monday tag", "item tag"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What tags are available?"
       description: Monday.com tag object
       properties:
         id:
@@ -1820,6 +1862,14 @@ components:
       type: object
       x-airbyte-entity-name: updates
       x-airbyte-stream-name: updates
+      x-airbyte-ai-hints:
+        summary: "Updates (comments/notes) posted on Monday.com items"
+        when_to_use: "Looking for discussions or notes on board items"
+        trigger_phrases: ["monday update", "item comment", "board comment"]
+        freshness: live
+        search_strategy: "Filter by item"
+        example_questions:
+          - "What updates are on this item?"
       description: Monday.com update (comment/post) object
       properties:
         id:
@@ -1895,6 +1945,14 @@ components:
       type: object
       x-airbyte-entity-name: workspaces
       x-airbyte-stream-name: workspaces
+      x-airbyte-ai-hints:
+        summary: "Monday.com workspaces organizing boards and teams"
+        when_to_use: "Questions about workspace structure or available workspaces"
+        trigger_phrases: ["monday workspace"]
+        freshness: live
+        search_strategy: "List all workspaces"
+        example_questions:
+          - "What workspaces are in Monday.com?"
       description: Monday.com workspace object
       properties:
         id:
@@ -1975,6 +2033,14 @@ components:
       type: object
       x-airbyte-entity-name: activity_logs
       x-airbyte-stream-name: activity_logs
+      x-airbyte-ai-hints:
+        summary: "Activity logs tracking changes and events on Monday.com boards"
+        when_to_use: "Questions about recent activity or audit trail on boards"
+        trigger_phrases: ["activity log", "board activity", "who changed"]
+        freshness: live
+        search_strategy: "Filter by board or date range"
+        example_questions:
+          - "What activity happened on a board recently?"
       description: Monday.com activity log entry
       properties:
         id:

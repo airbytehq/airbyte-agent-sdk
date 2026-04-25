@@ -1344,6 +1344,14 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: accounts
+      x-airbyte-ai-hints:
+        summary: "LinkedIn Ads accounts with status and billing information"
+        when_to_use: "Questions about ad account details or account-level settings"
+        trigger_phrases: ["linkedin ads account", "ad account"]
+        freshness: live
+        search_strategy: "List all accessible accounts"
+        example_questions:
+          - "What LinkedIn Ads accounts do I have?"
       description: LinkedIn ad account object
       properties:
         id:
@@ -1475,6 +1483,14 @@ components:
       type: object
       x-airbyte-entity-name: account_users
       x-airbyte-stream-name: account_users
+      x-airbyte-ai-hints:
+        summary: "Users with access to LinkedIn Ads accounts and their roles"
+        when_to_use: "Questions about who has access to ad accounts"
+        trigger_phrases: ["account user", "ad account access", "who has access"]
+        freshness: live
+        search_strategy: "Filter by account"
+        example_questions:
+          - "Who has access to this LinkedIn Ads account?"
       description: LinkedIn ad account user object
       properties:
         account:
@@ -1544,6 +1560,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "LinkedIn ad campaigns with targeting, budget, and status"
+        when_to_use: "Questions about campaign configuration, status, or performance"
+        trigger_phrases: ["linkedin campaign", "ad campaign", "campaign status"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show active LinkedIn campaigns"
       description: LinkedIn ad campaign object
       properties:
         id:
@@ -1790,6 +1814,14 @@ components:
       type: object
       x-airbyte-entity-name: campaign_groups
       x-airbyte-stream-name: campaign_groups
+      x-airbyte-ai-hints:
+        summary: "Campaign groups organizing LinkedIn ad campaigns"
+        when_to_use: "Questions about campaign organization or grouping"
+        trigger_phrases: ["campaign group", "campaign folder"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What campaign groups exist?"
       description: LinkedIn ad campaign group object
       properties:
         id:
@@ -1916,6 +1948,14 @@ components:
       type: object
       x-airbyte-entity-name: creatives
       x-airbyte-stream-name: creatives
+      x-airbyte-ai-hints:
+        summary: "LinkedIn ad creatives with copy, images, and format details"
+        when_to_use: "Questions about ad creative content or creative assets"
+        trigger_phrases: ["linkedin creative", "ad creative", "ad copy"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "Show creatives for a campaign"
       description: LinkedIn ad creative object
       properties:
         id:
@@ -2033,6 +2073,14 @@ components:
       type: object
       x-airbyte-entity-name: conversions
       x-airbyte-stream-name: conversions
+      x-airbyte-ai-hints:
+        summary: "Conversion tracking rules for LinkedIn ad attribution"
+        when_to_use: "Questions about conversion tracking or attribution setup"
+        trigger_phrases: ["linkedin conversion", "conversion tracking", "attribution"]
+        freshness: live
+        search_strategy: "List all conversion rules"
+        example_questions:
+          - "What conversion rules are set up?"
       description: LinkedIn ad conversion tracking rule
       properties:
         id:

@@ -140,6 +140,15 @@ components:
       type: object
       x-airbyte-entity-name: bases
       x-airbyte-stream-name: bases
+      x-airbyte-ai-hints:
+        summary: "Airtable bases (databases) available in the workspace"
+        when_to_use: "Questions about available Airtable databases or workspaces"
+        trigger_phrases: ["airtable base", "which bases", "list databases", "airtable workspace"]
+        freshness: live
+        search_strategy: "Search by name for the base you need"
+        example_questions:
+          - "List all my Airtable bases"
+          - "Which Airtable databases do I have access to?"
       description: An Airtable base (workspace)
       required:
         - id
@@ -170,6 +179,15 @@ components:
       type: object
       x-airbyte-entity-name: tables
       x-airbyte-stream-name: tables
+      x-airbyte-ai-hints:
+        summary: "Tables within an Airtable base with field definitions"
+        when_to_use: "Questions about table structure, fields, or schema in Airtable"
+        trigger_phrases: ["airtable table", "table schema", "what fields", "table structure"]
+        freshness: live
+        search_strategy: "Search by name to find specific tables within a base"
+        example_questions:
+          - "What tables are in my Airtable base?"
+          - "Show me the fields in a table"
       description: A table within an Airtable base
       required:
         - id
@@ -238,6 +256,15 @@ components:
     Record:
       type: object
       x-airbyte-entity-name: records
+      x-airbyte-ai-hints:
+        summary: "Records (rows) from Airtable tables"
+        when_to_use: "Looking up or searching data stored in Airtable tables"
+        trigger_phrases: ["airtable record", "rows in table", "airtable data", "find record"]
+        freshness: live
+        search_strategy: "Filter by field values to locate specific records"
+        example_questions:
+          - "Show me records from my Airtable table"
+          - "Find records where Status is Done"
       description: A record (row) in an Airtable table
       required:
         - id

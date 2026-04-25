@@ -887,6 +887,14 @@ components:
       type: object
       x-airbyte-entity-name: sites
       x-airbyte-stream-name: sites
+      x-airbyte-ai-hints:
+        summary: "Verified sites in Google Search Console"
+        when_to_use: "Questions about which websites are tracked in Search Console"
+        trigger_phrases: ["search console site", "verified site", "tracked website"]
+        freshness: live
+        search_strategy: "List all verified sites"
+        example_questions:
+          - "What sites are in Google Search Console?"
       description: A Search Console site resource.
       properties:
         siteUrl:
@@ -939,6 +947,15 @@ components:
       type: object
       x-airbyte-entity-name: sitemaps
       x-airbyte-stream-name: sitemaps
+      x-airbyte-ai-hints:
+        summary: "Sitemaps submitted to Google Search Console"
+        when_to_use: "Questions about sitemap status or submitted URLs"
+        trigger_phrases: ["sitemap", "submitted sitemap", "sitemap status"]
+        freshness: live
+        search_strategy: "Filter by site"
+        example_questions:
+          - "What sitemaps are submitted?"
+          - "Show sitemap status"
       description: A sitemap resource with details about a submitted sitemap.
       properties:
         path:

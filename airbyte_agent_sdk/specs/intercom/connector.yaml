@@ -2024,6 +2024,15 @@ components:
       type: object
       x-airbyte-entity-name: contacts
       x-airbyte-stream-name: contacts
+      x-airbyte-ai-hints:
+        summary: "Intercom contacts (users and leads) with profile and activity data"
+        when_to_use: "Looking up customer or lead information in Intercom"
+        trigger_phrases: ["intercom contact", "customer", "lead", "user profile"]
+        freshness: live
+        search_strategy: "Search by email, name, or external ID"
+        example_questions:
+          - "Find a contact in Intercom"
+          - "Look up a customer by email"
       description: Contact object representing a user or lead
       properties:
         type:
@@ -2340,6 +2349,15 @@ components:
       type: object
       x-airbyte-entity-name: conversations
       x-airbyte-stream-name: conversations
+      x-airbyte-ai-hints:
+        summary: "Intercom conversations (chat threads) with customers"
+        when_to_use: "Questions about customer conversations or support chat history"
+        trigger_phrases: ["intercom conversation", "chat", "customer message", "support thread"]
+        freshness: live
+        search_strategy: "Search by contact or filter by status and assignee"
+        example_questions:
+          - "Show open Intercom conversations"
+          - "Find chats with a customer"
       description: Conversation object
       properties:
         type:
@@ -2732,6 +2750,14 @@ components:
       type: object
       x-airbyte-entity-name: conversation_parts
       x-airbyte-stream-name: conversation_parts
+      x-airbyte-ai-hints:
+        summary: "Individual messages within Intercom conversations"
+        when_to_use: "Looking at specific messages in a conversation thread"
+        trigger_phrases: ["conversation part", "message", "reply"]
+        freshness: live
+        search_strategy: "Filter by conversation"
+        example_questions:
+          - "Show messages in a conversation"
       description: Conversation part (message, note, action)
       properties:
         type:
@@ -2781,6 +2807,14 @@ components:
       type: object
       x-airbyte-entity-name: companies
       x-airbyte-stream-name: companies
+      x-airbyte-ai-hints:
+        summary: "Companies associated with Intercom contacts"
+        when_to_use: "Looking up company details or grouping contacts by company"
+        trigger_phrases: ["intercom company", "company details"]
+        freshness: live
+        search_strategy: "Search by name or company ID"
+        example_questions:
+          - "Show companies in Intercom"
       description: Company object
       properties:
         type:
@@ -2931,6 +2965,14 @@ components:
       type: object
       x-airbyte-entity-name: teams
       x-airbyte-stream-name: teams
+      x-airbyte-ai-hints:
+        summary: "Support teams in Intercom for conversation routing"
+        when_to_use: "Questions about team structure or conversation assignment"
+        trigger_phrases: ["intercom team", "support team"]
+        freshness: static
+        search_strategy: "List all teams"
+        example_questions:
+          - "What teams are in Intercom?"
       description: Team object
       properties:
         type:
@@ -2986,6 +3028,14 @@ components:
       type: object
       x-airbyte-entity-name: admins
       x-airbyte-stream-name: admins
+      x-airbyte-ai-hints:
+        summary: "Intercom admin users (agents and operators)"
+        when_to_use: "Looking up support agent details"
+        trigger_phrases: ["intercom admin", "support agent", "operator"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the Intercom admins?"
       description: Admin object
       properties:
         type:
@@ -3055,6 +3105,14 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Tags for categorizing contacts, companies, and conversations"
+        when_to_use: "Questions about available tags or contact categorization"
+        trigger_phrases: ["intercom tag", "contact tag"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What tags exist in Intercom?"
       description: Tag object
       properties:
         type:
@@ -3093,6 +3151,14 @@ components:
       type: object
       x-airbyte-entity-name: segments
       x-airbyte-stream-name: segments
+      x-airbyte-ai-hints:
+        summary: "Dynamic segments of contacts based on filter criteria"
+        when_to_use: "Questions about user segments or customer groups"
+        trigger_phrases: ["intercom segment", "user segment", "customer group"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What segments are defined in Intercom?"
       description: Segment object
       properties:
         type:
@@ -3294,6 +3360,14 @@ components:
     Note:
       type: object
       x-airbyte-entity-name: notes
+      x-airbyte-ai-hints:
+        summary: "Internal notes on Intercom contacts"
+        when_to_use: "Looking for internal notes or context about a customer"
+        trigger_phrases: ["intercom note", "contact note", "internal note"]
+        freshness: live
+        search_strategy: "Filter by contact"
+        example_questions:
+          - "What notes are on a contact?"
       description: Note object on a contact
       properties:
         type:
@@ -3346,6 +3420,14 @@ components:
     InternalArticle:
       type: object
       x-airbyte-entity-name: internal_articles
+      x-airbyte-ai-hints:
+        summary: "Internal help center articles for the support team"
+        when_to_use: "Looking for internal knowledge base content"
+        trigger_phrases: ["help article", "knowledge base", "internal article"]
+        freshness: live
+        search_strategy: "Search by title or content"
+        example_questions:
+          - "Find an internal help article about a topic"
       description: Internal article object
       properties:
         id:

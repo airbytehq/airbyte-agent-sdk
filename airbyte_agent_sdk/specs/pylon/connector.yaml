@@ -1988,6 +1988,14 @@ components:
     Message:
       type: object
       x-airbyte-entity-name: messages
+      x-airbyte-ai-hints:
+        summary: "Customer messages across Pylon channels (Slack, email, etc.)"
+        when_to_use: "Looking for customer messages or conversation content"
+        trigger_phrases: ["pylon message", "customer message"]
+        freshness: live
+        search_strategy: "Search by content or filter by account"
+        example_questions:
+          - "Show recent customer messages"
       properties:
         id:
           type: string
@@ -2051,6 +2059,14 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: accounts
+      x-airbyte-ai-hints:
+        summary: "Customer accounts in Pylon"
+        when_to_use: "Looking up customer account details"
+        trigger_phrases: ["pylon account", "customer account"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "Find an account in Pylon"
       properties:
         id:
           type: string
@@ -2197,6 +2213,14 @@ components:
       type: object
       x-airbyte-entity-name: contacts
       x-airbyte-stream-name: contacts
+      x-airbyte-ai-hints:
+        summary: "Customer contacts associated with Pylon accounts"
+        when_to_use: "Looking up customer contact information"
+        trigger_phrases: ["pylon contact", "customer contact"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find a contact in Pylon"
       properties:
         id:
           type: string
@@ -2266,6 +2290,14 @@ components:
       type: object
       x-airbyte-entity-name: teams
       x-airbyte-stream-name: teams
+      x-airbyte-ai-hints:
+        summary: "Support teams in Pylon for routing conversations"
+        when_to_use: "Questions about team structure or routing"
+        trigger_phrases: ["pylon team", "support team"]
+        freshness: static
+        search_strategy: "List all teams"
+        example_questions:
+          - "What teams are in Pylon?"
       properties:
         id:
           type: string
@@ -2305,6 +2337,14 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Tags for categorizing issues and conversations in Pylon"
+        when_to_use: "Questions about available tags or categorization"
+        trigger_phrases: ["pylon tag"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What tags exist in Pylon?"
       properties:
         id:
           type: string
@@ -2345,6 +2385,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Pylon users (support agents and admins)"
+        when_to_use: "Looking up support agent details"
+        trigger_phrases: ["pylon user", "support agent"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the Pylon users?"
       properties:
         id:
           type: string
@@ -2428,6 +2476,14 @@ components:
       type: object
       x-airbyte-entity-name: custom_fields
       x-airbyte-stream-name: custom_fields
+      x-airbyte-ai-hints:
+        summary: "Custom field definitions in Pylon"
+        when_to_use: "Questions about custom data fields"
+        trigger_phrases: ["pylon custom field"]
+        freshness: static
+        search_strategy: "List all custom fields"
+        example_questions:
+          - "What custom fields are defined?"
       properties:
         id:
           type: string
@@ -2518,6 +2574,14 @@ components:
       type: object
       x-airbyte-entity-name: ticket_forms
       x-airbyte-stream-name: ticket_forms
+      x-airbyte-ai-hints:
+        summary: "Ticket form templates in Pylon"
+        when_to_use: "Questions about ticket form configuration"
+        trigger_phrases: ["ticket form", "form template"]
+        freshness: static
+        search_strategy: "List all ticket forms"
+        example_questions:
+          - "What ticket forms exist in Pylon?"
       properties:
         id:
           type: string
@@ -2560,6 +2624,14 @@ components:
       type: object
       x-airbyte-entity-name: user_roles
       x-airbyte-stream-name: user_roles
+      x-airbyte-ai-hints:
+        summary: "User role definitions in Pylon"
+        when_to_use: "Questions about role-based access or permissions"
+        trigger_phrases: ["pylon role", "user role"]
+        freshness: static
+        search_strategy: "List all roles"
+        example_questions:
+          - "What user roles are defined in Pylon?"
       properties:
         id:
           type: string

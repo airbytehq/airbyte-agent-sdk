@@ -1550,6 +1550,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Harvest users (team members) with roles and capacity"
+        when_to_use: "Looking up team member details or user assignments"
+        trigger_phrases: ["harvest user", "team member"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the users in Harvest?"
       description: A Harvest user
       required:
         - id
@@ -1662,6 +1670,15 @@ components:
       type: object
       x-airbyte-entity-name: clients
       x-airbyte-stream-name: clients
+      x-airbyte-ai-hints:
+        summary: "Clients tracked in Harvest for billing and project management"
+        when_to_use: "Questions about client details or client-project relationships"
+        trigger_phrases: ["harvest client", "customer", "client details"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "List Harvest clients"
+          - "Show details for a client"
       description: A Harvest client
       required:
         - id
@@ -1726,6 +1743,14 @@ components:
       type: object
       x-airbyte-entity-name: contacts
       x-airbyte-stream-name: contacts
+      x-airbyte-ai-hints:
+        summary: "Contacts associated with Harvest clients"
+        when_to_use: "Looking up contact details for a client"
+        trigger_phrases: ["harvest contact", "client contact"]
+        freshness: live
+        search_strategy: "Filter by client or search by name"
+        example_questions:
+          - "What contacts are associated with a client?"
       description: A Harvest contact associated with a client
       required:
         - id
@@ -1806,6 +1831,14 @@ components:
       type: object
       x-airbyte-entity-name: company
       x-airbyte-stream-name: company
+      x-airbyte-ai-hints:
+        summary: "Company account information and Harvest settings"
+        when_to_use: "Questions about account-level settings or company configuration"
+        trigger_phrases: ["harvest company", "account settings"]
+        freshness: static
+        search_strategy: "Retrieve company info"
+        example_questions:
+          - "Show Harvest company settings"
       description: The Harvest company/account information
       properties:
         base_uri:
@@ -1885,6 +1918,15 @@ components:
       type: object
       x-airbyte-entity-name: projects
       x-airbyte-stream-name: projects
+      x-airbyte-ai-hints:
+        summary: "Projects in Harvest with budget, status, and client association"
+        when_to_use: "Questions about project details, budgets, or active projects"
+        trigger_phrases: ["harvest project", "project budget", "active project"]
+        freshness: live
+        search_strategy: "Search by name or filter by client or status"
+        example_questions:
+          - "List active Harvest projects"
+          - "What is the budget for a project?"
       description: A Harvest project
       required:
         - id
@@ -2007,6 +2049,14 @@ components:
       type: object
       x-airbyte-entity-name: tasks
       x-airbyte-stream-name: tasks
+      x-airbyte-ai-hints:
+        summary: "Task categories used for time tracking in Harvest"
+        when_to_use: "Questions about available task types for time tracking"
+        trigger_phrases: ["harvest task", "task type", "task category"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What task types are available in Harvest?"
       description: A Harvest task
       required:
         - id
@@ -2071,6 +2121,15 @@ components:
       type: object
       x-airbyte-entity-name: time_entries
       x-airbyte-stream-name: time_entries
+      x-airbyte-ai-hints:
+        summary: "Time entries logged by team members against projects and tasks"
+        when_to_use: "Questions about hours logged, time tracking, or billable time"
+        trigger_phrases: ["time entry", "hours logged", "billable hours", "time tracked"]
+        freshness: live
+        search_strategy: "Filter by user, project, date, or billable status"
+        example_questions:
+          - "How many hours were logged this week?"
+          - "Show time entries for a project"
       description: A Harvest time entry
       required:
         - id
@@ -2236,6 +2295,15 @@ components:
       type: object
       x-airbyte-entity-name: invoices
       x-airbyte-stream-name: invoices
+      x-airbyte-ai-hints:
+        summary: "Invoices generated from Harvest projects and time entries"
+        when_to_use: "Questions about invoicing, billing, or payment status"
+        trigger_phrases: ["harvest invoice", "billing", "invoice status"]
+        freshness: live
+        search_strategy: "Filter by client, date, or status"
+        example_questions:
+          - "Show recent invoices"
+          - "What invoices are outstanding?"
       description: A Harvest invoice
       required:
         - id
@@ -2385,6 +2453,14 @@ components:
       type: object
       x-airbyte-entity-name: invoice_item_categories
       x-airbyte-stream-name: invoice_item_categories
+      x-airbyte-ai-hints:
+        summary: "Categories for invoice line items"
+        when_to_use: "Questions about invoice categorization"
+        trigger_phrases: ["invoice category", "line item type"]
+        freshness: static
+        search_strategy: "List all categories"
+        example_questions:
+          - "What invoice item categories exist?"
       description: A Harvest invoice item category
       required:
         - id
@@ -2443,6 +2519,14 @@ components:
       type: object
       x-airbyte-entity-name: estimates
       x-airbyte-stream-name: estimates
+      x-airbyte-ai-hints:
+        summary: "Project estimates and cost proposals for clients"
+        when_to_use: "Questions about project estimates or cost proposals"
+        trigger_phrases: ["harvest estimate", "cost estimate", "proposal"]
+        freshness: live
+        search_strategy: "Filter by client or status"
+        example_questions:
+          - "Show project estimates"
       description: A Harvest estimate
       required:
         - id
@@ -2560,6 +2644,14 @@ components:
       type: object
       x-airbyte-entity-name: estimate_item_categories
       x-airbyte-stream-name: estimate_item_categories
+      x-airbyte-ai-hints:
+        summary: "Categories for estimate line items"
+        when_to_use: "Questions about estimate categorization"
+        trigger_phrases: ["estimate category", "estimate line item type"]
+        freshness: static
+        search_strategy: "List all categories"
+        example_questions:
+          - "What estimate item categories exist?"
       description: A Harvest estimate item category
       required:
         - id
@@ -2612,6 +2704,15 @@ components:
       type: object
       x-airbyte-entity-name: expenses
       x-airbyte-stream-name: expenses
+      x-airbyte-ai-hints:
+        summary: "Expense records tracked against projects and clients"
+        when_to_use: "Questions about expenses, reimbursements, or cost tracking"
+        trigger_phrases: ["harvest expense", "expense report", "reimbursement"]
+        freshness: live
+        search_strategy: "Filter by project, user, or date"
+        example_questions:
+          - "Show recent expenses"
+          - "What expenses are on a project?"
       description: A Harvest expense
       required:
         - id
@@ -2715,6 +2816,14 @@ components:
       type: object
       x-airbyte-entity-name: expense_categories
       x-airbyte-stream-name: expense_categories
+      x-airbyte-ai-hints:
+        summary: "Expense categories for organizing costs"
+        when_to_use: "Questions about expense categorization"
+        trigger_phrases: ["expense category", "cost category"]
+        freshness: static
+        search_strategy: "List all categories"
+        example_questions:
+          - "What expense categories are available?"
       description: A Harvest expense category
       required:
         - id
@@ -2776,6 +2885,14 @@ components:
       type: object
       x-airbyte-entity-name: roles
       x-airbyte-stream-name: roles
+      x-airbyte-ai-hints:
+        summary: "User roles defining billable rates and permissions"
+        when_to_use: "Questions about team roles or rate configurations"
+        trigger_phrases: ["harvest role", "billable rate", "user role"]
+        freshness: static
+        search_strategy: "List all roles"
+        example_questions:
+          - "What roles are defined in Harvest?"
       description: A Harvest role
       required:
         - id
@@ -2833,6 +2950,14 @@ components:
       type: object
       x-airbyte-entity-name: user_assignments
       x-airbyte-stream-name: user_assignments
+      x-airbyte-ai-hints:
+        summary: "User-to-project assignments with hourly rates"
+        when_to_use: "Questions about who is assigned to which projects"
+        trigger_phrases: ["project assignment", "who is on", "team assignment"]
+        freshness: live
+        search_strategy: "Filter by project or user"
+        example_questions:
+          - "Who is assigned to a project?"
       description: A Harvest user assignment linking a user to a project
       required:
         - id
@@ -2920,6 +3045,14 @@ components:
       type: object
       x-airbyte-entity-name: task_assignments
       x-airbyte-stream-name: task_assignments
+      x-airbyte-ai-hints:
+        summary: "Task-to-project assignments controlling available time entry tasks"
+        when_to_use: "Questions about which tasks are available on a project"
+        trigger_phrases: ["task assignment", "project task"]
+        freshness: live
+        search_strategy: "Filter by project"
+        example_questions:
+          - "What tasks are assigned to a project?"
       description: A Harvest task assignment linking a task to a project
       required:
         - id
@@ -3004,6 +3137,14 @@ components:
       type: object
       x-airbyte-entity-name: time_projects
       x-airbyte-stream-name: time_projects
+      x-airbyte-ai-hints:
+        summary: "Projects available for time entry by the current user"
+        when_to_use: "Questions about which projects the user can log time to"
+        trigger_phrases: ["my projects", "available projects", "log time"]
+        freshness: live
+        search_strategy: "List projects available for time entry"
+        example_questions:
+          - "What projects can I log time to?"
       description: A time report entry grouped by project
       properties:
         project_id:
@@ -3064,6 +3205,14 @@ components:
       type: object
       x-airbyte-entity-name: time_tasks
       x-airbyte-stream-name: time_tasks
+      x-airbyte-ai-hints:
+        summary: "Tasks available for time entry by the current user"
+        when_to_use: "Questions about which tasks the user can log time to"
+        trigger_phrases: ["my tasks", "available tasks"]
+        freshness: live
+        search_strategy: "List tasks available for time entry"
+        example_questions:
+          - "What tasks can I log time to?"
       description: A time report entry grouped by task
       properties:
         task_id:

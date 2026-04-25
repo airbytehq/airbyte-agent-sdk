@@ -783,6 +783,15 @@ components:
       type: object
       x-airbyte-entity-name: spaces
       x-airbyte-stream-name: space
+      x-airbyte-ai-hints:
+        summary: "Confluence spaces organizing pages and documentation"
+        when_to_use: "Questions about available documentation spaces or project wikis"
+        trigger_phrases: ["confluence space", "wiki space", "documentation area"]
+        freshness: live
+        search_strategy: "Search by name or key"
+        example_questions:
+          - "What Confluence spaces are available?"
+          - "Find the engineering wiki space"
       description: Confluence space object
       properties:
         id:
@@ -871,6 +880,15 @@ components:
       type: object
       x-airbyte-entity-name: pages
       x-airbyte-stream-name: pages
+      x-airbyte-ai-hints:
+        summary: "Confluence pages with titles, content, and version history"
+        when_to_use: "Looking for documentation, wiki pages, or internal knowledge"
+        trigger_phrases: ["confluence page", "wiki page", "documentation", "internal doc"]
+        freshness: live
+        search_strategy: "Search by title across spaces for best results"
+        example_questions:
+          - "Find the Confluence page about onboarding"
+          - "What docs are in the engineering space?"
       description: Confluence page object
       properties:
         id:
@@ -990,6 +1008,14 @@ components:
       type: object
       x-airbyte-entity-name: blog_posts
       x-airbyte-stream-name: blog_posts
+      x-airbyte-ai-hints:
+        summary: "Blog posts published in Confluence spaces"
+        when_to_use: "Looking for team blog posts, announcements, or updates"
+        trigger_phrases: ["confluence blog", "blog post", "team announcement"]
+        freshness: live
+        search_strategy: "Search by title or filter by space and date"
+        example_questions:
+          - "Show recent Confluence blog posts"
       description: Confluence blog post object
       properties:
         id:
@@ -1088,6 +1114,14 @@ components:
       type: object
       x-airbyte-entity-name: groups
       x-airbyte-stream-name: group
+      x-airbyte-ai-hints:
+        summary: "User groups in Confluence for permission management"
+        when_to_use: "Questions about user groups or access permissions"
+        trigger_phrases: ["confluence group", "user group", "permissions group"]
+        freshness: static
+        search_strategy: "Search by group name"
+        example_questions:
+          - "What user groups exist in Confluence?"
       description: Confluence group object
       properties:
         type:
@@ -1149,6 +1183,14 @@ components:
       type: object
       x-airbyte-entity-name: audit
       x-airbyte-stream-name: audit
+      x-airbyte-ai-hints:
+        summary: "Audit log entries tracking actions in Confluence"
+        when_to_use: "Questions about recent activity or changes in Confluence"
+        trigger_phrases: ["audit log", "who changed", "activity log", "recent changes"]
+        freshness: live
+        search_strategy: "Filter by date range or action type"
+        example_questions:
+          - "What changes were made in Confluence recently?"
       description: Confluence audit record
       properties:
         author:

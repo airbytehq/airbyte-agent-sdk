@@ -3117,6 +3117,15 @@ components:
       type: object
       x-airbyte-entity-name: projects
       x-airbyte-stream-name: projects
+      x-airbyte-ai-hints:
+        summary: "GitLab projects (repositories) with settings and metadata"
+        when_to_use: "Questions about GitLab repositories, project settings, or visibility"
+        trigger_phrases: ["gitlab project", "repository", "gitlab repo"]
+        freshness: live
+        search_strategy: "Search by name or path"
+        example_questions:
+          - "List GitLab projects"
+          - "Find a specific repository"
       description: GitLab project
       additionalProperties: true
       required:
@@ -3702,6 +3711,15 @@ components:
       type: object
       x-airbyte-entity-name: issues
       x-airbyte-stream-name: issues
+      x-airbyte-ai-hints:
+        summary: "GitLab issues tracking bugs, tasks, and feature requests"
+        when_to_use: "Questions about issues, bugs, or tasks in GitLab"
+        trigger_phrases: ["gitlab issue", "bug", "task", "feature request"]
+        freshness: live
+        search_strategy: "Search by title or filter by labels, assignee, or state"
+        example_questions:
+          - "Show open GitLab issues"
+          - "Find issues assigned to me"
       description: GitLab issue
       additionalProperties: true
       required:
@@ -3910,6 +3928,15 @@ components:
       type: object
       x-airbyte-entity-name: merge_requests
       x-airbyte-stream-name: merge_requests
+      x-airbyte-ai-hints:
+        summary: "Merge requests (pull requests) with review status and CI results"
+        when_to_use: "Questions about merge requests, code reviews, or PR status"
+        trigger_phrases: ["merge request", "MR", "pull request", "code review"]
+        freshness: live
+        search_strategy: "Search by title or filter by state, author, or assignee"
+        example_questions:
+          - "Show open merge requests"
+          - "What MRs need review?"
       description: GitLab merge request
       additionalProperties: true
       required:
@@ -4208,6 +4235,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "GitLab user profiles with activity and permissions"
+        when_to_use: "Looking up user details or team membership"
+        trigger_phrases: ["gitlab user", "contributor", "who is"]
+        freshness: live
+        search_strategy: "Search by username or name"
+        example_questions:
+          - "Find a user in GitLab"
       description: GitLab user
       additionalProperties: true
       required:
@@ -4247,6 +4282,15 @@ components:
       type: object
       x-airbyte-entity-name: commits
       x-airbyte-stream-name: commits
+      x-airbyte-ai-hints:
+        summary: "Git commits with author, message, and change details"
+        when_to_use: "Questions about recent commits, who changed what, or change history"
+        trigger_phrases: ["commit", "git log", "who committed", "change history"]
+        freshness: live
+        search_strategy: "Filter by branch, author, or date range"
+        example_questions:
+          - "Show recent commits"
+          - "Who made the last commit?"
       description: GitLab commit
       additionalProperties: true
       required:
@@ -4325,6 +4369,14 @@ components:
       type: object
       x-airbyte-entity-name: groups
       x-airbyte-stream-name: groups
+      x-airbyte-ai-hints:
+        summary: "GitLab groups organizing projects and managing permissions"
+        when_to_use: "Questions about group hierarchy or project organization"
+        trigger_phrases: ["gitlab group", "organization", "project group"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What GitLab groups exist?"
       description: GitLab group
       additionalProperties: true
       required:
@@ -4569,6 +4621,14 @@ components:
       type: object
       x-airbyte-entity-name: branches
       x-airbyte-stream-name: branches
+      x-airbyte-ai-hints:
+        summary: "Git branches in GitLab projects"
+        when_to_use: "Questions about active branches or branch management"
+        trigger_phrases: ["branch", "git branch", "feature branch"]
+        freshness: live
+        search_strategy: "Search by name or filter by project"
+        example_questions:
+          - "What branches exist in this project?"
       description: GitLab branch
       additionalProperties: true
       properties:
@@ -4605,6 +4665,15 @@ components:
       type: object
       x-airbyte-entity-name: pipelines
       x-airbyte-stream-name: pipelines
+      x-airbyte-ai-hints:
+        summary: "CI/CD pipelines with status, stages, and job results"
+        when_to_use: "Questions about CI/CD pipeline status, build results, or deployments"
+        trigger_phrases: ["pipeline", "CI/CD", "build status", "deployment"]
+        freshness: live
+        search_strategy: "Filter by project, branch, or status"
+        example_questions:
+          - "Show recent pipeline runs"
+          - "Did the CI pass?"
       description: GitLab CI/CD pipeline
       additionalProperties: true
       required:
@@ -4711,6 +4780,15 @@ components:
       type: object
       x-airbyte-entity-name: releases
       x-airbyte-stream-name: releases
+      x-airbyte-ai-hints:
+        summary: "GitLab releases with tags, notes, and release assets"
+        when_to_use: "Questions about software releases or version history"
+        trigger_phrases: ["release", "version", "release notes"]
+        freshness: live
+        search_strategy: "Filter by project or search by tag"
+        example_questions:
+          - "What is the latest release?"
+          - "Show release notes"
       description: GitLab release
       additionalProperties: true
       properties:
@@ -4774,6 +4852,14 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Git tags marking specific commits or versions"
+        when_to_use: "Questions about version tags or tagged commits"
+        trigger_phrases: ["git tag", "version tag"]
+        freshness: live
+        search_strategy: "Search by name or filter by project"
+        example_questions:
+          - "What tags exist in this project?"
       description: GitLab repository tag
       additionalProperties: true
       properties:

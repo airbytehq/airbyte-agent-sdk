@@ -700,6 +700,14 @@ components:
       type: object
       x-airbyte-entity-name: forms
       x-airbyte-stream-name: forms
+      x-airbyte-ai-hints:
+        summary: "Typeform forms (surveys, quizzes, questionnaires)"
+        when_to_use: "Questions about available forms or form configuration"
+        trigger_phrases: ["typeform", "survey", "questionnaire", "form"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "What forms are in Typeform?"
       description: A Typeform form with its fields, settings, and logic
       properties:
         id:
@@ -1126,6 +1134,15 @@ components:
       type: object
       x-airbyte-entity-name: responses
       x-airbyte-stream-name: responses
+      x-airbyte-ai-hints:
+        summary: "Submitted responses to Typeform forms with answers"
+        when_to_use: "Questions about form submissions or survey responses"
+        trigger_phrases: ["typeform response", "survey response", "form submission", "answers"]
+        freshness: live
+        search_strategy: "Filter by form and date range"
+        example_questions:
+          - "Show responses to a form"
+          - "How many responses were submitted?"
       description: A single form response/submission
       properties:
         response_id:
@@ -1267,6 +1284,14 @@ components:
       type: object
       x-airbyte-entity-name: webhooks
       x-airbyte-stream-name: webhooks
+      x-airbyte-ai-hints:
+        summary: "Webhook configurations for Typeform event notifications"
+        when_to_use: "Questions about webhook setup or event notifications"
+        trigger_phrases: ["typeform webhook", "notification"]
+        freshness: static
+        search_strategy: "Filter by form"
+        example_questions:
+          - "What webhooks are configured?"
       description: A webhook configured for a form
       properties:
         id:
@@ -1307,6 +1332,14 @@ components:
       type: object
       x-airbyte-entity-name: workspaces
       x-airbyte-stream-name: workspaces
+      x-airbyte-ai-hints:
+        summary: "Typeform workspaces for organizing forms"
+        when_to_use: "Questions about workspace organization"
+        trigger_phrases: ["typeform workspace"]
+        freshness: live
+        search_strategy: "List all workspaces"
+        example_questions:
+          - "What Typeform workspaces exist?"
       description: A workspace containing forms
       properties:
         id:
@@ -1361,6 +1394,14 @@ components:
       type: object
       x-airbyte-entity-name: images
       x-airbyte-stream-name: images
+      x-airbyte-ai-hints:
+        summary: "Images uploaded to Typeform for use in forms"
+        when_to_use: "Questions about available images or media assets"
+        trigger_phrases: ["typeform image", "form image"]
+        freshness: live
+        search_strategy: "List all images"
+        example_questions:
+          - "What images are uploaded in Typeform?"
       description: An image in the account
       properties:
         id:
@@ -1395,6 +1436,14 @@ components:
       type: object
       x-airbyte-entity-name: themes
       x-airbyte-stream-name: themes
+      x-airbyte-ai-hints:
+        summary: "Visual themes applied to Typeform forms"
+        when_to_use: "Questions about form styling or available themes"
+        trigger_phrases: ["typeform theme", "form theme", "form styling"]
+        freshness: static
+        search_strategy: "List all themes"
+        example_questions:
+          - "What themes are available?"
       description: A theme used for styling forms
       properties:
         id:

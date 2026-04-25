@@ -3227,6 +3227,15 @@ components:
       type: object
       x-airbyte-entity-name: customers
       x-airbyte-stream-name: customers
+      x-airbyte-ai-hints:
+        summary: "Stripe customers with email, billing, and subscription details"
+        when_to_use: "Looking up customer billing info or payment details"
+        trigger_phrases: ["stripe customer", "billing customer", "who is paying"]
+        freshness: live
+        search_strategy: "Search by email or name"
+        example_questions:
+          - "Find a customer in Stripe"
+          - "Show customer billing details"
       properties:
         id:
           type: string
@@ -3683,6 +3692,15 @@ components:
       type: object
       x-airbyte-entity-name: invoices
       x-airbyte-stream-name: invoices
+      x-airbyte-ai-hints:
+        summary: "Stripe invoices with line items, amounts, and payment status"
+        when_to_use: "Questions about invoices, billing, or payment history"
+        trigger_phrases: ["stripe invoice", "billing", "invoice status"]
+        freshness: live
+        search_strategy: "Filter by customer, date, or status"
+        example_questions:
+          - "Show recent invoices"
+          - "What invoices are unpaid?"
       properties:
         id:
           type: string
@@ -4679,6 +4697,14 @@ components:
       type: object
       x-airbyte-entity-name: charges
       x-airbyte-stream-name: charges
+      x-airbyte-ai-hints:
+        summary: "Payment charges processed through Stripe"
+        when_to_use: "Questions about payments, charges, or transaction details"
+        trigger_phrases: ["stripe charge", "payment", "charge status"]
+        freshness: live
+        search_strategy: "Filter by customer, date, or status"
+        example_questions:
+          - "Show recent charges"
       properties:
         id:
           type: string
@@ -5031,6 +5057,15 @@ components:
       type: object
       x-airbyte-entity-name: subscriptions
       x-airbyte-stream-name: subscriptions
+      x-airbyte-ai-hints:
+        summary: "Stripe subscriptions with plan, status, and billing cycle"
+        when_to_use: "Questions about subscription status, plans, or renewals"
+        trigger_phrases: ["stripe subscription", "recurring billing", "subscription status"]
+        freshness: live
+        search_strategy: "Filter by customer or status"
+        example_questions:
+          - "Show active subscriptions"
+          - "What plan is a customer on?"
       properties:
         id:
           type: string
@@ -5503,6 +5538,14 @@ components:
       type: object
       x-airbyte-entity-name: refunds
       x-airbyte-stream-name: refunds
+      x-airbyte-ai-hints:
+        summary: "Refunds processed for Stripe charges"
+        when_to_use: "Questions about refunds or money returned to customers"
+        trigger_phrases: ["stripe refund", "refund status", "money back"]
+        freshness: live
+        search_strategy: "Filter by charge or customer"
+        example_questions:
+          - "Show recent refunds"
       properties:
         id:
           type: string
@@ -5881,6 +5924,14 @@ components:
       type: object
       x-airbyte-entity-name: products
       x-airbyte-stream-name: products
+      x-airbyte-ai-hints:
+        summary: "Products defined in Stripe for billing and subscriptions"
+        when_to_use: "Questions about available products or product catalog"
+        trigger_phrases: ["stripe product", "product catalog"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What products are in Stripe?"
       properties:
         id:
           type: string
@@ -6163,6 +6214,14 @@ components:
     Balance:
       type: object
       x-airbyte-entity-name: balance
+      x-airbyte-ai-hints:
+        summary: "Current Stripe account balance across currencies"
+        when_to_use: "Questions about account balance or available funds"
+        trigger_phrases: ["stripe balance", "account balance", "available funds"]
+        freshness: live
+        search_strategy: "Retrieve current balance"
+        example_questions:
+          - "What is the Stripe balance?"
       properties:
         object:
           type: string
@@ -6384,6 +6443,14 @@ components:
       type: object
       x-airbyte-entity-name: balance_transactions
       x-airbyte-stream-name: balance_transactions
+      x-airbyte-ai-hints:
+        summary: "Balance transactions showing money movement in Stripe"
+        when_to_use: "Questions about balance changes, fees, or money flow"
+        trigger_phrases: ["balance transaction", "fee", "payout detail"]
+        freshness: live
+        search_strategy: "Filter by date or type"
+        example_questions:
+          - "Show balance transactions for this month"
       properties:
         id:
           type: string
@@ -6474,6 +6541,14 @@ components:
       type: object
       x-airbyte-entity-name: payment_intents
       x-airbyte-stream-name: payment_intents
+      x-airbyte-ai-hints:
+        summary: "Payment intents tracking the lifecycle of a payment in Stripe"
+        when_to_use: "Questions about payment status or payment processing details"
+        trigger_phrases: ["payment intent", "payment status", "payment processing"]
+        freshness: live
+        search_strategy: "Filter by customer or status"
+        example_questions:
+          - "Show recent payment intents"
       properties:
         id:
           type: string
@@ -6577,6 +6652,14 @@ components:
       type: object
       x-airbyte-entity-name: disputes
       x-airbyte-stream-name: disputes
+      x-airbyte-ai-hints:
+        summary: "Payment disputes (chargebacks) in Stripe"
+        when_to_use: "Questions about chargebacks, disputes, or contested payments"
+        trigger_phrases: ["stripe dispute", "chargeback", "contested payment"]
+        freshness: live
+        search_strategy: "Filter by status or date"
+        example_questions:
+          - "Are there any open disputes?"
       properties:
         id:
           type: string
@@ -6671,6 +6754,14 @@ components:
       type: object
       x-airbyte-entity-name: payouts
       x-airbyte-stream-name: payouts
+      x-airbyte-ai-hints:
+        summary: "Payouts from Stripe to the connected bank account"
+        when_to_use: "Questions about bank payouts or money transfers"
+        trigger_phrases: ["stripe payout", "bank transfer", "payout status"]
+        freshness: live
+        search_strategy: "Filter by status or date"
+        example_questions:
+          - "Show recent payouts"
       properties:
         id:
           type: string
@@ -7114,6 +7205,14 @@ components:
       type: object
       x-airbyte-entity-name: prices
       x-airbyte-stream-name: prices
+      x-airbyte-ai-hints:
+        summary: "Price configurations for Stripe products (one-time and recurring)"
+        when_to_use: "Questions about pricing, billing amounts, or price configuration"
+        trigger_phrases: ["stripe price", "pricing", "billing amount"]
+        freshness: live
+        search_strategy: "Filter by product"
+        example_questions:
+          - "What prices are defined for a product?"
       properties:
         id:
           type: string
@@ -7255,6 +7354,14 @@ components:
       type: object
       x-airbyte-entity-name: checkout_sessions
       x-airbyte-stream-name: checkout_sessions
+      x-airbyte-ai-hints:
+        summary: "Stripe Checkout sessions for hosted payment pages"
+        when_to_use: "Questions about checkout sessions or hosted payment flows"
+        trigger_phrases: ["checkout session", "checkout page", "payment page"]
+        freshness: live
+        search_strategy: "Filter by customer or status"
+        example_questions:
+          - "Show recent checkout sessions"
       properties:
         id:
           type: string
@@ -7357,6 +7464,14 @@ components:
     PaymentMethod:
       type: object
       x-airbyte-entity-name: payment_method_attachments
+      x-airbyte-ai-hints:
+        summary: "Payment methods attached to Stripe customers"
+        when_to_use: "Questions about saved payment methods or cards on file"
+        trigger_phrases: ["payment method", "saved card", "card on file"]
+        freshness: live
+        search_strategy: "Filter by customer"
+        example_questions:
+          - "What payment methods does a customer have?"
       properties:
         id:
           type: string

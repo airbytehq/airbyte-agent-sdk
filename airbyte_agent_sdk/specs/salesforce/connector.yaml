@@ -2452,6 +2452,14 @@ components:
     SObject:
       type: object
       x-airbyte-entity-name: sobjects
+      x-airbyte-ai-hints:
+        summary: "Salesforce object metadata describing available entity types"
+        when_to_use: "Questions about available Salesforce objects or schema structure"
+        trigger_phrases: ["salesforce object", "sobject", "schema", "object type"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What Salesforce objects are available?"
       description: Salesforce sObject metadata
       additionalProperties: true
       properties:
@@ -2536,6 +2544,15 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: Account
+      x-airbyte-ai-hints:
+        summary: "Salesforce accounts representing companies or organizations"
+        when_to_use: "Looking up company or organization details in Salesforce"
+        trigger_phrases: ["salesforce account", "company", "organization"]
+        freshness: live
+        search_strategy: "Search by name or filter by type or owner"
+        example_questions:
+          - "Find an account in Salesforce"
+          - "Show account details"
       description: Salesforce Account object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2578,6 +2595,14 @@ components:
       type: object
       x-airbyte-entity-name: contacts
       x-airbyte-stream-name: Contact
+      x-airbyte-ai-hints:
+        summary: "Salesforce contacts with email, phone, and account association"
+        when_to_use: "Looking up individual contact information"
+        trigger_phrases: ["salesforce contact", "who is", "contact info"]
+        freshness: live
+        search_strategy: "Search by name, email, or account"
+        example_questions:
+          - "Find a contact in Salesforce"
       description: Salesforce Contact object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2615,6 +2640,15 @@ components:
       type: object
       x-airbyte-entity-name: leads
       x-airbyte-stream-name: Lead
+      x-airbyte-ai-hints:
+        summary: "Sales leads with source, status, and conversion details"
+        when_to_use: "Questions about leads, lead status, or lead conversion"
+        trigger_phrases: ["salesforce lead", "new lead", "lead status", "lead source"]
+        freshness: live
+        search_strategy: "Search by name, email, or filter by status and source"
+        example_questions:
+          - "Show new leads"
+          - "What leads came in this week?"
       description: Salesforce Lead object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2652,6 +2686,15 @@ components:
       type: object
       x-airbyte-entity-name: opportunities
       x-airbyte-stream-name: Opportunity
+      x-airbyte-ai-hints:
+        summary: "Sales opportunities with stage, amount, and close date"
+        when_to_use: "Questions about pipeline, deal stage, revenue, or forecasts"
+        trigger_phrases: ["opportunity", "deal", "pipeline", "forecast", "close date"]
+        freshness: live
+        search_strategy: "Search by name or filter by stage, owner, or close date"
+        example_questions:
+          - "Show deals closing this month"
+          - "What is the pipeline value?"
       description: Salesforce Opportunity object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2689,6 +2732,14 @@ components:
       type: object
       x-airbyte-entity-name: tasks
       x-airbyte-stream-name: Task
+      x-airbyte-ai-hints:
+        summary: "Salesforce tasks (to-dos and activities) assigned to users"
+        when_to_use: "Questions about assigned tasks or activity tracking"
+        trigger_phrases: ["salesforce task", "to-do", "activity", "assigned task"]
+        freshness: live
+        search_strategy: "Filter by assignee, status, or due date"
+        example_questions:
+          - "What tasks are assigned to me in Salesforce?"
       description: Salesforce Task object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2726,6 +2777,14 @@ components:
       type: object
       x-airbyte-entity-name: events
       x-airbyte-stream-name: Event
+      x-airbyte-ai-hints:
+        summary: "Calendar events and meetings in Salesforce"
+        when_to_use: "Questions about scheduled meetings or calendar events"
+        trigger_phrases: ["salesforce event", "meeting", "calendar event"]
+        freshness: live
+        search_strategy: "Filter by date, owner, or related record"
+        example_questions:
+          - "What meetings are scheduled this week?"
       description: Salesforce Event object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2763,6 +2822,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: Campaign
+      x-airbyte-ai-hints:
+        summary: "Marketing campaigns with members, status, and response tracking"
+        when_to_use: "Questions about marketing campaigns or campaign membership"
+        trigger_phrases: ["salesforce campaign", "marketing campaign"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show active Salesforce campaigns"
       description: Salesforce Campaign object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2800,6 +2867,15 @@ components:
       type: object
       x-airbyte-entity-name: cases
       x-airbyte-stream-name: Case
+      x-airbyte-ai-hints:
+        summary: "Support cases tracking customer issues and resolutions"
+        when_to_use: "Questions about support cases, customer issues, or case resolution"
+        trigger_phrases: ["salesforce case", "support case", "customer issue"]
+        freshness: live
+        search_strategy: "Search by subject or filter by status, priority, or owner"
+        example_questions:
+          - "Show open support cases"
+          - "Find cases for an account"
       description: Salesforce Case object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2839,6 +2915,14 @@ components:
       type: object
       x-airbyte-entity-name: notes
       x-airbyte-stream-name: Note
+      x-airbyte-ai-hints:
+        summary: "Notes attached to Salesforce records"
+        when_to_use: "Looking for notes or context on Salesforce records"
+        trigger_phrases: ["salesforce note", "record note"]
+        freshness: live
+        search_strategy: "Filter by parent record"
+        example_questions:
+          - "What notes are on this record?"
       description: Salesforce Note object - uses FIELDS(STANDARD) so all standard fields are returned
       additionalProperties: true
       properties:
@@ -2876,6 +2960,14 @@ components:
       type: object
       x-airbyte-entity-name: content_versions
       x-airbyte-stream-name: ContentVersion
+      x-airbyte-ai-hints:
+        summary: "File versions stored in Salesforce Content"
+        when_to_use: "Looking for files or documents in Salesforce"
+        trigger_phrases: ["salesforce file", "content version", "document"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "Find files in Salesforce"
       description: Salesforce ContentVersion object - represents a file version in Salesforce Files
       additionalProperties: true
       properties:
@@ -2930,6 +3022,14 @@ components:
       type: object
       x-airbyte-entity-name: attachments
       x-airbyte-stream-name: Attachment
+      x-airbyte-ai-hints:
+        summary: "File attachments on Salesforce records"
+        when_to_use: "Looking for files attached to specific records"
+        trigger_phrases: ["salesforce attachment", "attached file"]
+        freshness: live
+        search_strategy: "Filter by parent record"
+        example_questions:
+          - "What attachments are on this record?"
       description: Salesforce Attachment object - legacy file attachment on a record
       additionalProperties: true
       properties:
@@ -2978,6 +3078,14 @@ components:
       type: object
       x-airbyte-entity-name: reports
       x-airbyte-stream-name: Report
+      x-airbyte-ai-hints:
+        summary: "Salesforce reports with metadata and folder organization"
+        when_to_use: "Questions about available reports or report details"
+        trigger_phrases: ["salesforce report", "report list"]
+        freshness: live
+        search_strategy: "Search by name or filter by folder"
+        example_questions:
+          - "What reports are available in Salesforce?"
       description: Salesforce Report metadata from the Analytics API
       additionalProperties: true
       properties:
@@ -3063,6 +3171,14 @@ components:
     QueryResult:
       type: object
       x-airbyte-entity-name: query
+      x-airbyte-ai-hints:
+        summary: "SOQL query results from Salesforce"
+        when_to_use: "Running custom queries against Salesforce data"
+        trigger_phrases: ["SOQL query", "salesforce query", "custom query"]
+        freshness: live
+        search_strategy: "Write SOQL queries with WHERE clauses for filtering"
+        example_questions:
+          - "Run a query against Salesforce"
       description: Generic SOQL query result
       properties:
         totalSize:

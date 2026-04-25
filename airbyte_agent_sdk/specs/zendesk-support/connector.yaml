@@ -1477,6 +1477,15 @@ components:
       type: object
       x-airbyte-entity-name: tickets
       x-airbyte-stream-name: tickets
+      x-airbyte-ai-hints:
+        summary: "Zendesk support tickets with status, priority, and assignee"
+        when_to_use: "Questions about support tickets, customer issues, or ticket status"
+        trigger_phrases: ["zendesk ticket", "support ticket", "customer issue", "help desk ticket"]
+        freshness: live
+        search_strategy: "Search by subject or filter by status, priority, assignee, or requester"
+        example_questions:
+          - "Show open Zendesk tickets"
+          - "Find tickets assigned to me"
       description: Zendesk Support ticket object
       properties:
         id:
@@ -1653,6 +1662,14 @@ components:
       type: object
       x-airbyte-entity-name: deleted_tickets
       x-airbyte-stream-name: deleted_tickets
+      x-airbyte-ai-hints:
+        summary: "Soft-deleted Zendesk tickets recoverable within retention period"
+        when_to_use: "Looking for recently deleted tickets"
+        trigger_phrases: ["deleted ticket", "trashed ticket"]
+        freshness: live
+        search_strategy: "List deleted tickets"
+        example_questions:
+          - "Are there any deleted tickets?"
       description: Zendesk Support deleted ticket object
       properties:
         id:
@@ -1703,6 +1720,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Zendesk users (agents, admins, and end-users) with roles and details"
+        when_to_use: "Looking up user details or agent information"
+        trigger_phrases: ["zendesk user", "support agent", "end user"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find a user in Zendesk"
       description: Zendesk Support user object
       properties:
         id:
@@ -1865,6 +1890,14 @@ components:
       type: object
       x-airbyte-entity-name: organizations
       x-airbyte-stream-name: organizations
+      x-airbyte-ai-hints:
+        summary: "Organizations grouping Zendesk users for support management"
+        when_to_use: "Questions about customer organizations or org-level data"
+        trigger_phrases: ["zendesk organization", "customer org"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What organizations are in Zendesk?"
       description: Zendesk Support organization object
       properties:
         id:
@@ -1931,6 +1964,14 @@ components:
       type: object
       x-airbyte-entity-name: groups
       x-airbyte-stream-name: groups
+      x-airbyte-ai-hints:
+        summary: "Agent groups for ticket routing in Zendesk"
+        when_to_use: "Questions about agent groups or ticket routing"
+        trigger_phrases: ["zendesk group", "agent group"]
+        freshness: static
+        search_strategy: "List all groups"
+        example_questions:
+          - "What agent groups exist?"
       description: Zendesk Support group object
       properties:
         id:
@@ -1970,6 +2011,14 @@ components:
       type: object
       x-airbyte-entity-name: ticket_comments
       x-airbyte-stream-name: ticket_comments
+      x-airbyte-ai-hints:
+        summary: "Comments and replies on Zendesk tickets"
+        when_to_use: "Looking for conversation history on tickets"
+        trigger_phrases: ["ticket comment", "ticket reply", "ticket conversation"]
+        freshness: live
+        search_strategy: "Filter by ticket"
+        example_questions:
+          - "What comments are on this ticket?"
       description: Zendesk Support ticket comment object
       properties:
         id:
@@ -2018,6 +2067,14 @@ components:
     Attachment:
       type: object
       x-airbyte-entity-name: attachments
+      x-airbyte-ai-hints:
+        summary: "File attachments on Zendesk tickets and comments"
+        when_to_use: "Looking for files attached to tickets"
+        trigger_phrases: ["zendesk attachment", "ticket file"]
+        freshness: live
+        search_strategy: "Filter by ticket"
+        example_questions:
+          - "What files are attached to this ticket?"
       description: Zendesk Support attachment object
       properties:
         id:
@@ -2076,6 +2133,14 @@ components:
       type: object
       x-airbyte-entity-name: ticket_audits
       x-airbyte-stream-name: ticket_audits
+      x-airbyte-ai-hints:
+        summary: "Audit logs tracking all changes made to Zendesk tickets"
+        when_to_use: "Questions about ticket change history or audit trail"
+        trigger_phrases: ["ticket audit", "change history", "who changed"]
+        freshness: live
+        search_strategy: "Filter by ticket"
+        example_questions:
+          - "What changes were made to this ticket?"
       description: Zendesk Support ticket audit object
       properties:
         id:
@@ -2110,6 +2175,14 @@ components:
       type: object
       x-airbyte-entity-name: ticket_metrics
       x-airbyte-stream-name: ticket_metrics
+      x-airbyte-ai-hints:
+        summary: "Performance metrics for tickets (reply time, resolution time)"
+        when_to_use: "Questions about ticket response times or SLA metrics"
+        trigger_phrases: ["ticket metrics", "response time", "resolution time", "SLA"]
+        freshness: live
+        search_strategy: "Filter by ticket"
+        example_questions:
+          - "What is the average response time?"
       description: Zendesk Support ticket metric object
       properties:
         id:
@@ -2203,6 +2276,14 @@ components:
       type: object
       x-airbyte-entity-name: ticket_fields
       x-airbyte-stream-name: ticket_fields
+      x-airbyte-ai-hints:
+        summary: "Custom and standard ticket field definitions"
+        when_to_use: "Questions about ticket form fields or custom field configuration"
+        trigger_phrases: ["ticket field", "custom field"]
+        freshness: static
+        search_strategy: "List all fields"
+        example_questions:
+          - "What fields are on a Zendesk ticket?"
       description: Zendesk Support ticket field object
       properties:
         id:
@@ -2300,6 +2381,14 @@ components:
       type: object
       x-airbyte-entity-name: brands
       x-airbyte-stream-name: brands
+      x-airbyte-ai-hints:
+        summary: "Brands configured in Zendesk for multi-brand support"
+        when_to_use: "Questions about support brands or brand configuration"
+        trigger_phrases: ["zendesk brand", "support brand"]
+        freshness: static
+        search_strategy: "List all brands"
+        example_questions:
+          - "What brands are configured?"
       description: Zendesk Support brand object
       properties:
         id:
@@ -2365,6 +2454,14 @@ components:
     View:
       type: object
       x-airbyte-entity-name: views
+      x-airbyte-ai-hints:
+        summary: "Saved ticket views with filter conditions"
+        when_to_use: "Questions about ticket views or filtered ticket lists"
+        trigger_phrases: ["zendesk view", "ticket view", "saved view"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What ticket views are available?"
       description: Zendesk Support view object
       properties:
         id:
@@ -2417,6 +2514,14 @@ components:
       type: object
       x-airbyte-entity-name: macros
       x-airbyte-stream-name: macros
+      x-airbyte-ai-hints:
+        summary: "Macros automating common ticket updates in Zendesk"
+        when_to_use: "Questions about available macros or ticket automation"
+        trigger_phrases: ["zendesk macro", "ticket macro"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What macros are available?"
       description: Zendesk Support macro object
       properties:
         id:
@@ -2466,6 +2571,14 @@ components:
       type: object
       x-airbyte-entity-name: triggers
       x-airbyte-stream-name: triggers
+      x-airbyte-ai-hints:
+        summary: "Triggers automating actions on ticket events in Zendesk"
+        when_to_use: "Questions about ticket automation triggers"
+        trigger_phrases: ["zendesk trigger", "ticket trigger", "automation"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What triggers are configured?"
       description: Zendesk Support trigger object
       properties:
         id:
@@ -2518,6 +2631,14 @@ components:
       type: object
       x-airbyte-entity-name: automations
       x-airbyte-stream-name: automations
+      x-airbyte-ai-hints:
+        summary: "Time-based automations for ticket management"
+        when_to_use: "Questions about time-based ticket automation"
+        trigger_phrases: ["zendesk automation", "time-based automation"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What automations are configured?"
       description: Zendesk Support automation object
       properties:
         id:
@@ -2562,6 +2683,14 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Tags used to categorize Zendesk tickets"
+        when_to_use: "Questions about available tags or ticket categorization"
+        trigger_phrases: ["zendesk tag", "ticket tag"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What tags are used in Zendesk?"
       description: Zendesk Support tag object
       properties:
         name:
@@ -2578,6 +2707,14 @@ components:
       type: object
       x-airbyte-entity-name: satisfaction_ratings
       x-airbyte-stream-name: satisfaction_ratings
+      x-airbyte-ai-hints:
+        summary: "Customer satisfaction ratings for resolved tickets"
+        when_to_use: "Questions about CSAT scores or customer satisfaction"
+        trigger_phrases: ["satisfaction rating", "CSAT", "customer feedback"]
+        freshness: live
+        search_strategy: "Filter by score or date"
+        example_questions:
+          - "What is the CSAT score?"
       description: Zendesk Support satisfaction rating object
       properties:
         id:
@@ -2641,6 +2778,14 @@ components:
       type: object
       x-airbyte-entity-name: group_memberships
       x-airbyte-stream-name: group_memberships
+      x-airbyte-ai-hints:
+        summary: "Agent membership in Zendesk groups"
+        when_to_use: "Questions about which agents belong to which groups"
+        trigger_phrases: ["group membership", "who is in group"]
+        freshness: live
+        search_strategy: "Filter by group or agent"
+        example_questions:
+          - "Who is in this agent group?"
       description: Zendesk Support group membership object
       properties:
         id:
@@ -2674,6 +2819,14 @@ components:
       type: object
       x-airbyte-entity-name: organization_memberships
       x-airbyte-stream-name: organization_memberships
+      x-airbyte-ai-hints:
+        summary: "User membership in Zendesk organizations"
+        when_to_use: "Questions about which users belong to which organizations"
+        trigger_phrases: ["organization membership", "org membership"]
+        freshness: live
+        search_strategy: "Filter by organization or user"
+        example_questions:
+          - "Who belongs to this organization?"
       description: Zendesk Support organization membership object
       properties:
         id:
@@ -2713,6 +2866,14 @@ components:
       type: object
       x-airbyte-entity-name: sla_policies
       x-airbyte-stream-name: sla_policies
+      x-airbyte-ai-hints:
+        summary: "SLA policies defining response and resolution time targets"
+        when_to_use: "Questions about SLA configuration or service level targets"
+        trigger_phrases: ["SLA policy", "service level", "response target"]
+        freshness: static
+        search_strategy: "List all policies"
+        example_questions:
+          - "What SLA policies are configured?"
       description: Zendesk Support SLA policy object
       properties:
         id:
@@ -2754,6 +2915,14 @@ components:
       type: object
       x-airbyte-entity-name: ticket_forms
       x-airbyte-stream-name: ticket_forms
+      x-airbyte-ai-hints:
+        summary: "Ticket form templates with different field configurations"
+        when_to_use: "Questions about ticket form setup or form configuration"
+        trigger_phrases: ["ticket form", "form template"]
+        freshness: static
+        search_strategy: "List all forms"
+        example_questions:
+          - "What ticket forms exist?"
       description: Zendesk Support ticket form object
       properties:
         id:
@@ -2825,6 +2994,14 @@ components:
       type: object
       x-airbyte-entity-name: articles
       x-airbyte-stream-name: articles
+      x-airbyte-ai-hints:
+        summary: "Help center articles in the Zendesk knowledge base"
+        when_to_use: "Looking for knowledge base content or help articles"
+        trigger_phrases: ["help article", "knowledge base", "support article", "FAQ"]
+        freshness: live
+        search_strategy: "Search by title or content keywords"
+        example_questions:
+          - "Find a help article about a topic"
       description: Help Center article object
       properties:
         id:
@@ -2887,6 +3064,14 @@ components:
       type: object
       x-airbyte-entity-name: article_attachments
       x-airbyte-stream-name: article_attachments
+      x-airbyte-ai-hints:
+        summary: "Files attached to Zendesk help center articles"
+        when_to_use: "Looking for attachments on knowledge base articles"
+        trigger_phrases: ["article attachment", "help center file"]
+        freshness: live
+        search_strategy: "Filter by article"
+        example_questions:
+          - "What files are attached to an article?"
       description: Article attachment object
       properties:
         id:
@@ -2931,6 +3116,14 @@ components:
     JobStatus:
       type: object
       x-airbyte-entity-name: ticket_bulk_updates
+      x-airbyte-ai-hints:
+        summary: "Bulk update job results for batch ticket modifications"
+        when_to_use: "Questions about bulk ticket update operations"
+        trigger_phrases: ["bulk update", "batch update"]
+        freshness: live
+        search_strategy: "List recent bulk updates"
+        example_questions:
+          - "Show recent bulk ticket updates"
       description: Job status for bulk operations
       properties:
         id:

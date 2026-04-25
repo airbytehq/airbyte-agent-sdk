@@ -1782,6 +1782,15 @@ components:
       type: object
       x-airbyte-entity-name: projects
       x-airbyte-stream-name: projects
+      x-airbyte-ai-hints:
+        summary: "Jira projects with key, lead, and issue type configuration"
+        when_to_use: "Questions about available projects or project details"
+        trigger_phrases: ["jira project", "project key", "which project"]
+        freshness: live
+        search_strategy: "Search by name or key"
+        example_questions:
+          - "List Jira projects"
+          - "What is the key for a project?"
       description: Jira project object
       properties:
         id:
@@ -2044,6 +2053,15 @@ components:
       type: object
       x-airbyte-entity-name: issues
       x-airbyte-stream-name: issues
+      x-airbyte-ai-hints:
+        summary: "Jira issues (stories, bugs, tasks, epics) with status and assignee"
+        when_to_use: "Questions about issues, bugs, stories, or task assignments"
+        trigger_phrases: ["jira issue", "jira ticket", "bug", "story", "task status"]
+        freshness: live
+        search_strategy: "Search by summary or use JQL-style filters for status, assignee, or type"
+        example_questions:
+          - "Show open Jira issues"
+          - "Find bugs assigned to me"
       description: Jira issue object
       properties:
         id:
@@ -2307,6 +2325,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Jira user profiles with display name and email"
+        when_to_use: "Looking up team member details in Jira"
+        trigger_phrases: ["jira user", "who is", "team member"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find a user in Jira"
       description: Jira user object
       properties:
         self:
@@ -2455,6 +2481,14 @@ components:
       type: object
       x-airbyte-entity-name: issue_fields
       x-airbyte-stream-name: issue_fields
+      x-airbyte-ai-hints:
+        summary: "Field definitions for Jira issues including custom fields"
+        when_to_use: "Questions about available fields or custom field configuration"
+        trigger_phrases: ["jira field", "custom field", "issue field"]
+        freshness: static
+        search_strategy: "Search by field name"
+        example_questions:
+          - "What custom fields are defined in Jira?"
       description: Jira issue field object (custom or system field)
       properties:
         id:
@@ -2595,6 +2629,14 @@ components:
       type: object
       x-airbyte-entity-name: issue_comments
       x-airbyte-stream-name: issue_comments
+      x-airbyte-ai-hints:
+        summary: "Comments on Jira issues"
+        when_to_use: "Looking for discussion or notes on specific issues"
+        trigger_phrases: ["jira comment", "issue comment", "ticket comment"]
+        freshness: live
+        search_strategy: "Filter by issue"
+        example_questions:
+          - "What comments are on this Jira issue?"
       description: Jira issue comment object
       properties:
         id:
@@ -2767,6 +2809,14 @@ components:
     Worklog:
       type: object
       x-airbyte-entity-name: worklogs
+      x-airbyte-ai-hints:
+        summary: "Time tracking work logs on Jira issues"
+        when_to_use: "Questions about time logged or effort tracking on issues"
+        trigger_phrases: ["worklog", "time logged", "work hours"]
+        freshness: live
+        search_strategy: "Filter by issue or author"
+        example_questions:
+          - "How much time was logged on an issue?"
       description: Jira worklog object
       properties:
         id:

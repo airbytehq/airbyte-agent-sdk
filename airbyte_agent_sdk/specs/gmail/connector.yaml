@@ -914,6 +914,14 @@ components:
       type: object
       x-airbyte-entity-name: profile
       x-airbyte-stream-name: profile
+      x-airbyte-ai-hints:
+        summary: "Gmail user profile with email address and account info"
+        when_to_use: "Questions about the current email account"
+        trigger_phrases: ["gmail profile", "my email", "email address"]
+        freshness: live
+        search_strategy: "Retrieve the authenticated user profile"
+        example_questions:
+          - "What is my Gmail address?"
       description: Gmail user profile information
       properties:
         emailAddress:
@@ -987,6 +995,15 @@ components:
       type: object
       x-airbyte-entity-name: messages
       x-airbyte-stream-name: messages
+      x-airbyte-ai-hints:
+        summary: "Gmail email messages with subject, sender, body, and attachments"
+        when_to_use: "Looking for emails, searching inbox, or finding specific messages"
+        trigger_phrases: ["email", "gmail message", "inbox", "find email", "who emailed"]
+        freshness: live
+        search_strategy: "Search by subject, sender, or keywords in the body using Gmail query syntax"
+        example_questions:
+          - "Find emails from a specific sender"
+          - "Show unread messages"
       description: A Gmail email message
       properties:
         id:
@@ -1063,6 +1080,14 @@ components:
       type: object
       x-airbyte-entity-name: labels
       x-airbyte-stream-name: labels
+      x-airbyte-ai-hints:
+        summary: "Gmail labels for organizing and categorizing emails"
+        when_to_use: "Questions about email labels or folder organization"
+        trigger_phrases: ["gmail label", "email folder", "inbox label"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What labels are in my Gmail?"
       description: A Gmail label used to organize messages and threads
       properties:
         id:
@@ -1125,6 +1150,14 @@ components:
       type: object
       x-airbyte-entity-name: drafts
       x-airbyte-stream-name: drafts
+      x-airbyte-ai-hints:
+        summary: "Email drafts saved in Gmail"
+        when_to_use: "Looking for unsent email drafts"
+        trigger_phrases: ["email draft", "unsent email", "draft message"]
+        freshness: live
+        search_strategy: "Search by subject or recipient"
+        example_questions:
+          - "Show my email drafts"
       description: A Gmail draft message
       properties:
         id:
@@ -1170,6 +1203,15 @@ components:
       type: object
       x-airbyte-entity-name: threads
       x-airbyte-stream-name: threads
+      x-airbyte-ai-hints:
+        summary: "Gmail conversation threads grouping related messages"
+        when_to_use: "Looking at email conversations or thread history"
+        trigger_phrases: ["email thread", "conversation", "email chain"]
+        freshness: live
+        search_strategy: "Search by subject or participant"
+        example_questions:
+          - "Show the email thread about a topic"
+          - "Find conversations with a person"
       description: A Gmail thread (email conversation)
       properties:
         id:

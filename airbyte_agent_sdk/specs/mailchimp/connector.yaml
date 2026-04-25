@@ -2130,6 +2130,15 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "Mailchimp email campaigns with status and performance metrics"
+        when_to_use: "Questions about email campaigns, send status, or performance"
+        trigger_phrases: ["mailchimp campaign", "email campaign", "newsletter"]
+        freshness: live
+        search_strategy: "Search by title or filter by status"
+        example_questions:
+          - "Show recent Mailchimp campaigns"
+          - "What campaigns are scheduled?"
       description: A summary of an individual campaign's settings and content
       properties:
         id:
@@ -2348,6 +2357,14 @@ components:
       type: object
       x-airbyte-entity-name: lists
       x-airbyte-stream-name: lists
+      x-airbyte-ai-hints:
+        summary: "Mailchimp audience lists (subscriber databases)"
+        when_to_use: "Questions about subscriber lists or audience management"
+        trigger_phrases: ["mailchimp list", "audience", "subscriber list"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What audience lists are in Mailchimp?"
       description: Information about a specific list
       properties:
         id:
@@ -2528,6 +2545,15 @@ components:
       type: object
       x-airbyte-entity-name: list_members
       x-airbyte-stream-name: list_members
+      x-airbyte-ai-hints:
+        summary: "Individual subscribers in Mailchimp lists with status and tags"
+        when_to_use: "Looking up subscriber details or email list membership"
+        trigger_phrases: ["subscriber", "list member", "email contact"]
+        freshness: live
+        search_strategy: "Search by email"
+        example_questions:
+          - "Find a subscriber in Mailchimp"
+          - "Is this email subscribed?"
       description: Individuals who are currently or have been previously subscribed to this list
       properties:
         id:
@@ -2695,6 +2721,14 @@ components:
       type: object
       x-airbyte-entity-name: reports
       x-airbyte-stream-name: reports
+      x-airbyte-ai-hints:
+        summary: "Campaign performance reports with open, click, and bounce rates"
+        when_to_use: "Questions about campaign analytics or email performance"
+        trigger_phrases: ["campaign report", "open rate", "click rate", "email performance"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "What was the open rate for a campaign?"
       description: Report details about a sent campaign
       properties:
         id:
@@ -2895,6 +2929,14 @@ components:
       type: object
       x-airbyte-entity-name: email_activity
       x-airbyte-stream-name: email_activity
+      x-airbyte-ai-hints:
+        summary: "Individual email activity events (opens, clicks, bounces)"
+        when_to_use: "Questions about subscriber engagement or email delivery events"
+        trigger_phrases: ["email activity", "who opened", "who clicked", "email engagement"]
+        freshness: live
+        search_strategy: "Filter by campaign or subscriber"
+        example_questions:
+          - "Who opened a specific campaign?"
       description: A summary of the email activity for a campaign
       properties:
         campaign_id:
@@ -2960,6 +3002,14 @@ components:
       type: object
       x-airbyte-entity-name: automations
       x-airbyte-stream-name: automations
+      x-airbyte-ai-hints:
+        summary: "Automated email workflows in Mailchimp"
+        when_to_use: "Questions about email automation or drip campaigns"
+        trigger_phrases: ["mailchimp automation", "drip campaign", "automated email"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "What automations are running in Mailchimp?"
       description: A summary of an individual Automation workflow's settings and content
       properties:
         id:
@@ -3110,6 +3160,14 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Tags for categorizing subscribers in Mailchimp"
+        when_to_use: "Questions about subscriber tags or categorization"
+        trigger_phrases: ["mailchimp tag", "subscriber tag"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What tags exist in Mailchimp?"
       description: A tag that can be assigned to a list member
       properties:
         id:
@@ -3141,6 +3199,14 @@ components:
       type: object
       x-airbyte-entity-name: interest_categories
       x-airbyte-stream-name: interest_categories
+      x-airbyte-ai-hints:
+        summary: "Interest categories (groups) for subscriber preferences"
+        when_to_use: "Questions about subscriber preference categories"
+        trigger_phrases: ["interest category", "preference group"]
+        freshness: static
+        search_strategy: "Filter by list"
+        example_questions:
+          - "What interest categories are defined?"
       description: Interest categories organize interests, which are used to group subscribers based on their preferences
       properties:
         list_id:
@@ -3185,6 +3251,14 @@ components:
       type: object
       x-airbyte-entity-name: interests
       x-airbyte-stream-name: interests
+      x-airbyte-ai-hints:
+        summary: "Individual interests within Mailchimp interest categories"
+        when_to_use: "Questions about subscriber interest options"
+        trigger_phrases: ["interest", "preference option"]
+        freshness: static
+        search_strategy: "Filter by interest category"
+        example_questions:
+          - "What interests are available in a category?"
       description: Assign subscribers to interests to group them together
       properties:
         category_id:
@@ -3234,6 +3308,14 @@ components:
       type: object
       x-airbyte-entity-name: segments
       x-airbyte-stream-name: segments
+      x-airbyte-ai-hints:
+        summary: "Subscriber segments based on conditions and filters"
+        when_to_use: "Questions about subscriber segments or targeted groups"
+        trigger_phrases: ["mailchimp segment", "subscriber segment"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What segments are defined in Mailchimp?"
       description: Information about a specific segment
       properties:
         id:
@@ -3299,6 +3381,14 @@ components:
       type: object
       x-airbyte-entity-name: segment_members
       x-airbyte-stream-name: segment_members
+      x-airbyte-ai-hints:
+        summary: "Members belonging to a specific Mailchimp segment"
+        when_to_use: "Looking up which subscribers are in a segment"
+        trigger_phrases: ["segment member", "who is in segment"]
+        freshness: live
+        search_strategy: "Filter by segment"
+        example_questions:
+          - "Who is in a specific segment?"
       description: Individuals who are currently or have been previously subscribed to this list
       properties:
         id:
@@ -3417,6 +3507,14 @@ components:
       type: object
       x-airbyte-entity-name: unsubscribes
       x-airbyte-stream-name: unsubscribes
+      x-airbyte-ai-hints:
+        summary: "Unsubscribed members from Mailchimp campaigns"
+        when_to_use: "Questions about unsubscribe activity or opt-out tracking"
+        trigger_phrases: ["unsubscribe", "opt-out", "who unsubscribed"]
+        freshness: live
+        search_strategy: "Filter by campaign or date"
+        example_questions:
+          - "Who unsubscribed from a campaign?"
       description: A member who unsubscribed from a specific campaign
       properties:
         email_id:

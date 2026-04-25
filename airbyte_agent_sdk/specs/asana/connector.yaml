@@ -3732,6 +3732,15 @@ components:
       type: object
       x-airbyte-entity-name: tasks
       x-airbyte-stream-name: tasks
+      x-airbyte-ai-hints:
+        summary: "Asana tasks with assignee, due date, status, and project context"
+        when_to_use: "Questions about task assignments, deadlines, or work items"
+        trigger_phrases: ["asana task", "assigned to", "due date", "task status", "work item"]
+        freshness: live
+        search_strategy: "Search by name or filter by assignee, project, or completion status"
+        example_questions:
+          - "What tasks are assigned to me in Asana?"
+          - "Show overdue Asana tasks"
       description: Compact task object
       properties:
         gid:
@@ -3910,6 +3919,15 @@ components:
       type: object
       x-airbyte-entity-name: projects
       x-airbyte-stream-name: projects
+      x-airbyte-ai-hints:
+        summary: "Asana projects organizing tasks into workstreams"
+        when_to_use: "Looking up project details, timelines, or task groupings"
+        trigger_phrases: ["asana project", "project status", "project timeline"]
+        freshness: live
+        search_strategy: "Search by name to find specific projects"
+        example_questions:
+          - "List all Asana projects"
+          - "What is the status of a project?"
       description: Compact project object
       properties:
         gid:
@@ -4105,6 +4123,14 @@ components:
       type: object
       x-airbyte-entity-name: workspaces
       x-airbyte-stream-name: workspaces
+      x-airbyte-ai-hints:
+        summary: "Asana workspaces representing organizational boundaries"
+        when_to_use: "Questions about available workspaces or organization structure"
+        trigger_phrases: ["asana workspace", "organization"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "Which Asana workspaces do I have access to?"
       description: Compact workspace object
       properties:
         gid:
@@ -4164,6 +4190,15 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Asana user profiles with name, email, and workspace membership"
+        when_to_use: "Looking up team members or user details in Asana"
+        trigger_phrases: ["asana user", "team member", "who is"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the members of my Asana workspace?"
+          - "Find a user in Asana"
       description: Compact user object
       properties:
         gid:
@@ -4232,6 +4267,15 @@ components:
       type: object
       x-airbyte-entity-name: teams
       x-airbyte-stream-name: teams
+      x-airbyte-ai-hints:
+        summary: "Asana teams grouping users for project collaboration"
+        when_to_use: "Questions about team membership or team-level organization"
+        trigger_phrases: ["asana team", "team members", "which team"]
+        freshness: live
+        search_strategy: "Search by team name"
+        example_questions:
+          - "What teams exist in Asana?"
+          - "Who is on a specific team?"
       description: Compact team object
       properties:
         gid:
@@ -4296,6 +4340,14 @@ components:
       type: object
       x-airbyte-entity-name: attachments
       x-airbyte-stream-name: attachments
+      x-airbyte-ai-hints:
+        summary: "File attachments on Asana tasks"
+        when_to_use: "Looking for files or documents attached to tasks"
+        trigger_phrases: ["asana attachment", "task file", "uploaded file"]
+        freshness: live
+        search_strategy: "Search by name or filter by parent task"
+        example_questions:
+          - "What files are attached to this task?"
       description: Compact attachment object
       properties:
         gid:
@@ -4393,6 +4445,15 @@ components:
       type: object
       x-airbyte-entity-name: tags
       x-airbyte-stream-name: tags
+      x-airbyte-ai-hints:
+        summary: "Tags used to categorize and label Asana tasks"
+        when_to_use: "Looking up available tags or filtering tasks by label"
+        trigger_phrases: ["asana tag", "task label", "categorize"]
+        freshness: live
+        search_strategy: "Search by tag name"
+        example_questions:
+          - "What tags are available in Asana?"
+          - "Find tasks with a specific tag"
       description: Compact tag object
       properties:
         gid:
@@ -4465,6 +4526,14 @@ components:
       type: object
       x-airbyte-entity-name: sections
       x-airbyte-stream-name: sections
+      x-airbyte-ai-hints:
+        summary: "Sections within Asana projects for organizing tasks into groups"
+        when_to_use: "Questions about project organization or task grouping within a project"
+        trigger_phrases: ["asana section", "project section", "task group", "column"]
+        freshness: live
+        search_strategy: "Filter by project to list sections"
+        example_questions:
+          - "What sections are in this Asana project?"
       description: Compact section object
       properties:
         gid:

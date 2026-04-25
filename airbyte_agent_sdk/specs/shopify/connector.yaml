@@ -3125,6 +3125,15 @@ components:
       type: object
       x-airbyte-entity-name: customers
       x-airbyte-stream-name: customers
+      x-airbyte-ai-hints:
+        summary: "Shopify customers with order history and contact information"
+        when_to_use: "Looking up customer details or purchase history"
+        trigger_phrases: ["shopify customer", "buyer", "customer info"]
+        freshness: live
+        search_strategy: "Search by email, name, or phone"
+        example_questions:
+          - "Find a customer in Shopify"
+          - "Show customer order history"
       description: A Shopify customer
       required:
       - id
@@ -3345,6 +3354,15 @@ components:
       type: object
       x-airbyte-entity-name: orders
       x-airbyte-stream-name: orders
+      x-airbyte-ai-hints:
+        summary: "Shopify orders with line items, payment, and fulfillment status"
+        when_to_use: "Questions about orders, order status, or fulfillment"
+        trigger_phrases: ["shopify order", "order status", "fulfillment", "purchase"]
+        freshness: live
+        search_strategy: "Search by order number or filter by status, date, or customer"
+        example_questions:
+          - "Show recent Shopify orders"
+          - "What is the status of an order?"
       description: A Shopify order
       required:
       - id
@@ -3650,6 +3668,15 @@ components:
       type: object
       x-airbyte-entity-name: products
       x-airbyte-stream-name: products
+      x-airbyte-ai-hints:
+        summary: "Shopify products with title, description, pricing, and inventory"
+        when_to_use: "Questions about products, pricing, or product catalog"
+        trigger_phrases: ["shopify product", "product details", "pricing", "catalog"]
+        freshness: live
+        search_strategy: "Search by title or filter by type, vendor, or status"
+        example_questions:
+          - "List Shopify products"
+          - "What is the price of a product?"
       description: A Shopify product
       required:
       - id
@@ -3728,6 +3755,14 @@ components:
       type: object
       x-airbyte-entity-name: product_variants
       x-airbyte-stream-name: product_variants
+      x-airbyte-ai-hints:
+        summary: "Product variants with size, color, SKU, and inventory details"
+        when_to_use: "Questions about product options, SKUs, or variant-level data"
+        trigger_phrases: ["product variant", "SKU", "size", "color option"]
+        freshness: live
+        search_strategy: "Filter by product"
+        example_questions:
+          - "What variants does a product have?"
       description: A product variant
       required:
       - id
@@ -3825,6 +3860,14 @@ components:
       type: object
       x-airbyte-entity-name: product_images
       x-airbyte-stream-name: product_images
+      x-airbyte-ai-hints:
+        summary: "Product images attached to Shopify products"
+        when_to_use: "Looking for product photos or image assets"
+        trigger_phrases: ["product image", "product photo"]
+        freshness: live
+        search_strategy: "Filter by product"
+        example_questions:
+          - "Show images for a product"
       description: A product image
       required:
       - id
@@ -3878,6 +3921,15 @@ components:
       type: object
       x-airbyte-entity-name: abandoned_checkouts
       x-airbyte-stream-name: abandoned_checkouts
+      x-airbyte-ai-hints:
+        summary: "Abandoned checkout sessions with cart contents and customer info"
+        when_to_use: "Questions about abandoned carts or checkout drop-off"
+        trigger_phrases: ["abandoned checkout", "abandoned cart", "cart recovery"]
+        freshness: live
+        search_strategy: "Filter by date or customer"
+        example_questions:
+          - "Show abandoned checkouts"
+          - "How many carts were abandoned?"
       description: An abandoned checkout
       required:
       - id
@@ -4006,6 +4058,14 @@ components:
       type: object
       x-airbyte-entity-name: locations
       x-airbyte-stream-name: locations
+      x-airbyte-ai-hints:
+        summary: "Shopify store locations for inventory and fulfillment"
+        when_to_use: "Questions about store or warehouse locations"
+        trigger_phrases: ["shopify location", "warehouse", "store location"]
+        freshness: static
+        search_strategy: "List all locations"
+        example_questions:
+          - "What locations are configured in Shopify?"
       description: A store location
       required:
       - id
@@ -4064,6 +4124,14 @@ components:
       type: object
       x-airbyte-entity-name: inventory_levels
       x-airbyte-stream-name: inventory_levels
+      x-airbyte-ai-hints:
+        summary: "Inventory quantities at specific locations for variants"
+        when_to_use: "Questions about stock levels or inventory availability"
+        trigger_phrases: ["inventory level", "stock level", "how many in stock"]
+        freshness: live
+        search_strategy: "Filter by location or inventory item"
+        example_questions:
+          - "What is the stock level for a product?"
       description: An inventory level
       properties:
         inventory_item_id:
@@ -4090,6 +4158,14 @@ components:
       type: object
       x-airbyte-entity-name: inventory_items
       x-airbyte-stream-name: inventory_items
+      x-airbyte-ai-hints:
+        summary: "Inventory items representing physical goods for tracking"
+        when_to_use: "Questions about inventory item details or tracking configuration"
+        trigger_phrases: ["inventory item", "tracked inventory"]
+        freshness: live
+        search_strategy: "Filter by product variant"
+        example_questions:
+          - "Show inventory item details"
       description: An inventory item
       required:
       - id
@@ -4136,6 +4212,14 @@ components:
       type: object
       x-airbyte-entity-name: shop
       x-airbyte-stream-name: shop
+      x-airbyte-ai-hints:
+        summary: "Shopify store configuration and account details"
+        when_to_use: "Questions about store settings or account information"
+        trigger_phrases: ["shopify shop", "store settings", "shop details"]
+        freshness: static
+        search_strategy: "Retrieve store info"
+        example_questions:
+          - "Show Shopify store details"
       description: Shop configuration
       required:
       - id
@@ -4258,6 +4342,14 @@ components:
       type: object
       x-airbyte-entity-name: price_rules
       x-airbyte-stream-name: price_rules
+      x-airbyte-ai-hints:
+        summary: "Discount price rules for Shopify promotions"
+        when_to_use: "Questions about discount rules or promotion configuration"
+        trigger_phrases: ["price rule", "discount rule", "promotion"]
+        freshness: live
+        search_strategy: "List all price rules"
+        example_questions:
+          - "What price rules are active?"
       description: A price rule
       required:
       - id
@@ -4358,6 +4450,14 @@ components:
       type: object
       x-airbyte-entity-name: discount_codes
       x-airbyte-stream-name: discount_codes
+      x-airbyte-ai-hints:
+        summary: "Discount codes associated with Shopify price rules"
+        when_to_use: "Questions about available discount codes"
+        trigger_phrases: ["discount code", "promo code", "coupon code"]
+        freshness: live
+        search_strategy: "Filter by price rule or search by code"
+        example_questions:
+          - "What discount codes are available?"
       description: A discount code
       required:
       - id
@@ -4390,6 +4490,14 @@ components:
       type: object
       x-airbyte-entity-name: custom_collections
       x-airbyte-stream-name: custom_collections
+      x-airbyte-ai-hints:
+        summary: "Manually curated product collections in Shopify"
+        when_to_use: "Questions about product collections or curated groupings"
+        trigger_phrases: ["custom collection", "product collection"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "What custom collections exist?"
       description: A custom collection
       required:
       - id
@@ -4434,6 +4542,14 @@ components:
       type: object
       x-airbyte-entity-name: smart_collections
       x-airbyte-stream-name: smart_collections
+      x-airbyte-ai-hints:
+        summary: "Automated product collections based on rules in Shopify"
+        when_to_use: "Questions about automated collections or rule-based groupings"
+        trigger_phrases: ["smart collection", "automated collection"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "What smart collections exist?"
       description: A smart collection
       required:
       - id
@@ -4484,6 +4600,14 @@ components:
       type: object
       x-airbyte-entity-name: collects
       x-airbyte-stream-name: collects
+      x-airbyte-ai-hints:
+        summary: "Links between products and collections in Shopify"
+        when_to_use: "Questions about which products are in which collections"
+        trigger_phrases: ["product in collection", "collection membership"]
+        freshness: live
+        search_strategy: "Filter by collection or product"
+        example_questions:
+          - "What products are in a collection?"
       description: A collect (product-collection link)
       required:
       - id
@@ -4518,6 +4642,14 @@ components:
       type: object
       x-airbyte-entity-name: draft_orders
       x-airbyte-stream-name: draft_orders
+      x-airbyte-ai-hints:
+        summary: "Draft orders created manually in Shopify admin"
+        when_to_use: "Questions about draft orders or manually created orders"
+        trigger_phrases: ["draft order", "manual order"]
+        freshness: live
+        search_strategy: "Filter by status or date"
+        example_questions:
+          - "Show draft orders"
       description: A draft order
       required:
       - id
@@ -4620,6 +4752,14 @@ components:
       type: object
       x-airbyte-entity-name: fulfillments
       x-airbyte-stream-name: fulfillments
+      x-airbyte-ai-hints:
+        summary: "Order fulfillments with tracking and shipping details"
+        when_to_use: "Questions about shipping status or fulfillment tracking"
+        trigger_phrases: ["fulfillment", "shipping status", "tracking number"]
+        freshness: live
+        search_strategy: "Filter by order"
+        example_questions:
+          - "What is the shipping status of an order?"
       description: A fulfillment
       required:
       - id
@@ -4682,6 +4822,14 @@ components:
       type: object
       x-airbyte-entity-name: fulfillment_orders
       x-airbyte-stream-name: fulfillment_orders
+      x-airbyte-ai-hints:
+        summary: "Fulfillment orders representing items to be shipped from a location"
+        when_to_use: "Questions about pending fulfillment or items to ship"
+        trigger_phrases: ["fulfillment order", "items to ship", "pending fulfillment"]
+        freshness: live
+        search_strategy: "Filter by order or location"
+        example_questions:
+          - "What fulfillment orders are pending?"
       description: A fulfillment order
       required:
       - id
@@ -4748,6 +4896,14 @@ components:
       type: object
       x-airbyte-entity-name: order_refunds
       x-airbyte-stream-name: order_refunds
+      x-airbyte-ai-hints:
+        summary: "Refunds processed for Shopify orders"
+        when_to_use: "Questions about refunds or return processing"
+        trigger_phrases: ["refund", "order refund", "return"]
+        freshness: live
+        search_strategy: "Filter by order"
+        example_questions:
+          - "What refunds were processed for an order?"
       description: An order refund
       required:
       - id
@@ -4808,6 +4964,14 @@ components:
       type: object
       x-airbyte-entity-name: transactions
       x-airbyte-stream-name: transactions
+      x-airbyte-ai-hints:
+        summary: "Payment transactions on Shopify orders"
+        when_to_use: "Questions about payment processing or transaction details"
+        trigger_phrases: ["shopify transaction", "payment", "charge"]
+        freshness: live
+        search_strategy: "Filter by order"
+        example_questions:
+          - "Show transactions for an order"
       description: An order transaction
       required:
       - id
@@ -4876,6 +5040,14 @@ components:
       type: object
       x-airbyte-entity-name: tender_transactions
       x-airbyte-stream-name: tender_transactions
+      x-airbyte-ai-hints:
+        summary: "Tender transactions recording payment method usage"
+        when_to_use: "Questions about payment method usage or tender records"
+        trigger_phrases: ["tender transaction", "payment method"]
+        freshness: live
+        search_strategy: "Filter by date"
+        example_questions:
+          - "Show recent tender transactions"
       description: A tender transaction
       required:
       - id
@@ -4915,6 +5087,14 @@ components:
       type: object
       x-airbyte-entity-name: countries
       x-airbyte-stream-name: countries
+      x-airbyte-ai-hints:
+        summary: "Countries configured for Shopify store shipping and taxes"
+        when_to_use: "Questions about shipping zones or tax configuration by country"
+        trigger_phrases: ["shopify country", "shipping country", "tax region"]
+        freshness: static
+        search_strategy: "List all countries"
+        example_questions:
+          - "What countries are configured for shipping?"
       description: A country
       required:
       - id
@@ -4947,6 +5127,14 @@ components:
       type: object
       x-airbyte-entity-name: metafields
       x-airbyte-stream-name: metafields
+      x-airbyte-ai-hints:
+        summary: "Custom metafields storing additional data on Shopify resources"
+        when_to_use: "Questions about custom metadata or extended fields on resources"
+        trigger_phrases: ["metafield", "custom field", "metadata"]
+        freshness: live
+        search_strategy: "Filter by resource type and namespace"
+        example_questions:
+          - "What metafields are on a product?"
       description: A metafield
       required:
       - id

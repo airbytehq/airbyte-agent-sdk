@@ -925,6 +925,14 @@ components:
       type: object
       x-airbyte-entity-name: advertisers
       x-airbyte-stream-name: advertisers
+      x-airbyte-ai-hints:
+        summary: "TikTok advertiser accounts with status and settings"
+        when_to_use: "Questions about TikTok ad account details"
+        trigger_phrases: ["tiktok advertiser", "tiktok ad account"]
+        freshness: live
+        search_strategy: "List accessible accounts"
+        example_questions:
+          - "What TikTok ad accounts do I have?"
       description: TikTok advertiser account
       properties:
         advertiser_id:
@@ -1019,6 +1027,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "TikTok ad campaigns with budget, objective, and status"
+        when_to_use: "Questions about ad campaigns or campaign management"
+        trigger_phrases: ["tiktok campaign", "ad campaign"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show active TikTok campaigns"
       description: TikTok marketing campaign
       properties:
         campaign_id:
@@ -1113,6 +1129,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_groups
       x-airbyte-stream-name: ad_groups
+      x-airbyte-ai-hints:
+        summary: "Ad groups within TikTok campaigns with targeting and bidding"
+        when_to_use: "Questions about ad group configuration or targeting"
+        trigger_phrases: ["tiktok ad group", "ad group targeting"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "What ad groups are in this campaign?"
       description: TikTok ad group
       properties:
         adgroup_id:
@@ -1418,6 +1442,14 @@ components:
       type: object
       x-airbyte-entity-name: ads
       x-airbyte-stream-name: ads
+      x-airbyte-ai-hints:
+        summary: "Individual TikTok ads with creative and delivery status"
+        when_to_use: "Questions about specific ads or their status"
+        trigger_phrases: ["tiktok ad", "ad creative", "ad status"]
+        freshness: live
+        search_strategy: "Filter by ad group or campaign"
+        example_questions:
+          - "Show TikTok ads"
       description: TikTok ad
       properties:
         ad_id:
@@ -1574,6 +1606,14 @@ components:
       type: object
       x-airbyte-entity-name: audiences
       x-airbyte-stream-name: audiences
+      x-airbyte-ai-hints:
+        summary: "Custom and lookalike audiences for TikTok ad targeting"
+        when_to_use: "Questions about targeting audiences or audience management"
+        trigger_phrases: ["tiktok audience", "custom audience", "lookalike audience"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What audiences are available for targeting?"
       description: TikTok custom audience
       properties:
         audience_id:
@@ -1616,6 +1656,14 @@ components:
       type: object
       x-airbyte-entity-name: creative_assets_images
       x-airbyte-stream-name: creative_assets_images
+      x-airbyte-ai-hints:
+        summary: "Image assets uploaded for TikTok ad creatives"
+        when_to_use: "Questions about available image assets"
+        trigger_phrases: ["tiktok image", "creative image", "ad image"]
+        freshness: live
+        search_strategy: "Filter by advertiser"
+        example_questions:
+          - "What images are uploaded?"
       description: TikTok creative asset image
       properties:
         image_id:
@@ -1664,6 +1712,14 @@ components:
       type: object
       x-airbyte-entity-name: creative_assets_videos
       x-airbyte-stream-name: creative_assets_videos
+      x-airbyte-ai-hints:
+        summary: "Video assets uploaded for TikTok ad creatives"
+        when_to_use: "Questions about available video assets"
+        trigger_phrases: ["tiktok video", "creative video", "ad video"]
+        freshness: live
+        search_strategy: "Filter by advertiser"
+        example_questions:
+          - "What videos are uploaded?"
       description: TikTok creative asset video
       properties:
         video_id:
@@ -1736,6 +1792,14 @@ components:
       type: object
       x-airbyte-entity-name: advertisers_reports_daily
       x-airbyte-stream-name: advertisers_reports_daily
+      x-airbyte-ai-hints:
+        summary: "Daily performance reports at the advertiser account level"
+        when_to_use: "Questions about account-level ad performance or spend"
+        trigger_phrases: ["daily report", "account performance", "daily spend"]
+        freshness: live
+        search_strategy: "Filter by date range"
+        example_questions:
+          - "What was the daily spend this week?"
       description: Daily performance report at the advertiser level
       properties:
         advertiser_id:
@@ -1836,6 +1900,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns_reports_daily
       x-airbyte-stream-name: campaigns_reports_daily
+      x-airbyte-ai-hints:
+        summary: "Daily performance reports at the campaign level"
+        when_to_use: "Questions about campaign-level daily performance"
+        trigger_phrases: ["campaign report", "campaign daily stats"]
+        freshness: live
+        search_strategy: "Filter by campaign and date range"
+        example_questions:
+          - "How did a campaign perform daily?"
       description: Daily performance report at the campaign level
       properties:
         campaign_id:
@@ -1933,6 +2005,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_groups_reports_daily
       x-airbyte-stream-name: ad_groups_reports_daily
+      x-airbyte-ai-hints:
+        summary: "Daily performance reports at the ad group level"
+        when_to_use: "Questions about ad group daily performance metrics"
+        trigger_phrases: ["ad group report", "ad group daily stats"]
+        freshness: live
+        search_strategy: "Filter by ad group and date range"
+        example_questions:
+          - "Show daily performance for an ad group"
       description: Daily performance report at the ad group level
       properties:
         adgroup_id:
@@ -2084,6 +2164,14 @@ components:
       type: object
       x-airbyte-entity-name: ads_reports_daily
       x-airbyte-stream-name: ads_reports_daily
+      x-airbyte-ai-hints:
+        summary: "Daily performance reports at the individual ad level"
+        when_to_use: "Questions about individual ad daily performance"
+        trigger_phrases: ["ad report", "ad daily stats"]
+        freshness: live
+        search_strategy: "Filter by ad and date range"
+        example_questions:
+          - "Show daily performance for an ad"
       description: Daily performance report at the ad level
       properties:
         ad_id:

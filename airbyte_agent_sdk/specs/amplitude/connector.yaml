@@ -637,6 +637,15 @@ components:
       type: object
       x-airbyte-entity-name: annotations
       x-airbyte-stream-name: annotations
+      x-airbyte-ai-hints:
+        summary: "Annotations marking notable events on Amplitude charts"
+        when_to_use: "Looking for event annotations or chart markers in Amplitude"
+        trigger_phrases: ["amplitude annotation", "chart marker", "event annotation"]
+        freshness: live
+        search_strategy: "Search by label or date range"
+        example_questions:
+          - "What annotations exist in Amplitude?"
+          - "Show recent chart annotations"
       description: A chart annotation object
       required:
         - id
@@ -726,6 +735,15 @@ components:
       type: object
       x-airbyte-entity-name: cohorts
       x-airbyte-stream-name: cohorts
+      x-airbyte-ai-hints:
+        summary: "User cohorts defined in Amplitude for behavioral segmentation"
+        when_to_use: "Questions about user segments or behavioral cohorts"
+        trigger_phrases: ["amplitude cohort", "user segment", "behavioral group"]
+        freshness: live
+        search_strategy: "Search by name to find specific cohorts"
+        example_questions:
+          - "List all Amplitude cohorts"
+          - "What user cohorts are defined?"
       description: A user cohort object
       required:
         - id
@@ -916,6 +934,15 @@ components:
       type: object
       x-airbyte-entity-name: events_list
       x-airbyte-stream-name: events_list
+      x-airbyte-ai-hints:
+        summary: "Event types tracked in Amplitude analytics"
+        when_to_use: "Looking up which events are tracked or event definitions"
+        trigger_phrases: ["amplitude event", "tracked events", "event type", "event definition"]
+        freshness: live
+        search_strategy: "Search by event name"
+        example_questions:
+          - "What events are tracked in Amplitude?"
+          - "List all event types"
       description: An event type definition with weekly totals
       required:
         - id
@@ -1007,6 +1034,15 @@ components:
       type: object
       x-airbyte-entity-name: active_users
       x-airbyte-stream-name: active_users
+      x-airbyte-ai-hints:
+        summary: "Active user counts and trends from Amplitude"
+        when_to_use: "Questions about daily/weekly/monthly active user metrics"
+        trigger_phrases: ["active users", "DAU", "MAU", "user activity"]
+        freshness: live
+        search_strategy: "Filter by date range for time-series data"
+        example_questions:
+          - "How many active users last month?"
+          - "Show active user trends"
       description: Active or new user count data
       properties:
         series:
@@ -1067,6 +1103,15 @@ components:
       type: object
       x-airbyte-entity-name: average_session_length
       x-airbyte-stream-name: average_session_length
+      x-airbyte-ai-hints:
+        summary: "Average session duration metrics from Amplitude"
+        when_to_use: "Questions about user engagement or session duration"
+        trigger_phrases: ["session length", "session duration", "engagement time"]
+        freshness: live
+        search_strategy: "Filter by date range for time-series data"
+        example_questions:
+          - "What is the average session length?"
+          - "Show session duration trends"
       description: Average session length data
       properties:
         series:

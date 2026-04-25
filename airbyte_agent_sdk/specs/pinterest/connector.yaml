@@ -1395,6 +1395,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_accounts
       x-airbyte-stream-name: ad_accounts
+      x-airbyte-ai-hints:
+        summary: "Pinterest ad accounts with billing and permissions"
+        when_to_use: "Questions about Pinterest ad account details"
+        trigger_phrases: ["pinterest ad account", "ad account"]
+        freshness: live
+        search_strategy: "List accessible accounts"
+        example_questions:
+          - "What Pinterest ad accounts do I have?"
       description: Pinterest ad account object
       required:
       - id
@@ -1449,6 +1457,14 @@ components:
       type: object
       x-airbyte-entity-name: boards
       x-airbyte-stream-name: boards
+      x-airbyte-ai-hints:
+        summary: "Pinterest boards organizing pins by topic or theme"
+        when_to_use: "Questions about boards or content organization"
+        trigger_phrases: ["pinterest board", "pin board"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What boards do I have on Pinterest?"
       description: Pinterest board object
       required:
       - id
@@ -1521,6 +1537,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "Pinterest ad campaigns with budget and targeting"
+        when_to_use: "Questions about ad campaigns or campaign performance"
+        trigger_phrases: ["pinterest campaign", "ad campaign"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show active Pinterest campaigns"
       description: Pinterest campaign object
       required:
       - id
@@ -1631,6 +1655,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_groups
       x-airbyte-stream-name: ad_groups
+      x-airbyte-ai-hints:
+        summary: "Ad groups within Pinterest campaigns with targeting settings"
+        when_to_use: "Questions about ad group configuration or targeting"
+        trigger_phrases: ["pinterest ad group", "ad group targeting"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "What ad groups are in this campaign?"
       description: Pinterest ad group object
       required:
       - id
@@ -1778,6 +1810,14 @@ components:
       type: object
       x-airbyte-entity-name: ads
       x-airbyte-stream-name: ads
+      x-airbyte-ai-hints:
+        summary: "Individual Pinterest ads (Promoted Pins) with creative and status"
+        when_to_use: "Questions about specific ads or promoted pins"
+        trigger_phrases: ["pinterest ad", "promoted pin"]
+        freshness: live
+        search_strategy: "Filter by ad group or campaign"
+        example_questions:
+          - "Show ads in this ad group"
       description: Pinterest ad object
       required:
       - id
@@ -1934,6 +1974,14 @@ components:
       type: object
       x-airbyte-entity-name: board_sections
       x-airbyte-stream-name: board_sections
+      x-airbyte-ai-hints:
+        summary: "Sections within Pinterest boards for organizing pins"
+        when_to_use: "Questions about board organization or section structure"
+        trigger_phrases: ["board section"]
+        freshness: live
+        search_strategy: "Filter by board"
+        example_questions:
+          - "What sections are in this board?"
       description: Pinterest board section object
       required:
       - id
@@ -1961,6 +2009,14 @@ components:
       type: object
       x-airbyte-entity-name: board_pins
       x-airbyte-stream-name: board_pins
+      x-airbyte-ai-hints:
+        summary: "Pins saved to Pinterest boards"
+        when_to_use: "Questions about pins on a board or pin content"
+        trigger_phrases: ["board pin", "saved pin", "pin content"]
+        freshness: live
+        search_strategy: "Filter by board"
+        example_questions:
+          - "Show pins on a board"
       description: Pinterest pin on a board
       required:
       - id
@@ -2050,6 +2106,14 @@ components:
       type: object
       x-airbyte-entity-name: catalogs
       x-airbyte-stream-name: catalogs
+      x-airbyte-ai-hints:
+        summary: "Product catalogs for Pinterest Shopping"
+        when_to_use: "Questions about product catalogs or shopping feeds"
+        trigger_phrases: ["pinterest catalog", "shopping catalog"]
+        freshness: live
+        search_strategy: "List all catalogs"
+        example_questions:
+          - "What catalogs are set up in Pinterest?"
       description: Pinterest catalog object
       required:
       - id
@@ -2088,6 +2152,14 @@ components:
       type: object
       x-airbyte-entity-name: catalogs_feeds
       x-airbyte-stream-name: catalogs_feeds
+      x-airbyte-ai-hints:
+        summary: "Data feeds for Pinterest product catalogs"
+        when_to_use: "Questions about catalog feed status or configuration"
+        trigger_phrases: ["catalog feed", "product feed", "feed status"]
+        freshness: live
+        search_strategy: "Filter by catalog"
+        example_questions:
+          - "What catalog feeds are configured?"
       description: Pinterest catalog feed object
       required:
       - id
@@ -2157,6 +2229,14 @@ components:
       type: object
       x-airbyte-entity-name: catalogs_product_groups
       x-airbyte-stream-name: catalogs_product_groups
+      x-airbyte-ai-hints:
+        summary: "Product groups within Pinterest catalogs for ad targeting"
+        when_to_use: "Questions about product grouping for ads"
+        trigger_phrases: ["product group", "catalog group"]
+        freshness: live
+        search_strategy: "Filter by catalog"
+        example_questions:
+          - "What product groups exist?"
       description: Pinterest catalog product group object
       required:
       - id
@@ -2205,6 +2285,14 @@ components:
       type: object
       x-airbyte-entity-name: audiences
       x-airbyte-stream-name: audiences
+      x-airbyte-ai-hints:
+        summary: "Custom and lookalike audiences for Pinterest ad targeting"
+        when_to_use: "Questions about targeting audiences or audience management"
+        trigger_phrases: ["pinterest audience", "custom audience", "lookalike audience"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What audiences are available for targeting?"
       description: Pinterest audience object
       required:
       - id
@@ -2286,6 +2374,14 @@ components:
       type: object
       x-airbyte-entity-name: conversion_tags
       x-airbyte-stream-name: conversion_tags
+      x-airbyte-ai-hints:
+        summary: "Conversion tracking tags for Pinterest ad measurement"
+        when_to_use: "Questions about conversion tracking or tag setup"
+        trigger_phrases: ["conversion tag", "pinterest tag", "tracking tag"]
+        freshness: live
+        search_strategy: "List all conversion tags"
+        example_questions:
+          - "What conversion tags are set up?"
       description: Pinterest conversion tag object
       required:
       - id
@@ -2356,6 +2452,14 @@ components:
       type: object
       x-airbyte-entity-name: customer_lists
       x-airbyte-stream-name: customer_lists
+      x-airbyte-ai-hints:
+        summary: "Customer email/ID lists for audience targeting on Pinterest"
+        when_to_use: "Questions about customer list uploads or CRM targeting"
+        trigger_phrases: ["customer list", "email list", "CRM list"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What customer lists are uploaded?"
       description: Pinterest customer list object
       required:
       - id
@@ -2407,6 +2511,14 @@ components:
       type: object
       x-airbyte-entity-name: keywords
       x-airbyte-stream-name: keywords
+      x-airbyte-ai-hints:
+        summary: "Keywords targeted in Pinterest ad campaigns"
+        when_to_use: "Questions about keyword targeting or ad keywords"
+        trigger_phrases: ["pinterest keyword", "targeted keyword"]
+        freshness: live
+        search_strategy: "Filter by ad group"
+        example_questions:
+          - "What keywords are targeted?"
       description: Pinterest keyword object
       required:
       - id

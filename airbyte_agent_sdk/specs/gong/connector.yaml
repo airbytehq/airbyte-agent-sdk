@@ -1509,6 +1509,15 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Gong users (reps, managers) with roles and team membership"
+        when_to_use: "Looking up sales team members or user details"
+        trigger_phrases: ["gong user", "sales rep", "team member"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the Gong users?"
+          - "Find a sales rep"
       description: User object
       properties:
         id:
@@ -1614,6 +1623,15 @@ components:
       type: object
       x-airbyte-entity-name: calls
       x-airbyte-stream-name: calls
+      x-airbyte-ai-hints:
+        summary: "Recorded sales calls with duration, participants, and transcript data"
+        when_to_use: "Questions about sales calls, call recordings, or conversation data"
+        trigger_phrases: ["gong call", "sales call", "call recording", "conversation"]
+        freshness: live
+        search_strategy: "Search by title or filter by date, participant, or owner"
+        example_questions:
+          - "Show recent Gong calls"
+          - "Find calls with a specific customer"
       description: Call object
       properties:
         id:
@@ -1706,6 +1724,14 @@ components:
     Workspace:
       type: object
       x-airbyte-entity-name: workspaces
+      x-airbyte-ai-hints:
+        summary: "Gong workspaces for organizational separation"
+        when_to_use: "Questions about available workspaces or organizational boundaries"
+        trigger_phrases: ["gong workspace"]
+        freshness: static
+        search_strategy: "List all workspaces"
+        example_questions:
+          - "What Gong workspaces are available?"
       description: Workspace object
       properties:
         id:
@@ -2295,6 +2321,14 @@ components:
       type: object
       x-airbyte-entity-name: settings_scorecards
       x-airbyte-stream-name: scorecards
+      x-airbyte-ai-hints:
+        summary: "Scorecard templates for evaluating sales call quality"
+        when_to_use: "Questions about call evaluation criteria or scorecard definitions"
+        trigger_phrases: ["scorecard", "call evaluation", "quality scorecard"]
+        freshness: static
+        search_strategy: "List all scorecard definitions"
+        example_questions:
+          - "What scorecards are defined in Gong?"
       description: Scorecard configuration
       properties:
         scorecardId:
@@ -2343,6 +2377,14 @@ components:
     Tracker:
       type: object
       x-airbyte-entity-name: settings_trackers
+      x-airbyte-ai-hints:
+        summary: "Keyword trackers monitoring topics and phrases in calls"
+        when_to_use: "Questions about tracked keywords, topics, or talk patterns"
+        trigger_phrases: ["tracker", "keyword tracker", "topic tracking"]
+        freshness: static
+        search_strategy: "Search by tracker name"
+        example_questions:
+          - "What trackers are set up in Gong?"
       description: Keyword tracker configuration
       properties:
         trackerId:

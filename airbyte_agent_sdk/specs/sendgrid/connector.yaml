@@ -995,6 +995,14 @@ components:
       type: object
       x-airbyte-entity-name: contacts
       x-airbyte-stream-name: contacts
+      x-airbyte-ai-hints:
+        summary: "SendGrid contacts with email and custom fields"
+        when_to_use: "Looking up email contacts or subscriber information"
+        trigger_phrases: ["sendgrid contact", "email contact"]
+        freshness: live
+        search_strategy: "Search by email"
+        example_questions:
+          - "Find a contact in SendGrid"
       description: A SendGrid marketing contact
       properties:
         id:
@@ -1133,6 +1141,14 @@ components:
       type: object
       x-airbyte-entity-name: lists
       x-airbyte-stream-name: lists
+      x-airbyte-ai-hints:
+        summary: "Contact lists for organizing SendGrid recipients"
+        when_to_use: "Questions about email lists or recipient management"
+        trigger_phrases: ["sendgrid list", "email list", "recipient list"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What lists are in SendGrid?"
       description: A SendGrid marketing list
       properties:
         id:
@@ -1174,6 +1190,14 @@ components:
       type: object
       x-airbyte-entity-name: segments
       x-airbyte-stream-name: segments
+      x-airbyte-ai-hints:
+        summary: "Dynamic segments of contacts based on conditions"
+        when_to_use: "Questions about contact segments or audience targeting"
+        trigger_phrases: ["sendgrid segment", "contact segment"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What segments are defined?"
       description: A SendGrid marketing segment
       properties:
         id:
@@ -1244,6 +1268,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "Legacy SendGrid email campaigns"
+        when_to_use: "Questions about legacy campaign details"
+        trigger_phrases: ["sendgrid campaign", "legacy campaign"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "Show SendGrid campaigns"
       description: A SendGrid marketing campaign
       properties:
         id:
@@ -1299,6 +1331,14 @@ components:
       type: object
       x-airbyte-entity-name: singlesends
       x-airbyte-stream-name: singlesends
+      x-airbyte-ai-hints:
+        summary: "Single Send email campaigns in SendGrid (modern API)"
+        when_to_use: "Questions about email sends or campaign performance"
+        trigger_phrases: ["single send", "email send", "sendgrid email"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show recent email sends"
       description: A SendGrid single send
       properties:
         id:
@@ -1421,6 +1461,14 @@ components:
       type: object
       x-airbyte-entity-name: templates
       x-airbyte-stream-name: templates
+      x-airbyte-ai-hints:
+        summary: "Email templates for SendGrid campaigns and transactional emails"
+        when_to_use: "Questions about available email templates"
+        trigger_phrases: ["sendgrid template", "email template"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What email templates are available?"
       description: A SendGrid transactional template
       properties:
         id:
@@ -1465,6 +1513,14 @@ components:
       type: object
       x-airbyte-entity-name: singlesend_stats
       x-airbyte-stream-name: singlesend_stats
+      x-airbyte-ai-hints:
+        summary: "Performance statistics for Single Send campaigns"
+        when_to_use: "Questions about email send performance or delivery metrics"
+        trigger_phrases: ["send stats", "delivery stats", "email performance"]
+        freshness: live
+        search_strategy: "Filter by single send"
+        example_questions:
+          - "What were the stats for a send?"
       description: Stats for a single send
       properties:
         id:
@@ -1538,6 +1594,14 @@ components:
       type: object
       x-airbyte-entity-name: bounces
       x-airbyte-stream-name: bounces
+      x-airbyte-ai-hints:
+        summary: "Email bounce records from SendGrid deliveries"
+        when_to_use: "Questions about email bounces or delivery failures"
+        trigger_phrases: ["bounce", "email bounce", "delivery failure"]
+        freshness: live
+        search_strategy: "Search by email or filter by date"
+        example_questions:
+          - "Show recent email bounces"
       description: A bounced email record
       properties:
         created:
@@ -1557,6 +1621,14 @@ components:
       type: object
       x-airbyte-entity-name: blocks
       x-airbyte-stream-name: blocks
+      x-airbyte-ai-hints:
+        summary: "Blocked email addresses that failed to deliver"
+        when_to_use: "Questions about blocked emails or delivery blocks"
+        trigger_phrases: ["blocked email", "delivery block"]
+        freshness: live
+        search_strategy: "Search by email or filter by date"
+        example_questions:
+          - "What emails are blocked?"
       description: A blocked email record
       properties:
         created:
@@ -1576,6 +1648,14 @@ components:
       type: object
       x-airbyte-entity-name: spam_reports
       x-airbyte-stream-name: spam_reports
+      x-airbyte-ai-hints:
+        summary: "Spam reports from recipients marking emails as spam"
+        when_to_use: "Questions about spam complaints or sender reputation"
+        trigger_phrases: ["spam report", "spam complaint", "marked as spam"]
+        freshness: live
+        search_strategy: "Search by email or filter by date"
+        example_questions:
+          - "Show spam reports"
       description: A spam report record
       properties:
         created:
@@ -1592,6 +1672,14 @@ components:
       type: object
       x-airbyte-entity-name: invalid_emails
       x-airbyte-stream-name: invalid_emails
+      x-airbyte-ai-hints:
+        summary: "Invalid email addresses that could not be delivered to"
+        when_to_use: "Questions about invalid email addresses or list hygiene"
+        trigger_phrases: ["invalid email", "bad email address"]
+        freshness: live
+        search_strategy: "Search by email or filter by date"
+        example_questions:
+          - "What emails are invalid?"
       description: An invalid email record
       properties:
         created:
@@ -1608,6 +1696,14 @@ components:
       type: object
       x-airbyte-entity-name: global_suppressions
       x-airbyte-stream-name: global_suppressions
+      x-airbyte-ai-hints:
+        summary: "Globally suppressed email addresses (unsubscribed from all)"
+        when_to_use: "Questions about global unsubscribes or suppression list"
+        trigger_phrases: ["global suppression", "global unsubscribe"]
+        freshness: live
+        search_strategy: "Search by email"
+        example_questions:
+          - "Is an email globally suppressed?"
       description: A globally suppressed email address
       properties:
         created:
@@ -1621,6 +1717,14 @@ components:
       type: object
       x-airbyte-entity-name: suppression_groups
       x-airbyte-stream-name: suppression_groups
+      x-airbyte-ai-hints:
+        summary: "Suppression groups for managing email preferences"
+        when_to_use: "Questions about unsubscribe groups or preference management"
+        trigger_phrases: ["suppression group", "unsubscribe group", "email preference"]
+        freshness: static
+        search_strategy: "List all suppression groups"
+        example_questions:
+          - "What suppression groups exist?"
       description: A suppression (unsubscribe) group
       properties:
         id:
@@ -1643,6 +1747,14 @@ components:
       type: object
       x-airbyte-entity-name: suppression_group_members
       x-airbyte-stream-name: suppression_group_members
+      x-airbyte-ai-hints:
+        summary: "Contacts suppressed within specific suppression groups"
+        when_to_use: "Questions about who has opted out of specific email groups"
+        trigger_phrases: ["group member", "suppressed contact"]
+        freshness: live
+        search_strategy: "Filter by suppression group"
+        example_questions:
+          - "Who opted out of a specific email group?"
       description: A member of a suppression group
       properties:
         email:

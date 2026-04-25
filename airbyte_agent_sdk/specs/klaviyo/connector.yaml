@@ -1715,6 +1715,15 @@ components:
       type: object
       x-airbyte-entity-name: profiles
       x-airbyte-stream-name: profiles
+      x-airbyte-ai-hints:
+        summary: "Klaviyo customer profiles with email, properties, and engagement data"
+        when_to_use: "Looking up customer profiles or subscriber information"
+        trigger_phrases: ["klaviyo profile", "subscriber", "customer profile", "email subscriber"]
+        freshness: live
+        search_strategy: "Search by email or name"
+        example_questions:
+          - "Find a subscriber in Klaviyo"
+          - "Show profile details for an email"
       description: A Klaviyo profile representing a contact
       required:
         - id
@@ -1815,6 +1824,15 @@ components:
       type: object
       x-airbyte-entity-name: lists
       x-airbyte-stream-name: lists
+      x-airbyte-ai-hints:
+        summary: "Email and SMS subscriber lists in Klaviyo"
+        when_to_use: "Questions about subscriber lists or audience management"
+        trigger_phrases: ["klaviyo list", "email list", "subscriber list"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What lists are in Klaviyo?"
+          - "How many subscribers on a list?"
       description: A Klaviyo list for organizing profiles
       required:
         - id
@@ -1872,6 +1890,15 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "Email and SMS campaigns with status and performance metrics"
+        when_to_use: "Questions about marketing campaigns or campaign performance"
+        trigger_phrases: ["klaviyo campaign", "email campaign", "SMS campaign"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show recent Klaviyo campaigns"
+          - "What campaigns are scheduled?"
       description: A Klaviyo campaign
       required:
         - id
@@ -1952,6 +1979,14 @@ components:
       type: object
       x-airbyte-entity-name: events
       x-airbyte-stream-name: events
+      x-airbyte-ai-hints:
+        summary: "Customer events and activity tracked in Klaviyo"
+        when_to_use: "Questions about customer activity or behavioral events"
+        trigger_phrases: ["klaviyo event", "customer activity", "behavioral event"]
+        freshness: live
+        search_strategy: "Filter by event type or profile"
+        example_questions:
+          - "What events has a customer triggered?"
       description: A Klaviyo event representing an action taken by a profile
       required:
         - id
@@ -2036,6 +2071,14 @@ components:
       type: object
       x-airbyte-entity-name: metrics
       x-airbyte-stream-name: metrics
+      x-airbyte-ai-hints:
+        summary: "Metric definitions for tracking Klaviyo performance"
+        when_to_use: "Questions about tracked metrics or KPI definitions"
+        trigger_phrases: ["klaviyo metric", "email metric", "performance metric"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What metrics are tracked in Klaviyo?"
       description: A Klaviyo metric (event type)
       required:
         - id
@@ -2100,6 +2143,14 @@ components:
       type: object
       x-airbyte-entity-name: flows
       x-airbyte-stream-name: flows
+      x-airbyte-ai-hints:
+        summary: "Automated email/SMS flows (drip sequences) in Klaviyo"
+        when_to_use: "Questions about automation flows or drip campaigns"
+        trigger_phrases: ["klaviyo flow", "automation", "drip sequence", "email flow"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "What flows are active in Klaviyo?"
       description: A Klaviyo flow (automated sequence)
       required:
         - id
@@ -2163,6 +2214,14 @@ components:
       type: object
       x-airbyte-entity-name: email_templates
       x-airbyte-stream-name: email_templates
+      x-airbyte-ai-hints:
+        summary: "Email templates used in Klaviyo campaigns and flows"
+        when_to_use: "Questions about available email templates or template design"
+        trigger_phrases: ["email template", "template design", "klaviyo template"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What email templates are available?"
       description: A Klaviyo email template
       required:
         - id

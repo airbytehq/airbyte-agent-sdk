@@ -1878,6 +1878,14 @@ components:
       type: object
       x-airbyte-entity-name: leads
       x-airbyte-stream-name: incremental_leads_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Sales leads with source, status, and contact information"
+        when_to_use: "Questions about leads, lead status, or lead management"
+        trigger_phrases: ["zoho lead", "sales lead", "new lead"]
+        freshness: live
+        search_strategy: "Search by name, email, or filter by status and source"
+        example_questions:
+          - "Show new leads in Zoho CRM"
       description: Zoho CRM lead object
       required:
         - id
@@ -1994,6 +2002,14 @@ components:
       type: object
       x-airbyte-entity-name: contacts
       x-airbyte-stream-name: incremental_contacts_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Zoho CRM contacts with email, phone, and account details"
+        when_to_use: "Looking up contact information in Zoho CRM"
+        trigger_phrases: ["zoho contact", "CRM contact"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find a contact in Zoho CRM"
       description: Zoho CRM contact object
       required:
         - id
@@ -2112,6 +2128,14 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: incremental_accounts_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Zoho CRM accounts representing companies or organizations"
+        when_to_use: "Looking up company details or account information"
+        trigger_phrases: ["zoho account", "company", "organization"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "Find an account in Zoho CRM"
       description: Zoho CRM account (company) object
       required:
         - id
@@ -2235,6 +2259,14 @@ components:
       type: object
       x-airbyte-entity-name: deals
       x-airbyte-stream-name: incremental_deals_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Sales deals with stage, amount, and close date in Zoho CRM"
+        when_to_use: "Questions about sales pipeline, deal status, or revenue"
+        trigger_phrases: ["zoho deal", "sales pipeline", "deal stage"]
+        freshness: live
+        search_strategy: "Search by name or filter by stage and owner"
+        example_questions:
+          - "What deals are in the pipeline?"
       description: Zoho CRM deal (opportunity) object
       required:
         - id
@@ -2330,6 +2362,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: incremental_campaigns_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Marketing campaigns tracked in Zoho CRM"
+        when_to_use: "Questions about marketing campaigns or campaign performance"
+        trigger_phrases: ["zoho campaign", "marketing campaign"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show marketing campaigns"
       description: Zoho CRM campaign object
       required:
         - id
@@ -2412,6 +2452,14 @@ components:
       type: object
       x-airbyte-entity-name: tasks
       x-airbyte-stream-name: incremental_tasks_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Tasks and to-dos assigned to users in Zoho CRM"
+        when_to_use: "Questions about assigned tasks or activity tracking"
+        trigger_phrases: ["zoho task", "CRM task", "to-do"]
+        freshness: live
+        search_strategy: "Filter by assignee, status, or due date"
+        example_questions:
+          - "What tasks are assigned to me?"
       description: Zoho CRM task object
       required:
         - id
@@ -2496,6 +2544,14 @@ components:
       type: object
       x-airbyte-entity-name: events
       x-airbyte-stream-name: incremental_events_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Calendar events and meetings in Zoho CRM"
+        when_to_use: "Questions about scheduled meetings or events"
+        trigger_phrases: ["zoho event", "meeting", "calendar event"]
+        freshness: live
+        search_strategy: "Filter by date or attendee"
+        example_questions:
+          - "What meetings are scheduled?"
       description: Zoho CRM event (meeting/calendar) object
       required:
         - id
@@ -2595,6 +2651,14 @@ components:
       type: object
       x-airbyte-entity-name: calls
       x-airbyte-stream-name: incremental_calls_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Call logs tracked in Zoho CRM"
+        when_to_use: "Questions about call history or call logs"
+        trigger_phrases: ["zoho call", "call log"]
+        freshness: live
+        search_strategy: "Filter by date or user"
+        example_questions:
+          - "Show recent call logs"
       description: Zoho CRM call object
       required:
         - id
@@ -2681,6 +2745,14 @@ components:
       type: object
       x-airbyte-entity-name: products
       x-airbyte-stream-name: incremental_products_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Products in the Zoho CRM catalog with pricing"
+        when_to_use: "Questions about product catalog or pricing"
+        trigger_phrases: ["zoho product", "CRM product"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What products are in Zoho CRM?"
       description: Zoho CRM product object
       required:
         - id
@@ -2793,6 +2865,14 @@ components:
       type: object
       x-airbyte-entity-name: quotes
       x-airbyte-stream-name: incremental_quotes_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Sales quotes with line items and pricing in Zoho CRM"
+        when_to_use: "Questions about sales quotes or pricing proposals"
+        trigger_phrases: ["zoho quote", "sales quote", "price quote"]
+        freshness: live
+        search_strategy: "Filter by deal or account"
+        example_questions:
+          - "Show quotes for a deal"
       description: Zoho CRM quote object
       required:
         - id
@@ -2916,6 +2996,14 @@ components:
       type: object
       x-airbyte-entity-name: invoices
       x-airbyte-stream-name: incremental_invoices_zoho_crm_stream
+      x-airbyte-ai-hints:
+        summary: "Invoices generated in Zoho CRM with amounts and status"
+        when_to_use: "Questions about CRM invoices or billing"
+        trigger_phrases: ["zoho invoice", "CRM invoice"]
+        freshness: live
+        search_strategy: "Filter by account, date, or status"
+        example_questions:
+          - "Show recent Zoho CRM invoices"
       description: Zoho CRM invoice object
       required:
         - id

@@ -2547,6 +2547,19 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                     'x-airbyte-entity-name': 'threads',
                                     'x-airbyte-stream-name': 'threads',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Slack thread replies in channel conversations',
+                                        'when_to_use': 'Looking for threaded replies or discussion context in Slack channels',
+                                        'trigger_phrases': [
+                                            'slack thread',
+                                            'thread reply',
+                                            'threaded conversation',
+                                            'replies',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show replies in a Slack thread', 'What was discussed in a thread?'],
+                                        'search_strategy': 'Filter by channel and parent message timestamp',
+                                    },
                                 },
                             },
                             'has_more': {
@@ -2672,6 +2685,32 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                 },
                 'x-airbyte-entity-name': 'threads',
                 'x-airbyte-stream-name': 'threads',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Slack thread replies in channel conversations',
+                    'when_to_use': 'Looking for threaded replies or discussion context in Slack channels',
+                    'trigger_phrases': [
+                        'slack thread',
+                        'thread reply',
+                        'threaded conversation',
+                        'replies',
+                    ],
+                    'freshness': 'live',
+                    'example_questions': ['Show replies in a Slack thread', 'What was discussed in a thread?'],
+                    'search_strategy': 'Filter by channel and parent message timestamp',
+                },
+            },
+            ai_hints={
+                'summary': 'Slack thread replies in channel conversations',
+                'when_to_use': 'Looking for threaded replies or discussion context in Slack channels',
+                'trigger_phrases': [
+                    'slack thread',
+                    'thread reply',
+                    'threaded conversation',
+                    'replies',
+                ],
+                'freshness': 'live',
+                'example_questions': ['Show replies in a Slack thread', 'What was discussed in a thread?'],
+                'search_strategy': 'Filter by channel and parent message timestamp',
             },
         ),
         EntityDefinition(

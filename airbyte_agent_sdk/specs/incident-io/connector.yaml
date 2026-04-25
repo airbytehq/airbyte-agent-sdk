@@ -1295,6 +1295,15 @@ components:
       type: object
       x-airbyte-entity-name: incidents
       x-airbyte-stream-name: incidents
+      x-airbyte-ai-hints:
+        summary: "Incidents tracked in incident.io with severity, status, and timeline"
+        when_to_use: "Questions about incidents, outages, or post-mortems"
+        trigger_phrases: ["incident", "outage", "post-mortem", "what happened"]
+        freshness: live
+        search_strategy: "Search by name or filter by severity, status, or date"
+        example_questions:
+          - "Show recent incidents"
+          - "What incidents are open?"
       description: An incident tracked in incident.io
       required:
         - id
@@ -1523,6 +1532,15 @@ components:
       type: object
       x-airbyte-entity-name: alerts
       x-airbyte-stream-name: alerts
+      x-airbyte-ai-hints:
+        summary: "Alerts triggered in incident.io from monitoring systems"
+        when_to_use: "Questions about alerts, monitoring triggers, or alert status"
+        trigger_phrases: ["alert", "monitoring alert", "triggered alert"]
+        freshness: live
+        search_strategy: "Filter by status or source"
+        example_questions:
+          - "What alerts are active?"
+          - "Show recent alerts"
       description: An alert ingested from an alert source
       required:
         - id
@@ -1595,6 +1613,14 @@ components:
       type: object
       x-airbyte-entity-name: escalations
       x-airbyte-stream-name: escalations
+      x-airbyte-ai-hints:
+        summary: "Escalation paths and on-call routing rules"
+        when_to_use: "Questions about escalation policies or who is on-call"
+        trigger_phrases: ["escalation", "on-call", "escalation path"]
+        freshness: live
+        search_strategy: "List escalation policies"
+        example_questions:
+          - "What are the escalation paths?"
       description: An escalation that pages people via escalation paths
       required:
         - id
@@ -1747,6 +1773,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Users in incident.io with roles and on-call assignments"
+        when_to_use: "Looking up team members or responder details"
+        trigger_phrases: ["incident.io user", "responder", "who is on-call"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the responders?"
       description: A user in the incident.io organisation
       required:
         - id
@@ -1786,6 +1820,14 @@ components:
       type: object
       x-airbyte-entity-name: incident_updates
       x-airbyte-stream-name: incident_updates
+      x-airbyte-ai-hints:
+        summary: "Status updates posted during incident response"
+        when_to_use: "Looking for incident timeline or status update history"
+        trigger_phrases: ["incident update", "status update", "incident timeline"]
+        freshness: live
+        search_strategy: "Filter by incident"
+        example_questions:
+          - "What updates were posted for an incident?"
       description: An update posted to an incident
       required:
         - id
@@ -1858,6 +1900,14 @@ components:
       type: object
       x-airbyte-entity-name: incident_roles
       x-airbyte-stream-name: incident_roles
+      x-airbyte-ai-hints:
+        summary: "Roles assigned during incident response (lead, comms, etc.)"
+        when_to_use: "Questions about incident response role definitions"
+        trigger_phrases: ["incident role", "response role", "incident lead"]
+        freshness: static
+        search_strategy: "List all incident roles"
+        example_questions:
+          - "What incident roles are defined?"
       description: A role that can be assigned during an incident
       required:
         - id
@@ -1894,6 +1944,14 @@ components:
       type: object
       x-airbyte-entity-name: incident_statuses
       x-airbyte-stream-name: incident_statuses
+      x-airbyte-ai-hints:
+        summary: "Incident lifecycle statuses (investigating, mitigated, resolved)"
+        when_to_use: "Questions about incident status workflow or definitions"
+        trigger_phrases: ["incident status", "status definition"]
+        freshness: static
+        search_strategy: "List all statuses"
+        example_questions:
+          - "What incident statuses are available?"
       description: A status that an incident can be in
       required:
         - id
@@ -1924,6 +1982,14 @@ components:
       type: object
       x-airbyte-entity-name: incident_timestamps
       x-airbyte-stream-name: incident_timestamps
+      x-airbyte-ai-hints:
+        summary: "Key timestamps during incident lifecycle (detected, resolved, etc.)"
+        when_to_use: "Questions about incident timing or duration analysis"
+        trigger_phrases: ["incident timestamp", "time to resolve", "incident duration"]
+        freshness: live
+        search_strategy: "Filter by incident"
+        example_questions:
+          - "How long did an incident take to resolve?"
       description: A timestamp definition for incidents
       required:
         - id
@@ -1942,6 +2008,14 @@ components:
       type: object
       x-airbyte-entity-name: severities
       x-airbyte-stream-name: severities
+      x-airbyte-ai-hints:
+        summary: "Severity level definitions for incidents"
+        when_to_use: "Questions about severity classification or impact levels"
+        trigger_phrases: ["severity", "severity level", "impact level"]
+        freshness: static
+        search_strategy: "List all severities"
+        example_questions:
+          - "What severity levels are defined?"
       description: A severity level for incidents
       required:
         - id
@@ -1969,6 +2043,14 @@ components:
       type: object
       x-airbyte-entity-name: custom_fields
       x-airbyte-stream-name: custom_fields
+      x-airbyte-ai-hints:
+        summary: "Custom fields for capturing additional incident metadata"
+        when_to_use: "Questions about custom incident data fields"
+        trigger_phrases: ["custom field", "incident field"]
+        freshness: static
+        search_strategy: "List all custom fields"
+        example_questions:
+          - "What custom fields are on incidents?"
       description: A custom field definition for incidents
       required:
         - id
@@ -1999,6 +2081,14 @@ components:
       type: object
       x-airbyte-entity-name: catalog_types
       x-airbyte-stream-name: catalog_types
+      x-airbyte-ai-hints:
+        summary: "Catalog types defining service, team, and infrastructure entities"
+        when_to_use: "Questions about the service catalog or entity types"
+        trigger_phrases: ["catalog type", "service catalog", "entity type"]
+        freshness: static
+        search_strategy: "List all catalog types"
+        example_questions:
+          - "What catalog types are defined?"
       description: A catalog type defining a category of catalog entries
       required:
         - id
@@ -2081,6 +2171,15 @@ components:
       type: object
       x-airbyte-entity-name: schedules
       x-airbyte-stream-name: schedules
+      x-airbyte-ai-hints:
+        summary: "On-call schedules defining rotation and coverage"
+        when_to_use: "Questions about on-call schedules or rotation planning"
+        trigger_phrases: ["on-call schedule", "rotation", "coverage schedule"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What on-call schedules are set up?"
+          - "Who is on-call?"
       description: An on-call schedule
       required:
         - id

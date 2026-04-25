@@ -1677,6 +1677,14 @@ components:
     CurrentUser:
       type: object
       x-airbyte-entity-name: current_user
+      x-airbyte-ai-hints:
+        summary: "The authenticated Facebook user profile"
+        when_to_use: "Looking up the current user's Facebook account details"
+        trigger_phrases: ["facebook user", "my facebook account", "who am I"]
+        freshness: live
+        search_strategy: "Retrieve the authenticated user profile"
+        example_questions:
+          - "Who is the current Facebook user?"
       description: Current Facebook user associated with the access token
       required:
       - id
@@ -1693,6 +1701,15 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "Facebook ad campaigns with objective, status, and budget"
+        when_to_use: "Questions about ad campaigns, budgets, or campaign performance"
+        trigger_phrases: ["facebook campaign", "ad campaign", "campaign budget", "campaign status"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "List active Facebook campaigns"
+          - "What is the budget for a campaign?"
       description: Facebook Ad Campaign
       required:
       - id
@@ -1845,6 +1862,15 @@ components:
       type: object
       x-airbyte-entity-name: ad_sets
       x-airbyte-stream-name: ad_sets
+      x-airbyte-ai-hints:
+        summary: "Facebook ad sets with targeting, scheduling, and bid strategy"
+        when_to_use: "Questions about ad targeting, audiences, or ad set configuration"
+        trigger_phrases: ["ad set", "targeting", "audience", "bid strategy"]
+        freshness: live
+        search_strategy: "Filter by campaign or status"
+        example_questions:
+          - "What ad sets are in this campaign?"
+          - "Show ad set targeting details"
       description: Facebook Ad Set
       required:
       - id
@@ -1963,6 +1989,15 @@ components:
       type: object
       x-airbyte-entity-name: ads
       x-airbyte-stream-name: ads
+      x-airbyte-ai-hints:
+        summary: "Individual Facebook ads with creative and delivery status"
+        when_to_use: "Questions about specific ads, their status, or creative content"
+        trigger_phrases: ["facebook ad", "ad status", "ad creative", "which ads"]
+        freshness: live
+        search_strategy: "Filter by ad set, campaign, or status"
+        example_questions:
+          - "Show active Facebook ads"
+          - "What ads are running?"
       description: Facebook Ad
       required:
       - id
@@ -2088,6 +2123,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_creatives
       x-airbyte-stream-name: ad_creatives
+      x-airbyte-ai-hints:
+        summary: "Ad creative assets (copy, images, videos, links)"
+        when_to_use: "Questions about ad creative content, copy, or media"
+        trigger_phrases: ["ad creative", "ad copy", "ad image", "creative asset"]
+        freshness: live
+        search_strategy: "Filter by ad or search by name"
+        example_questions:
+          - "Show the creative for an ad"
       description: Facebook Ad Creative
       required:
       - id
@@ -2189,6 +2232,15 @@ components:
       type: object
       x-airbyte-entity-name: ads_insights
       x-airbyte-stream-name: ads_insights
+      x-airbyte-ai-hints:
+        summary: "Ad performance metrics (impressions, clicks, spend, conversions)"
+        when_to_use: "Questions about ad performance, ROI, or campaign analytics"
+        trigger_phrases: ["ad performance", "impressions", "click rate", "ad spend", "ROAS", "conversions"]
+        freshness: live
+        search_strategy: "Filter by campaign, date range, or breakdown dimensions"
+        example_questions:
+          - "How are my Facebook ads performing?"
+          - "What is the spend this month?"
       description: Facebook Ads Insight
       properties:
         account_id:
@@ -2359,6 +2411,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_account
       x-airbyte-stream-name: ad_account
+      x-airbyte-ai-hints:
+        summary: "Facebook ad account details and settings"
+        when_to_use: "Questions about ad account configuration or account-level settings"
+        trigger_phrases: ["ad account", "account settings", "facebook account"]
+        freshness: live
+        search_strategy: "Retrieve the primary ad account"
+        example_questions:
+          - "Show my Facebook ad account details"
       description: Facebook Ad Account
       required:
       - id
@@ -2556,6 +2616,14 @@ components:
       type: object
       x-airbyte-entity-name: ad_accounts
       x-airbyte-stream-name: ad_account
+      x-airbyte-ai-hints:
+        summary: "List of all accessible Facebook ad accounts"
+        when_to_use: "Looking up which ad accounts are available or accessible"
+        trigger_phrases: ["ad accounts", "which accounts", "list accounts"]
+        freshness: live
+        search_strategy: "List all available ad accounts"
+        example_questions:
+          - "What Facebook ad accounts do I have access to?"
       description: Facebook Ad Account in list response
       required:
       - id
@@ -2638,6 +2706,14 @@ components:
       type: object
       x-airbyte-entity-name: custom_conversions
       x-airbyte-stream-name: custom_conversions
+      x-airbyte-ai-hints:
+        summary: "Custom conversion events defined for tracking ad outcomes"
+        when_to_use: "Questions about conversion tracking or custom conversion setup"
+        trigger_phrases: ["custom conversion", "conversion tracking", "conversion event"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What custom conversions are defined?"
       description: Facebook Custom Conversion
       required:
       - id
@@ -2743,6 +2819,14 @@ components:
       type: object
       x-airbyte-entity-name: images
       x-airbyte-stream-name: images
+      x-airbyte-ai-hints:
+        summary: "Images uploaded to the Facebook ad account"
+        when_to_use: "Questions about available ad images or creative library"
+        trigger_phrases: ["ad image", "uploaded image", "creative image"]
+        freshness: live
+        search_strategy: "Search by name or hash"
+        example_questions:
+          - "What images are in the ad account?"
       properties:
         id:
           type:
@@ -2848,6 +2932,14 @@ components:
       type: object
       x-airbyte-entity-name: videos
       x-airbyte-stream-name: videos
+      x-airbyte-ai-hints:
+        summary: "Videos uploaded to the Facebook ad account"
+        when_to_use: "Questions about available ad videos or video assets"
+        trigger_phrases: ["ad video", "uploaded video", "video asset"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "What videos are in the ad account?"
       required:
       - id
       properties:
@@ -3023,6 +3115,14 @@ components:
     Pixel:
       type: object
       x-airbyte-entity-name: pixels
+      x-airbyte-ai-hints:
+        summary: "Facebook tracking pixels for conversion measurement"
+        when_to_use: "Questions about pixel setup, events, or conversion tracking"
+        trigger_phrases: ["facebook pixel", "tracking pixel", "pixel events"]
+        freshness: live
+        search_strategy: "List all configured pixels"
+        example_questions:
+          - "What Facebook pixels are configured?"
       description: Facebook Ads Pixel
       required:
       - id
@@ -3137,6 +3237,14 @@ components:
     PixelStat:
       type: object
       x-airbyte-entity-name: pixel_stats
+      x-airbyte-ai-hints:
+        summary: "Statistics for Facebook pixel events and fire counts"
+        when_to_use: "Questions about pixel event volume or tracking health"
+        trigger_phrases: ["pixel stats", "pixel events", "tracking stats"]
+        freshness: live
+        search_strategy: "Filter by pixel and date range"
+        example_questions:
+          - "How many pixel events fired this week?"
       description: Facebook Pixel event stat entry showing event counts and quality metrics
       properties:
         data:
@@ -3800,6 +3908,14 @@ components:
     AdLibraryAd:
       type: object
       x-airbyte-entity-name: ad_library
+      x-airbyte-ai-hints:
+        summary: "Public Facebook Ad Library entries for transparency"
+        when_to_use: "Researching competitor ads or public ad transparency data"
+        trigger_phrases: ["ad library", "competitor ads", "public ads"]
+        freshness: live
+        search_strategy: "Search by advertiser name or keyword"
+        example_questions:
+          - "Search the Facebook Ad Library for a competitor"
       description: An archived ad from the Facebook Ad Library, containing ad creative content, delivery information, spend data, and demographic reach breakdowns.
       required:
       - id

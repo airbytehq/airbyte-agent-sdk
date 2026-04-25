@@ -2256,6 +2256,15 @@ components:
       type: object
       x-airbyte-entity-name: customer
       x-airbyte-stream-name: customer
+      x-airbyte-ai-hints:
+        summary: "Chargebee customers with billing details and subscription status"
+        when_to_use: "Looking up customer billing info, subscriptions, or account status"
+        trigger_phrases: ["chargebee customer", "billing customer", "subscriber", "who is paying"]
+        freshness: live
+        search_strategy: "Search by email, name, or customer ID"
+        example_questions:
+          - "Find a customer in Chargebee"
+          - "Show customer billing details"
       description: Chargebee customer object
       required:
         - id
@@ -2482,6 +2491,15 @@ components:
       type: object
       x-airbyte-entity-name: subscription
       x-airbyte-stream-name: subscription
+      x-airbyte-ai-hints:
+        summary: "Subscriptions with plan, pricing, and renewal details"
+        when_to_use: "Questions about subscription status, plans, or renewals"
+        trigger_phrases: ["subscription", "plan", "renewal", "billing cycle"]
+        freshness: live
+        search_strategy: "Filter by customer, plan, or status"
+        example_questions:
+          - "Show active subscriptions"
+          - "When does a subscription renew?"
       description: Chargebee subscription object
       required:
         - id
@@ -2719,6 +2737,15 @@ components:
       type: object
       x-airbyte-entity-name: invoice
       x-airbyte-stream-name: invoice
+      x-airbyte-ai-hints:
+        summary: "Invoices with line items, amounts, and payment status"
+        when_to_use: "Questions about invoices, billing amounts, or payment history"
+        trigger_phrases: ["invoice", "billing", "payment due", "amount owed"]
+        freshness: live
+        search_strategy: "Filter by customer, date, or status"
+        example_questions:
+          - "Show recent invoices"
+          - "What is the invoice total for a customer?"
       description: Chargebee invoice object
       required:
         - id
@@ -2948,6 +2975,14 @@ components:
       type: object
       x-airbyte-entity-name: credit_note
       x-airbyte-stream-name: credit_note
+      x-airbyte-ai-hints:
+        summary: "Credit notes issued against invoices"
+        when_to_use: "Questions about credits, refunds, or invoice adjustments"
+        trigger_phrases: ["credit note", "credit", "refund", "adjustment"]
+        freshness: live
+        search_strategy: "Filter by customer or invoice"
+        example_questions:
+          - "Show credit notes for a customer"
       description: Chargebee credit note object
       required:
         - id
@@ -3128,6 +3163,15 @@ components:
       type: object
       x-airbyte-entity-name: coupon
       x-airbyte-stream-name: coupon
+      x-airbyte-ai-hints:
+        summary: "Discount coupons and promotional codes"
+        when_to_use: "Questions about available coupons or discount codes"
+        trigger_phrases: ["coupon", "discount code", "promo", "promotion"]
+        freshness: live
+        search_strategy: "Search by coupon code or name"
+        example_questions:
+          - "What coupons are available?"
+          - "Show active promotions"
       description: Chargebee coupon object
       required:
         - id
@@ -3254,6 +3298,15 @@ components:
       type: object
       x-airbyte-entity-name: transaction
       x-airbyte-stream-name: transaction
+      x-airbyte-ai-hints:
+        summary: "Payment transactions including charges and refunds"
+        when_to_use: "Questions about payment processing or transaction history"
+        trigger_phrases: ["transaction", "payment", "charge", "payment history"]
+        freshness: live
+        search_strategy: "Filter by customer, date, or status"
+        example_questions:
+          - "Show recent transactions"
+          - "What payments were processed today?"
       description: Chargebee transaction object
       required:
         - id
@@ -3429,6 +3482,14 @@ components:
       type: object
       x-airbyte-entity-name: event
       x-airbyte-stream-name: event
+      x-airbyte-ai-hints:
+        summary: "Chargebee webhook events tracking billing lifecycle changes"
+        when_to_use: "Questions about billing events or system activity logs"
+        trigger_phrases: ["chargebee event", "billing event", "webhook event"]
+        freshness: live
+        search_strategy: "Filter by event type or date range"
+        example_questions:
+          - "What billing events occurred recently?"
       description: Chargebee event object
       required:
         - id
@@ -3491,6 +3552,14 @@ components:
       type: object
       x-airbyte-entity-name: order
       x-airbyte-stream-name: order
+      x-airbyte-ai-hints:
+        summary: "Orders created from Chargebee subscriptions"
+        when_to_use: "Questions about order fulfillment or order status"
+        trigger_phrases: ["chargebee order", "order status", "fulfillment"]
+        freshness: live
+        search_strategy: "Filter by customer or status"
+        example_questions:
+          - "Show recent orders"
       description: Chargebee order object
       required:
         - id
@@ -3702,6 +3771,14 @@ components:
       type: object
       x-airbyte-entity-name: item
       x-airbyte-stream-name: item
+      x-airbyte-ai-hints:
+        summary: "Product items available for subscription or purchase"
+        when_to_use: "Questions about available products or catalog items"
+        trigger_phrases: ["item", "product", "catalog item"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What items are in the Chargebee catalog?"
       description: Chargebee item object (Product Catalog 2.0)
       required:
         - id
@@ -3821,6 +3898,14 @@ components:
       type: object
       x-airbyte-entity-name: item_price
       x-airbyte-stream-name: item_price
+      x-airbyte-ai-hints:
+        summary: "Pricing configurations for Chargebee items"
+        when_to_use: "Questions about item pricing, tiers, or billing models"
+        trigger_phrases: ["item price", "pricing", "price tier"]
+        freshness: live
+        search_strategy: "Filter by item"
+        example_questions:
+          - "What are the pricing options for an item?"
       description: Chargebee item price object (Product Catalog 2.0)
       required:
         - id
@@ -3967,6 +4052,14 @@ components:
       type: object
       x-airbyte-entity-name: payment_source
       x-airbyte-stream-name: payment_source
+      x-airbyte-ai-hints:
+        summary: "Customer payment methods (cards, bank accounts, etc.)"
+        when_to_use: "Questions about customer payment methods on file"
+        trigger_phrases: ["payment source", "payment method", "card on file"]
+        freshness: live
+        search_strategy: "Filter by customer"
+        example_questions:
+          - "What payment methods does a customer have?"
       description: Chargebee payment source object
       required:
         - id

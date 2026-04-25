@@ -1326,6 +1326,14 @@ components:
       type: object
       x-airbyte-entity-name: organizations
       x-airbyte-stream-name: organizations
+      x-airbyte-ai-hints:
+        summary: "Snapchat business organizations"
+        when_to_use: "Questions about Snapchat business account details"
+        trigger_phrases: ["snapchat organization", "business organization"]
+        freshness: live
+        search_strategy: "List all organizations"
+        example_questions:
+          - "What Snapchat organizations do I have?"
       description: Snapchat organization object
       properties:
         id:
@@ -1414,6 +1422,14 @@ components:
       type: object
       x-airbyte-entity-name: adaccounts
       x-airbyte-stream-name: adaccounts
+      x-airbyte-ai-hints:
+        summary: "Snapchat ad accounts with billing and permissions"
+        when_to_use: "Questions about ad account details or access"
+        trigger_phrases: ["snapchat ad account", "snap ad account"]
+        freshness: live
+        search_strategy: "List accessible accounts"
+        example_questions:
+          - "What Snapchat ad accounts do I have?"
       description: Snapchat ad account object
       properties:
         id:
@@ -1475,6 +1491,14 @@ components:
       type: object
       x-airbyte-entity-name: campaigns
       x-airbyte-stream-name: campaigns
+      x-airbyte-ai-hints:
+        summary: "Snapchat ad campaigns with objective and budget"
+        when_to_use: "Questions about ad campaigns or campaign management"
+        trigger_phrases: ["snapchat campaign", "snap campaign"]
+        freshness: live
+        search_strategy: "Search by name or filter by status"
+        example_questions:
+          - "Show active Snapchat campaigns"
       description: Snapchat campaign object
       properties:
         id:
@@ -1528,6 +1552,14 @@ components:
       type: object
       x-airbyte-entity-name: adsquads
       x-airbyte-stream-name: adsquads
+      x-airbyte-ai-hints:
+        summary: "Ad squads (ad sets) within Snapchat campaigns with targeting"
+        when_to_use: "Questions about ad targeting or ad squad configuration"
+        trigger_phrases: ["ad squad", "snapchat ad set", "targeting"]
+        freshness: live
+        search_strategy: "Filter by campaign"
+        example_questions:
+          - "What ad squads are in this campaign?"
       description: Snapchat ad squad object
       properties:
         id:
@@ -1662,6 +1694,14 @@ components:
       type: object
       x-airbyte-entity-name: ads
       x-airbyte-stream-name: ads
+      x-airbyte-ai-hints:
+        summary: "Individual Snapchat ads with creative and delivery status"
+        when_to_use: "Questions about specific ads or their performance"
+        trigger_phrases: ["snapchat ad", "snap ad"]
+        freshness: live
+        search_strategy: "Filter by ad squad or campaign"
+        example_questions:
+          - "Show Snapchat ads"
       description: Snapchat ad object
       properties:
         id:
@@ -1709,6 +1749,14 @@ components:
       type: object
       x-airbyte-entity-name: creatives
       x-airbyte-stream-name: creatives
+      x-airbyte-ai-hints:
+        summary: "Creative assets (images, videos) for Snapchat ads"
+        when_to_use: "Questions about ad creative content"
+        trigger_phrases: ["snapchat creative", "ad creative"]
+        freshness: live
+        search_strategy: "Filter by ad account"
+        example_questions:
+          - "Show creative assets"
       description: Snapchat creative object
       properties:
         id:
@@ -1792,6 +1840,14 @@ components:
       type: object
       x-airbyte-entity-name: media
       x-airbyte-stream-name: media
+      x-airbyte-ai-hints:
+        summary: "Media files uploaded for Snapchat ad creatives"
+        when_to_use: "Questions about uploaded media or creative assets"
+        trigger_phrases: ["snapchat media", "uploaded media"]
+        freshness: live
+        search_strategy: "Filter by ad account"
+        example_questions:
+          - "What media files are uploaded?"
       description: Snapchat media object
       properties:
         id:
@@ -1859,6 +1915,14 @@ components:
       type: object
       x-airbyte-entity-name: segments
       x-airbyte-stream-name: segments
+      x-airbyte-ai-hints:
+        summary: "Audience segments for Snapchat ad targeting"
+        when_to_use: "Questions about targeting segments or audience management"
+        trigger_phrases: ["snapchat segment", "audience segment"]
+        freshness: live
+        search_strategy: "Search by name"
+        example_questions:
+          - "What audience segments are available?"
       description: Snapchat audience segment object
       properties:
         id:

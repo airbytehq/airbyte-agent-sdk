@@ -871,6 +871,14 @@ components:
       type: object
       x-airbyte-entity-name: balances
       x-airbyte-stream-name: balances
+      x-airbyte-ai-hints:
+        summary: "PayPal account balances across currencies"
+        when_to_use: "Questions about account balance or available funds"
+        trigger_phrases: ["paypal balance", "account balance", "available funds"]
+        freshness: live
+        search_strategy: "Retrieve current balances"
+        example_questions:
+          - "What is my PayPal balance?"
       description: Balances response with account balance details.
       properties:
         balances:
@@ -1116,6 +1124,14 @@ components:
       type: object
       x-airbyte-entity-name: transactions
       x-airbyte-stream-name: transactions
+      x-airbyte-ai-hints:
+        summary: "PayPal transaction records with amount, type, and status"
+        when_to_use: "Questions about payment transactions or transaction history"
+        trigger_phrases: ["paypal transaction", "payment history", "transaction"]
+        freshness: live
+        search_strategy: "Filter by date range, type, or status"
+        example_questions:
+          - "Show recent PayPal transactions"
       description: A single PayPal transaction with full details.
       properties:
         transaction_info:
@@ -1186,6 +1202,14 @@ components:
       type: object
       x-airbyte-entity-name: list_payments
       x-airbyte-stream-name: list_payments
+      x-airbyte-ai-hints:
+        summary: "PayPal payment records for orders and purchases"
+        when_to_use: "Questions about payments received or payment details"
+        trigger_phrases: ["paypal payment", "payment received", "payment details"]
+        freshness: live
+        search_strategy: "Filter by date range"
+        example_questions:
+          - "Show recent payments"
       description: A PayPal payment object.
       properties:
         id:
@@ -1303,6 +1327,14 @@ components:
       type: object
       x-airbyte-entity-name: list_disputes
       x-airbyte-stream-name: list_disputes
+      x-airbyte-ai-hints:
+        summary: "PayPal disputes and chargebacks from buyers"
+        when_to_use: "Questions about payment disputes, chargebacks, or claims"
+        trigger_phrases: ["paypal dispute", "chargeback", "buyer claim"]
+        freshness: live
+        search_strategy: "Filter by status or date"
+        example_questions:
+          - "Are there any open disputes?"
       description: A PayPal dispute object.
       properties:
         dispute_id:
@@ -1387,6 +1419,14 @@ components:
       type: object
       x-airbyte-entity-name: list_products
       x-airbyte-stream-name: list_products
+      x-airbyte-ai-hints:
+        summary: "Products cataloged in PayPal for billing"
+        when_to_use: "Questions about product catalog or available products"
+        trigger_phrases: ["paypal product", "product catalog"]
+        freshness: live
+        search_strategy: "List all products"
+        example_questions:
+          - "What products are in PayPal?"
       description: A PayPal catalog product (summary).
       properties:
         id:
@@ -1439,6 +1479,14 @@ components:
       type: object
       x-airbyte-entity-name: show_product_details
       x-airbyte-stream-name: show_product_details
+      x-airbyte-ai-hints:
+        summary: "Detailed information about a specific PayPal product"
+        when_to_use: "Looking up details for a specific product"
+        trigger_phrases: ["product details", "product info"]
+        freshness: live
+        search_strategy: "Retrieve by product ID"
+        example_questions:
+          - "Show details for a PayPal product"
       description: Detailed catalog product information.
       properties:
         id:
@@ -1501,6 +1549,14 @@ components:
       type: object
       x-airbyte-entity-name: search_invoices
       x-airbyte-stream-name: search_invoices
+      x-airbyte-ai-hints:
+        summary: "PayPal invoices with line items and payment status"
+        when_to_use: "Questions about PayPal invoices or billing"
+        trigger_phrases: ["paypal invoice", "invoice search", "billing"]
+        freshness: live
+        search_strategy: "Search by recipient, date, or status"
+        example_questions:
+          - "Show PayPal invoices"
       description: A PayPal invoice object.
       properties:
         id:

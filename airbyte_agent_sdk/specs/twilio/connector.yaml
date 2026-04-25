@@ -1550,6 +1550,14 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: accounts
+      x-airbyte-ai-hints:
+        summary: "Twilio accounts and subaccounts with configuration"
+        when_to_use: "Questions about Twilio account details or subaccounts"
+        trigger_phrases: ["twilio account", "subaccount"]
+        freshness: live
+        search_strategy: "List all accounts"
+        example_questions:
+          - "What Twilio accounts do I have?"
       description: A Twilio account
       required:
       - sid
@@ -1614,6 +1622,15 @@ components:
       type: object
       x-airbyte-entity-name: calls
       x-airbyte-stream-name: calls
+      x-airbyte-ai-hints:
+        summary: "Voice call records with duration, status, and direction"
+        when_to_use: "Questions about phone calls, call history, or call status"
+        trigger_phrases: ["twilio call", "phone call", "call log", "call history"]
+        freshness: live
+        search_strategy: "Filter by date, direction, or phone number"
+        example_questions:
+          - "Show recent Twilio calls"
+          - "How many calls were made today?"
       description: A Twilio call
       required:
       - sid
@@ -1731,6 +1748,15 @@ components:
       type: object
       x-airbyte-entity-name: messages
       x-airbyte-stream-name: messages
+      x-airbyte-ai-hints:
+        summary: "SMS and MMS messages sent and received via Twilio"
+        when_to_use: "Questions about text messages, SMS logs, or message delivery"
+        trigger_phrases: ["twilio message", "SMS", "text message", "MMS"]
+        freshness: live
+        search_strategy: "Filter by date, direction, or phone number"
+        example_questions:
+          - "Show recent text messages"
+          - "Were there any failed SMS?"
       description: A Twilio message
       required:
       - sid
@@ -1826,6 +1852,14 @@ components:
       type: object
       x-airbyte-entity-name: incoming_phone_numbers
       x-airbyte-stream-name: incoming_phone_numbers
+      x-airbyte-ai-hints:
+        summary: "Phone numbers owned and managed in the Twilio account"
+        when_to_use: "Questions about phone numbers or number configuration"
+        trigger_phrases: ["phone number", "twilio number", "incoming number"]
+        freshness: live
+        search_strategy: "Search by number or filter by capabilities"
+        example_questions:
+          - "What phone numbers do I have in Twilio?"
       description: A Twilio incoming phone number
       required:
       - sid
@@ -1978,6 +2012,14 @@ components:
       type: object
       x-airbyte-entity-name: recordings
       x-airbyte-stream-name: recordings
+      x-airbyte-ai-hints:
+        summary: "Call recordings stored in Twilio"
+        when_to_use: "Questions about recorded calls or recording availability"
+        trigger_phrases: ["recording", "call recording"]
+        freshness: live
+        search_strategy: "Filter by call or date"
+        example_questions:
+          - "Show call recordings"
       description: A Twilio recording
       required:
       - sid
@@ -2071,6 +2113,14 @@ components:
       type: object
       x-airbyte-entity-name: conferences
       x-airbyte-stream-name: conferences
+      x-airbyte-ai-hints:
+        summary: "Conference call sessions in Twilio"
+        when_to_use: "Questions about conference calls or multi-party calls"
+        trigger_phrases: ["conference call", "conference"]
+        freshness: live
+        search_strategy: "Filter by date or status"
+        example_questions:
+          - "Show recent conference calls"
       description: A Twilio conference
       required:
       - sid
@@ -2141,6 +2191,14 @@ components:
       type: object
       x-airbyte-entity-name: usage_records
       x-airbyte-stream-name: usage_records
+      x-airbyte-ai-hints:
+        summary: "Usage records tracking Twilio resource consumption and costs"
+        when_to_use: "Questions about usage, billing, or resource consumption"
+        trigger_phrases: ["usage", "twilio usage", "cost", "consumption"]
+        freshness: live
+        search_strategy: "Filter by category or date range"
+        example_questions:
+          - "What is my Twilio usage this month?"
       description: A Twilio usage record
       properties:
         account_sid:
@@ -2216,6 +2274,14 @@ components:
       type: object
       x-airbyte-entity-name: addresses
       x-airbyte-stream-name: addresses
+      x-airbyte-ai-hints:
+        summary: "Physical addresses registered with the Twilio account"
+        when_to_use: "Questions about registered addresses for compliance"
+        trigger_phrases: ["twilio address", "registered address"]
+        freshness: static
+        search_strategy: "List all addresses"
+        example_questions:
+          - "What addresses are registered?"
       description: A Twilio address
       required:
       - sid
@@ -2297,6 +2363,14 @@ components:
       type: object
       x-airbyte-entity-name: queues
       x-airbyte-stream-name: queues
+      x-airbyte-ai-hints:
+        summary: "Call queues for managing inbound call routing"
+        when_to_use: "Questions about call queues or queue configuration"
+        trigger_phrases: ["call queue", "queue"]
+        freshness: live
+        search_strategy: "List all queues"
+        example_questions:
+          - "What call queues are configured?"
       description: A Twilio queue
       required:
       - sid
@@ -2361,6 +2435,14 @@ components:
       type: object
       x-airbyte-entity-name: transcriptions
       x-airbyte-stream-name: transcriptions
+      x-airbyte-ai-hints:
+        summary: "Call transcriptions generated from recordings"
+        when_to_use: "Questions about call transcriptions or speech-to-text results"
+        trigger_phrases: ["transcription", "call transcript"]
+        freshness: live
+        search_strategy: "Filter by recording"
+        example_questions:
+          - "Show call transcriptions"
       description: A Twilio transcription
       required:
       - sid
@@ -2433,6 +2515,14 @@ components:
       type: object
       x-airbyte-entity-name: outgoing_caller_ids
       x-airbyte-stream-name: outgoing_caller_ids
+      x-airbyte-ai-hints:
+        summary: "Verified outgoing caller IDs for the Twilio account"
+        when_to_use: "Questions about verified caller IDs or outbound number setup"
+        trigger_phrases: ["caller ID", "outgoing number", "verified number"]
+        freshness: static
+        search_strategy: "List all caller IDs"
+        example_questions:
+          - "What outgoing caller IDs are verified?"
       description: A Twilio outgoing caller ID
       required:
       - sid

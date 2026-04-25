@@ -958,6 +958,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Notion workspace members and bot users"
+        when_to_use: "Looking up team members or user details in Notion"
+        trigger_phrases: ["notion user", "workspace member"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the Notion workspace members?"
       description: A Notion user object
       required:
         - id
@@ -1200,6 +1208,14 @@ components:
       type: object
       x-airbyte-entity-name: data_sources
       x-airbyte-stream-name: data_sources
+      x-airbyte-ai-hints:
+        summary: "External data sources connected to Notion"
+        when_to_use: "Questions about connected data sources or integrations"
+        trigger_phrases: ["data source", "connected source", "notion integration"]
+        freshness: static
+        search_strategy: "List all data sources"
+        example_questions:
+          - "What data sources are connected to Notion?"
       description: A Notion data source object
       required:
         - id
@@ -1317,6 +1333,14 @@ components:
       type: object
       x-airbyte-entity-name: blocks
       x-airbyte-stream-name: blocks
+      x-airbyte-ai-hints:
+        summary: "Content blocks (paragraphs, headings, lists, etc.) within Notion pages"
+        when_to_use: "Looking at page content structure or specific content blocks"
+        trigger_phrases: ["notion block", "page content", "content block"]
+        freshness: live
+        search_strategy: "Filter by parent page"
+        example_questions:
+          - "Show the content blocks of a Notion page"
       description: A Notion block object
       required:
         - id
@@ -1625,6 +1649,14 @@ components:
       type: object
       x-airbyte-entity-name: comments
       x-airbyte-stream-name: comments
+      x-airbyte-ai-hints:
+        summary: "Comments on Notion pages and blocks"
+        when_to_use: "Looking for discussion or feedback on Notion pages"
+        trigger_phrases: ["notion comment", "page comment", "feedback"]
+        freshness: live
+        search_strategy: "Filter by page"
+        example_questions:
+          - "What comments are on this Notion page?"
       description: A Notion comment object
       required:
         - id

@@ -280,6 +280,14 @@ components:
       type: object
       x-airbyte-entity-name: accounts
       x-airbyte-stream-name: accounts
+      x-airbyte-ai-hints:
+        summary: "Zendesk Chat account configuration and settings"
+        when_to_use: "Questions about chat account details"
+        trigger_phrases: ["zendesk chat account", "chat settings"]
+        freshness: static
+        search_strategy: "Retrieve account info"
+        example_questions:
+          - "Show Zendesk Chat account details"
       description: Zendesk Chat account information
       properties:
         account_key:
@@ -488,6 +496,14 @@ components:
       type: object
       x-airbyte-entity-name: agents
       x-airbyte-stream-name: agents
+      x-airbyte-ai-hints:
+        summary: "Chat agents with availability and role information"
+        when_to_use: "Questions about chat agent details or availability"
+        trigger_phrases: ["chat agent", "who is available"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the chat agents?"
       description: Zendesk Chat agent
       properties:
         id:
@@ -592,6 +608,14 @@ components:
       type: object
       x-airbyte-entity-name: agent_timeline
       x-airbyte-stream-name: agent_timeline
+      x-airbyte-ai-hints:
+        summary: "Agent activity timeline showing status changes and interactions"
+        when_to_use: "Questions about agent activity patterns or availability history"
+        trigger_phrases: ["agent timeline", "agent activity"]
+        freshness: live
+        search_strategy: "Filter by agent or date"
+        example_questions:
+          - "Show agent activity for today"
       description: Agent activity timeline entry
       properties:
         agent_id:
@@ -622,6 +646,14 @@ components:
       type: object
       x-airbyte-entity-name: bans
       x-airbyte-stream-name: bans
+      x-airbyte-ai-hints:
+        summary: "Banned visitors or IPs from Zendesk Chat"
+        when_to_use: "Questions about banned users or access restrictions"
+        trigger_phrases: ["banned user", "chat ban", "blocked visitor"]
+        freshness: live
+        search_strategy: "List all bans"
+        example_questions:
+          - "What chat bans are in place?"
       description: Banned visitor
       properties:
         id:
@@ -661,6 +693,15 @@ components:
       type: object
       x-airbyte-entity-name: chats
       x-airbyte-stream-name: chats
+      x-airbyte-ai-hints:
+        summary: "Chat conversations with visitors including messages and timestamps"
+        when_to_use: "Questions about chat history or customer conversations"
+        trigger_phrases: ["zendesk chat", "chat conversation", "chat history"]
+        freshness: live
+        search_strategy: "Filter by date, agent, or department"
+        example_questions:
+          - "Show recent chats"
+          - "Find chats from today"
       description: Chat conversation transcript
       properties:
         id:
@@ -1104,6 +1145,14 @@ components:
       type: object
       x-airbyte-entity-name: departments
       x-airbyte-stream-name: departments
+      x-airbyte-ai-hints:
+        summary: "Chat departments for routing conversations"
+        when_to_use: "Questions about chat routing or department configuration"
+        trigger_phrases: ["chat department", "routing department"]
+        freshness: static
+        search_strategy: "List all departments"
+        example_questions:
+          - "What chat departments exist?"
       properties:
         id:
           type: integer
@@ -1145,6 +1194,14 @@ components:
       type: object
       x-airbyte-entity-name: goals
       x-airbyte-stream-name: goals
+      x-airbyte-ai-hints:
+        summary: "Conversion goals tracked in Zendesk Chat"
+        when_to_use: "Questions about chat-driven conversion goals"
+        trigger_phrases: ["chat goal", "conversion goal"]
+        freshness: static
+        search_strategy: "List all goals"
+        example_questions:
+          - "What chat goals are configured?"
       properties:
         id:
           type: integer
@@ -1184,6 +1241,14 @@ components:
       type: object
       x-airbyte-entity-name: roles
       x-airbyte-stream-name: roles
+      x-airbyte-ai-hints:
+        summary: "Agent role definitions in Zendesk Chat"
+        when_to_use: "Questions about agent roles or permissions"
+        trigger_phrases: ["chat role", "agent role"]
+        freshness: static
+        search_strategy: "List all roles"
+        example_questions:
+          - "What chat roles are defined?"
       properties:
         id:
           type: integer
@@ -1215,6 +1280,14 @@ components:
       type: object
       x-airbyte-entity-name: routing_settings
       x-airbyte-stream-name: routing_settings
+      x-airbyte-ai-hints:
+        summary: "Chat routing settings controlling how conversations are assigned"
+        when_to_use: "Questions about chat routing configuration"
+        trigger_phrases: ["routing settings", "chat routing"]
+        freshness: static
+        search_strategy: "Retrieve routing settings"
+        example_questions:
+          - "How is chat routing configured?"
       properties:
         routing_mode:
           type:
@@ -1246,6 +1319,14 @@ components:
       type: object
       x-airbyte-entity-name: shortcuts
       x-airbyte-stream-name: shortcuts
+      x-airbyte-ai-hints:
+        summary: "Chat shortcuts (canned responses) for agents"
+        when_to_use: "Questions about canned responses or response templates"
+        trigger_phrases: ["chat shortcut", "canned response", "quick reply"]
+        freshness: static
+        search_strategy: "Search by name or content"
+        example_questions:
+          - "What chat shortcuts are available?"
       properties:
         id:
           type: string
@@ -1292,6 +1373,14 @@ components:
       type: object
       x-airbyte-entity-name: skills
       x-airbyte-stream-name: skills
+      x-airbyte-ai-hints:
+        summary: "Agent skills for skill-based chat routing"
+        when_to_use: "Questions about agent skills or skill-based routing"
+        trigger_phrases: ["agent skill", "skill routing"]
+        freshness: static
+        search_strategy: "List all skills"
+        example_questions:
+          - "What skills are configured for chat routing?"
       properties:
         id:
           type: integer
@@ -1321,6 +1410,14 @@ components:
       type: object
       x-airbyte-entity-name: triggers
       x-airbyte-stream-name: triggers
+      x-airbyte-ai-hints:
+        summary: "Chat triggers automating actions based on visitor behavior"
+        when_to_use: "Questions about chat automation or proactive triggers"
+        trigger_phrases: ["chat trigger", "proactive chat"]
+        freshness: static
+        search_strategy: "List all triggers"
+        example_questions:
+          - "What chat triggers are configured?"
       properties:
         id:
           type: integer

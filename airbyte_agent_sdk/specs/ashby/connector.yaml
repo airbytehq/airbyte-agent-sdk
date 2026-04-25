@@ -964,6 +964,15 @@ components:
       type: object
       x-airbyte-entity-name: candidates
       x-airbyte-stream-name: candidates
+      x-airbyte-ai-hints:
+        summary: "Job candidates in the Ashby ATS with application history"
+        when_to_use: "Looking up candidate information or hiring pipeline status"
+        trigger_phrases: ["ashby candidate", "applicant", "hiring candidate", "who applied"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Find candidate details in Ashby"
+          - "List recent candidates"
       description: Candidate object
       required:
       - id
@@ -1105,6 +1114,15 @@ components:
       type: object
       x-airbyte-entity-name: applications
       x-airbyte-stream-name: applications
+      x-airbyte-ai-hints:
+        summary: "Job applications linking candidates to specific positions"
+        when_to_use: "Questions about application status, stage, or hiring pipeline"
+        trigger_phrases: ["application status", "applied for", "hiring stage", "application"]
+        freshness: live
+        search_strategy: "Filter by candidate, job, or status"
+        example_questions:
+          - "What is the status of an application?"
+          - "Show applications for a job"
       description: Application object
       required:
       - id
@@ -1345,6 +1363,15 @@ components:
       type: object
       x-airbyte-entity-name: jobs
       x-airbyte-stream-name: jobs
+      x-airbyte-ai-hints:
+        summary: "Open and closed job positions in Ashby"
+        when_to_use: "Questions about job openings, roles, or positions"
+        trigger_phrases: ["ashby job", "open position", "job opening", "role"]
+        freshness: live
+        search_strategy: "Search by title or department"
+        example_questions:
+          - "What jobs are open in Ashby?"
+          - "Show engineering positions"
       description: Job object
       required:
       - id
@@ -1529,6 +1556,14 @@ components:
       type: object
       x-airbyte-entity-name: departments
       x-airbyte-stream-name: departments
+      x-airbyte-ai-hints:
+        summary: "Departments or divisions in the organization"
+        when_to_use: "Questions about organizational structure or department hierarchy"
+        trigger_phrases: ["department", "division", "org structure"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What departments are in Ashby?"
       description: Department object
       required:
       - id
@@ -1575,6 +1610,14 @@ components:
       type: object
       x-airbyte-entity-name: locations
       x-airbyte-stream-name: locations
+      x-airbyte-ai-hints:
+        summary: "Office locations configured in Ashby"
+        when_to_use: "Questions about office locations or where jobs are based"
+        trigger_phrases: ["office location", "where is", "job location"]
+        freshness: static
+        search_strategy: "Search by name or city"
+        example_questions:
+          - "What office locations are configured?"
       description: Location object
       required:
       - id
@@ -1649,6 +1692,14 @@ components:
       type: object
       x-airbyte-entity-name: users
       x-airbyte-stream-name: users
+      x-airbyte-ai-hints:
+        summary: "Ashby users (recruiters, hiring managers, interviewers)"
+        when_to_use: "Looking up recruiter or hiring manager details"
+        trigger_phrases: ["ashby user", "recruiter", "hiring manager"]
+        freshness: live
+        search_strategy: "Search by name or email"
+        example_questions:
+          - "Who are the recruiters in Ashby?"
       description: User object
       required:
       - id
@@ -1690,6 +1741,14 @@ components:
       type: object
       x-airbyte-entity-name: job_postings
       x-airbyte-stream-name: job_postings
+      x-airbyte-ai-hints:
+        summary: "Published job postings visible to external candidates"
+        when_to_use: "Questions about published job listings or career page postings"
+        trigger_phrases: ["job posting", "job listing", "career page", "published job"]
+        freshness: live
+        search_strategy: "Search by title"
+        example_questions:
+          - "What job postings are live?"
       description: Job posting object
       required:
       - id
@@ -1795,6 +1854,14 @@ components:
       type: object
       x-airbyte-entity-name: sources
       x-airbyte-stream-name: sources
+      x-airbyte-ai-hints:
+        summary: "Candidate sources tracking where applicants originate"
+        when_to_use: "Questions about recruitment channels or sourcing analytics"
+        trigger_phrases: ["candidate source", "referral", "where did they apply"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What candidate sources are tracked?"
       description: Candidate source object
       required:
       - id
@@ -1834,6 +1901,14 @@ components:
       type: object
       x-airbyte-entity-name: archive_reasons
       x-airbyte-stream-name: archive_reasons
+      x-airbyte-ai-hints:
+        summary: "Reasons for archiving or rejecting candidates"
+        when_to_use: "Questions about rejection reasons or archive categories"
+        trigger_phrases: ["archive reason", "rejection reason", "why rejected"]
+        freshness: static
+        search_strategy: "Search by name or text"
+        example_questions:
+          - "What archive reasons are configured in Ashby?"
       description: Archive reason object
       required:
       - id
@@ -1860,6 +1935,14 @@ components:
       type: object
       x-airbyte-entity-name: candidate_tags
       x-airbyte-stream-name: candidate_tags
+      x-airbyte-ai-hints:
+        summary: "Tags applied to candidates for categorization"
+        when_to_use: "Looking up or filtering candidates by tags"
+        trigger_phrases: ["candidate tag", "tagged candidate"]
+        freshness: live
+        search_strategy: "Search by tag name"
+        example_questions:
+          - "What candidate tags exist?"
       description: Candidate tag object
       required:
       - id
@@ -1881,6 +1964,14 @@ components:
       type: object
       x-airbyte-entity-name: custom_fields
       x-airbyte-stream-name: custom_fields
+      x-airbyte-ai-hints:
+        summary: "Custom field definitions in Ashby"
+        when_to_use: "Questions about custom data fields or metadata configuration"
+        trigger_phrases: ["custom field", "field definition", "metadata field"]
+        freshness: static
+        search_strategy: "Search by field name"
+        example_questions:
+          - "What custom fields are defined in Ashby?"
       description: Custom field definition
       required:
       - id
@@ -1917,6 +2008,14 @@ components:
       type: object
       x-airbyte-entity-name: feedback_form_definitions
       x-airbyte-stream-name: feedback_form_definitions
+      x-airbyte-ai-hints:
+        summary: "Interview feedback form templates in Ashby"
+        when_to_use: "Questions about feedback forms or interview evaluation templates"
+        trigger_phrases: ["feedback form", "interview form", "evaluation template"]
+        freshness: static
+        search_strategy: "Search by name"
+        example_questions:
+          - "What feedback forms are available?"
       description: Feedback form definition
       required:
       - id
