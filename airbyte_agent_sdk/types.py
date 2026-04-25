@@ -9,6 +9,7 @@ from uuid import UUID
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 from airbyte_agent_sdk.constants import OPENAPI_DEFAULT_VERSION
+from airbyte_agent_sdk.extensions import AIRBYTE_FILE_URL_DESCRIPTION
 from airbyte_agent_sdk.schema.base import ResponseErrorCheck
 from airbyte_agent_sdk.schema.components import PathOverrideConfig
 from airbyte_agent_sdk.schema.extensions import EntityRelationshipConfig, RetryConfig, ScopingParamConfig
@@ -300,7 +301,7 @@ class EndpointDefinition(BaseModel):
     # Download support (Airbyte extension)
     file_field: str | None = Field(
         None,
-        description="Field in metadata response containing download URL (from x-airbyte-file-url extension)",
+        description=AIRBYTE_FILE_URL_DESCRIPTION,
     )
 
     # Test validation support (Airbyte extension)

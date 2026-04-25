@@ -1136,14 +1136,30 @@ class LocalExecutor:
         file_field: str,
         entity: str,
     ) -> str:
-        """Extract download URL from metadata response using x-airbyte-file-url.
+        """Extract download URL from metadata response using `x-airbyte-file-url`.
 
-        Supports both simple dot notation (e.g., "article.content_url") and array
-        indexing with bracket notation (e.g., "calls[0].media.audioUrl").
+        Parses the post-substitution `file_field` input and navigates the metadata
+        response. This is NOT a JSONPath expression — do not prefix with `$.`; see
+        the canonical contract on `airbyte_agent_sdk.extensions.AIRBYTE_FILE_URL_DOC`
+        for the full syntax and distinction from `x-airbyte-record-extractor` /
+        `x-airbyte-meta-extractor` (which DO use JSONPath).
+
+        Directly supported syntax:
+
+        - Simple field name (e.g., `content_url`)
+        - Dot-separated nested path (e.g., `data.download_link`, `article.content_url`)
+        - Fixed-index bracket navigation (e.g., `calls[0].media.audioUrl`)
+
+        Templated bracket segments (e.g., `attachments[{attachment_index}].url`) ARE
+        supported in the end-to-end `x-airbyte-file-url` extension value, but they
+        are resolved by `_substitute_file_field_params` before reaching this helper —
+        so this helper only ever sees resolved, integer-indexed bracket segments.
 
         Args:
             response: Metadata response containing file reference
-            file_field: JSON path to file URL field (from x-airbyte-file-url)
+            file_field: Post-substitution dot-separated field path to the file URL
+                (from the `x-airbyte-file-url` extension, after
+                `_substitute_file_field_params` has resolved any `{param}` segments)
             entity: Entity name (for error messages)
 
         Returns:

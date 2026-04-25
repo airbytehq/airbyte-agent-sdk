@@ -413,7 +413,28 @@ Behavior:
 """
 
 AIRBYTE_FILE_URL = "x-airbyte-file-url"
+"""Operation extension naming the metadata-response field that contains the
+download URL. See `AIRBYTE_FILE_URL_DOC` for the full contract."""
+
+AIRBYTE_FILE_URL_DESCRIPTION = (
+    "Field in metadata response containing the download URL. "
+    "The field path uses the executor's dot-separated field-path syntax "
+    "with optional bracket indexing (e.g., calls[0].media.audioUrl) and "
+    "templated bracket segments (e.g., attachments[{attachment_index}].url). "
+    'This is NOT a JSONPath expression — do not prefix with "$.". '
+    "For JSONPath-based extractors, see x-airbyte-record-extractor and "
+    "x-airbyte-meta-extractor. "
+    "Required when x-airbyte-action is 'download'."
+)
+"""Single source of truth for the `x-airbyte-file-url` field description.
+
+Used as the `description=` value on the three Pydantic Field sites
+(`EndpointDefinition.file_field`, `Operation.x_airbyte_file_url`) and on the
+`EXTENSION_REGISTRY[AIRBYTE_FILE_URL]["description"]` registry entry, so
+editing the contract in one place updates all four authored surfaces.
 """
+
+AIRBYTE_FILE_URL_DOC = """
 Extension: x-airbyte-file-url
 Location: Operation object (on individual HTTP operations with x-airbyte-action: download)
 Type: string
@@ -422,10 +443,13 @@ Required: Yes (when x-airbyte-action is "download")
 Description:
     Specifies which field in the metadata response contains the download URL. Used with
     the 'download' action to perform a two-step file retrieval: first fetch metadata,
-    then extract and download from the URL field specified here.
+    then extract and download from the URL field specified here. The URL must be absolute.
 
-    The field path can be a simple field name (e.g., "content_url") or a nested path
-    using dot notation (e.g., "data.download_link"). The URL must be absolute.
+    The field path uses the executor's dot-separated field-path syntax with optional
+    bracket indexing (e.g., calls[0].media.audioUrl) and templated bracket segments
+    (e.g., attachments[{attachment_index}].url). This is NOT a JSONPath expression —
+    do not prefix with "$.". For JSONPath-based extractors, see
+    x-airbyte-record-extractor and x-airbyte-meta-extractor.
 
 Example:
     ```yaml
@@ -735,7 +759,7 @@ EXTENSION_REGISTRY = {
         "location": "operation",
         "type": "string",
         "required": "conditional",  # Required when action is 'download'
-        "description": "Field in metadata response containing download URL (required for download action)",
+        "description": AIRBYTE_FILE_URL_DESCRIPTION,
     },
     AIRBYTE_TOKEN_EXTRACT: {
         "location": "securityScheme",

@@ -135,9 +135,13 @@ class Info(BaseModel):
 
     OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#info-object
 
-    Unknown ``x-*`` fields are accepted so that older SDK versions can still parse
+    Unknown `x-*` fields are accepted so that older SDK versions can still parse
     specs that carry newer Airbyte extensions. Unknown non-extension fields still
-    raise — that's where typos in standard OpenAPI keys get caught.
+    raise at SDK load time (via `_reject_unknown_non_extension_fields`) — that's
+    where typos in standard OpenAPI keys get caught. Note: this rejection is a
+    Python-level validator and is NOT expressible in JSON Schema, so external
+    consumers validating directly against the published YAML (where
+    `additionalProperties: true` for `Info`) will not see it.
 
     Extensions:
     - x-airbyte-connector-name: Name of the connector (Airbyte extension)

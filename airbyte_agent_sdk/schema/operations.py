@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from ..extensions import ActionTypeLiteral
+from ..extensions import AIRBYTE_FILE_URL_DESCRIPTION, ActionTypeLiteral
 from .components import AiHints, Parameter, PathOverrideConfig, RequestBody, Response
 from .security import SecurityRequirement
 
@@ -89,7 +89,11 @@ class Operation(BaseModel):
             "Example: {'pagination': '$.pagination', 'request_id': '$.requestId'}"
         ),
     )
-    x_airbyte_file_url: str | None = Field(None, alias="x-airbyte-file-url")
+    x_airbyte_file_url: str | None = Field(
+        None,
+        alias="x-airbyte-file-url",
+        description=AIRBYTE_FILE_URL_DESCRIPTION,
+    )
     x_airbyte_untested: bool | None = Field(
         None,
         alias="x-airbyte-untested",
