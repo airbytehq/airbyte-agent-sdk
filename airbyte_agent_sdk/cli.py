@@ -12,6 +12,7 @@ from pathlib import Path
 import click
 
 from .codegen.generator import ConnectorGenerator, write_connect_stub
+from .constants import SDK_VERSION
 from .secrets import (
     SecretResolutionError,
 )
@@ -35,6 +36,7 @@ from .validation.replication import annotate_replication_version
 
 
 @click.group()
+@click.version_option(version=SDK_VERSION, prog_name="airbyte-agent-sdk")
 def cli():
     """Airbyte SDK command-line tools."""
     pass

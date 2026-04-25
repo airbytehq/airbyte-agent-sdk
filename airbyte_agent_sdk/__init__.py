@@ -187,6 +187,8 @@ __all__ = [
     # Utilities
     "save_download",
     "configure",
+    # Version
+    "SDK_VERSION",
 ]
 
 # Submodules hidden from pdoc output. Add new internal submodules here; see docs/CONTRIBUTING.md for the public-API contract.
