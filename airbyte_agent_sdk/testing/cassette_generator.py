@@ -17,6 +17,7 @@ import yaml
 from pydantic import SecretStr
 
 from airbyte_agent_sdk.logging.types import LogSession, RequestLog
+from airbyte_agent_sdk.observability.redactor import DataRedactor
 from airbyte_agent_sdk.secrets import get_secret_values
 from airbyte_agent_sdk.testing.models import (
     CapturedRequest,
@@ -27,20 +28,26 @@ from airbyte_agent_sdk.testing.models import (
 )
 
 
+def _redact_body_aggressive(body: Any) -> Any:
+    """Redact secrets from a request or response body with aggressive mode.
+
+    - dict/list: recursive key-name + value-shape redaction.
+    - str: value-shape redaction.
+    - bytes / binary wrapper: pass through unchanged.
+    """
+    if isinstance(body, dict):
+        if body.get("_binary"):
+            return body
+        return DataRedactor.redact_mapping(body, aggressive=True)
+    if isinstance(body, list):
+        return DataRedactor.redact_mapping({"_list": body}, aggressive=True)["_list"]
+    if isinstance(body, str):
+        return DataRedactor.redact_string(body, aggressive=True)
+    return body
+
+
 class CassetteGenerator:
     """Generates test cassettes from logged HTTP interactions."""
-
-    # Headers that should be excluded from captured requests
-    AUTH_HEADERS = {
-        "authorization",
-        "bearer",
-        "api-key",
-        "x-api-key",
-        "token",
-        "secret",
-        "password",
-        "credential",
-    }
 
     def __init__(self, log_session: LogSession):
         """Initialize generator with a log session.
@@ -131,23 +138,34 @@ class CassetteGenerator:
         # Filter headers (remove auth headers)
         filtered_headers = self._filter_headers(request_log.headers)
 
+        # Redact secrets in all serialized fields (aggressive mode)
+        redacted_path = DataRedactor.redact_string(request_log.path, aggressive=True)
+        redacted_query_params = DataRedactor.redact_mapping(query_params, aggressive=True) if query_params else None
+        redacted_body = _redact_body_aggressive(request_log.body) if request_log.body is not None else None
+
         # Build captured request
         return CapturedRequest(
             method=request_log.method,
-            path=request_log.path,
-            query_params=query_params if query_params else None,
+            path=redacted_path,
+            query_params=redacted_query_params if redacted_query_params else None,
             headers=filtered_headers,
-            body=request_log.body,
+            body=redacted_body,
             validation=ValidationConfig(),
         )
 
     def _extract_captured_response(self, request_log: RequestLog) -> CapturedResponse:
         # Use captured response headers if available, fall back to empty dict for backward compatibility
         response_headers = getattr(request_log, "response_headers", None) or {}
+
+        # Redact response header values (keep keys, scrub values)
+        redacted_response_headers = DataRedactor.redact_headers(response_headers)
+        # Redact response body
+        redacted_body = _redact_body_aggressive(request_log.response_body) if request_log.response_body is not None else None
+
         return CapturedResponse(
             status_code=request_log.response_status,
-            headers=response_headers,
-            body=request_log.response_body,
+            headers=redacted_response_headers,
+            body=redacted_body,
         )
 
     def generate_test_spec(
@@ -394,6 +412,11 @@ class CassetteGenerator:
     def _filter_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
         """Remove authentication headers from captured request.
 
+        Auth headers are dropped entirely (not redacted in place) — this is
+        load-bearing for request-validation tests and the cassette contract.
+        Non-auth header *values* are scrubbed with aggressive value-shape
+        detection.
+
         Args:
             headers: Original headers dict
 
@@ -403,13 +426,14 @@ class CassetteGenerator:
         filtered = {}
         for key, value in headers.items():
             key_lower = key.lower()
-            # Skip auth headers
-            if any(auth_term in key_lower for auth_term in self.AUTH_HEADERS):
+            # Skip auth headers (using canonical deny-list)
+            if any(pattern in key_lower for pattern in DataRedactor.SENSITIVE_HEADER_PATTERNS):
                 continue
             # Skip already redacted headers
             if value == "[REDACTED]":
                 continue
-            filtered[key] = value
+            # Scrub non-auth header values for secret shapes
+            filtered[key] = DataRedactor.redact_value(value, aggressive=True)
 
         return filtered
 

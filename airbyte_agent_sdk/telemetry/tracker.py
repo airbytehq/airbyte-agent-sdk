@@ -6,6 +6,7 @@ import sys
 from datetime import UTC, datetime
 
 from airbyte_agent_sdk.observability import ObservabilitySession
+from airbyte_agent_sdk.observability.redactor import DataRedactor
 
 from .config import SEGMENT_WRITE_KEY, TelemetryConfig, TelemetryMode
 from .events import ConnectorInitEvent, OperationEvent, SessionEndEvent
@@ -69,11 +70,12 @@ class SegmentTracker:
                 os_version=platform.release(),
             )
 
+            properties = DataRedactor.redact_mapping(event.to_dict())
             self._analytics.track(
                 user_id=self.session.user_id,
                 anonymous_id=event.session_id,
                 event="Connector Initialized",
-                properties=event.to_dict(),
+                properties=properties,
             )
         except Exception as e:
             # Never fail on tracking errors
@@ -113,11 +115,12 @@ class SegmentTracker:
                 error_type=error_type,
             )
 
+            properties = DataRedactor.redact_mapping(event.to_dict())
             self._analytics.track(
                 user_id=self.session.user_id,
                 anonymous_id=event.session_id,
                 event="Operation Executed",
-                properties=event.to_dict(),
+                properties=properties,
             )
         except Exception as e:
             logger.error(f"Telemetry error: {e}")
@@ -142,11 +145,12 @@ class SegmentTracker:
                 failure_count=self.failure_count,
             )
 
+            properties = DataRedactor.redact_mapping(event.to_dict())
             self._analytics.track(
                 user_id=self.session.user_id,
                 anonymous_id=event.session_id,
                 event="Session Ended",
-                properties=event.to_dict(),
+                properties=properties,
             )
 
             # Ensure events are sent before shutdown

@@ -5,21 +5,33 @@ import json
 import time
 import uuid
 from pathlib import Path
-from typing import Any, Dict, Set
+from typing import Any, Dict
+
+from airbyte_agent_sdk.observability.redactor import DataRedactor
 
 from .types import LogSession, RequestLog
 
-# Headers to redact for security
-SENSITIVE_HEADERS: Set[str] = {
-    "authorization",
-    "bearer",
-    "api-key",
-    "x-api-key",
-    "token",
-    "secret",
-    "password",
-    "credential",
-}
+# Logger-local redaction marker — preserved for backwards compatibility
+# with existing assertions in tests/test_logging.py and bug-bash harness.
+_LOGGER_MARKER = "[REDACTED]"
+
+
+def _redact_body(body: Any) -> Any:
+    """Redact secrets from a request or response body.
+
+    - dict/list: recursive key-name + value-shape redaction via `redact_mapping`.
+    - str: value-shape redaction via `redact_string`.
+    - bytes / binary wrapper: pass through unchanged (opaque binary payloads).
+    """
+    if isinstance(body, dict):
+        if "_base64" in body or body.get("_binary"):
+            return body
+        return DataRedactor.redact_mapping(body)
+    if isinstance(body, list):
+        return DataRedactor.redact_mapping({"_list": body})["_list"]
+    if isinstance(body, str):
+        return DataRedactor.redact_string(body)
+    return body
 
 
 class RequestLogger:
@@ -35,8 +47,7 @@ class RequestLogger:
         connector_name: str | None = None,
         max_logs: int | None = 10000,
     ):
-        """
-        Initialize the request logger.
+        """Initialize the request logger.
 
         Args:
             log_file: Path to write logs. If None, generates timestamped filename.
@@ -62,14 +73,8 @@ class RequestLogger:
         self._rotated_logs: list[RequestLog] = []
 
     def _redact_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
-        """Redact sensitive headers."""
-        redacted = {}
-        for key, value in headers.items():
-            if any(sensitive in key.lower() for sensitive in SENSITIVE_HEADERS):
-                redacted[key] = "[REDACTED]"
-            else:
-                redacted[key] = value
-        return redacted
+        """Redact sensitive headers using the canonical deny-list."""
+        return DataRedactor.redact_headers(headers, marker=_LOGGER_MARKER)
 
     def _rotate_logs_if_needed(self) -> None:
         """Rotate logs if max_logs limit is reached.
@@ -103,8 +108,7 @@ class RequestLogger:
         params: Dict[str, Any] | None = None,
         body: Any | None = None,
     ) -> str:
-        """
-        Log the start of an HTTP request.
+        """Log the start of an HTTP request.
 
         Args:
             method: HTTP method (GET, POST, etc.)
@@ -121,11 +125,11 @@ class RequestLogger:
         self._active_requests[request_id] = {
             "start_time": time.time(),
             "method": method,
-            "url": url,
-            "path": path,
+            "url": DataRedactor.redact_string(DataRedactor.redact_url(url)),
+            "path": DataRedactor.redact_string(path),
             "headers": self._redact_headers(headers or {}),
-            "params": params,
-            "body": body,
+            "params": DataRedactor.redact_mapping(params) if params else params,
+            "body": _redact_body(body) if body is not None else body,
         }
         return request_id
 
@@ -136,8 +140,7 @@ class RequestLogger:
         response_body: Any | None = None,
         response_headers: Dict[str, str] | None = None,
     ) -> None:
-        """
-        Log a successful HTTP response.
+        """Log a successful HTTP response.
 
         Args:
             request_id: ID returned from log_request
@@ -159,6 +162,10 @@ class RequestLogger:
                 "_base64": base64.b64encode(response_body).decode("utf-8"),
             }
 
+        # Redact response body and headers before storing
+        redacted_response_body = _redact_body(serializable_body) if serializable_body is not None else serializable_body
+        redacted_response_headers = DataRedactor.redact_headers(response_headers, marker=_LOGGER_MARKER) if response_headers else {}
+
         log_entry = RequestLog(
             method=request_data["method"],
             url=request_data["url"],
@@ -167,8 +174,8 @@ class RequestLogger:
             params=request_data["params"],
             body=request_data["body"],
             response_status=status_code,
-            response_body=serializable_body,
-            response_headers=response_headers or {},
+            response_body=redacted_response_body,
+            response_headers=redacted_response_headers,
             timing_ms=timing_ms,
         )
 
@@ -181,8 +188,7 @@ class RequestLogger:
         error: str,
         status_code: int | None = None,
     ) -> None:
-        """
-        Log an HTTP request error.
+        """Log an HTTP request error.
 
         Args:
             request_id: ID returned from log_request
@@ -204,7 +210,7 @@ class RequestLogger:
             body=request_data["body"],
             response_status=status_code,
             timing_ms=timing_ms,
-            error=error,
+            error=DataRedactor.redact_string(error),
         )
 
         self.session.logs.append(log_entry)
