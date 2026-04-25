@@ -220,8 +220,17 @@ class ConnectorGenerator:
             for py_file in package_dir.glob("*.py"):
                 shutil.copy2(py_file, target_dir / py_file.name)
 
-            # Generate tests into a parallel tests/connectors/ directory
-            tests_base = sdk_package_dir.parent / "tests" / "connectors"
+            # Generate tests into a parallel tests/connectors/ directory.
+            # When sdk_package_dir is an existing Python package (has __init__.py),
+            # place tests as a sibling of the package dir. Otherwise the caller
+            # passed a standalone --output dir and tests belong inside it.
+            # NOTE: this heuristic assumes standalone output dirs never contain
+            # __init__.py. All known callers satisfy this; if a future caller
+            # does not, thread the original --output value through instead.
+            if (sdk_package_dir / "__init__.py").exists():
+                tests_base = sdk_package_dir.parent / "tests" / "connectors"
+            else:
+                tests_base = sdk_package_dir / "tests" / "connectors"
             tests_dir = tests_base / module_name
             tests_dir.mkdir(parents=True, exist_ok=True)
 
