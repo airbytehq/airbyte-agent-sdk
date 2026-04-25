@@ -19,6 +19,9 @@ from airbyte_agent_sdk.schema.security import (
     AuthConfigFieldSpec,
     AuthConfigSpec,
 )
+from airbyte_agent_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -419,6 +422,22 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Find an account in Salesforce', 'Show account details'],
                 'search_strategy': 'Search by name or filter by type or owner',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='accounts',
+                    target_entity='users',
+                    foreign_key='OwnerId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='accounts',
+                    target_entity='accounts',
+                    foreign_key='ParentId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='contacts',
@@ -594,6 +613,29 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Find a contact in Salesforce'],
                 'search_strategy': 'Search by name, email, or account',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='contacts',
+                    target_entity='accounts',
+                    foreign_key='AccountId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='contacts',
+                    target_entity='users',
+                    foreign_key='OwnerId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='contacts',
+                    target_entity='contacts',
+                    foreign_key='ReportsToId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='leads',
@@ -789,6 +831,36 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Show new leads', 'What leads came in this week?'],
                 'search_strategy': 'Search by name, email, or filter by status and source',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='leads',
+                    target_entity='users',
+                    foreign_key='OwnerId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='leads',
+                    target_entity='accounts',
+                    foreign_key='ConvertedAccountId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='leads',
+                    target_entity='contacts',
+                    foreign_key='ConvertedContactId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='leads',
+                    target_entity='opportunities',
+                    foreign_key='ConvertedOpportunityId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='opportunities',
@@ -988,6 +1060,36 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Show deals closing this month', 'What is the pipeline value?'],
                 'search_strategy': 'Search by name or filter by stage, owner, or close date',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='opportunities',
+                    target_entity='accounts',
+                    foreign_key='AccountId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='opportunities',
+                    target_entity='users',
+                    foreign_key='OwnerId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='opportunities',
+                    target_entity='contacts',
+                    foreign_key='ContactId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='opportunities',
+                    target_entity='campaigns',
+                    foreign_key='CampaignId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='tasks',
@@ -1183,6 +1285,22 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['What tasks are assigned to me in Salesforce?'],
                 'search_strategy': 'Filter by assignee, status, or due date',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='tasks',
+                    target_entity='accounts',
+                    foreign_key='AccountId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='tasks',
+                    target_entity='users',
+                    foreign_key='OwnerId',
+                    target_key='Id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='events',
