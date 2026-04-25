@@ -1422,21 +1422,34 @@ components:
         type: object
         title: OAuth 2.0
         description: Zendesk OAuth 2.0 authentication
-        required: [access_token]
+        required:
+        - refresh_token
         properties:
+          client_id:
+            type: string
+            title: Client ID
+            description: Zendesk OAuth 2.0 client ID
+          client_secret:
+            type: string
+            title: Client Secret
+            description: Zendesk OAuth 2.0 client secret
           access_token:
             type: string
             title: Access Token
-            description: OAuth 2.0 access token
+            description: OAuth 2.0 access token (optional if refresh_token is provided)
           refresh_token:
             type: string
             title: Refresh Token
-            description: OAuth 2.0 refresh token (optional)
+            description: OAuth 2.0 refresh token
         auth_mapping:
+          client_id: "${client_id}"
+          client_secret: "${client_secret}"
           access_token: "${access_token}"
           refresh_token: "${refresh_token}"
         replication_auth_key_mapping:
-          credentials.access_token: "access_token"
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.refresh_token: "refresh_token"
         replication_auth_key_constants:
           credentials.credentials: "oauth2.0"
 

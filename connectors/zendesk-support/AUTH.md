@@ -15,8 +15,10 @@ In open source mode, you provide API credentials directly to the connector.
 
 | Field Name | Type | Required | Description |
 |------------|------|----------|-------------|
-| `access_token` | `str` | Yes | OAuth 2.0 access token |
-| `refresh_token` | `str` | No | OAuth 2.0 refresh token (optional) |
+| `client_id` | `str` | No | Zendesk OAuth 2.0 client ID |
+| `client_secret` | `str` | No | Zendesk OAuth 2.0 client secret |
+| `access_token` | `str` | No | OAuth 2.0 access token (optional if refresh_token is provided) |
+| `refresh_token` | `str` | Yes | OAuth 2.0 refresh token |
 
 Example request:
 
@@ -26,8 +28,10 @@ from airbyte_agent_sdk.connectors.zendesk_support.models import ZendeskSupportOa
 
 connector = ZendeskSupportConnector(
     auth_config=ZendeskSupportOauth20AuthConfig(
-        access_token="<OAuth 2.0 access token>",
-        refresh_token="<OAuth 2.0 refresh token (optional)>"
+        client_id="<Zendesk OAuth 2.0 client ID>",
+        client_secret="<Zendesk OAuth 2.0 client secret>",
+        access_token="<OAuth 2.0 access token (optional if refresh_token is provided)>",
+        refresh_token="<OAuth 2.0 refresh token>"
     )
 )
 ```
@@ -67,8 +71,10 @@ Create a connector with OAuth credentials.
 
 | Field Name | Type | Required | Description |
 |------------|------|----------|-------------|
-| `access_token` | `str` | Yes | OAuth 2.0 access token |
-| `refresh_token` | `str` | No | OAuth 2.0 refresh token (optional) |
+| `client_id` | `str` | No | Zendesk OAuth 2.0 client ID |
+| `client_secret` | `str` | No | Zendesk OAuth 2.0 client secret |
+| `access_token` | `str` | No | OAuth 2.0 access token (optional if refresh_token is provided) |
+| `refresh_token` | `str` | Yes | OAuth 2.0 refresh token |
 
 Example request:
 
@@ -81,8 +87,10 @@ curl -X POST "https://api.airbyte.ai/api/v1/integrations/connectors" \
     "connector_type": "Zendesk-Support",
     "name": "My Zendesk-Support Connector",
     "credentials": {
-      "access_token": "<OAuth 2.0 access token>",
-      "refresh_token": "<OAuth 2.0 refresh token (optional)>"
+      "client_id": "<Zendesk OAuth 2.0 client ID>",
+      "client_secret": "<Zendesk OAuth 2.0 client secret>",
+      "access_token": "<OAuth 2.0 access token (optional if refresh_token is provided)>",
+      "refresh_token": "<OAuth 2.0 refresh token>"
     }
   }'
 ```

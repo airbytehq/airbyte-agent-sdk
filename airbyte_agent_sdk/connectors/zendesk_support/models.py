@@ -18,10 +18,14 @@ class ZendeskSupportOauth20AuthConfig(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    access_token: str
-    """OAuth 2.0 access token"""
-    refresh_token: Optional[str] = None
-    """OAuth 2.0 refresh token (optional)"""
+    client_id: Optional[str] = None
+    """Zendesk OAuth 2.0 client ID"""
+    client_secret: Optional[str] = None
+    """Zendesk OAuth 2.0 client secret"""
+    access_token: Optional[str] = None
+    """OAuth 2.0 access token (optional if refresh_token is provided)"""
+    refresh_token: str
+    """OAuth 2.0 refresh token"""
 
 class ZendeskSupportApiTokenAuthConfig(BaseModel):
     """API Token - Authenticate using email and API token"""
