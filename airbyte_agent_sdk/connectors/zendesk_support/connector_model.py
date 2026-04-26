@@ -80,9 +80,10 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                     replication_auth_key_mapping={
                         'credentials.client_id': 'client_id',
                         'credentials.client_secret': 'client_secret',
+                        'credentials.access_token': 'access_token',
                         'credentials.refresh_token': 'refresh_token',
                     },
-                    replication_auth_key_constants={'credentials.credentials': 'oauth2.0'},
+                    replication_auth_key_constants={'credentials.credentials': 'oauth2_refresh'},
                 ),
             ),
             AuthOption(

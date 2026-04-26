@@ -34,14 +34,6 @@ class SentryReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class ProjectAvatar(BaseModel):
-    """Project avatar information."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avatar_type: str | None | None = Field(default=None, alias="avatarType")
-    avatar_uuid: str | None | None = Field(default=None, alias="avatarUuid")
-    avatar_url: str | None | None = Field(default=None, alias="avatarUrl")
-
 class ProjectOrganization(BaseModel):
     """Organization this project belongs to."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -49,6 +41,14 @@ class ProjectOrganization(BaseModel):
     id: str | None | None = Field(default=None)
     name: str | None | None = Field(default=None)
     slug: str | None | None = Field(default=None)
+
+class ProjectAvatar(BaseModel):
+    """Project avatar information."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avatar_type: str | None | None = Field(default=None, alias="avatarType")
+    avatar_uuid: str | None | None = Field(default=None, alias="avatarUuid")
+    avatar_url: str | None | None = Field(default=None, alias="avatarUrl")
 
 class Project(BaseModel):
     """A Sentry project (summary view from list endpoint)."""
@@ -101,6 +101,14 @@ class ProjectDetailOrganization(BaseModel):
     name: str | None | None = Field(default=None)
     slug: str | None | None = Field(default=None)
 
+class ProjectDetailTeamsItem(BaseModel):
+    """Nested schema for ProjectDetail.teams_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None | None = Field(default=None)
+    name: str | None | None = Field(default=None)
+    slug: str | None | None = Field(default=None)
+
 class ProjectDetailTeam(BaseModel):
     """Primary team for this project."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -116,14 +124,6 @@ class ProjectDetailAvatar(BaseModel):
     avatar_type: str | None | None = Field(default=None, alias="avatarType")
     avatar_uuid: str | None | None = Field(default=None, alias="avatarUuid")
     avatar_url: str | None | None = Field(default=None, alias="avatarUrl")
-
-class ProjectDetailTeamsItem(BaseModel):
-    """Nested schema for ProjectDetail.teams_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None | None = Field(default=None)
-    name: str | None | None = Field(default=None)
-    slug: str | None | None = Field(default=None)
 
 class ProjectDetail(BaseModel):
     """Detailed project information."""
@@ -269,6 +269,12 @@ class EventTagsItem(BaseModel):
     key: str | None | None = Field(default=None)
     value: str | None | None = Field(default=None)
 
+class EventMetadata(BaseModel):
+    """Event metadata."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    title: str | None | None = Field(default=None)
+
 class EventGroupingconfig(BaseModel):
     """Grouping configuration."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -285,12 +291,6 @@ class EventUser(BaseModel):
     username: str | None | None = Field(default=None)
     name: str | None | None = Field(default=None)
     ip_address: str | None | None = Field(default=None)
-
-class EventMetadata(BaseModel):
-    """Event metadata."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    title: str | None | None = Field(default=None)
 
 class Event(BaseModel):
     """A Sentry event (individual error occurrence)."""
