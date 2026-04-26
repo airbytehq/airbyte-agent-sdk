@@ -1161,7 +1161,14 @@ paths:
           description: |
             SOQL query for accounts. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Account ORDER BY LastModifiedDate DESC LIMIT 50"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Account ORDER BY LastModifiedDate DESC LIMIT 50
+              SELECT Id, Name, Owner.Name, Owner.Email FROM Account LIMIT 50
+              SELECT Id, Name, Parent.Name, Owner.Name FROM Account WHERE Industry = 'Technology' LIMIT 50
+
+            Use dot-path traversal (Owner.Name, Parent.Name) to resolve relationship
+            fields inline instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Account ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1275,7 +1282,14 @@ paths:
           description: |
             SOQL query for contacts. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Contact WHERE AccountId = '001xx...' LIMIT 50"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Contact WHERE AccountId = '001xx...' LIMIT 50
+              SELECT Id, FirstName, LastName, Account.Name, Owner.Name FROM Contact LIMIT 50
+              SELECT Id, Name, Email, Account.Name, ReportsTo.Name FROM Contact WHERE AccountId != null LIMIT 50
+
+            Use dot-path traversal (Account.Name, Owner.Name, ReportsTo.Name) to resolve
+            relationship fields inline instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Contact ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1387,7 +1401,14 @@ paths:
           description: |
             SOQL query for leads. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Lead WHERE Status = 'Open' LIMIT 100"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Lead WHERE Status = 'Open' LIMIT 100
+              SELECT Id, Name, Company, Owner.Name FROM Lead LIMIT 50
+              SELECT Id, Name, Owner.Name, ConvertedAccount.Name, ConvertedContact.Name, ConvertedOpportunity.Name FROM Lead WHERE IsConverted = true LIMIT 50
+
+            Use dot-path traversal (Owner.Name, ConvertedAccount.Name, ConvertedContact.Name,
+            ConvertedOpportunity.Name) to resolve relationship fields inline instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Lead ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1499,7 +1520,14 @@ paths:
           description: |
             SOQL query for opportunities. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Opportunity WHERE StageName = 'Closed Won' LIMIT 50"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Opportunity WHERE StageName = 'Closed Won' LIMIT 50
+              SELECT Id, Name, Amount, Account.Name, Owner.Name FROM Opportunity LIMIT 50
+              SELECT Id, Name, StageName, Account.Name, Account.Industry, Owner.Name, Campaign.Name FROM Opportunity WHERE CloseDate = THIS_QUARTER LIMIT 50
+
+            Use dot-path traversal (Account.Name, Owner.Name, Campaign.Name) to resolve
+            relationship fields inline instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Opportunity ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1611,7 +1639,15 @@ paths:
           description: |
             SOQL query for tasks. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Task WHERE Status = 'Not Started' LIMIT 100"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Task WHERE Status = 'Not Started' LIMIT 100
+              SELECT Id, Subject, Status, Owner.Name, Account.Name FROM Task LIMIT 50
+              SELECT Id, Subject, Status, Owner.Name, Who.Name, What.Name FROM Task WHERE ActivityDate = THIS_WEEK LIMIT 50
+
+            Use dot-path traversal (Owner.Name, Account.Name) to resolve relationship
+            fields inline instead of returning raw IDs. Who.Name and What.Name resolve
+            polymorphic WhoId/WhatId references to the related record's name.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Task ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1723,7 +1759,15 @@ paths:
           description: |
             SOQL query for events. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Event WHERE StartDateTime > TODAY LIMIT 50"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Event WHERE StartDateTime > TODAY LIMIT 50
+              SELECT Id, Subject, StartDateTime, Owner.Name, Account.Name FROM Event LIMIT 50
+              SELECT Id, Subject, StartDateTime, Owner.Name, Who.Name, What.Name FROM Event WHERE StartDateTime = THIS_WEEK LIMIT 50
+
+            Use dot-path traversal (Owner.Name, Account.Name) to resolve relationship
+            fields inline instead of returning raw IDs. Who.Name and What.Name resolve
+            polymorphic WhoId/WhatId references to the related record's name.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Event ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1835,7 +1879,14 @@ paths:
           description: |
             SOQL query for campaigns. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Campaign WHERE IsActive = true LIMIT 50"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Campaign WHERE IsActive = true LIMIT 50
+              SELECT Id, Name, Type, Status, Owner.Name FROM Campaign LIMIT 50
+              SELECT Id, Name, Owner.Name, Owner.Email, StartDate FROM Campaign WHERE IsActive = true LIMIT 50
+
+            Use dot-path traversal (Owner.Name) to resolve relationship fields inline
+            instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Campaign ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -1947,7 +1998,14 @@ paths:
           description: |
             SOQL query for cases. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Case WHERE Status = 'New' LIMIT 100"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Case WHERE Status = 'New' LIMIT 100
+              SELECT Id, CaseNumber, Subject, Account.Name, Owner.Name, Contact.Name FROM Case LIMIT 50
+              SELECT Id, CaseNumber, Subject, Status, Account.Name, Owner.Name FROM Case WHERE Status = 'Escalated' LIMIT 50
+
+            Use dot-path traversal (Account.Name, Owner.Name, Contact.Name) to resolve
+            relationship fields inline instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Case ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -2059,7 +2117,14 @@ paths:
           description: |
             SOQL query for notes. Default returns up to 200 records.
             To change the limit, provide your own query with a LIMIT clause.
-            Example: "SELECT FIELDS(STANDARD) FROM Note WHERE ParentId = '001xx...' LIMIT 50"
+
+            Examples:
+              SELECT FIELDS(STANDARD) FROM Note WHERE ParentId = '001xx...' LIMIT 50
+              SELECT Id, Title, Body, Owner.Name FROM Note LIMIT 50
+              SELECT Id, Title, Owner.Name, CreatedDate FROM Note ORDER BY CreatedDate DESC LIMIT 50
+
+            Use dot-path traversal (Owner.Name) to resolve relationship fields inline
+            instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT FIELDS(STANDARD) FROM Note ORDER BY LastModifiedDate DESC LIMIT 200"
@@ -2471,6 +2536,10 @@ paths:
             - "SELECT Id, Name FROM Account LIMIT 100"
             - "SELECT FIELDS(STANDARD) FROM Contact WHERE AccountId = '001xx...' LIMIT 50"
             - "SELECT Id, Subject, Status FROM Case WHERE CreatedDate = TODAY"
+            - "SELECT Id, Name, Account.Name, Owner.Name FROM Opportunity LIMIT 50"
+
+            Use dot-path traversal (e.g. Owner.Name, Account.Name) to resolve relationship
+            fields inline instead of returning raw IDs.
           schema:
             type: string
             default: "SELECT Id FROM Organization LIMIT 1"

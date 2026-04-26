@@ -62,6 +62,21 @@ class CampaignReportSummary(BaseModel):
     ecommerce: CampaignReportSummaryEcommerce | None | None = Field(default=None, description="E-Commerce stats for a campaign")
     """E-Commerce stats for a campaign"""
 
+class CampaignRecipients(BaseModel):
+    """List settings for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    list_id: str | None | None = Field(default=None, description="The unique list id")
+    """The unique list id"""
+    list_is_active: bool | None | None = Field(default=None, description="The status of the list used")
+    """The status of the list used"""
+    list_name: str | None | None = Field(default=None, description="The name of the list")
+    """The name of the list"""
+    segment_text: str | None | None = Field(default=None, description="A description of the segment used for the campaign")
+    """A description of the segment used for the campaign"""
+    recipient_count: int | None | None = Field(default=None, description="Count of the recipients on the associated list")
+    """Count of the recipients on the associated list"""
+
 class CampaignTracking(BaseModel):
     """The tracking options for a campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -95,21 +110,6 @@ class CampaignDeliveryStatus(BaseModel):
     """The total number of emails confirmed sent for this campaign so far"""
     emails_canceled: int | None | None = Field(default=None, description="The total number of emails canceled for this campaign")
     """The total number of emails canceled for this campaign"""
-
-class CampaignRecipients(BaseModel):
-    """List settings for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    list_id: str | None | None = Field(default=None, description="The unique list id")
-    """The unique list id"""
-    list_is_active: bool | None | None = Field(default=None, description="The status of the list used")
-    """The status of the list used"""
-    list_name: str | None | None = Field(default=None, description="The name of the list")
-    """The name of the list"""
-    segment_text: str | None | None = Field(default=None, description="A description of the segment used for the campaign")
-    """A description of the segment used for the campaign"""
-    recipient_count: int | None | None = Field(default=None, description="Count of the recipients on the associated list")
-    """Count of the recipients on the associated list"""
 
 class CampaignSettings(BaseModel):
     """The settings for your campaign"""
@@ -179,6 +179,19 @@ class CampaignsList(BaseModel):
     campaigns: list[Campaign] | None = Field(default=None)
     total_items: int | None = Field(default=None)
 
+class ListCampaignDefaults(BaseModel):
+    """Default values for campaigns created for this list"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    from_name: str | None | None = Field(default=None, description="The default from name for campaigns sent to this list")
+    """The default from name for campaigns sent to this list"""
+    from_email: str | None | None = Field(default=None, description="The default from email for campaigns sent to this list")
+    """The default from email for campaigns sent to this list"""
+    subject: str | None | None = Field(default=None, description="The default subject line for campaigns sent to this list")
+    """The default subject line for campaigns sent to this list"""
+    language: str | None | None = Field(default=None, description="The default language for this list's forms")
+    """The default language for this list's forms"""
+
 class ListStats(BaseModel):
     """Stats for the list"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -217,19 +230,6 @@ class ListStats(BaseModel):
     """The date and time of the last time someone subscribed to this list"""
     last_unsub_date: str | None | None = Field(default=None, description="The date and time of the last time someone unsubscribed from this list")
     """The date and time of the last time someone unsubscribed from this list"""
-
-class ListCampaignDefaults(BaseModel):
-    """Default values for campaigns created for this list"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    from_name: str | None | None = Field(default=None, description="The default from name for campaigns sent to this list")
-    """The default from name for campaigns sent to this list"""
-    from_email: str | None | None = Field(default=None, description="The default from email for campaigns sent to this list")
-    """The default from email for campaigns sent to this list"""
-    subject: str | None | None = Field(default=None, description="The default subject line for campaigns sent to this list")
-    """The default subject line for campaigns sent to this list"""
-    language: str | None | None = Field(default=None, description="The default language for this list's forms")
-    """The default language for this list's forms"""
 
 class ListContact(BaseModel):
     """Contact information displayed in campaign footers to comply with international spam laws"""
@@ -376,16 +376,44 @@ class ListMembersList(BaseModel):
     list_id: str | None = Field(default=None)
     total_items: int | None = Field(default=None)
 
-class ReportFacebookLikes(BaseModel):
-    """An object describing campaign engagement on Facebook"""
+class ReportOpens(BaseModel):
+    """An object describing the open activity for the campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    recipient_likes: int | None | None = Field(default=None, description="The number of recipients who liked the campaign on Facebook")
-    """The number of recipients who liked the campaign on Facebook"""
-    unique_likes: int | None | None = Field(default=None, description="The number of unique likes")
-    """The number of unique likes"""
-    facebook_likes: int | None | None = Field(default=None, description="The number of Facebook likes for the campaign")
-    """The number of Facebook likes for the campaign"""
+    opens_total: int | None | None = Field(default=None, description="The total number of opens for a campaign")
+    """The total number of opens for a campaign"""
+    unique_opens: int | None | None = Field(default=None, description="The total number of unique opens")
+    """The total number of unique opens"""
+    open_rate: float | None | None = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
+    """The number of unique opens divided by the total number of successful deliveries"""
+    last_open: str | None | None = Field(default=None, description="The date and time of the last recorded open")
+    """The date and time of the last recorded open"""
+
+class ReportEcommerce(BaseModel):
+    """E-Commerce stats for a campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total_orders: int | None | None = Field(default=None, description="The total orders for a campaign")
+    """The total orders for a campaign"""
+    total_spent: float | None | None = Field(default=None, description="The total spent for a campaign")
+    """The total spent for a campaign"""
+    total_revenue: float | None | None = Field(default=None, description="The total revenue for a campaign")
+    """The total revenue for a campaign"""
+
+class ReportClicks(BaseModel):
+    """An object describing the click activity for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    clicks_total: int | None | None = Field(default=None, description="The total number of clicks for the campaign")
+    """The total number of clicks for the campaign"""
+    unique_clicks: int | None | None = Field(default=None, description="The total number of unique clicks for links across a campaign")
+    """The total number of unique clicks for links across a campaign"""
+    unique_subscriber_clicks: int | None | None = Field(default=None, description="The total number of subscribers who clicked on a campaign")
+    """The total number of subscribers who clicked on a campaign"""
+    click_rate: float | None | None = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
+    """The number of unique clicks divided by the total number of successful deliveries"""
+    last_click: str | None | None = Field(default=None, description="The date and time of the last recorded click for the campaign")
+    """The date and time of the last recorded click for the campaign"""
 
 class ReportListStats(BaseModel):
     """The average campaign statistics for your list"""
@@ -400,29 +428,12 @@ class ReportListStats(BaseModel):
     click_rate: float | None | None = Field(default=None, description="The average click rate for campaigns sent to this list")
     """The average click rate for campaigns sent to this list"""
 
-class ReportEcommerce(BaseModel):
-    """E-Commerce stats for a campaign"""
+class ReportDeliveryStatus(BaseModel):
+    """Updates on campaigns in the process of sending"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    total_orders: int | None | None = Field(default=None, description="The total orders for a campaign")
-    """The total orders for a campaign"""
-    total_spent: float | None | None = Field(default=None, description="The total spent for a campaign")
-    """The total spent for a campaign"""
-    total_revenue: float | None | None = Field(default=None, description="The total revenue for a campaign")
-    """The total revenue for a campaign"""
-
-class ReportOpens(BaseModel):
-    """An object describing the open activity for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    opens_total: int | None | None = Field(default=None, description="The total number of opens for a campaign")
-    """The total number of opens for a campaign"""
-    unique_opens: int | None | None = Field(default=None, description="The total number of unique opens")
-    """The total number of unique opens"""
-    open_rate: float | None | None = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
-    """The number of unique opens divided by the total number of successful deliveries"""
-    last_open: str | None | None = Field(default=None, description="The date and time of the last recorded open")
-    """The date and time of the last recorded open"""
+    enabled: bool | None | None = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
+    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
 
 class ReportIndustryStats(BaseModel):
     """The average campaign statistics for your industry"""
@@ -443,6 +454,17 @@ class ReportIndustryStats(BaseModel):
     abuse_rate: float | None | None = Field(default=None, description="The industry abuse rate")
     """The industry abuse rate"""
 
+class ReportFacebookLikes(BaseModel):
+    """An object describing campaign engagement on Facebook"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    recipient_likes: int | None | None = Field(default=None, description="The number of recipients who liked the campaign on Facebook")
+    """The number of recipients who liked the campaign on Facebook"""
+    unique_likes: int | None | None = Field(default=None, description="The number of unique likes")
+    """The number of unique likes"""
+    facebook_likes: int | None | None = Field(default=None, description="The number of Facebook likes for the campaign")
+    """The number of Facebook likes for the campaign"""
+
 class ReportBounces(BaseModel):
     """An object describing the bounce summary for the campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -453,28 +475,6 @@ class ReportBounces(BaseModel):
     """The total number of soft bounced email addresses"""
     syntax_errors: int | None | None = Field(default=None, description="The total number of addresses that were syntax-related bounces")
     """The total number of addresses that were syntax-related bounces"""
-
-class ReportClicks(BaseModel):
-    """An object describing the click activity for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    clicks_total: int | None | None = Field(default=None, description="The total number of clicks for the campaign")
-    """The total number of clicks for the campaign"""
-    unique_clicks: int | None | None = Field(default=None, description="The total number of unique clicks for links across a campaign")
-    """The total number of unique clicks for links across a campaign"""
-    unique_subscriber_clicks: int | None | None = Field(default=None, description="The total number of subscribers who clicked on a campaign")
-    """The total number of subscribers who clicked on a campaign"""
-    click_rate: float | None | None = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
-    """The number of unique clicks divided by the total number of successful deliveries"""
-    last_click: str | None | None = Field(default=None, description="The date and time of the last recorded click for the campaign")
-    """The date and time of the last recorded click for the campaign"""
-
-class ReportDeliveryStatus(BaseModel):
-    """Updates on campaigns in the process of sending"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None | None = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
-    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
 
 class ReportForwards(BaseModel):
     """An object describing the forwards and forward activity for the campaign"""
@@ -581,25 +581,6 @@ class AutomationRecipients(BaseModel):
     store_id: str | None | None = Field(default=None, description="The id of the store")
     """The id of the store"""
 
-class AutomationTracking(BaseModel):
-    """The tracking options for the Automation"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    opens: bool | None | None = Field(default=None, description="Whether to track opens")
-    """Whether to track opens"""
-    html_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the HTML version")
-    """Whether to track clicks in the HTML version"""
-    text_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the plain-text version")
-    """Whether to track clicks in the plain-text version"""
-    goal_tracking: bool | None | None = Field(default=None, description="Whether to enable Goal tracking")
-    """Whether to enable Goal tracking"""
-    ecomm360: bool | None | None = Field(default=None, description="Whether to enable eCommerce360 tracking")
-    """Whether to enable eCommerce360 tracking"""
-    google_analytics: str | None | None = Field(default=None, description="The custom slug for Google Analytics tracking")
-    """The custom slug for Google Analytics tracking"""
-    clicktale: str | None | None = Field(default=None, description="The custom slug for ClickTale tracking")
-    """The custom slug for ClickTale tracking"""
-
 class AutomationSettings(BaseModel):
     """The settings for the Automation workflow"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -637,6 +618,25 @@ class AutomationReportSummary(BaseModel):
     """The number of unique clicks"""
     click_rate: float | None | None = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
     """The number of unique clicks divided by the total number of successful deliveries"""
+
+class AutomationTracking(BaseModel):
+    """The tracking options for the Automation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    opens: bool | None | None = Field(default=None, description="Whether to track opens")
+    """Whether to track opens"""
+    html_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the HTML version")
+    """Whether to track clicks in the HTML version"""
+    text_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the plain-text version")
+    """Whether to track clicks in the plain-text version"""
+    goal_tracking: bool | None | None = Field(default=None, description="Whether to enable Goal tracking")
+    """Whether to enable Goal tracking"""
+    ecomm360: bool | None | None = Field(default=None, description="Whether to enable eCommerce360 tracking")
+    """Whether to enable eCommerce360 tracking"""
+    google_analytics: str | None | None = Field(default=None, description="The custom slug for Google Analytics tracking")
+    """The custom slug for Google Analytics tracking"""
+    clicktale: str | None | None = Field(default=None, description="The custom slug for ClickTale tracking")
+    """The custom slug for ClickTale tracking"""
 
 class Automation(BaseModel):
     """A summary of an individual Automation workflow's settings and content"""
