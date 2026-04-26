@@ -430,13 +430,6 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     target_key='Id',
                     cardinality='many_to_one',
                 ),
-                EntityRelationshipConfig(
-                    source_entity='accounts',
-                    target_entity='accounts',
-                    foreign_key='ParentId',
-                    target_key='Id',
-                    cardinality='many_to_one',
-                ),
             ],
         ),
         EntityDefinition(
@@ -625,13 +618,6 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     source_entity='contacts',
                     target_entity='users',
                     foreign_key='OwnerId',
-                    target_key='Id',
-                    cardinality='many_to_one',
-                ),
-                EntityRelationshipConfig(
-                    source_entity='contacts',
-                    target_entity='contacts',
-                    foreign_key='ReportsToId',
                     target_key='Id',
                     cardinality='many_to_one',
                 ),
@@ -2638,15 +2624,6 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Who are the active users in Salesforce?', 'Show me details for the owner of this record'],
                 'search_strategy': 'Search by name, email, or filter by active status',
             },
-            relationships=[
-                EntityRelationshipConfig(
-                    source_entity='users',
-                    target_entity='users',
-                    foreign_key='ManagerId',
-                    target_key='Id',
-                    cardinality='many_to_one',
-                ),
-            ],
         ),
         EntityDefinition(
             name='opportunity_stages',
