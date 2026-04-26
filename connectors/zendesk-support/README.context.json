@@ -7,7 +7,7 @@
   "yaml_version": "0.1.20",
   "api_reference_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/",
   "commit_sha": "unknown",
-  "auth_example": "ZendeskSupportAuthConfig(client_id=\"...\", client_secret=\"...\", access_token=\"...\", refresh_token=\"...\")",
+  "auth_example": "ZendeskSupportAuthConfig(access_token=\"...\", refresh_token=\"...\")",
   "auth_import": ", ZendeskSupportAuthConfig",
   "auth_config": {
     "type_name": "ZendeskSupportAuthConfig",
@@ -18,32 +18,18 @@
         "description": "Zendesk OAuth 2.0 authentication",
         "fields": [
           {
-            "name": "client_id",
-            "type": "str",
-            "required": false,
-            "title": "Client ID",
-            "description": "Zendesk OAuth 2.0 client ID"
-          },
-          {
-            "name": "client_secret",
-            "type": "str",
-            "required": false,
-            "title": "Client Secret",
-            "description": "Zendesk OAuth 2.0 client secret"
-          },
-          {
             "name": "access_token",
             "type": "str",
-            "required": false,
+            "required": true,
             "title": "Access Token",
-            "description": "OAuth 2.0 access token (optional if refresh_token is provided)"
+            "description": "OAuth 2.0 access token"
           },
           {
             "name": "refresh_token",
             "type": "str",
-            "required": true,
+            "required": false,
             "title": "Refresh Token",
-            "description": "OAuth 2.0 refresh token"
+            "description": "OAuth 2.0 refresh token (optional)"
           }
         ],
         "type_suffix": "Oauth20",

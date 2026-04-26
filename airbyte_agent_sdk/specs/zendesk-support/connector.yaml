@@ -1418,41 +1418,48 @@ components:
         - triggers
         - users
         - views
+      # WARNING: Why we are NOT using oauth2_refresh here
+      # Zendesk's OAuth2 access tokens do not expire by default:
+      #   "Zendesk does not set the access token expires_in value."
+      #   "Refresh tokens aren't used. An access token doesn't expire but it can be revoked."
+      # The standard Zendesk OAuth integration (authorizationCode flow) produces a
+      # long-lived access_token. The legacy oauth2.0 auth mode in Airbyte's
+      # source-zendesk-support spec — which uses a single access_token with
+      # BearerAuthenticator — is the correct fit.
+      # The oauth2_refresh mode exists for OAuth clients that explicitly opt into
+      # token expiry (by setting expires_in at token-creation time). It is NOT
+      # the default Zendesk behavior. When used, Airbyte's source manifest forces
+      # expires_in: 172800 (48h) on every refresh and relies on rotating refresh
+      # tokens — meaning each refresh invalidates the previous refresh_token, so
+      # we would also need bullet-proof persistence of the rotated refresh_token
+      # AND the new access_token back to the secret store. Any persistence gap
+      # breaks the connection after 48h.
+      # If we ever support a customer whose Zendesk OAuth client is configured with
+      # custom expires_in, revisit and implement oauth2_refresh correctly (set
+      # discriminator to "oauth2_refresh", map client_id/client_secret/refresh_token/
+      # access_token in replication_auth_key_mapping, and verify rotated tokens
+      # persist on each refresh).
       x-airbyte-auth-config:
         type: object
         title: OAuth 2.0
         description: Zendesk OAuth 2.0 authentication
-        required:
-        - refresh_token
+        required: [access_token]
         properties:
-          client_id:
-            type: string
-            title: Client ID
-            description: Zendesk OAuth 2.0 client ID
-          client_secret:
-            type: string
-            title: Client Secret
-            description: Zendesk OAuth 2.0 client secret
           access_token:
             type: string
             title: Access Token
-            description: OAuth 2.0 access token (optional if refresh_token is provided)
+            description: OAuth 2.0 access token
           refresh_token:
             type: string
             title: Refresh Token
-            description: OAuth 2.0 refresh token
+            description: OAuth 2.0 refresh token (optional)
         auth_mapping:
-          client_id: "${client_id}"
-          client_secret: "${client_secret}"
           access_token: "${access_token}"
           refresh_token: "${refresh_token}"
         replication_auth_key_mapping:
-          credentials.client_id: "client_id"
-          credentials.client_secret: "client_secret"
           credentials.access_token: "access_token"
-          credentials.refresh_token: "refresh_token"
         replication_auth_key_constants:
-          credentials.credentials: "oauth2_refresh"
+          credentials.credentials: "oauth2.0"
 
     zendeskAPIToken:
       type: http

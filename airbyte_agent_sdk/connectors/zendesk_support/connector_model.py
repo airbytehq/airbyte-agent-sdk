@@ -52,38 +52,20 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                     title='OAuth 2.0',
                     description='Zendesk OAuth 2.0 authentication',
                     type='object',
-                    required=['refresh_token'],
+                    required=['access_token'],
                     properties={
-                        'client_id': AuthConfigFieldSpec(
-                            title='Client ID',
-                            description='Zendesk OAuth 2.0 client ID',
-                        ),
-                        'client_secret': AuthConfigFieldSpec(
-                            title='Client Secret',
-                            description='Zendesk OAuth 2.0 client secret',
-                        ),
                         'access_token': AuthConfigFieldSpec(
                             title='Access Token',
-                            description='OAuth 2.0 access token (optional if refresh_token is provided)',
+                            description='OAuth 2.0 access token',
                         ),
                         'refresh_token': AuthConfigFieldSpec(
                             title='Refresh Token',
-                            description='OAuth 2.0 refresh token',
+                            description='OAuth 2.0 refresh token (optional)',
                         ),
                     },
-                    auth_mapping={
-                        'client_id': '${client_id}',
-                        'client_secret': '${client_secret}',
-                        'access_token': '${access_token}',
-                        'refresh_token': '${refresh_token}',
-                    },
-                    replication_auth_key_mapping={
-                        'credentials.client_id': 'client_id',
-                        'credentials.client_secret': 'client_secret',
-                        'credentials.access_token': 'access_token',
-                        'credentials.refresh_token': 'refresh_token',
-                    },
-                    replication_auth_key_constants={'credentials.credentials': 'oauth2_refresh'},
+                    auth_mapping={'access_token': '${access_token}', 'refresh_token': '${refresh_token}'},
+                    replication_auth_key_mapping={'credentials.access_token': 'access_token'},
+                    replication_auth_key_constants={'credentials.credentials': 'oauth2.0'},
                 ),
             ),
             AuthOption(
