@@ -344,15 +344,23 @@ class EntityRelationshipConfig(BaseModel):
 
 
 class ScopingParamConfig(BaseModel):
-    """
-    Scoping parameter resolution from connector configuration.
+    """Scoping parameter resolution from connector configuration.
 
     Declares a path parameter that should be resolved from the connector's
-    config values at runtime, rather than being supplied per-request.
+    `config_values` at runtime, rather than being supplied per-request.
+    The resolution applies to **all executor operations** — `execute()`,
+    `execute_batch()`, `check_entities()`, and download operations — not
+    only probe/check calls.
 
-    Used in x-airbyte-scoping extension in the Info object.
+    When a path template contains a placeholder matching `param`, the
+    executor looks up `config_key` (defaulting to `param`) in
+    `config_values` and injects the value automatically.  Explicitly
+    supplied `params` always take precedence over the scoped default.
+
+    Used in `x-airbyte-scoping` extension in the Info object.
 
     Example YAML usage:
+
         info:
           title: My API
           x-airbyte-scoping:

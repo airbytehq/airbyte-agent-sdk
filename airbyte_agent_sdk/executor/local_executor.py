@@ -151,6 +151,26 @@ class _OperationHandler(Protocol):
         ...
 
 
+class _BufferedAsyncResponse:
+    """Re-wraps already-read bytes so they can flow through `aiter_bytes(chunk_size=...)`.
+
+    Used by the download handler when `x-airbyte-response-error-check` forces a
+    buffered read of a JSON body that did not match the error envelope — the
+    caller still needs the body, and the existing streaming block expects an
+    object with an async `aiter_bytes(chunk_size=...)` method.
+    """
+
+    def __init__(self, body: bytes, headers: dict[str, str]) -> None:
+        self._body = body
+        self.headers = headers
+
+    async def aiter_bytes(self, chunk_size: int = 8 * 1024 * 1024) -> AsyncIterator[bytes]:
+        if not self._body:
+            return
+        for i in range(0, len(self._body), chunk_size):
+            yield self._body[i : i + chunk_size]
+
+
 class LocalExecutor:
     """Async executor for Entity×Action operations with direct HTTP execution.
 
@@ -571,7 +591,7 @@ class LocalExecutor:
 
             # Convert config to internal format
             action = Action(config.action) if isinstance(config.action, str) else config.action
-            params = config.params or {}
+            params = self._merge_scoping_defaults(config.params or {})
 
             # Dispatch to handler (handlers handle telemetry internally)
             handler = next((h for h in self._operation_handlers if h.can_handle(action)), None)
@@ -918,7 +938,7 @@ class LocalExecutor:
             ValueError: If entity or action not found
             HTTPClientError: If API request fails
         """
-        params = params or {}
+        params = self._merge_scoping_defaults(params or {})
         action = Action(action) if isinstance(action, str) else action
 
         # Delegate to the appropriate handler
@@ -961,7 +981,7 @@ class LocalExecutor:
         for entity, action, params in operations:
             # Convert action to Action enum if needed
             action = Action(action) if isinstance(action, str) else action
-            params = params or {}
+            params = self._merge_scoping_defaults(params or {})
 
             # Find appropriate handler
             handler = next((h for h in self._operation_handlers if h.can_handle(action)), None)
@@ -985,6 +1005,30 @@ class LocalExecutor:
                 extracted_results.append(result)
 
         return extracted_results
+
+    def _merge_scoping_defaults(self, params: dict[str, Any]) -> dict[str, Any]:
+        """Merge declared `x-airbyte-scoping` values into `params`.
+
+        For each entry in `_scoping_index`, resolves the value from
+        `config_values` when not already supplied by the caller.
+        User-supplied `params` always take precedence.
+
+        Only resolves params explicitly declared in `x-airbyte-scoping`;
+        arbitrary `config_values` keys are **not** merged.
+        """
+        if not self._scoping_index:
+            return params
+
+        merged: dict[str, Any] | None = None
+        for param_name, config_key in self._scoping_index.items():
+            if param_name in params:
+                continue
+            if config_key in self.config_values:
+                if merged is None:
+                    merged = dict(params)
+                merged[param_name] = self.config_values[config_key]
+
+        return merged if merged is not None else params
 
     def _build_path(self, path_template: str, params: dict[str, Any]) -> str:
         """Build path by replacing {param} placeholders with URL-encoded values.
@@ -1129,6 +1173,28 @@ class LocalExecutor:
                 serialized[key] = value
 
         return serialized
+
+    @staticmethod
+    def _apply_response_error_check(model: ConnectorModel, response_data: Any) -> None:
+        """Raise `HTTPClientError` when the response matches the connector's declared error envelope.
+
+        Implements the `x-airbyte-response-error-check` OpenAPI extension: when
+        `model.response_error_check` is set, a dict response whose `field` equals
+        `on_value` is treated as an application-level error even if the HTTP status
+        was 200. The raised message mirrors the format used by the standard path
+        so caller error-handling is uniform across all action types.
+
+        No-op when `model.response_error_check` is `None` or `response_data` is
+        not a dict.
+        """
+        check = model.response_error_check
+        if check is None or not isinstance(response_data, dict):
+            return
+        if response_data.get(check.field) == check.on_value:
+            error_msg = (
+                str(response_data.get(check.message_field, "unknown_error")) if check.message_field else "API returned application-level error"
+            )
+            raise HTTPClientError(f"API error: {error_msg}")
 
     @staticmethod
     def _extract_download_url(
@@ -2157,16 +2223,8 @@ class _StandardOperationHandler:
                     headers=header_params if header_params else None,
                 )
 
-                # Check for application-level errors returned with HTTP 200
-                error_check = self.ctx.executor.model.response_error_check
-                if error_check and isinstance(response_data, dict):
-                    if response_data.get(error_check.field) == error_check.on_value:
-                        error_msg = (
-                            str(response_data.get(error_check.message_field, "unknown_error"))
-                            if error_check.message_field
-                            else "API returned application-level error"
-                        )
-                        raise HTTPClientError(f"API error: {error_msg}")
+                # Apply x-airbyte-response-error-check for HTTP 200 application-level errors
+                LocalExecutor._apply_response_error_check(self.ctx.executor.model, response_data)
 
                 # Extract metadata from original response (before record extraction)
                 metadata = self.ctx.executor._extract_metadata(response_data, response_headers, endpoint)
@@ -2305,6 +2363,12 @@ class _DownloadOperationHandler:
                         **request_format,
                     )
 
+                    # Apply x-airbyte-response-error-check before URL extraction so
+                    # connectors that signal application-level errors on the metadata
+                    # request surface as HTTPClientError instead of an opaque
+                    # "field not found" ExecutorError.
+                    LocalExecutor._apply_response_error_check(self.ctx.executor.model, metadata_response)
+
                     # Step 2: Extract file URL from metadata
                     file_url = LocalExecutor._extract_download_url(
                         response=metadata_response,
@@ -2321,13 +2385,42 @@ class _DownloadOperationHandler:
                     )
                 else:
                     # One-step direct download: stream file directly from endpoint
-                    file_response, _ = await self.ctx.http_client.request(
+                    file_response, file_headers = await self.ctx.http_client.request(
                         method=operation.method,
                         path=path,
                         params=query_params,
                         headers=headers,
                         stream=True,
                     )
+
+                    # Apply x-airbyte-response-error-check to one-step download
+                    # responses. Only buffer the body when the connector declares
+                    # the extension AND the response looks like it could carry a
+                    # JSON error envelope — binary downloads must keep streaming
+                    # lazily to avoid full-memory reads. Range requests return 206
+                    # Partial Content whose body is a byte range of the file, not
+                    # a full envelope, so skip the check for those.
+                    error_check = self.ctx.executor.model.response_error_check
+                    if error_check is not None and range_header is None:
+                        content_type = file_headers.get("content-type", "").lower()
+                        if "json" in content_type:
+                            body_bytes = await file_response.aread()
+                            try:
+                                payload = json_module.loads(body_bytes) if body_bytes else None
+                            except ValueError as exc:
+                                # Mirror HTTPClient.request(stream=False) behaviour: surface
+                                # malformed JSON instead of silently returning garbage bytes
+                                # as file content.
+                                raise HTTPClientError(
+                                    f"Failed to parse JSON response for download " f"(content-type={file_headers.get('content-type', '')}): {exc}"
+                                )
+                            if isinstance(payload, dict):
+                                LocalExecutor._apply_response_error_check(self.ctx.executor.model, payload)
+                            # Envelope did not match (or payload was not a dict).
+                            # Re-wrap the already-read bytes so the existing
+                            # streaming block below runs unchanged — no early
+                            # return, no missed telemetry.
+                            file_response = _BufferedAsyncResponse(body_bytes, file_headers)
 
                 # Assume success once we start streaming
                 status_code = 200
