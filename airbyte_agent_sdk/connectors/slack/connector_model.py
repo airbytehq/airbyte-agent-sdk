@@ -20,6 +20,9 @@ from airbyte_agent_sdk.schema.security import (
     AuthConfigFieldSpec,
     AuthConfigSpec,
 )
+from airbyte_agent_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
     ResponseErrorCheck,
@@ -2187,6 +2190,14 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ["What's the latest in #ext-marathon?", 'What did Alex say in the channel?'],
                 'search_strategy': 'Use `channel_messages` for reading and searching existing Slack messages only. First find the channel using the `channels` entity search, then find messages using the `channel_messages` entity search filtered on channel_id for that channel. Example filter: {"eq": {"channel_id": "C123"}}. Do not use `channel_messages.create` to send a message. To post a new Slack message, use `messages.create` with channel and text.',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='channel_messages',
+                    target_entity='channels',
+                    foreign_key='channel',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='threads',
@@ -2712,6 +2723,21 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Show replies in a Slack thread', 'What was discussed in a thread?'],
                 'search_strategy': 'Filter by channel and parent message timestamp',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='threads',
+                    target_entity='channels',
+                    foreign_key='channel',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='threads',
+                    target_entity='channel_messages',
+                    foreign_key='ts',
+                    target_key='ts',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='messages',
