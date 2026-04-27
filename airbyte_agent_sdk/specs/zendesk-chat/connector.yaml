@@ -80,6 +80,7 @@ info:
     disable_compaction: true
     entities:
       - entity: agents
+        suggested: true
         fields:
           - name: id
             type: integer
@@ -126,6 +127,7 @@ info:
             description: When agent was created
 
       - entity: chats
+        suggested: true
         fields:
           - name: id
             type: string
@@ -172,6 +174,7 @@ info:
             description: IDs of agents in chat
 
       - entity: departments
+        suggested: true
         fields:
           - name: id
             type: integer

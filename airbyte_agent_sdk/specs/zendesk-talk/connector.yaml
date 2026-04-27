@@ -64,6 +64,7 @@ info:
             type: ["null", "string"]
             description: Zip code of the address
       - entity: agents_activity
+        suggested: true
         fields:
           - name: accepted_third_party_conferences
             type: ["null", "integer"]
@@ -144,6 +145,7 @@ info:
             type: ["null", "string"]
             description: Channel the agent is registered on
       - entity: agents_overview
+        suggested: true
         fields:
           - name: average_accepted_transfers
             type: ["null", "integer"]
@@ -264,6 +266,7 @@ info:
             type: ["null", "integer"]
             description: Upload ID associated with the greeting
       - entity: phone_numbers
+        suggested: true
         fields:
           - name: call_recording_consent
             type: ["null", "string"]
@@ -365,6 +368,7 @@ info:
             type: ["null", "boolean"]
             description: Whether voice is enabled
       - entity: call_legs
+        suggested: true
         fields:
           - name: agent_id
             type: ["null", "integer"]
@@ -442,6 +446,7 @@ info:
             type: ["null", "integer"]
             description: Wrap-up time in seconds
       - entity: calls
+        suggested: true
         fields:
           - name: agent_id
             type: ["null", "integer"]
@@ -567,6 +572,7 @@ info:
             type: ["null", "integer"]
             description: Wrap-up time in seconds
       - entity: current_queue_activity
+        suggested: true
         fields:
           - name: agents_online
             type: ["null", "integer"]
@@ -661,6 +667,7 @@ info:
             type: ["null", "integer"]
             description: Total wrap-up time
       - entity: ivrs
+        suggested: true
         fields:
           - name: id
             type: ["null", "integer"]

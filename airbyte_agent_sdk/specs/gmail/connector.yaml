@@ -42,6 +42,7 @@ info:
               - "null"
             description: "Total number of threads currently in the mailbox"
       - entity: messages
+        suggested: true
         x-airbyte-name: messages
         fields:
           - name: id
@@ -90,6 +91,7 @@ info:
               - "null"
             description: "Draft message payload (headers, body, and metadata)"
       - entity: threads
+        suggested: true
         x-airbyte-name: threads
         fields:
           - name: id

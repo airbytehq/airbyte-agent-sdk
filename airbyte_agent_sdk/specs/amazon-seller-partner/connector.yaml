@@ -54,6 +54,7 @@ info:
     disable_compaction: true
     entities:
       - entity: orders
+        suggested: true
         x-airbyte-name: Orders
         fields:
           - name: AmazonOrderId
@@ -189,6 +190,7 @@ info:
             type: ["null", "string"]
             description: Identifier for the seller associated with the order
       - entity: order_items
+        suggested: true
         x-airbyte-name: OrderItems
         fields:
           - name: ASIN
@@ -303,6 +305,7 @@ info:
             type: ["null", "string"]
             description: Title of the product
       - entity: list_financial_event_groups
+        suggested: true
         x-airbyte-name: ListFinancialEventGroups
         fields:
           - name: AccountTail
@@ -354,6 +357,7 @@ info:
             type: ["null", "string"]
             description: Unique identifier for tracing
       - entity: list_financial_events
+        suggested: true
         x-airbyte-name: ListFinancialEvents
         fields:
           - name: AdhocDisbursementEventList

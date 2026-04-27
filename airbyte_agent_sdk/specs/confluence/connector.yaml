@@ -92,6 +92,7 @@ info:
             type: ["null", "boolean"]
             description: Indicates if the user triggering the audit event is a system admin.
       - entity: blog_posts
+        suggested: true
         fields:
           - name: _links
             type: ["null", "object"]
@@ -159,6 +160,7 @@ info:
             type: ["null", "string"]
             description: The type of group
       - entity: pages
+        suggested: true
         fields:
           - name: _links
             type: ["null", "object"]
@@ -226,6 +228,7 @@ info:
               authorId:
                 type: ["null", "string"]
       - entity: spaces
+        suggested: true
         x-airbyte-name: space
         fields:
           - name: _links

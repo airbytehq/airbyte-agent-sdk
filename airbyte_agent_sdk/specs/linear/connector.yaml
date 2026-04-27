@@ -153,6 +153,7 @@ info:
               - 'null'
             description: ''
       - entity: comments
+        suggested: true
         fields:
           - name: body
             type:
@@ -659,6 +660,7 @@ info:
               - 'null'
             description: ''
       - entity: issues
+        suggested: true
         fields:
           - name: addedToCycleAt
             type:
@@ -1030,6 +1032,7 @@ info:
               - 'null'
             description: ''
       - entity: projects
+        suggested: true
         fields:
           - name: canceledAt
             type:
@@ -1232,6 +1235,7 @@ info:
               - 'null'
             description: ''
       - entity: teams
+        suggested: true
         fields:
           - name: activeCycle
             type:
@@ -1434,6 +1438,7 @@ info:
               - 'null'
             description: ''
       - entity: users
+        suggested: true
         fields:
           - name: active
             type:

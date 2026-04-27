@@ -60,6 +60,7 @@ info:
     disable_compaction: true
     entities:
       - entity: clients
+        suggested: true
         fields:
           - name: address
             type: ["null", "string"]
@@ -259,6 +260,7 @@ info:
             type: ["null", "boolean"]
             description: "Whether used as service type"
       - entity: invoices
+        suggested: true
         fields:
           - name: amount
             type: ["null", "number"]
@@ -297,6 +299,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: projects
+        suggested: true
         fields:
           - name: budget
             type: ["null", "number"]
@@ -375,6 +378,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: tasks
+        suggested: true
         fields:
           - name: billable_by_default
             type: ["null", "boolean"]
@@ -398,6 +402,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: time_entries
+        suggested: true
         fields:
           - name: billable
             type: ["null", "boolean"]
@@ -511,6 +516,7 @@ info:
             type: ["null", "object"]
             description: "Associated user"
       - entity: users
+        suggested: true
         fields:
           - name: avatar_url
             type: ["null", "string"]

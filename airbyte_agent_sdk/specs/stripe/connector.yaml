@@ -58,6 +58,7 @@ info:
     disable_compaction: false
     entities:
         - entity: charges
+          suggested: true
           fields:
           - name: amount
             type:
@@ -345,6 +346,7 @@ info:
             - integer
             description: Timestamp of the last update to this charge object.
         - entity: customers
+          suggested: true
           fields:
           - name: account_balance
             type:
@@ -514,6 +516,7 @@ info:
             - integer
             description: Timestamp indicating when the customer object was last updated.
         - entity: invoices
+          suggested: true
           fields:
           - name: account_country
             type:
@@ -1002,6 +1005,7 @@ info:
             description: Timestamp indicating when webhooks for this invoice were successfully
               delivered.
         - entity: refunds
+          suggested: true
           fields:
           - name: amount
             type:
@@ -1093,6 +1097,7 @@ info:
             - integer
             description: Timestamp indicating when the refund was last updated.
         - entity: subscriptions
+          suggested: true
           fields:
           - name: application
             type:

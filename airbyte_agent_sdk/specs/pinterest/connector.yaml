@@ -105,6 +105,7 @@ info:
     disable_compaction: true
     entities:
     - entity: ad_accounts
+      suggested: true
       fields:
       - name: country
         type: ["null", "string"]
@@ -174,6 +175,7 @@ info:
         type: ["null", "string"]
         description: Board privacy setting
     - entity: campaigns
+      suggested: true
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -227,6 +229,7 @@ info:
         type: ["null", "integer"]
         description: Last update timestamp (Unix seconds)
     - entity: ad_groups
+      suggested: true
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -304,6 +307,7 @@ info:
         type: ["null", "number"]
         description: Last update timestamp (Unix seconds)
     - entity: ads
+      suggested: true
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -637,6 +641,7 @@ info:
         type: ["null", "integer"]
         description: Last update time (Unix seconds)
     - entity: keywords
+      suggested: true
       fields:
       - name: archived
         type: ["null", "boolean"]

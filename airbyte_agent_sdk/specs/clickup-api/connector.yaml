@@ -14,6 +14,7 @@ info:
   x-airbyte-context-store:
     entities:
       - entity: user
+        suggested: true
         x-airbyte-name: user
         fields:
           - name: id
@@ -27,6 +28,7 @@ info:
               - "string"
             description: "Display name of the user"
       - entity: teams
+        suggested: true
         x-airbyte-name: team
         fields:
           - name: id
@@ -40,6 +42,7 @@ info:
               - "string"
             description: "Name of the team"
       - entity: spaces
+        suggested: true
         x-airbyte-name: space
         fields:
           - name: id
@@ -58,6 +61,7 @@ info:
               - "boolean"
             description: "Whether the space is private"
       - entity: folders
+        suggested: true
         x-airbyte-name: folder
         fields:
           - name: id
@@ -81,6 +85,7 @@ info:
               - "string"
             description: "Number of tasks contained in the folder"
       - entity: lists
+        suggested: true
         x-airbyte-name: list
         fields:
           - name: id
@@ -119,6 +124,7 @@ info:
               - "integer"
             description: "Number of tasks contained in the list"
       - entity: tasks
+        suggested: true
         x-airbyte-name: task
         fields:
           - name: id
@@ -167,6 +173,7 @@ info:
               - "string"
             description: "Permalink URL to view the task in ClickUp"
       - entity: comments
+        suggested: true
         x-airbyte-name: list_comments
         fields:
           - name: id
@@ -188,6 +195,7 @@ info:
               - "number"
             description: "Number of replies on the comment"
       - entity: goals
+        suggested: true
         x-airbyte-name: team_goals
         fields:
           - name: id
@@ -239,6 +247,7 @@ info:
               - "string"
             description: "Identifier of the team that owns the goal"
       - entity: time_tracking
+        suggested: true
         x-airbyte-name: time_tracking
         fields:
           - name: time

@@ -148,6 +148,7 @@ info:
     disable_compaction: false
     entities:
       - entity: abandoned_checkouts
+        suggested: true
         x-airbyte-name: abandoned_checkouts
         fields:
           - name: id
@@ -241,6 +242,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the collection was last updated"
       - entity: customers
+        suggested: true
         x-airbyte-name: customers
         fields:
           - name: id
@@ -277,6 +279,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the customer record was last updated"
       - entity: discount_codes
+        suggested: true
         x-airbyte-name: discount_codes
         fields:
           - name: id
@@ -298,6 +301,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the code was last updated"
       - entity: draft_orders
+        suggested: true
         x-airbyte-name: draft_orders
         fields:
           - name: id
@@ -358,6 +362,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the fulfillment order was last updated"
       - entity: fulfillments
+        suggested: true
         x-airbyte-name: fulfillments
         fields:
           - name: id
@@ -388,6 +393,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the fulfillment was last updated"
       - entity: inventory_items
+        suggested: true
         x-airbyte-name: inventory_items
         fields:
           - name: id
@@ -412,6 +418,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the inventory item was last updated"
       - entity: inventory_levels
+        suggested: true
         x-airbyte-name: inventory_levels
         fields:
           - name: inventory_item_id
@@ -760,6 +767,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the metafield was last updated"
       - entity: order_refunds
+        suggested: true
         x-airbyte-name: order_refunds
         fields:
           - name: id
@@ -847,6 +855,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the image was last updated"
       - entity: product_variants
+        suggested: true
         x-airbyte-name: product_variants
         fields:
           - name: id

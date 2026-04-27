@@ -15,6 +15,7 @@ info:
   x-airbyte-context-store:
     entities:
       - entity: issues
+        suggested: true
         x-airbyte-name: issues
         fields:
           - name: id
@@ -71,6 +72,7 @@ info:
               - "boolean"
             description: "Whether the issue is visible in the customer portal"
       - entity: messages
+        suggested: true
         x-airbyte-name: issue_messages
         fields:
           - name: id
@@ -97,6 +99,7 @@ info:
               - "string"
             description: "Identifier of the thread this message belongs to"
       - entity: accounts
+        suggested: true
         x-airbyte-name: accounts
         fields:
           - name: id
@@ -138,6 +141,7 @@ info:
               - "string"
             description: "Timestamp of the most recent activity from this account, in ISO 8601 format"
       - entity: contacts
+        suggested: true
         x-airbyte-name: contacts
         fields:
           - name: id
@@ -164,6 +168,7 @@ info:
               - "string"
             description: "Role the contact has in the customer portal"
       - entity: teams
+        suggested: true
         x-airbyte-name: teams
         fields:
           - name: id
@@ -175,6 +180,7 @@ info:
               - "string"
             description: "Name of the team"
       - entity: tags
+        suggested: true
         x-airbyte-name: tags
         fields:
           - name: id
@@ -191,6 +197,7 @@ info:
               - "string"
             description: "Type of object this tag applies to (e.g. issue, account)"
       - entity: users
+        suggested: true
         x-airbyte-name: users
         fields:
           - name: id
@@ -217,6 +224,7 @@ info:
               - "string"
             description: "Current status of the user (e.g. active, disabled)"
       - entity: custom_fields
+        suggested: true
         x-airbyte-name: custom_fields
         fields:
           - name: id
@@ -253,6 +261,7 @@ info:
               - "string"
             description: "Timestamp when the custom field was created, in ISO 8601 format"
       - entity: ticket_forms
+        suggested: true
         x-airbyte-name: ticket_forms
         fields:
           - name: id

@@ -20,6 +20,7 @@ info:
     disable_compaction: true
     entities:
       - entity: transactions
+        suggested: true
         fields:
           - name: auction_info
             type: ["null", "object"]
@@ -170,6 +171,7 @@ info:
             type: ["null", "string"]
             description: Date and time when the transaction was last updated
       - entity: balances
+        suggested: true
         fields:
           - name: account_id
             type: ["null", "string"]
@@ -184,6 +186,7 @@ info:
             type: ["null", "string"]
             description: The timestamp when the balances data was last refreshed.
       - entity: list_products
+        suggested: true
         fields:
           - name: create_time
             type: ["null", "string"]
@@ -233,6 +236,7 @@ info:
             type: ["null", "string"]
             description: The date and time when the product was last updated
       - entity: list_disputes
+        suggested: true
         fields:
           - name: create_time
             type: ["null", "string"]
@@ -279,6 +283,7 @@ info:
             type: ["null", "string"]
             description: The cut-off timestamp for the last update.
       - entity: search_invoices
+        suggested: true
         fields:
           - name: additional_recipients
             type: ["null", "array"]
@@ -340,6 +345,7 @@ info:
             type: ["null", "string"]
             description: Current status of the invoice
       - entity: list_payments
+        suggested: true
         fields:
           - name: cart
             type: ["null", "string"]

@@ -34,6 +34,7 @@ info:
             type: ["null", "string"]
             description: The label assigned to the annotation
       - entity: cohorts
+        suggested: true
         fields:
           - name: appId
             type: ["null", "integer"]
@@ -114,6 +115,7 @@ info:
             type: ["null", "array"]
             description: Users or viewers who have access to the cohort data
       - entity: events_list
+        suggested: true
         fields:
           - name: autohidden
             type: ["null", "boolean"]
@@ -158,6 +160,7 @@ info:
             type: ["null", "string"]
             description: Raw event name in the data
       - entity: active_users
+        suggested: true
         fields:
           - name: date
             type: ["null", "string"]
@@ -334,6 +337,7 @@ info:
             type: ["null", "string"]
             description: Version name associated with the event
       - entity: average_session_length
+        suggested: true
         fields:
           - name: date
             type: ["null", "string"]

@@ -110,6 +110,7 @@ info:
     disable_compaction: true
     entities:
       - entity: channel_members
+        suggested: true
         fields:
           - name: channel_id
             type:
@@ -122,6 +123,7 @@ info:
               - "string"
             description: "The unique identifier for the member within the channel."
       - entity: channels
+        suggested: true
         fields:
           - name: context_team_id
             type:
@@ -305,6 +307,7 @@ info:
               - "integer"
             description: "The timestamp when the channel was last updated."
       - entity: channel_messages
+        suggested: true
         fields:
           - name: type
             type:
@@ -397,6 +400,7 @@ info:
               - "string"
             description: "Team ID."
       - entity: threads
+        suggested: true
         fields:
           - name: type
             type:
@@ -479,6 +483,7 @@ info:
               - "string"
             description: "Team ID."
       - entity: users
+        suggested: true
         fields:
           - name: color
             type:

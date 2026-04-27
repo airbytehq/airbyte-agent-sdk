@@ -92,6 +92,7 @@ info:
             type: ["null", "string"]
             description: "Git ref prefix for the branch (typically `refs/heads/`)"
       - entity: comments
+        suggested: true
         x-airbyte-name: comments
         fields:
           - name: id
@@ -155,6 +156,7 @@ info:
       - entity: file_content
         x-airbyte-skip-searchable-fields: "File payload retrieval endpoint returns a single blob (text or binary) for a specific path, not a record stream; no upstream source-github replication equivalent."
       - entity: issues
+        suggested: true
         x-airbyte-name: issues
         fields:
           - name: id
@@ -311,6 +313,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the project was last updated"
       - entity: pull_requests
+        suggested: true
         x-airbyte-name: pull_requests
         fields:
           - name: id
@@ -389,6 +392,7 @@ info:
             type: ["null", "string"]
             description: "Permalink to the release on GitHub"
       - entity: repositories
+        suggested: true
         x-airbyte-name: repositories
         fields:
           - name: id
@@ -503,6 +507,7 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the team was last updated"
       - entity: users
+        suggested: true
         x-airbyte-name: users
         fields:
           - name: id

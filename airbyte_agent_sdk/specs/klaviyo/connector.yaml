@@ -46,6 +46,7 @@ info:
     disable_compaction: true
     entities:
     - entity: profiles
+      suggested: true
       fields:
       - name: attributes
         type:
@@ -422,6 +423,7 @@ info:
         - string
         description: ''
     - entity: events
+      suggested: true
       fields:
       - name: attributes
         type:
@@ -622,6 +624,7 @@ info:
         - string
         description: ''
     - entity: campaigns
+      suggested: true
       fields:
       - name: attributes
         type:
@@ -840,6 +843,7 @@ info:
         - string
         description: ''
     - entity: flows
+      suggested: true
       fields:
       - name: attributes
         type:
@@ -947,6 +951,7 @@ info:
         - string
         description: ''
     - entity: metrics
+      suggested: true
       fields:
       - name: attributes
         type:
@@ -1033,6 +1038,7 @@ info:
         - string
         description: ''
     - entity: lists
+      suggested: true
       fields:
       - name: attributes
         type:

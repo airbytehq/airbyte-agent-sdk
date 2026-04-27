@@ -85,6 +85,7 @@ info:
             type: ["null", "string"]
             description: The status code for the block
       - entity: campaigns
+        suggested: true
         fields:
           - name: channels
             type: ["null", "array"]
@@ -108,6 +109,7 @@ info:
             type: ["null", "string"]
             description: When the campaign was last updated
       - entity: contacts
+        suggested: true
         fields:
           - name: address_line_1
             type: ["null", "string"]
@@ -189,6 +191,7 @@ info:
             type: ["null", "string"]
             description: The reason the email is invalid
       - entity: lists
+        suggested: true
         fields:
           - name: _metadata
             type: ["null", "object"]
@@ -206,6 +209,7 @@ info:
             type: ["null", "string"]
             description: Name of the list
       - entity: segments
+        suggested: true
         fields:
           - name: contacts_count
             type: ["null", "integer"]
@@ -241,6 +245,7 @@ info:
             type: ["null", "string"]
             description: When the segment was last updated
       - entity: singlesend_stats
+        suggested: true
         fields:
           - name: ab_phase
             type: ["null", "string"]
@@ -283,6 +288,7 @@ info:
               unsubscribes:
                 type: ["null", "integer"]
       - entity: singlesends
+        suggested: true
         fields:
           - name: categories
             type: ["null", "array"]
@@ -379,6 +385,7 @@ info:
             type: ["null", "integer"]
             description: Number of unsubscribes in this group
       - entity: templates
+        suggested: true
         fields:
           - name: generation
             type: ["null", "string"]

@@ -124,6 +124,7 @@ info:
     disable_compaction: false
     entities:
       - entity: accounts
+        suggested: true
         x-airbyte-name: Account
         fields:
           - name: Id
@@ -276,6 +277,7 @@ info:
               - string
             description: System timestamp when the record was last modified
       - entity: contacts
+        suggested: true
         x-airbyte-name: Contact
         fields:
           - name: Id
@@ -408,6 +410,7 @@ info:
               - string
             description: System timestamp when the record was last modified
       - entity: leads
+        suggested: true
         x-airbyte-name: Lead
         fields:
           - name: Id
@@ -580,6 +583,7 @@ info:
               - string
             description: System timestamp when the record was last modified
       - entity: opportunities
+        suggested: true
         x-airbyte-name: Opportunity
         fields:
           - name: Id
@@ -712,6 +716,7 @@ info:
               - string
             description: System timestamp when the record was last modified
       - entity: tasks
+        suggested: true
         x-airbyte-name: Task
         fields:
           - name: Id
@@ -834,6 +839,7 @@ info:
               - string
             description: System timestamp when the record was last modified
       - entity: users
+        suggested: true
         x-airbyte-name: User
         fields:
           - name: Id
@@ -996,6 +1002,7 @@ info:
               - string
             description: System timestamp when the record was last modified
       - entity: opportunity_stages
+        suggested: true
         x-airbyte-name: OpportunityStage
         fields:
           - name: Id

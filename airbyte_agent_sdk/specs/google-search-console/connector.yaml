@@ -77,6 +77,7 @@ info:
     disable_compaction: true
     entities:
     - entity: sites
+      suggested: true
       fields:
       - name: permissionLevel
         type: ["null", "string"]
@@ -114,6 +115,7 @@ info:
         type: ["null", "string"]
         description: Warnings encountered while processing the sitemaps
     - entity: search_analytics_all_fields
+      suggested: true
       fields:
       - name: clicks
         type: ["null", "integer"]
@@ -149,6 +151,7 @@ info:
         type: ["null", "string"]
         description: The URL of the site from which the data originates
     - entity: search_analytics_by_country
+      suggested: true
       fields:
       - name: clicks
         type: ["null", "integer"]
@@ -175,6 +178,7 @@ info:
         type: ["null", "string"]
         description: The URL of the site for which the search analytics data is being reported
     - entity: search_analytics_by_date
+      suggested: true
       fields:
       - name: clicks
         type: ["null", "integer"]
@@ -198,6 +202,7 @@ info:
         type: ["null", "string"]
         description: The URL of the site for which the search analytics data is being reported
     - entity: search_analytics_by_device
+      suggested: true
       fields:
       - name: clicks
         type: ["null", "integer"]
@@ -224,6 +229,7 @@ info:
         type: ["null", "string"]
         description: The URL of the site for which search analytics data is being provided
     - entity: search_analytics_by_page
+      suggested: true
       fields:
       - name: clicks
         type: ["null", "integer"]
@@ -250,6 +256,7 @@ info:
         type: ["null", "string"]
         description: The URL of the site for which the search analytics data is being reported
     - entity: search_analytics_by_query
+      suggested: true
       fields:
       - name: clicks
         type: ["null", "integer"]

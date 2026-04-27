@@ -141,6 +141,7 @@ info:
     disable_compaction: false
     entities:
     - entity: campaigns
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]
@@ -182,6 +183,7 @@ info:
         type: ["null", "string"]
         description: Last update time
     - entity: ad_sets
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]
@@ -226,6 +228,7 @@ info:
         type: ["null", "string"]
         description: Last update time
     - entity: ads
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]
@@ -255,6 +258,7 @@ info:
         type: ["null", "string"]
         description: Last update time
     - entity: ad_creatives
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]
@@ -287,6 +291,7 @@ info:
         type: ["null", "string"]
         description: Call to action type
     - entity: ads_insights
+      suggested: true
       fields:
       - name: account_id
         type: ["null", "string"]
@@ -381,6 +386,7 @@ info:
         type: ["null", "string"]
         description: Timezone name
     - entity: ad_accounts
+      suggested: true
       x-airbyte-name: ad_account
       fields:
       - name: id
@@ -417,6 +423,7 @@ info:
         type: ["null", "string"]
         description: Timezone name
     - entity: custom_conversions
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]
@@ -446,6 +453,7 @@ info:
         type: ["null", "boolean"]
         description: Whether the conversion is archived
     - entity: images
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]

@@ -62,6 +62,7 @@ info:
               - 'array'
             description: 'List of notes or comments added in the greenhouse'
       - entity: applications
+        suggested: true
         fields:
           - name: answers
             type:
@@ -429,6 +430,7 @@ info:
               - 'integer'
             description: 'Version of the approval request'
       - entity: candidates
+        suggested: true
         fields:
           - name: addresses
             type:
@@ -1172,6 +1174,7 @@ info:
               - 'string'
             description: 'The URL for the video conferencing platform used for the interview'
       - entity: job_posts
+        suggested: true
         fields:
           - name: active
             type:
@@ -1303,6 +1306,7 @@ info:
               - 'string'
             description: 'The timestamp when the job stage was last updated'
       - entity: jobs
+        suggested: true
         fields:
           - name: closed_at
             type:
@@ -1533,6 +1537,7 @@ info:
               - 'string'
             description: 'The date and time when the job stage was last updated'
       - entity: offers
+        suggested: true
         fields:
           - name: application_id
             type:

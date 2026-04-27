@@ -43,6 +43,7 @@ info:
     disable_compaction: true
     entities:
       - entity: bases
+        suggested: true
         fields:
           - name: id
             type:
@@ -60,6 +61,7 @@ info:
               - 'string'
             description: Permission level for the base
       - entity: tables
+        suggested: true
         fields:
           - name: id
             type:

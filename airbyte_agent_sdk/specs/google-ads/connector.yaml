@@ -96,6 +96,7 @@ info:
     disable_compaction: false
     entities:
       - entity: accounts
+        suggested: true
         x-airbyte-name: customer
         fields:
           - name: customer.auto_tagging_enabled
@@ -162,6 +163,7 @@ info:
             type: ["null", "string"]
             description: Date segment for the report row
       - entity: campaigns
+        suggested: true
         x-airbyte-name: campaign
         fields:
           - name: campaign.id
@@ -255,6 +257,7 @@ info:
             type: ["null", "string"]
             description: Ad network type segment
       - entity: ad_groups
+        suggested: true
         x-airbyte-name: ad_group
         fields:
           - name: campaign.id
@@ -324,6 +327,7 @@ info:
             type: ["null", "string"]
             description: Date segment for the report row
       - entity: ad_group_ads
+        suggested: true
         x-airbyte-name: ad_group_ad
         fields:
           - name: ad_group.id
@@ -381,6 +385,7 @@ info:
             type: ["null", "string"]
             description: Date segment for the report row
       - entity: campaign_labels
+        suggested: true
         x-airbyte-name: campaign_label
         fields:
           - name: campaign.id
@@ -399,6 +404,7 @@ info:
             type: ["null", "string"]
             description: Resource name of the label
       - entity: ad_group_labels
+        suggested: true
         x-airbyte-name: ad_group_label
         fields:
           - name: ad_group.id
@@ -417,6 +423,7 @@ info:
             type: ["null", "string"]
             description: Resource name of the label
       - entity: ad_group_ad_labels
+        suggested: true
         x-airbyte-name: ad_group_ad_label
         fields:
           - name: ad_group_ad.ad.id

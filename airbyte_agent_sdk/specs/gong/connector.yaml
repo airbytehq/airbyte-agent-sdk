@@ -47,6 +47,7 @@ info:
     disable_compaction: false
     entities:
       - entity: users
+        suggested: true
         fields:
           - name: active
             type:
@@ -129,6 +130,7 @@ info:
               - string
             description: An email address that is considered trusted for the user
       - entity: calls
+        suggested: true
         fields:
           - name: calendarEventId
             type:
@@ -231,6 +233,7 @@ info:
               - string
             description: Identifier for the workspace to which the call belongs.
       - entity: calls_extensive
+        suggested: true
         x-airbyte-name: extensiveCalls
         fields:
           - name: id

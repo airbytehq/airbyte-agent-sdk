@@ -71,6 +71,7 @@ info:
     disable_compaction: true
     entities:
       - entity: leads
+        suggested: true
         x-airbyte-name: incremental_leads_zoho_crm_stream
         fields:
           - name: id
@@ -140,6 +141,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: contacts
+        suggested: true
         x-airbyte-name: incremental_contacts_zoho_crm_stream
         fields:
           - name: id
@@ -194,6 +196,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: accounts
+        suggested: true
         x-airbyte-name: incremental_accounts_zoho_crm_stream
         fields:
           - name: id
@@ -248,6 +251,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: deals
+        suggested: true
         x-airbyte-name: incremental_deals_zoho_crm_stream
         fields:
           - name: id
@@ -287,6 +291,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: campaigns
+        suggested: true
         x-airbyte-name: incremental_campaigns_zoho_crm_stream
         fields:
           - name: id
@@ -437,6 +442,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: products
+        suggested: true
         x-airbyte-name: incremental_products_zoho_crm_stream
         fields:
           - name: id
@@ -488,6 +494,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: quotes
+        suggested: true
         x-airbyte-name: incremental_quotes_zoho_crm_stream
         fields:
           - name: id
@@ -533,6 +540,7 @@ info:
             type: ["null", "string"]
             description: Time the record was last modified
       - entity: invoices
+        suggested: true
         x-airbyte-name: incremental_invoices_zoho_crm_stream
         fields:
           - name: id

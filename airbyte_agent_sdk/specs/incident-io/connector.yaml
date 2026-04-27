@@ -49,6 +49,7 @@ info:
     disable_compaction: true
     entities:
       - entity: incidents
+        suggested: true
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -185,6 +186,7 @@ info:
             type: ["null", "number"]
             description: Minutes of workload classified as working
       - entity: alerts
+        suggested: true
         fields:
           - name: alert_source_id
             type: ["null", "string"]
@@ -220,6 +222,7 @@ info:
             type: ["null", "string"]
             description: When the alert was last updated
       - entity: users
+        suggested: true
         fields:
           - name: base_role
             type: ["null", "object"]
@@ -252,6 +255,7 @@ info:
             type: ["null", "string"]
             description: Slack user ID
       - entity: incident_updates
+        suggested: true
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -317,6 +321,7 @@ info:
                   slack_user_id:
                     type: ["null", "string"]
       - entity: incident_roles
+        suggested: true
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -346,6 +351,7 @@ info:
             type: ["null", "string"]
             description: When the role was last updated
       - entity: incident_statuses
+        suggested: true
         fields:
           - name: category
             type: ["null", "string"]
@@ -369,6 +375,7 @@ info:
             type: ["null", "string"]
             description: When the status was last updated
       - entity: incident_timestamps
+        suggested: true
         fields:
           - name: id
             type: ["null", "string"]
@@ -380,6 +387,7 @@ info:
             type: ["null", "number"]
             description: Rank for ordering
       - entity: severities
+        suggested: true
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -400,6 +408,7 @@ info:
             type: ["null", "string"]
             description: When the severity was last updated
       - entity: custom_fields
+        suggested: true
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -478,6 +487,7 @@ info:
             type: ["null", "string"]
             description: When the catalog type was last updated
       - entity: schedules
+        suggested: true
         fields:
           - name: annotations
             type: ["null", "object"]
@@ -507,6 +517,7 @@ info:
             type: ["null", "string"]
             description: When the schedule was last updated
       - entity: escalations
+        suggested: true
         fields:
           - name: created_at
             type: ["null", "string"]

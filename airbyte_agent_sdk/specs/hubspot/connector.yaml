@@ -48,6 +48,7 @@ info:
     disable_compaction: false
     entities:
     - entity: companies
+      suggested: true
       fields:
       - name: archived
         type:
@@ -79,6 +80,7 @@ info:
         - 'string'
         description: Timestamp when the company record was last modified
     - entity: contacts
+      suggested: true
       fields:
       - name: archived
         type:
@@ -110,6 +112,7 @@ info:
         - 'string'
         description: Timestamp indicating when the contact record was last modified.
     - entity: deals
+      suggested: true
       fields:
       - name: archived
         type:

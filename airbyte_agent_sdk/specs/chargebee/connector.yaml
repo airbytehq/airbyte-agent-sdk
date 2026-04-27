@@ -63,6 +63,7 @@ info:
     disable_compaction: true
     entities:
       - entity: subscription
+        suggested: true
         fields:
           - name: activated_at
             type: ["null", "integer"]
@@ -293,6 +294,7 @@ info:
             type: ["null", "integer"]
             description: "The date and time when the subscription was last updated."
       - entity: customer
+        suggested: true
         fields:
           - name: allow_direct_debit
             type: ["null", "boolean"]
@@ -484,6 +486,7 @@ info:
             type: ["null", "integer"]
             description: "Date and time when the VAT number was validated."
       - entity: invoice
+        suggested: true
         fields:
           - name: adjustment_credit_notes
             type: ["null", "array"]
@@ -693,6 +696,7 @@ info:
             type: ["null", "integer"]
             description: "Amount written off"
       - entity: credit_note
+        suggested: true
         fields:
           - name: allocations
             type: ["null", "array"]
@@ -842,6 +846,7 @@ info:
             type: ["null", "integer"]
             description: "The date when the credit note was voided."
       - entity: coupon
+        suggested: true
         fields:
           - name: apply_discount_on
             type: ["null", "string"]
@@ -928,6 +933,7 @@ info:
             type: ["null", "integer"]
             description: "Date until which the coupon is valid for use."
       - entity: transaction
+        suggested: true
         fields:
           - name: amount
             type: ["null", "integer"]
@@ -1130,6 +1136,7 @@ info:
             type: ["null", "array"]
             description: "List of webhooks associated with the event."
       - entity: order
+        suggested: true
         fields:
           - name: amount_adjusted
             type: ["null", "integer"]
@@ -1312,6 +1319,7 @@ info:
             type: ["null", "integer"]
             description: "Timestamp when the order data was last updated."
       - entity: payment_source
+        suggested: true
         fields:
           - name: amazon_payment
             type: ["null", "object"]
@@ -1380,6 +1388,7 @@ info:
             type: ["null", "object"]
             description: "Data related to UPI payment source"
       - entity: item
+        suggested: true
         fields:
           - name: applicable_items
             type: ["null", "array"]
@@ -1460,6 +1469,7 @@ info:
             type: ["null", "string"]
             description: "Calculation method used for item usage"
       - entity: item_price
+        suggested: true
         fields:
           - name: accounting_detail
             type: ["null", "object"]

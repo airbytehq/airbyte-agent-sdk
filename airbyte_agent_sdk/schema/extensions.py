@@ -117,6 +117,10 @@ class CacheEntityConfig(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     entity: str
+    suggested: bool = Field(
+        default=False,
+        description="Whether this entity should be suggested for syncing by default.",
+    )
     x_airbyte_name: str | None = Field(default=None, alias="x-airbyte-name")
     fields: list[CacheFieldConfig] = Field(default_factory=list)
     x_airbyte_skip_searchable_fields: str | None = Field(

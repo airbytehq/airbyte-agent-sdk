@@ -38,6 +38,7 @@ info:
     disable_compaction: false
     entities:
       - entity: pages
+        suggested: true
         fields:
           - name: archived
             type:
@@ -147,6 +148,7 @@ info:
               - object
             description: Type of user (person or bot)
       - entity: data_sources
+        suggested: true
         fields:
           - name: archived
             type:
@@ -234,6 +236,7 @@ info:
               - string
             description: URL or reference to access the data source.
       - entity: blocks
+        suggested: true
         fields:
           - name: archived
             type:

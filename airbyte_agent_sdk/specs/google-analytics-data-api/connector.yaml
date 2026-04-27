@@ -63,6 +63,7 @@ info:
     disable_compaction: true
     entities:
       - entity: website_overview
+        suggested: true
         fields:
           - name: averageSessionDuration
             type: ["null", "number"]
@@ -101,6 +102,7 @@ info:
             type: ["null", "integer"]
             description: Total number of unique users
       - entity: daily_active_users
+        suggested: true
         fields:
           - name: active1DayUsers
             type: ["null", "integer"]
@@ -152,6 +154,7 @@ info:
             type: ["null", "string"]
             description: Start date of the reporting period
       - entity: traffic_sources
+        suggested: true
         fields:
           - name: averageSessionDuration
             type: ["null", "number"]
@@ -196,6 +199,7 @@ info:
             type: ["null", "integer"]
             description: Total number of unique users
       - entity: pages
+        suggested: true
         fields:
           - name: bounceRate
             type: ["null", "number"]
@@ -222,6 +226,7 @@ info:
             type: ["null", "string"]
             description: Start date of the reporting period
       - entity: devices
+        suggested: true
         fields:
           - name: averageSessionDuration
             type: ["null", "number"]
@@ -269,6 +274,7 @@ info:
             type: ["null", "integer"]
             description: Total number of unique users
       - entity: locations
+        suggested: true
         fields:
           - name: averageSessionDuration
             type: ["null", "number"]

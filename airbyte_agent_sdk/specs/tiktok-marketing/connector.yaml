@@ -38,6 +38,7 @@ info:
     disable_compaction: false
     entities:
       - entity: advertisers
+        suggested: true
         fields:
           - name: address
             type: ["null", "string"]
@@ -127,6 +128,7 @@ info:
             type: ["null", "string"]
             description: The timezone setting for the advertiser's activities.
       - entity: campaigns
+        suggested: true
         fields:
           - name: advertiser_id
             type: ["null", "integer"]
@@ -198,6 +200,7 @@ info:
             type: ["null", "string"]
             description: Variable being tested in a split test campaign
       - entity: ad_groups
+        suggested: true
         fields:
           - name: adgroup_id
             type: ["null", "integer"]
@@ -239,6 +242,7 @@ info:
             type: ["null", "string"]
             description: The secondary status of the ad group
       - entity: ads
+        suggested: true
         fields:
           - name: ad_format
             type: ["null", "string"]
@@ -370,6 +374,7 @@ info:
             type: ["null", "integer"]
             description: Width of the video in pixels.
       - entity: advertisers_reports_daily
+        suggested: true
         x-airbyte-name: advertisers_reports_daily
         fields:
           - name: advertiser_id
@@ -466,6 +471,7 @@ info:
             type: ["null", "number"]
             description: Number of app installations.
       - entity: campaigns_reports_daily
+        suggested: true
         fields:
           - name: campaign_id
             type: ["null", "integer"]
@@ -558,6 +564,7 @@ info:
             type: ["null", "number"]
             description: Number of app installations.
       - entity: ad_groups_reports_daily
+        suggested: true
         fields:
           - name: adgroup_id
             type: ["null", "integer"]
@@ -704,6 +711,7 @@ info:
             type: ["null", "number"]
             description: Number of app installations.
       - entity: ads_reports_daily
+        suggested: true
         fields:
           - name: ad_id
             type: ["null", "integer"]

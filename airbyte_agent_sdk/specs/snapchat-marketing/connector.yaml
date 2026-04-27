@@ -160,6 +160,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: adaccounts
+      suggested: true
       fields:
       - name: advertiser_organization_id
         type: ["null", "string"]
@@ -213,6 +214,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: campaigns
+      suggested: true
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -248,6 +250,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: adsquads
+      suggested: true
       fields:
       - name: auto_bid
         type: ["null", "boolean"]
@@ -365,6 +368,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: ads
+      suggested: true
       fields:
       - name: ad_squad_id
         type: ["null", "string"]

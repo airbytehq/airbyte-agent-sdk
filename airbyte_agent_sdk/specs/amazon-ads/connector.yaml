@@ -60,6 +60,7 @@ info:
     disable_compaction: true
     entities:
       - entity: profiles
+        suggested: true
         fields:
           - name: accountInfo
             type:

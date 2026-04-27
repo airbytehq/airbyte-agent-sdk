@@ -118,6 +118,7 @@ info:
     disable_compaction: true
     entities:
     - entity: accounts
+      suggested: true
       fields:
       - name: sid
         type:
@@ -160,6 +161,7 @@ info:
         - "string"
         description: The URI for accessing the account resource
     - entity: calls
+      suggested: true
       fields:
       - name: sid
         type:
@@ -227,6 +229,7 @@ info:
         - "string"
         description: The date and time when the call record was last updated
     - entity: messages
+      suggested: true
       fields:
       - name: sid
         type:

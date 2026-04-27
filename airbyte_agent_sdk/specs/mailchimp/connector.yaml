@@ -101,6 +101,7 @@ info:
     disable_compaction: true
     entities:
     - entity: campaigns
+      suggested: true
       fields:
       - name: ab_split_opts
         type:
@@ -530,6 +531,7 @@ info:
         - 'integer'
         description: 'The ID used in the Mailchimp web application. View this campaign in your Mailchimp account at `ht...'
     - entity: email_activity
+      suggested: true
       fields:
       - name: action
         type:
@@ -582,6 +584,7 @@ info:
         - 'null'
         description: 'If the action is a ''click'', the URL on which the member clicked.'
     - entity: lists
+      suggested: true
       fields:
       - name: beamer_address
         type:
@@ -808,6 +811,7 @@ info:
         - 'integer'
         description: 'The ID used in the Mailchimp web application. View this list in your Mailchimp account at `https:...'
     - entity: reports
+      suggested: true
       fields:
       - name: ab_split
         type:

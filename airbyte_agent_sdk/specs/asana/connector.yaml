@@ -806,6 +806,7 @@ info:
             - 'string'
             - 'null'
     - entity: projects
+      suggested: true
       fields:
       - name: archived
         type:
@@ -1013,6 +1014,7 @@ info:
             - 'null'
             - 'string'
     - entity: sections
+      suggested: true
       fields:
       - name: created_at
         type:
@@ -1276,6 +1278,7 @@ info:
         - 'string'
         description: ''
     - entity: tags
+      suggested: true
       fields:
       - name: color
         type:
@@ -1326,6 +1329,7 @@ info:
             - 'null'
             - 'string'
     - entity: tasks
+      suggested: true
       fields:
       - name: actual_time_minutes
         type:
@@ -1622,6 +1626,7 @@ info:
             - 'null'
             - 'string'
     - entity: teams
+      suggested: true
       fields:
       - name: description
         type:
@@ -1672,6 +1677,7 @@ info:
         - 'string'
         description: ''
     - entity: users
+      suggested: true
       fields:
       - name: email
         type:
@@ -1725,6 +1731,7 @@ info:
         - 'array'
         description: ''
     - entity: workspaces
+      suggested: true
       fields:
       - name: email_domains
         type:

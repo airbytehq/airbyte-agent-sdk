@@ -63,6 +63,7 @@ info:
     disable_compaction: true
     entities:
     - entity: forms
+      suggested: true
       fields:
       - name: _links
         type: ["null", "object"]
@@ -205,6 +206,7 @@ info:
           href:
             type: ["null", "string"]
     - entity: responses
+      suggested: true
       fields:
       - name: answers
         type: ["null", "array"]

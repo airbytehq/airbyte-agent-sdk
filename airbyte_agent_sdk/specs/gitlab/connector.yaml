@@ -93,6 +93,7 @@ info:
     disable_compaction: true
     entities:
     - entity: projects
+      suggested: true
       fields:
       - name: id
         type:
@@ -490,6 +491,7 @@ info:
         - boolean
         description: Whether the latest artifact is kept
     - entity: issues
+      suggested: true
       fields:
       - name: id
         type:
@@ -677,6 +679,7 @@ info:
         - string
         description: Severity level of the issue
     - entity: merge_requests
+      suggested: true
       fields:
       - name: id
         type:
@@ -929,6 +932,7 @@ info:
         - object
         description: User who performed the merge
     - entity: users
+      suggested: true
       fields:
       - name: id
         type:
@@ -966,6 +970,7 @@ info:
         - boolean
         description: Whether the user account is locked
     - entity: commits
+      suggested: true
       fields:
       - name: project_id
         type:

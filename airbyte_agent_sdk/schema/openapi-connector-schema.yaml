@@ -276,6 +276,11 @@ $defs:
       entity:
         title: Entity
         type: string
+      suggested:
+        default: false
+        description: Whether this entity should be suggested for syncing by default.
+        title: Suggested
+        type: boolean
       x-airbyte-name:
         anyOf:
         - type: string
@@ -903,9 +908,8 @@ $defs:
         type: array
       x-airbyte-skip-auth-methods:
         description: List of Airbyte auth methods to skip when validating auth compatibility
-          and filtering auth options from the connector spec UI.
-          Use the SelectiveAuthenticator option key (e.g., 'Private App Credentials',
-          'oauth2.0')
+          and filtering auth options from the connector spec UI. Use the SelectiveAuthenticator
+          option key (e.g., 'Private App Credentials', 'oauth2.0')
         items:
           type: string
         title: X-Airbyte-Skip-Auth-Methods
@@ -1950,11 +1954,16 @@ $defs:
   ScopingParamConfig:
     additionalProperties: false
     description: "Scoping parameter resolution from connector configuration.\n\nDeclares\
-      \ a path parameter that should be resolved from the connector's\nconfig values\
-      \ at runtime, rather than being supplied per-request.\n\nUsed in x-airbyte-scoping\
-      \ extension in the Info object.\n\nExample YAML usage:\n    info:\n      title:\
-      \ My API\n      x-airbyte-scoping:\n        - param: account_id\n          config_key:\
-      \ account_id"
+      \ a path parameter that should be resolved from the connector's\n`config_values`\
+      \ at runtime, rather than being supplied per-request.\nThe resolution applies\
+      \ to **all executor operations** — `execute()`,\n`execute_batch()`, `check_entities()`,\
+      \ and download operations — not\nonly probe/check calls.\n\nWhen a path template\
+      \ contains a placeholder matching `param`, the\nexecutor looks up `config_key`\
+      \ (defaulting to `param`) in\n`config_values` and injects the value automatically.\
+      \  Explicitly\nsupplied `params` always take precedence over the scoped default.\n\
+      \nUsed in `x-airbyte-scoping` extension in the Info object.\n\nExample YAML\
+      \ usage:\n\n    info:\n      title: My API\n      x-airbyte-scoping:\n     \
+      \   - param: account_id\n          config_key: account_id"
     properties:
       param:
         description: Path parameter name to resolve from config

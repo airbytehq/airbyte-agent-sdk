@@ -73,6 +73,7 @@ info:
     disable_compaction: true
     entities:
     - entity: customers
+      suggested: true
       fields:
       - name: avatar_url
         type: ["null", "string"]
@@ -162,6 +163,7 @@ info:
         type: ["null", "string"]
         description: Customer login name
     - entity: orders
+      suggested: true
       fields:
       - name: billing
         type: ["null", "object"]
@@ -287,6 +289,7 @@ info:
         type: ["null", "string"]
         description: Version of WooCommerce which last updated the order
     - entity: products
+      suggested: true
       fields:
       - name: attributes
         type: ["null", "array"]
@@ -481,6 +484,7 @@ info:
         type: ["null", "string"]
         description: Product weight
     - entity: coupons
+      suggested: true
       fields:
       - name: amount
         type: ["null", "string"]
@@ -662,6 +666,7 @@ info:
         type: ["null", "string"]
         description: Type of attribute
     - entity: product_variations
+      suggested: true
       fields:
       - name: attributes
         type: ["null", "array"]
@@ -798,6 +803,7 @@ info:
         type: ["null", "string"]
         description: Order note content
     - entity: refunds
+      suggested: true
       fields:
       - name: amount
         type: ["null", "string"]

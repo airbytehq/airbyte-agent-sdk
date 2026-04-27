@@ -52,6 +52,7 @@ info:
     disable_compaction: false
     entities:
       - entity: applications
+        suggested: true
         x-airbyte-name: applications
         fields:
           - name: id
@@ -80,6 +81,7 @@ info:
               - "string"
             description: "Timestamp when the application was last updated, in ISO 8601 format"
       - entity: candidates
+        suggested: true
         x-airbyte-name: candidates
         fields:
           - name: id
@@ -108,6 +110,7 @@ info:
               - "string"
             description: "School associated with the candidate's education"
       - entity: job_postings
+        suggested: true
         x-airbyte-name: job_postings
         fields:
           - name: id
@@ -136,6 +139,7 @@ info:
               - "string"
             description: "Name of the location associated with the posting"
       - entity: jobs
+        suggested: true
         x-airbyte-name: jobs
         fields:
           - name: id
@@ -164,6 +168,7 @@ info:
               - "string"
             description: "Identifier of the primary location of the job"
       - entity: users
+        suggested: true
         x-airbyte-name: users
         fields:
           - name: id

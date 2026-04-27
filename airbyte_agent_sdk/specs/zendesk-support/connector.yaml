@@ -80,6 +80,7 @@ info:
     disable_compaction: false
     entities:
     - entity: brands
+      suggested: true
       fields:
       - name: active
         type:
@@ -162,6 +163,7 @@ info:
         - "string"
         description: The API URL for accessing this brand resource
     - entity: groups
+      suggested: true
       fields:
       - name: created_at
         type:
@@ -209,6 +211,7 @@ info:
         - "string"
         description: The API URL of the group
     - entity: organizations
+      suggested: true
       fields:
       - name: created_at
         type:
@@ -286,6 +289,7 @@ info:
         - "string"
         description: The API URL of this organization
     - entity: satisfaction_ratings
+      suggested: true
       fields:
       - name: assignee_id
         type:
@@ -348,6 +352,7 @@ info:
         - "string"
         description: The API URL of this satisfaction rating resource
     - entity: tags
+      suggested: true
       fields:
       - name: count
         type:
@@ -360,6 +365,7 @@ info:
         - "string"
         description: The tag name string used to label and categorize resources
     - entity: ticket_audits
+      suggested: true
       fields:
       - name: attachments
         type:
@@ -402,6 +408,7 @@ info:
         - "object"
         description: "Describes how the audit was created, providing context about the creation source"
     - entity: ticket_comments
+      suggested: true
       fields:
       - name: attachments
         type:
@@ -489,6 +496,7 @@ info:
         - "integer"
         description: Reference identifier for the channel through which the comment was created
     - entity: ticket_fields
+      suggested: true
       fields:
       - name: active
         type:
@@ -626,6 +634,7 @@ info:
         - "boolean"
         description: Whether this field is visible to end users in Help Center
     - entity: ticket_forms
+      suggested: true
       fields:
       - name: active
         type:
@@ -745,6 +754,7 @@ info:
         - "string"
         description: "The category of metric event, such as activate, pause, fulfill, apply_sla, breach, or update_status"
     - entity: ticket_metrics
+      suggested: true
       fields:
       - name: agent_wait_time_in_minutes
         type:
@@ -897,6 +907,7 @@ info:
         - "string"
         description: The API url of the ticket metric
     - entity: tickets
+      suggested: true
       fields:
       - name: allow_attachments
         type:
@@ -1137,6 +1148,7 @@ info:
         - "object"
         description: The user who performed the deletion action
     - entity: users
+      suggested: true
       fields:
       - name: active
         type:

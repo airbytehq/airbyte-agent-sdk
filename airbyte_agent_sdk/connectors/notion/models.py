@@ -89,15 +89,6 @@ class UsersListResponse(BaseModel):
     user: dict[str, Any] | None = Field(default=None)
     request_id: str | None = Field(default=None)
 
-class RichTextText(BaseModel):
-    """Text content"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    content: str | None | None = Field(default=None, description="Plain text content")
-    """Plain text content"""
-    link: dict[str, Any] | None | None = Field(default=None, description="Link object")
-    """Link object"""
-
 class RichTextAnnotations(BaseModel):
     """Text annotations (bold, italic, etc.)"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -108,6 +99,15 @@ class RichTextAnnotations(BaseModel):
     underline: bool | None | None = Field(default=None)
     code: bool | None | None = Field(default=None)
     color: str | None | None = Field(default=None)
+
+class RichTextText(BaseModel):
+    """Text content"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    content: str | None | None = Field(default=None, description="Plain text content")
+    """Plain text content"""
+    link: dict[str, Any] | None | None = Field(default=None, description="Link object")
+    """Link object"""
 
 class RichText(BaseModel):
     """A rich text object"""
@@ -130,15 +130,15 @@ class Parent(BaseModel):
     block_id: str | None = Field(default=None)
     workspace: bool | None = Field(default=None)
 
-class PageCreatedBy(BaseModel):
-    """User who created the page"""
+class PageLastEditedBy(BaseModel):
+    """User who last edited the page"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     object_: str | None | None = Field(default=None, alias="object")
     id: str | None | None = Field(default=None)
 
-class PageLastEditedBy(BaseModel):
-    """User who last edited the page"""
+class PageCreatedBy(BaseModel):
+    """User who created the page"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     object_: str | None | None = Field(default=None, alias="object")
@@ -230,20 +230,26 @@ class DataSourcesListResponse(BaseModel):
     page_or_data_source: dict[str, Any] | None = Field(default=None)
     request_id: str | None = Field(default=None)
 
-class BlockLinkPreview(BaseModel):
-    """Link preview block"""
+class BlockColumn(BaseModel):
+    """Column block"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    url: str | None | None = Field(default=None)
+    width_ratio: float | None | None = Field(default=None)
 
-class BlockChildDatabase(BaseModel):
-    """Child database block"""
+class BlockTableOfContents(BaseModel):
+    """Table of contents block"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    color: str | None | None = Field(default=None)
+
+class BlockChildPage(BaseModel):
+    """Child page block"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     title: str | None | None = Field(default=None)
 
-class BlockParagraph(BaseModel):
-    """Paragraph block content"""
+class BlockNumberedListItem(BaseModel):
+    """Numbered list item content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     rich_text: list[RichText] | None | None = Field(default=None)
@@ -256,62 +262,17 @@ class BlockBookmark(BaseModel):
     caption: list[RichText] | None | None = Field(default=None)
     url: str | None | None = Field(default=None)
 
-class BlockTable(BaseModel):
-    """Table block"""
+class BlockLinkPreview(BaseModel):
+    """Link preview block"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    table_width: int | None | None = Field(default=None)
-    has_column_header: bool | None | None = Field(default=None)
-    has_row_header: bool | None | None = Field(default=None)
+    url: str | None | None = Field(default=None)
 
-class BlockCallout(BaseModel):
-    """Callout block content"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    rich_text: list[RichText] | None | None = Field(default=None)
-    icon: dict[str, Any] | None | None = Field(default=None)
-    color: str | None | None = Field(default=None)
-
-class BlockTableRow(BaseModel):
-    """Table row block"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    cells: list[Any] | None | None = Field(default=None)
-
-class BlockTableOfContents(BaseModel):
-    """Table of contents block"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    color: str | None | None = Field(default=None)
-
-class BlockLastEditedBy(BaseModel):
-    """User who last edited the block"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    object_: str | None | None = Field(default=None, alias="object")
-    id: str | None | None = Field(default=None)
-
-class BlockQuote(BaseModel):
-    """Quote block content"""
+class BlockBulletedListItem(BaseModel):
+    """Bulleted list item content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     rich_text: list[RichText] | None | None = Field(default=None)
-    color: str | None | None = Field(default=None)
-
-class BlockHeading2(BaseModel):
-    """Heading 2 block content"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    rich_text: list[RichText] | None | None = Field(default=None)
-    color: str | None | None = Field(default=None)
-    is_toggleable: bool | None | None = Field(default=None)
-
-class BlockToDo(BaseModel):
-    """To-do block content"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    rich_text: list[RichText] | None | None = Field(default=None)
-    checked: bool | None | None = Field(default=None)
     color: str | None | None = Field(default=None)
 
 class BlockToggle(BaseModel):
@@ -321,31 +282,28 @@ class BlockToggle(BaseModel):
     rich_text: list[RichText] | None | None = Field(default=None)
     color: str | None | None = Field(default=None)
 
-class BlockColumn(BaseModel):
-    """Column block"""
+class BlockCode(BaseModel):
+    """Code block content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    width_ratio: float | None | None = Field(default=None)
+    rich_text: list[RichText] | None | None = Field(default=None)
+    caption: list[RichText] | None | None = Field(default=None)
+    language: str | None | None = Field(default=None)
 
-class BlockBulletedListItem(BaseModel):
-    """Bulleted list item content"""
+class BlockParagraph(BaseModel):
+    """Paragraph block content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     rich_text: list[RichText] | None | None = Field(default=None)
     color: str | None | None = Field(default=None)
 
-class BlockNumberedListItem(BaseModel):
-    """Numbered list item content"""
+class BlockCallout(BaseModel):
+    """Callout block content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     rich_text: list[RichText] | None | None = Field(default=None)
+    icon: dict[str, Any] | None | None = Field(default=None)
     color: str | None | None = Field(default=None)
-
-class BlockChildPage(BaseModel):
-    """Child page block"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    title: str | None | None = Field(default=None)
 
 class BlockEquation(BaseModel):
     """Equation block"""
@@ -358,6 +316,12 @@ class BlockEmbed(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     url: str | None | None = Field(default=None)
+
+class BlockTableRow(BaseModel):
+    """Table row block"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    cells: list[Any] | None | None = Field(default=None)
 
 class BlockHeading1(BaseModel):
     """Heading 1 block content"""
@@ -374,6 +338,20 @@ class BlockCreatedBy(BaseModel):
     object_: str | None | None = Field(default=None, alias="object")
     id: str | None | None = Field(default=None)
 
+class BlockToDo(BaseModel):
+    """To-do block content"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    rich_text: list[RichText] | None | None = Field(default=None)
+    checked: bool | None | None = Field(default=None)
+    color: str | None | None = Field(default=None)
+
+class BlockChildDatabase(BaseModel):
+    """Child database block"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    title: str | None | None = Field(default=None)
+
 class BlockHeading3(BaseModel):
     """Heading 3 block content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -382,13 +360,35 @@ class BlockHeading3(BaseModel):
     color: str | None | None = Field(default=None)
     is_toggleable: bool | None | None = Field(default=None)
 
-class BlockCode(BaseModel):
-    """Code block content"""
+class BlockQuote(BaseModel):
+    """Quote block content"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     rich_text: list[RichText] | None | None = Field(default=None)
-    caption: list[RichText] | None | None = Field(default=None)
-    language: str | None | None = Field(default=None)
+    color: str | None | None = Field(default=None)
+
+class BlockHeading2(BaseModel):
+    """Heading 2 block content"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    rich_text: list[RichText] | None | None = Field(default=None)
+    color: str | None | None = Field(default=None)
+    is_toggleable: bool | None | None = Field(default=None)
+
+class BlockTable(BaseModel):
+    """Table block"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    table_width: int | None | None = Field(default=None)
+    has_column_header: bool | None | None = Field(default=None)
+    has_row_header: bool | None | None = Field(default=None)
+
+class BlockLastEditedBy(BaseModel):
+    """User who last edited the block"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    object_: str | None | None = Field(default=None, alias="object")
+    id: str | None | None = Field(default=None)
 
 class Block(BaseModel):
     """A Notion block object"""

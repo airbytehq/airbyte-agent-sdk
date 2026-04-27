@@ -71,6 +71,7 @@ info:
     disable_compaction: true
     entities:
     - entity: accounts
+      suggested: true
       fields:
       - name: id
         type: ["null", "integer"]
@@ -118,6 +119,7 @@ info:
           versionTag:
             type: ["null", "string"]
     - entity: account_users
+      suggested: true
       fields:
       - name: account
         type: ["null", "string"]
@@ -129,6 +131,7 @@ info:
         type: ["null", "string"]
         description: User role in the account
     - entity: campaigns
+      suggested: true
       fields:
       - name: id
         type: ["null", "integer"]
@@ -231,6 +234,7 @@ info:
           versionTag:
             type: ["null", "string"]
     - entity: campaign_groups
+      suggested: true
       fields:
       - name: id
         type: ["null", "integer"]
@@ -273,6 +277,7 @@ info:
         type: ["null", "array"]
         description: Types of campaigns allowed in this group
     - entity: creatives
+      suggested: true
       fields:
       - name: id
         type: ["null", "string"]
@@ -363,6 +368,7 @@ info:
           currencyCode:
             type: ["null", "string"]
     - entity: ad_campaign_analytics
+      suggested: true
       fields:
       - name: impressions
         type: ["null", "number"]
@@ -482,6 +488,7 @@ info:
         type: ["null", "string"]
         description: End date of the ad analytics data
     - entity: ad_creative_analytics
+      suggested: true
       fields:
       - name: impressions
         type: ["null", "number"]

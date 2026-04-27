@@ -74,6 +74,7 @@ info:
     disable_compaction: true
     entities:
       - entity: companies
+        suggested: true
         fields:
           - name: app_id
             type:
@@ -197,6 +198,7 @@ info:
               - "string"
             description: "The website of the company"
       - entity: contacts
+        suggested: true
         fields:
           - name: android_app_name
             type:
@@ -709,6 +711,7 @@ info:
               - "integer"
             description: "The date and time when the conversation part was last updated."
       - entity: conversations
+        suggested: true
         fields:
           - name: admin_assignee_id
             type:
@@ -1185,6 +1188,7 @@ info:
               - "integer"
             description: "Timestamp since waiting for a response"
       - entity: teams
+        suggested: true
         fields:
           - name: admin_ids
             type:

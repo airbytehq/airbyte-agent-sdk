@@ -49,6 +49,7 @@ info:
     disable_compaction: true
     entities:
       - entity: customers
+        suggested: true
         fields:
           - name: id
             type: string
@@ -81,6 +82,7 @@ info:
             type: [object, "null"]
             description: The billing address of the customer
       - entity: subscriptions
+        suggested: true
         fields:
           - name: id
             type: string
@@ -118,6 +120,7 @@ info:
             type: [object, "null"]
             description: The product associated with the plan
       - entity: invoices
+        suggested: true
         fields:
           - name: id
             type: string

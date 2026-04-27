@@ -56,6 +56,7 @@ info:
     disable_compaction: true
     entities:
     - entity: events
+      suggested: true
       fields:
       - name: _meta
         type: ["null", "object"]
@@ -166,6 +167,7 @@ info:
           ip_address:
             type: ["null", "string"]
     - entity: issues
+      suggested: true
       fields:
       - name: annotations
         type: ["array", "null"]
@@ -268,6 +270,7 @@ info:
         type: ["integer", "null"]
         description: Number of users affected.
     - entity: projects
+      suggested: true
       fields:
       - name: access
         type: ["null", "array"]
@@ -362,6 +365,7 @@ info:
         type: ["string", "null"]
         description: Project status.
     - entity: releases
+      suggested: true
       fields:
       - name: authors
         type: ["null", "array"]
