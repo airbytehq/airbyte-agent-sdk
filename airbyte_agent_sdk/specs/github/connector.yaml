@@ -115,6 +115,45 @@ info:
           - name: isMinimized
             type: ["null", "boolean"]
             description: "Whether the comment has been hidden/collapsed"
+      - entity: commits
+        x-airbyte-name: commits
+        fields:
+          - name: oid
+            type: ["null", "string"]
+            description: "Full Git commit SHA"
+          - name: abbreviatedOid
+            type: ["null", "string"]
+            description: "Abbreviated Git commit SHA (typically 7 characters)"
+          - name: messageHeadline
+            type: ["null", "string"]
+            description: "First line of the commit message"
+          - name: message
+            type: ["null", "string"]
+            description: "Full commit message"
+          - name: committedDate
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the commit was applied to its tree"
+          - name: authoredDate
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the commit was originally authored"
+          - name: additions
+            type: ["null", "integer"]
+            description: "Number of lines added across all files in the commit"
+          - name: deletions
+            type: ["null", "integer"]
+            description: "Number of lines deleted across all files in the commit"
+          - name: changedFiles
+            type: ["null", "integer"]
+            description: "Number of files changed in the commit"
+          - name: url
+            type: ["null", "string"]
+            description: "Permalink to the commit on GitHub"
+      - entity: directory_content
+        x-airbyte-skip-searchable-fields: "Directory listing endpoint returns tree entries for a specific path, not a record stream with a stable schema; no upstream source-github replication stream exists."
+      - entity: discussions
+        x-airbyte-skip-searchable-fields: "Upstream source-github replication does not include a discussions stream; only reachable via direct GraphQL calls (list, get, api_search)."
+      - entity: file_content
+        x-airbyte-skip-searchable-fields: "File payload retrieval endpoint returns a single blob (text or binary) for a specific path, not a record stream; no upstream source-github replication equivalent."
       - entity: issues
         x-airbyte-name: issues
         fields:
@@ -151,6 +190,60 @@ info:
           - name: url
             type: ["null", "string"]
             description: "Permalink to the issue on GitHub"
+      - entity: labels
+        x-airbyte-name: issue_labels
+        fields:
+          - name: id
+            type: ["null", "string"]
+            description: "GraphQL node ID of the label"
+          - name: name
+            type: ["null", "string"]
+            description: "Label name"
+          - name: color
+            type: ["null", "string"]
+            description: "Label color as a 6-character hex string without a leading `#`"
+          - name: description
+            type: ["null", "string"]
+            description: "Short description of what the label is used for"
+          - name: createdAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the label was created"
+          - name: url
+            type: ["null", "string"]
+            description: "Permalink to the label on GitHub"
+      - entity: milestones
+        x-airbyte-name: issue_milestones
+        fields:
+          - name: id
+            type: ["null", "string"]
+            description: "GraphQL node ID of the milestone"
+          - name: number
+            type: ["null", "integer"]
+            description: "Repository-scoped milestone number"
+          - name: title
+            type: ["null", "string"]
+            description: "Milestone title"
+          - name: description
+            type: ["null", "string"]
+            description: "Milestone description"
+          - name: state
+            type: ["null", "string"]
+            description: "Milestone state: `OPEN` or `CLOSED`"
+          - name: dueOn
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp for the milestone's due date, if set"
+          - name: closedAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the milestone was closed, if applicable"
+          - name: createdAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the milestone was created"
+          - name: updatedAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the milestone was last updated"
+          - name: progressPercentage
+            type: ["null", "number"]
+            description: "Percentage of associated issues/PRs that are closed"
       - entity: organizations
         x-airbyte-name: organizations
         fields:
@@ -181,6 +274,42 @@ info:
           - name: createdAt
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the organization was created"
+      - entity: org_repositories
+        x-airbyte-skip-searchable-fields: "Scope-variant of repositories that returns the same underlying records filtered to an organization owner; the `repositories` context-store entity already covers cached search against the upstream source-github `repositories` stream."
+      - entity: pr_comments
+        x-airbyte-skip-searchable-fields: "Top-level pull request comments are stored in the same upstream source-github `comments` stream as issue comments (pull requests are issues in GitHub's data model); the `comments` context-store entity already covers cached search against that data."
+      - entity: project_items
+        x-airbyte-skip-searchable-fields: "Projects V2 items are derived from issues and pull requests already present in the cache; no dedicated upstream source-github replication stream exists for project items."
+      - entity: projects
+        x-airbyte-name: projects_v2
+        fields:
+          - name: id
+            type: ["null", "string"]
+            description: "GraphQL node ID of the project"
+          - name: number
+            type: ["null", "integer"]
+            description: "Organization- or user-scoped project number"
+          - name: title
+            type: ["null", "string"]
+            description: "Project title"
+          - name: shortDescription
+            type: ["null", "string"]
+            description: "Short description displayed on the project summary"
+          - name: url
+            type: ["null", "string"]
+            description: "Permalink to the project on GitHub"
+          - name: closed
+            type: ["null", "boolean"]
+            description: "Whether the project has been closed"
+          - name: public
+            type: ["null", "boolean"]
+            description: "Whether the project is publicly visible"
+          - name: createdAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the project was created"
+          - name: updatedAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the project was last updated"
       - entity: pull_requests
         x-airbyte-name: pull_requests
         fields:
@@ -226,6 +355,39 @@ info:
           - name: url
             type: ["null", "string"]
             description: "Permalink to the pull request on GitHub"
+      - entity: releases
+        x-airbyte-name: releases
+        fields:
+          - name: id
+            type: ["null", "string"]
+            description: "GraphQL node ID of the release"
+          - name: databaseId
+            type: ["null", "integer"]
+            description: "REST API numeric identifier for the release"
+          - name: name
+            type: ["null", "string"]
+            description: "Display name of the release"
+          - name: tagName
+            type: ["null", "string"]
+            description: "Git tag the release points at (e.g. `v1.2.3`)"
+          - name: description
+            type: ["null", "string"]
+            description: "Markdown body / release notes"
+          - name: publishedAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the release was published"
+          - name: createdAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the release was created"
+          - name: isPrerelease
+            type: ["null", "boolean"]
+            description: "Whether the release is marked as a pre-release"
+          - name: isDraft
+            type: ["null", "boolean"]
+            description: "Whether the release is still a draft and not published"
+          - name: url
+            type: ["null", "string"]
+            description: "Permalink to the release on GitHub"
       - entity: repositories
         x-airbyte-name: repositories
         fields:
@@ -268,6 +430,33 @@ info:
           - name: isArchived
             type: ["null", "boolean"]
             description: "Whether the repository has been archived"
+      - entity: reviews
+        x-airbyte-name: reviews
+        fields:
+          - name: id
+            type: ["null", "string"]
+            description: "GraphQL node ID of the review"
+          - name: databaseId
+            type: ["null", "integer"]
+            description: "REST API numeric identifier for the review"
+          - name: state
+            type: ["null", "string"]
+            description: "Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"
+          - name: body
+            type: ["null", "string"]
+            description: "Review body text"
+          - name: submittedAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the review was submitted"
+          - name: createdAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the review was created"
+          - name: updatedAt
+            type: ["null", "string"]
+            description: "ISO 8601 timestamp when the review was last updated"
+          - name: url
+            type: ["null", "string"]
+            description: "Permalink to the review on GitHub"
       - entity: stargazers
         x-airbyte-name: stargazers
         fields:
@@ -349,6 +538,10 @@ info:
           - name: isHireable
             type: ["null", "boolean"]
             description: "Whether the user has marked themselves as available for hire"
+      - entity: viewer
+        x-airbyte-skip-searchable-fields: "Singleton endpoint returning the authenticated user's own profile; not a record stream and has no upstream source-github replication equivalent."
+      - entity: viewer_repositories
+        x-airbyte-skip-searchable-fields: "Identity-scoped subset of `repositories` returning only repos owned by the authenticated viewer; the `repositories` context-store entity already covers cached search."
 
 servers:
   - url: https://api.github.com

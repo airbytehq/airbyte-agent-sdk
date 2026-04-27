@@ -710,6 +710,566 @@ class CommentsSearchQuery(TypedDict, total=False):
     sort: list[CommentsSortFilter]
 
 
+# ===== COMMITS SEARCH TYPES =====
+
+class CommitsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering commits search queries."""
+    oid: str | None
+    """Full Git commit SHA"""
+    abbreviated_oid: str | None
+    """Abbreviated Git commit SHA (typically 7 characters)"""
+    message_headline: str | None
+    """First line of the commit message"""
+    message: str | None
+    """Full commit message"""
+    committed_date: str | None
+    """ISO 8601 timestamp when the commit was applied to its tree"""
+    authored_date: str | None
+    """ISO 8601 timestamp when the commit was originally authored"""
+    additions: int | None
+    """Number of lines added across all files in the commit"""
+    deletions: int | None
+    """Number of lines deleted across all files in the commit"""
+    changed_files: int | None
+    """Number of files changed in the commit"""
+    url: str | None
+    """Permalink to the commit on GitHub"""
+
+
+class CommitsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    oid: list[str]
+    """Full Git commit SHA"""
+    abbreviated_oid: list[str]
+    """Abbreviated Git commit SHA (typically 7 characters)"""
+    message_headline: list[str]
+    """First line of the commit message"""
+    message: list[str]
+    """Full commit message"""
+    committed_date: list[str]
+    """ISO 8601 timestamp when the commit was applied to its tree"""
+    authored_date: list[str]
+    """ISO 8601 timestamp when the commit was originally authored"""
+    additions: list[int]
+    """Number of lines added across all files in the commit"""
+    deletions: list[int]
+    """Number of lines deleted across all files in the commit"""
+    changed_files: list[int]
+    """Number of files changed in the commit"""
+    url: list[str]
+    """Permalink to the commit on GitHub"""
+
+
+class CommitsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    oid: Any
+    """Full Git commit SHA"""
+    abbreviated_oid: Any
+    """Abbreviated Git commit SHA (typically 7 characters)"""
+    message_headline: Any
+    """First line of the commit message"""
+    message: Any
+    """Full commit message"""
+    committed_date: Any
+    """ISO 8601 timestamp when the commit was applied to its tree"""
+    authored_date: Any
+    """ISO 8601 timestamp when the commit was originally authored"""
+    additions: Any
+    """Number of lines added across all files in the commit"""
+    deletions: Any
+    """Number of lines deleted across all files in the commit"""
+    changed_files: Any
+    """Number of files changed in the commit"""
+    url: Any
+    """Permalink to the commit on GitHub"""
+
+
+class CommitsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    oid: str
+    """Full Git commit SHA"""
+    abbreviated_oid: str
+    """Abbreviated Git commit SHA (typically 7 characters)"""
+    message_headline: str
+    """First line of the commit message"""
+    message: str
+    """Full commit message"""
+    committed_date: str
+    """ISO 8601 timestamp when the commit was applied to its tree"""
+    authored_date: str
+    """ISO 8601 timestamp when the commit was originally authored"""
+    additions: str
+    """Number of lines added across all files in the commit"""
+    deletions: str
+    """Number of lines deleted across all files in the commit"""
+    changed_files: str
+    """Number of files changed in the commit"""
+    url: str
+    """Permalink to the commit on GitHub"""
+
+
+class CommitsSortFilter(TypedDict, total=False):
+    """Available fields for sorting commits search results."""
+    oid: AirbyteSortOrder
+    """Full Git commit SHA"""
+    abbreviated_oid: AirbyteSortOrder
+    """Abbreviated Git commit SHA (typically 7 characters)"""
+    message_headline: AirbyteSortOrder
+    """First line of the commit message"""
+    message: AirbyteSortOrder
+    """Full commit message"""
+    committed_date: AirbyteSortOrder
+    """ISO 8601 timestamp when the commit was applied to its tree"""
+    authored_date: AirbyteSortOrder
+    """ISO 8601 timestamp when the commit was originally authored"""
+    additions: AirbyteSortOrder
+    """Number of lines added across all files in the commit"""
+    deletions: AirbyteSortOrder
+    """Number of lines deleted across all files in the commit"""
+    changed_files: AirbyteSortOrder
+    """Number of files changed in the commit"""
+    url: AirbyteSortOrder
+    """Permalink to the commit on GitHub"""
+
+
+# Entity-specific condition types for commits
+class CommitsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: CommitsSearchFilter
+
+
+class CommitsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: CommitsSearchFilter
+
+
+class CommitsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: CommitsSearchFilter
+
+
+class CommitsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: CommitsSearchFilter
+
+
+class CommitsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: CommitsSearchFilter
+
+
+class CommitsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: CommitsSearchFilter
+
+
+class CommitsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: CommitsStringFilter
+
+
+class CommitsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: CommitsStringFilter
+
+
+class CommitsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: CommitsStringFilter
+
+
+class CommitsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: CommitsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+CommitsInCondition = TypedDict("CommitsInCondition", {"in": CommitsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+CommitsNotCondition = TypedDict("CommitsNotCondition", {"not": "CommitsCondition"}, total=False)
+"""Negates the nested condition."""
+
+CommitsAndCondition = TypedDict("CommitsAndCondition", {"and": "list[CommitsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+CommitsOrCondition = TypedDict("CommitsOrCondition", {"or": "list[CommitsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+CommitsAnyCondition = TypedDict("CommitsAnyCondition", {"any": CommitsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all commits condition types
+CommitsCondition = (
+    CommitsEqCondition
+    | CommitsNeqCondition
+    | CommitsGtCondition
+    | CommitsGteCondition
+    | CommitsLtCondition
+    | CommitsLteCondition
+    | CommitsInCondition
+    | CommitsLikeCondition
+    | CommitsFuzzyCondition
+    | CommitsKeywordCondition
+    | CommitsContainsCondition
+    | CommitsNotCondition
+    | CommitsAndCondition
+    | CommitsOrCondition
+    | CommitsAnyCondition
+)
+
+
+class CommitsSearchQuery(TypedDict, total=False):
+    """Search query for commits entity."""
+    filter: CommitsCondition
+    sort: list[CommitsSortFilter]
+
+
+# ===== DIRECTORY_CONTENT SEARCH TYPES =====
+
+class DirectoryContentSearchFilter(TypedDict, total=False):
+    """Available fields for filtering directory_content search queries."""
+
+
+class DirectoryContentInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class DirectoryContentAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class DirectoryContentStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class DirectoryContentSortFilter(TypedDict, total=False):
+    """Available fields for sorting directory_content search results."""
+
+
+# Entity-specific condition types for directory_content
+class DirectoryContentEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: DirectoryContentSearchFilter
+
+
+class DirectoryContentNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: DirectoryContentSearchFilter
+
+
+class DirectoryContentGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: DirectoryContentSearchFilter
+
+
+class DirectoryContentGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: DirectoryContentSearchFilter
+
+
+class DirectoryContentLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: DirectoryContentSearchFilter
+
+
+class DirectoryContentLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: DirectoryContentSearchFilter
+
+
+class DirectoryContentLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: DirectoryContentStringFilter
+
+
+class DirectoryContentFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: DirectoryContentStringFilter
+
+
+class DirectoryContentKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: DirectoryContentStringFilter
+
+
+class DirectoryContentContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: DirectoryContentAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+DirectoryContentInCondition = TypedDict("DirectoryContentInCondition", {"in": DirectoryContentInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+DirectoryContentNotCondition = TypedDict("DirectoryContentNotCondition", {"not": "DirectoryContentCondition"}, total=False)
+"""Negates the nested condition."""
+
+DirectoryContentAndCondition = TypedDict("DirectoryContentAndCondition", {"and": "list[DirectoryContentCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+DirectoryContentOrCondition = TypedDict("DirectoryContentOrCondition", {"or": "list[DirectoryContentCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+DirectoryContentAnyCondition = TypedDict("DirectoryContentAnyCondition", {"any": DirectoryContentAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all directory_content condition types
+DirectoryContentCondition = (
+    DirectoryContentEqCondition
+    | DirectoryContentNeqCondition
+    | DirectoryContentGtCondition
+    | DirectoryContentGteCondition
+    | DirectoryContentLtCondition
+    | DirectoryContentLteCondition
+    | DirectoryContentInCondition
+    | DirectoryContentLikeCondition
+    | DirectoryContentFuzzyCondition
+    | DirectoryContentKeywordCondition
+    | DirectoryContentContainsCondition
+    | DirectoryContentNotCondition
+    | DirectoryContentAndCondition
+    | DirectoryContentOrCondition
+    | DirectoryContentAnyCondition
+)
+
+
+class DirectoryContentSearchQuery(TypedDict, total=False):
+    """Search query for directory_content entity."""
+    filter: DirectoryContentCondition
+    sort: list[DirectoryContentSortFilter]
+
+
+# ===== DISCUSSIONS SEARCH TYPES =====
+
+class DiscussionsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering discussions search queries."""
+
+
+class DiscussionsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class DiscussionsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class DiscussionsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class DiscussionsSortFilter(TypedDict, total=False):
+    """Available fields for sorting discussions search results."""
+
+
+# Entity-specific condition types for discussions
+class DiscussionsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: DiscussionsSearchFilter
+
+
+class DiscussionsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: DiscussionsSearchFilter
+
+
+class DiscussionsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: DiscussionsSearchFilter
+
+
+class DiscussionsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: DiscussionsSearchFilter
+
+
+class DiscussionsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: DiscussionsSearchFilter
+
+
+class DiscussionsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: DiscussionsSearchFilter
+
+
+class DiscussionsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: DiscussionsStringFilter
+
+
+class DiscussionsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: DiscussionsStringFilter
+
+
+class DiscussionsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: DiscussionsStringFilter
+
+
+class DiscussionsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: DiscussionsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+DiscussionsInCondition = TypedDict("DiscussionsInCondition", {"in": DiscussionsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+DiscussionsNotCondition = TypedDict("DiscussionsNotCondition", {"not": "DiscussionsCondition"}, total=False)
+"""Negates the nested condition."""
+
+DiscussionsAndCondition = TypedDict("DiscussionsAndCondition", {"and": "list[DiscussionsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+DiscussionsOrCondition = TypedDict("DiscussionsOrCondition", {"or": "list[DiscussionsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+DiscussionsAnyCondition = TypedDict("DiscussionsAnyCondition", {"any": DiscussionsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all discussions condition types
+DiscussionsCondition = (
+    DiscussionsEqCondition
+    | DiscussionsNeqCondition
+    | DiscussionsGtCondition
+    | DiscussionsGteCondition
+    | DiscussionsLtCondition
+    | DiscussionsLteCondition
+    | DiscussionsInCondition
+    | DiscussionsLikeCondition
+    | DiscussionsFuzzyCondition
+    | DiscussionsKeywordCondition
+    | DiscussionsContainsCondition
+    | DiscussionsNotCondition
+    | DiscussionsAndCondition
+    | DiscussionsOrCondition
+    | DiscussionsAnyCondition
+)
+
+
+class DiscussionsSearchQuery(TypedDict, total=False):
+    """Search query for discussions entity."""
+    filter: DiscussionsCondition
+    sort: list[DiscussionsSortFilter]
+
+
+# ===== FILE_CONTENT SEARCH TYPES =====
+
+class FileContentSearchFilter(TypedDict, total=False):
+    """Available fields for filtering file_content search queries."""
+
+
+class FileContentInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class FileContentAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class FileContentStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class FileContentSortFilter(TypedDict, total=False):
+    """Available fields for sorting file_content search results."""
+
+
+# Entity-specific condition types for file_content
+class FileContentEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: FileContentSearchFilter
+
+
+class FileContentNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: FileContentSearchFilter
+
+
+class FileContentGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: FileContentSearchFilter
+
+
+class FileContentGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: FileContentSearchFilter
+
+
+class FileContentLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: FileContentSearchFilter
+
+
+class FileContentLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: FileContentSearchFilter
+
+
+class FileContentLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: FileContentStringFilter
+
+
+class FileContentFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: FileContentStringFilter
+
+
+class FileContentKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: FileContentStringFilter
+
+
+class FileContentContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: FileContentAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+FileContentInCondition = TypedDict("FileContentInCondition", {"in": FileContentInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+FileContentNotCondition = TypedDict("FileContentNotCondition", {"not": "FileContentCondition"}, total=False)
+"""Negates the nested condition."""
+
+FileContentAndCondition = TypedDict("FileContentAndCondition", {"and": "list[FileContentCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+FileContentOrCondition = TypedDict("FileContentOrCondition", {"or": "list[FileContentCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+FileContentAnyCondition = TypedDict("FileContentAnyCondition", {"any": FileContentAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all file_content condition types
+FileContentCondition = (
+    FileContentEqCondition
+    | FileContentNeqCondition
+    | FileContentGtCondition
+    | FileContentGteCondition
+    | FileContentLtCondition
+    | FileContentLteCondition
+    | FileContentInCondition
+    | FileContentLikeCondition
+    | FileContentFuzzyCondition
+    | FileContentKeywordCondition
+    | FileContentContainsCondition
+    | FileContentNotCondition
+    | FileContentAndCondition
+    | FileContentOrCondition
+    | FileContentAnyCondition
+)
+
+
+class FileContentSearchQuery(TypedDict, total=False):
+    """Search query for file_content entity."""
+    filter: FileContentCondition
+    sort: list[FileContentSortFilter]
+
+
 # ===== ISSUES SEARCH TYPES =====
 
 class IssuesSearchFilter(TypedDict, total=False):
@@ -935,6 +1495,396 @@ class IssuesSearchQuery(TypedDict, total=False):
     sort: list[IssuesSortFilter]
 
 
+# ===== LABELS SEARCH TYPES =====
+
+class LabelsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering labels search queries."""
+    id: str | None
+    """GraphQL node ID of the label"""
+    name: str | None
+    """Label name"""
+    color: str | None
+    """Label color as a 6-character hex string without a leading `#`"""
+    description: str | None
+    """Short description of what the label is used for"""
+    created_at: str | None
+    """ISO 8601 timestamp when the label was created"""
+    url: str | None
+    """Permalink to the label on GitHub"""
+
+
+class LabelsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the label"""
+    name: list[str]
+    """Label name"""
+    color: list[str]
+    """Label color as a 6-character hex string without a leading `#`"""
+    description: list[str]
+    """Short description of what the label is used for"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the label was created"""
+    url: list[str]
+    """Permalink to the label on GitHub"""
+
+
+class LabelsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the label"""
+    name: Any
+    """Label name"""
+    color: Any
+    """Label color as a 6-character hex string without a leading `#`"""
+    description: Any
+    """Short description of what the label is used for"""
+    created_at: Any
+    """ISO 8601 timestamp when the label was created"""
+    url: Any
+    """Permalink to the label on GitHub"""
+
+
+class LabelsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the label"""
+    name: str
+    """Label name"""
+    color: str
+    """Label color as a 6-character hex string without a leading `#`"""
+    description: str
+    """Short description of what the label is used for"""
+    created_at: str
+    """ISO 8601 timestamp when the label was created"""
+    url: str
+    """Permalink to the label on GitHub"""
+
+
+class LabelsSortFilter(TypedDict, total=False):
+    """Available fields for sorting labels search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the label"""
+    name: AirbyteSortOrder
+    """Label name"""
+    color: AirbyteSortOrder
+    """Label color as a 6-character hex string without a leading `#`"""
+    description: AirbyteSortOrder
+    """Short description of what the label is used for"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the label was created"""
+    url: AirbyteSortOrder
+    """Permalink to the label on GitHub"""
+
+
+# Entity-specific condition types for labels
+class LabelsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: LabelsSearchFilter
+
+
+class LabelsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: LabelsSearchFilter
+
+
+class LabelsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: LabelsSearchFilter
+
+
+class LabelsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: LabelsSearchFilter
+
+
+class LabelsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: LabelsSearchFilter
+
+
+class LabelsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: LabelsSearchFilter
+
+
+class LabelsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: LabelsStringFilter
+
+
+class LabelsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: LabelsStringFilter
+
+
+class LabelsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: LabelsStringFilter
+
+
+class LabelsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: LabelsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+LabelsInCondition = TypedDict("LabelsInCondition", {"in": LabelsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+LabelsNotCondition = TypedDict("LabelsNotCondition", {"not": "LabelsCondition"}, total=False)
+"""Negates the nested condition."""
+
+LabelsAndCondition = TypedDict("LabelsAndCondition", {"and": "list[LabelsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+LabelsOrCondition = TypedDict("LabelsOrCondition", {"or": "list[LabelsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+LabelsAnyCondition = TypedDict("LabelsAnyCondition", {"any": LabelsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all labels condition types
+LabelsCondition = (
+    LabelsEqCondition
+    | LabelsNeqCondition
+    | LabelsGtCondition
+    | LabelsGteCondition
+    | LabelsLtCondition
+    | LabelsLteCondition
+    | LabelsInCondition
+    | LabelsLikeCondition
+    | LabelsFuzzyCondition
+    | LabelsKeywordCondition
+    | LabelsContainsCondition
+    | LabelsNotCondition
+    | LabelsAndCondition
+    | LabelsOrCondition
+    | LabelsAnyCondition
+)
+
+
+class LabelsSearchQuery(TypedDict, total=False):
+    """Search query for labels entity."""
+    filter: LabelsCondition
+    sort: list[LabelsSortFilter]
+
+
+# ===== MILESTONES SEARCH TYPES =====
+
+class MilestonesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering milestones search queries."""
+    id: str | None
+    """GraphQL node ID of the milestone"""
+    number: int | None
+    """Repository-scoped milestone number"""
+    title: str | None
+    """Milestone title"""
+    description: str | None
+    """Milestone description"""
+    state: str | None
+    """Milestone state: `OPEN` or `CLOSED`"""
+    due_on: str | None
+    """ISO 8601 timestamp for the milestone's due date, if set"""
+    closed_at: str | None
+    """ISO 8601 timestamp when the milestone was closed, if applicable"""
+    created_at: str | None
+    """ISO 8601 timestamp when the milestone was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the milestone was last updated"""
+    progress_percentage: float | None
+    """Percentage of associated issues/PRs that are closed"""
+
+
+class MilestonesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the milestone"""
+    number: list[int]
+    """Repository-scoped milestone number"""
+    title: list[str]
+    """Milestone title"""
+    description: list[str]
+    """Milestone description"""
+    state: list[str]
+    """Milestone state: `OPEN` or `CLOSED`"""
+    due_on: list[str]
+    """ISO 8601 timestamp for the milestone's due date, if set"""
+    closed_at: list[str]
+    """ISO 8601 timestamp when the milestone was closed, if applicable"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the milestone was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the milestone was last updated"""
+    progress_percentage: list[float]
+    """Percentage of associated issues/PRs that are closed"""
+
+
+class MilestonesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the milestone"""
+    number: Any
+    """Repository-scoped milestone number"""
+    title: Any
+    """Milestone title"""
+    description: Any
+    """Milestone description"""
+    state: Any
+    """Milestone state: `OPEN` or `CLOSED`"""
+    due_on: Any
+    """ISO 8601 timestamp for the milestone's due date, if set"""
+    closed_at: Any
+    """ISO 8601 timestamp when the milestone was closed, if applicable"""
+    created_at: Any
+    """ISO 8601 timestamp when the milestone was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the milestone was last updated"""
+    progress_percentage: Any
+    """Percentage of associated issues/PRs that are closed"""
+
+
+class MilestonesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the milestone"""
+    number: str
+    """Repository-scoped milestone number"""
+    title: str
+    """Milestone title"""
+    description: str
+    """Milestone description"""
+    state: str
+    """Milestone state: `OPEN` or `CLOSED`"""
+    due_on: str
+    """ISO 8601 timestamp for the milestone's due date, if set"""
+    closed_at: str
+    """ISO 8601 timestamp when the milestone was closed, if applicable"""
+    created_at: str
+    """ISO 8601 timestamp when the milestone was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the milestone was last updated"""
+    progress_percentage: str
+    """Percentage of associated issues/PRs that are closed"""
+
+
+class MilestonesSortFilter(TypedDict, total=False):
+    """Available fields for sorting milestones search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the milestone"""
+    number: AirbyteSortOrder
+    """Repository-scoped milestone number"""
+    title: AirbyteSortOrder
+    """Milestone title"""
+    description: AirbyteSortOrder
+    """Milestone description"""
+    state: AirbyteSortOrder
+    """Milestone state: `OPEN` or `CLOSED`"""
+    due_on: AirbyteSortOrder
+    """ISO 8601 timestamp for the milestone's due date, if set"""
+    closed_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the milestone was closed, if applicable"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the milestone was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the milestone was last updated"""
+    progress_percentage: AirbyteSortOrder
+    """Percentage of associated issues/PRs that are closed"""
+
+
+# Entity-specific condition types for milestones
+class MilestonesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: MilestonesSearchFilter
+
+
+class MilestonesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: MilestonesSearchFilter
+
+
+class MilestonesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: MilestonesSearchFilter
+
+
+class MilestonesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: MilestonesSearchFilter
+
+
+class MilestonesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: MilestonesSearchFilter
+
+
+class MilestonesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: MilestonesSearchFilter
+
+
+class MilestonesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: MilestonesStringFilter
+
+
+class MilestonesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: MilestonesStringFilter
+
+
+class MilestonesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: MilestonesStringFilter
+
+
+class MilestonesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: MilestonesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+MilestonesInCondition = TypedDict("MilestonesInCondition", {"in": MilestonesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+MilestonesNotCondition = TypedDict("MilestonesNotCondition", {"not": "MilestonesCondition"}, total=False)
+"""Negates the nested condition."""
+
+MilestonesAndCondition = TypedDict("MilestonesAndCondition", {"and": "list[MilestonesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+MilestonesOrCondition = TypedDict("MilestonesOrCondition", {"or": "list[MilestonesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+MilestonesAnyCondition = TypedDict("MilestonesAnyCondition", {"any": MilestonesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all milestones condition types
+MilestonesCondition = (
+    MilestonesEqCondition
+    | MilestonesNeqCondition
+    | MilestonesGtCondition
+    | MilestonesGteCondition
+    | MilestonesLtCondition
+    | MilestonesLteCondition
+    | MilestonesInCondition
+    | MilestonesLikeCondition
+    | MilestonesFuzzyCondition
+    | MilestonesKeywordCondition
+    | MilestonesContainsCondition
+    | MilestonesNotCondition
+    | MilestonesAndCondition
+    | MilestonesOrCondition
+    | MilestonesAnyCondition
+)
+
+
+class MilestonesSearchQuery(TypedDict, total=False):
+    """Search query for milestones entity."""
+    filter: MilestonesCondition
+    sort: list[MilestonesSortFilter]
+
+
 # ===== ORGANIZATIONS SEARCH TYPES =====
 
 class OrganizationsSearchFilter(TypedDict, total=False):
@@ -1138,6 +2088,556 @@ class OrganizationsSearchQuery(TypedDict, total=False):
     """Search query for organizations entity."""
     filter: OrganizationsCondition
     sort: list[OrganizationsSortFilter]
+
+
+# ===== ORG_REPOSITORIES SEARCH TYPES =====
+
+class OrgRepositoriesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering org_repositories search queries."""
+
+
+class OrgRepositoriesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class OrgRepositoriesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class OrgRepositoriesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class OrgRepositoriesSortFilter(TypedDict, total=False):
+    """Available fields for sorting org_repositories search results."""
+
+
+# Entity-specific condition types for org_repositories
+class OrgRepositoriesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: OrgRepositoriesSearchFilter
+
+
+class OrgRepositoriesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: OrgRepositoriesSearchFilter
+
+
+class OrgRepositoriesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: OrgRepositoriesSearchFilter
+
+
+class OrgRepositoriesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: OrgRepositoriesSearchFilter
+
+
+class OrgRepositoriesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: OrgRepositoriesSearchFilter
+
+
+class OrgRepositoriesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: OrgRepositoriesSearchFilter
+
+
+class OrgRepositoriesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: OrgRepositoriesStringFilter
+
+
+class OrgRepositoriesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: OrgRepositoriesStringFilter
+
+
+class OrgRepositoriesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: OrgRepositoriesStringFilter
+
+
+class OrgRepositoriesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: OrgRepositoriesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+OrgRepositoriesInCondition = TypedDict("OrgRepositoriesInCondition", {"in": OrgRepositoriesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+OrgRepositoriesNotCondition = TypedDict("OrgRepositoriesNotCondition", {"not": "OrgRepositoriesCondition"}, total=False)
+"""Negates the nested condition."""
+
+OrgRepositoriesAndCondition = TypedDict("OrgRepositoriesAndCondition", {"and": "list[OrgRepositoriesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+OrgRepositoriesOrCondition = TypedDict("OrgRepositoriesOrCondition", {"or": "list[OrgRepositoriesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+OrgRepositoriesAnyCondition = TypedDict("OrgRepositoriesAnyCondition", {"any": OrgRepositoriesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all org_repositories condition types
+OrgRepositoriesCondition = (
+    OrgRepositoriesEqCondition
+    | OrgRepositoriesNeqCondition
+    | OrgRepositoriesGtCondition
+    | OrgRepositoriesGteCondition
+    | OrgRepositoriesLtCondition
+    | OrgRepositoriesLteCondition
+    | OrgRepositoriesInCondition
+    | OrgRepositoriesLikeCondition
+    | OrgRepositoriesFuzzyCondition
+    | OrgRepositoriesKeywordCondition
+    | OrgRepositoriesContainsCondition
+    | OrgRepositoriesNotCondition
+    | OrgRepositoriesAndCondition
+    | OrgRepositoriesOrCondition
+    | OrgRepositoriesAnyCondition
+)
+
+
+class OrgRepositoriesSearchQuery(TypedDict, total=False):
+    """Search query for org_repositories entity."""
+    filter: OrgRepositoriesCondition
+    sort: list[OrgRepositoriesSortFilter]
+
+
+# ===== PR_COMMENTS SEARCH TYPES =====
+
+class PrCommentsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering pr_comments search queries."""
+
+
+class PrCommentsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class PrCommentsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class PrCommentsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class PrCommentsSortFilter(TypedDict, total=False):
+    """Available fields for sorting pr_comments search results."""
+
+
+# Entity-specific condition types for pr_comments
+class PrCommentsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: PrCommentsSearchFilter
+
+
+class PrCommentsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: PrCommentsSearchFilter
+
+
+class PrCommentsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: PrCommentsSearchFilter
+
+
+class PrCommentsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: PrCommentsSearchFilter
+
+
+class PrCommentsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: PrCommentsSearchFilter
+
+
+class PrCommentsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: PrCommentsSearchFilter
+
+
+class PrCommentsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: PrCommentsStringFilter
+
+
+class PrCommentsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: PrCommentsStringFilter
+
+
+class PrCommentsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: PrCommentsStringFilter
+
+
+class PrCommentsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: PrCommentsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+PrCommentsInCondition = TypedDict("PrCommentsInCondition", {"in": PrCommentsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+PrCommentsNotCondition = TypedDict("PrCommentsNotCondition", {"not": "PrCommentsCondition"}, total=False)
+"""Negates the nested condition."""
+
+PrCommentsAndCondition = TypedDict("PrCommentsAndCondition", {"and": "list[PrCommentsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+PrCommentsOrCondition = TypedDict("PrCommentsOrCondition", {"or": "list[PrCommentsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+PrCommentsAnyCondition = TypedDict("PrCommentsAnyCondition", {"any": PrCommentsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all pr_comments condition types
+PrCommentsCondition = (
+    PrCommentsEqCondition
+    | PrCommentsNeqCondition
+    | PrCommentsGtCondition
+    | PrCommentsGteCondition
+    | PrCommentsLtCondition
+    | PrCommentsLteCondition
+    | PrCommentsInCondition
+    | PrCommentsLikeCondition
+    | PrCommentsFuzzyCondition
+    | PrCommentsKeywordCondition
+    | PrCommentsContainsCondition
+    | PrCommentsNotCondition
+    | PrCommentsAndCondition
+    | PrCommentsOrCondition
+    | PrCommentsAnyCondition
+)
+
+
+class PrCommentsSearchQuery(TypedDict, total=False):
+    """Search query for pr_comments entity."""
+    filter: PrCommentsCondition
+    sort: list[PrCommentsSortFilter]
+
+
+# ===== PROJECT_ITEMS SEARCH TYPES =====
+
+class ProjectItemsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering project_items search queries."""
+
+
+class ProjectItemsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class ProjectItemsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class ProjectItemsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class ProjectItemsSortFilter(TypedDict, total=False):
+    """Available fields for sorting project_items search results."""
+
+
+# Entity-specific condition types for project_items
+class ProjectItemsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ProjectItemsSearchFilter
+
+
+class ProjectItemsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ProjectItemsSearchFilter
+
+
+class ProjectItemsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ProjectItemsSearchFilter
+
+
+class ProjectItemsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ProjectItemsSearchFilter
+
+
+class ProjectItemsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ProjectItemsSearchFilter
+
+
+class ProjectItemsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ProjectItemsSearchFilter
+
+
+class ProjectItemsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ProjectItemsStringFilter
+
+
+class ProjectItemsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ProjectItemsStringFilter
+
+
+class ProjectItemsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ProjectItemsStringFilter
+
+
+class ProjectItemsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ProjectItemsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ProjectItemsInCondition = TypedDict("ProjectItemsInCondition", {"in": ProjectItemsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ProjectItemsNotCondition = TypedDict("ProjectItemsNotCondition", {"not": "ProjectItemsCondition"}, total=False)
+"""Negates the nested condition."""
+
+ProjectItemsAndCondition = TypedDict("ProjectItemsAndCondition", {"and": "list[ProjectItemsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ProjectItemsOrCondition = TypedDict("ProjectItemsOrCondition", {"or": "list[ProjectItemsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ProjectItemsAnyCondition = TypedDict("ProjectItemsAnyCondition", {"any": ProjectItemsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all project_items condition types
+ProjectItemsCondition = (
+    ProjectItemsEqCondition
+    | ProjectItemsNeqCondition
+    | ProjectItemsGtCondition
+    | ProjectItemsGteCondition
+    | ProjectItemsLtCondition
+    | ProjectItemsLteCondition
+    | ProjectItemsInCondition
+    | ProjectItemsLikeCondition
+    | ProjectItemsFuzzyCondition
+    | ProjectItemsKeywordCondition
+    | ProjectItemsContainsCondition
+    | ProjectItemsNotCondition
+    | ProjectItemsAndCondition
+    | ProjectItemsOrCondition
+    | ProjectItemsAnyCondition
+)
+
+
+class ProjectItemsSearchQuery(TypedDict, total=False):
+    """Search query for project_items entity."""
+    filter: ProjectItemsCondition
+    sort: list[ProjectItemsSortFilter]
+
+
+# ===== PROJECTS SEARCH TYPES =====
+
+class ProjectsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering projects search queries."""
+    id: str | None
+    """GraphQL node ID of the project"""
+    number: int | None
+    """Organization- or user-scoped project number"""
+    title: str | None
+    """Project title"""
+    short_description: str | None
+    """Short description displayed on the project summary"""
+    url: str | None
+    """Permalink to the project on GitHub"""
+    closed: bool | None
+    """Whether the project has been closed"""
+    public: bool | None
+    """Whether the project is publicly visible"""
+    created_at: str | None
+    """ISO 8601 timestamp when the project was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the project was last updated"""
+
+
+class ProjectsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the project"""
+    number: list[int]
+    """Organization- or user-scoped project number"""
+    title: list[str]
+    """Project title"""
+    short_description: list[str]
+    """Short description displayed on the project summary"""
+    url: list[str]
+    """Permalink to the project on GitHub"""
+    closed: list[bool]
+    """Whether the project has been closed"""
+    public: list[bool]
+    """Whether the project is publicly visible"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the project was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the project was last updated"""
+
+
+class ProjectsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the project"""
+    number: Any
+    """Organization- or user-scoped project number"""
+    title: Any
+    """Project title"""
+    short_description: Any
+    """Short description displayed on the project summary"""
+    url: Any
+    """Permalink to the project on GitHub"""
+    closed: Any
+    """Whether the project has been closed"""
+    public: Any
+    """Whether the project is publicly visible"""
+    created_at: Any
+    """ISO 8601 timestamp when the project was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the project was last updated"""
+
+
+class ProjectsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the project"""
+    number: str
+    """Organization- or user-scoped project number"""
+    title: str
+    """Project title"""
+    short_description: str
+    """Short description displayed on the project summary"""
+    url: str
+    """Permalink to the project on GitHub"""
+    closed: str
+    """Whether the project has been closed"""
+    public: str
+    """Whether the project is publicly visible"""
+    created_at: str
+    """ISO 8601 timestamp when the project was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the project was last updated"""
+
+
+class ProjectsSortFilter(TypedDict, total=False):
+    """Available fields for sorting projects search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the project"""
+    number: AirbyteSortOrder
+    """Organization- or user-scoped project number"""
+    title: AirbyteSortOrder
+    """Project title"""
+    short_description: AirbyteSortOrder
+    """Short description displayed on the project summary"""
+    url: AirbyteSortOrder
+    """Permalink to the project on GitHub"""
+    closed: AirbyteSortOrder
+    """Whether the project has been closed"""
+    public: AirbyteSortOrder
+    """Whether the project is publicly visible"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the project was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the project was last updated"""
+
+
+# Entity-specific condition types for projects
+class ProjectsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ProjectsSearchFilter
+
+
+class ProjectsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ProjectsSearchFilter
+
+
+class ProjectsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ProjectsSearchFilter
+
+
+class ProjectsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ProjectsSearchFilter
+
+
+class ProjectsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ProjectsSearchFilter
+
+
+class ProjectsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ProjectsSearchFilter
+
+
+class ProjectsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ProjectsStringFilter
+
+
+class ProjectsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ProjectsStringFilter
+
+
+class ProjectsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ProjectsStringFilter
+
+
+class ProjectsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ProjectsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ProjectsInCondition = TypedDict("ProjectsInCondition", {"in": ProjectsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ProjectsNotCondition = TypedDict("ProjectsNotCondition", {"not": "ProjectsCondition"}, total=False)
+"""Negates the nested condition."""
+
+ProjectsAndCondition = TypedDict("ProjectsAndCondition", {"and": "list[ProjectsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ProjectsOrCondition = TypedDict("ProjectsOrCondition", {"or": "list[ProjectsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ProjectsAnyCondition = TypedDict("ProjectsAnyCondition", {"any": ProjectsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all projects condition types
+ProjectsCondition = (
+    ProjectsEqCondition
+    | ProjectsNeqCondition
+    | ProjectsGtCondition
+    | ProjectsGteCondition
+    | ProjectsLtCondition
+    | ProjectsLteCondition
+    | ProjectsInCondition
+    | ProjectsLikeCondition
+    | ProjectsFuzzyCondition
+    | ProjectsKeywordCondition
+    | ProjectsContainsCondition
+    | ProjectsNotCondition
+    | ProjectsAndCondition
+    | ProjectsOrCondition
+    | ProjectsAnyCondition
+)
+
+
+class ProjectsSearchQuery(TypedDict, total=False):
+    """Search query for projects entity."""
+    filter: ProjectsCondition
+    sort: list[ProjectsSortFilter]
 
 
 # ===== PULL_REQUESTS SEARCH TYPES =====
@@ -1395,6 +2895,221 @@ class PullRequestsSearchQuery(TypedDict, total=False):
     sort: list[PullRequestsSortFilter]
 
 
+# ===== RELEASES SEARCH TYPES =====
+
+class ReleasesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering releases search queries."""
+    id: str | None
+    """GraphQL node ID of the release"""
+    database_id: int | None
+    """REST API numeric identifier for the release"""
+    name: str | None
+    """Display name of the release"""
+    tag_name: str | None
+    """Git tag the release points at (e.g. `v1.2.3`)"""
+    description: str | None
+    """Markdown body / release notes"""
+    published_at: str | None
+    """ISO 8601 timestamp when the release was published"""
+    created_at: str | None
+    """ISO 8601 timestamp when the release was created"""
+    is_prerelease: bool | None
+    """Whether the release is marked as a pre-release"""
+    is_draft: bool | None
+    """Whether the release is still a draft and not published"""
+    url: str | None
+    """Permalink to the release on GitHub"""
+
+
+class ReleasesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the release"""
+    database_id: list[int]
+    """REST API numeric identifier for the release"""
+    name: list[str]
+    """Display name of the release"""
+    tag_name: list[str]
+    """Git tag the release points at (e.g. `v1.2.3`)"""
+    description: list[str]
+    """Markdown body / release notes"""
+    published_at: list[str]
+    """ISO 8601 timestamp when the release was published"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the release was created"""
+    is_prerelease: list[bool]
+    """Whether the release is marked as a pre-release"""
+    is_draft: list[bool]
+    """Whether the release is still a draft and not published"""
+    url: list[str]
+    """Permalink to the release on GitHub"""
+
+
+class ReleasesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the release"""
+    database_id: Any
+    """REST API numeric identifier for the release"""
+    name: Any
+    """Display name of the release"""
+    tag_name: Any
+    """Git tag the release points at (e.g. `v1.2.3`)"""
+    description: Any
+    """Markdown body / release notes"""
+    published_at: Any
+    """ISO 8601 timestamp when the release was published"""
+    created_at: Any
+    """ISO 8601 timestamp when the release was created"""
+    is_prerelease: Any
+    """Whether the release is marked as a pre-release"""
+    is_draft: Any
+    """Whether the release is still a draft and not published"""
+    url: Any
+    """Permalink to the release on GitHub"""
+
+
+class ReleasesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the release"""
+    database_id: str
+    """REST API numeric identifier for the release"""
+    name: str
+    """Display name of the release"""
+    tag_name: str
+    """Git tag the release points at (e.g. `v1.2.3`)"""
+    description: str
+    """Markdown body / release notes"""
+    published_at: str
+    """ISO 8601 timestamp when the release was published"""
+    created_at: str
+    """ISO 8601 timestamp when the release was created"""
+    is_prerelease: str
+    """Whether the release is marked as a pre-release"""
+    is_draft: str
+    """Whether the release is still a draft and not published"""
+    url: str
+    """Permalink to the release on GitHub"""
+
+
+class ReleasesSortFilter(TypedDict, total=False):
+    """Available fields for sorting releases search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the release"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the release"""
+    name: AirbyteSortOrder
+    """Display name of the release"""
+    tag_name: AirbyteSortOrder
+    """Git tag the release points at (e.g. `v1.2.3`)"""
+    description: AirbyteSortOrder
+    """Markdown body / release notes"""
+    published_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the release was published"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the release was created"""
+    is_prerelease: AirbyteSortOrder
+    """Whether the release is marked as a pre-release"""
+    is_draft: AirbyteSortOrder
+    """Whether the release is still a draft and not published"""
+    url: AirbyteSortOrder
+    """Permalink to the release on GitHub"""
+
+
+# Entity-specific condition types for releases
+class ReleasesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ReleasesSearchFilter
+
+
+class ReleasesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ReleasesSearchFilter
+
+
+class ReleasesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ReleasesSearchFilter
+
+
+class ReleasesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ReleasesSearchFilter
+
+
+class ReleasesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ReleasesSearchFilter
+
+
+class ReleasesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ReleasesSearchFilter
+
+
+class ReleasesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ReleasesStringFilter
+
+
+class ReleasesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ReleasesStringFilter
+
+
+class ReleasesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ReleasesStringFilter
+
+
+class ReleasesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ReleasesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ReleasesInCondition = TypedDict("ReleasesInCondition", {"in": ReleasesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ReleasesNotCondition = TypedDict("ReleasesNotCondition", {"not": "ReleasesCondition"}, total=False)
+"""Negates the nested condition."""
+
+ReleasesAndCondition = TypedDict("ReleasesAndCondition", {"and": "list[ReleasesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ReleasesOrCondition = TypedDict("ReleasesOrCondition", {"or": "list[ReleasesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ReleasesAnyCondition = TypedDict("ReleasesAnyCondition", {"any": ReleasesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all releases condition types
+ReleasesCondition = (
+    ReleasesEqCondition
+    | ReleasesNeqCondition
+    | ReleasesGtCondition
+    | ReleasesGteCondition
+    | ReleasesLtCondition
+    | ReleasesLteCondition
+    | ReleasesInCondition
+    | ReleasesLikeCondition
+    | ReleasesFuzzyCondition
+    | ReleasesKeywordCondition
+    | ReleasesContainsCondition
+    | ReleasesNotCondition
+    | ReleasesAndCondition
+    | ReleasesOrCondition
+    | ReleasesAnyCondition
+)
+
+
+class ReleasesSearchQuery(TypedDict, total=False):
+    """Search query for releases entity."""
+    filter: ReleasesCondition
+    sort: list[ReleasesSortFilter]
+
+
 # ===== REPOSITORIES SEARCH TYPES =====
 
 class RepositoriesSearchFilter(TypedDict, total=False):
@@ -1638,6 +3353,201 @@ class RepositoriesSearchQuery(TypedDict, total=False):
     """Search query for repositories entity."""
     filter: RepositoriesCondition
     sort: list[RepositoriesSortFilter]
+
+
+# ===== REVIEWS SEARCH TYPES =====
+
+class ReviewsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering reviews search queries."""
+    id: str | None
+    """GraphQL node ID of the review"""
+    database_id: int | None
+    """REST API numeric identifier for the review"""
+    state: str | None
+    """Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"""
+    body: str | None
+    """Review body text"""
+    submitted_at: str | None
+    """ISO 8601 timestamp when the review was submitted"""
+    created_at: str | None
+    """ISO 8601 timestamp when the review was created"""
+    updated_at: str | None
+    """ISO 8601 timestamp when the review was last updated"""
+    url: str | None
+    """Permalink to the review on GitHub"""
+
+
+class ReviewsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """GraphQL node ID of the review"""
+    database_id: list[int]
+    """REST API numeric identifier for the review"""
+    state: list[str]
+    """Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"""
+    body: list[str]
+    """Review body text"""
+    submitted_at: list[str]
+    """ISO 8601 timestamp when the review was submitted"""
+    created_at: list[str]
+    """ISO 8601 timestamp when the review was created"""
+    updated_at: list[str]
+    """ISO 8601 timestamp when the review was last updated"""
+    url: list[str]
+    """Permalink to the review on GitHub"""
+
+
+class ReviewsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """GraphQL node ID of the review"""
+    database_id: Any
+    """REST API numeric identifier for the review"""
+    state: Any
+    """Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"""
+    body: Any
+    """Review body text"""
+    submitted_at: Any
+    """ISO 8601 timestamp when the review was submitted"""
+    created_at: Any
+    """ISO 8601 timestamp when the review was created"""
+    updated_at: Any
+    """ISO 8601 timestamp when the review was last updated"""
+    url: Any
+    """Permalink to the review on GitHub"""
+
+
+class ReviewsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """GraphQL node ID of the review"""
+    database_id: str
+    """REST API numeric identifier for the review"""
+    state: str
+    """Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"""
+    body: str
+    """Review body text"""
+    submitted_at: str
+    """ISO 8601 timestamp when the review was submitted"""
+    created_at: str
+    """ISO 8601 timestamp when the review was created"""
+    updated_at: str
+    """ISO 8601 timestamp when the review was last updated"""
+    url: str
+    """Permalink to the review on GitHub"""
+
+
+class ReviewsSortFilter(TypedDict, total=False):
+    """Available fields for sorting reviews search results."""
+    id: AirbyteSortOrder
+    """GraphQL node ID of the review"""
+    database_id: AirbyteSortOrder
+    """REST API numeric identifier for the review"""
+    state: AirbyteSortOrder
+    """Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"""
+    body: AirbyteSortOrder
+    """Review body text"""
+    submitted_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the review was submitted"""
+    created_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the review was created"""
+    updated_at: AirbyteSortOrder
+    """ISO 8601 timestamp when the review was last updated"""
+    url: AirbyteSortOrder
+    """Permalink to the review on GitHub"""
+
+
+# Entity-specific condition types for reviews
+class ReviewsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ReviewsSearchFilter
+
+
+class ReviewsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ReviewsSearchFilter
+
+
+class ReviewsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ReviewsSearchFilter
+
+
+class ReviewsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ReviewsSearchFilter
+
+
+class ReviewsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ReviewsSearchFilter
+
+
+class ReviewsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ReviewsSearchFilter
+
+
+class ReviewsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ReviewsStringFilter
+
+
+class ReviewsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ReviewsStringFilter
+
+
+class ReviewsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ReviewsStringFilter
+
+
+class ReviewsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ReviewsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ReviewsInCondition = TypedDict("ReviewsInCondition", {"in": ReviewsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ReviewsNotCondition = TypedDict("ReviewsNotCondition", {"not": "ReviewsCondition"}, total=False)
+"""Negates the nested condition."""
+
+ReviewsAndCondition = TypedDict("ReviewsAndCondition", {"and": "list[ReviewsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ReviewsOrCondition = TypedDict("ReviewsOrCondition", {"or": "list[ReviewsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ReviewsAnyCondition = TypedDict("ReviewsAnyCondition", {"any": ReviewsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all reviews condition types
+ReviewsCondition = (
+    ReviewsEqCondition
+    | ReviewsNeqCondition
+    | ReviewsGtCondition
+    | ReviewsGteCondition
+    | ReviewsLtCondition
+    | ReviewsLteCondition
+    | ReviewsInCondition
+    | ReviewsLikeCondition
+    | ReviewsFuzzyCondition
+    | ReviewsKeywordCondition
+    | ReviewsContainsCondition
+    | ReviewsNotCondition
+    | ReviewsAndCondition
+    | ReviewsOrCondition
+    | ReviewsAnyCondition
+)
+
+
+class ReviewsSearchQuery(TypedDict, total=False):
+    """Search query for reviews entity."""
+    filter: ReviewsCondition
+    sort: list[ReviewsSortFilter]
 
 
 # ===== STARGAZERS SEARCH TYPES =====
@@ -2328,6 +4238,236 @@ class UsersSearchQuery(TypedDict, total=False):
     """Search query for users entity."""
     filter: UsersCondition
     sort: list[UsersSortFilter]
+
+
+# ===== VIEWER SEARCH TYPES =====
+
+class ViewerSearchFilter(TypedDict, total=False):
+    """Available fields for filtering viewer search queries."""
+
+
+class ViewerInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class ViewerAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class ViewerStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class ViewerSortFilter(TypedDict, total=False):
+    """Available fields for sorting viewer search results."""
+
+
+# Entity-specific condition types for viewer
+class ViewerEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ViewerSearchFilter
+
+
+class ViewerNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ViewerSearchFilter
+
+
+class ViewerGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ViewerSearchFilter
+
+
+class ViewerGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ViewerSearchFilter
+
+
+class ViewerLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ViewerSearchFilter
+
+
+class ViewerLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ViewerSearchFilter
+
+
+class ViewerLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ViewerStringFilter
+
+
+class ViewerFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ViewerStringFilter
+
+
+class ViewerKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ViewerStringFilter
+
+
+class ViewerContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ViewerAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ViewerInCondition = TypedDict("ViewerInCondition", {"in": ViewerInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ViewerNotCondition = TypedDict("ViewerNotCondition", {"not": "ViewerCondition"}, total=False)
+"""Negates the nested condition."""
+
+ViewerAndCondition = TypedDict("ViewerAndCondition", {"and": "list[ViewerCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ViewerOrCondition = TypedDict("ViewerOrCondition", {"or": "list[ViewerCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ViewerAnyCondition = TypedDict("ViewerAnyCondition", {"any": ViewerAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all viewer condition types
+ViewerCondition = (
+    ViewerEqCondition
+    | ViewerNeqCondition
+    | ViewerGtCondition
+    | ViewerGteCondition
+    | ViewerLtCondition
+    | ViewerLteCondition
+    | ViewerInCondition
+    | ViewerLikeCondition
+    | ViewerFuzzyCondition
+    | ViewerKeywordCondition
+    | ViewerContainsCondition
+    | ViewerNotCondition
+    | ViewerAndCondition
+    | ViewerOrCondition
+    | ViewerAnyCondition
+)
+
+
+class ViewerSearchQuery(TypedDict, total=False):
+    """Search query for viewer entity."""
+    filter: ViewerCondition
+    sort: list[ViewerSortFilter]
+
+
+# ===== VIEWER_REPOSITORIES SEARCH TYPES =====
+
+class ViewerRepositoriesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering viewer_repositories search queries."""
+
+
+class ViewerRepositoriesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+
+
+class ViewerRepositoriesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+
+
+class ViewerRepositoriesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+
+
+class ViewerRepositoriesSortFilter(TypedDict, total=False):
+    """Available fields for sorting viewer_repositories search results."""
+
+
+# Entity-specific condition types for viewer_repositories
+class ViewerRepositoriesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ViewerRepositoriesSearchFilter
+
+
+class ViewerRepositoriesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ViewerRepositoriesSearchFilter
+
+
+class ViewerRepositoriesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ViewerRepositoriesSearchFilter
+
+
+class ViewerRepositoriesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ViewerRepositoriesSearchFilter
+
+
+class ViewerRepositoriesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ViewerRepositoriesSearchFilter
+
+
+class ViewerRepositoriesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ViewerRepositoriesSearchFilter
+
+
+class ViewerRepositoriesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ViewerRepositoriesStringFilter
+
+
+class ViewerRepositoriesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ViewerRepositoriesStringFilter
+
+
+class ViewerRepositoriesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ViewerRepositoriesStringFilter
+
+
+class ViewerRepositoriesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ViewerRepositoriesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ViewerRepositoriesInCondition = TypedDict("ViewerRepositoriesInCondition", {"in": ViewerRepositoriesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ViewerRepositoriesNotCondition = TypedDict("ViewerRepositoriesNotCondition", {"not": "ViewerRepositoriesCondition"}, total=False)
+"""Negates the nested condition."""
+
+ViewerRepositoriesAndCondition = TypedDict("ViewerRepositoriesAndCondition", {"and": "list[ViewerRepositoriesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ViewerRepositoriesOrCondition = TypedDict("ViewerRepositoriesOrCondition", {"or": "list[ViewerRepositoriesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ViewerRepositoriesAnyCondition = TypedDict("ViewerRepositoriesAnyCondition", {"any": ViewerRepositoriesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all viewer_repositories condition types
+ViewerRepositoriesCondition = (
+    ViewerRepositoriesEqCondition
+    | ViewerRepositoriesNeqCondition
+    | ViewerRepositoriesGtCondition
+    | ViewerRepositoriesGteCondition
+    | ViewerRepositoriesLtCondition
+    | ViewerRepositoriesLteCondition
+    | ViewerRepositoriesInCondition
+    | ViewerRepositoriesLikeCondition
+    | ViewerRepositoriesFuzzyCondition
+    | ViewerRepositoriesKeywordCondition
+    | ViewerRepositoriesContainsCondition
+    | ViewerRepositoriesNotCondition
+    | ViewerRepositoriesAndCondition
+    | ViewerRepositoriesOrCondition
+    | ViewerRepositoriesAnyCondition
+)
+
+
+class ViewerRepositoriesSearchQuery(TypedDict, total=False):
+    """Search query for viewer_repositories entity."""
+    filter: ViewerRepositoriesCondition
+    sort: list[ViewerRepositoriesSortFilter]
 
 
 

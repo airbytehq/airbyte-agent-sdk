@@ -52,6 +52,21 @@ class IssueCreateParams(BaseModel):
     assignees: list[str] | None = Field(default=None)
     milestone: int | None = Field(default=None)
 
+class IssueResponseReactions(BaseModel):
+    """Reaction counts"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    url: str | None = Field(default=None)
+    total_count: int | None = Field(default=None)
+    field_1: int | None = Field(default=None, alias="+1")
+    field_1: int | None = Field(default=None, alias="-1")
+    laugh: int | None = Field(default=None)
+    hooray: int | None = Field(default=None)
+    confused: int | None = Field(default=None)
+    heart: int | None = Field(default=None)
+    rocket: int | None = Field(default=None)
+    eyes: int | None = Field(default=None)
+
 class IssueResponseSubIssuesSummary(BaseModel):
     """Summary of sub-issues"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -60,8 +75,8 @@ class IssueResponseSubIssuesSummary(BaseModel):
     completed: int | None = Field(default=None)
     percent_completed: int | None = Field(default=None)
 
-class IssueResponseUser(BaseModel):
-    """The user who created the issue"""
+class IssueResponseAssigneesItem(BaseModel):
+    """Nested schema for IssueResponse.assignees_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     login: str | None = Field(default=None)
@@ -73,8 +88,33 @@ class IssueResponseUser(BaseModel):
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
 
-class IssueResponseAssigneesItem(BaseModel):
-    """Nested schema for IssueResponse.assignees_item"""
+class IssueResponseAssignee(BaseModel):
+    """Primary user assigned to this issue"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    login: str | None = Field(default=None)
+    id: int | None = Field(default=None)
+    node_id: str | None = Field(default=None)
+    avatar_url: str | None = Field(default=None)
+    url: str | None = Field(default=None)
+    html_url: str | None = Field(default=None)
+    type_: str | None = Field(default=None, alias="type")
+    site_admin: bool | None = Field(default=None)
+
+class IssueResponseLabelsItem(BaseModel):
+    """Nested schema for IssueResponse.labels_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None = Field(default=None)
+    node_id: str | None = Field(default=None)
+    url: str | None = Field(default=None)
+    name: str | None = Field(default=None)
+    color: str | None = Field(default=None)
+    default: bool | None = Field(default=None)
+    description: str | None | None = Field(default=None)
+
+class IssueResponseUser(BaseModel):
+    """The user who created the issue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     login: str | None = Field(default=None)
@@ -94,46 +134,6 @@ class IssueResponseIssueDependenciesSummary(BaseModel):
     blocking: int | None = Field(default=None)
     total_blocked_by: int | None = Field(default=None)
     total_blocking: int | None = Field(default=None)
-
-class IssueResponseLabelsItem(BaseModel):
-    """Nested schema for IssueResponse.labels_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None = Field(default=None)
-    node_id: str | None = Field(default=None)
-    url: str | None = Field(default=None)
-    name: str | None = Field(default=None)
-    color: str | None = Field(default=None)
-    default: bool | None = Field(default=None)
-    description: str | None | None = Field(default=None)
-
-class IssueResponseReactions(BaseModel):
-    """Reaction counts"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    url: str | None = Field(default=None)
-    total_count: int | None = Field(default=None)
-    field_1: int | None = Field(default=None, alias="+1")
-    field_1: int | None = Field(default=None, alias="-1")
-    laugh: int | None = Field(default=None)
-    hooray: int | None = Field(default=None)
-    confused: int | None = Field(default=None)
-    heart: int | None = Field(default=None)
-    rocket: int | None = Field(default=None)
-    eyes: int | None = Field(default=None)
-
-class IssueResponseAssignee(BaseModel):
-    """Primary user assigned to this issue"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    login: str | None = Field(default=None)
-    id: int | None = Field(default=None)
-    node_id: str | None = Field(default=None)
-    avatar_url: str | None = Field(default=None)
-    url: str | None = Field(default=None)
-    html_url: str | None = Field(default=None)
-    type_: str | None = Field(default=None, alias="type")
-    site_admin: bool | None = Field(default=None)
 
 class IssueResponse(BaseModel):
     """IssueResponse type definition"""
@@ -248,19 +248,6 @@ class PullRequestCreateParams(BaseModel):
     draft: bool | None = Field(default=None)
     maintainer_can_modify: bool | None = Field(default=None)
 
-class PullRequestResponseAssigneesItem(BaseModel):
-    """Nested schema for PullRequestResponse.assignees_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    login: str | None = Field(default=None)
-    id: int | None = Field(default=None)
-    node_id: str | None = Field(default=None)
-    avatar_url: str | None = Field(default=None)
-    url: str | None = Field(default=None)
-    html_url: str | None = Field(default=None)
-    type_: str | None = Field(default=None, alias="type")
-    site_admin: bool | None = Field(default=None)
-
 class PullRequestResponseLabelsItem(BaseModel):
     """Nested schema for PullRequestResponse.labels_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -281,14 +268,6 @@ class PullRequestResponseHead(BaseModel):
     ref: str | None = Field(default=None)
     sha: str | None = Field(default=None)
 
-class PullRequestResponseBase(BaseModel):
-    """The base branch"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    label: str | None = Field(default=None)
-    ref: str | None = Field(default=None)
-    sha: str | None = Field(default=None)
-
 class PullRequestResponseUser(BaseModel):
     """The user who created the pull request"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -301,6 +280,27 @@ class PullRequestResponseUser(BaseModel):
     html_url: str | None = Field(default=None)
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
+
+class PullRequestResponseAssigneesItem(BaseModel):
+    """Nested schema for PullRequestResponse.assignees_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    login: str | None = Field(default=None)
+    id: int | None = Field(default=None)
+    node_id: str | None = Field(default=None)
+    avatar_url: str | None = Field(default=None)
+    url: str | None = Field(default=None)
+    html_url: str | None = Field(default=None)
+    type_: str | None = Field(default=None, alias="type")
+    site_admin: bool | None = Field(default=None)
+
+class PullRequestResponseBase(BaseModel):
+    """The base branch"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    label: str | None = Field(default=None)
+    ref: str | None = Field(default=None)
+    sha: str | None = Field(default=None)
 
 class PullRequestResponse(BaseModel):
     """PullRequestResponse type definition"""
@@ -609,6 +609,50 @@ class CommentsSearchData(BaseModel):
     """Whether the comment has been hidden/collapsed"""
 
 
+class CommitsSearchData(BaseModel):
+    """Search result data for commits entity."""
+    model_config = ConfigDict(extra="allow")
+
+    oid: str | None = None
+    """Full Git commit SHA"""
+    abbreviated_oid: str | None = None
+    """Abbreviated Git commit SHA (typically 7 characters)"""
+    message_headline: str | None = None
+    """First line of the commit message"""
+    message: str | None = None
+    """Full commit message"""
+    committed_date: str | None = None
+    """ISO 8601 timestamp when the commit was applied to its tree"""
+    authored_date: str | None = None
+    """ISO 8601 timestamp when the commit was originally authored"""
+    additions: int | None = None
+    """Number of lines added across all files in the commit"""
+    deletions: int | None = None
+    """Number of lines deleted across all files in the commit"""
+    changed_files: int | None = None
+    """Number of files changed in the commit"""
+    url: str | None = None
+    """Permalink to the commit on GitHub"""
+
+
+class DirectoryContentSearchData(BaseModel):
+    """Search result data for directory_content entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class DiscussionsSearchData(BaseModel):
+    """Search result data for discussions entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class FileContentSearchData(BaseModel):
+    """Search result data for file_content entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
 class IssuesSearchData(BaseModel):
     """Search result data for issues entity."""
     model_config = ConfigDict(extra="allow")
@@ -637,6 +681,50 @@ class IssuesSearchData(BaseModel):
     """Permalink to the issue on GitHub"""
 
 
+class LabelsSearchData(BaseModel):
+    """Search result data for labels entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str | None = None
+    """GraphQL node ID of the label"""
+    name: str | None = None
+    """Label name"""
+    color: str | None = None
+    """Label color as a 6-character hex string without a leading `#`"""
+    description: str | None = None
+    """Short description of what the label is used for"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the label was created"""
+    url: str | None = None
+    """Permalink to the label on GitHub"""
+
+
+class MilestonesSearchData(BaseModel):
+    """Search result data for milestones entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str | None = None
+    """GraphQL node ID of the milestone"""
+    number: int | None = None
+    """Repository-scoped milestone number"""
+    title: str | None = None
+    """Milestone title"""
+    description: str | None = None
+    """Milestone description"""
+    state: str | None = None
+    """Milestone state: `OPEN` or `CLOSED`"""
+    due_on: str | None = None
+    """ISO 8601 timestamp for the milestone's due date, if set"""
+    closed_at: str | None = None
+    """ISO 8601 timestamp when the milestone was closed, if applicable"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the milestone was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the milestone was last updated"""
+    progress_percentage: float | None = None
+    """Percentage of associated issues/PRs that are closed"""
+
+
 class OrganizationsSearchData(BaseModel):
     """Search result data for organizations entity."""
     model_config = ConfigDict(extra="allow")
@@ -659,6 +747,48 @@ class OrganizationsSearchData(BaseModel):
     """Whether the organization has a verified domain"""
     created_at: str | None = None
     """ISO 8601 timestamp when the organization was created"""
+
+
+class OrgRepositoriesSearchData(BaseModel):
+    """Search result data for org_repositories entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class PrCommentsSearchData(BaseModel):
+    """Search result data for pr_comments entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class ProjectItemsSearchData(BaseModel):
+    """Search result data for project_items entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class ProjectsSearchData(BaseModel):
+    """Search result data for projects entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str | None = None
+    """GraphQL node ID of the project"""
+    number: int | None = None
+    """Organization- or user-scoped project number"""
+    title: str | None = None
+    """Project title"""
+    short_description: str | None = None
+    """Short description displayed on the project summary"""
+    url: str | None = None
+    """Permalink to the project on GitHub"""
+    closed: bool | None = None
+    """Whether the project has been closed"""
+    public: bool | None = None
+    """Whether the project is publicly visible"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the project was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the project was last updated"""
 
 
 class PullRequestsSearchData(BaseModel):
@@ -695,6 +825,32 @@ class PullRequestsSearchData(BaseModel):
     """Permalink to the pull request on GitHub"""
 
 
+class ReleasesSearchData(BaseModel):
+    """Search result data for releases entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str | None = None
+    """GraphQL node ID of the release"""
+    database_id: int | None = None
+    """REST API numeric identifier for the release"""
+    name: str | None = None
+    """Display name of the release"""
+    tag_name: str | None = None
+    """Git tag the release points at (e.g. `v1.2.3`)"""
+    description: str | None = None
+    """Markdown body / release notes"""
+    published_at: str | None = None
+    """ISO 8601 timestamp when the release was published"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the release was created"""
+    is_prerelease: bool | None = None
+    """Whether the release is marked as a pre-release"""
+    is_draft: bool | None = None
+    """Whether the release is still a draft and not published"""
+    url: str | None = None
+    """Permalink to the release on GitHub"""
+
+
 class RepositoriesSearchData(BaseModel):
     """Search result data for repositories entity."""
     model_config = ConfigDict(extra="allow")
@@ -725,6 +881,28 @@ class RepositoriesSearchData(BaseModel):
     """Whether the repository is a fork of another repository"""
     is_archived: bool | None = None
     """Whether the repository has been archived"""
+
+
+class ReviewsSearchData(BaseModel):
+    """Search result data for reviews entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str | None = None
+    """GraphQL node ID of the review"""
+    database_id: int | None = None
+    """REST API numeric identifier for the review"""
+    state: str | None = None
+    """Review state: `PENDING`, `COMMENTED`, `APPROVED`, `CHANGES_REQUESTED`, or `DISMISSED`"""
+    body: str | None = None
+    """Review body text"""
+    submitted_at: str | None = None
+    """ISO 8601 timestamp when the review was submitted"""
+    created_at: str | None = None
+    """ISO 8601 timestamp when the review was created"""
+    updated_at: str | None = None
+    """ISO 8601 timestamp when the review was last updated"""
+    url: str | None = None
+    """Permalink to the review on GitHub"""
 
 
 class StargazersSearchData(BaseModel):
@@ -797,6 +975,18 @@ class UsersSearchData(BaseModel):
     """Whether the user has marked themselves as available for hire"""
 
 
+class ViewerSearchData(BaseModel):
+    """Search result data for viewer entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
+class ViewerRepositoriesSearchData(BaseModel):
+    """Search result data for viewer_repositories entity."""
+    model_config = ConfigDict(extra="allow")
+
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -829,17 +1019,53 @@ BranchesSearchResult = AirbyteSearchResult[BranchesSearchData]
 CommentsSearchResult = AirbyteSearchResult[CommentsSearchData]
 """Search result type for comments entity."""
 
+CommitsSearchResult = AirbyteSearchResult[CommitsSearchData]
+"""Search result type for commits entity."""
+
+DirectoryContentSearchResult = AirbyteSearchResult[DirectoryContentSearchData]
+"""Search result type for directory_content entity."""
+
+DiscussionsSearchResult = AirbyteSearchResult[DiscussionsSearchData]
+"""Search result type for discussions entity."""
+
+FileContentSearchResult = AirbyteSearchResult[FileContentSearchData]
+"""Search result type for file_content entity."""
+
 IssuesSearchResult = AirbyteSearchResult[IssuesSearchData]
 """Search result type for issues entity."""
+
+LabelsSearchResult = AirbyteSearchResult[LabelsSearchData]
+"""Search result type for labels entity."""
+
+MilestonesSearchResult = AirbyteSearchResult[MilestonesSearchData]
+"""Search result type for milestones entity."""
 
 OrganizationsSearchResult = AirbyteSearchResult[OrganizationsSearchData]
 """Search result type for organizations entity."""
 
+OrgRepositoriesSearchResult = AirbyteSearchResult[OrgRepositoriesSearchData]
+"""Search result type for org_repositories entity."""
+
+PrCommentsSearchResult = AirbyteSearchResult[PrCommentsSearchData]
+"""Search result type for pr_comments entity."""
+
+ProjectItemsSearchResult = AirbyteSearchResult[ProjectItemsSearchData]
+"""Search result type for project_items entity."""
+
+ProjectsSearchResult = AirbyteSearchResult[ProjectsSearchData]
+"""Search result type for projects entity."""
+
 PullRequestsSearchResult = AirbyteSearchResult[PullRequestsSearchData]
 """Search result type for pull_requests entity."""
 
+ReleasesSearchResult = AirbyteSearchResult[ReleasesSearchData]
+"""Search result type for releases entity."""
+
 RepositoriesSearchResult = AirbyteSearchResult[RepositoriesSearchData]
 """Search result type for repositories entity."""
+
+ReviewsSearchResult = AirbyteSearchResult[ReviewsSearchData]
+"""Search result type for reviews entity."""
 
 StargazersSearchResult = AirbyteSearchResult[StargazersSearchData]
 """Search result type for stargazers entity."""
@@ -852,6 +1078,12 @@ TeamsSearchResult = AirbyteSearchResult[TeamsSearchData]
 
 UsersSearchResult = AirbyteSearchResult[UsersSearchData]
 """Search result type for users entity."""
+
+ViewerSearchResult = AirbyteSearchResult[ViewerSearchData]
+"""Search result type for viewer entity."""
+
+ViewerRepositoriesSearchResult = AirbyteSearchResult[ViewerRepositoriesSearchData]
+"""Search result type for viewer_repositories entity."""
 
 
 
