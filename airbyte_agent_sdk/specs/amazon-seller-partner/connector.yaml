@@ -42,6 +42,8 @@ info:
       - replication_start_date
     replication_config_key_mapping:
       replication_start_date: replication_start_date
+    replication_config_constants:
+      replication_start_date: "2024-01-01T00:00:00Z"
   x-airbyte-entity-relationships:
     - source_entity: order_items
       target_entity: orders
