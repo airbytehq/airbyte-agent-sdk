@@ -3074,6 +3074,17 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
             'properties',
             'updatedAt',
         ],
+        'tickets': [
+            'archived',
+            'companies',
+            'companies[]',
+            'contacts',
+            'contacts[]',
+            'createdAt',
+            'id',
+            'properties',
+            'updatedAt',
+        ],
     },
     example_questions=ExampleQuestions(
         direct=[

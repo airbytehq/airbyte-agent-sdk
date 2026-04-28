@@ -2197,6 +2197,77 @@
           "description": "Timestamp when the deal record was last modified"
         }
       ]
+    },
+    "tickets": {
+      "entity": "tickets",
+      "data_type_name": "TicketsSearchData",
+      "filter_type_name": "TicketsSearchFilter",
+      "in_filter_type_name": "TicketsInFilter",
+      "any_value_filter_type_name": "TicketsAnyValueFilter",
+      "string_filter_type_name": "TicketsStringFilter",
+      "sort_filter_type_name": "TicketsSortFilter",
+      "result_type_name": "TicketsSearchResult",
+      "query_type_name": "TicketsSearchQuery",
+      "condition_prefix": "Tickets",
+      "condition_type_name": "TicketsCondition",
+      "fields": [
+        {
+          "name": "archived",
+          "python_name": "archived",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Indicates whether the ticket has been deleted and moved to the recycling bin"
+        },
+        {
+          "name": "companies",
+          "python_name": "companies",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "Collection of company records associated with the ticket"
+        },
+        {
+          "name": "contacts",
+          "python_name": "contacts",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "Collection of contact records associated with the ticket"
+        },
+        {
+          "name": "createdAt",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the ticket record was originally created"
+        },
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the ticket record"
+        },
+        {
+          "name": "properties",
+          "python_name": "properties",
+          "type": "dict[str, Any]",
+          "json_type": "object",
+          "example_value_json": "{}",
+          "description": "Key-value object containing all ticket properties and custom fields"
+        },
+        {
+          "name": "updatedAt",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Timestamp when the ticket record was last modified"
+        }
+      ]
     }
   }
 }

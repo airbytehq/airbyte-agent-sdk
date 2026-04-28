@@ -153,6 +153,43 @@ info:
         - 'null'
         - 'string'
         description: Timestamp when the deal record was last modified
+    - entity: tickets
+      suggested: true
+      fields:
+      - name: archived
+        type:
+        - 'null'
+        - 'boolean'
+        description: Indicates whether the ticket has been deleted and moved to the recycling bin
+      - name: companies
+        type:
+        - 'null'
+        - 'array'
+        description: Collection of company records associated with the ticket
+      - name: contacts
+        type:
+        - 'null'
+        - 'array'
+        description: Collection of contact records associated with the ticket
+      - name: createdAt
+        type:
+        - 'null'
+        - 'string'
+        description: Timestamp when the ticket record was originally created
+      - name: id
+        type:
+        - 'null'
+        - 'string'
+        description: Unique identifier for the ticket record
+      - name: properties
+        type:
+        - 'object'
+        description: "Key-value object containing all ticket properties and custom fields"
+      - name: updatedAt
+        type:
+        - 'null'
+        - 'string'
+        description: Timestamp when the ticket record was last modified
 
 servers:
 - url: https://api.hubapi.com

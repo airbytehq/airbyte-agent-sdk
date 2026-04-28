@@ -206,12 +206,22 @@ class TicketsList(BaseModel):
     paging: Paging | None = Field(default=None)
     total: int | None = Field(default=None)
 
-class SchemaLabels(BaseModel):
-    """Display labels"""
+class SchemaAssociationsItem(BaseModel):
+    """Nested schema for Schema.associations_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    singular: str | None = Field(default=None)
-    plural: str | None = Field(default=None)
+    from_object_type_id: str | None = Field(default=None, alias="fromObjectTypeId")
+    to_object_type_id: str | None = Field(default=None, alias="toObjectTypeId")
+    name: str | None = Field(default=None)
+    cardinality: str | None = Field(default=None)
+    id: str | None = Field(default=None)
+    inverse_cardinality: str | None = Field(default=None, alias="inverseCardinality")
+    has_user_enforced_max_to_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxToObjectIds")
+    has_user_enforced_max_from_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxFromObjectIds")
+    max_to_object_ids: int | None = Field(default=None, alias="maxToObjectIds")
+    max_from_object_ids: int | None = Field(default=None, alias="maxFromObjectIds")
+    created_at: str | None | None = Field(default=None, alias="createdAt")
+    updated_at: str | None | None = Field(default=None, alias="updatedAt")
 
 class SchemaPropertiesItemModificationmetadata(BaseModel):
     """Nested schema for SchemaPropertiesItem.modificationMetadata"""
@@ -249,22 +259,12 @@ class SchemaPropertiesItem(BaseModel):
     show_currency_symbol: bool | None = Field(default=None, alias="showCurrencySymbol")
     modification_metadata: SchemaPropertiesItemModificationmetadata | None = Field(default=None, alias="modificationMetadata")
 
-class SchemaAssociationsItem(BaseModel):
-    """Nested schema for Schema.associations_item"""
+class SchemaLabels(BaseModel):
+    """Display labels"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    from_object_type_id: str | None = Field(default=None, alias="fromObjectTypeId")
-    to_object_type_id: str | None = Field(default=None, alias="toObjectTypeId")
-    name: str | None = Field(default=None)
-    cardinality: str | None = Field(default=None)
-    id: str | None = Field(default=None)
-    inverse_cardinality: str | None = Field(default=None, alias="inverseCardinality")
-    has_user_enforced_max_to_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxToObjectIds")
-    has_user_enforced_max_from_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxFromObjectIds")
-    max_to_object_ids: int | None = Field(default=None, alias="maxToObjectIds")
-    max_from_object_ids: int | None = Field(default=None, alias="maxFromObjectIds")
-    created_at: str | None | None = Field(default=None, alias="createdAt")
-    updated_at: str | None | None = Field(default=None, alias="updatedAt")
+    singular: str | None = Field(default=None)
+    plural: str | None = Field(default=None)
 
 class Schema(BaseModel):
     """Custom object schema definition"""
@@ -506,6 +506,26 @@ class DealsSearchData(BaseModel):
     """Timestamp when the deal record was last modified"""
 
 
+class TicketsSearchData(BaseModel):
+    """Search result data for tickets entity."""
+    model_config = ConfigDict(extra="allow")
+
+    archived: bool | None = None
+    """Indicates whether the ticket has been deleted and moved to the recycling bin"""
+    companies: list[Any] | None = None
+    """Collection of company records associated with the ticket"""
+    contacts: list[Any] | None = None
+    """Collection of contact records associated with the ticket"""
+    created_at: str | None = None
+    """Timestamp when the ticket record was originally created"""
+    id: str | None = None
+    """Unique identifier for the ticket record"""
+    properties: dict[str, Any] = None
+    """Key-value object containing all ticket properties and custom fields"""
+    updated_at: str | None = None
+    """Timestamp when the ticket record was last modified"""
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -540,6 +560,9 @@ ContactsSearchResult = AirbyteSearchResult[ContactsSearchData]
 
 DealsSearchResult = AirbyteSearchResult[DealsSearchData]
 """Search result type for deals entity."""
+
+TicketsSearchResult = AirbyteSearchResult[TicketsSearchData]
+"""Search result type for tickets entity."""
 
 
 
