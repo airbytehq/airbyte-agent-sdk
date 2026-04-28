@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Gong API Connector
-  version: 0.1.22
+  version: 0.1.23
   description: |
     Gong is a revenue intelligence platform that captures and analyzes customer interactions
     across calls, emails, and web conferences. This connector provides access to users,
@@ -1422,6 +1422,10 @@ components:
             api:stats:scorecards: Read scorecards statistics
             api:stats:interaction: Read interaction statistics
             api:settings:scorecards:read: Read scorecard settings
+            api:settings:trackers:read: Read tracker settings
+            api:workspaces:read: Read workspace data
+            api:library:read: Read library folders and content
+            api:coaching:read: Read coaching metrics
       x-airbyte-oauth-scopes:
         - scope: "api:calls:read:basic"
           mode: read
@@ -1431,6 +1435,8 @@ components:
           mode: read
           entities:
             - calls_extensive
+            - call_audio
+            - call_video
         - scope: "api:calls:read:transcript"
           mode: read
           entities:
@@ -1453,6 +1459,23 @@ components:
           mode: read
           entities:
             - settings_scorecards
+        - scope: "api:settings:trackers:read"
+          mode: read
+          entities:
+            - settings_trackers
+        - scope: "api:workspaces:read"
+          mode: read
+          entities:
+            - workspaces
+        - scope: "api:library:read"
+          mode: read
+          entities:
+            - library_folders
+            - library_folder_content
+        - scope: "api:coaching:read"
+          mode: read
+          entities:
+            - coaching
       x-airbyte-token-refresh:
         auth_style: basic
         body_format: form
