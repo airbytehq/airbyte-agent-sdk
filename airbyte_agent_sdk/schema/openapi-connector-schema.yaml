@@ -558,6 +558,20 @@ $defs:
         default: null
         description: Human-readable description of the relationship
         title: Description
+      parent_record_filter:
+        anyOf:
+        - type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        - type: 'null'
+        default: null
+        description: Optional filter applied to parent entity records during check-time
+          parameter resolution. Keys are field names on the parent record, values are
+          lists of acceptable values. Only records matching all conditions are considered
+          when resolving the foreign key.
+        title: Parent Record Filter
     required:
     - source_entity
     - target_entity

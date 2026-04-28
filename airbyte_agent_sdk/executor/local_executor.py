@@ -30,7 +30,7 @@ from airbyte_agent_sdk.http.exceptions import ConnectorValidationError, HTTPClie
 from airbyte_agent_sdk.http_client import HTTPClient, TokenRefreshCallback
 from airbyte_agent_sdk.logging import NullLogger, RequestLogger
 from airbyte_agent_sdk.observability import ObservabilitySession
-from airbyte_agent_sdk.schema.extensions import RetryConfig
+from airbyte_agent_sdk.schema.extensions import EntityRelationshipConfig, RetryConfig
 from airbyte_agent_sdk.schema.security import AuthConfigSpec
 from airbyte_agent_sdk.secrets import SecretStr
 from airbyte_agent_sdk.telemetry import SegmentTracker
@@ -897,12 +897,12 @@ class LocalExecutor:
         if depth > MAX_PARAM_RESOLUTION_DEPTH:
             raise ParamResolutionError(f"Max resolution depth exceeded for '{entity_name}'")
 
-        # Build relationship index for this entity: foreign_key -> (target_entity, target_key)
+        # Build relationship index for this entity: foreign_key -> EntityRelationshipConfig
         entity_def = self._entity_index.get(entity_name)
-        rel_index: dict[str, tuple[str, str]] = {}
+        rel_index: dict[str, EntityRelationshipConfig] = {}
         if entity_def:
             for rel in entity_def.relationships:
-                rel_index[rel.foreign_key] = (rel.target_entity, rel.target_key)
+                rel_index[rel.foreign_key] = rel
 
         target_params = params_to_resolve if params_to_resolve is not None else list(endpoint.path_params)
 
@@ -920,8 +920,11 @@ class LocalExecutor:
                 continue
 
             # 3. Check entity relationships by foreign_key
+            record_filter: dict[str, list[str]] | None = None
             if param_name in rel_index:
-                parent_entity_name, parent_key = rel_index[param_name]
+                rel = rel_index[param_name]
+                parent_entity_name, parent_key = rel.target_entity, rel.target_key
+                record_filter = rel.parent_record_filter
             elif param_name in self._global_fk_index:
                 # Fallback: another entity declares a relationship for this foreign key
                 parent_entity_name, parent_key = self._global_fk_index[param_name]
@@ -930,7 +933,22 @@ class LocalExecutor:
             if parent_entity_name == entity_name:
                 raise ParamResolutionError(f"Self-referential param '{param_name}' on entity '{entity_name}'")
 
-            if parent_entity_name not in parent_cache:
+            # Determine whether we need to (re-)fetch the parent entity.
+            # The cache may have been populated by a limit=1 probe from an
+            # unfiltered sibling running concurrently.  When a record_filter is
+            # present we must verify the cached set actually satisfies the
+            # filter; if not, refetch without limit so we have the full set.
+            needs_fetch = parent_entity_name not in parent_cache
+            if not needs_fetch and record_filter:
+                cached_candidates = [
+                    r
+                    for r in parent_cache[parent_entity_name]
+                    if all(field in r and str(r[field]) in values for field, values in record_filter.items())
+                ]
+                if not cached_candidates:
+                    needs_fetch = True
+
+            if needs_fetch:
                 _logger.info(
                     "Resolving param '%s' for entity '%s' via parent entity '%s'",
                     param_name,
@@ -940,7 +958,7 @@ class LocalExecutor:
                 parent_endpoint = self._operation_index.get((parent_entity_name, Action.LIST))
                 if parent_endpoint is None:
                     raise ParamResolutionError(f"Parent entity '{parent_entity_name}' has no LIST operation")
-                parent_params: dict[str, Any] = {"limit": 1}
+                parent_params: dict[str, Any] = {} if record_filter else {"limit": 1}
                 # Inject query param defaults for parent entity (mirrors _probe_entity logic).
                 parent_repl_constants = self._get_replication_constants()
                 for pname, pschema in parent_endpoint.query_params_schema.items():
@@ -974,7 +992,14 @@ class LocalExecutor:
                     raise ParamResolutionError(f"Parent entity '{parent_entity_name}' returned no records")
                 parent_cache[parent_entity_name] = records
 
-            record = parent_cache[parent_entity_name][0]
+            candidates = parent_cache[parent_entity_name]
+            if record_filter:
+                candidates = [r for r in candidates if all(field in r and str(r[field]) in values for field, values in record_filter.items())]
+                if not candidates:
+                    raise ParamResolutionError(
+                        f"No records from parent entity '{parent_entity_name}' match parent_record_filter for entity '{entity_name}'"
+                    )
+            record = candidates[0]
             value = record.get(parent_key)
             if value is None:
                 raise ParamResolutionError(f"Parent key '{parent_key}' not found in '{parent_entity_name}' response")

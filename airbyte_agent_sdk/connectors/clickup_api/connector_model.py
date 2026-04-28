@@ -4027,6 +4027,14 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     target_entity='views',
                     foreign_key='view_id',
                     cardinality='many_to_one',
+                    parent_record_filter={
+                        'type': [
+                            'list',
+                            'board',
+                            'calendar',
+                            'gantt',
+                        ],
+                    },
                 ),
             ],
         ),

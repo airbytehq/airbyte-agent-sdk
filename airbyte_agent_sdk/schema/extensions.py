@@ -341,6 +341,17 @@ class EntityRelationshipConfig(BaseModel):
         None, description="Optional relationship cardinality"
     )
     description: str | None = Field(None, description="Human-readable description of the relationship")
+    parent_record_filter: dict[str, list[str]] | None = Field(
+        None,
+        description=(
+            "Optional filter applied to parent entity records during check-time "
+            "parameter resolution. Keys are field names on the parent record, values "
+            "are lists of acceptable values. Only records matching all conditions are "
+            "considered when resolving the foreign key. Example: "
+            "`parent_record_filter: {type: [list, board]}` picks only parent records "
+            "whose `type` field is `list` or `board`."
+        ),
+    )
 
     def format_line(self) -> str:
         """Format as a human-readable line for tool descriptions."""
