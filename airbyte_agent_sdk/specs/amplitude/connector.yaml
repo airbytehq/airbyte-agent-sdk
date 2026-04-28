@@ -362,6 +362,8 @@ info:
       - start_date
     replication_config_key_mapping:
       start_date: start_date
+    replication_config_constants:
+      start_date: "{{ day_delta(-365, '%Y-%m-%dT%H:%M:%SZ') }}"
   x-airbyte-example-questions:
     direct:
       - "List all chart annotations in Amplitude"
@@ -524,12 +526,14 @@ paths:
           description: "First date included in data series, formatted YYYYMMDD (e.g. 20220101)"
           schema:
             type: string
+            default: "{{ (now_utc() - duration('P365D')).strftime('%Y%m%d') }}"
         - name: end
           in: query
           required: true
           description: "Last date included in data series, formatted YYYYMMDD (e.g. 20220131)"
           schema:
             type: string
+            default: "{{ now_utc().strftime('%Y%m%d') }}"
         - name: m
           in: query
           description: "Either 'new' or 'active' to get the desired count. Defaults to 'active'."
@@ -584,12 +588,14 @@ paths:
           description: "First date included in data series, formatted YYYYMMDD (e.g. 20220101)"
           schema:
             type: string
+            default: "{{ (now_utc() - duration('P365D')).strftime('%Y%m%d') }}"
         - name: end
           in: query
           required: true
           description: "Last date included in data series, formatted YYYYMMDD (e.g. 20220131)"
           schema:
             type: string
+            default: "{{ now_utc().strftime('%Y%m%d') }}"
       responses:
         "200":
           description: Average session length data

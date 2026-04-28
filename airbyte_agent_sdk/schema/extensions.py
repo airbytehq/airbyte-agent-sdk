@@ -9,9 +9,11 @@ Provides Pydantic models for OpenAPI x-airbyte-* extensions:
 - ScopingParamConfig: scoping parameter resolution from config
 """
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from airbyte_agent_sdk.schema.interpolation import resolve_interpolated_constants
 
 
 class RetryConfig(BaseModel):
@@ -231,6 +233,10 @@ class ReplicationConfig(BaseModel):
         alias="replication_config_constants",
         description="System-set constant values injected into the Airbyte source config; never shown in the user-facing form",
     )
+
+    def resolved_constants(self) -> dict[str, Any]:
+        """Return `replication_config_constants` with Jinja2 date expressions evaluated."""
+        return resolve_interpolated_constants(self.replication_config_constants)
 
     @model_validator(mode="after")
     def validate_replication_config_key_mapping(self) -> "ReplicationConfig":

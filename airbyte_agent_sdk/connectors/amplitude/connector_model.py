@@ -899,8 +899,16 @@ AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
                         'g',
                     ],
                     query_params_schema={
-                        'start': {'type': 'string', 'required': True},
-                        'end': {'type': 'string', 'required': True},
+                        'start': {
+                            'type': 'string',
+                            'required': True,
+                            'default': "{{ (now_utc() - duration('P365D')).strftime('%Y%m%d') }}",
+                        },
+                        'end': {
+                            'type': 'string',
+                            'required': True,
+                            'default': "{{ now_utc().strftime('%Y%m%d') }}",
+                        },
                         'm': {
                             'type': 'string',
                             'required': False,
@@ -1069,8 +1077,16 @@ AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
                     description='Returns the average session length (in seconds) for each day in the specified date range.\n',
                     query_params=['start', 'end'],
                     query_params_schema={
-                        'start': {'type': 'string', 'required': True},
-                        'end': {'type': 'string', 'required': True},
+                        'start': {
+                            'type': 'string',
+                            'required': True,
+                            'default': "{{ (now_utc() - duration('P365D')).strftime('%Y%m%d') }}",
+                        },
+                        'end': {
+                            'type': 'string',
+                            'required': True,
+                            'default': "{{ now_utc().strftime('%Y%m%d') }}",
+                        },
                     },
                     response_schema={
                         'type': 'object',

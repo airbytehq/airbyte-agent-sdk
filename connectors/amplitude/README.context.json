@@ -200,7 +200,8 @@
             "python_name": "start",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "{{ (now_utc() - duration('P365D')).strftime('%Y%m%d') }}"
             },
             "required": true,
             "description": "First date included in data series, formatted YYYYMMDD (e.g. 20220101)",
@@ -211,7 +212,8 @@
             "python_name": "end",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "{{ now_utc().strftime('%Y%m%d') }}"
             },
             "required": true,
             "description": "Last date included in data series, formatted YYYYMMDD (e.g. 20220131)",
@@ -286,7 +288,8 @@
             "python_name": "start",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "{{ (now_utc() - duration('P365D')).strftime('%Y%m%d') }}"
             },
             "required": true,
             "description": "First date included in data series, formatted YYYYMMDD (e.g. 20220101)",
@@ -297,7 +300,8 @@
             "python_name": "end",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "{{ now_utc().strftime('%Y%m%d') }}"
             },
             "required": true,
             "description": "Last date included in data series, formatted YYYYMMDD (e.g. 20220131)",
