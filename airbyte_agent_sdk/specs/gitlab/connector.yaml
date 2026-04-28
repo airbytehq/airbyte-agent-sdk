@@ -4958,3 +4958,19 @@ components:
           - 'null'
           - integer
           description: ID of the project (for project milestones)
+    GroupMemberStreamMapping:
+      type: object
+      x-airbyte-entity-name: group_members
+      x-airbyte-stream-name: group_members
+    ProjectMemberStreamMapping:
+      type: object
+      x-airbyte-entity-name: project_members
+      x-airbyte-stream-name: project_members
+    GroupMilestoneStreamMapping:
+      type: object
+      x-airbyte-entity-name: group_milestones
+      x-airbyte-stream-name: group_milestones
+    ProjectMilestoneStreamMapping:
+      type: object
+      x-airbyte-entity-name: project_milestones
+      x-airbyte-stream-name: project_milestones

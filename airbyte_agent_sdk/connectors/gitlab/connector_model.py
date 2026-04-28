@@ -4617,6 +4617,7 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='group_members',
+            stream_name='group_members',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4750,6 +4751,11 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'x-airbyte-entity-name': 'group_members',
+                'x-airbyte-stream-name': 'group_members',
+            },
             relationships=[
                 EntityRelationshipConfig(
                     source_entity='group_members',
@@ -4761,6 +4767,7 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='project_members',
+            stream_name='project_members',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -4893,6 +4900,11 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 ),
+            },
+            entity_schema={
+                'type': 'object',
+                'x-airbyte-entity-name': 'project_members',
+                'x-airbyte-stream-name': 'project_members',
             },
             relationships=[
                 EntityRelationshipConfig(
@@ -5338,6 +5350,7 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='group_milestones',
+            stream_name='group_milestones',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5491,6 +5504,11 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'x-airbyte-entity-name': 'group_milestones',
+                'x-airbyte-stream-name': 'group_milestones',
+            },
             relationships=[
                 EntityRelationshipConfig(
                     source_entity='group_milestones',
@@ -5502,6 +5520,7 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='project_milestones',
+            stream_name='project_milestones',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -5654,6 +5673,11 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 ),
+            },
+            entity_schema={
+                'type': 'object',
+                'x-airbyte-entity-name': 'project_milestones',
+                'x-airbyte-stream-name': 'project_milestones',
             },
             relationships=[
                 EntityRelationshipConfig(

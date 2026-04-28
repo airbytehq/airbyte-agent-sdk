@@ -274,20 +274,6 @@ class ExtensiveCallPartiesItem(BaseModel):
     context: list[ExtensiveCallPartiesItemContextItem] | None = Field(default=None, description="CRM context data linked to this participant")
     """CRM context data linked to this participant"""
 
-class ExtensiveCallMedia(BaseModel):
-    """Media URLs"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    audio_url: str | None = Field(default=None, alias="audioUrl")
-    video_url: str | None = Field(default=None, alias="videoUrl")
-
-class ExtensiveCallContentTopicsItem(BaseModel):
-    """Nested schema for ExtensiveCallContent.topics_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None = Field(default=None)
-    duration: float | None = Field(default=None)
-
 class ExtensiveCallContentTrackersItem(BaseModel):
     """Nested schema for ExtensiveCallContent.trackers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -298,6 +284,13 @@ class ExtensiveCallContentTrackersItem(BaseModel):
     type_: str | None = Field(default=None, alias="type")
     occurrences: list[dict[str, Any]] | None = Field(default=None)
 
+class ExtensiveCallContentTopicsItem(BaseModel):
+    """Nested schema for ExtensiveCallContent.topics_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None = Field(default=None)
+    duration: float | None = Field(default=None)
+
 class ExtensiveCallContent(BaseModel):
     """Content data including topics and trackers"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -305,6 +298,13 @@ class ExtensiveCallContent(BaseModel):
     topics: list[ExtensiveCallContentTopicsItem] | None = Field(default=None)
     trackers: list[ExtensiveCallContentTrackersItem] | None = Field(default=None)
     points_of_interest: dict[str, Any] | None = Field(default=None, alias="pointsOfInterest")
+
+class ExtensiveCallMedia(BaseModel):
+    """Media URLs"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    audio_url: str | None = Field(default=None, alias="audioUrl")
+    video_url: str | None = Field(default=None, alias="videoUrl")
 
 class ExtensiveCallMetadata(BaseModel):
     """Call metadata"""

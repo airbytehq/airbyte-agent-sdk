@@ -52,32 +52,8 @@ class IssueCreateParams(BaseModel):
     assignees: list[str] | None = Field(default=None)
     milestone: int | None = Field(default=None)
 
-class IssueResponseReactions(BaseModel):
-    """Reaction counts"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    url: str | None = Field(default=None)
-    total_count: int | None = Field(default=None)
-    field_1: int | None = Field(default=None, alias="+1")
-    field_1: int | None = Field(default=None, alias="-1")
-    laugh: int | None = Field(default=None)
-    hooray: int | None = Field(default=None)
-    confused: int | None = Field(default=None)
-    heart: int | None = Field(default=None)
-    rocket: int | None = Field(default=None)
-    eyes: int | None = Field(default=None)
-
-class IssueResponseIssueDependenciesSummary(BaseModel):
-    """Summary of issue dependencies"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    blocked_by: int | None = Field(default=None)
-    blocking: int | None = Field(default=None)
-    total_blocked_by: int | None = Field(default=None)
-    total_blocking: int | None = Field(default=None)
-
-class IssueResponseAssigneesItem(BaseModel):
-    """Nested schema for IssueResponse.assignees_item"""
+class IssueResponseAssignee(BaseModel):
+    """Primary user assigned to this issue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     login: str | None = Field(default=None)
@@ -88,6 +64,23 @@ class IssueResponseAssigneesItem(BaseModel):
     html_url: str | None = Field(default=None)
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
+
+class IssueResponseSubIssuesSummary(BaseModel):
+    """Summary of sub-issues"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    total: int | None = Field(default=None)
+    completed: int | None = Field(default=None)
+    percent_completed: int | None = Field(default=None)
+
+class IssueResponseIssueDependenciesSummary(BaseModel):
+    """Summary of issue dependencies"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    blocked_by: int | None = Field(default=None)
+    blocking: int | None = Field(default=None)
+    total_blocked_by: int | None = Field(default=None)
+    total_blocking: int | None = Field(default=None)
 
 class IssueResponseUser(BaseModel):
     """The user who created the issue"""
@@ -114,8 +107,8 @@ class IssueResponseLabelsItem(BaseModel):
     default: bool | None = Field(default=None)
     description: str | None | None = Field(default=None)
 
-class IssueResponseAssignee(BaseModel):
-    """Primary user assigned to this issue"""
+class IssueResponseAssigneesItem(BaseModel):
+    """Nested schema for IssueResponse.assignees_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     login: str | None = Field(default=None)
@@ -127,13 +120,20 @@ class IssueResponseAssignee(BaseModel):
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
 
-class IssueResponseSubIssuesSummary(BaseModel):
-    """Summary of sub-issues"""
+class IssueResponseReactions(BaseModel):
+    """Reaction counts"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    total: int | None = Field(default=None)
-    completed: int | None = Field(default=None)
-    percent_completed: int | None = Field(default=None)
+    url: str | None = Field(default=None)
+    total_count: int | None = Field(default=None)
+    field_1: int | None = Field(default=None, alias="+1")
+    field_1: int | None = Field(default=None, alias="-1")
+    laugh: int | None = Field(default=None)
+    hooray: int | None = Field(default=None)
+    confused: int | None = Field(default=None)
+    heart: int | None = Field(default=None)
+    rocket: int | None = Field(default=None)
+    eyes: int | None = Field(default=None)
 
 class IssueResponse(BaseModel):
     """IssueResponse type definition"""
@@ -248,8 +248,20 @@ class PullRequestCreateParams(BaseModel):
     draft: bool | None = Field(default=None)
     maintainer_can_modify: bool | None = Field(default=None)
 
-class PullRequestResponseUser(BaseModel):
-    """The user who created the pull request"""
+class PullRequestResponseLabelsItem(BaseModel):
+    """Nested schema for PullRequestResponse.labels_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None = Field(default=None)
+    node_id: str | None = Field(default=None)
+    url: str | None = Field(default=None)
+    name: str | None = Field(default=None)
+    color: str | None = Field(default=None)
+    default: bool | None = Field(default=None)
+    description: str | None | None = Field(default=None)
+
+class PullRequestResponseAssigneesItem(BaseModel):
+    """Nested schema for PullRequestResponse.assignees_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     login: str | None = Field(default=None)
@@ -261,8 +273,8 @@ class PullRequestResponseUser(BaseModel):
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
 
-class PullRequestResponseAssigneesItem(BaseModel):
-    """Nested schema for PullRequestResponse.assignees_item"""
+class PullRequestResponseUser(BaseModel):
+    """The user who created the pull request"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     login: str | None = Field(default=None)
@@ -281,18 +293,6 @@ class PullRequestResponseHead(BaseModel):
     label: str | None = Field(default=None)
     ref: str | None = Field(default=None)
     sha: str | None = Field(default=None)
-
-class PullRequestResponseLabelsItem(BaseModel):
-    """Nested schema for PullRequestResponse.labels_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None = Field(default=None)
-    node_id: str | None = Field(default=None)
-    url: str | None = Field(default=None)
-    name: str | None = Field(default=None)
-    color: str | None = Field(default=None)
-    default: bool | None = Field(default=None)
-    description: str | None | None = Field(default=None)
 
 class PullRequestResponseBase(BaseModel):
     """The base branch"""
