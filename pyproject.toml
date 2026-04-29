@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "airbyte-agent-sdk"
-version = "0.1.106"
+version = "0.1.107"
 description = "Airbyte Agent SDK: typed connectors that give AI agents access to 50+ third-party APIs"
 authors = [{ name = "Airbyte", email = "contact@airbyte.io" }]
 readme = "README.md"
@@ -24,9 +24,6 @@ dependencies = [
     "jsonschema>=4.0.0",
     "packaging>=21.0",
 ]
-
-[project.scripts]
-airbyte-agent-sdk = "airbyte_agent_sdk.cli:cli"
 
 [project.optional-dependencies]
 dev = [

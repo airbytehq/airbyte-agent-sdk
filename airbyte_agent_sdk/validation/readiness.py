@@ -1288,7 +1288,7 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
         drift_warning = (
             f"Replication version drift: connector annotated with v{annotated_version}, "
             f"but registry latest is v{registry_version}. "
-            f"Run 'airbyte-agent-sdk annotate replication-version' to update."
+            f"Run 'python -m airbyte_agent_sdk.cli annotate replication-version' to update."
         )
         replication_warnings.append(drift_warning)
         total_warnings += 1

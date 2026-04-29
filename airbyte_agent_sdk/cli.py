@@ -1,7 +1,8 @@
-"""
-CLI for airbyte-agent-sdk tools.
+"""Internal CLI for connector-sdk maintainer and CI tooling.
 
-Provides commands for code generation, testing, and other SDK utilities.
+Not a public surface — invoke via `python -m airbyte_agent_sdk.cli` from the
+connector-sdk pipeline scripts. The console script entry point was removed on
+2026-04-27; this module is no longer advertised to end users.
 """
 
 import asyncio
@@ -57,7 +58,7 @@ def generate_docs(spec_path: Path, output: Path):
     SPEC_PATH: Path to OpenAPI 3.0 YAML specification file (connector.yaml)
 
     Example:
-        uv run airbyte-agent-sdk generate-docs ../integrations/stripe/connector.yaml --output /tmp/stripe-docs
+        uv run python -m airbyte_agent_sdk.cli generate-docs ../integrations/stripe/connector.yaml --output /tmp/stripe-docs
     """
     click.echo(f"Generating docs from {spec_path}...")
 
@@ -97,7 +98,7 @@ def generate_sdk(spec_path: Path, output: Path | None):
     SPEC_PATH: Path to OpenAPI 3.0 YAML specification file (connector.yaml)
 
     Example:
-        uv run airbyte-agent-sdk generate-sdk ../integrations/stripe/connector.yaml
+        uv run python -m airbyte_agent_sdk.cli generate-sdk ../integrations/stripe/connector.yaml
     """
     if output is None:
         # Default: generate into airbyte_agent_sdk/ alongside this CLI
@@ -193,11 +194,11 @@ def run(
     CONNECTOR_PATH: Path to connector.yaml or directory containing it
 
     Example:
-        uv run airbyte-agent-sdk test run ../connectors/stripe/ --test-dir ../connectors/stripe/tests/cassettes --verbose
-        uv run airbyte-agent-sdk test run projects/stripe-mcp/ --verbose
-        uv run airbyte-agent-sdk test run projects/stripe-mcp/ --format=json --output=results.json
-        uv run airbyte-agent-sdk test run projects/stripe-mcp/ --format=html --output=report.html
-        uv run airbyte-agent-sdk test run projects/stripe-mcp/ --show-diffs --verbose
+        uv run python -m airbyte_agent_sdk.cli test run ../connectors/stripe/ --test-dir ../connectors/stripe/tests/cassettes --verbose
+        uv run python -m airbyte_agent_sdk.cli test run projects/stripe-mcp/ --verbose
+        uv run python -m airbyte_agent_sdk.cli test run projects/stripe-mcp/ --format=json --output=results.json
+        uv run python -m airbyte_agent_sdk.cli test run projects/stripe-mcp/ --format=html --output=report.html
+        uv run python -m airbyte_agent_sdk.cli test run projects/stripe-mcp/ --show-diffs --verbose
     """
     try:
         # Resolve connector path
@@ -261,7 +262,7 @@ def validate_spec(spec_path: Path):
     SPEC_PATH: Path to YAML test specification file
 
     Example:
-        uv run airbyte-agent-sdk test validate-spec tests/verified/customers_list.yaml
+        uv run python -m airbyte_agent_sdk.cli test validate-spec tests/verified/customers_list.yaml
     """
     click.echo(f"Validating test spec: {spec_path}...")
 
@@ -339,7 +340,7 @@ def record(
     CONNECTOR_PATH: Path to connector.yaml or directory containing it
 
     Example:
-        uv run airbyte-agent-sdk cassette record connectors/stripe/ \\
+        uv run python -m airbyte_agent_sdk.cli cassette record connectors/stripe/ \\
             --entity customers \\
             --action list \\
             --params '{"limit": 10}' \\
@@ -347,7 +348,7 @@ def record(
             --output tests/cassettes
 
     Example with server variables (e.g., Zendesk):
-        uv run airbyte-agent-sdk cassette record integrations/zendesk-support/ \\
+        uv run python -m airbyte_agent_sdk.cli cassette record integrations/zendesk-support/ \\
             --entity articles \\
             --action list \\
             --secrets '{"client_id": "${ZENDESK_CLIENT_ID}", ...}' \\
@@ -431,8 +432,8 @@ def record(
         click.echo(f"\n✓ Cassette saved to {result.cassette_file}")
         click.echo("\nNext steps:")
         click.echo(f"  1. Review the generated cassette: {result.cassette_file}")
-        click.echo(f"  2. Validate: uv run airbyte-agent-sdk test validate-spec {result.cassette_file}")
-        click.echo(f"  3. Run tests: uv run airbyte-agent-sdk test run {connector_file} --test-dir {output}")
+        click.echo(f"  2. Validate: uv run python -m airbyte_agent_sdk.cli test validate-spec {result.cassette_file}")
+        click.echo(f"  3. Run tests: uv run python -m airbyte_agent_sdk.cli test run {connector_file} --test-dir {output}")
 
     except FileNotFoundError as e:
         click.echo(f"✗ Error: {e}", err=True)
@@ -467,9 +468,9 @@ def readiness(connector_path: Path, quiet: bool, json_output: bool):
     CONNECTOR_PATH: Path to connector directory
 
     Example:
-        uv run airbyte-agent-sdk validate readiness integrations/stripe/
-        uv run airbyte-agent-sdk validate readiness integrations/stripe/ --json-output
-        uv run airbyte-agent-sdk validate readiness integrations/stripe/ --quiet
+        uv run python -m airbyte_agent_sdk.cli validate readiness integrations/stripe/
+        uv run python -m airbyte_agent_sdk.cli validate readiness integrations/stripe/ --json-output
+        uv run python -m airbyte_agent_sdk.cli validate readiness integrations/stripe/ --quiet
     """
     try:
         if not quiet:
@@ -631,8 +632,8 @@ def replication_version(connector_path: Path, dry_run: bool, version_override: s
     CONNECTOR_PATH: Path to connector directory containing connector.yaml
 
     Example:
-        uv run airbyte-agent-sdk annotate replication-version integrations/stripe/
-        uv run airbyte-agent-sdk annotate replication-version integrations/stripe/ --version 5.2.0
+        uv run python -m airbyte_agent_sdk.cli annotate replication-version integrations/stripe/
+        uv run python -m airbyte_agent_sdk.cli annotate replication-version integrations/stripe/ --version 5.2.0
     """
     config_file = connector_path / "connector.yaml"
     if not config_file.exists():
@@ -683,9 +684,9 @@ def overview(connector_path: Path, json_output: bool, markdown: bool, base_ref: 
     CONNECTOR_PATH: Path to connector directory
 
     Example:
-        uv run airbyte-agent-sdk connector overview integrations/stripe/
-        uv run airbyte-agent-sdk connector overview integrations/stripe/ --markdown
-        uv run airbyte-agent-sdk connector overview integrations/stripe/ --markdown --base-ref main
+        uv run python -m airbyte_agent_sdk.cli connector overview integrations/stripe/
+        uv run python -m airbyte_agent_sdk.cli connector overview integrations/stripe/ --markdown
+        uv run python -m airbyte_agent_sdk.cli connector overview integrations/stripe/ --markdown --base-ref main
     """
     try:
         result = get_connector_overview(connector_path)
