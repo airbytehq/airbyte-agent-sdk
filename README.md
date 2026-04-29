@@ -170,3 +170,48 @@ ln -s ~/.codex/skills/airbyte-agent-sdk-src/connector-sdk/.claude/skills/* ~/.co
 ```
 
 See [docs.airbyte.com/ai-agents/about/](https://docs.airbyte.com/ai-agents/about/) for full documentation.
+
+## FAQ
+
+### General
+
+**What is Airbyte Agent SDK?**
+Airbyte Agent SDK is a drop-in toolkit that gives AI agents reliable, permission-aware access to external data sources and APIs. It provides standardized tools for agents to interact with data platforms securely.
+
+**How does it differ from other agent toolkits?**
+Unlike generic agent toolkits, Airbyte Agent SDK focuses on data access with built-in permission controls, making it ideal for agents that need to read/write data from multiple sources while respecting access policies.
+
+### Installation & Setup
+
+**What Python version is required?**
+Python 3.9 or higher. Install via `pip install airbyte-agent-sdk`.
+
+**Do I need an Airbyte account?**
+No. The SDK works standalone for tool integration. An Airbyte account is only needed if you want to leverage Airbyte's data synchronization features.
+
+**Which AI frameworks are supported?**
+The SDK is framework-agnostic. It works with any agent framework that supports tool/function calling, including LangChain, LlamaIndex, and custom agent implementations.
+
+### Tool Integration
+
+**How do I add tools to my agent?**
+Use the provided tool integrations to add data access capabilities. Each integration follows a consistent interface for discovery, authentication, and execution.
+
+**Can I create custom tool integrations?**
+Yes. The SDK provides base classes and interfaces for building custom integrations. See the documentation for examples.
+
+**How are permissions handled?**
+Permissions are managed through the SDK's permission layer. You can configure read/write access per tool, per data source, and per agent.
+
+### Troubleshooting
+
+**Why is my agent not seeing available tools?**
+Ensure the tools are properly registered with your agent framework. Check that the integration is initialized before the agent starts.
+
+**How do I debug authentication issues?**
+Enable debug logging with `LOG_LEVEL=debug`. Verify your API keys and credentials are correctly configured in your environment variables.
+
+**Where can I get help?**
+- **Documentation**: [Airbyte Docs](https://docs.airbyte.com/)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/airbytehq/airbyte-agent-sdk/issues)
+- **Community**: [Airbyte Slack](https://airbyte.com/community)
