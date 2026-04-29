@@ -467,6 +467,15 @@ class VideosList(BaseModel):
     data: list[Video] | None = Field(default=None)
     paging: Paging | None = Field(default=None)
 
+class PixelCreator(BaseModel):
+    """User who created the pixel"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None | None = Field(default=None, description="Creator user ID")
+    """Creator user ID"""
+    name: str | None | None = Field(default=None, description="Creator user name")
+    """Creator user name"""
+
 class PixelOwnerBusiness(BaseModel):
     """Business that owns the pixel"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -484,15 +493,6 @@ class PixelOwnerAdAccount(BaseModel):
     """Owner ad account ID"""
     id: str | None | None = Field(default=None, description="Owner ad account ID (with act_ prefix)")
     """Owner ad account ID (with act_ prefix)"""
-
-class PixelCreator(BaseModel):
-    """User who created the pixel"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None | None = Field(default=None, description="Creator user ID")
-    """Creator user ID"""
-    name: str | None | None = Field(default=None, description="Creator user name")
-    """Creator user name"""
 
 class Pixel(BaseModel):
     """Facebook Ads Pixel"""
@@ -689,26 +689,6 @@ class AdUpdateParams(BaseModel):
     tracking_specs: str | None = Field(default=None)
     bid_amount: str | None = Field(default=None)
 
-class AdLibraryAdSpend(BaseModel):
-    """Amount spent on the ad as a range"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    lower_bound: int | None | None = Field(default=None, description="Lower bound of spend")
-    """Lower bound of spend"""
-    upper_bound: int | None | None = Field(default=None, description="Upper bound of spend")
-    """Upper bound of spend"""
-
-class AdLibraryAdDemographicDistributionItem(BaseModel):
-    """Nested schema for AdLibraryAd.demographic_distribution_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    age: str | None | None = Field(default=None, description="Age range")
-    """Age range"""
-    gender: str | None | None = Field(default=None, description="Gender category")
-    """Gender category"""
-    percentage: str | None | None = Field(default=None, description="Percentage of audience in this demographic")
-    """Percentage of audience in this demographic"""
-
 class AdLibraryAdEstimatedAudienceSize(BaseModel):
     """Estimated audience size range"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -726,6 +706,26 @@ class AdLibraryAdDeliveryByRegionItem(BaseModel):
     """Region name"""
     percentage: str | None | None = Field(default=None, description="Percentage of audience in this region")
     """Percentage of audience in this region"""
+
+class AdLibraryAdDemographicDistributionItem(BaseModel):
+    """Nested schema for AdLibraryAd.demographic_distribution_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    age: str | None | None = Field(default=None, description="Age range")
+    """Age range"""
+    gender: str | None | None = Field(default=None, description="Gender category")
+    """Gender category"""
+    percentage: str | None | None = Field(default=None, description="Percentage of audience in this demographic")
+    """Percentage of audience in this demographic"""
+
+class AdLibraryAdSpend(BaseModel):
+    """Amount spent on the ad as a range"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    lower_bound: int | None | None = Field(default=None, description="Lower bound of spend")
+    """Lower bound of spend"""
+    upper_bound: int | None | None = Field(default=None, description="Upper bound of spend")
+    """Upper bound of spend"""
 
 class AdLibraryAdImpressions(BaseModel):
     """Number of impressions as a range"""
