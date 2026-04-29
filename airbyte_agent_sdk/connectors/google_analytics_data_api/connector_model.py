@@ -1912,7 +1912,7 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
     scoping=[
         ScopingParamConfig(
             param='property_id',
-            config_key='property_id',
+            config_key='property_ids',
         ),
     ],
 )

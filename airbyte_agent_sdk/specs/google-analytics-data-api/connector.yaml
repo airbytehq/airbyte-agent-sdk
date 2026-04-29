@@ -58,7 +58,7 @@ info:
       property_ids: property_ids
   x-airbyte-scoping:
     - param: property_id
-      config_key: property_id
+      config_key: property_ids
   x-airbyte-context-store:
     disable_compaction: true
     entities:

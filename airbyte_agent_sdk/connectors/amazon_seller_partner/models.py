@@ -39,6 +39,19 @@ class AmazonSellerPartnerReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
+class OrderOrdertotal(BaseModel):
+    """Total amount of the order"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderAutomatedshippingsettings(BaseModel):
+    """Automated shipping settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    has_automated_shipping_settings: bool | None = Field(default=None, alias="HasAutomatedShippingSettings")
+
 class OrderShippingaddress(BaseModel):
     """Shipping address for the order"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -47,19 +60,6 @@ class OrderShippingaddress(BaseModel):
     state_or_region: str | None = Field(default=None, alias="StateOrRegion")
     postal_code: str | None = Field(default=None, alias="PostalCode")
     country_code: str | None = Field(default=None, alias="CountryCode")
-
-class OrderAutomatedshippingsettings(BaseModel):
-    """Automated shipping settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    has_automated_shipping_settings: bool | None = Field(default=None, alias="HasAutomatedShippingSettings")
-
-class OrderOrdertotal(BaseModel):
-    """Total amount of the order"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
 
 class OrderDefaultshipfromlocationaddress(BaseModel):
     """Default ship-from address"""
@@ -124,6 +124,90 @@ class OrdersList(BaseModel):
 
     payload: OrdersListPayload | None = Field(default=None)
 
+class OrderItemCodfee(BaseModel):
+    """Cash on delivery fee"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemShippingtax(BaseModel):
+    """Shipping tax"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemShippingprice(BaseModel):
+    """Shipping price"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemShippingdiscounttax(BaseModel):
+    """Shipping discount tax"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemPromotiondiscount(BaseModel):
+    """Promotion discount"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemPromotiondiscounttax(BaseModel):
+    """Promotion discount tax"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemProductinfo(BaseModel):
+    """Product information"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    number_of_items: str | None = Field(default=None, alias="NumberOfItems")
+
+class OrderItemShippingdiscount(BaseModel):
+    """Shipping discount"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemBuyerinfoBuyercustomizedinfo(BaseModel):
+    """Nested schema for OrderItemBuyerinfo.BuyerCustomizedInfo"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    customized_url: str | None = Field(default=None, alias="CustomizedURL")
+
+class OrderItemBuyerinfoGiftwrapprice(BaseModel):
+    """Nested schema for OrderItemBuyerinfo.GiftWrapPrice"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
+class OrderItemBuyerinfo(BaseModel):
+    """Buyer information for the item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    buyer_customized_info: OrderItemBuyerinfoBuyercustomizedinfo | None = Field(default=None, alias="BuyerCustomizedInfo")
+    gift_message_text: str | None = Field(default=None, alias="GiftMessageText")
+    gift_wrap_price: OrderItemBuyerinfoGiftwrapprice | None = Field(default=None, alias="GiftWrapPrice")
+    gift_wrap_level: str | None = Field(default=None, alias="GiftWrapLevel")
+
+class OrderItemCodfeediscount(BaseModel):
+    """Cash on delivery fee discount"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    currency_code: str | None = Field(default=None, alias="CurrencyCode")
+    amount: str | None = Field(default=None, alias="Amount")
+
 class OrderItemPointsgrantedPointsmonetaryvalue(BaseModel):
     """Nested schema for OrderItemPointsgranted.PointsMonetaryValue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -138,81 +222,12 @@ class OrderItemPointsgranted(BaseModel):
     points_number: int | None = Field(default=None, alias="PointsNumber")
     points_monetary_value: OrderItemPointsgrantedPointsmonetaryvalue | None = Field(default=None, alias="PointsMonetaryValue")
 
-class OrderItemShippingtax(BaseModel):
-    """Shipping tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemPromotiondiscounttax(BaseModel):
-    """Promotion discount tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
 class OrderItemBuyerrequestedcancel(BaseModel):
     """Buyer cancellation request information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     is_buyer_requested_cancel: str | None = Field(default=None, alias="IsBuyerRequestedCancel")
     buyer_cancel_reason: str | None = Field(default=None, alias="BuyerCancelReason")
-
-class OrderItemItemtax(BaseModel):
-    """Item tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemPromotiondiscount(BaseModel):
-    """Promotion discount"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemCodfeediscount(BaseModel):
-    """Cash on delivery fee discount"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemProductinfo(BaseModel):
-    """Product information"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    number_of_items: str | None = Field(default=None, alias="NumberOfItems")
-
-class OrderItemCodfee(BaseModel):
-    """Cash on delivery fee"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemShippingdiscount(BaseModel):
-    """Shipping discount"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemShippingdiscounttax(BaseModel):
-    """Shipping discount tax"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemShippingprice(BaseModel):
-    """Shipping price"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    currency_code: str | None = Field(default=None, alias="CurrencyCode")
-    amount: str | None = Field(default=None, alias="Amount")
 
 class OrderItemItemprice(BaseModel):
     """Item price"""
@@ -221,27 +236,12 @@ class OrderItemItemprice(BaseModel):
     currency_code: str | None = Field(default=None, alias="CurrencyCode")
     amount: str | None = Field(default=None, alias="Amount")
 
-class OrderItemBuyerinfoGiftwrapprice(BaseModel):
-    """Nested schema for OrderItemBuyerinfo.GiftWrapPrice"""
+class OrderItemItemtax(BaseModel):
+    """Item tax"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     currency_code: str | None = Field(default=None, alias="CurrencyCode")
     amount: str | None = Field(default=None, alias="Amount")
-
-class OrderItemBuyerinfoBuyercustomizedinfo(BaseModel):
-    """Nested schema for OrderItemBuyerinfo.BuyerCustomizedInfo"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    customized_url: str | None = Field(default=None, alias="CustomizedURL")
-
-class OrderItemBuyerinfo(BaseModel):
-    """Buyer information for the item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    buyer_customized_info: OrderItemBuyerinfoBuyercustomizedinfo | None = Field(default=None, alias="BuyerCustomizedInfo")
-    gift_message_text: str | None = Field(default=None, alias="GiftMessageText")
-    gift_wrap_price: OrderItemBuyerinfoGiftwrapprice | None = Field(default=None, alias="GiftWrapPrice")
-    gift_wrap_level: str | None = Field(default=None, alias="GiftWrapLevel")
 
 class OrderItemTaxcollection(BaseModel):
     """Tax collection information"""
@@ -302,15 +302,15 @@ class OrderItemsList(BaseModel):
 
     payload: OrderItemsListPayload | None = Field(default=None)
 
-class FinancialEventGroupOriginaltotal(BaseModel):
-    """Original total in seller's currency"""
+class FinancialEventGroupConvertedtotal(BaseModel):
+    """Converted total"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     currency_code: str | None = Field(default=None, alias="CurrencyCode")
     currency_amount: float | None = Field(default=None, alias="CurrencyAmount")
 
-class FinancialEventGroupConvertedtotal(BaseModel):
-    """Converted total"""
+class FinancialEventGroupOriginaltotal(BaseModel):
+    """Original total in seller's currency"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     currency_code: str | None = Field(default=None, alias="CurrencyCode")
@@ -525,20 +525,6 @@ class CatalogItem(BaseModel):
     summaries: list[CatalogItemSummariesItem] | None = Field(default=None)
     vendor_details: list[dict[str, Any]] | None = Field(default=None, alias="vendorDetails")
 
-class CatalogItemsListPagination(BaseModel):
-    """Nested schema for CatalogItemsList.pagination"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    next_token: str | None = Field(default=None, alias="nextToken")
-    previous_token: str | None = Field(default=None, alias="previousToken")
-
-class CatalogItemsListRefinementsBrandsItem(BaseModel):
-    """Nested schema for CatalogItemsListRefinements.brands_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    number_of_results: int | None = Field(default=None, alias="numberOfResults")
-    brand_name: str | None = Field(default=None, alias="brandName")
-
 class CatalogItemsListRefinementsClassificationsItem(BaseModel):
     """Nested schema for CatalogItemsListRefinements.classifications_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -547,12 +533,26 @@ class CatalogItemsListRefinementsClassificationsItem(BaseModel):
     display_name: str | None = Field(default=None, alias="displayName")
     classification_id: str | None = Field(default=None, alias="classificationId")
 
+class CatalogItemsListRefinementsBrandsItem(BaseModel):
+    """Nested schema for CatalogItemsListRefinements.brands_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    number_of_results: int | None = Field(default=None, alias="numberOfResults")
+    brand_name: str | None = Field(default=None, alias="brandName")
+
 class CatalogItemsListRefinements(BaseModel):
     """Nested schema for CatalogItemsList.refinements"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     brands: list[CatalogItemsListRefinementsBrandsItem] | None = Field(default=None)
     classifications: list[CatalogItemsListRefinementsClassificationsItem] | None = Field(default=None)
+
+class CatalogItemsListPagination(BaseModel):
+    """Nested schema for CatalogItemsList.pagination"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    next_token: str | None = Field(default=None, alias="nextToken")
+    previous_token: str | None = Field(default=None, alias="previousToken")
 
 class CatalogItemsList(BaseModel):
     """Catalog items search results"""
