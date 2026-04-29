@@ -86,21 +86,6 @@ class IssueResponseAssignee(BaseModel):
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
 
-class IssueResponseReactions(BaseModel):
-    """Reaction counts"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    url: str | None = Field(default=None)
-    total_count: int | None = Field(default=None)
-    field_1: int | None = Field(default=None, alias="+1")
-    field_1: int | None = Field(default=None, alias="-1")
-    laugh: int | None = Field(default=None)
-    hooray: int | None = Field(default=None)
-    confused: int | None = Field(default=None)
-    heart: int | None = Field(default=None)
-    rocket: int | None = Field(default=None)
-    eyes: int | None = Field(default=None)
-
 class IssueResponseUser(BaseModel):
     """The user who created the issue"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -134,6 +119,21 @@ class IssueResponseLabelsItem(BaseModel):
     color: str | None = Field(default=None)
     default: bool | None = Field(default=None)
     description: str | None | None = Field(default=None)
+
+class IssueResponseReactions(BaseModel):
+    """Reaction counts"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    url: str | None = Field(default=None)
+    total_count: int | None = Field(default=None)
+    field_1: int | None = Field(default=None, alias="+1")
+    field_1: int | None = Field(default=None, alias="-1")
+    laugh: int | None = Field(default=None)
+    hooray: int | None = Field(default=None)
+    confused: int | None = Field(default=None)
+    heart: int | None = Field(default=None)
+    rocket: int | None = Field(default=None)
+    eyes: int | None = Field(default=None)
 
 class IssueResponse(BaseModel):
     """IssueResponse type definition"""
@@ -274,6 +274,22 @@ class PullRequestResponseUser(BaseModel):
     type_: str | None = Field(default=None, alias="type")
     site_admin: bool | None = Field(default=None)
 
+class PullRequestResponseBase(BaseModel):
+    """The base branch"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    label: str | None = Field(default=None)
+    ref: str | None = Field(default=None)
+    sha: str | None = Field(default=None)
+
+class PullRequestResponseHead(BaseModel):
+    """The head branch"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    label: str | None = Field(default=None)
+    ref: str | None = Field(default=None)
+    sha: str | None = Field(default=None)
+
 class PullRequestResponseLabelsItem(BaseModel):
     """Nested schema for PullRequestResponse.labels_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -285,22 +301,6 @@ class PullRequestResponseLabelsItem(BaseModel):
     color: str | None = Field(default=None)
     default: bool | None = Field(default=None)
     description: str | None | None = Field(default=None)
-
-class PullRequestResponseHead(BaseModel):
-    """The head branch"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    label: str | None = Field(default=None)
-    ref: str | None = Field(default=None)
-    sha: str | None = Field(default=None)
-
-class PullRequestResponseBase(BaseModel):
-    """The base branch"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    label: str | None = Field(default=None)
-    ref: str | None = Field(default=None)
-    sha: str | None = Field(default=None)
 
 class PullRequestResponse(BaseModel):
     """PullRequestResponse type definition"""

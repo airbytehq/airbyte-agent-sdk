@@ -43,6 +43,14 @@ info:
     - "Update subscriber information"
     - "Send a campaign now"
     - "Create a new automation workflow"
+  x-airbyte-config-normalization:
+    rules:
+    - target: data_center
+      source: credentials.apikey
+      when_missing: false
+      transform:
+        type: suffix
+        delimiter: "-"
   x-airbyte-skip-auth-methods:
   - bearer    # Airbyte implements OAuth using bearer
 
