@@ -78,6 +78,7 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
     entities=[
         EntityDefinition(
             name='website_overview',
+            stream_name='website_overview',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -292,9 +293,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened website overview report row with date, users, sessions, bounce rate, and page view metrics.',
+                'x-airbyte-entity-name': 'website_overview',
+                'x-airbyte-stream-name': 'website_overview',
+            },
         ),
         EntityDefinition(
             name='daily_active_users',
+            stream_name='daily_active_users',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -495,9 +503,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened daily active users report row with 1-day active user counts by date.',
+                'x-airbyte-entity-name': 'daily_active_users',
+                'x-airbyte-stream-name': 'daily_active_users',
+            },
         ),
         EntityDefinition(
             name='weekly_active_users',
+            stream_name='weekly_active_users',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -698,9 +713,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened weekly active users report row with 7-day active user counts by date.',
+                'x-airbyte-entity-name': 'weekly_active_users',
+                'x-airbyte-stream-name': 'weekly_active_users',
+            },
         ),
         EntityDefinition(
             name='four_weekly_active_users',
+            stream_name='four_weekly_active_users',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -901,9 +923,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened four-weekly active users report row with 28-day active user counts by date.',
+                'x-airbyte-entity-name': 'four_weekly_active_users',
+                'x-airbyte-stream-name': 'four_weekly_active_users',
+            },
         ),
         EntityDefinition(
             name='traffic_sources',
+            stream_name='traffic_sources',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1122,9 +1151,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened traffic sources report row with session source, medium, and engagement metrics by date.',
+                'x-airbyte-entity-name': 'traffic_sources',
+                'x-airbyte-stream-name': 'traffic_sources',
+            },
         ),
         EntityDefinition(
             name='pages',
+            stream_name='pages',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1331,9 +1367,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened pages report row with page views and bounce rate by host, path, and date.',
+                'x-airbyte-entity-name': 'pages',
+                'x-airbyte-stream-name': 'pages',
+            },
         ),
         EntityDefinition(
             name='devices',
+            stream_name='devices',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1554,9 +1597,16 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
             },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened devices report row with engagement metrics by device category, OS, browser, and date.',
+                'x-airbyte-entity-name': 'devices',
+                'x-airbyte-stream-name': 'devices',
+            },
         ),
         EntityDefinition(
             name='locations',
+            stream_name='locations',
             actions=[Action.LIST],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1776,6 +1826,12 @@ GoogleAnalyticsDataApiConnectorModel: ConnectorModel = ConnectorModel(
                     meta_extractor={'row_count': '$.rowCount'},
                     no_pagination='runReport returns a bounded aggregation scoped to the request body (dateRanges + dimensions + metrics); GA4 Data API responses only surface rowCount, not a next-page cursor.',
                 ),
+            },
+            entity_schema={
+                'type': 'object',
+                'description': 'A flattened locations report row with engagement metrics by region, country, city, and date.',
+                'x-airbyte-entity-name': 'locations',
+                'x-airbyte-stream-name': 'locations',
             },
         ),
     ],

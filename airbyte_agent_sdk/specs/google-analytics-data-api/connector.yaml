@@ -790,6 +790,54 @@ components:
           type: string
           description: Resource type identifier
 
+    WebsiteOverviewRecord:
+      type: object
+      x-airbyte-entity-name: website_overview
+      x-airbyte-stream-name: website_overview
+      description: A flattened website overview report row with date, users, sessions, bounce rate, and page view metrics.
+
+    DailyActiveUsersRecord:
+      type: object
+      x-airbyte-entity-name: daily_active_users
+      x-airbyte-stream-name: daily_active_users
+      description: A flattened daily active users report row with 1-day active user counts by date.
+
+    WeeklyActiveUsersRecord:
+      type: object
+      x-airbyte-entity-name: weekly_active_users
+      x-airbyte-stream-name: weekly_active_users
+      description: A flattened weekly active users report row with 7-day active user counts by date.
+
+    FourWeeklyActiveUsersRecord:
+      type: object
+      x-airbyte-entity-name: four_weekly_active_users
+      x-airbyte-stream-name: four_weekly_active_users
+      description: A flattened four-weekly active users report row with 28-day active user counts by date.
+
+    TrafficSourcesRecord:
+      type: object
+      x-airbyte-entity-name: traffic_sources
+      x-airbyte-stream-name: traffic_sources
+      description: A flattened traffic sources report row with session source, medium, and engagement metrics by date.
+
+    PagesRecord:
+      type: object
+      x-airbyte-entity-name: pages
+      x-airbyte-stream-name: pages
+      description: A flattened pages report row with page views and bounce rate by host, path, and date.
+
+    DevicesRecord:
+      type: object
+      x-airbyte-entity-name: devices
+      x-airbyte-stream-name: devices
+      description: A flattened devices report row with engagement metrics by device category, OS, browser, and date.
+
+    LocationsRecord:
+      type: object
+      x-airbyte-entity-name: locations
+      x-airbyte-stream-name: locations
+      description: A flattened locations report row with engagement metrics by region, country, city, and date.
+
     WebsiteOverviewRequest:
       type: object
       description: Request body for website overview report
