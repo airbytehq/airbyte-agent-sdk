@@ -18,6 +18,63 @@
 {% endfor -%}
 {%- endmacro %}
 
+{# Emit multi-framework usage code blocks for a connector.
+   Each block gets a `title` attribute so Docusaurus remark plugin can wrap them in tabs.
+   On GitHub, all three blocks render sequentially with bold labels.
+
+   Args:
+     class_name: Connector class name (e.g., "StripeConnector")
+     connector_name: Snake-case connector name (e.g., "stripe")
+     package_name: Full package path (e.g., "airbyte_agent_sdk.connectors.stripe")
+     connector_init_lines: Pre-rendered connector initialization lines (imports + constructor)
+#}
+{% macro framework_usage_blocks(class_name, connector_name, package_name, connector_init_lines) %}
+**Pydantic AI**
+
+```python title="Pydantic AI"
+{{ connector_init_lines }}
+
+@agent.tool_plain
+@{{ class_name }}.tool_utils
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+import json
+
+from langchain_core.tools import tool
+{{ connector_init_lines }}
+
+@tool
+@{{ class_name }}.tool_utils
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None) -> str:
+    """Execute {{ connector_name | title }} connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return json.dumps(result, default=str)
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+import json
+
+from fastmcp import FastMCP
+{{ connector_init_lines }}
+
+mcp = FastMCP("{{ connector_name | title }} Agent")
+
+@mcp.tool()
+@{{ class_name }}.tool_utils
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None) -> str:
+    """Execute {{ connector_name | title }} connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return json.dumps(result, default=str)
+```
+{%- endmacro %}
+
 {% macro python_operation_call(connector_var, op, assign_to=None, include_download_comment=False, params=None) -%}
 {%- set example_params = params if params is not none else op.required_parameters -%}
 {%- if op.is_download -%}

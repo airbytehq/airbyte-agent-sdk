@@ -302,25 +302,24 @@ This authentication method isn't available for this connector.
 After creating the connector, execute operations using either the Python SDK or API.
 If your Airbyte client can access multiple organizations, include `organization_id` in `AirbyteAuthConfig` and `X-Organization-Id` in raw API calls.
 
+{% from "_macros.jinja2" import framework_usage_blocks %}
+
 **Python SDK**
 
 The `connect()` factory returns a fully typed `{{ class_name }}` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
-```python
+{% set connect_exec_init_lines -%}
 from airbyte_agent_sdk import connect
 from {{ package_name }} import {{ class_name }}
 
 connector = connect("{{ connector_name }}", workspace_name="<your_workspace_name>")
+{%- endset %}
 
-@agent.tool_plain # assumes you're using Pydantic AI
-@{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
+{{ framework_usage_blocks(class_name, connector_name, package_name, connect_exec_init_lines) }}
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
 
-```python
+{%- set hosted_exec_init_lines -%}
 from {{ package_name }} import {{ class_name }}
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -332,12 +331,9 @@ connector = {{ class_name }}(
         airbyte_client_secret="<your-client-secret>"
     )
 )
+{%- endset %}
 
-@agent.tool_plain # assumes you're using Pydantic AI
-@{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
+{{ framework_usage_blocks(class_name, connector_name, package_name, hosted_exec_init_lines) }}
 
 **API**
 

@@ -1,4 +1,4 @@
-{%- from "_macros.jinja2" import python_operation_call, supported_entities_actions_table -%}
+{%- from "_macros.jinja2" import python_operation_call, supported_entities_actions_table, framework_usage_blocks -%}
 # {{ connector_name | title }}
 
 The {{ connector_name | title }} agent connector is a Python package that equips AI agents to interact with {{ connector_name | title }} through strongly typed, well-documented tools. It's ready to use directly in your Python app, in an agent framework, or exposed through an MCP.
@@ -55,7 +55,7 @@ In open source mode, you provide API credentials directly to the connector.
 {%- set auth_class = auth_config.type_name -%}
 {%- set auth_import = "\nfrom " ~ package_name ~ ".models import " ~ auth_class -%}
 {%- endif %}
-```python
+{%- set oss_init_lines -%}
 from {{ package_name }} import {{ class_name }}{{ auth_import }}
 
 connector = {{ class_name }}(
@@ -63,23 +63,15 @@ connector = {{ class_name }}(
 {% for field in example_option.fields %}        {{ field.name }}="<{{ field.description or field.name }}>"{{ "," if not loop.last else "" }}
 {% endfor %}    )
 )
-
-@agent.tool_plain # assumes you're using Pydantic AI
-@{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
+{%- endset %}
+{{ framework_usage_blocks(class_name, connector_name, package_name, oss_init_lines) }}
 {% else %}
-```python
+{%- set oss_init_lines -%}
 from {{ package_name }} import {{ class_name }}
 
 connector = {{ class_name }}()
-
-@agent.tool_plain # assumes you're using Pydantic AI
-@{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
+{%- endset %}
+{{ framework_usage_blocks(class_name, connector_name, package_name, oss_init_lines) }}
 {% endif %}
 
 ### Hosted
@@ -91,21 +83,18 @@ This example assumes you've already authenticated your connector with Airbyte. S
 
 The `connect()` factory returns a fully typed `{{ class_name }}` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
-```python
+{% set connect_init_lines -%}
 from airbyte_agent_sdk import connect
 from {{ package_name }} import {{ class_name }}
 
 connector = connect("{{ connector_name }}", workspace_name="<your_workspace_name>")
+{%- endset %}
 
-@agent.tool_plain # assumes you're using Pydantic AI
-@{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
+{{ framework_usage_blocks(class_name, connector_name, package_name, connect_init_lines) }}
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
 
-```python
+{% set hosted_init_lines -%}
 from {{ package_name }} import {{ class_name }}
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -117,12 +106,8 @@ connector = {{ class_name }}(
         airbyte_client_secret="<your-client-secret>"
     )
 )
-
-@agent.tool_plain # assumes you're using Pydantic AI
-@{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
+{%- endset %}
+{{ framework_usage_blocks(class_name, connector_name, package_name, hosted_init_lines) }}
 
 ## Full documentation
 

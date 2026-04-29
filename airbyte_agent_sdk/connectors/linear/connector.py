@@ -102,7 +102,7 @@ class LinearConnector:
 
     connector_name = "linear"
     connector_version = "0.1.19"
-    sdk_version = "0.1.110"
+    sdk_version = "0.1.111"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
