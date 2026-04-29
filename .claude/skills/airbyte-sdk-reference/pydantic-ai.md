@@ -53,6 +53,23 @@ async def stripe_execute(entity: str, action: str, params: dict | None = None):
 
 `tool_utils` enriches the docstring BEFORE PydanticAI reads it for tool registration.
 
+### Automatic Exception Translation
+
+`tool_utils` now also translates retryable runtime errors (`ConnectorValidationError`, `RateLimitError`, `NetworkError`, `TimeoutError`, output-too-large) into `ModelRetry` so the LLM can self-correct on the next agent turn. No code-pattern change — the canonical `@agent.tool_plain + @Connector.tool_utils` stack continues to work unchanged.
+
+Recovery example:
+
+```python
+# Agent calls with a bad action → ModelRetry → agent retries with corrected args
+result = await agent.run("List Stripe customers")
+# Internally: first tool call raises ConnectorValidationError → tool_utils translates
+# to ModelRetry → pydantic-ai re-prompts with the error → agent corrects the call.
+```
+
+For non-Connector callables, use the standalone `@translate_exceptions(framework="pydantic_ai")` from `airbyte_agent_sdk`.
+
+See: `examples/demo_agent.py` for a runnable end-to-end demo.
+
 ## Multi-Connector
 
 Same pattern as single-connector, repeated. Extract `AirbyteAuthConfig(...)` into a shared `auth` variable and construct one typed connector per service.

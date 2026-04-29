@@ -51,6 +51,12 @@ async def stripe_execute(...):
 
 `tool_utils` is a `@classmethod` — use `StripeConnector.tool_utils`, not `connector.tool_utils`.
 
+### Automatic Retry Translation
+
+`tool_utils` automatically translates retryable errors to the framework's retry signal (`ModelRetry` for pydantic-ai). The example above continues to work unchanged — translation happens inside `tool_utils` with no extra decorator needed.
+
+Reference demo: `connector-sdk/examples/demo_agent.py` (mocked, no credentials needed: `--mock`).
+
 ## Verify the Setup
 
 ```python
