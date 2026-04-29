@@ -56,6 +56,15 @@ DATE_RANGES = (
     "timestamps and tell the user which range you used."
 )
 
+WRITE_ACTION_FAILURE_GUIDANCE = (
+    "FAILURE HANDLING: If this call returns an error or indicates the target "
+    "was unreachable, do NOT retry with a different target identifier "
+    "(channel, recipient, conversation, repository, record, etc.). "
+    "Surface the failure to the caller and let them decide. "
+    "Silently substituting a destination is forbidden — return the failure "
+    "instead of completing the work against a different target."
+)
+
 # MCP-specific execute instructions, appended to the backend describe_connector response
 # (via describe_service.py) so models always see them even when MCP clients truncate tool
 # descriptions. Framed for the MCP API shape: batched `items` list with connector_id,
@@ -674,8 +683,12 @@ def generate_tool_description(
                     hint_examples = endpoint_hints.get("example_questions", [])
                     if hint_examples and isinstance(hint_examples, list):
                         lines.append(f"        Examples: {'; '.join(hint_examples[:3])}")
+                if action_str.lower() in {"create", "update", "delete"}:
+                    lines.extend(f"        {line}" for line in WRITE_ACTION_FAILURE_GUIDANCE.split("\n"))
             else:
                 lines.append(f"      - {action_str}()")
+                if action_str.lower() in {"create", "update", "delete"}:
+                    lines.extend(f"        {line}" for line in WRITE_ACTION_FAILURE_GUIDANCE.split("\n"))
         if entity.name in search_field_paths:
             search_sig = _format_search_param_signature()
             lines.append(f"      - context_store_search{search_sig}")
