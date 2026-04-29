@@ -15,8 +15,7 @@ Supply your Airbyte Cloud credentials in one of three ways:
    automatically when their `client_id`/`client_secret` kwargs are
    omitted.
 2. **Explicit kwargs**: pass `client_id=` and `client_secret=` directly
-   to [`connect()`](#connect), [`Workspace`](#Workspace),
-   [`ask()`](#ask), or [`ask_sync()`](#ask_sync).
+   to [`connect()`](#connect) or [`Workspace`](#Workspace).
 3. **Programmatic**: call [`configure()`](#configure) once at startup to
    set process-wide defaults (useful in notebooks).
 
@@ -47,9 +46,6 @@ releases the underlying HTTP client automatically. If you need to manage
 the lifetime manually, assign the connector and call `await
 connector.close()` in a `finally` block.
 
-Use [`ask_sync`](#ask_sync) and direct [`connect()`](#connect) for scripts
-and notebooks; use [`ask`](#ask) and [`Workspace`](#Workspace) for async
-applications.
 
 ## Entry points
 
@@ -57,8 +53,6 @@ applications.
   or a [`HostedExecutor`](#HostedExecutor).
 - [`list_connectors`](#list_connectors) — enumerate connectors bundled
   with this SDK.
-- [`ask`](#ask) / [`ask_sync`](#ask_sync) — natural-language query across
-  an entire workspace.
 
 ## Workspace operations
 
@@ -69,7 +63,7 @@ applications.
 
 ## Results & info
 
-- [`AskResult`](#AskResult), [`ConnectorInfo`](#ConnectorInfo),
+- [`ConnectorInfo`](#ConnectorInfo),
   [`WorkflowInfo`](#WorkflowInfo), [`AutomationInfo`](#AutomationInfo),
   [`ExecutionConfig`](#ExecutionConfig),
   [`ExecutionResult`](#ExecutionResult),
@@ -121,7 +115,6 @@ releases without notice.
 
 from __future__ import annotations
 
-from .ask import ask, ask_sync
 from .config import configure
 from .connect import connect
 from .constants import SDK_VERSION
@@ -136,7 +129,7 @@ from .executor import (
     InvalidParameterError,
     MissingParameterError,
 )
-from .executor.models import AskResult, AutomationInfo, ConnectorInfo, WorkflowInfo
+from .executor.models import AutomationInfo, ConnectorInfo, WorkflowInfo
 from .http.exceptions import (
     AuthenticationError,
     ConnectorValidationError,
@@ -159,12 +152,9 @@ __all__ = [
     "connect",
     "list_connectors",
     "Workspace",
-    "ask",
-    "ask_sync",
     # Hosted execution
     "HostedExecutor",
     # Results / info types
-    "AskResult",
     "ConnectorInfo",
     "WorkflowInfo",
     "AutomationInfo",
