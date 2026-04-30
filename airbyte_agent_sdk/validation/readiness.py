@@ -649,56 +649,70 @@ def _check_entity_relationships(config: ConnectorModel) -> List[str]:
     return warnings
 
 
+def _compute_implicit_config_keys(config: ConnectorModel) -> set[str]:
+    """Compute the set of config keys available for implicit parameter resolution.
+
+    Includes auth config property names and server variable default keys.
+    These are the keys the SDK can resolve automatically when a parameter name
+    matches a `config_values` entry.
+    """
+    keys: set[str] = set()
+    if config.auth and config.auth.options:
+        for opt in config.auth.options:
+            if opt.user_config_spec and opt.user_config_spec.properties:
+                keys.update(opt.user_config_spec.properties.keys())
+    elif config.auth and config.auth.user_config_spec and config.auth.user_config_spec.properties:
+        keys.update(config.auth.user_config_spec.properties.keys())
+    keys.update(config.server_variable_defaults.keys())
+    return keys
+
+
+# Actions whose parameters are supplied by the caller (agent or list results)
+# rather than requiring static resolution via relationships/scoping/config.
+_CALLER_SUPPLIED_PARAM_ACTIONS = {
+    Action.GET,
+    Action.CREATE,
+    Action.UPDATE,
+    Action.DELETE,
+    Action.DOWNLOAD,
+    Action.AUTHORIZE,
+    Action.API_SEARCH,
+}
+
+
 def _check_entity_relationships_coverage(config: ConnectorModel) -> Tuple[List[str], List[str]]:
-    """Check that endpoints with path params are covered by entity relationships or scoping.
+    """Check that endpoints with path params or required query params are covered.
 
-    Returns a tuple of (errors, warnings) for endpoints where path parameters
-    are not covered by entity relationships, scoping, or implicit config
-    resolution.
+    Validates that path parameters and required query parameters (no default,
+    no `config_inject`) have a resolution source: entity relationships,
+    scoping, or implicit config key match.
 
-    List operations with uncovered path params are errors (they cause runtime
-    ParamResolutionError during health checks). Non-list operations are warnings.
+    List operations with uncovered params are errors (they cause runtime
+    `ParamResolutionError` during health checks). Non-list operations are warnings.
 
-    Skips single-record actions (get, update, delete) when the entity also has
-    a list action, since those path params are the entity's own primary key
-    resolved from list results -- not a parent dependency.
+    Skips caller-supplied-param actions (get, create, update, delete, download,
+    authorize, api_search) when the entity also has a list action, since those
+    params are the entity's own primary key or agent-supplied values.
     """
     errors: List[str] = []
     warnings: List[str] = []
 
-    # Collect all known config key names that the SDK can resolve implicitly
-    # (auth properties + server variable defaults)
-    implicit_config_keys: set[str] = set()
-    if config.auth and config.auth.options:
-        for opt in config.auth.options:
-            if opt.user_config_spec and opt.user_config_spec.properties:
-                implicit_config_keys.update(opt.user_config_spec.properties.keys())
-    elif config.auth and config.auth.user_config_spec and config.auth.user_config_spec.properties:
-        implicit_config_keys.update(config.auth.user_config_spec.properties.keys())
-    implicit_config_keys.update(config.server_variable_defaults.keys())
-
-    # Collect scoping param names
+    implicit_config_keys = _compute_implicit_config_keys(config)
     scoping_params = {s.param for s in config.scoping}
-
-    single_record_actions = {Action.GET, Action.UPDATE, Action.DELETE, Action.DOWNLOAD}
 
     for entity in config.entities:
         has_list = Action.LIST in entity.endpoints
-        # Build set of foreign_keys covered by entity relationships
         relationship_keys = {rel.foreign_key for rel in entity.relationships}
         for action, endpoint in entity.endpoints.items():
-            if not endpoint.path_params:
+            if has_list and action in _CALLER_SUPPLIED_PARAM_ACTIONS:
                 continue
-            # Skip self-referencing actions (get/update/delete by own ID)
-            # when the entity also has a list action
-            if has_list and action in single_record_actions:
-                continue
+
+            # Check path params
             for param in endpoint.path_params:
                 if param in relationship_keys:
                     continue
                 if param in scoping_params:
                     continue
-                # SDK resolves implicitly when param name matches a config key
                 if param in implicit_config_keys:
                     continue
                 msg = (
@@ -711,7 +725,86 @@ def _check_entity_relationships_coverage(config: ConnectorModel) -> Tuple[List[s
                     errors.append(msg)
                 else:
                     warnings.append(msg)
+
+            # Check required query params without resolution sources
+            for qp_name, qp_schema in endpoint.query_params_schema.items():
+                if not qp_schema.get("required"):
+                    continue
+                if qp_schema.get("default") is not None:
+                    continue
+                if qp_schema.get("config_inject"):
+                    continue
+                if qp_name in relationship_keys:
+                    continue
+                if qp_name in scoping_params:
+                    continue
+                if qp_name in implicit_config_keys:
+                    continue
+                msg = (
+                    f"Entity '{entity.name}' operation '{action.value}' has required query "
+                    f"parameter '{qp_name}' with no default, config_inject, entity relationship, "
+                    f"or scoping declaration. This parameter has no resolution source and will be "
+                    f"omitted at runtime."
+                )
+                if action == Action.LIST:
+                    errors.append(msg)
+                else:
+                    warnings.append(msg)
     return errors, warnings
+
+
+def _check_required_header_params(config: ConnectorModel) -> Tuple[List[str], List[str]]:
+    """Check that required header params have a resolution source.
+
+    Headers have fewer resolution paths than path/query params -- they are
+    not resolved via relationships or scoping.  A required header with no
+    default and no matching config key will be silently omitted at runtime.
+
+    All findings are warnings (not errors) because headers may be injected
+    by auth middleware or custom HTTP client interceptors that readiness
+    cannot introspect.
+    """
+    errors: List[str] = []
+    warnings: List[str] = []
+
+    implicit_config_keys = _compute_implicit_config_keys(config)
+
+    for entity in config.entities:
+        for action, endpoint in entity.endpoints.items():
+            if not endpoint.header_params_schema:
+                continue
+            for header_name, schema in endpoint.header_params_schema.items():
+                if not schema.get("required"):
+                    continue
+                if schema.get("default") is not None:
+                    continue
+                if header_name in implicit_config_keys:
+                    continue
+                warnings.append(
+                    f"Entity '{entity.name}' operation '{action.value}' has required header "
+                    f"parameter '{header_name}' with no default value or config resolution source."
+                )
+    return errors, warnings
+
+
+def _check_scoping_config_keys(config: ConnectorModel) -> List[str]:
+    """Validate that `x-airbyte-scoping` config_key references resolve to known config keys.
+
+    Each scoping entry declares a `config_key` (or defaults to `param`) that
+    the executor looks up in `config_values` at runtime.  A misspelled or
+    missing key silently fails parameter resolution.
+    """
+    warnings: List[str] = []
+    implicit_config_keys = _compute_implicit_config_keys(config)
+
+    for scoping_entry in config.scoping:
+        key = scoping_entry.config_key or scoping_entry.param
+        if key not in implicit_config_keys:
+            warnings.append(
+                f"Scoping entry for param '{scoping_entry.param}' references config_key "
+                f"'{key}' which is not found in auth config properties or server variable defaults."
+            )
+    return warnings
 
 
 def _validate_entity_relationships(config: ConnectorModel, raw_spec: Dict[str, Any]) -> List[str]:
@@ -1334,6 +1427,15 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
     total_errors += len(relationship_coverage_errors)
     total_warnings += len(relationship_coverage_warnings)
 
+    # Check required header params have a resolution source (default or config key)
+    header_param_errors, header_param_warnings = _check_required_header_params(config)
+    total_errors += len(header_param_errors)
+    total_warnings += len(header_param_warnings)
+
+    # Validate scoping config_key references resolve to known config keys
+    scoping_key_warnings = _check_scoping_config_keys(config)
+    total_warnings += len(scoping_key_warnings)
+
     # Check list operations declare pagination metadata (meta-extractor with next-page/cursor field)
     # or explicitly opt out via x-airbyte-no-pagination with a justification.
     list_pagination_errors, list_pagination_warnings = _check_list_pagination_coverage(config)
@@ -1387,6 +1489,8 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
 
     # Add coverage warnings to readiness_warnings (errors already counted above)
     readiness_warnings.extend(relationship_coverage_warnings)
+    readiness_warnings.extend(header_param_warnings)
+    readiness_warnings.extend(scoping_key_warnings)
     readiness_warnings.extend(list_pagination_warnings)
     readiness_warnings.extend(cache_field_warnings)
 
