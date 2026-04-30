@@ -2601,8 +2601,7 @@
                 "usage_1h",
                 "usage_24h",
                 "usage_7d"
-              ],
-              "default": "position"
+              ]
             },
             "required": null,
             "description": "Sort field for offset pagination",
@@ -2758,8 +2757,7 @@
                 "usage_1h",
                 "usage_24h",
                 "usage_7d"
-              ],
-              "default": "position"
+              ]
             },
             "required": null,
             "description": "Sort field for offset pagination",

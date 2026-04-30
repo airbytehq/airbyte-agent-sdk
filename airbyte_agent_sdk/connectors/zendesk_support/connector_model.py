@@ -4548,7 +4548,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                         'sort_by': {
                             'type': 'string',
                             'required': False,
-                            'default': 'position',
                             'enum': [
                                 'alphabetical',
                                 'created_at',
@@ -4779,7 +4778,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                         'sort_by': {
                             'type': 'string',
                             'required': False,
-                            'default': 'position',
                             'enum': [
                                 'alphabetical',
                                 'created_at',

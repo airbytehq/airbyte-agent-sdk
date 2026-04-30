@@ -4890,7 +4890,6 @@ paths:
         schema:
           type: string
           enum: [alphabetical, created_at, updated_at, usage_1h, usage_24h, usage_7d]
-          default: position
       - name: sort_order
         in: query
         description: Sort order for offset pagination
@@ -4991,7 +4990,6 @@ paths:
         schema:
           type: string
           enum: [alphabetical, created_at, updated_at, usage_1h, usage_24h, usage_7d]
-          default: position
       - name: sort_order
         in: query
         description: Sort order for offset pagination
