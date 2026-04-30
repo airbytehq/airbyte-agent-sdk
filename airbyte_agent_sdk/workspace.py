@@ -34,7 +34,7 @@ def _automation_info_from_dict(data: dict[str, Any]) -> AutomationInfo:
 class Workspace:
     """Top-level entry point for Airbyte hosted-mode workspace operations.
 
-    Provides workspace-level methods: list/create/delete connectors, get a
+    Provides workspace-level methods: list/delete connectors, get a
     connector executor, and workflow/automation CRUD. Use `Workspace` when
     you want to operate against a whole workspace (many connectors,
     workflows, automations); use [`connect()`](#connect) when you already
@@ -152,26 +152,6 @@ class Workspace:
             airbyte_client_secret=self._client_secret,
             connector_id=connector_id,
             organization_id=self._organization_id,
-        )
-
-    async def create_connector(
-        self,
-        *,
-        definition_id: str,
-        credentials: dict[str, Any] | None = None,
-        name: str | None = None,
-        replication_config: dict[str, Any] | None = None,
-        source_template_id: str | None = None,
-    ) -> str:
-        """Create a new connector, returns the connector ID."""
-        source_name = name or f"connector-{self._workspace_name}"
-        return await self._cloud_client.create_source(
-            name=source_name,
-            connector_definition_id=definition_id,
-            workspace_name=self._workspace_name,
-            credentials=credentials,
-            replication_config=replication_config,
-            source_template_id=source_template_id,
         )
 
     async def delete_connector(self, connector_id: str) -> None:

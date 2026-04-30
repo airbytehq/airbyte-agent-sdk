@@ -102,27 +102,6 @@ To implement your own OAuth flow, use Airbyte's server-side OAuth API endpoints.
 
 By default, Airbyte uses its own OAuth app credentials. You can override these with your own so that OAuth consent screens show your company's branding. If you skip this step, the consent screen shows "Airbyte" as the requesting application.
 
-**Python SDK**
-
-```python
-from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
-from airbyte_agent_sdk.connectors.hubspot.models import HubspotOAuthCredentials
-from airbyte_agent_sdk.types import AirbyteAuthConfig
-
-await HubspotConnector.configure_oauth_app_parameters(
-    airbyte_config=AirbyteAuthConfig(
-        airbyte_client_id="<your_airbyte_client_id>",
-        airbyte_client_secret="<your_airbyte_client_secret>",
-    ),
-    credentials=HubspotOAuthCredentials(
-        client_id="<Your HubSpot OAuth app's client ID>",
-        client_secret="<Your HubSpot OAuth app's client secret>",
-    ),
-)
-```
-
-**API**
-
 ```bash
 curl -X PUT "https://api.airbyte.ai/api/v1/oauth/credentials" \
   -H "Authorization: Bearer <YOUR_BEARER_TOKEN>" \
@@ -137,20 +116,6 @@ curl -X PUT "https://api.airbyte.ai/api/v1/oauth/credentials" \
 ```
 
 **To revert to Airbyte-managed defaults**:
-
-**Python SDK**
-
-```python
-await HubspotConnector.configure_oauth_app_parameters(
-    airbyte_config=AirbyteAuthConfig(
-        airbyte_client_id="<your_airbyte_client_id>",
-        airbyte_client_secret="<your_airbyte_client_secret>",
-    ),
-    credentials=None,
-)
-```
-
-**API**
 
 ```bash
 curl -X DELETE "https://api.airbyte.ai/api/v1/oauth/credentials/connector_type/hubspot" \

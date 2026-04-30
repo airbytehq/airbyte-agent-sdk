@@ -82,7 +82,7 @@ class SentryConnector:
 
     connector_name = "sentry"
     connector_version = "1.0.4"
-    sdk_version = "0.1.120"
+    sdk_version = "0.1.121"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -537,10 +537,6 @@ class SentryConnector:
 
         Returns:
             The connector ID if in hosted mode, None if in local mode.
-
-        Example:
-            connector = await SentryConnector.create(...)
-            print(f"Created connector: {connector.connector_id}")
         """
         if hasattr(self, '_executor') and hasattr(self._executor, '_connector_id'):
             return self._executor._connector_id
@@ -559,107 +555,6 @@ class SentryConnector:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Async context manager exit."""
         await self.close()
-
-    # ===== HOSTED MODE FACTORY =====
-
-    @classmethod
-    async def create(
-        cls,
-        *,
-        airbyte_config: AirbyteAuthConfig,
-        auth_config: "SentryAuthConfig",
-        name: str | None = None,
-        replication_config: "SentryReplicationConfig" | None = None,
-        source_template_id: str | None = None,
-    ) -> "SentryConnector":
-        """
-        Create a new hosted connector on Airbyte Cloud.
-
-        This factory method:
-        1. Creates a source on Airbyte Cloud with the provided credentials
-        2. Returns a connector configured with the new connector_id
-
-        Args:
-            airbyte_config: Airbyte hosted auth config with client credentials and workspace_name.
-                Optionally include organization_id for multi-org request routing.
-            auth_config: Typed auth config (same as local mode)
-            name: Optional source name (defaults to connector name + workspace_name)
-            replication_config: Typed replication settings.
-                Required for connectors with x-airbyte-replication-config (REPLICATION mode sources).
-            source_template_id: Source template ID. Required when organization has
-                multiple source templates for this connector type.
-
-        Returns:
-            A SentryConnector instance configured in hosted mode
-
-        Example:
-            # Create a new hosted connector with API key auth
-            connector = await SentryConnector.create(
-                airbyte_config=AirbyteAuthConfig(
-                    workspace_name="my-workspace",
-                    organization_id="00000000-0000-0000-0000-000000000123",
-                    airbyte_client_id="client_abc",
-                    airbyte_client_secret="secret_xyz",
-                ),
-                auth_config=SentryAuthConfig(auth_token="..."),
-            )
-
-            # With replication config (required for this connector):
-            connector = await SentryConnector.create(
-                airbyte_config=AirbyteAuthConfig(
-                    workspace_name="my-workspace",
-                    organization_id="00000000-0000-0000-0000-000000000123",
-                    airbyte_client_id="client_abc",
-                    airbyte_client_secret="secret_xyz",
-                ),
-                auth_config=SentryAuthConfig(auth_token="..."),
-                replication_config=SentryReplicationConfig(organization="...", project="..."),
-            )
-
-            # Use the connector
-            result = await connector.execute("entity", "list", {})
-        """
-        if not airbyte_config.workspace_name:
-            raise ValueError("airbyte_config.workspace_name is required for create()")
-
-
-        from airbyte_agent_sdk.cloud_utils import AirbyteCloudClient
-        from airbyte_agent_sdk.types import AirbyteAuthConfig as _AirbyteAuthConfig
-
-        client = AirbyteCloudClient(
-            client_id=airbyte_config.airbyte_client_id,
-            client_secret=airbyte_config.airbyte_client_secret,
-            organization_id=airbyte_config.organization_id,
-        )
-
-        try:
-            # Build credentials from auth_config (if provided)
-            credentials = auth_config.model_dump(exclude_none=True) if auth_config else None
-            replication_config_dict = replication_config.model_dump(exclude_none=True) if replication_config else None
-
-            # Create source on Airbyte Cloud
-            source_name = name or f"{cls.connector_name} - {airbyte_config.workspace_name}"
-            source_id = await client.create_source(
-                name=source_name,
-                connector_definition_id=str(SentryConnectorModel.id),
-                workspace_name=airbyte_config.workspace_name,
-                credentials=credentials,
-                replication_config=replication_config_dict,
-                source_template_id=source_template_id,
-            )
-        finally:
-            await client.close()
-
-        # Return connector configured with the new connector_id
-        return cls(
-            auth_config=_AirbyteAuthConfig(
-                airbyte_client_id=airbyte_config.airbyte_client_id,
-                airbyte_client_secret=airbyte_config.airbyte_client_secret,
-                organization_id=airbyte_config.organization_id,
-                connector_id=source_id,
-            ),
-        )
-
 
 
 

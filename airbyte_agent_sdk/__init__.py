@@ -57,7 +57,7 @@ connector.close()` in a `finally` block.
 ## Workspace operations
 
 - [`Workspace`](#Workspace) — async context manager for workspace-level
-  operations (list/create/delete connectors, workflows, and automations).
+  operations (list/delete connectors, workflows, and automations).
 - [`HostedExecutor`](#HostedExecutor) — fallback executor returned by
   [`connect()`](#connect) when no typed connector package exists.
 
