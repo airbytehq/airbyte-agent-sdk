@@ -528,6 +528,216 @@ class GroupsSearchData(BaseModel):
     """Group last update timestamp"""
 
 
+class ContactsSearchData(BaseModel):
+    """Search result data for contacts entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique contact ID"""
+    name: str | None = None
+    """Name of the contact"""
+    email: str | None = None
+    """Primary email address"""
+    phone: str | None = None
+    """Phone number"""
+    mobile: str | None = None
+    """Mobile number"""
+    active: bool | None = None
+    """Whether the contact has been verified"""
+    address: str | None = None
+    """Address of the contact"""
+    company_id: int | None = None
+    """ID of the primary company"""
+    custom_fields: dict[str, Any] | None = None
+    """Custom fields associated with the contact"""
+    description: str | None = None
+    """Description of the contact"""
+    job_title: str | None = None
+    """Job title of the contact"""
+    language: str | None = None
+    """Language of the contact"""
+    twitter_id: str | None = None
+    """Twitter ID"""
+    unique_external_id: str | None = None
+    """External ID of the contact"""
+    time_zone: str | None = None
+    """Time zone of the contact"""
+    facebook_id: str | None = None
+    """Facebook ID of the contact"""
+    csat_rating: int | None = None
+    """CSAT rating of the contact"""
+    preferred_source: str | None = None
+    """Preferred contact source"""
+    created_at: str | None = None
+    """Contact creation timestamp"""
+    updated_at: str | None = None
+    """Contact last update timestamp"""
+
+
+class CompaniesSearchData(BaseModel):
+    """Search result data for companies entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique company ID"""
+    name: str | None = None
+    """Name of the company"""
+    description: str | None = None
+    """Description of the company"""
+    domains: list[Any] | None = None
+    """Email domains associated with the company"""
+    note: str | None = None
+    """Notes about the company"""
+    health_score: str | None = None
+    """Health score of the company"""
+    account_tier: str | None = None
+    """Account tier of the company"""
+    renewal_date: str | None = None
+    """Renewal date"""
+    industry: str | None = None
+    """Industry of the company"""
+    custom_fields: dict[str, Any] | None = None
+    """Custom fields associated with the company"""
+    created_at: str | None = None
+    """Company creation timestamp"""
+    updated_at: str | None = None
+    """Company last update timestamp"""
+
+
+class RolesSearchData(BaseModel):
+    """Search result data for roles entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique role ID"""
+    name: str | None = None
+    """Name of the role"""
+    description: str | None = None
+    """Description of the role"""
+    default: bool | None = None
+    """Whether this is a default role"""
+    created_at: str | None = None
+    """Role creation timestamp"""
+    updated_at: str | None = None
+    """Role last update timestamp"""
+
+
+class SatisfactionRatingsSearchData(BaseModel):
+    """Search result data for satisfaction_ratings entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique satisfaction rating ID"""
+    survey_id: int | None = None
+    """ID of the survey"""
+    user_id: int | None = None
+    """ID of the user (requester)"""
+    agent_id: int | None = None
+    """ID of the agent"""
+    group_id: int | None = None
+    """ID of the group"""
+    ticket_id: int | None = None
+    """ID of the ticket"""
+    feedback: str | None = None
+    """Feedback text"""
+    ratings: dict[str, Any] | None = None
+    """Rating values (question_id to rating mapping)"""
+    created_at: str | None = None
+    """Rating creation timestamp"""
+    updated_at: str | None = None
+    """Rating last update timestamp"""
+
+
+class SurveysSearchData(BaseModel):
+    """Search result data for surveys entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique survey ID"""
+    title: str | None = None
+    """Title of the survey"""
+    active: bool | None = None
+    """Whether the survey is active"""
+    questions: list[Any] | None = None
+    """Survey questions"""
+    created_at: str | None = None
+    """Survey creation timestamp"""
+    updated_at: str | None = None
+    """Survey last update timestamp"""
+
+
+class TimeEntriesSearchData(BaseModel):
+    """Search result data for time_entries entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique time entry ID"""
+    agent_id: int | None = None
+    """ID of the agent"""
+    ticket_id: int | None = None
+    """ID of the associated ticket"""
+    company_id: int | None = None
+    """ID of the associated company"""
+    billable: bool | None = None
+    """Whether the time entry is billable"""
+    note: str | None = None
+    """Description of the time entry"""
+    time_spent: str | None = None
+    """Time spent in hh:mm format"""
+    timer_running: bool | None = None
+    """Whether the timer is running"""
+    executed_at: str | None = None
+    """Execution timestamp"""
+    start_time: str | None = None
+    """Start time of the timer"""
+    created_at: str | None = None
+    """Time entry creation timestamp"""
+    updated_at: str | None = None
+    """Time entry last update timestamp"""
+
+
+class TicketFieldsSearchData(BaseModel):
+    """Search result data for ticket_fields entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Unique ticket field ID"""
+    name: str | None = None
+    """Name of the field"""
+    label: str | None = None
+    """Display label for agents"""
+    label_for_customers: str | None = None
+    """Display label in the customer portal"""
+    description: str | None = None
+    """Description of the field"""
+    position: int | None = None
+    """Position of the field in the form"""
+    type_: str | None = None
+    """Field type (e.g., custom_dropdown, custom_text)"""
+    default: bool | None = None
+    """Whether this is a default (non-custom) field"""
+    required_for_closure: bool | None = None
+    """Whether the field is required for ticket closure"""
+    required_for_agents: bool | None = None
+    """Whether the field is required for agents"""
+    required_for_customers: bool | None = None
+    """Whether the field is required for customers"""
+    customers_can_edit: bool | None = None
+    """Whether customers can edit this field"""
+    displayed_to_customers: bool | None = None
+    """Whether the field is displayed to customers"""
+    portal_cc: bool | None = None
+    """Whether CC is enabled in the portal"""
+    portal_cc_to: str | None = None
+    """CC recipients scope (all or company)"""
+    choices: dict[str, Any] | None = None
+    """Available choices for dropdown fields"""
+    created_at: str | None = None
+    """Field creation timestamp"""
+    updated_at: str | None = None
+    """Field last update timestamp"""
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -562,6 +772,27 @@ AgentsSearchResult = AirbyteSearchResult[AgentsSearchData]
 
 GroupsSearchResult = AirbyteSearchResult[GroupsSearchData]
 """Search result type for groups entity."""
+
+ContactsSearchResult = AirbyteSearchResult[ContactsSearchData]
+"""Search result type for contacts entity."""
+
+CompaniesSearchResult = AirbyteSearchResult[CompaniesSearchData]
+"""Search result type for companies entity."""
+
+RolesSearchResult = AirbyteSearchResult[RolesSearchData]
+"""Search result type for roles entity."""
+
+SatisfactionRatingsSearchResult = AirbyteSearchResult[SatisfactionRatingsSearchData]
+"""Search result type for satisfaction_ratings entity."""
+
+SurveysSearchResult = AirbyteSearchResult[SurveysSearchData]
+"""Search result type for surveys entity."""
+
+TimeEntriesSearchResult = AirbyteSearchResult[TimeEntriesSearchData]
+"""Search result type for time_entries entity."""
+
+TicketFieldsSearchResult = AirbyteSearchResult[TicketFieldsSearchData]
+"""Search result type for ticket_fields entity."""
 
 
 

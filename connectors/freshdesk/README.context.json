@@ -1452,6 +1452,783 @@
           "description": "Group last update timestamp"
         }
       ]
+    },
+    "contacts": {
+      "entity": "contacts",
+      "data_type_name": "ContactsSearchData",
+      "filter_type_name": "ContactsSearchFilter",
+      "in_filter_type_name": "ContactsInFilter",
+      "any_value_filter_type_name": "ContactsAnyValueFilter",
+      "string_filter_type_name": "ContactsStringFilter",
+      "sort_filter_type_name": "ContactsSortFilter",
+      "result_type_name": "ContactsSearchResult",
+      "query_type_name": "ContactsSearchQuery",
+      "condition_prefix": "Contacts",
+      "condition_type_name": "ContactsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique contact ID"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the contact"
+        },
+        {
+          "name": "email",
+          "python_name": "email",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Primary email address"
+        },
+        {
+          "name": "phone",
+          "python_name": "phone",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Phone number"
+        },
+        {
+          "name": "mobile",
+          "python_name": "mobile",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Mobile number"
+        },
+        {
+          "name": "active",
+          "python_name": "active",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the contact has been verified"
+        },
+        {
+          "name": "address",
+          "python_name": "address",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Address of the contact"
+        },
+        {
+          "name": "company_id",
+          "python_name": "company_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the primary company"
+        },
+        {
+          "name": "custom_fields",
+          "python_name": "custom_fields",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "Custom fields associated with the contact"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Description of the contact"
+        },
+        {
+          "name": "job_title",
+          "python_name": "job_title",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Job title of the contact"
+        },
+        {
+          "name": "language",
+          "python_name": "language",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Language of the contact"
+        },
+        {
+          "name": "twitter_id",
+          "python_name": "twitter_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Twitter ID"
+        },
+        {
+          "name": "unique_external_id",
+          "python_name": "unique_external_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "External ID of the contact"
+        },
+        {
+          "name": "time_zone",
+          "python_name": "time_zone",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Time zone of the contact"
+        },
+        {
+          "name": "facebook_id",
+          "python_name": "facebook_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Facebook ID of the contact"
+        },
+        {
+          "name": "csat_rating",
+          "python_name": "csat_rating",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "CSAT rating of the contact"
+        },
+        {
+          "name": "preferred_source",
+          "python_name": "preferred_source",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Preferred contact source"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Contact creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Contact last update timestamp"
+        }
+      ]
+    },
+    "companies": {
+      "entity": "companies",
+      "data_type_name": "CompaniesSearchData",
+      "filter_type_name": "CompaniesSearchFilter",
+      "in_filter_type_name": "CompaniesInFilter",
+      "any_value_filter_type_name": "CompaniesAnyValueFilter",
+      "string_filter_type_name": "CompaniesStringFilter",
+      "sort_filter_type_name": "CompaniesSortFilter",
+      "result_type_name": "CompaniesSearchResult",
+      "query_type_name": "CompaniesSearchQuery",
+      "condition_prefix": "Companies",
+      "condition_type_name": "CompaniesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique company ID"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the company"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Description of the company"
+        },
+        {
+          "name": "domains",
+          "python_name": "domains",
+          "type": "list[Any] | None",
+          "json_type": "array | null",
+          "example_value_json": "[]",
+          "description": "Email domains associated with the company"
+        },
+        {
+          "name": "note",
+          "python_name": "note",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Notes about the company"
+        },
+        {
+          "name": "health_score",
+          "python_name": "health_score",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Health score of the company"
+        },
+        {
+          "name": "account_tier",
+          "python_name": "account_tier",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Account tier of the company"
+        },
+        {
+          "name": "renewal_date",
+          "python_name": "renewal_date",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Renewal date"
+        },
+        {
+          "name": "industry",
+          "python_name": "industry",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Industry of the company"
+        },
+        {
+          "name": "custom_fields",
+          "python_name": "custom_fields",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "Custom fields associated with the company"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Company creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Company last update timestamp"
+        }
+      ]
+    },
+    "roles": {
+      "entity": "roles",
+      "data_type_name": "RolesSearchData",
+      "filter_type_name": "RolesSearchFilter",
+      "in_filter_type_name": "RolesInFilter",
+      "any_value_filter_type_name": "RolesAnyValueFilter",
+      "string_filter_type_name": "RolesStringFilter",
+      "sort_filter_type_name": "RolesSortFilter",
+      "result_type_name": "RolesSearchResult",
+      "query_type_name": "RolesSearchQuery",
+      "condition_prefix": "Roles",
+      "condition_type_name": "RolesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique role ID"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the role"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Description of the role"
+        },
+        {
+          "name": "default",
+          "python_name": "default",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether this is a default role"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Role creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Role last update timestamp"
+        }
+      ]
+    },
+    "satisfaction_ratings": {
+      "entity": "satisfaction_ratings",
+      "data_type_name": "SatisfactionRatingsSearchData",
+      "filter_type_name": "SatisfactionRatingsSearchFilter",
+      "in_filter_type_name": "SatisfactionRatingsInFilter",
+      "any_value_filter_type_name": "SatisfactionRatingsAnyValueFilter",
+      "string_filter_type_name": "SatisfactionRatingsStringFilter",
+      "sort_filter_type_name": "SatisfactionRatingsSortFilter",
+      "result_type_name": "SatisfactionRatingsSearchResult",
+      "query_type_name": "SatisfactionRatingsSearchQuery",
+      "condition_prefix": "SatisfactionRatings",
+      "condition_type_name": "SatisfactionRatingsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique satisfaction rating ID"
+        },
+        {
+          "name": "survey_id",
+          "python_name": "survey_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the survey"
+        },
+        {
+          "name": "user_id",
+          "python_name": "user_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the user (requester)"
+        },
+        {
+          "name": "agent_id",
+          "python_name": "agent_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the agent"
+        },
+        {
+          "name": "group_id",
+          "python_name": "group_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the group"
+        },
+        {
+          "name": "ticket_id",
+          "python_name": "ticket_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the ticket"
+        },
+        {
+          "name": "feedback",
+          "python_name": "feedback",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Feedback text"
+        },
+        {
+          "name": "ratings",
+          "python_name": "ratings",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "Rating values (question_id to rating mapping)"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Rating creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Rating last update timestamp"
+        }
+      ]
+    },
+    "surveys": {
+      "entity": "surveys",
+      "data_type_name": "SurveysSearchData",
+      "filter_type_name": "SurveysSearchFilter",
+      "in_filter_type_name": "SurveysInFilter",
+      "any_value_filter_type_name": "SurveysAnyValueFilter",
+      "string_filter_type_name": "SurveysStringFilter",
+      "sort_filter_type_name": "SurveysSortFilter",
+      "result_type_name": "SurveysSearchResult",
+      "query_type_name": "SurveysSearchQuery",
+      "condition_prefix": "Surveys",
+      "condition_type_name": "SurveysCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique survey ID"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Title of the survey"
+        },
+        {
+          "name": "active",
+          "python_name": "active",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the survey is active"
+        },
+        {
+          "name": "questions",
+          "python_name": "questions",
+          "type": "list[Any] | None",
+          "json_type": "array | null",
+          "example_value_json": "[]",
+          "description": "Survey questions"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Survey creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Survey last update timestamp"
+        }
+      ]
+    },
+    "time_entries": {
+      "entity": "time_entries",
+      "data_type_name": "TimeEntriesSearchData",
+      "filter_type_name": "TimeEntriesSearchFilter",
+      "in_filter_type_name": "TimeEntriesInFilter",
+      "any_value_filter_type_name": "TimeEntriesAnyValueFilter",
+      "string_filter_type_name": "TimeEntriesStringFilter",
+      "sort_filter_type_name": "TimeEntriesSortFilter",
+      "result_type_name": "TimeEntriesSearchResult",
+      "query_type_name": "TimeEntriesSearchQuery",
+      "condition_prefix": "TimeEntries",
+      "condition_type_name": "TimeEntriesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique time entry ID"
+        },
+        {
+          "name": "agent_id",
+          "python_name": "agent_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the agent"
+        },
+        {
+          "name": "ticket_id",
+          "python_name": "ticket_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the associated ticket"
+        },
+        {
+          "name": "company_id",
+          "python_name": "company_id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "ID of the associated company"
+        },
+        {
+          "name": "billable",
+          "python_name": "billable",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the time entry is billable"
+        },
+        {
+          "name": "note",
+          "python_name": "note",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Description of the time entry"
+        },
+        {
+          "name": "time_spent",
+          "python_name": "time_spent",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Time spent in hh:mm format"
+        },
+        {
+          "name": "timer_running",
+          "python_name": "timer_running",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the timer is running"
+        },
+        {
+          "name": "executed_at",
+          "python_name": "executed_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Execution timestamp"
+        },
+        {
+          "name": "start_time",
+          "python_name": "start_time",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Start time of the timer"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Time entry creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Time entry last update timestamp"
+        }
+      ]
+    },
+    "ticket_fields": {
+      "entity": "ticket_fields",
+      "data_type_name": "TicketFieldsSearchData",
+      "filter_type_name": "TicketFieldsSearchFilter",
+      "in_filter_type_name": "TicketFieldsInFilter",
+      "any_value_filter_type_name": "TicketFieldsAnyValueFilter",
+      "string_filter_type_name": "TicketFieldsStringFilter",
+      "sort_filter_type_name": "TicketFieldsSortFilter",
+      "result_type_name": "TicketFieldsSearchResult",
+      "query_type_name": "TicketFieldsSearchQuery",
+      "condition_prefix": "TicketFields",
+      "condition_type_name": "TicketFieldsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Unique ticket field ID"
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Name of the field"
+        },
+        {
+          "name": "label",
+          "python_name": "label",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Display label for agents"
+        },
+        {
+          "name": "label_for_customers",
+          "python_name": "label_for_customers",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Display label in the customer portal"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Description of the field"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Position of the field in the form"
+        },
+        {
+          "name": "type",
+          "python_name": "type_",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Field type (e.g., custom_dropdown, custom_text)"
+        },
+        {
+          "name": "default",
+          "python_name": "default",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether this is a default (non-custom) field"
+        },
+        {
+          "name": "required_for_closure",
+          "python_name": "required_for_closure",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the field is required for ticket closure"
+        },
+        {
+          "name": "required_for_agents",
+          "python_name": "required_for_agents",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the field is required for agents"
+        },
+        {
+          "name": "required_for_customers",
+          "python_name": "required_for_customers",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the field is required for customers"
+        },
+        {
+          "name": "customers_can_edit",
+          "python_name": "customers_can_edit",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether customers can edit this field"
+        },
+        {
+          "name": "displayed_to_customers",
+          "python_name": "displayed_to_customers",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether the field is displayed to customers"
+        },
+        {
+          "name": "portal_cc",
+          "python_name": "portal_cc",
+          "type": "bool | None",
+          "json_type": "boolean | null",
+          "example_value_json": "True",
+          "description": "Whether CC is enabled in the portal"
+        },
+        {
+          "name": "portal_cc_to",
+          "python_name": "portal_cc_to",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "CC recipients scope (all or company)"
+        },
+        {
+          "name": "choices",
+          "python_name": "choices",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "Available choices for dropdown fields"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Field creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Field last update timestamp"
+        }
+      ]
     }
   }
 }

@@ -216,6 +216,274 @@ info:
           - name: updated_at
             type: ["null", "string"]
             description: Group last update timestamp
+      - entity: contacts
+        suggested: true
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique contact ID
+          - name: name
+            type: ["string", "null"]
+            description: Name of the contact
+          - name: email
+            type: ["string", "null"]
+            description: Primary email address
+          - name: phone
+            type: ["string", "null"]
+            description: Phone number
+          - name: mobile
+            type: ["string", "null"]
+            description: Mobile number
+          - name: active
+            type: ["boolean", "null"]
+            description: Whether the contact has been verified
+          - name: address
+            type: ["string", "null"]
+            description: Address of the contact
+          - name: company_id
+            type: ["integer", "null"]
+            description: ID of the primary company
+          - name: custom_fields
+            type: ["object", "null"]
+            description: Custom fields associated with the contact
+          - name: description
+            type: ["string", "null"]
+            description: Description of the contact
+          - name: job_title
+            type: ["string", "null"]
+            description: Job title of the contact
+          - name: language
+            type: ["string", "null"]
+            description: Language of the contact
+          - name: twitter_id
+            type: ["string", "null"]
+            description: Twitter ID
+          - name: unique_external_id
+            type: ["string", "null"]
+            description: External ID of the contact
+          - name: time_zone
+            type: ["string", "null"]
+            description: Time zone of the contact
+          - name: facebook_id
+            type: ["string", "null"]
+            description: Facebook ID of the contact
+          - name: csat_rating
+            type: ["integer", "null"]
+            description: CSAT rating of the contact
+          - name: preferred_source
+            type: ["string", "null"]
+            description: Preferred contact source
+          - name: created_at
+            type: ["string", "null"]
+            description: Contact creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Contact last update timestamp
+      - entity: companies
+        suggested: true
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique company ID
+          - name: name
+            type: ["string", "null"]
+            description: Name of the company
+          - name: description
+            type: ["string", "null"]
+            description: Description of the company
+          - name: domains
+            type: ["array", "null"]
+            description: Email domains associated with the company
+          - name: note
+            type: ["string", "null"]
+            description: Notes about the company
+          - name: health_score
+            type: ["string", "null"]
+            description: Health score of the company
+          - name: account_tier
+            type: ["string", "null"]
+            description: Account tier of the company
+          - name: renewal_date
+            type: ["string", "null"]
+            description: Renewal date
+          - name: industry
+            type: ["string", "null"]
+            description: Industry of the company
+          - name: custom_fields
+            type: ["object", "null"]
+            description: Custom fields associated with the company
+          - name: created_at
+            type: ["string", "null"]
+            description: Company creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Company last update timestamp
+      - entity: roles
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique role ID
+          - name: name
+            type: ["string", "null"]
+            description: Name of the role
+          - name: description
+            type: ["string", "null"]
+            description: Description of the role
+          - name: default
+            type: ["boolean", "null"]
+            description: Whether this is a default role
+          - name: created_at
+            type: ["string", "null"]
+            description: Role creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Role last update timestamp
+      - entity: satisfaction_ratings
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique satisfaction rating ID
+          - name: survey_id
+            type: ["integer", "null"]
+            description: ID of the survey
+          - name: user_id
+            type: ["integer", "null"]
+            description: ID of the user (requester)
+          - name: agent_id
+            type: ["integer", "null"]
+            description: ID of the agent
+          - name: group_id
+            type: ["integer", "null"]
+            description: ID of the group
+          - name: ticket_id
+            type: ["integer", "null"]
+            description: ID of the ticket
+          - name: feedback
+            type: ["string", "null"]
+            description: Feedback text
+          - name: ratings
+            type: ["object", "null"]
+            description: Rating values (question_id to rating mapping)
+          - name: created_at
+            type: ["string", "null"]
+            description: Rating creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Rating last update timestamp
+      - entity: surveys
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique survey ID
+          - name: title
+            type: ["string", "null"]
+            description: Title of the survey
+          - name: active
+            type: ["boolean", "null"]
+            description: Whether the survey is active
+          - name: questions
+            type: ["array", "null"]
+            description: Survey questions
+          - name: created_at
+            type: ["string", "null"]
+            description: Survey creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Survey last update timestamp
+      - entity: time_entries
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique time entry ID
+          - name: agent_id
+            type: ["integer", "null"]
+            description: ID of the agent
+          - name: ticket_id
+            type: ["integer", "null"]
+            description: ID of the associated ticket
+          - name: company_id
+            type: ["integer", "null"]
+            description: ID of the associated company
+          - name: billable
+            type: ["boolean", "null"]
+            description: Whether the time entry is billable
+          - name: note
+            type: ["string", "null"]
+            description: Description of the time entry
+          - name: time_spent
+            type: ["string", "null"]
+            description: "Time spent in hh:mm format"
+          - name: timer_running
+            type: ["boolean", "null"]
+            description: Whether the timer is running
+          - name: executed_at
+            type: ["string", "null"]
+            description: Execution timestamp
+          - name: start_time
+            type: ["string", "null"]
+            description: Start time of the timer
+          - name: created_at
+            type: ["string", "null"]
+            description: Time entry creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Time entry last update timestamp
+      - entity: ticket_fields
+        fields:
+          - name: id
+            type: ["integer", "null"]
+            description: Unique ticket field ID
+          - name: name
+            type: ["string", "null"]
+            description: Name of the field
+          - name: label
+            type: ["string", "null"]
+            description: Display label for agents
+          - name: label_for_customers
+            type: ["string", "null"]
+            description: Display label in the customer portal
+          - name: description
+            type: ["string", "null"]
+            description: Description of the field
+          - name: position
+            type: ["integer", "null"]
+            description: Position of the field in the form
+          - name: type
+            type: ["string", "null"]
+            description: Field type (e.g., custom_dropdown, custom_text)
+          - name: default
+            type: ["boolean", "null"]
+            description: Whether this is a default (non-custom) field
+          - name: required_for_closure
+            type: ["boolean", "null"]
+            description: Whether the field is required for ticket closure
+          - name: required_for_agents
+            type: ["boolean", "null"]
+            description: Whether the field is required for agents
+          - name: required_for_customers
+            type: ["boolean", "null"]
+            description: Whether the field is required for customers
+          - name: customers_can_edit
+            type: ["boolean", "null"]
+            description: Whether customers can edit this field
+          - name: displayed_to_customers
+            type: ["boolean", "null"]
+            description: Whether the field is displayed to customers
+          - name: portal_cc
+            type: ["boolean", "null"]
+            description: Whether CC is enabled in the portal
+          - name: portal_cc_to
+            type: ["string", "null"]
+            description: CC recipients scope (all or company)
+          - name: choices
+            type: ["object", "null"]
+            description: Available choices for dropdown fields
+          - name: created_at
+            type: ["string", "null"]
+            description: Field creation timestamp
+          - name: updated_at
+            type: ["string", "null"]
+            description: Field last update timestamp
 
 servers:
   - url: https://{subdomain}.freshdesk.com/api/v2
