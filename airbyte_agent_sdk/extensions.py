@@ -167,9 +167,9 @@ Type: string
 Required: No
 
 Description:
-    Specifies the Airbyte stream name for cache lookup purposes. This maps the entity
-    to the corresponding Airbyte stream, enabling cache-based data retrieval. When
-    specified, the EntityDefinition.stream_name field will be populated with this value.
+    Maps the entity to the corresponding Airbyte replication stream name. Used during
+    connection creation to resolve which stream to sync for a given entity. When
+    specified, the `EntityDefinition.stream_name` field will be populated with this value.
 
     This extension is placed on Schema objects alongside x-airbyte-entity-name, following
     the same pattern. The stream name is an entity-level property (not operation-level)
