@@ -62,46 +62,6 @@ class FileContentrestrictionsItem(BaseModel):
     restriction_time: str | None | None = Field(default=None, alias="restrictionTime")
     type_: str | None | None = Field(default=None, alias="type")
 
-class FileCapabilities(BaseModel):
-    """Capabilities the current user has on this file"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    can_edit: bool | None | None = Field(default=None, alias="canEdit")
-    can_comment: bool | None | None = Field(default=None, alias="canComment")
-    can_share: bool | None | None = Field(default=None, alias="canShare")
-    can_copy: bool | None | None = Field(default=None, alias="canCopy")
-    can_download: bool | None | None = Field(default=None, alias="canDownload")
-    can_delete: bool | None | None = Field(default=None, alias="canDelete")
-    can_rename: bool | None | None = Field(default=None, alias="canRename")
-    can_trash: bool | None | None = Field(default=None, alias="canTrash")
-    can_read_revisions: bool | None | None = Field(default=None, alias="canReadRevisions")
-    can_add_children: bool | None | None = Field(default=None, alias="canAddChildren")
-    can_list_children: bool | None | None = Field(default=None, alias="canListChildren")
-    can_remove_children: bool | None | None = Field(default=None, alias="canRemoveChildren")
-
-class FileLinksharemetadata(BaseModel):
-    """Contains details about the link URLs"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    security_update_eligible: bool | None | None = Field(default=None, alias="securityUpdateEligible")
-    security_update_enabled: bool | None | None = Field(default=None, alias="securityUpdateEnabled")
-
-class FileShortcutdetails(BaseModel):
-    """Shortcut file details"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    target_id: str | None | None = Field(default=None, alias="targetId")
-    target_mime_type: str | None | None = Field(default=None, alias="targetMimeType")
-    target_resource_key: str | None | None = Field(default=None, alias="targetResourceKey")
-
-class FileVideomediametadata(BaseModel):
-    """Additional metadata about video media"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    width: int | None | None = Field(default=None)
-    height: int | None | None = Field(default=None)
-    duration_millis: str | None | None = Field(default=None, alias="durationMillis")
-
 class FileImagemediametadataLocation(BaseModel):
     """Nested schema for FileImagemediametadata.location"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -136,11 +96,51 @@ class FileImagemediametadata(BaseModel):
     lens: str | None | None = Field(default=None)
     location: FileImagemediametadataLocation | None | None = Field(default=None)
 
+class FileCapabilities(BaseModel):
+    """Capabilities the current user has on this file"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    can_edit: bool | None | None = Field(default=None, alias="canEdit")
+    can_comment: bool | None | None = Field(default=None, alias="canComment")
+    can_share: bool | None | None = Field(default=None, alias="canShare")
+    can_copy: bool | None | None = Field(default=None, alias="canCopy")
+    can_download: bool | None | None = Field(default=None, alias="canDownload")
+    can_delete: bool | None | None = Field(default=None, alias="canDelete")
+    can_rename: bool | None | None = Field(default=None, alias="canRename")
+    can_trash: bool | None | None = Field(default=None, alias="canTrash")
+    can_read_revisions: bool | None | None = Field(default=None, alias="canReadRevisions")
+    can_add_children: bool | None | None = Field(default=None, alias="canAddChildren")
+    can_list_children: bool | None | None = Field(default=None, alias="canListChildren")
+    can_remove_children: bool | None | None = Field(default=None, alias="canRemoveChildren")
+
+class FileVideomediametadata(BaseModel):
+    """Additional metadata about video media"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    width: int | None | None = Field(default=None)
+    height: int | None | None = Field(default=None)
+    duration_millis: str | None | None = Field(default=None, alias="durationMillis")
+
 class FileLabelinfo(BaseModel):
     """An overview of the labels on the file"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     labels: list[dict[str, Any]] | None | None = Field(default=None)
+
+class FileLinksharemetadata(BaseModel):
+    """Contains details about the link URLs"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    security_update_eligible: bool | None | None = Field(default=None, alias="securityUpdateEligible")
+    security_update_enabled: bool | None | None = Field(default=None, alias="securityUpdateEnabled")
+
+class FileShortcutdetails(BaseModel):
+    """Shortcut file details"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    target_id: str | None | None = Field(default=None, alias="targetId")
+    target_mime_type: str | None | None = Field(default=None, alias="targetMimeType")
+    target_resource_key: str | None | None = Field(default=None, alias="targetResourceKey")
 
 class File(BaseModel):
     """The metadata for a file"""
@@ -242,15 +242,6 @@ class FileUploadParams(BaseModel):
     description: str | None = Field(default=None)
     file_mime_type: str | None = Field(default=None)
 
-class DriveBackgroundimagefile(BaseModel):
-    """An image file and cropping parameters for the background image"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None | None = Field(default=None)
-    x_coordinate: float | None | None = Field(default=None, alias="xCoordinate")
-    y_coordinate: float | None | None = Field(default=None, alias="yCoordinate")
-    width: float | None | None = Field(default=None)
-
 class DriveCapabilities(BaseModel):
     """Capabilities the current user has on this shared drive"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -275,6 +266,15 @@ class DriveCapabilities(BaseModel):
     can_reset_drive_restrictions: bool | None | None = Field(default=None, alias="canResetDriveRestrictions")
     can_delete_children: bool | None | None = Field(default=None, alias="canDeleteChildren")
     can_trash_children: bool | None | None = Field(default=None, alias="canTrashChildren")
+
+class DriveBackgroundimagefile(BaseModel):
+    """An image file and cropping parameters for the background image"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None | None = Field(default=None)
+    x_coordinate: float | None | None = Field(default=None, alias="xCoordinate")
+    y_coordinate: float | None | None = Field(default=None, alias="yCoordinate")
+    width: float | None | None = Field(default=None)
 
 class DriveRestrictions(BaseModel):
     """A set of restrictions that apply to this shared drive"""

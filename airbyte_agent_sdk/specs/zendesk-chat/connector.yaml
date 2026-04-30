@@ -75,6 +75,8 @@ info:
       - start_date
     replication_config_key_mapping:
       start_date: start_date
+    replication_config_constants:
+      start_date: "{{ day_delta(-180, '%Y-%m-%dT%H:%M:%SZ') }}"
 
   x-airbyte-context-store:
     disable_compaction: true
