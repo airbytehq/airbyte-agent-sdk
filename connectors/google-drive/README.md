@@ -57,6 +57,7 @@ In open source mode, you provide API credentials directly to the connector.
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 from airbyte_agent_sdk.connectors.google_drive.models import GoogleDriveAuthConfig
 
@@ -69,6 +70,8 @@ connector = GoogleDriveConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @GoogleDriveConnector.tool_utils
 async def google_drive_execute(entity: str, action: str, params: dict | None = None):
@@ -78,8 +81,6 @@ async def google_drive_execute(entity: str, action: str, params: dict | None = N
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 from airbyte_agent_sdk.connectors.google_drive.models import GoogleDriveAuthConfig
@@ -95,17 +96,44 @@ connector = GoogleDriveConnector(
 
 @tool
 @GoogleDriveConnector.tool_utils
-async def google_drive_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
     """Execute Google-Drive connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
+from airbyte_agent_sdk.connectors.google_drive.models import GoogleDriveAuthConfig
+
+connector = GoogleDriveConnector(
+    auth_config=GoogleDriveAuthConfig(
+        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
+        refresh_token="<Your Google OAuth2 Refresh Token>",
+        client_id="<Your Google OAuth2 Client ID>",
+        client_secret="<Your Google OAuth2 Client Secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@GoogleDriveConnector.tool_utils(framework="openai_agents")
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Google-Drive connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Google-Drive Assistant", tools=[google_drive_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 from airbyte_agent_sdk.connectors.google_drive.models import GoogleDriveAuthConfig
@@ -121,12 +149,12 @@ connector = GoogleDriveConnector(
 
 mcp = FastMCP("Google-Drive Agent")
 
-@mcp.tool()
+@mcp.tool
 @GoogleDriveConnector.tool_utils
-async def google_drive_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
     """Execute Google-Drive connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ### Hosted
@@ -142,10 +170,13 @@ The `connect()` factory returns a fully typed `GoogleDriveConnector` and reads `
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 
 connector = connect("google-drive", workspace_name="<your_workspace_name>")
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @GoogleDriveConnector.tool_utils
@@ -156,8 +187,6 @@ async def google_drive_execute(entity: str, action: str, params: dict | None = N
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
@@ -166,17 +195,37 @@ connector = connect("google-drive", workspace_name="<your_workspace_name>")
 
 @tool
 @GoogleDriveConnector.tool_utils
-async def google_drive_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
     """Execute Google-Drive connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk import connect
+from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
+
+connector = connect("google-drive", workspace_name="<your_workspace_name>")
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@GoogleDriveConnector.tool_utils(framework="openai_agents")
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Google-Drive connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Google-Drive Assistant", tools=[google_drive_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
@@ -185,12 +234,12 @@ connector = connect("google-drive", workspace_name="<your_workspace_name>")
 
 mcp = FastMCP("Google-Drive Agent")
 
-@mcp.tool()
+@mcp.tool
 @GoogleDriveConnector.tool_utils
-async def google_drive_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
     """Execute Google-Drive connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
@@ -198,6 +247,7 @@ Or pass credentials explicitly (equivalent, useful when you're not loading them 
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -210,6 +260,8 @@ connector = GoogleDriveConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @GoogleDriveConnector.tool_utils
 async def google_drive_execute(entity: str, action: str, params: dict | None = None):
@@ -219,8 +271,6 @@ async def google_drive_execute(entity: str, action: str, params: dict | None = N
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -236,17 +286,44 @@ connector = GoogleDriveConnector(
 
 @tool
 @GoogleDriveConnector.tool_utils
-async def google_drive_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
     """Execute Google-Drive connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+connector = GoogleDriveConnector(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@GoogleDriveConnector.tool_utils(framework="openai_agents")
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Google-Drive connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Google-Drive Assistant", tools=[google_drive_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.google_drive import GoogleDriveConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -262,12 +339,12 @@ connector = GoogleDriveConnector(
 
 mcp = FastMCP("Google-Drive Agent")
 
-@mcp.tool()
+@mcp.tool
 @GoogleDriveConnector.tool_utils
-async def google_drive_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def google_drive_execute(entity: str, action: str, params: dict | None = None):
     """Execute Google-Drive connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ## Full documentation

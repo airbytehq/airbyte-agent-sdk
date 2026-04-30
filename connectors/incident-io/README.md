@@ -54,6 +54,7 @@ In open source mode, you provide API credentials directly to the connector.
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 from airbyte_agent_sdk.connectors.incident_io.models import IncidentIoAuthConfig
 
@@ -62,6 +63,8 @@ connector = IncidentIoConnector(
         api_key="<Your incident.io API key. Create one at https://app.incident.io/settings/api-keys>"
     )
 )
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @IncidentIoConnector.tool_utils
@@ -72,8 +75,6 @@ async def incident_io_execute(entity: str, action: str, params: dict | None = No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 from airbyte_agent_sdk.connectors.incident_io.models import IncidentIoAuthConfig
@@ -86,17 +87,41 @@ connector = IncidentIoConnector(
 
 @tool
 @IncidentIoConnector.tool_utils
-async def incident_io_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
     """Execute Incident-Io connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
+from airbyte_agent_sdk.connectors.incident_io.models import IncidentIoAuthConfig
+
+connector = IncidentIoConnector(
+    auth_config=IncidentIoAuthConfig(
+        api_key="<Your incident.io API key. Create one at https://app.incident.io/settings/api-keys>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@IncidentIoConnector.tool_utils(framework="openai_agents")
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Incident-Io connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Incident-Io Assistant", tools=[incident_io_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 from airbyte_agent_sdk.connectors.incident_io.models import IncidentIoAuthConfig
@@ -109,12 +134,12 @@ connector = IncidentIoConnector(
 
 mcp = FastMCP("Incident-Io Agent")
 
-@mcp.tool()
+@mcp.tool
 @IncidentIoConnector.tool_utils
-async def incident_io_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
     """Execute Incident-Io connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ### Hosted
@@ -130,10 +155,13 @@ The `connect()` factory returns a fully typed `IncidentIoConnector` and reads `A
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 
 connector = connect("incident-io", workspace_name="<your_workspace_name>")
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @IncidentIoConnector.tool_utils
@@ -144,8 +172,6 @@ async def incident_io_execute(entity: str, action: str, params: dict | None = No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
@@ -154,17 +180,37 @@ connector = connect("incident-io", workspace_name="<your_workspace_name>")
 
 @tool
 @IncidentIoConnector.tool_utils
-async def incident_io_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
     """Execute Incident-Io connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk import connect
+from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
+
+connector = connect("incident-io", workspace_name="<your_workspace_name>")
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@IncidentIoConnector.tool_utils(framework="openai_agents")
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Incident-Io connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Incident-Io Assistant", tools=[incident_io_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
@@ -173,12 +219,12 @@ connector = connect("incident-io", workspace_name="<your_workspace_name>")
 
 mcp = FastMCP("Incident-Io Agent")
 
-@mcp.tool()
+@mcp.tool
 @IncidentIoConnector.tool_utils
-async def incident_io_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
     """Execute Incident-Io connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
@@ -186,6 +232,7 @@ Or pass credentials explicitly (equivalent, useful when you're not loading them 
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -198,6 +245,8 @@ connector = IncidentIoConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @IncidentIoConnector.tool_utils
 async def incident_io_execute(entity: str, action: str, params: dict | None = None):
@@ -207,8 +256,6 @@ async def incident_io_execute(entity: str, action: str, params: dict | None = No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -224,17 +271,44 @@ connector = IncidentIoConnector(
 
 @tool
 @IncidentIoConnector.tool_utils
-async def incident_io_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
     """Execute Incident-Io connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+connector = IncidentIoConnector(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@IncidentIoConnector.tool_utils(framework="openai_agents")
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Incident-Io connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Incident-Io Assistant", tools=[incident_io_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.incident_io import IncidentIoConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -250,12 +324,12 @@ connector = IncidentIoConnector(
 
 mcp = FastMCP("Incident-Io Agent")
 
-@mcp.tool()
+@mcp.tool
 @IncidentIoConnector.tool_utils
-async def incident_io_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def incident_io_execute(entity: str, action: str, params: dict | None = None):
     """Execute Incident-Io connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ## Full documentation

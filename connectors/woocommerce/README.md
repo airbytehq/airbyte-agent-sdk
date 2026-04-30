@@ -55,6 +55,7 @@ In open source mode, you provide API credentials directly to the connector.
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 from airbyte_agent_sdk.connectors.woocommerce.models import WoocommerceAuthConfig
 
@@ -65,6 +66,8 @@ connector = WoocommerceConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @WoocommerceConnector.tool_utils
 async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
@@ -74,8 +77,6 @@ async def woocommerce_execute(entity: str, action: str, params: dict | None = No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 from airbyte_agent_sdk.connectors.woocommerce.models import WoocommerceAuthConfig
@@ -89,17 +90,42 @@ connector = WoocommerceConnector(
 
 @tool
 @WoocommerceConnector.tool_utils
-async def woocommerce_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
     """Execute Woocommerce connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
+from airbyte_agent_sdk.connectors.woocommerce.models import WoocommerceAuthConfig
+
+connector = WoocommerceConnector(
+    auth_config=WoocommerceAuthConfig(
+        api_key="<WooCommerce REST API consumer key (starts with ck_)>",
+        api_secret="<WooCommerce REST API consumer secret (starts with cs_)>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@WoocommerceConnector.tool_utils(framework="openai_agents")
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Woocommerce connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Woocommerce Assistant", tools=[woocommerce_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 from airbyte_agent_sdk.connectors.woocommerce.models import WoocommerceAuthConfig
@@ -113,12 +139,12 @@ connector = WoocommerceConnector(
 
 mcp = FastMCP("Woocommerce Agent")
 
-@mcp.tool()
+@mcp.tool
 @WoocommerceConnector.tool_utils
-async def woocommerce_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
     """Execute Woocommerce connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ### Hosted
@@ -134,10 +160,13 @@ The `connect()` factory returns a fully typed `WoocommerceConnector` and reads `
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 
 connector = connect("woocommerce", workspace_name="<your_workspace_name>")
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @WoocommerceConnector.tool_utils
@@ -148,8 +177,6 @@ async def woocommerce_execute(entity: str, action: str, params: dict | None = No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
@@ -158,17 +185,37 @@ connector = connect("woocommerce", workspace_name="<your_workspace_name>")
 
 @tool
 @WoocommerceConnector.tool_utils
-async def woocommerce_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
     """Execute Woocommerce connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk import connect
+from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
+
+connector = connect("woocommerce", workspace_name="<your_workspace_name>")
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@WoocommerceConnector.tool_utils(framework="openai_agents")
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Woocommerce connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Woocommerce Assistant", tools=[woocommerce_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
@@ -177,12 +224,12 @@ connector = connect("woocommerce", workspace_name="<your_workspace_name>")
 
 mcp = FastMCP("Woocommerce Agent")
 
-@mcp.tool()
+@mcp.tool
 @WoocommerceConnector.tool_utils
-async def woocommerce_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
     """Execute Woocommerce connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
@@ -190,6 +237,7 @@ Or pass credentials explicitly (equivalent, useful when you're not loading them 
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -202,6 +250,8 @@ connector = WoocommerceConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @WoocommerceConnector.tool_utils
 async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
@@ -211,8 +261,6 @@ async def woocommerce_execute(entity: str, action: str, params: dict | None = No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -228,17 +276,44 @@ connector = WoocommerceConnector(
 
 @tool
 @WoocommerceConnector.tool_utils
-async def woocommerce_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
     """Execute Woocommerce connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+connector = WoocommerceConnector(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@WoocommerceConnector.tool_utils(framework="openai_agents")
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Woocommerce connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Woocommerce Assistant", tools=[woocommerce_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.woocommerce import WoocommerceConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -254,12 +329,12 @@ connector = WoocommerceConnector(
 
 mcp = FastMCP("Woocommerce Agent")
 
-@mcp.tool()
+@mcp.tool
 @WoocommerceConnector.tool_utils
-async def woocommerce_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def woocommerce_execute(entity: str, action: str, params: dict | None = None):
     """Execute Woocommerce connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ## Full documentation

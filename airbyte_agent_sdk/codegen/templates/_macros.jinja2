@@ -32,7 +32,10 @@
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 {{ connector_init_lines }}
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @{{ class_name }}.tool_utils
@@ -43,35 +46,50 @@ async def {{ connector_name | snake_case }}_execute(entity: str, action: str, pa
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 {{ connector_init_lines }}
 
 @tool
 @{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
     """Execute {{ connector_name | title }} connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+{{ connector_init_lines }}
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@{{ class_name }}.tool_utils(framework="openai_agents")
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
+    """Execute {{ connector_name | title }} connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="{{ connector_name | title }} Assistant", tools=[{{ connector_name | snake_case }}_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 {{ connector_init_lines }}
 
 mcp = FastMCP("{{ connector_name | title }} Agent")
 
-@mcp.tool()
+@mcp.tool
 @{{ class_name }}.tool_utils
-async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def {{ connector_name | snake_case }}_execute(entity: str, action: str, params: dict | None = None):
     """Execute {{ connector_name | title }} connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 {%- endmacro %}
 

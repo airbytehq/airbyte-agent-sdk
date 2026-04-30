@@ -46,6 +46,7 @@ In open source mode, you provide API credentials directly to the connector.
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.connectors.paypal_transaction.models import PaypalTransactionAuthConfig
 
@@ -58,6 +59,8 @@ connector = PaypalTransactionConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @PaypalTransactionConnector.tool_utils
 async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
@@ -67,8 +70,6 @@ async def paypal_transaction_execute(entity: str, action: str, params: dict | No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.connectors.paypal_transaction.models import PaypalTransactionAuthConfig
@@ -84,17 +85,44 @@ connector = PaypalTransactionConnector(
 
 @tool
 @PaypalTransactionConnector.tool_utils
-async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
     """Execute Paypal-Transaction connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
+from airbyte_agent_sdk.connectors.paypal_transaction.models import PaypalTransactionAuthConfig
+
+connector = PaypalTransactionConnector(
+    auth_config=PaypalTransactionAuthConfig(
+        client_id="<The Client ID of your PayPal developer application.>",
+        client_secret="<The Client Secret of your PayPal developer application.>",
+        access_token="<OAuth2 access token obtained via client credentials grant. Use the PayPal token endpoint with your client_id and client_secret to obtain this.
+>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@PaypalTransactionConnector.tool_utils(framework="openai_agents")
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Paypal-Transaction connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Paypal-Transaction Assistant", tools=[paypal_transaction_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.connectors.paypal_transaction.models import PaypalTransactionAuthConfig
@@ -110,12 +138,12 @@ connector = PaypalTransactionConnector(
 
 mcp = FastMCP("Paypal-Transaction Agent")
 
-@mcp.tool()
+@mcp.tool
 @PaypalTransactionConnector.tool_utils
-async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
     """Execute Paypal-Transaction connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ### Hosted
@@ -131,10 +159,13 @@ The `connect()` factory returns a fully typed `PaypalTransactionConnector` and r
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 
 connector = connect("paypal-transaction", workspace_name="<your_workspace_name>")
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @PaypalTransactionConnector.tool_utils
@@ -145,8 +176,6 @@ async def paypal_transaction_execute(entity: str, action: str, params: dict | No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
@@ -155,17 +184,37 @@ connector = connect("paypal-transaction", workspace_name="<your_workspace_name>"
 
 @tool
 @PaypalTransactionConnector.tool_utils
-async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
     """Execute Paypal-Transaction connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk import connect
+from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
+
+connector = connect("paypal-transaction", workspace_name="<your_workspace_name>")
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@PaypalTransactionConnector.tool_utils(framework="openai_agents")
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Paypal-Transaction connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Paypal-Transaction Assistant", tools=[paypal_transaction_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
@@ -174,12 +223,12 @@ connector = connect("paypal-transaction", workspace_name="<your_workspace_name>"
 
 mcp = FastMCP("Paypal-Transaction Agent")
 
-@mcp.tool()
+@mcp.tool
 @PaypalTransactionConnector.tool_utils
-async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
     """Execute Paypal-Transaction connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
@@ -187,6 +236,7 @@ Or pass credentials explicitly (equivalent, useful when you're not loading them 
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -199,6 +249,8 @@ connector = PaypalTransactionConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @PaypalTransactionConnector.tool_utils
 async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
@@ -208,8 +260,6 @@ async def paypal_transaction_execute(entity: str, action: str, params: dict | No
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -225,17 +275,44 @@ connector = PaypalTransactionConnector(
 
 @tool
 @PaypalTransactionConnector.tool_utils
-async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
     """Execute Paypal-Transaction connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+connector = PaypalTransactionConnector(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@PaypalTransactionConnector.tool_utils(framework="openai_agents")
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Paypal-Transaction connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Paypal-Transaction Assistant", tools=[paypal_transaction_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -251,12 +328,12 @@ connector = PaypalTransactionConnector(
 
 mcp = FastMCP("Paypal-Transaction Agent")
 
-@mcp.tool()
+@mcp.tool
 @PaypalTransactionConnector.tool_utils
-async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def paypal_transaction_execute(entity: str, action: str, params: dict | None = None):
     """Execute Paypal-Transaction connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ## Full documentation

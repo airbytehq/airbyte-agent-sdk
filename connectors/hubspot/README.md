@@ -50,6 +50,7 @@ In open source mode, you provide API credentials directly to the connector.
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 from airbyte_agent_sdk.connectors.hubspot.models import HubspotPrivateAppAuthConfig
 
@@ -58,6 +59,8 @@ connector = HubspotConnector(
         private_app_token="<Access token from a HubSpot Private App>"
     )
 )
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @HubspotConnector.tool_utils
@@ -68,8 +71,6 @@ async def hubspot_execute(entity: str, action: str, params: dict | None = None):
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 from airbyte_agent_sdk.connectors.hubspot.models import HubspotPrivateAppAuthConfig
@@ -82,17 +83,41 @@ connector = HubspotConnector(
 
 @tool
 @HubspotConnector.tool_utils
-async def hubspot_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
     """Execute Hubspot connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
+from airbyte_agent_sdk.connectors.hubspot.models import HubspotPrivateAppAuthConfig
+
+connector = HubspotConnector(
+    auth_config=HubspotPrivateAppAuthConfig(
+        private_app_token="<Access token from a HubSpot Private App>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@HubspotConnector.tool_utils(framework="openai_agents")
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Hubspot connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Hubspot Assistant", tools=[hubspot_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 from airbyte_agent_sdk.connectors.hubspot.models import HubspotPrivateAppAuthConfig
@@ -105,12 +130,12 @@ connector = HubspotConnector(
 
 mcp = FastMCP("Hubspot Agent")
 
-@mcp.tool()
+@mcp.tool
 @HubspotConnector.tool_utils
-async def hubspot_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
     """Execute Hubspot connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ### Hosted
@@ -126,10 +151,13 @@ The `connect()` factory returns a fully typed `HubspotConnector` and reads `AIRB
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 
 connector = connect("hubspot", workspace_name="<your_workspace_name>")
+
+agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
 @HubspotConnector.tool_utils
@@ -140,8 +168,6 @@ async def hubspot_execute(entity: str, action: str, params: dict | None = None):
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
@@ -150,17 +176,37 @@ connector = connect("hubspot", workspace_name="<your_workspace_name>")
 
 @tool
 @HubspotConnector.tool_utils
-async def hubspot_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
     """Execute Hubspot connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk import connect
+from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
+
+connector = connect("hubspot", workspace_name="<your_workspace_name>")
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@HubspotConnector.tool_utils(framework="openai_agents")
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Hubspot connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Hubspot Assistant", tools=[hubspot_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk import connect
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
@@ -169,12 +215,12 @@ connector = connect("hubspot", workspace_name="<your_workspace_name>")
 
 mcp = FastMCP("Hubspot Agent")
 
-@mcp.tool()
+@mcp.tool
 @HubspotConnector.tool_utils
-async def hubspot_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
     """Execute Hubspot connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
@@ -182,6 +228,7 @@ Or pass credentials explicitly (equivalent, useful when you're not loading them 
 **Pydantic AI**
 
 ```python title="Pydantic AI"
+from pydantic_ai import Agent
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -194,6 +241,8 @@ connector = HubspotConnector(
     )
 )
 
+agent = Agent("openai:gpt-4o")
+
 @agent.tool_plain
 @HubspotConnector.tool_utils
 async def hubspot_execute(entity: str, action: str, params: dict | None = None):
@@ -203,8 +252,6 @@ async def hubspot_execute(entity: str, action: str, params: dict | None = None):
 **LangChain**
 
 ```python title="LangChain"
-import json
-
 from langchain_core.tools import tool
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -220,17 +267,44 @@ connector = HubspotConnector(
 
 @tool
 @HubspotConnector.tool_utils
-async def hubspot_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
     """Execute Hubspot connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+connector = HubspotConnector(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@HubspotConnector.tool_utils(framework="openai_agents")
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Hubspot connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Hubspot Assistant", tools=[hubspot_execute])
 ```
 
 **FastMCP**
 
 ```python title="FastMCP"
-import json
-
 from fastmcp import FastMCP
 from airbyte_agent_sdk.connectors.hubspot import HubspotConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
@@ -246,12 +320,12 @@ connector = HubspotConnector(
 
 mcp = FastMCP("Hubspot Agent")
 
-@mcp.tool()
+@mcp.tool
 @HubspotConnector.tool_utils
-async def hubspot_execute(entity: str, action: str, params: dict | None = None) -> str:
+async def hubspot_execute(entity: str, action: str, params: dict | None = None):
     """Execute Hubspot connector operations."""
     result = await connector.execute(entity, action, params or {})
-    return json.dumps(result, default=str)
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
 ## Full documentation

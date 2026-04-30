@@ -141,7 +141,7 @@ class IncidentIoConnector:
 
     connector_name = "incident-io"
     connector_version = "1.0.4"
-    sdk_version = "0.1.121"
+    sdk_version = "0.1.122"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
