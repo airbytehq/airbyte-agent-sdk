@@ -18,7 +18,7 @@ from airbyte_agent_sdk.introspection import describe_entities, generate_tool_des
 from airbyte_agent_sdk.translation import DEFAULT_MAX_OUTPUT_CHARS, FrameworkName, translate_exceptions
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 from .types import (
-    AdAccountGetParams,
+    AdAccountsGetParams,
     AdAccountsListParams,
     AdCreativesListParams,
     AdLibraryListParams,
@@ -53,8 +53,6 @@ from .types import (
     AdCreativesSearchQuery,
     AdsInsightsSearchFilter,
     AdsInsightsSearchQuery,
-    AdAccountSearchFilter,
-    AdAccountSearchQuery,
     AdAccountsSearchFilter,
     AdAccountsSearchQuery,
     CustomConversionsSearchFilter,
@@ -116,8 +114,6 @@ from .models import (
     AdCreativesSearchResult,
     AdsInsightsSearchData,
     AdsInsightsSearchResult,
-    AdAccountSearchData,
-    AdAccountSearchResult,
     AdAccountsSearchData,
     AdAccountsSearchResult,
     CustomConversionsSearchData,
@@ -143,7 +139,7 @@ class FacebookMarketingConnector:
 
     connector_name = "facebook-marketing"
     connector_version = "1.0.24"
-    sdk_version = "0.1.113"
+    sdk_version = "0.1.114"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -157,7 +153,7 @@ class FacebookMarketingConnector:
         ("ads", "create"): None,
         ("ad_creatives", "list"): True,
         ("ads_insights", "list"): True,
-        ("ad_account", "get"): None,
+        ("ad_accounts", "get"): None,
         ("custom_conversions", "list"): True,
         ("images", "list"): True,
         ("videos", "list"): True,
@@ -186,7 +182,7 @@ class FacebookMarketingConnector:
         ('ads', 'create'): {'account_id': 'account_id'},
         ('ad_creatives', 'list'): {'account_id': 'account_id', 'fields': 'fields', 'limit': 'limit', 'after': 'after'},
         ('ads_insights', 'list'): {'account_id': 'account_id', 'fields': 'fields', 'date_preset': 'date_preset', 'time_range': 'time_range', 'level': 'level', 'time_increment': 'time_increment', 'limit': 'limit', 'after': 'after'},
-        ('ad_account', 'get'): {'account_id': 'account_id', 'fields': 'fields'},
+        ('ad_accounts', 'get'): {'account_id': 'account_id', 'fields': 'fields'},
         ('custom_conversions', 'list'): {'account_id': 'account_id', 'fields': 'fields', 'limit': 'limit', 'after': 'after'},
         ('images', 'list'): {'account_id': 'account_id', 'fields': 'fields', 'limit': 'limit', 'after': 'after'},
         ('videos', 'list'): {'account_id': 'account_id', 'fields': 'fields', 'limit': 'limit', 'after': 'after'},
@@ -311,7 +307,6 @@ class FacebookMarketingConnector:
         self.ads = AdsQuery(self)
         self.ad_creatives = AdCreativesQuery(self)
         self.ads_insights = AdsInsightsQuery(self)
-        self.ad_account = AdAccountQuery(self)
         self.custom_conversions = CustomConversionsQuery(self)
         self.images = ImagesQuery(self)
         self.videos = VideosQuery(self)
@@ -404,9 +399,9 @@ class FacebookMarketingConnector:
     @overload
     async def execute(
         self,
-        entity: Literal["ad_account"],
+        entity: Literal["ad_accounts"],
         action: Literal["get"],
-        params: "AdAccountGetParams"
+        params: "AdAccountsGetParams"
     ) -> "AdAccount": ...
 
     @overload
@@ -1064,6 +1059,34 @@ class AdAccountsQuery:
             data=result.data,
             meta=result.meta
         )
+
+
+
+    async def get(
+        self,
+        account_id: str,
+        fields: str | None = None,
+        **kwargs
+    ) -> AdAccount:
+        """
+        Returns information about the specified ad account including balance and currency
+
+        Args:
+            account_id: The Facebook Ad Account ID (without act_ prefix)
+            fields: Comma-separated list of fields to return
+            **kwargs: Additional parameters
+
+        Returns:
+            AdAccount
+        """
+        params = {k: v for k, v in {
+            "account_id": account_id,
+            "fields": fields,
+            **kwargs
+        }.items() if v is not None}
+
+        result = await self._connector.execute("ad_accounts", "get", params)
+        return result
 
 
 
@@ -1938,108 +1961,6 @@ class AdsInsightsQuery:
         return AdsInsightsSearchResult(
             data=[
                 AdsInsightsSearchData(**row)
-                for row in result.get("data", [])
-                if isinstance(row, dict)
-            ],
-            meta=AirbyteSearchMeta(
-                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
-                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
-                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
-            ),
-        )
-
-class AdAccountQuery:
-    """
-    Query class for AdAccount entity operations.
-    """
-
-    def __init__(self, connector: FacebookMarketingConnector):
-        """Initialize query with connector reference."""
-        self._connector = connector
-
-    async def get(
-        self,
-        account_id: str,
-        fields: str | None = None,
-        **kwargs
-    ) -> AdAccount:
-        """
-        Returns information about the specified ad account including balance and currency
-
-        Args:
-            account_id: The Facebook Ad Account ID (without act_ prefix)
-            fields: Comma-separated list of fields to return
-            **kwargs: Additional parameters
-
-        Returns:
-            AdAccount
-        """
-        params = {k: v for k, v in {
-            "account_id": account_id,
-            "fields": fields,
-            **kwargs
-        }.items() if v is not None}
-
-        result = await self._connector.execute("ad_account", "get", params)
-        return result
-
-
-
-    async def context_store_search(
-        self,
-        query: AdAccountSearchQuery,
-        limit: int | None = None,
-        cursor: str | None = None,
-        fields: list[list[str]] | None = None,
-    ) -> AdAccountSearchResult:
-        """
-        Search ad_account records from Airbyte cache.
-
-        This operation searches cached data from Airbyte syncs.
-        Only available in hosted execution mode.
-
-        Available filter fields (AdAccountSearchFilter):
-        - id: Ad account ID
-        - account_id: Ad account ID (numeric)
-        - name: Ad account name
-        - balance: Current balance of the ad account
-        - currency: Currency used by the ad account
-        - account_status: Account status
-        - amount_spent: Total amount spent
-        - business_name: Business name
-        - created_time: Account creation time
-        - spend_cap: Spend cap
-        - timezone_name: Timezone name
-
-        Args:
-            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
-                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
-            limit: Maximum results to return (default 1000)
-            cursor: Pagination cursor from previous response's meta.cursor
-            fields: Field paths to include in results. Each path is a list of keys for nested access.
-                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
-
-        Returns:
-            AdAccountSearchResult with typed records, pagination metadata, and optional search metadata
-
-        Raises:
-            NotImplementedError: If called in local execution mode
-        """
-        params: dict[str, Any] = {"query": query}
-        if limit is not None:
-            params["limit"] = limit
-        if cursor is not None:
-            params["cursor"] = cursor
-        if fields is not None:
-            params["fields"] = fields
-
-        result = await self._connector.execute("ad_account", "context_store_search", params)
-
-        # Parse response into typed result
-        meta_data = result.get("meta")
-        return AdAccountSearchResult(
-            data=[
-                AdAccountSearchData(**row)
                 for row in result.get("data", [])
                 if isinstance(row, dict)
             ],

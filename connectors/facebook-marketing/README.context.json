@@ -212,6 +212,46 @@
           }
         ],
         "is_download": false
+      },
+      {
+        "method_name": "get_ad_account",
+        "http_method": "get",
+        "path": "/act_{account_id}",
+        "entity": "ad_accounts",
+        "action": "get",
+        "parameters": [
+          {
+            "name": "account_id",
+            "python_name": "account_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The Facebook Ad Account ID (without act_ prefix)"
+          },
+          {
+            "name": "fields",
+            "python_name": "fields",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "default": "id,account_id,name,account_status,age,amount_spent,balance,business,business_city,business_country_code,business_name,business_state,business_street,business_street2,business_zip,created_time,currency,disable_reason,end_advertiser,end_advertiser_name,funding_source,funding_source_details,has_migrated_permissions,is_personal,is_prepay_account,is_tax_id_required,min_campaign_group_spend_cap,min_daily_budget,owner,spend_cap,timezone_id,timezone_name,timezone_offset_hours_utc"
+            },
+            "required": null,
+            "description": "Comma-separated list of fields to return",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "AdAccountsGetParams",
+        "response_type": "AdAccount",
+        "description": "Returns information about the specified ad account including balance and currency",
+        "record_extractor": "$",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "AdAccount",
+        "meta_fields": null,
+        "is_download": false
       }
     ],
     "campaigns": [
@@ -981,48 +1021,6 @@
             }
           }
         ],
-        "is_download": false
-      }
-    ],
-    "ad_account": [
-      {
-        "method_name": "get_ad_account",
-        "http_method": "get",
-        "path": "/act_{account_id}",
-        "entity": "ad_account",
-        "action": "get",
-        "parameters": [
-          {
-            "name": "account_id",
-            "python_name": "account_id",
-            "type": "str",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The Facebook Ad Account ID (without act_ prefix)"
-          },
-          {
-            "name": "fields",
-            "python_name": "fields",
-            "type": "str",
-            "schema": {
-              "type": "string",
-              "default": "id,account_id,name,account_status,age,amount_spent,balance,business,business_city,business_country_code,business_name,business_state,business_street,business_street2,business_zip,created_time,currency,disable_reason,end_advertiser,end_advertiser_name,funding_source,funding_source_details,has_migrated_permissions,is_personal,is_prepay_account,is_tax_id_required,min_campaign_group_spend_cap,min_daily_budget,owner,spend_cap,timezone_id,timezone_name,timezone_offset_hours_utc"
-            },
-            "required": null,
-            "description": "Comma-separated list of fields to return",
-            "is_deep_object": false
-          }
-        ],
-        "params_type_name": "AdAccountGetParams",
-        "response_type": "AdAccount",
-        "description": "Returns information about the specified ad account including balance and currency",
-        "record_extractor": "$",
-        "meta_extractor": null,
-        "needs_envelope": null,
-        "record_type": "AdAccount",
-        "meta_fields": null,
         "is_download": false
       }
     ],
@@ -2300,109 +2298,6 @@
           "json_type": "null | array",
           "example_value_json": "[]",
           "description": "Action values taken on the ad"
-        }
-      ]
-    },
-    "ad_account": {
-      "entity": "ad_account",
-      "data_type_name": "AdAccountSearchData",
-      "filter_type_name": "AdAccountSearchFilter",
-      "in_filter_type_name": "AdAccountInFilter",
-      "any_value_filter_type_name": "AdAccountAnyValueFilter",
-      "string_filter_type_name": "AdAccountStringFilter",
-      "sort_filter_type_name": "AdAccountSortFilter",
-      "result_type_name": "AdAccountSearchResult",
-      "query_type_name": "AdAccountSearchQuery",
-      "condition_prefix": "AdAccount",
-      "condition_type_name": "AdAccountCondition",
-      "fields": [
-        {
-          "name": "id",
-          "python_name": "id",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Ad account ID"
-        },
-        {
-          "name": "account_id",
-          "python_name": "account_id",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Ad account ID (numeric)"
-        },
-        {
-          "name": "name",
-          "python_name": "name",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Ad account name"
-        },
-        {
-          "name": "balance",
-          "python_name": "balance",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Current balance of the ad account"
-        },
-        {
-          "name": "currency",
-          "python_name": "currency",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Currency used by the ad account"
-        },
-        {
-          "name": "account_status",
-          "python_name": "account_status",
-          "type": "int | None",
-          "json_type": "null | integer",
-          "example_value_json": "0",
-          "description": "Account status"
-        },
-        {
-          "name": "amount_spent",
-          "python_name": "amount_spent",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Total amount spent"
-        },
-        {
-          "name": "business_name",
-          "python_name": "business_name",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Business name"
-        },
-        {
-          "name": "created_time",
-          "python_name": "created_time",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Account creation time"
-        },
-        {
-          "name": "spend_cap",
-          "python_name": "spend_cap",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Spend cap"
-        },
-        {
-          "name": "timezone_name",
-          "python_name": "timezone_name",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Timezone name"
         }
       ]
     },

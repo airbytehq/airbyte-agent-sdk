@@ -127,11 +127,6 @@ info:
     foreign_key: account_id
     target_key: account_id
     cardinality: many_to_one
-  - source_entity: ad_account
-    target_entity: ad_accounts
-    foreign_key: account_id
-    target_key: account_id
-    cardinality: one_to_one
   - source_entity: pixel_stats
     target_entity: pixels
     foreign_key: pixel_id
@@ -350,41 +345,6 @@ info:
       - name: action_values
         type: ["null", "array"]
         description: Action values taken on the ad
-    - entity: ad_account
-      fields:
-      - name: id
-        type: ["null", "string"]
-        description: Ad account ID
-      - name: account_id
-        type: ["null", "string"]
-        description: Ad account ID (numeric)
-      - name: name
-        type: ["null", "string"]
-        description: Ad account name
-      - name: balance
-        type: ["null", "string"]
-        description: Current balance of the ad account
-      - name: currency
-        type: ["null", "string"]
-        description: Currency used by the ad account
-      - name: account_status
-        type: ["null", "integer"]
-        description: Account status
-      - name: amount_spent
-        type: ["null", "string"]
-        description: Total amount spent
-      - name: business_name
-        type: ["null", "string"]
-        description: Business name
-      - name: created_time
-        type: ["null", "string"]
-        description: Account creation time
-      - name: spend_cap
-        type: ["null", "string"]
-        description: Spend cap
-      - name: timezone_name
-        type: ["null", "string"]
-        description: Timezone name
     - entity: ad_accounts
       suggested: true
       x-airbyte-name: ad_account
@@ -979,7 +939,7 @@ paths:
       summary: Get ad account
       description: Returns information about the specified ad account including balance and currency
       operationId: getAdAccount
-      x-airbyte-entity: ad_account
+      x-airbyte-entity: ad_accounts
       x-airbyte-action: get
       x-airbyte-record-extractor: $
       tags:
@@ -2417,7 +2377,7 @@ components:
           $ref: '#/components/schemas/Paging'
     AdAccount:
       type: object
-      x-airbyte-entity-name: ad_account
+      x-airbyte-entity-name: ad_accounts
       x-airbyte-stream-name: ad_account
       x-airbyte-ai-hints:
         summary: "Facebook ad account details and settings"
