@@ -52,6 +52,8 @@ info:
     - type: rate_limits
       title: Google Drive API Quotas
       url: https://developers.google.com/drive/api/guides/limits
+  x-airbyte-skip-auth-methods:
+    - service_account_key
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from Google Drive.
