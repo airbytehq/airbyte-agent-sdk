@@ -177,7 +177,7 @@ class AsanaConnector:
 
     connector_name = "asana"
     connector_version = "0.1.20"
-    sdk_version = "0.1.128"
+    sdk_version = "0.1.129"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

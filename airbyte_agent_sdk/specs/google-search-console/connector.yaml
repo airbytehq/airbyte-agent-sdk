@@ -477,6 +477,8 @@ info:
       - name: site_url
         type: ["null", "string"]
         description: The URL of the site for which the data is recorded
+  x-airbyte-skip-auth-methods:
+    - service_account_key
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from Google Search Console.
