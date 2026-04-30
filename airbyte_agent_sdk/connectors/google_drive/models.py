@@ -66,23 +66,12 @@ class FileLabelinfo(BaseModel):
 
     labels: list[dict[str, Any]] | None | None = Field(default=None)
 
-class FileContentrestrictionsItem(BaseModel):
-    """Nested schema for File.contentRestrictions_item"""
+class FileLinksharemetadata(BaseModel):
+    """Contains details about the link URLs"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    read_only: bool | None | None = Field(default=None, alias="readOnly")
-    reason: str | None | None = Field(default=None)
-    restricting_user: Any | None = Field(default=None, alias="restrictingUser")
-    restriction_time: str | None | None = Field(default=None, alias="restrictionTime")
-    type_: str | None | None = Field(default=None, alias="type")
-
-class FileVideomediametadata(BaseModel):
-    """Additional metadata about video media"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    width: int | None | None = Field(default=None)
-    height: int | None | None = Field(default=None)
-    duration_millis: str | None | None = Field(default=None, alias="durationMillis")
+    security_update_eligible: bool | None | None = Field(default=None, alias="securityUpdateEligible")
+    security_update_enabled: bool | None | None = Field(default=None, alias="securityUpdateEnabled")
 
 class FileCapabilities(BaseModel):
     """Capabilities the current user has on this file"""
@@ -101,12 +90,23 @@ class FileCapabilities(BaseModel):
     can_list_children: bool | None | None = Field(default=None, alias="canListChildren")
     can_remove_children: bool | None | None = Field(default=None, alias="canRemoveChildren")
 
-class FileLinksharemetadata(BaseModel):
-    """Contains details about the link URLs"""
+class FileVideomediametadata(BaseModel):
+    """Additional metadata about video media"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    security_update_eligible: bool | None | None = Field(default=None, alias="securityUpdateEligible")
-    security_update_enabled: bool | None | None = Field(default=None, alias="securityUpdateEnabled")
+    width: int | None | None = Field(default=None)
+    height: int | None | None = Field(default=None)
+    duration_millis: str | None | None = Field(default=None, alias="durationMillis")
+
+class FileContentrestrictionsItem(BaseModel):
+    """Nested schema for File.contentRestrictions_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    read_only: bool | None | None = Field(default=None, alias="readOnly")
+    reason: str | None | None = Field(default=None)
+    restricting_user: Any | None = Field(default=None, alias="restrictingUser")
+    restriction_time: str | None | None = Field(default=None, alias="restrictionTime")
+    type_: str | None | None = Field(default=None, alias="type")
 
 class FileImagemediametadataLocation(BaseModel):
     """Nested schema for FileImagemediametadata.location"""
@@ -311,20 +311,20 @@ class DrivesListResponse(BaseModel):
     next_page_token: str | None = Field(default=None, alias="nextPageToken")
     drives: list[Drive] | None = Field(default=None)
 
-class PermissionPermissiondetailsItem(BaseModel):
-    """Nested schema for Permission.permissionDetails_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    permission_type: str | None | None = Field(default=None, alias="permissionType")
-    role: str | None | None = Field(default=None)
-    inherited_from: str | None | None = Field(default=None, alias="inheritedFrom")
-    inherited: bool | None | None = Field(default=None)
-
 class PermissionTeamdrivepermissiondetailsItem(BaseModel):
     """Nested schema for Permission.teamDrivePermissionDetails_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     team_drive_permission_type: str | None | None = Field(default=None, alias="teamDrivePermissionType")
+    role: str | None | None = Field(default=None)
+    inherited_from: str | None | None = Field(default=None, alias="inheritedFrom")
+    inherited: bool | None | None = Field(default=None)
+
+class PermissionPermissiondetailsItem(BaseModel):
+    """Nested schema for Permission.permissionDetails_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    permission_type: str | None | None = Field(default=None, alias="permissionType")
     role: str | None | None = Field(default=None)
     inherited_from: str | None | None = Field(default=None, alias="inheritedFrom")
     inherited: bool | None | None = Field(default=None)

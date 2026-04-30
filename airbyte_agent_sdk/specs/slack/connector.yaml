@@ -102,7 +102,7 @@ info:
       lookback_window: lookback_window
       join_channels: join_channels
     replication_config_constants:
-      start_date: "2024-01-01T00:00:00Z"
+      start_date: "{{ day_delta(-180, '%Y-%m-%dT%H:%M:%SZ') }}"
       lookback_window: 0
       join_channels: false
 
