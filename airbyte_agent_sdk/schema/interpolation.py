@@ -13,7 +13,7 @@ Example YAML usage::
 """
 
 from collections.abc import Mapping
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from jinja2.sandbox import SandboxedEnvironment
@@ -21,17 +21,17 @@ from jinja2.sandbox import SandboxedEnvironment
 
 def _now_utc() -> datetime:
     """Current UTC datetime (matches CDK `now_utc()`)."""
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _today_utc() -> datetime:
     """Midnight of the current UTC date (matches CDK `today_utc()`)."""
-    return datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    return datetime.now(UTC).replace(hour=0, minute=0, second=0, microsecond=0)
 
 
 def _day_delta(num_days: int, format: str = "%Y-%m-%dT%H:%M:%SZ") -> str:
     """Return `now_utc() + num_days` formatted as a string (matches CDK `day_delta()`)."""
-    return (datetime.now(timezone.utc) + timedelta(days=num_days)).strftime(format)
+    return (datetime.now(UTC) + timedelta(days=num_days)).strftime(format)
 
 
 _JINJA_ENV = SandboxedEnvironment()

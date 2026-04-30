@@ -12,7 +12,7 @@ import re
 import time
 import uuid
 from collections.abc import AsyncIterator
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any, Protocol, overload
 from urllib.parse import quote
 
@@ -128,7 +128,7 @@ def _evaluate_probe_default(default_value: str, replication_constants: dict[str,
     env = Environment(undefined=StrictUndefined, autoescape=False)
     template = env.from_string(str(default_value))
     return template.render(
-        now_utc=lambda: datetime.now(timezone.utc),
+        now_utc=lambda: datetime.now(UTC),
         duration=_parse_iso_duration,
         config=replication_constants,
         max=max,
