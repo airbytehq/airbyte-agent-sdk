@@ -351,16 +351,16 @@ This connector supports the following entities and actions. For more details, se
 | Entity | Actions |
 |--------|---------|
 | Profiles | [List](./REFERENCE.md#profiles-list), [Get](./REFERENCE.md#profiles-get), [Context Store Search](./REFERENCE.md#profiles-context-store-search) |
-| Portfolios | [List](./REFERENCE.md#portfolios-list), [Get](./REFERENCE.md#portfolios-get) |
-| Sponsored Product Campaigns | [List](./REFERENCE.md#sponsored-product-campaigns-list), [Get](./REFERENCE.md#sponsored-product-campaigns-get) |
-| Sponsored Product Ad Groups | [List](./REFERENCE.md#sponsored-product-ad-groups-list) |
-| Sponsored Product Keywords | [List](./REFERENCE.md#sponsored-product-keywords-list) |
-| Sponsored Product Product Ads | [List](./REFERENCE.md#sponsored-product-product-ads-list) |
-| Sponsored Product Targets | [List](./REFERENCE.md#sponsored-product-targets-list) |
-| Sponsored Product Negative Keywords | [List](./REFERENCE.md#sponsored-product-negative-keywords-list) |
+| Portfolios | [List](./REFERENCE.md#portfolios-list), [Get](./REFERENCE.md#portfolios-get), [Context Store Search](./REFERENCE.md#portfolios-context-store-search) |
+| Sponsored Product Campaigns | [List](./REFERENCE.md#sponsored-product-campaigns-list), [Get](./REFERENCE.md#sponsored-product-campaigns-get), [Context Store Search](./REFERENCE.md#sponsored-product-campaigns-context-store-search) |
+| Sponsored Product Ad Groups | [List](./REFERENCE.md#sponsored-product-ad-groups-list), [Context Store Search](./REFERENCE.md#sponsored-product-ad-groups-context-store-search) |
+| Sponsored Product Keywords | [List](./REFERENCE.md#sponsored-product-keywords-list), [Context Store Search](./REFERENCE.md#sponsored-product-keywords-context-store-search) |
+| Sponsored Product Product Ads | [List](./REFERENCE.md#sponsored-product-product-ads-list), [Context Store Search](./REFERENCE.md#sponsored-product-product-ads-context-store-search) |
+| Sponsored Product Targets | [List](./REFERENCE.md#sponsored-product-targets-list), [Context Store Search](./REFERENCE.md#sponsored-product-targets-context-store-search) |
+| Sponsored Product Negative Keywords | [List](./REFERENCE.md#sponsored-product-negative-keywords-list), [Context Store Search](./REFERENCE.md#sponsored-product-negative-keywords-context-store-search) |
 | Sponsored Product Negative Targets | [List](./REFERENCE.md#sponsored-product-negative-targets-list) |
-| Sponsored Brands Campaigns | [List](./REFERENCE.md#sponsored-brands-campaigns-list) |
-| Sponsored Brands Ad Groups | [List](./REFERENCE.md#sponsored-brands-ad-groups-list) |
+| Sponsored Brands Campaigns | [List](./REFERENCE.md#sponsored-brands-campaigns-list), [Context Store Search](./REFERENCE.md#sponsored-brands-campaigns-context-store-search) |
+| Sponsored Brands Ad Groups | [List](./REFERENCE.md#sponsored-brands-ad-groups-list), [Context Store Search](./REFERENCE.md#sponsored-brands-ad-groups-context-store-search) |
 
 
 ### Authentication

@@ -44,6 +44,24 @@ from .types import (
     AirbyteSearchParams,
     ProfilesSearchFilter,
     ProfilesSearchQuery,
+    PortfoliosSearchFilter,
+    PortfoliosSearchQuery,
+    SponsoredProductCampaignsSearchFilter,
+    SponsoredProductCampaignsSearchQuery,
+    SponsoredProductAdGroupsSearchFilter,
+    SponsoredProductAdGroupsSearchQuery,
+    SponsoredProductKeywordsSearchFilter,
+    SponsoredProductKeywordsSearchQuery,
+    SponsoredProductProductAdsSearchFilter,
+    SponsoredProductProductAdsSearchQuery,
+    SponsoredProductTargetsSearchFilter,
+    SponsoredProductTargetsSearchQuery,
+    SponsoredProductNegativeKeywordsSearchFilter,
+    SponsoredProductNegativeKeywordsSearchQuery,
+    SponsoredBrandsCampaignsSearchFilter,
+    SponsoredBrandsCampaignsSearchQuery,
+    SponsoredBrandsAdGroupsSearchFilter,
+    SponsoredBrandsAdGroupsSearchQuery,
 )
 from .models import AmazonAdsAuthConfig
 
@@ -70,6 +88,24 @@ from .models import (
     AirbyteSearchResult,
     ProfilesSearchData,
     ProfilesSearchResult,
+    PortfoliosSearchData,
+    PortfoliosSearchResult,
+    SponsoredProductCampaignsSearchData,
+    SponsoredProductCampaignsSearchResult,
+    SponsoredProductAdGroupsSearchData,
+    SponsoredProductAdGroupsSearchResult,
+    SponsoredProductKeywordsSearchData,
+    SponsoredProductKeywordsSearchResult,
+    SponsoredProductProductAdsSearchData,
+    SponsoredProductProductAdsSearchResult,
+    SponsoredProductTargetsSearchData,
+    SponsoredProductTargetsSearchResult,
+    SponsoredProductNegativeKeywordsSearchData,
+    SponsoredProductNegativeKeywordsSearchResult,
+    SponsoredBrandsCampaignsSearchData,
+    SponsoredBrandsCampaignsSearchResult,
+    SponsoredBrandsAdGroupsSearchData,
+    SponsoredBrandsAdGroupsSearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -87,7 +123,7 @@ class AmazonAdsConnector:
 
     connector_name = "amazon-ads"
     connector_version = "1.0.10"
-    sdk_version = "0.1.134"
+    sdk_version = "0.1.135"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -819,6 +855,68 @@ group campaigns together for organizational and budget management purposes.
 
 
 
+    async def context_store_search(
+        self,
+        query: PortfoliosSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> PortfoliosSearchResult:
+        """
+        Search portfolios records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (PortfoliosSearchFilter):
+        - portfolio_id: The unique identifier of the portfolio
+        - name: The name of the portfolio
+        - budget: Budget configuration for the portfolio
+        - in_budget: Whether the portfolio is within its budget
+        - state: The state of the portfolio (enabled, paused, archived)
+        - creation_date: The creation date of the portfolio (epoch milliseconds)
+        - last_updated_date: The last updated date of the portfolio (epoch milliseconds)
+        - serving_status: The serving status of the portfolio
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            PortfoliosSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("portfolios", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return PortfoliosSearchResult(
+            data=[
+                PortfoliosSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SponsoredProductCampaignsQuery:
     """
     Query class for SponsoredProductCampaigns entity operations.
@@ -891,6 +989,69 @@ Sponsored Products campaigns promote individual product listings on Amazon.
 
 
 
+    async def context_store_search(
+        self,
+        query: SponsoredProductCampaignsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredProductCampaignsSearchResult:
+        """
+        Search sponsored_product_campaigns records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredProductCampaignsSearchFilter):
+        - campaign_id: The unique identifier of the campaign
+        - portfolio_id: The portfolio ID this campaign belongs to
+        - name: The name of the campaign
+        - targeting_type: The targeting type (manual, auto)
+        - state: The state of the campaign (enabled, paused, archived)
+        - budget: Budget configuration for the campaign
+        - start_date: The start date of the campaign (YYYYMMDD format)
+        - end_date: The end date of the campaign (YYYYMMDD format)
+        - dynamic_bidding: Dynamic bidding settings for the campaign
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredProductCampaignsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_product_campaigns", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredProductCampaignsSearchResult(
+            data=[
+                SponsoredProductCampaignsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SponsoredProductAdGroupsQuery:
     """
     Query class for SponsoredProductAdGroups entity operations.
@@ -936,6 +1097,65 @@ Ad groups are used to organize ads and targeting within a campaign.
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: SponsoredProductAdGroupsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredProductAdGroupsSearchResult:
+        """
+        Search sponsored_product_ad_groups records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredProductAdGroupsSearchFilter):
+        - ad_group_id: The unique identifier of the ad group
+        - campaign_id: The campaign ID this ad group belongs to
+        - name: The name of the ad group
+        - state: The state of the ad group (enabled, paused, archived)
+        - default_bid: The default bid amount for the ad group
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredProductAdGroupsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_product_ad_groups", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredProductAdGroupsSearchResult(
+            data=[
+                SponsoredProductAdGroupsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class SponsoredProductKeywordsQuery:
     """
@@ -983,6 +1203,65 @@ Keywords are used in manual targeting campaigns to match shopper search queries.
 
 
 
+    async def context_store_search(
+        self,
+        query: SponsoredProductKeywordsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredProductKeywordsSearchResult:
+        """
+        Search sponsored_product_keywords records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredProductKeywordsSearchFilter):
+        - keyword_id: The unique identifier of the keyword
+        - campaign_id: The campaign ID this keyword belongs to
+        - ad_group_id: The ad group ID this keyword belongs to
+        - keyword_text: The keyword text
+        - state: The state of the keyword (enabled, paused, archived)
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredProductKeywordsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_product_keywords", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredProductKeywordsSearchResult(
+            data=[
+                SponsoredProductKeywordsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SponsoredProductProductAdsQuery:
     """
     Query class for SponsoredProductProductAds entity operations.
@@ -1028,6 +1307,66 @@ Product ads associate an advertised product with an ad group.
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: SponsoredProductProductAdsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredProductProductAdsSearchResult:
+        """
+        Search sponsored_product_product_ads records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredProductProductAdsSearchFilter):
+        - ad_id: The unique identifier of the product ad
+        - campaign_id: The campaign ID this product ad belongs to
+        - ad_group_id: The ad group ID this product ad belongs to
+        - asin: The ASIN of the advertised product
+        - sku: The SKU of the advertised product (seller accounts only)
+        - state: The state of the product ad (enabled, paused, archived)
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredProductProductAdsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_product_product_ads", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredProductProductAdsSearchResult(
+            data=[
+                SponsoredProductProductAdsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class SponsoredProductTargetsQuery:
     """
@@ -1075,6 +1414,65 @@ Targeting clauses define product or category targeting for ad groups.
 
 
 
+    async def context_store_search(
+        self,
+        query: SponsoredProductTargetsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredProductTargetsSearchResult:
+        """
+        Search sponsored_product_targets records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredProductTargetsSearchFilter):
+        - target_id: The unique identifier of the targeting clause
+        - campaign_id: The campaign ID this target belongs to
+        - ad_group_id: The ad group ID this target belongs to
+        - expression_type: The type of targeting expression (manual, auto)
+        - state: The state of the targeting clause (enabled, paused, archived)
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredProductTargetsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_product_targets", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredProductTargetsSearchResult(
+            data=[
+                SponsoredProductTargetsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SponsoredProductNegativeKeywordsQuery:
     """
     Query class for SponsoredProductNegativeKeywords entity operations.
@@ -1120,6 +1518,65 @@ Negative keywords prevent ads from showing for specific search terms.
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: SponsoredProductNegativeKeywordsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredProductNegativeKeywordsSearchResult:
+        """
+        Search sponsored_product_negative_keywords records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredProductNegativeKeywordsSearchFilter):
+        - keyword_id: The unique identifier of the negative keyword
+        - campaign_id: The campaign ID this negative keyword belongs to
+        - ad_group_id: The ad group ID this negative keyword belongs to
+        - keyword_text: The negative keyword text
+        - state: The state of the negative keyword (enabled, paused, archived)
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredProductNegativeKeywordsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_product_negative_keywords", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredProductNegativeKeywordsSearchResult(
+            data=[
+                SponsoredProductNegativeKeywordsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class SponsoredProductNegativeTargetsQuery:
     """
@@ -1213,6 +1670,68 @@ Sponsored Brands campaigns help drive discovery and sales with creative ad exper
 
 
 
+    async def context_store_search(
+        self,
+        query: SponsoredBrandsCampaignsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredBrandsCampaignsSearchResult:
+        """
+        Search sponsored_brands_campaigns records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredBrandsCampaignsSearchFilter):
+        - campaign_id: The unique identifier of the campaign
+        - name: The name of the campaign
+        - state: The state of the campaign (enabled, paused, archived)
+        - budget: The budget amount for the campaign
+        - budget_type: The budget type (DAILY, LIFETIME)
+        - start_date: The start date of the campaign (YYYYMMDD format)
+        - end_date: The end date of the campaign (YYYYMMDD format)
+        - portfolio_id: The portfolio ID this campaign belongs to
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredBrandsCampaignsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_brands_campaigns", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredBrandsCampaignsSearchResult(
+            data=[
+                SponsoredBrandsCampaignsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SponsoredBrandsAdGroupsQuery:
     """
     Query class for SponsoredBrandsAdGroups entity operations.
@@ -1258,3 +1777,61 @@ Ad groups organize ads and targeting within a Sponsored Brands campaign.
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: SponsoredBrandsAdGroupsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SponsoredBrandsAdGroupsSearchResult:
+        """
+        Search sponsored_brands_ad_groups records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SponsoredBrandsAdGroupsSearchFilter):
+        - ad_group_id: The unique identifier of the ad group
+        - campaign_id: The campaign ID this ad group belongs to
+        - name: The name of the ad group
+        - state: The state of the ad group (enabled, paused, archived)
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SponsoredBrandsAdGroupsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sponsored_brands_ad_groups", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SponsoredBrandsAdGroupsSearchResult(
+            data=[
+                SponsoredBrandsAdGroupsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )

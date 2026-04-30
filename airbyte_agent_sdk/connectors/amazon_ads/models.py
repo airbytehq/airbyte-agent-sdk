@@ -166,15 +166,6 @@ advertised product (identified by ASIN or SKU) with an ad group.
     state: str | None = Field(default=None)
     extended_data: dict[str, Any] | None = Field(default=None, alias="extendedData")
 
-class SponsoredProductTargetExpressionItem(BaseModel):
-    """Nested schema for SponsoredProductTarget.expression_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: str | None | None = Field(default=None, alias="type", description="The expression type")
-    """The expression type"""
-    value: str | None | None = Field(default=None, description="The expression value")
-    """The expression value"""
-
 class SponsoredProductTargetResolvedexpressionItem(BaseModel):
     """Nested schema for SponsoredProductTarget.resolvedExpression_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -183,6 +174,15 @@ class SponsoredProductTargetResolvedexpressionItem(BaseModel):
     """The resolved expression type"""
     value: str | None | None = Field(default=None, description="The resolved expression value")
     """The resolved expression value"""
+
+class SponsoredProductTargetExpressionItem(BaseModel):
+    """Nested schema for SponsoredProductTarget.expression_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type", description="The expression type")
+    """The expression type"""
+    value: str | None | None = Field(default=None, description="The expression value")
+    """The expression value"""
 
 class SponsoredProductTarget(BaseModel):
     """A targeting clause within a Sponsored Products ad group. Targeting clauses define
@@ -414,6 +414,170 @@ class ProfilesSearchData(BaseModel):
     """"""
 
 
+class PortfoliosSearchData(BaseModel):
+    """Search result data for portfolios entity."""
+    model_config = ConfigDict(extra="allow")
+
+    portfolio_id: str | None = None
+    """The unique identifier of the portfolio"""
+    name: str | None = None
+    """The name of the portfolio"""
+    budget: dict[str, Any] | None = None
+    """Budget configuration for the portfolio"""
+    in_budget: bool | None = None
+    """Whether the portfolio is within its budget"""
+    state: str | None = None
+    """The state of the portfolio (enabled, paused, archived)"""
+    creation_date: int | None = None
+    """The creation date of the portfolio (epoch milliseconds)"""
+    last_updated_date: int | None = None
+    """The last updated date of the portfolio (epoch milliseconds)"""
+    serving_status: str | None = None
+    """The serving status of the portfolio"""
+
+
+class SponsoredProductCampaignsSearchData(BaseModel):
+    """Search result data for sponsored_product_campaigns entity."""
+    model_config = ConfigDict(extra="allow")
+
+    campaign_id: str | None = None
+    """The unique identifier of the campaign"""
+    portfolio_id: str | None = None
+    """The portfolio ID this campaign belongs to"""
+    name: str | None = None
+    """The name of the campaign"""
+    targeting_type: str | None = None
+    """The targeting type (manual, auto)"""
+    state: str | None = None
+    """The state of the campaign (enabled, paused, archived)"""
+    budget: dict[str, Any] | None = None
+    """Budget configuration for the campaign"""
+    start_date: str | None = None
+    """The start date of the campaign (YYYYMMDD format)"""
+    end_date: str | None = None
+    """The end date of the campaign (YYYYMMDD format)"""
+    dynamic_bidding: dict[str, Any] | None = None
+    """Dynamic bidding settings for the campaign"""
+
+
+class SponsoredProductAdGroupsSearchData(BaseModel):
+    """Search result data for sponsored_product_ad_groups entity."""
+    model_config = ConfigDict(extra="allow")
+
+    ad_group_id: str | None = None
+    """The unique identifier of the ad group"""
+    campaign_id: str | None = None
+    """The campaign ID this ad group belongs to"""
+    name: str | None = None
+    """The name of the ad group"""
+    state: str | None = None
+    """The state of the ad group (enabled, paused, archived)"""
+    default_bid: float | None = None
+    """The default bid amount for the ad group"""
+
+
+class SponsoredProductKeywordsSearchData(BaseModel):
+    """Search result data for sponsored_product_keywords entity."""
+    model_config = ConfigDict(extra="allow")
+
+    keyword_id: str | None = None
+    """The unique identifier of the keyword"""
+    campaign_id: str | None = None
+    """The campaign ID this keyword belongs to"""
+    ad_group_id: str | None = None
+    """The ad group ID this keyword belongs to"""
+    keyword_text: str | None = None
+    """The keyword text"""
+    state: str | None = None
+    """The state of the keyword (enabled, paused, archived)"""
+
+
+class SponsoredProductProductAdsSearchData(BaseModel):
+    """Search result data for sponsored_product_product_ads entity."""
+    model_config = ConfigDict(extra="allow")
+
+    ad_id: str | None = None
+    """The unique identifier of the product ad"""
+    campaign_id: str | None = None
+    """The campaign ID this product ad belongs to"""
+    ad_group_id: str | None = None
+    """The ad group ID this product ad belongs to"""
+    asin: str | None = None
+    """The ASIN of the advertised product"""
+    sku: str | None = None
+    """The SKU of the advertised product (seller accounts only)"""
+    state: str | None = None
+    """The state of the product ad (enabled, paused, archived)"""
+
+
+class SponsoredProductTargetsSearchData(BaseModel):
+    """Search result data for sponsored_product_targets entity."""
+    model_config = ConfigDict(extra="allow")
+
+    target_id: str | None = None
+    """The unique identifier of the targeting clause"""
+    campaign_id: str | None = None
+    """The campaign ID this target belongs to"""
+    ad_group_id: str | None = None
+    """The ad group ID this target belongs to"""
+    expression_type: str | None = None
+    """The type of targeting expression (manual, auto)"""
+    state: str | None = None
+    """The state of the targeting clause (enabled, paused, archived)"""
+
+
+class SponsoredProductNegativeKeywordsSearchData(BaseModel):
+    """Search result data for sponsored_product_negative_keywords entity."""
+    model_config = ConfigDict(extra="allow")
+
+    keyword_id: str | None = None
+    """The unique identifier of the negative keyword"""
+    campaign_id: str | None = None
+    """The campaign ID this negative keyword belongs to"""
+    ad_group_id: str | None = None
+    """The ad group ID this negative keyword belongs to"""
+    keyword_text: str | None = None
+    """The negative keyword text"""
+    state: str | None = None
+    """The state of the negative keyword (enabled, paused, archived)"""
+
+
+class SponsoredBrandsCampaignsSearchData(BaseModel):
+    """Search result data for sponsored_brands_campaigns entity."""
+    model_config = ConfigDict(extra="allow")
+
+    campaign_id: str | None = None
+    """The unique identifier of the campaign"""
+    name: str | None = None
+    """The name of the campaign"""
+    state: str | None = None
+    """The state of the campaign (enabled, paused, archived)"""
+    budget: float | None = None
+    """The budget amount for the campaign"""
+    budget_type: str | None = None
+    """The budget type (DAILY, LIFETIME)"""
+    start_date: str | None = None
+    """The start date of the campaign (YYYYMMDD format)"""
+    end_date: str | None = None
+    """The end date of the campaign (YYYYMMDD format)"""
+    portfolio_id: str | None = None
+    """The portfolio ID this campaign belongs to"""
+
+
+class SponsoredBrandsAdGroupsSearchData(BaseModel):
+    """Search result data for sponsored_brands_ad_groups entity."""
+    model_config = ConfigDict(extra="allow")
+
+    ad_group_id: str | None = None
+    """The unique identifier of the ad group"""
+    campaign_id: str | None = None
+    """The campaign ID this ad group belongs to"""
+    name: str | None = None
+    """The name of the ad group"""
+    state: str | None = None
+    """The state of the ad group (enabled, paused, archived)"""
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -442,6 +606,33 @@ class AirbyteSearchResult(BaseModel, Generic[D]):
 
 ProfilesSearchResult = AirbyteSearchResult[ProfilesSearchData]
 """Search result type for profiles entity."""
+
+PortfoliosSearchResult = AirbyteSearchResult[PortfoliosSearchData]
+"""Search result type for portfolios entity."""
+
+SponsoredProductCampaignsSearchResult = AirbyteSearchResult[SponsoredProductCampaignsSearchData]
+"""Search result type for sponsored_product_campaigns entity."""
+
+SponsoredProductAdGroupsSearchResult = AirbyteSearchResult[SponsoredProductAdGroupsSearchData]
+"""Search result type for sponsored_product_ad_groups entity."""
+
+SponsoredProductKeywordsSearchResult = AirbyteSearchResult[SponsoredProductKeywordsSearchData]
+"""Search result type for sponsored_product_keywords entity."""
+
+SponsoredProductProductAdsSearchResult = AirbyteSearchResult[SponsoredProductProductAdsSearchData]
+"""Search result type for sponsored_product_product_ads entity."""
+
+SponsoredProductTargetsSearchResult = AirbyteSearchResult[SponsoredProductTargetsSearchData]
+"""Search result type for sponsored_product_targets entity."""
+
+SponsoredProductNegativeKeywordsSearchResult = AirbyteSearchResult[SponsoredProductNegativeKeywordsSearchData]
+"""Search result type for sponsored_product_negative_keywords entity."""
+
+SponsoredBrandsCampaignsSearchResult = AirbyteSearchResult[SponsoredBrandsCampaignsSearchData]
+"""Search result type for sponsored_brands_campaigns entity."""
+
+SponsoredBrandsAdGroupsSearchResult = AirbyteSearchResult[SponsoredBrandsAdGroupsSearchData]
+"""Search result type for sponsored_brands_ad_groups entity."""
 
 
 
