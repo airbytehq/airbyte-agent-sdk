@@ -744,6 +744,15 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['What tasks are assigned to me in Asana?', 'Show overdue Asana tasks'],
                 'search_strategy': 'Search by name or filter by assignee, project, or completion status',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='tasks',
+                    target_entity='projects',
+                    foreign_key='project',
+                    target_key='gid',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='project_tasks',
@@ -1615,6 +1624,15 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['List all Asana projects', 'What is the status of a project?'],
                 'search_strategy': 'Search by name to find specific projects',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='projects',
+                    target_entity='workspaces',
+                    foreign_key='workspace',
+                    target_key='gid',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='task_projects',
@@ -2097,6 +2115,15 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Who are the members of my Asana workspace?', 'Find a user in Asana'],
                 'search_strategy': 'Search by name or email',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='users',
+                    target_entity='workspaces',
+                    foreign_key='workspace',
+                    target_key='gid',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='workspace_users',
@@ -2647,6 +2674,15 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['What files are attached to this task?'],
                 'search_strategy': 'Search by name or filter by parent task',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='attachments',
+                    target_entity='tasks',
+                    foreign_key='parent',
+                    target_key='gid',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='workspace_tags',
