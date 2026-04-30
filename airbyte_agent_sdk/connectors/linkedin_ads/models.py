@@ -42,15 +42,15 @@ class AccountVersion(BaseModel):
 
     version_tag: str | None | None = Field(default=None, alias="versionTag")
 
-class AccountChangeauditstampsCreated(BaseModel):
-    """Nested schema for AccountChangeauditstamps.created"""
+class AccountChangeauditstampsLastmodified(BaseModel):
+    """Nested schema for AccountChangeauditstamps.lastModified"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     actor: str | None | None = Field(default=None)
     time: int | None | None = Field(default=None)
 
-class AccountChangeauditstampsLastmodified(BaseModel):
-    """Nested schema for AccountChangeauditstamps.lastModified"""
+class AccountChangeauditstampsCreated(BaseModel):
+    """Nested schema for AccountChangeauditstamps.created"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     actor: str | None | None = Field(default=None)
@@ -139,6 +139,27 @@ class AccountUsersList(BaseModel):
     elements: list[AccountUser] | None = Field(default=None)
     metadata: AccountUsersListMetadata | None = Field(default=None)
 
+class CampaignUnitcost(BaseModel):
+    """Cost per unit (bid amount)"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    amount: str | None | None = Field(default=None)
+    currency_code: str | None | None = Field(default=None, alias="currencyCode")
+
+class CampaignTotalbudget(BaseModel):
+    """Total budget configuration"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    amount: str | None | None = Field(default=None)
+    currency_code: str | None | None = Field(default=None, alias="currencyCode")
+
+class CampaignLocale(BaseModel):
+    """Campaign locale settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    country: str | None | None = Field(default=None)
+    language: str | None | None = Field(default=None)
+
 class CampaignChangeauditstampsLastmodified(BaseModel):
     """Nested schema for CampaignChangeauditstamps.lastModified"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -167,12 +188,11 @@ class CampaignRunschedule(BaseModel):
     start: int | None | None = Field(default=None)
     end: int | None | None = Field(default=None)
 
-class CampaignUnitcost(BaseModel):
-    """Cost per unit (bid amount)"""
+class CampaignVersion(BaseModel):
+    """Version information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    amount: str | None | None = Field(default=None)
-    currency_code: str | None | None = Field(default=None, alias="currencyCode")
+    version_tag: str | None | None = Field(default=None, alias="versionTag")
 
 class CampaignDailybudget(BaseModel):
     """Daily budget configuration"""
@@ -180,26 +200,6 @@ class CampaignDailybudget(BaseModel):
 
     amount: str | None | None = Field(default=None)
     currency_code: str | None | None = Field(default=None, alias="currencyCode")
-
-class CampaignVersion(BaseModel):
-    """Version information"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    version_tag: str | None | None = Field(default=None, alias="versionTag")
-
-class CampaignTotalbudget(BaseModel):
-    """Total budget configuration"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    amount: str | None | None = Field(default=None)
-    currency_code: str | None | None = Field(default=None, alias="currencyCode")
-
-class CampaignLocale(BaseModel):
-    """Campaign locale settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    country: str | None | None = Field(default=None)
-    language: str | None | None = Field(default=None)
 
 class Campaign(BaseModel):
     """LinkedIn ad campaign object"""
@@ -248,13 +248,6 @@ class CampaignsList(BaseModel):
     elements: list[Campaign] | None = Field(default=None)
     metadata: CampaignsListMetadata | None = Field(default=None)
 
-class CampaignGroupTotalbudget(BaseModel):
-    """Total budget for the campaign group"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    amount: str | None | None = Field(default=None)
-    currency_code: str | None | None = Field(default=None, alias="currencyCode")
-
 class CampaignGroupChangeauditstampsCreated(BaseModel):
     """Nested schema for CampaignGroupChangeauditstamps.created"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -282,6 +275,13 @@ class CampaignGroupRunschedule(BaseModel):
 
     start: int | None | None = Field(default=None)
     end: int | None | None = Field(default=None)
+
+class CampaignGroupTotalbudget(BaseModel):
+    """Total budget for the campaign group"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    amount: str | None | None = Field(default=None)
+    currency_code: str | None | None = Field(default=None, alias="currencyCode")
 
 class CampaignGroup(BaseModel):
     """LinkedIn ad campaign group object"""
@@ -406,16 +406,16 @@ class ConversionsList(BaseModel):
     elements: list[Conversion] | None = Field(default=None)
     paging: ConversionsListPaging | None = Field(default=None)
 
-class AdAnalyticsRecordDaterangeStart(BaseModel):
-    """Nested schema for AdAnalyticsRecordDaterange.start"""
+class AdAnalyticsRecordDaterangeEnd(BaseModel):
+    """Nested schema for AdAnalyticsRecordDaterange.end"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     year: int | None = Field(default=None)
     month: int | None = Field(default=None)
     day: int | None = Field(default=None)
 
-class AdAnalyticsRecordDaterangeEnd(BaseModel):
-    """Nested schema for AdAnalyticsRecordDaterange.end"""
+class AdAnalyticsRecordDaterangeStart(BaseModel):
+    """Nested schema for AdAnalyticsRecordDaterange.start"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     year: int | None = Field(default=None)
