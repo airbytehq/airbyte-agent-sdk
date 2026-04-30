@@ -986,7 +986,7 @@ paths:
             search. Cannot be used together with identifiers — provide one or the other.
           schema:
             type: string
-            default: "test"
+            default: "a"
         - name: identifiers
           in: query
           description: >-

@@ -1993,7 +1993,7 @@ AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
                         'keywords': {
                             'type': 'string',
                             'required': False,
-                            'default': 'test',
+                            'default': 'a',
                         },
                         'identifiers': {'type': 'string', 'required': False},
                         'identifiersType': {
