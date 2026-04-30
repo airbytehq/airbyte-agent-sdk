@@ -1422,6 +1422,7 @@ components:
         - tags
         - deleted_tickets
         - ticket_audits
+        - ticket_bulk_updates
         - ticket_comments
         - ticket_fields
         - ticket_forms
