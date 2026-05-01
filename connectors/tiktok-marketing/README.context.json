@@ -36,15 +36,6 @@
     "description": "Settings for data replication from TikTok Marketing.",
     "fields": [
       {
-        "name": "advertiser_id",
-        "type": "str",
-        "required": true,
-        "title": "Advertiser ID",
-        "description": "The TikTok advertiser account ID to scope all data requests. This is required to access campaigns, ads, and reporting data.",
-        "format": null,
-        "default": null
-      },
-      {
         "name": "start_date",
         "type": "str",
         "required": true,

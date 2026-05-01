@@ -27,8 +27,6 @@ class TiktokMarketingReplicationConfig(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    advertiser_id: str
-    """The TikTok advertiser account ID to scope all data requests. This is required to access campaigns, ads, and reporting data."""
     start_date: str
     """The start date in YYYY-MM-DD format. Any data before this date will not be replicated. If not set, defaults to 2016-09-01."""
 

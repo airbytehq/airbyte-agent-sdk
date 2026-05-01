@@ -23,12 +23,6 @@ info:
     title: Replication Configuration
     description: Settings for data replication from TikTok Marketing.
     properties:
-      advertiser_id:
-        type: string
-        title: Advertiser ID
-        description: >-
-          The TikTok advertiser account ID to scope all data requests.
-          This is required to access campaigns, ads, and reporting data.
       start_date:
         type: string
         title: Replication Start Date
@@ -37,10 +31,8 @@ info:
           be replicated. If not set, defaults to 2016-09-01.
         format: date
     required:
-      - advertiser_id
       - start_date
     replication_config_key_mapping:
-      advertiser_id: credentials.advertiser_id
       start_date: start_date
   x-airbyte-scoping:
     - param: advertiser_id
@@ -2360,6 +2352,7 @@ paths:
       operationId: listAdvertisers
       x-airbyte-entity: advertisers
       x-airbyte-action: list
+      x-airbyte-preferred-for-check: true
       x-airbyte-record-extractor: $.data.list
       x-airbyte-meta-extractor:
         page_info: $.data.page_info
