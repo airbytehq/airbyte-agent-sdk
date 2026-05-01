@@ -57,6 +57,7 @@ info:
     disable_compaction: true
     entities:
       - entity: audit
+        x-airbyte-name: audit
         fields:
           - name: affectedObject
             type: ["null", "object"]
@@ -92,6 +93,7 @@ info:
             type: ["null", "boolean"]
             description: Indicates if the user triggering the audit event is a system admin.
       - entity: blog_posts
+        x-airbyte-name: blog_posts
         suggested: true
         fields:
           - name: _links
@@ -160,6 +162,7 @@ info:
             type: ["null", "string"]
             description: The type of group
       - entity: pages
+        x-airbyte-name: pages
         suggested: true
         fields:
           - name: _links

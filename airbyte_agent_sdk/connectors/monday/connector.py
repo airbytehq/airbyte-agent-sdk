@@ -109,7 +109,7 @@ class MondayConnector:
 
     connector_name = "monday"
     connector_version = "1.0.3"
-    sdk_version = "0.1.139"
+    sdk_version = "0.1.140"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
