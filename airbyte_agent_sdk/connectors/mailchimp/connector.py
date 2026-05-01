@@ -46,6 +46,22 @@ from .types import (
     ListsSearchQuery,
     ReportsSearchFilter,
     ReportsSearchQuery,
+    ListMembersSearchFilter,
+    ListMembersSearchQuery,
+    AutomationsSearchFilter,
+    AutomationsSearchQuery,
+    TagsSearchFilter,
+    TagsSearchQuery,
+    InterestCategoriesSearchFilter,
+    InterestCategoriesSearchQuery,
+    InterestsSearchFilter,
+    InterestsSearchQuery,
+    SegmentsSearchFilter,
+    SegmentsSearchQuery,
+    SegmentMembersSearchFilter,
+    SegmentMembersSearchQuery,
+    UnsubscribesSearchFilter,
+    UnsubscribesSearchQuery,
 )
 from .models import MailchimpAuthConfig
 
@@ -88,6 +104,22 @@ from .models import (
     ListsSearchResult,
     ReportsSearchData,
     ReportsSearchResult,
+    ListMembersSearchData,
+    ListMembersSearchResult,
+    AutomationsSearchData,
+    AutomationsSearchResult,
+    TagsSearchData,
+    TagsSearchResult,
+    InterestCategoriesSearchData,
+    InterestCategoriesSearchResult,
+    InterestsSearchData,
+    InterestsSearchResult,
+    SegmentsSearchData,
+    SegmentsSearchResult,
+    SegmentMembersSearchData,
+    SegmentMembersSearchResult,
+    UnsubscribesSearchData,
+    UnsubscribesSearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -105,7 +137,7 @@ class MailchimpConnector:
 
     connector_name = "mailchimp"
     connector_version = "1.0.11"
-    sdk_version = "0.1.146"
+    sdk_version = "0.1.147"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1133,6 +1165,87 @@ class ListMembersQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: ListMembersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ListMembersSearchResult:
+        """
+        Search list_members records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ListMembersSearchFilter):
+        - id: The MD5 hash of the lowercase version of the list member's email address
+        - email_address: Email address for a subscriber
+        - unique_email_id: An identifier for the address across all of Mailchimp
+        - contact_id: As Mailchimp evolves beyond email, you may eventually have contacts without email addresses
+        - full_name: The contact's full name
+        - web_id: The ID used in the Mailchimp web application
+        - email_type: Type of email this member asked to get
+        - status: Subscriber's current status
+        - unsubscribe_reason: A subscriber's reason for unsubscribing
+        - consents_to_one_to_one_messaging: Indicates whether a contact consents to 1:1 messaging
+        - merge_fields: A dictionary of merge fields where the keys are the merge tags
+        - interests: The key of this object's properties is the ID of the interest in question
+        - stats: Open and click rates for this subscriber
+        - ip_signup: IP address the subscriber signed up from
+        - timestamp_signup: The date and time the subscriber signed up for the list
+        - ip_opt: The IP address the subscriber used to confirm their opt-in status
+        - timestamp_opt: The date and time the subscriber confirmed their opt-in status
+        - member_rating: Star rating for this member, between 1 and 5
+        - last_changed: The date and time the member's info was last changed
+        - language: If set/detected, the subscriber's language
+        - vip: VIP status for subscriber
+        - email_client: The list member's email client
+        - location: Subscriber location information
+        - source: The source from which the subscriber was added to this list
+        - tags_count: The number of tags applied to this member
+        - tags: Returns up to 50 tags applied to this member
+        - list_id: The list id
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ListMembersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("list_members", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ListMembersSearchResult(
+            data=[
+                ListMembersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class ReportsQuery:
     """
     Query class for Reports entity operations.
@@ -1455,6 +1568,69 @@ class AutomationsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: AutomationsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> AutomationsSearchResult:
+        """
+        Search automations records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (AutomationsSearchFilter):
+        - id: A string that uniquely identifies an Automation workflow
+        - create_time: The date and time the Automation was created
+        - start_time: The date and time the Automation was started
+        - status: The current status of the Automation
+        - emails_sent: The total number of emails sent for the Automation
+        - recipients: List settings for the Automation
+        - settings: The settings for the Automation workflow
+        - tracking: The tracking options for the Automation
+        - report_summary: A summary of opens and clicks for sent campaigns
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            AutomationsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("automations", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return AutomationsSearchResult(
+            data=[
+                AutomationsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class TagsQuery:
     """
     Query class for Tags entity operations.
@@ -1495,6 +1671,62 @@ class TagsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: TagsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> TagsSearchResult:
+        """
+        Search tags records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (TagsSearchFilter):
+        - id: The unique id for the tag
+        - name: The name of the tag
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            TagsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("tags", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return TagsSearchResult(
+            data=[
+                TagsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class InterestCategoriesQuery:
     """
@@ -1567,6 +1799,65 @@ class InterestCategoriesQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: InterestCategoriesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> InterestCategoriesSearchResult:
+        """
+        Search interest_categories records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (InterestCategoriesSearchFilter):
+        - list_id: The unique list id for the category
+        - id: The id for the interest category
+        - title: The text description of this category
+        - display_order: The order that the categories are displayed in the list
+        - type_: Determines how this category's interests appear on signup forms
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            InterestCategoriesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("interest_categories", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return InterestCategoriesSearchResult(
+            data=[
+                InterestCategoriesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class InterestsQuery:
     """
@@ -1645,6 +1936,66 @@ class InterestsQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: InterestsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> InterestsSearchResult:
+        """
+        Search interests records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (InterestsSearchFilter):
+        - category_id: The id for the interest category
+        - list_id: The ID for the list that this interest belongs to
+        - id: The ID for the interest
+        - name: The name of the interest
+        - subscriber_count: The number of subscribers associated with this interest
+        - display_order: The display order for interests
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            InterestsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("interests", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return InterestsSearchResult(
+            data=[
+                InterestsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class SegmentsQuery:
     """
@@ -1733,6 +2084,68 @@ class SegmentsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: SegmentsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SegmentsSearchResult:
+        """
+        Search segments records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SegmentsSearchFilter):
+        - id: The unique id for the segment
+        - name: The name of the segment
+        - member_count: The number of active subscribers currently included in the segment
+        - type_: The type of segment
+        - created_at: The date and time the segment was created
+        - updated_at: The date and time the segment was last updated
+        - options: The conditions of the segment
+        - list_id: The list id
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SegmentsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("segments", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SegmentsSearchResult(
+            data=[
+                SegmentsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class SegmentMembersQuery:
     """
     Query class for SegmentMembers entity operations.
@@ -1780,6 +2193,79 @@ class SegmentMembersQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: SegmentMembersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SegmentMembersSearchResult:
+        """
+        Search segment_members records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SegmentMembersSearchFilter):
+        - id: The MD5 hash of the lowercase version of the list member's email address
+        - email_address: Email address for a subscriber
+        - unique_email_id: An identifier for the address across all of Mailchimp
+        - email_type: Type of email this member asked to get
+        - status: Subscriber's current status
+        - merge_fields: A dictionary of merge fields where the keys are the merge tags
+        - interests: The key of this object's properties is the ID of the interest in question
+        - stats: Open and click rates for this subscriber
+        - ip_signup: IP address the subscriber signed up from
+        - timestamp_signup: The date and time the subscriber signed up for the list
+        - ip_opt: The IP address the subscriber used to confirm their opt-in status
+        - timestamp_opt: The date and time the subscriber confirmed their opt-in status
+        - member_rating: Star rating for this member, between 1 and 5
+        - last_changed: The date and time the member's info was last changed
+        - language: If set/detected, the subscriber's language
+        - vip: VIP status for subscriber
+        - email_client: The list member's email client
+        - location: Subscriber location information
+        - list_id: The list id
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SegmentMembersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("segment_members", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SegmentMembersSearchResult(
+            data=[
+                SegmentMembersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class UnsubscribesQuery:
     """
     Query class for Unsubscribes entity operations.
@@ -1823,3 +2309,66 @@ class UnsubscribesQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: UnsubscribesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> UnsubscribesSearchResult:
+        """
+        Search unsubscribes records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (UnsubscribesSearchFilter):
+        - email_id: The MD5 hash of the lowercase version of the list member's email address
+        - email_address: Email address for a subscriber
+        - merge_fields: A dictionary of merge fields where the keys are the merge tags
+        - vip: VIP status for subscriber
+        - timestamp: The date and time the member opted-out
+        - reason: If available, the reason listed by the member for unsubscribing
+        - campaign_id: The campaign id
+        - list_id: The list id
+        - list_is_active: The status of the list used
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            UnsubscribesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("unsubscribes", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return UnsubscribesSearchResult(
+            data=[
+                UnsubscribesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )

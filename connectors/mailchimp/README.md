@@ -341,16 +341,16 @@ This connector supports the following entities and actions. For more details, se
 |--------|---------|
 | Campaigns | [List](./REFERENCE.md#campaigns-list), [Get](./REFERENCE.md#campaigns-get), [Context Store Search](./REFERENCE.md#campaigns-context-store-search) |
 | Lists | [List](./REFERENCE.md#lists-list), [Get](./REFERENCE.md#lists-get), [Context Store Search](./REFERENCE.md#lists-context-store-search) |
-| List Members | [List](./REFERENCE.md#list-members-list), [Get](./REFERENCE.md#list-members-get) |
+| List Members | [List](./REFERENCE.md#list-members-list), [Get](./REFERENCE.md#list-members-get), [Context Store Search](./REFERENCE.md#list-members-context-store-search) |
 | Reports | [List](./REFERENCE.md#reports-list), [Get](./REFERENCE.md#reports-get), [Context Store Search](./REFERENCE.md#reports-context-store-search) |
 | Email Activity | [List](./REFERENCE.md#email-activity-list), [Context Store Search](./REFERENCE.md#email-activity-context-store-search) |
-| Automations | [List](./REFERENCE.md#automations-list) |
-| Tags | [List](./REFERENCE.md#tags-list) |
-| Interest Categories | [List](./REFERENCE.md#interest-categories-list), [Get](./REFERENCE.md#interest-categories-get) |
-| Interests | [List](./REFERENCE.md#interests-list), [Get](./REFERENCE.md#interests-get) |
-| Segments | [List](./REFERENCE.md#segments-list), [Get](./REFERENCE.md#segments-get) |
-| Segment Members | [List](./REFERENCE.md#segment-members-list) |
-| Unsubscribes | [List](./REFERENCE.md#unsubscribes-list) |
+| Automations | [List](./REFERENCE.md#automations-list), [Context Store Search](./REFERENCE.md#automations-context-store-search) |
+| Tags | [List](./REFERENCE.md#tags-list), [Context Store Search](./REFERENCE.md#tags-context-store-search) |
+| Interest Categories | [List](./REFERENCE.md#interest-categories-list), [Get](./REFERENCE.md#interest-categories-get), [Context Store Search](./REFERENCE.md#interest-categories-context-store-search) |
+| Interests | [List](./REFERENCE.md#interests-list), [Get](./REFERENCE.md#interests-get), [Context Store Search](./REFERENCE.md#interests-context-store-search) |
+| Segments | [List](./REFERENCE.md#segments-list), [Get](./REFERENCE.md#segments-get), [Context Store Search](./REFERENCE.md#segments-context-store-search) |
+| Segment Members | [List](./REFERENCE.md#segment-members-list), [Context Store Search](./REFERENCE.md#segment-members-context-store-search) |
+| Unsubscribes | [List](./REFERENCE.md#unsubscribes-list), [Context Store Search](./REFERENCE.md#unsubscribes-context-store-search) |
 
 
 ### Authentication

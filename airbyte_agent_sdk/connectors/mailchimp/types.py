@@ -1420,6 +1420,1776 @@ class ReportsSearchQuery(TypedDict, total=False):
     sort: list[ReportsSortFilter]
 
 
+# ===== LIST_MEMBERS SEARCH TYPES =====
+
+class ListMembersSearchFilter(TypedDict, total=False):
+    """Available fields for filtering list_members search queries."""
+    id: str
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str | None
+    """Email address for a subscriber"""
+    unique_email_id: str | None
+    """An identifier for the address across all of Mailchimp"""
+    contact_id: str | None
+    """As Mailchimp evolves beyond email, you may eventually have contacts without email addresses"""
+    full_name: str | None
+    """The contact's full name"""
+    web_id: int | None
+    """The ID used in the Mailchimp web application"""
+    email_type: str | None
+    """Type of email this member asked to get"""
+    status: str | None
+    """Subscriber's current status"""
+    unsubscribe_reason: str | None
+    """A subscriber's reason for unsubscribing"""
+    consents_to_one_to_one_messaging: bool | None
+    """Indicates whether a contact consents to 1:1 messaging"""
+    merge_fields: dict[str, Any] | None
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: dict[str, Any] | None
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: dict[str, Any] | None
+    """Open and click rates for this subscriber"""
+    ip_signup: str | None
+    """IP address the subscriber signed up from"""
+    timestamp_signup: str | None
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: str | None
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: str | None
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: int | None
+    """Star rating for this member, between 1 and 5"""
+    last_changed: str | None
+    """The date and time the member's info was last changed"""
+    language: str | None
+    """If set/detected, the subscriber's language"""
+    vip: bool | None
+    """VIP status for subscriber"""
+    email_client: str | None
+    """The list member's email client"""
+    location: dict[str, Any] | None
+    """Subscriber location information"""
+    source: str | None
+    """The source from which the subscriber was added to this list"""
+    tags_count: int | None
+    """The number of tags applied to this member"""
+    tags: list[Any] | None
+    """Returns up to 50 tags applied to this member"""
+    list_id: str | None
+    """The list id"""
+
+
+class ListMembersInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: list[str]
+    """Email address for a subscriber"""
+    unique_email_id: list[str]
+    """An identifier for the address across all of Mailchimp"""
+    contact_id: list[str]
+    """As Mailchimp evolves beyond email, you may eventually have contacts without email addresses"""
+    full_name: list[str]
+    """The contact's full name"""
+    web_id: list[int]
+    """The ID used in the Mailchimp web application"""
+    email_type: list[str]
+    """Type of email this member asked to get"""
+    status: list[str]
+    """Subscriber's current status"""
+    unsubscribe_reason: list[str]
+    """A subscriber's reason for unsubscribing"""
+    consents_to_one_to_one_messaging: list[bool]
+    """Indicates whether a contact consents to 1:1 messaging"""
+    merge_fields: list[dict[str, Any]]
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: list[dict[str, Any]]
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: list[dict[str, Any]]
+    """Open and click rates for this subscriber"""
+    ip_signup: list[str]
+    """IP address the subscriber signed up from"""
+    timestamp_signup: list[str]
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: list[str]
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: list[str]
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: list[int]
+    """Star rating for this member, between 1 and 5"""
+    last_changed: list[str]
+    """The date and time the member's info was last changed"""
+    language: list[str]
+    """If set/detected, the subscriber's language"""
+    vip: list[bool]
+    """VIP status for subscriber"""
+    email_client: list[str]
+    """The list member's email client"""
+    location: list[dict[str, Any]]
+    """Subscriber location information"""
+    source: list[str]
+    """The source from which the subscriber was added to this list"""
+    tags_count: list[int]
+    """The number of tags applied to this member"""
+    tags: list[list[Any]]
+    """Returns up to 50 tags applied to this member"""
+    list_id: list[str]
+    """The list id"""
+
+
+class ListMembersAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: Any
+    """Email address for a subscriber"""
+    unique_email_id: Any
+    """An identifier for the address across all of Mailchimp"""
+    contact_id: Any
+    """As Mailchimp evolves beyond email, you may eventually have contacts without email addresses"""
+    full_name: Any
+    """The contact's full name"""
+    web_id: Any
+    """The ID used in the Mailchimp web application"""
+    email_type: Any
+    """Type of email this member asked to get"""
+    status: Any
+    """Subscriber's current status"""
+    unsubscribe_reason: Any
+    """A subscriber's reason for unsubscribing"""
+    consents_to_one_to_one_messaging: Any
+    """Indicates whether a contact consents to 1:1 messaging"""
+    merge_fields: Any
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: Any
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: Any
+    """Open and click rates for this subscriber"""
+    ip_signup: Any
+    """IP address the subscriber signed up from"""
+    timestamp_signup: Any
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: Any
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: Any
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: Any
+    """Star rating for this member, between 1 and 5"""
+    last_changed: Any
+    """The date and time the member's info was last changed"""
+    language: Any
+    """If set/detected, the subscriber's language"""
+    vip: Any
+    """VIP status for subscriber"""
+    email_client: Any
+    """The list member's email client"""
+    location: Any
+    """Subscriber location information"""
+    source: Any
+    """The source from which the subscriber was added to this list"""
+    tags_count: Any
+    """The number of tags applied to this member"""
+    tags: Any
+    """Returns up to 50 tags applied to this member"""
+    list_id: Any
+    """The list id"""
+
+
+class ListMembersStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str
+    """Email address for a subscriber"""
+    unique_email_id: str
+    """An identifier for the address across all of Mailchimp"""
+    contact_id: str
+    """As Mailchimp evolves beyond email, you may eventually have contacts without email addresses"""
+    full_name: str
+    """The contact's full name"""
+    web_id: str
+    """The ID used in the Mailchimp web application"""
+    email_type: str
+    """Type of email this member asked to get"""
+    status: str
+    """Subscriber's current status"""
+    unsubscribe_reason: str
+    """A subscriber's reason for unsubscribing"""
+    consents_to_one_to_one_messaging: str
+    """Indicates whether a contact consents to 1:1 messaging"""
+    merge_fields: str
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: str
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: str
+    """Open and click rates for this subscriber"""
+    ip_signup: str
+    """IP address the subscriber signed up from"""
+    timestamp_signup: str
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: str
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: str
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: str
+    """Star rating for this member, between 1 and 5"""
+    last_changed: str
+    """The date and time the member's info was last changed"""
+    language: str
+    """If set/detected, the subscriber's language"""
+    vip: str
+    """VIP status for subscriber"""
+    email_client: str
+    """The list member's email client"""
+    location: str
+    """Subscriber location information"""
+    source: str
+    """The source from which the subscriber was added to this list"""
+    tags_count: str
+    """The number of tags applied to this member"""
+    tags: str
+    """Returns up to 50 tags applied to this member"""
+    list_id: str
+    """The list id"""
+
+
+class ListMembersSortFilter(TypedDict, total=False):
+    """Available fields for sorting list_members search results."""
+    id: AirbyteSortOrder
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: AirbyteSortOrder
+    """Email address for a subscriber"""
+    unique_email_id: AirbyteSortOrder
+    """An identifier for the address across all of Mailchimp"""
+    contact_id: AirbyteSortOrder
+    """As Mailchimp evolves beyond email, you may eventually have contacts without email addresses"""
+    full_name: AirbyteSortOrder
+    """The contact's full name"""
+    web_id: AirbyteSortOrder
+    """The ID used in the Mailchimp web application"""
+    email_type: AirbyteSortOrder
+    """Type of email this member asked to get"""
+    status: AirbyteSortOrder
+    """Subscriber's current status"""
+    unsubscribe_reason: AirbyteSortOrder
+    """A subscriber's reason for unsubscribing"""
+    consents_to_one_to_one_messaging: AirbyteSortOrder
+    """Indicates whether a contact consents to 1:1 messaging"""
+    merge_fields: AirbyteSortOrder
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: AirbyteSortOrder
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: AirbyteSortOrder
+    """Open and click rates for this subscriber"""
+    ip_signup: AirbyteSortOrder
+    """IP address the subscriber signed up from"""
+    timestamp_signup: AirbyteSortOrder
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: AirbyteSortOrder
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: AirbyteSortOrder
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: AirbyteSortOrder
+    """Star rating for this member, between 1 and 5"""
+    last_changed: AirbyteSortOrder
+    """The date and time the member's info was last changed"""
+    language: AirbyteSortOrder
+    """If set/detected, the subscriber's language"""
+    vip: AirbyteSortOrder
+    """VIP status for subscriber"""
+    email_client: AirbyteSortOrder
+    """The list member's email client"""
+    location: AirbyteSortOrder
+    """Subscriber location information"""
+    source: AirbyteSortOrder
+    """The source from which the subscriber was added to this list"""
+    tags_count: AirbyteSortOrder
+    """The number of tags applied to this member"""
+    tags: AirbyteSortOrder
+    """Returns up to 50 tags applied to this member"""
+    list_id: AirbyteSortOrder
+    """The list id"""
+
+
+# Entity-specific condition types for list_members
+class ListMembersEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ListMembersSearchFilter
+
+
+class ListMembersNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ListMembersSearchFilter
+
+
+class ListMembersGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ListMembersSearchFilter
+
+
+class ListMembersGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ListMembersSearchFilter
+
+
+class ListMembersLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ListMembersSearchFilter
+
+
+class ListMembersLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ListMembersSearchFilter
+
+
+class ListMembersLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ListMembersStringFilter
+
+
+class ListMembersFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ListMembersStringFilter
+
+
+class ListMembersKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ListMembersStringFilter
+
+
+class ListMembersContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ListMembersAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ListMembersInCondition = TypedDict("ListMembersInCondition", {"in": ListMembersInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ListMembersNotCondition = TypedDict("ListMembersNotCondition", {"not": "ListMembersCondition"}, total=False)
+"""Negates the nested condition."""
+
+ListMembersAndCondition = TypedDict("ListMembersAndCondition", {"and": "list[ListMembersCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ListMembersOrCondition = TypedDict("ListMembersOrCondition", {"or": "list[ListMembersCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ListMembersAnyCondition = TypedDict("ListMembersAnyCondition", {"any": ListMembersAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all list_members condition types
+ListMembersCondition = (
+    ListMembersEqCondition
+    | ListMembersNeqCondition
+    | ListMembersGtCondition
+    | ListMembersGteCondition
+    | ListMembersLtCondition
+    | ListMembersLteCondition
+    | ListMembersInCondition
+    | ListMembersLikeCondition
+    | ListMembersFuzzyCondition
+    | ListMembersKeywordCondition
+    | ListMembersContainsCondition
+    | ListMembersNotCondition
+    | ListMembersAndCondition
+    | ListMembersOrCondition
+    | ListMembersAnyCondition
+)
+
+
+class ListMembersSearchQuery(TypedDict, total=False):
+    """Search query for list_members entity."""
+    filter: ListMembersCondition
+    sort: list[ListMembersSortFilter]
+
+
+# ===== AUTOMATIONS SEARCH TYPES =====
+
+class AutomationsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering automations search queries."""
+    id: str
+    """A string that uniquely identifies an Automation workflow"""
+    create_time: str | None
+    """The date and time the Automation was created"""
+    start_time: str | None
+    """The date and time the Automation was started"""
+    status: str | None
+    """The current status of the Automation"""
+    emails_sent: int | None
+    """The total number of emails sent for the Automation"""
+    recipients: dict[str, Any] | None
+    """List settings for the Automation"""
+    settings: dict[str, Any] | None
+    """The settings for the Automation workflow"""
+    tracking: dict[str, Any] | None
+    """The tracking options for the Automation"""
+    report_summary: dict[str, Any] | None
+    """A summary of opens and clicks for sent campaigns"""
+
+
+class AutomationsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """A string that uniquely identifies an Automation workflow"""
+    create_time: list[str]
+    """The date and time the Automation was created"""
+    start_time: list[str]
+    """The date and time the Automation was started"""
+    status: list[str]
+    """The current status of the Automation"""
+    emails_sent: list[int]
+    """The total number of emails sent for the Automation"""
+    recipients: list[dict[str, Any]]
+    """List settings for the Automation"""
+    settings: list[dict[str, Any]]
+    """The settings for the Automation workflow"""
+    tracking: list[dict[str, Any]]
+    """The tracking options for the Automation"""
+    report_summary: list[dict[str, Any]]
+    """A summary of opens and clicks for sent campaigns"""
+
+
+class AutomationsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """A string that uniquely identifies an Automation workflow"""
+    create_time: Any
+    """The date and time the Automation was created"""
+    start_time: Any
+    """The date and time the Automation was started"""
+    status: Any
+    """The current status of the Automation"""
+    emails_sent: Any
+    """The total number of emails sent for the Automation"""
+    recipients: Any
+    """List settings for the Automation"""
+    settings: Any
+    """The settings for the Automation workflow"""
+    tracking: Any
+    """The tracking options for the Automation"""
+    report_summary: Any
+    """A summary of opens and clicks for sent campaigns"""
+
+
+class AutomationsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """A string that uniquely identifies an Automation workflow"""
+    create_time: str
+    """The date and time the Automation was created"""
+    start_time: str
+    """The date and time the Automation was started"""
+    status: str
+    """The current status of the Automation"""
+    emails_sent: str
+    """The total number of emails sent for the Automation"""
+    recipients: str
+    """List settings for the Automation"""
+    settings: str
+    """The settings for the Automation workflow"""
+    tracking: str
+    """The tracking options for the Automation"""
+    report_summary: str
+    """A summary of opens and clicks for sent campaigns"""
+
+
+class AutomationsSortFilter(TypedDict, total=False):
+    """Available fields for sorting automations search results."""
+    id: AirbyteSortOrder
+    """A string that uniquely identifies an Automation workflow"""
+    create_time: AirbyteSortOrder
+    """The date and time the Automation was created"""
+    start_time: AirbyteSortOrder
+    """The date and time the Automation was started"""
+    status: AirbyteSortOrder
+    """The current status of the Automation"""
+    emails_sent: AirbyteSortOrder
+    """The total number of emails sent for the Automation"""
+    recipients: AirbyteSortOrder
+    """List settings for the Automation"""
+    settings: AirbyteSortOrder
+    """The settings for the Automation workflow"""
+    tracking: AirbyteSortOrder
+    """The tracking options for the Automation"""
+    report_summary: AirbyteSortOrder
+    """A summary of opens and clicks for sent campaigns"""
+
+
+# Entity-specific condition types for automations
+class AutomationsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: AutomationsSearchFilter
+
+
+class AutomationsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: AutomationsSearchFilter
+
+
+class AutomationsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: AutomationsSearchFilter
+
+
+class AutomationsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: AutomationsSearchFilter
+
+
+class AutomationsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: AutomationsSearchFilter
+
+
+class AutomationsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: AutomationsSearchFilter
+
+
+class AutomationsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: AutomationsStringFilter
+
+
+class AutomationsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: AutomationsStringFilter
+
+
+class AutomationsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: AutomationsStringFilter
+
+
+class AutomationsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: AutomationsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+AutomationsInCondition = TypedDict("AutomationsInCondition", {"in": AutomationsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+AutomationsNotCondition = TypedDict("AutomationsNotCondition", {"not": "AutomationsCondition"}, total=False)
+"""Negates the nested condition."""
+
+AutomationsAndCondition = TypedDict("AutomationsAndCondition", {"and": "list[AutomationsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+AutomationsOrCondition = TypedDict("AutomationsOrCondition", {"or": "list[AutomationsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+AutomationsAnyCondition = TypedDict("AutomationsAnyCondition", {"any": AutomationsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all automations condition types
+AutomationsCondition = (
+    AutomationsEqCondition
+    | AutomationsNeqCondition
+    | AutomationsGtCondition
+    | AutomationsGteCondition
+    | AutomationsLtCondition
+    | AutomationsLteCondition
+    | AutomationsInCondition
+    | AutomationsLikeCondition
+    | AutomationsFuzzyCondition
+    | AutomationsKeywordCondition
+    | AutomationsContainsCondition
+    | AutomationsNotCondition
+    | AutomationsAndCondition
+    | AutomationsOrCondition
+    | AutomationsAnyCondition
+)
+
+
+class AutomationsSearchQuery(TypedDict, total=False):
+    """Search query for automations entity."""
+    filter: AutomationsCondition
+    sort: list[AutomationsSortFilter]
+
+
+# ===== TAGS SEARCH TYPES =====
+
+class TagsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering tags search queries."""
+    id: int
+    """The unique id for the tag"""
+    name: str | None
+    """The name of the tag"""
+
+
+class TagsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """The unique id for the tag"""
+    name: list[str]
+    """The name of the tag"""
+
+
+class TagsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """The unique id for the tag"""
+    name: Any
+    """The name of the tag"""
+
+
+class TagsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """The unique id for the tag"""
+    name: str
+    """The name of the tag"""
+
+
+class TagsSortFilter(TypedDict, total=False):
+    """Available fields for sorting tags search results."""
+    id: AirbyteSortOrder
+    """The unique id for the tag"""
+    name: AirbyteSortOrder
+    """The name of the tag"""
+
+
+# Entity-specific condition types for tags
+class TagsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: TagsSearchFilter
+
+
+class TagsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: TagsSearchFilter
+
+
+class TagsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: TagsSearchFilter
+
+
+class TagsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: TagsSearchFilter
+
+
+class TagsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: TagsSearchFilter
+
+
+class TagsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: TagsSearchFilter
+
+
+class TagsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: TagsStringFilter
+
+
+class TagsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: TagsStringFilter
+
+
+class TagsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: TagsStringFilter
+
+
+class TagsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: TagsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+TagsInCondition = TypedDict("TagsInCondition", {"in": TagsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+TagsNotCondition = TypedDict("TagsNotCondition", {"not": "TagsCondition"}, total=False)
+"""Negates the nested condition."""
+
+TagsAndCondition = TypedDict("TagsAndCondition", {"and": "list[TagsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+TagsOrCondition = TypedDict("TagsOrCondition", {"or": "list[TagsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+TagsAnyCondition = TypedDict("TagsAnyCondition", {"any": TagsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all tags condition types
+TagsCondition = (
+    TagsEqCondition
+    | TagsNeqCondition
+    | TagsGtCondition
+    | TagsGteCondition
+    | TagsLtCondition
+    | TagsLteCondition
+    | TagsInCondition
+    | TagsLikeCondition
+    | TagsFuzzyCondition
+    | TagsKeywordCondition
+    | TagsContainsCondition
+    | TagsNotCondition
+    | TagsAndCondition
+    | TagsOrCondition
+    | TagsAnyCondition
+)
+
+
+class TagsSearchQuery(TypedDict, total=False):
+    """Search query for tags entity."""
+    filter: TagsCondition
+    sort: list[TagsSortFilter]
+
+
+# ===== INTEREST_CATEGORIES SEARCH TYPES =====
+
+class InterestCategoriesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering interest_categories search queries."""
+    list_id: str | None
+    """The unique list id for the category"""
+    id: str
+    """The id for the interest category"""
+    title: str | None
+    """The text description of this category"""
+    display_order: int | None
+    """The order that the categories are displayed in the list"""
+    type_: str | None
+    """Determines how this category's interests appear on signup forms"""
+
+
+class InterestCategoriesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    list_id: list[str]
+    """The unique list id for the category"""
+    id: list[str]
+    """The id for the interest category"""
+    title: list[str]
+    """The text description of this category"""
+    display_order: list[int]
+    """The order that the categories are displayed in the list"""
+    type_: list[str]
+    """Determines how this category's interests appear on signup forms"""
+
+
+class InterestCategoriesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    list_id: Any
+    """The unique list id for the category"""
+    id: Any
+    """The id for the interest category"""
+    title: Any
+    """The text description of this category"""
+    display_order: Any
+    """The order that the categories are displayed in the list"""
+    type_: Any
+    """Determines how this category's interests appear on signup forms"""
+
+
+class InterestCategoriesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    list_id: str
+    """The unique list id for the category"""
+    id: str
+    """The id for the interest category"""
+    title: str
+    """The text description of this category"""
+    display_order: str
+    """The order that the categories are displayed in the list"""
+    type_: str
+    """Determines how this category's interests appear on signup forms"""
+
+
+class InterestCategoriesSortFilter(TypedDict, total=False):
+    """Available fields for sorting interest_categories search results."""
+    list_id: AirbyteSortOrder
+    """The unique list id for the category"""
+    id: AirbyteSortOrder
+    """The id for the interest category"""
+    title: AirbyteSortOrder
+    """The text description of this category"""
+    display_order: AirbyteSortOrder
+    """The order that the categories are displayed in the list"""
+    type_: AirbyteSortOrder
+    """Determines how this category's interests appear on signup forms"""
+
+
+# Entity-specific condition types for interest_categories
+class InterestCategoriesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: InterestCategoriesSearchFilter
+
+
+class InterestCategoriesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: InterestCategoriesSearchFilter
+
+
+class InterestCategoriesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: InterestCategoriesSearchFilter
+
+
+class InterestCategoriesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: InterestCategoriesSearchFilter
+
+
+class InterestCategoriesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: InterestCategoriesSearchFilter
+
+
+class InterestCategoriesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: InterestCategoriesSearchFilter
+
+
+class InterestCategoriesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: InterestCategoriesStringFilter
+
+
+class InterestCategoriesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: InterestCategoriesStringFilter
+
+
+class InterestCategoriesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: InterestCategoriesStringFilter
+
+
+class InterestCategoriesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: InterestCategoriesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+InterestCategoriesInCondition = TypedDict("InterestCategoriesInCondition", {"in": InterestCategoriesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+InterestCategoriesNotCondition = TypedDict("InterestCategoriesNotCondition", {"not": "InterestCategoriesCondition"}, total=False)
+"""Negates the nested condition."""
+
+InterestCategoriesAndCondition = TypedDict("InterestCategoriesAndCondition", {"and": "list[InterestCategoriesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+InterestCategoriesOrCondition = TypedDict("InterestCategoriesOrCondition", {"or": "list[InterestCategoriesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+InterestCategoriesAnyCondition = TypedDict("InterestCategoriesAnyCondition", {"any": InterestCategoriesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all interest_categories condition types
+InterestCategoriesCondition = (
+    InterestCategoriesEqCondition
+    | InterestCategoriesNeqCondition
+    | InterestCategoriesGtCondition
+    | InterestCategoriesGteCondition
+    | InterestCategoriesLtCondition
+    | InterestCategoriesLteCondition
+    | InterestCategoriesInCondition
+    | InterestCategoriesLikeCondition
+    | InterestCategoriesFuzzyCondition
+    | InterestCategoriesKeywordCondition
+    | InterestCategoriesContainsCondition
+    | InterestCategoriesNotCondition
+    | InterestCategoriesAndCondition
+    | InterestCategoriesOrCondition
+    | InterestCategoriesAnyCondition
+)
+
+
+class InterestCategoriesSearchQuery(TypedDict, total=False):
+    """Search query for interest_categories entity."""
+    filter: InterestCategoriesCondition
+    sort: list[InterestCategoriesSortFilter]
+
+
+# ===== INTERESTS SEARCH TYPES =====
+
+class InterestsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering interests search queries."""
+    category_id: str | None
+    """The id for the interest category"""
+    list_id: str | None
+    """The ID for the list that this interest belongs to"""
+    id: str
+    """The ID for the interest"""
+    name: str | None
+    """The name of the interest"""
+    subscriber_count: str | None
+    """The number of subscribers associated with this interest"""
+    display_order: int | None
+    """The display order for interests"""
+
+
+class InterestsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    category_id: list[str]
+    """The id for the interest category"""
+    list_id: list[str]
+    """The ID for the list that this interest belongs to"""
+    id: list[str]
+    """The ID for the interest"""
+    name: list[str]
+    """The name of the interest"""
+    subscriber_count: list[str]
+    """The number of subscribers associated with this interest"""
+    display_order: list[int]
+    """The display order for interests"""
+
+
+class InterestsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    category_id: Any
+    """The id for the interest category"""
+    list_id: Any
+    """The ID for the list that this interest belongs to"""
+    id: Any
+    """The ID for the interest"""
+    name: Any
+    """The name of the interest"""
+    subscriber_count: Any
+    """The number of subscribers associated with this interest"""
+    display_order: Any
+    """The display order for interests"""
+
+
+class InterestsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    category_id: str
+    """The id for the interest category"""
+    list_id: str
+    """The ID for the list that this interest belongs to"""
+    id: str
+    """The ID for the interest"""
+    name: str
+    """The name of the interest"""
+    subscriber_count: str
+    """The number of subscribers associated with this interest"""
+    display_order: str
+    """The display order for interests"""
+
+
+class InterestsSortFilter(TypedDict, total=False):
+    """Available fields for sorting interests search results."""
+    category_id: AirbyteSortOrder
+    """The id for the interest category"""
+    list_id: AirbyteSortOrder
+    """The ID for the list that this interest belongs to"""
+    id: AirbyteSortOrder
+    """The ID for the interest"""
+    name: AirbyteSortOrder
+    """The name of the interest"""
+    subscriber_count: AirbyteSortOrder
+    """The number of subscribers associated with this interest"""
+    display_order: AirbyteSortOrder
+    """The display order for interests"""
+
+
+# Entity-specific condition types for interests
+class InterestsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: InterestsSearchFilter
+
+
+class InterestsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: InterestsSearchFilter
+
+
+class InterestsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: InterestsSearchFilter
+
+
+class InterestsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: InterestsSearchFilter
+
+
+class InterestsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: InterestsSearchFilter
+
+
+class InterestsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: InterestsSearchFilter
+
+
+class InterestsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: InterestsStringFilter
+
+
+class InterestsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: InterestsStringFilter
+
+
+class InterestsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: InterestsStringFilter
+
+
+class InterestsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: InterestsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+InterestsInCondition = TypedDict("InterestsInCondition", {"in": InterestsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+InterestsNotCondition = TypedDict("InterestsNotCondition", {"not": "InterestsCondition"}, total=False)
+"""Negates the nested condition."""
+
+InterestsAndCondition = TypedDict("InterestsAndCondition", {"and": "list[InterestsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+InterestsOrCondition = TypedDict("InterestsOrCondition", {"or": "list[InterestsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+InterestsAnyCondition = TypedDict("InterestsAnyCondition", {"any": InterestsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all interests condition types
+InterestsCondition = (
+    InterestsEqCondition
+    | InterestsNeqCondition
+    | InterestsGtCondition
+    | InterestsGteCondition
+    | InterestsLtCondition
+    | InterestsLteCondition
+    | InterestsInCondition
+    | InterestsLikeCondition
+    | InterestsFuzzyCondition
+    | InterestsKeywordCondition
+    | InterestsContainsCondition
+    | InterestsNotCondition
+    | InterestsAndCondition
+    | InterestsOrCondition
+    | InterestsAnyCondition
+)
+
+
+class InterestsSearchQuery(TypedDict, total=False):
+    """Search query for interests entity."""
+    filter: InterestsCondition
+    sort: list[InterestsSortFilter]
+
+
+# ===== SEGMENTS SEARCH TYPES =====
+
+class SegmentsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering segments search queries."""
+    id: int
+    """The unique id for the segment"""
+    name: str | None
+    """The name of the segment"""
+    member_count: int | None
+    """The number of active subscribers currently included in the segment"""
+    type_: str | None
+    """The type of segment"""
+    created_at: str | None
+    """The date and time the segment was created"""
+    updated_at: str | None
+    """The date and time the segment was last updated"""
+    options: dict[str, Any] | None
+    """The conditions of the segment"""
+    list_id: str | None
+    """The list id"""
+
+
+class SegmentsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """The unique id for the segment"""
+    name: list[str]
+    """The name of the segment"""
+    member_count: list[int]
+    """The number of active subscribers currently included in the segment"""
+    type_: list[str]
+    """The type of segment"""
+    created_at: list[str]
+    """The date and time the segment was created"""
+    updated_at: list[str]
+    """The date and time the segment was last updated"""
+    options: list[dict[str, Any]]
+    """The conditions of the segment"""
+    list_id: list[str]
+    """The list id"""
+
+
+class SegmentsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """The unique id for the segment"""
+    name: Any
+    """The name of the segment"""
+    member_count: Any
+    """The number of active subscribers currently included in the segment"""
+    type_: Any
+    """The type of segment"""
+    created_at: Any
+    """The date and time the segment was created"""
+    updated_at: Any
+    """The date and time the segment was last updated"""
+    options: Any
+    """The conditions of the segment"""
+    list_id: Any
+    """The list id"""
+
+
+class SegmentsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """The unique id for the segment"""
+    name: str
+    """The name of the segment"""
+    member_count: str
+    """The number of active subscribers currently included in the segment"""
+    type_: str
+    """The type of segment"""
+    created_at: str
+    """The date and time the segment was created"""
+    updated_at: str
+    """The date and time the segment was last updated"""
+    options: str
+    """The conditions of the segment"""
+    list_id: str
+    """The list id"""
+
+
+class SegmentsSortFilter(TypedDict, total=False):
+    """Available fields for sorting segments search results."""
+    id: AirbyteSortOrder
+    """The unique id for the segment"""
+    name: AirbyteSortOrder
+    """The name of the segment"""
+    member_count: AirbyteSortOrder
+    """The number of active subscribers currently included in the segment"""
+    type_: AirbyteSortOrder
+    """The type of segment"""
+    created_at: AirbyteSortOrder
+    """The date and time the segment was created"""
+    updated_at: AirbyteSortOrder
+    """The date and time the segment was last updated"""
+    options: AirbyteSortOrder
+    """The conditions of the segment"""
+    list_id: AirbyteSortOrder
+    """The list id"""
+
+
+# Entity-specific condition types for segments
+class SegmentsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: SegmentsSearchFilter
+
+
+class SegmentsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: SegmentsSearchFilter
+
+
+class SegmentsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: SegmentsSearchFilter
+
+
+class SegmentsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: SegmentsSearchFilter
+
+
+class SegmentsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: SegmentsSearchFilter
+
+
+class SegmentsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: SegmentsSearchFilter
+
+
+class SegmentsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: SegmentsStringFilter
+
+
+class SegmentsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: SegmentsStringFilter
+
+
+class SegmentsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: SegmentsStringFilter
+
+
+class SegmentsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: SegmentsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+SegmentsInCondition = TypedDict("SegmentsInCondition", {"in": SegmentsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+SegmentsNotCondition = TypedDict("SegmentsNotCondition", {"not": "SegmentsCondition"}, total=False)
+"""Negates the nested condition."""
+
+SegmentsAndCondition = TypedDict("SegmentsAndCondition", {"and": "list[SegmentsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+SegmentsOrCondition = TypedDict("SegmentsOrCondition", {"or": "list[SegmentsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+SegmentsAnyCondition = TypedDict("SegmentsAnyCondition", {"any": SegmentsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all segments condition types
+SegmentsCondition = (
+    SegmentsEqCondition
+    | SegmentsNeqCondition
+    | SegmentsGtCondition
+    | SegmentsGteCondition
+    | SegmentsLtCondition
+    | SegmentsLteCondition
+    | SegmentsInCondition
+    | SegmentsLikeCondition
+    | SegmentsFuzzyCondition
+    | SegmentsKeywordCondition
+    | SegmentsContainsCondition
+    | SegmentsNotCondition
+    | SegmentsAndCondition
+    | SegmentsOrCondition
+    | SegmentsAnyCondition
+)
+
+
+class SegmentsSearchQuery(TypedDict, total=False):
+    """Search query for segments entity."""
+    filter: SegmentsCondition
+    sort: list[SegmentsSortFilter]
+
+
+# ===== SEGMENT_MEMBERS SEARCH TYPES =====
+
+class SegmentMembersSearchFilter(TypedDict, total=False):
+    """Available fields for filtering segment_members search queries."""
+    id: str
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str | None
+    """Email address for a subscriber"""
+    unique_email_id: str | None
+    """An identifier for the address across all of Mailchimp"""
+    email_type: str | None
+    """Type of email this member asked to get"""
+    status: str | None
+    """Subscriber's current status"""
+    merge_fields: dict[str, Any] | None
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: dict[str, Any] | None
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: dict[str, Any] | None
+    """Open and click rates for this subscriber"""
+    ip_signup: str | None
+    """IP address the subscriber signed up from"""
+    timestamp_signup: str | None
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: str | None
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: str | None
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: int | None
+    """Star rating for this member, between 1 and 5"""
+    last_changed: str | None
+    """The date and time the member's info was last changed"""
+    language: str | None
+    """If set/detected, the subscriber's language"""
+    vip: bool | None
+    """VIP status for subscriber"""
+    email_client: str | None
+    """The list member's email client"""
+    location: dict[str, Any] | None
+    """Subscriber location information"""
+    list_id: str | None
+    """The list id"""
+
+
+class SegmentMembersInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[str]
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: list[str]
+    """Email address for a subscriber"""
+    unique_email_id: list[str]
+    """An identifier for the address across all of Mailchimp"""
+    email_type: list[str]
+    """Type of email this member asked to get"""
+    status: list[str]
+    """Subscriber's current status"""
+    merge_fields: list[dict[str, Any]]
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: list[dict[str, Any]]
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: list[dict[str, Any]]
+    """Open and click rates for this subscriber"""
+    ip_signup: list[str]
+    """IP address the subscriber signed up from"""
+    timestamp_signup: list[str]
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: list[str]
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: list[str]
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: list[int]
+    """Star rating for this member, between 1 and 5"""
+    last_changed: list[str]
+    """The date and time the member's info was last changed"""
+    language: list[str]
+    """If set/detected, the subscriber's language"""
+    vip: list[bool]
+    """VIP status for subscriber"""
+    email_client: list[str]
+    """The list member's email client"""
+    location: list[dict[str, Any]]
+    """Subscriber location information"""
+    list_id: list[str]
+    """The list id"""
+
+
+class SegmentMembersAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: Any
+    """Email address for a subscriber"""
+    unique_email_id: Any
+    """An identifier for the address across all of Mailchimp"""
+    email_type: Any
+    """Type of email this member asked to get"""
+    status: Any
+    """Subscriber's current status"""
+    merge_fields: Any
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: Any
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: Any
+    """Open and click rates for this subscriber"""
+    ip_signup: Any
+    """IP address the subscriber signed up from"""
+    timestamp_signup: Any
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: Any
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: Any
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: Any
+    """Star rating for this member, between 1 and 5"""
+    last_changed: Any
+    """The date and time the member's info was last changed"""
+    language: Any
+    """If set/detected, the subscriber's language"""
+    vip: Any
+    """VIP status for subscriber"""
+    email_client: Any
+    """The list member's email client"""
+    location: Any
+    """Subscriber location information"""
+    list_id: Any
+    """The list id"""
+
+
+class SegmentMembersStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str
+    """Email address for a subscriber"""
+    unique_email_id: str
+    """An identifier for the address across all of Mailchimp"""
+    email_type: str
+    """Type of email this member asked to get"""
+    status: str
+    """Subscriber's current status"""
+    merge_fields: str
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: str
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: str
+    """Open and click rates for this subscriber"""
+    ip_signup: str
+    """IP address the subscriber signed up from"""
+    timestamp_signup: str
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: str
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: str
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: str
+    """Star rating for this member, between 1 and 5"""
+    last_changed: str
+    """The date and time the member's info was last changed"""
+    language: str
+    """If set/detected, the subscriber's language"""
+    vip: str
+    """VIP status for subscriber"""
+    email_client: str
+    """The list member's email client"""
+    location: str
+    """Subscriber location information"""
+    list_id: str
+    """The list id"""
+
+
+class SegmentMembersSortFilter(TypedDict, total=False):
+    """Available fields for sorting segment_members search results."""
+    id: AirbyteSortOrder
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: AirbyteSortOrder
+    """Email address for a subscriber"""
+    unique_email_id: AirbyteSortOrder
+    """An identifier for the address across all of Mailchimp"""
+    email_type: AirbyteSortOrder
+    """Type of email this member asked to get"""
+    status: AirbyteSortOrder
+    """Subscriber's current status"""
+    merge_fields: AirbyteSortOrder
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: AirbyteSortOrder
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: AirbyteSortOrder
+    """Open and click rates for this subscriber"""
+    ip_signup: AirbyteSortOrder
+    """IP address the subscriber signed up from"""
+    timestamp_signup: AirbyteSortOrder
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: AirbyteSortOrder
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: AirbyteSortOrder
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: AirbyteSortOrder
+    """Star rating for this member, between 1 and 5"""
+    last_changed: AirbyteSortOrder
+    """The date and time the member's info was last changed"""
+    language: AirbyteSortOrder
+    """If set/detected, the subscriber's language"""
+    vip: AirbyteSortOrder
+    """VIP status for subscriber"""
+    email_client: AirbyteSortOrder
+    """The list member's email client"""
+    location: AirbyteSortOrder
+    """Subscriber location information"""
+    list_id: AirbyteSortOrder
+    """The list id"""
+
+
+# Entity-specific condition types for segment_members
+class SegmentMembersEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: SegmentMembersSearchFilter
+
+
+class SegmentMembersNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: SegmentMembersSearchFilter
+
+
+class SegmentMembersGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: SegmentMembersSearchFilter
+
+
+class SegmentMembersGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: SegmentMembersSearchFilter
+
+
+class SegmentMembersLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: SegmentMembersSearchFilter
+
+
+class SegmentMembersLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: SegmentMembersSearchFilter
+
+
+class SegmentMembersLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: SegmentMembersStringFilter
+
+
+class SegmentMembersFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: SegmentMembersStringFilter
+
+
+class SegmentMembersKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: SegmentMembersStringFilter
+
+
+class SegmentMembersContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: SegmentMembersAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+SegmentMembersInCondition = TypedDict("SegmentMembersInCondition", {"in": SegmentMembersInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+SegmentMembersNotCondition = TypedDict("SegmentMembersNotCondition", {"not": "SegmentMembersCondition"}, total=False)
+"""Negates the nested condition."""
+
+SegmentMembersAndCondition = TypedDict("SegmentMembersAndCondition", {"and": "list[SegmentMembersCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+SegmentMembersOrCondition = TypedDict("SegmentMembersOrCondition", {"or": "list[SegmentMembersCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+SegmentMembersAnyCondition = TypedDict("SegmentMembersAnyCondition", {"any": SegmentMembersAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all segment_members condition types
+SegmentMembersCondition = (
+    SegmentMembersEqCondition
+    | SegmentMembersNeqCondition
+    | SegmentMembersGtCondition
+    | SegmentMembersGteCondition
+    | SegmentMembersLtCondition
+    | SegmentMembersLteCondition
+    | SegmentMembersInCondition
+    | SegmentMembersLikeCondition
+    | SegmentMembersFuzzyCondition
+    | SegmentMembersKeywordCondition
+    | SegmentMembersContainsCondition
+    | SegmentMembersNotCondition
+    | SegmentMembersAndCondition
+    | SegmentMembersOrCondition
+    | SegmentMembersAnyCondition
+)
+
+
+class SegmentMembersSearchQuery(TypedDict, total=False):
+    """Search query for segment_members entity."""
+    filter: SegmentMembersCondition
+    sort: list[SegmentMembersSortFilter]
+
+
+# ===== UNSUBSCRIBES SEARCH TYPES =====
+
+class UnsubscribesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering unsubscribes search queries."""
+    email_id: str | None
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str | None
+    """Email address for a subscriber"""
+    merge_fields: dict[str, Any] | None
+    """A dictionary of merge fields where the keys are the merge tags"""
+    vip: bool | None
+    """VIP status for subscriber"""
+    timestamp: str | None
+    """The date and time the member opted-out"""
+    reason: str | None
+    """If available, the reason listed by the member for unsubscribing"""
+    campaign_id: str | None
+    """The campaign id"""
+    list_id: str | None
+    """The list id"""
+    list_is_active: bool | None
+    """The status of the list used"""
+
+
+class UnsubscribesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    email_id: list[str]
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: list[str]
+    """Email address for a subscriber"""
+    merge_fields: list[dict[str, Any]]
+    """A dictionary of merge fields where the keys are the merge tags"""
+    vip: list[bool]
+    """VIP status for subscriber"""
+    timestamp: list[str]
+    """The date and time the member opted-out"""
+    reason: list[str]
+    """If available, the reason listed by the member for unsubscribing"""
+    campaign_id: list[str]
+    """The campaign id"""
+    list_id: list[str]
+    """The list id"""
+    list_is_active: list[bool]
+    """The status of the list used"""
+
+
+class UnsubscribesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    email_id: Any
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: Any
+    """Email address for a subscriber"""
+    merge_fields: Any
+    """A dictionary of merge fields where the keys are the merge tags"""
+    vip: Any
+    """VIP status for subscriber"""
+    timestamp: Any
+    """The date and time the member opted-out"""
+    reason: Any
+    """If available, the reason listed by the member for unsubscribing"""
+    campaign_id: Any
+    """The campaign id"""
+    list_id: Any
+    """The list id"""
+    list_is_active: Any
+    """The status of the list used"""
+
+
+class UnsubscribesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    email_id: str
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str
+    """Email address for a subscriber"""
+    merge_fields: str
+    """A dictionary of merge fields where the keys are the merge tags"""
+    vip: str
+    """VIP status for subscriber"""
+    timestamp: str
+    """The date and time the member opted-out"""
+    reason: str
+    """If available, the reason listed by the member for unsubscribing"""
+    campaign_id: str
+    """The campaign id"""
+    list_id: str
+    """The list id"""
+    list_is_active: str
+    """The status of the list used"""
+
+
+class UnsubscribesSortFilter(TypedDict, total=False):
+    """Available fields for sorting unsubscribes search results."""
+    email_id: AirbyteSortOrder
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: AirbyteSortOrder
+    """Email address for a subscriber"""
+    merge_fields: AirbyteSortOrder
+    """A dictionary of merge fields where the keys are the merge tags"""
+    vip: AirbyteSortOrder
+    """VIP status for subscriber"""
+    timestamp: AirbyteSortOrder
+    """The date and time the member opted-out"""
+    reason: AirbyteSortOrder
+    """If available, the reason listed by the member for unsubscribing"""
+    campaign_id: AirbyteSortOrder
+    """The campaign id"""
+    list_id: AirbyteSortOrder
+    """The list id"""
+    list_is_active: AirbyteSortOrder
+    """The status of the list used"""
+
+
+# Entity-specific condition types for unsubscribes
+class UnsubscribesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: UnsubscribesSearchFilter
+
+
+class UnsubscribesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: UnsubscribesSearchFilter
+
+
+class UnsubscribesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: UnsubscribesSearchFilter
+
+
+class UnsubscribesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: UnsubscribesSearchFilter
+
+
+class UnsubscribesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: UnsubscribesSearchFilter
+
+
+class UnsubscribesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: UnsubscribesSearchFilter
+
+
+class UnsubscribesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: UnsubscribesStringFilter
+
+
+class UnsubscribesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: UnsubscribesStringFilter
+
+
+class UnsubscribesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: UnsubscribesStringFilter
+
+
+class UnsubscribesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: UnsubscribesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+UnsubscribesInCondition = TypedDict("UnsubscribesInCondition", {"in": UnsubscribesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+UnsubscribesNotCondition = TypedDict("UnsubscribesNotCondition", {"not": "UnsubscribesCondition"}, total=False)
+"""Negates the nested condition."""
+
+UnsubscribesAndCondition = TypedDict("UnsubscribesAndCondition", {"and": "list[UnsubscribesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+UnsubscribesOrCondition = TypedDict("UnsubscribesOrCondition", {"or": "list[UnsubscribesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+UnsubscribesAnyCondition = TypedDict("UnsubscribesAnyCondition", {"any": UnsubscribesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all unsubscribes condition types
+UnsubscribesCondition = (
+    UnsubscribesEqCondition
+    | UnsubscribesNeqCondition
+    | UnsubscribesGtCondition
+    | UnsubscribesGteCondition
+    | UnsubscribesLtCondition
+    | UnsubscribesLteCondition
+    | UnsubscribesInCondition
+    | UnsubscribesLikeCondition
+    | UnsubscribesFuzzyCondition
+    | UnsubscribesKeywordCondition
+    | UnsubscribesContainsCondition
+    | UnsubscribesNotCondition
+    | UnsubscribesAndCondition
+    | UnsubscribesOrCondition
+    | UnsubscribesAnyCondition
+)
+
+
+class UnsubscribesSearchQuery(TypedDict, total=False):
+    """Search query for unsubscribes entity."""
+    filter: UnsubscribesCondition
+    sort: list[UnsubscribesSortFilter]
+
+
 
 # ===== SEARCH PARAMS =====
 

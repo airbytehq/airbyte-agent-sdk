@@ -1130,6 +1130,653 @@ info:
         - 'null'
         - 'integer'
         description: 'The total number of unsubscribed members for this campaign.'
+    - entity: list_members
+      x-airbyte-name: list_members
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - 'string'
+        description: 'The MD5 hash of the lowercase version of the list member''s email address'
+      - name: email_address
+        type:
+        - 'null'
+        - 'string'
+        description: 'Email address for a subscriber'
+      - name: unique_email_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'An identifier for the address across all of Mailchimp'
+      - name: contact_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'As Mailchimp evolves beyond email, you may eventually have contacts without email addresses'
+      - name: full_name
+        type:
+        - 'null'
+        - 'string'
+        description: 'The contact''s full name'
+      - name: web_id
+        type:
+        - 'null'
+        - 'integer'
+        description: 'The ID used in the Mailchimp web application'
+      - name: email_type
+        type:
+        - 'null'
+        - 'string'
+        description: 'Type of email this member asked to get'
+      - name: status
+        type:
+        - 'null'
+        - 'string'
+        description: 'Subscriber''s current status'
+      - name: unsubscribe_reason
+        type:
+        - 'null'
+        - 'string'
+        description: 'A subscriber''s reason for unsubscribing'
+      - name: consents_to_one_to_one_messaging
+        type:
+        - 'null'
+        - 'boolean'
+        description: 'Indicates whether a contact consents to 1:1 messaging'
+      - name: merge_fields
+        type:
+        - 'null'
+        - 'object'
+        description: 'A dictionary of merge fields where the keys are the merge tags'
+      - name: interests
+        type:
+        - 'null'
+        - 'object'
+        description: 'The key of this object''s properties is the ID of the interest in question'
+      - name: stats
+        type:
+        - 'null'
+        - 'object'
+        description: 'Open and click rates for this subscriber'
+        properties:
+          avg_open_rate:
+            type:
+            - 'null'
+            - 'number'
+          avg_click_rate:
+            type:
+            - 'null'
+            - 'number'
+          ecommerce_data:
+            type:
+            - 'null'
+            - 'object'
+      - name: ip_signup
+        type:
+        - 'null'
+        - 'string'
+        description: 'IP address the subscriber signed up from'
+      - name: timestamp_signup
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the subscriber signed up for the list'
+      - name: ip_opt
+        type:
+        - 'null'
+        - 'string'
+        description: 'The IP address the subscriber used to confirm their opt-in status'
+      - name: timestamp_opt
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the subscriber confirmed their opt-in status'
+      - name: member_rating
+        type:
+        - 'null'
+        - 'integer'
+        description: 'Star rating for this member, between 1 and 5'
+      - name: last_changed
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the member''s info was last changed'
+      - name: language
+        type:
+        - 'null'
+        - 'string'
+        description: 'If set/detected, the subscriber''s language'
+      - name: vip
+        type:
+        - 'null'
+        - 'boolean'
+        description: 'VIP status for subscriber'
+      - name: email_client
+        type:
+        - 'null'
+        - 'string'
+        description: 'The list member''s email client'
+      - name: location
+        type:
+        - 'null'
+        - 'object'
+        description: 'Subscriber location information'
+        properties:
+          latitude:
+            type:
+            - 'null'
+            - 'number'
+          longitude:
+            type:
+            - 'null'
+            - 'number'
+          gmtoff:
+            type:
+            - 'null'
+            - 'integer'
+          dstoff:
+            type:
+            - 'null'
+            - 'integer'
+          country_code:
+            type:
+            - 'null'
+            - 'string'
+          timezone:
+            type:
+            - 'null'
+            - 'string'
+          region:
+            type:
+            - 'null'
+            - 'string'
+      - name: source
+        type:
+        - 'null'
+        - 'string'
+        description: 'The source from which the subscriber was added to this list'
+      - name: tags_count
+        type:
+        - 'null'
+        - 'integer'
+        description: 'The number of tags applied to this member'
+      - name: tags
+        type:
+        - 'null'
+        - 'array'
+        description: 'Returns up to 50 tags applied to this member'
+      - name: list_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The list id'
+    - entity: automations
+      x-airbyte-name: automations
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - 'string'
+        description: 'A string that uniquely identifies an Automation workflow'
+      - name: create_time
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the Automation was created'
+      - name: start_time
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the Automation was started'
+      - name: status
+        type:
+        - 'null'
+        - 'string'
+        description: 'The current status of the Automation'
+      - name: emails_sent
+        type:
+        - 'null'
+        - 'integer'
+        description: 'The total number of emails sent for the Automation'
+      - name: recipients
+        type:
+        - 'null'
+        - 'object'
+        description: 'List settings for the Automation'
+        properties:
+          list_id:
+            type:
+            - 'null'
+            - 'string'
+          list_is_active:
+            type:
+            - 'null'
+            - 'boolean'
+          list_name:
+            type:
+            - 'null'
+            - 'string'
+          segment_opts:
+            type:
+            - 'null'
+            - 'object'
+          store_id:
+            type:
+            - 'null'
+            - 'string'
+      - name: settings
+        type:
+        - 'null'
+        - 'object'
+        description: 'The settings for the Automation workflow'
+        properties:
+          title:
+            type:
+            - 'null'
+            - 'string'
+          from_name:
+            type:
+            - 'null'
+            - 'string'
+          reply_to:
+            type:
+            - 'null'
+            - 'string'
+          use_conversation:
+            type:
+            - 'null'
+            - 'boolean'
+          to_name:
+            type:
+            - 'null'
+            - 'string'
+          authenticate:
+            type:
+            - 'null'
+            - 'boolean'
+          auto_footer:
+            type:
+            - 'null'
+            - 'boolean'
+          inline_css:
+            type:
+            - 'null'
+            - 'boolean'
+      - name: tracking
+        type:
+        - 'null'
+        - 'object'
+        description: 'The tracking options for the Automation'
+        properties:
+          opens:
+            type:
+            - 'null'
+            - 'boolean'
+          html_clicks:
+            type:
+            - 'null'
+            - 'boolean'
+          text_clicks:
+            type:
+            - 'null'
+            - 'boolean'
+          goal_tracking:
+            type:
+            - 'null'
+            - 'boolean'
+          ecomm360:
+            type:
+            - 'null'
+            - 'boolean'
+          google_analytics:
+            type:
+            - 'null'
+            - 'string'
+          clicktale:
+            type:
+            - 'null'
+            - 'string'
+      - name: report_summary
+        type:
+        - 'null'
+        - 'object'
+        description: 'A summary of opens and clicks for sent campaigns'
+        properties:
+          opens:
+            type:
+            - 'null'
+            - 'integer'
+          unique_opens:
+            type:
+            - 'null'
+            - 'integer'
+          open_rate:
+            type:
+            - 'null'
+            - 'number'
+          clicks:
+            type:
+            - 'null'
+            - 'integer'
+          subscriber_clicks:
+            type:
+            - 'null'
+            - 'integer'
+          click_rate:
+            type:
+            - 'null'
+            - 'number'
+    - entity: tags
+      x-airbyte-name: tags
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - 'integer'
+        description: 'The unique id for the tag'
+      - name: name
+        type:
+        - 'null'
+        - 'string'
+        description: 'The name of the tag'
+    - entity: interest_categories
+      x-airbyte-name: interest_categories
+      suggested: true
+      fields:
+      - name: list_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The unique list id for the category'
+      - name: id
+        type:
+        - 'string'
+        description: 'The id for the interest category'
+      - name: title
+        type:
+        - 'null'
+        - 'string'
+        description: 'The text description of this category'
+      - name: display_order
+        type:
+        - 'null'
+        - 'integer'
+        description: 'The order that the categories are displayed in the list'
+      - name: type
+        type:
+        - 'null'
+        - 'string'
+        description: 'Determines how this category''s interests appear on signup forms'
+    - entity: interests
+      x-airbyte-name: interests
+      suggested: true
+      fields:
+      - name: category_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The id for the interest category'
+      - name: list_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The ID for the list that this interest belongs to'
+      - name: id
+        type:
+        - 'string'
+        description: 'The ID for the interest'
+      - name: name
+        type:
+        - 'null'
+        - 'string'
+        description: 'The name of the interest'
+      - name: subscriber_count
+        type:
+        - 'null'
+        - 'string'
+        description: 'The number of subscribers associated with this interest'
+      - name: display_order
+        type:
+        - 'null'
+        - 'integer'
+        description: 'The display order for interests'
+    - entity: segments
+      x-airbyte-name: segments
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - 'integer'
+        description: 'The unique id for the segment'
+      - name: name
+        type:
+        - 'null'
+        - 'string'
+        description: 'The name of the segment'
+      - name: member_count
+        type:
+        - 'null'
+        - 'integer'
+        description: 'The number of active subscribers currently included in the segment'
+      - name: type
+        type:
+        - 'null'
+        - 'string'
+        description: 'The type of segment'
+      - name: created_at
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the segment was created'
+      - name: updated_at
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the segment was last updated'
+      - name: options
+        type:
+        - 'null'
+        - 'object'
+        description: 'The conditions of the segment'
+        properties:
+          match:
+            type:
+            - 'null'
+            - 'string'
+          conditions:
+            type:
+            - 'null'
+            - 'array'
+      - name: list_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The list id'
+    - entity: segment_members
+      x-airbyte-name: segment_members
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - 'string'
+        description: 'The MD5 hash of the lowercase version of the list member''s email address'
+      - name: email_address
+        type:
+        - 'null'
+        - 'string'
+        description: 'Email address for a subscriber'
+      - name: unique_email_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'An identifier for the address across all of Mailchimp'
+      - name: email_type
+        type:
+        - 'null'
+        - 'string'
+        description: 'Type of email this member asked to get'
+      - name: status
+        type:
+        - 'null'
+        - 'string'
+        description: 'Subscriber''s current status'
+      - name: merge_fields
+        type:
+        - 'null'
+        - 'object'
+        description: 'A dictionary of merge fields where the keys are the merge tags'
+      - name: interests
+        type:
+        - 'null'
+        - 'object'
+        description: 'The key of this object''s properties is the ID of the interest in question'
+      - name: stats
+        type:
+        - 'null'
+        - 'object'
+        description: 'Open and click rates for this subscriber'
+        properties:
+          avg_open_rate:
+            type:
+            - 'null'
+            - 'number'
+          avg_click_rate:
+            type:
+            - 'null'
+            - 'number'
+      - name: ip_signup
+        type:
+        - 'null'
+        - 'string'
+        description: 'IP address the subscriber signed up from'
+      - name: timestamp_signup
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the subscriber signed up for the list'
+      - name: ip_opt
+        type:
+        - 'null'
+        - 'string'
+        description: 'The IP address the subscriber used to confirm their opt-in status'
+      - name: timestamp_opt
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the subscriber confirmed their opt-in status'
+      - name: member_rating
+        type:
+        - 'null'
+        - 'integer'
+        description: 'Star rating for this member, between 1 and 5'
+      - name: last_changed
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the member''s info was last changed'
+      - name: language
+        type:
+        - 'null'
+        - 'string'
+        description: 'If set/detected, the subscriber''s language'
+      - name: vip
+        type:
+        - 'null'
+        - 'boolean'
+        description: 'VIP status for subscriber'
+      - name: email_client
+        type:
+        - 'null'
+        - 'string'
+        description: 'The list member''s email client'
+      - name: location
+        type:
+        - 'null'
+        - 'object'
+        description: 'Subscriber location information'
+        properties:
+          latitude:
+            type:
+            - 'null'
+            - 'number'
+          longitude:
+            type:
+            - 'null'
+            - 'number'
+          gmtoff:
+            type:
+            - 'null'
+            - 'integer'
+          dstoff:
+            type:
+            - 'null'
+            - 'integer'
+          country_code:
+            type:
+            - 'null'
+            - 'string'
+          timezone:
+            type:
+            - 'null'
+            - 'string'
+          region:
+            type:
+            - 'null'
+            - 'string'
+      - name: list_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The list id'
+    - entity: unsubscribes
+      x-airbyte-name: unsubscribes
+      suggested: true
+      fields:
+      - name: email_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The MD5 hash of the lowercase version of the list member''s email address'
+      - name: email_address
+        type:
+        - 'null'
+        - 'string'
+        description: 'Email address for a subscriber'
+      - name: merge_fields
+        type:
+        - 'null'
+        - 'object'
+        description: 'A dictionary of merge fields where the keys are the merge tags'
+      - name: vip
+        type:
+        - 'null'
+        - 'boolean'
+        description: 'VIP status for subscriber'
+      - name: timestamp
+        type:
+        - 'null'
+        - 'string'
+        description: 'The date and time the member opted-out'
+      - name: reason
+        type:
+        - 'null'
+        - 'string'
+        description: 'If available, the reason listed by the member for unsubscribing'
+      - name: campaign_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The campaign id'
+      - name: list_id
+        type:
+        - 'null'
+        - 'string'
+        description: 'The list id'
+      - name: list_is_active
+        type:
+        - 'null'
+        - 'boolean'
+        description: 'The status of the list used'
 
 servers:
 - url: https://{data_center}.api.mailchimp.com/3.0

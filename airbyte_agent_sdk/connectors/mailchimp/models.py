@@ -99,25 +99,6 @@ class CampaignReportSummary(BaseModel):
     ecommerce: CampaignReportSummaryEcommerce | None | None = Field(default=None, description="E-Commerce stats for a campaign")
     """E-Commerce stats for a campaign"""
 
-class CampaignTracking(BaseModel):
-    """The tracking options for a campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    opens: bool | None | None = Field(default=None, description="Whether to track opens")
-    """Whether to track opens"""
-    html_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the HTML version of the campaign")
-    """Whether to track clicks in the HTML version of the campaign"""
-    text_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the plain-text version of the campaign")
-    """Whether to track clicks in the plain-text version of the campaign"""
-    goal_tracking: bool | None | None = Field(default=None, description="Whether to enable Goal tracking")
-    """Whether to enable Goal tracking"""
-    ecomm360: bool | None | None = Field(default=None, description="Whether to enable eCommerce360 tracking")
-    """Whether to enable eCommerce360 tracking"""
-    google_analytics: str | None | None = Field(default=None, description="The custom slug for Google Analytics tracking")
-    """The custom slug for Google Analytics tracking"""
-    clicktale: str | None | None = Field(default=None, description="The custom slug for ClickTale tracking")
-    """The custom slug for ClickTale tracking"""
-
 class CampaignRecipients(BaseModel):
     """List settings for the campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -147,6 +128,25 @@ class CampaignDeliveryStatus(BaseModel):
     """The total number of emails confirmed sent for this campaign so far"""
     emails_canceled: int | None | None = Field(default=None, description="The total number of emails canceled for this campaign")
     """The total number of emails canceled for this campaign"""
+
+class CampaignTracking(BaseModel):
+    """The tracking options for a campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    opens: bool | None | None = Field(default=None, description="Whether to track opens")
+    """Whether to track opens"""
+    html_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the HTML version of the campaign")
+    """Whether to track clicks in the HTML version of the campaign"""
+    text_clicks: bool | None | None = Field(default=None, description="Whether to track clicks in the plain-text version of the campaign")
+    """Whether to track clicks in the plain-text version of the campaign"""
+    goal_tracking: bool | None | None = Field(default=None, description="Whether to enable Goal tracking")
+    """Whether to enable Goal tracking"""
+    ecomm360: bool | None | None = Field(default=None, description="Whether to enable eCommerce360 tracking")
+    """Whether to enable eCommerce360 tracking"""
+    google_analytics: str | None | None = Field(default=None, description="The custom slug for Google Analytics tracking")
+    """The custom slug for Google Analytics tracking"""
+    clicktale: str | None | None = Field(default=None, description="The custom slug for ClickTale tracking")
+    """The custom slug for ClickTale tracking"""
 
 class Campaign(BaseModel):
     """A summary of an individual campaign's settings and content"""
@@ -178,27 +178,6 @@ class CampaignsList(BaseModel):
     links: list[Link] | None = Field(default=None, alias="_links")
     campaigns: list[Campaign] | None = Field(default=None)
     total_items: int | None = Field(default=None)
-
-class ListContact(BaseModel):
-    """Contact information displayed in campaign footers to comply with international spam laws"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    company: str | None | None = Field(default=None, description="The company name for the list")
-    """The company name for the list"""
-    address1: str | None | None = Field(default=None, description="The street address for the list contact")
-    """The street address for the list contact"""
-    address2: str | None | None = Field(default=None, description="The street address for the list contact")
-    """The street address for the list contact"""
-    city: str | None | None = Field(default=None, description="The city for the list contact")
-    """The city for the list contact"""
-    state: str | None | None = Field(default=None, description="The state for the list contact")
-    """The state for the list contact"""
-    zip: str | None | None = Field(default=None, description="The postal or zip code for the list contact")
-    """The postal or zip code for the list contact"""
-    country: str | None | None = Field(default=None, description="A two-character ISO3166 country code")
-    """A two-character ISO3166 country code"""
-    phone: str | None | None = Field(default=None, description="The phone number for the list contact")
-    """The phone number for the list contact"""
 
 class ListStats(BaseModel):
     """Stats for the list"""
@@ -251,6 +230,27 @@ class ListCampaignDefaults(BaseModel):
     """The default subject line for campaigns sent to this list"""
     language: str | None | None = Field(default=None, description="The default language for this list's forms")
     """The default language for this list's forms"""
+
+class ListContact(BaseModel):
+    """Contact information displayed in campaign footers to comply with international spam laws"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    company: str | None | None = Field(default=None, description="The company name for the list")
+    """The company name for the list"""
+    address1: str | None | None = Field(default=None, description="The street address for the list contact")
+    """The street address for the list contact"""
+    address2: str | None | None = Field(default=None, description="The street address for the list contact")
+    """The street address for the list contact"""
+    city: str | None | None = Field(default=None, description="The city for the list contact")
+    """The city for the list contact"""
+    state: str | None | None = Field(default=None, description="The state for the list contact")
+    """The state for the list contact"""
+    zip: str | None | None = Field(default=None, description="The postal or zip code for the list contact")
+    """The postal or zip code for the list contact"""
+    country: str | None | None = Field(default=None, description="A two-character ISO3166 country code")
+    """A two-character ISO3166 country code"""
+    phone: str | None | None = Field(default=None, description="The phone number for the list contact")
+    """The phone number for the list contact"""
 
 class List(BaseModel):
     """Information about a specific list"""
@@ -376,14 +376,25 @@ class ListMembersList(BaseModel):
     list_id: str | None = Field(default=None)
     total_items: int | None = Field(default=None)
 
-class ReportForwards(BaseModel):
-    """An object describing the forwards and forward activity for the campaign"""
+class ReportOpens(BaseModel):
+    """An object describing the open activity for the campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    forwards_count: int | None | None = Field(default=None, description="How many times the campaign has been forwarded")
-    """How many times the campaign has been forwarded"""
-    forwards_opens: int | None | None = Field(default=None, description="How many times the forwarded campaign has been opened")
-    """How many times the forwarded campaign has been opened"""
+    opens_total: int | None | None = Field(default=None, description="The total number of opens for a campaign")
+    """The total number of opens for a campaign"""
+    unique_opens: int | None | None = Field(default=None, description="The total number of unique opens")
+    """The total number of unique opens"""
+    open_rate: float | None | None = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
+    """The number of unique opens divided by the total number of successful deliveries"""
+    last_open: str | None | None = Field(default=None, description="The date and time of the last recorded open")
+    """The date and time of the last recorded open"""
+
+class ReportDeliveryStatus(BaseModel):
+    """Updates on campaigns in the process of sending"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None | None = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
+    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
 
 class ReportClicks(BaseModel):
     """An object describing the click activity for the campaign"""
@@ -419,26 +430,6 @@ class ReportIndustryStats(BaseModel):
     abuse_rate: float | None | None = Field(default=None, description="The industry abuse rate")
     """The industry abuse rate"""
 
-class ReportDeliveryStatus(BaseModel):
-    """Updates on campaigns in the process of sending"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None | None = Field(default=None, description="Whether Campaign Delivery Status is enabled for this account and target campaign")
-    """Whether Campaign Delivery Status is enabled for this account and target campaign"""
-
-class ReportOpens(BaseModel):
-    """An object describing the open activity for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    opens_total: int | None | None = Field(default=None, description="The total number of opens for a campaign")
-    """The total number of opens for a campaign"""
-    unique_opens: int | None | None = Field(default=None, description="The total number of unique opens")
-    """The total number of unique opens"""
-    open_rate: float | None | None = Field(default=None, description="The number of unique opens divided by the total number of successful deliveries")
-    """The number of unique opens divided by the total number of successful deliveries"""
-    last_open: str | None | None = Field(default=None, description="The date and time of the last recorded open")
-    """The date and time of the last recorded open"""
-
 class ReportListStats(BaseModel):
     """The average campaign statistics for your list"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -452,17 +443,6 @@ class ReportListStats(BaseModel):
     click_rate: float | None | None = Field(default=None, description="The average click rate for campaigns sent to this list")
     """The average click rate for campaigns sent to this list"""
 
-class ReportBounces(BaseModel):
-    """An object describing the bounce summary for the campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    hard_bounces: int | None | None = Field(default=None, description="The total number of hard bounced email addresses")
-    """The total number of hard bounced email addresses"""
-    soft_bounces: int | None | None = Field(default=None, description="The total number of soft bounced email addresses")
-    """The total number of soft bounced email addresses"""
-    syntax_errors: int | None | None = Field(default=None, description="The total number of addresses that were syntax-related bounces")
-    """The total number of addresses that were syntax-related bounces"""
-
 class ReportEcommerce(BaseModel):
     """E-Commerce stats for a campaign"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -473,6 +453,26 @@ class ReportEcommerce(BaseModel):
     """The total spent for a campaign"""
     total_revenue: float | None | None = Field(default=None, description="The total revenue for a campaign")
     """The total revenue for a campaign"""
+
+class ReportForwards(BaseModel):
+    """An object describing the forwards and forward activity for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    forwards_count: int | None | None = Field(default=None, description="How many times the campaign has been forwarded")
+    """How many times the campaign has been forwarded"""
+    forwards_opens: int | None | None = Field(default=None, description="How many times the forwarded campaign has been opened")
+    """How many times the forwarded campaign has been opened"""
+
+class ReportBounces(BaseModel):
+    """An object describing the bounce summary for the campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    hard_bounces: int | None | None = Field(default=None, description="The total number of hard bounced email addresses")
+    """The total number of hard bounced email addresses"""
+    soft_bounces: int | None | None = Field(default=None, description="The total number of soft bounced email addresses")
+    """The total number of soft bounced email addresses"""
+    syntax_errors: int | None | None = Field(default=None, description="The total number of addresses that were syntax-related bounces")
+    """The total number of addresses that were syntax-related bounces"""
 
 class ReportFacebookLikes(BaseModel):
     """An object describing campaign engagement on Facebook"""
@@ -572,32 +572,6 @@ class AutomationReportSummary(BaseModel):
     click_rate: float | None | None = Field(default=None, description="The number of unique clicks divided by the total number of successful deliveries")
     """The number of unique clicks divided by the total number of successful deliveries"""
 
-class AutomationRecipientsSegmentOpts(BaseModel):
-    """An object representing all segmentation options"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    saved_segment_id: int | None | None = Field(default=None, description="The id for an existing saved segment")
-    """The id for an existing saved segment"""
-    match: str | None | None = Field(default=None, description="Segment match type")
-    """Segment match type"""
-    conditions: list[dict[str, Any]] | None | None = Field(default=None, description="Segment match conditions")
-    """Segment match conditions"""
-
-class AutomationRecipients(BaseModel):
-    """List settings for the Automation"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    list_id: str | None | None = Field(default=None, description="The unique list id")
-    """The unique list id"""
-    list_is_active: bool | None | None = Field(default=None, description="The status of the list used")
-    """The status of the list used"""
-    list_name: str | None | None = Field(default=None, description="The name of the list")
-    """The name of the list"""
-    segment_opts: AutomationRecipientsSegmentOpts | None | None = Field(default=None, description="An object representing all segmentation options")
-    """An object representing all segmentation options"""
-    store_id: str | None | None = Field(default=None, description="The id of the store")
-    """The id of the store"""
-
 class AutomationTracking(BaseModel):
     """The tracking options for the Automation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -637,6 +611,32 @@ class AutomationSettings(BaseModel):
     """Whether to automatically append Mailchimp's default footer"""
     inline_css: bool | None | None = Field(default=None, description="Whether to automatically inline the CSS")
     """Whether to automatically inline the CSS"""
+
+class AutomationRecipientsSegmentOpts(BaseModel):
+    """An object representing all segmentation options"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    saved_segment_id: int | None | None = Field(default=None, description="The id for an existing saved segment")
+    """The id for an existing saved segment"""
+    match: str | None | None = Field(default=None, description="Segment match type")
+    """Segment match type"""
+    conditions: list[dict[str, Any]] | None | None = Field(default=None, description="Segment match conditions")
+    """Segment match conditions"""
+
+class AutomationRecipients(BaseModel):
+    """List settings for the Automation"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    list_id: str | None | None = Field(default=None, description="The unique list id")
+    """The unique list id"""
+    list_is_active: bool | None | None = Field(default=None, description="The status of the list used")
+    """The status of the list used"""
+    list_name: str | None | None = Field(default=None, description="The name of the list")
+    """The name of the list"""
+    segment_opts: AutomationRecipientsSegmentOpts | None | None = Field(default=None, description="An object representing all segmentation options")
+    """An object representing all segmentation options"""
+    store_id: str | None | None = Field(default=None, description="The id of the store")
+    """The id of the store"""
 
 class Automation(BaseModel):
     """A summary of an individual Automation workflow's settings and content"""
@@ -746,15 +746,6 @@ class SegmentsList(BaseModel):
     list_id: str | None = Field(default=None)
     total_items: int | None = Field(default=None)
 
-class SegmentMemberStats(BaseModel):
-    """Open and click rates for this subscriber"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    avg_open_rate: float | None | None = Field(default=None, description="A subscriber's average open rate")
-    """A subscriber's average open rate"""
-    avg_click_rate: float | None | None = Field(default=None, description="A subscriber's average clickthrough rate")
-    """A subscriber's average clickthrough rate"""
-
 class SegmentMemberLocation(BaseModel):
     """Subscriber location information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -773,6 +764,15 @@ class SegmentMemberLocation(BaseModel):
     """The timezone for the location"""
     region: str | None | None = Field(default=None, description="The region for the location")
     """The region for the location"""
+
+class SegmentMemberStats(BaseModel):
+    """Open and click rates for this subscriber"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    avg_open_rate: float | None | None = Field(default=None, description="A subscriber's average open rate")
+    """A subscriber's average open rate"""
+    avg_click_rate: float | None | None = Field(default=None, description="A subscriber's average clickthrough rate")
+    """A subscriber's average clickthrough rate"""
 
 class SegmentMember(BaseModel):
     """Individuals who are currently or have been previously subscribed to this list"""
@@ -1137,6 +1137,224 @@ class ReportsSearchData(BaseModel):
     """The total number of unsubscribed members for this campaign."""
 
 
+class ListMembersSearchData(BaseModel):
+    """Search result data for list_members entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str | None = None
+    """Email address for a subscriber"""
+    unique_email_id: str | None = None
+    """An identifier for the address across all of Mailchimp"""
+    contact_id: str | None = None
+    """As Mailchimp evolves beyond email, you may eventually have contacts without email addresses"""
+    full_name: str | None = None
+    """The contact's full name"""
+    web_id: int | None = None
+    """The ID used in the Mailchimp web application"""
+    email_type: str | None = None
+    """Type of email this member asked to get"""
+    status: str | None = None
+    """Subscriber's current status"""
+    unsubscribe_reason: str | None = None
+    """A subscriber's reason for unsubscribing"""
+    consents_to_one_to_one_messaging: bool | None = None
+    """Indicates whether a contact consents to 1:1 messaging"""
+    merge_fields: dict[str, Any] | None = None
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: dict[str, Any] | None = None
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: dict[str, Any] | None = None
+    """Open and click rates for this subscriber"""
+    ip_signup: str | None = None
+    """IP address the subscriber signed up from"""
+    timestamp_signup: str | None = None
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: str | None = None
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: str | None = None
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: int | None = None
+    """Star rating for this member, between 1 and 5"""
+    last_changed: str | None = None
+    """The date and time the member's info was last changed"""
+    language: str | None = None
+    """If set/detected, the subscriber's language"""
+    vip: bool | None = None
+    """VIP status for subscriber"""
+    email_client: str | None = None
+    """The list member's email client"""
+    location: dict[str, Any] | None = None
+    """Subscriber location information"""
+    source: str | None = None
+    """The source from which the subscriber was added to this list"""
+    tags_count: int | None = None
+    """The number of tags applied to this member"""
+    tags: list[Any] | None = None
+    """Returns up to 50 tags applied to this member"""
+    list_id: str | None = None
+    """The list id"""
+
+
+class AutomationsSearchData(BaseModel):
+    """Search result data for automations entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """A string that uniquely identifies an Automation workflow"""
+    create_time: str | None = None
+    """The date and time the Automation was created"""
+    start_time: str | None = None
+    """The date and time the Automation was started"""
+    status: str | None = None
+    """The current status of the Automation"""
+    emails_sent: int | None = None
+    """The total number of emails sent for the Automation"""
+    recipients: dict[str, Any] | None = None
+    """List settings for the Automation"""
+    settings: dict[str, Any] | None = None
+    """The settings for the Automation workflow"""
+    tracking: dict[str, Any] | None = None
+    """The tracking options for the Automation"""
+    report_summary: dict[str, Any] | None = None
+    """A summary of opens and clicks for sent campaigns"""
+
+
+class TagsSearchData(BaseModel):
+    """Search result data for tags entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int = None
+    """The unique id for the tag"""
+    name: str | None = None
+    """The name of the tag"""
+
+
+class InterestCategoriesSearchData(BaseModel):
+    """Search result data for interest_categories entity."""
+    model_config = ConfigDict(extra="allow")
+
+    list_id: str | None = None
+    """The unique list id for the category"""
+    id: str = None
+    """The id for the interest category"""
+    title: str | None = None
+    """The text description of this category"""
+    display_order: int | None = None
+    """The order that the categories are displayed in the list"""
+    type_: str | None = None
+    """Determines how this category's interests appear on signup forms"""
+
+
+class InterestsSearchData(BaseModel):
+    """Search result data for interests entity."""
+    model_config = ConfigDict(extra="allow")
+
+    category_id: str | None = None
+    """The id for the interest category"""
+    list_id: str | None = None
+    """The ID for the list that this interest belongs to"""
+    id: str = None
+    """The ID for the interest"""
+    name: str | None = None
+    """The name of the interest"""
+    subscriber_count: str | None = None
+    """The number of subscribers associated with this interest"""
+    display_order: int | None = None
+    """The display order for interests"""
+
+
+class SegmentsSearchData(BaseModel):
+    """Search result data for segments entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int = None
+    """The unique id for the segment"""
+    name: str | None = None
+    """The name of the segment"""
+    member_count: int | None = None
+    """The number of active subscribers currently included in the segment"""
+    type_: str | None = None
+    """The type of segment"""
+    created_at: str | None = None
+    """The date and time the segment was created"""
+    updated_at: str | None = None
+    """The date and time the segment was last updated"""
+    options: dict[str, Any] | None = None
+    """The conditions of the segment"""
+    list_id: str | None = None
+    """The list id"""
+
+
+class SegmentMembersSearchData(BaseModel):
+    """Search result data for segment_members entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: str = None
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str | None = None
+    """Email address for a subscriber"""
+    unique_email_id: str | None = None
+    """An identifier for the address across all of Mailchimp"""
+    email_type: str | None = None
+    """Type of email this member asked to get"""
+    status: str | None = None
+    """Subscriber's current status"""
+    merge_fields: dict[str, Any] | None = None
+    """A dictionary of merge fields where the keys are the merge tags"""
+    interests: dict[str, Any] | None = None
+    """The key of this object's properties is the ID of the interest in question"""
+    stats: dict[str, Any] | None = None
+    """Open and click rates for this subscriber"""
+    ip_signup: str | None = None
+    """IP address the subscriber signed up from"""
+    timestamp_signup: str | None = None
+    """The date and time the subscriber signed up for the list"""
+    ip_opt: str | None = None
+    """The IP address the subscriber used to confirm their opt-in status"""
+    timestamp_opt: str | None = None
+    """The date and time the subscriber confirmed their opt-in status"""
+    member_rating: int | None = None
+    """Star rating for this member, between 1 and 5"""
+    last_changed: str | None = None
+    """The date and time the member's info was last changed"""
+    language: str | None = None
+    """If set/detected, the subscriber's language"""
+    vip: bool | None = None
+    """VIP status for subscriber"""
+    email_client: str | None = None
+    """The list member's email client"""
+    location: dict[str, Any] | None = None
+    """Subscriber location information"""
+    list_id: str | None = None
+    """The list id"""
+
+
+class UnsubscribesSearchData(BaseModel):
+    """Search result data for unsubscribes entity."""
+    model_config = ConfigDict(extra="allow")
+
+    email_id: str | None = None
+    """The MD5 hash of the lowercase version of the list member's email address"""
+    email_address: str | None = None
+    """Email address for a subscriber"""
+    merge_fields: dict[str, Any] | None = None
+    """A dictionary of merge fields where the keys are the merge tags"""
+    vip: bool | None = None
+    """VIP status for subscriber"""
+    timestamp: str | None = None
+    """The date and time the member opted-out"""
+    reason: str | None = None
+    """If available, the reason listed by the member for unsubscribing"""
+    campaign_id: str | None = None
+    """The campaign id"""
+    list_id: str | None = None
+    """The list id"""
+    list_is_active: bool | None = None
+    """The status of the list used"""
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -1174,6 +1392,30 @@ ListsSearchResult = AirbyteSearchResult[ListsSearchData]
 
 ReportsSearchResult = AirbyteSearchResult[ReportsSearchData]
 """Search result type for reports entity."""
+
+ListMembersSearchResult = AirbyteSearchResult[ListMembersSearchData]
+"""Search result type for list_members entity."""
+
+AutomationsSearchResult = AirbyteSearchResult[AutomationsSearchData]
+"""Search result type for automations entity."""
+
+TagsSearchResult = AirbyteSearchResult[TagsSearchData]
+"""Search result type for tags entity."""
+
+InterestCategoriesSearchResult = AirbyteSearchResult[InterestCategoriesSearchData]
+"""Search result type for interest_categories entity."""
+
+InterestsSearchResult = AirbyteSearchResult[InterestsSearchData]
+"""Search result type for interests entity."""
+
+SegmentsSearchResult = AirbyteSearchResult[SegmentsSearchData]
+"""Search result type for segments entity."""
+
+SegmentMembersSearchResult = AirbyteSearchResult[SegmentMembersSearchData]
+"""Search result type for segment_members entity."""
+
+UnsubscribesSearchResult = AirbyteSearchResult[UnsubscribesSearchData]
+"""Search result type for unsubscribes entity."""
 
 
 
