@@ -2371,6 +2371,11 @@ class ConnectorGenerator:
         """
         schema_type = schema.get("type")
 
+        # Normalize nullable type arrays (e.g., ["integer", "null"]) to the base type
+        if isinstance(schema_type, list):
+            non_null_types = [t for t in schema_type if t != "null"]
+            schema_type = non_null_types[0] if non_null_types else "string"
+
         if schema_type == "object":
             # Check for required nested properties
             properties = schema.get("properties", {})
