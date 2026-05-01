@@ -368,6 +368,6 @@ See the official [Pinterest API reference](https://developers.pinterest.com/docs
 
 ## Version information
 
-- **Package version:** 0.1.4
-- **Connector version:** 0.1.4
+- **Package version:** 0.1.5
+- **Connector version:** 0.1.5
 - **Generated with Connector SDK commit SHA:** unknown

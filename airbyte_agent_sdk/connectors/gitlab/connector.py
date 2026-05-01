@@ -159,7 +159,7 @@ class GitlabConnector:
 
     connector_name = "gitlab"
     connector_version = "1.0.4"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -894,7 +894,7 @@ class ProjectsQuery:
         # Cast generic envelope to concrete typed result
         return ProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1123,7 +1123,7 @@ class IssuesQuery:
         # Cast generic envelope to concrete typed result
         return IssuesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1310,7 +1310,7 @@ class MergeRequestsQuery:
         # Cast generic envelope to concrete typed result
         return MergeRequestsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1489,7 +1489,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1631,7 +1631,7 @@ class CommitsQuery:
         # Cast generic envelope to concrete typed result
         return CommitsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1785,7 +1785,7 @@ class GroupsQuery:
         # Cast generic envelope to concrete typed result
         return GroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1936,7 +1936,7 @@ class BranchesQuery:
         # Cast generic envelope to concrete typed result
         return BranchesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2085,7 +2085,7 @@ class PipelinesQuery:
         # Cast generic envelope to concrete typed result
         return PipelinesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2225,7 +2225,7 @@ class GroupMembersQuery:
         # Cast generic envelope to concrete typed result
         return GroupMembersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2367,7 +2367,7 @@ class ProjectMembersQuery:
         # Cast generic envelope to concrete typed result
         return ProjectMembersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2512,7 +2512,7 @@ class ReleasesQuery:
         # Cast generic envelope to concrete typed result
         return ReleasesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2664,7 +2664,7 @@ class TagsQuery:
         # Cast generic envelope to concrete typed result
         return TagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2804,7 +2804,7 @@ class GroupMilestonesQuery:
         # Cast generic envelope to concrete typed result
         return GroupMilestonesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2948,7 +2948,7 @@ class ProjectMilestonesQuery:
         # Cast generic envelope to concrete typed result
         return ProjectMilestonesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

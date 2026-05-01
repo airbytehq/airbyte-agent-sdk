@@ -187,7 +187,7 @@ class HarvestConnector:
 
     connector_name = "harvest"
     connector_version = "1.0.3"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -930,7 +930,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1062,7 +1062,7 @@ class ClientsQuery:
         # Cast generic envelope to concrete typed result
         return ClientsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1186,7 +1186,7 @@ class ContactsQuery:
         # Cast generic envelope to concrete typed result
         return ContactsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1400,7 +1400,7 @@ class ProjectsQuery:
         # Cast generic envelope to concrete typed result
         return ProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1528,7 +1528,7 @@ class TasksQuery:
         # Cast generic envelope to concrete typed result
         return TasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1652,7 +1652,7 @@ class TimeEntriesQuery:
         # Cast generic envelope to concrete typed result
         return TimeEntriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1781,7 +1781,7 @@ class InvoicesQuery:
         # Cast generic envelope to concrete typed result
         return InvoicesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1910,7 +1910,7 @@ class InvoiceItemCategoriesQuery:
         # Cast generic envelope to concrete typed result
         return InvoiceItemCategoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2033,7 +2033,7 @@ class EstimatesQuery:
         # Cast generic envelope to concrete typed result
         return EstimatesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2160,7 +2160,7 @@ class EstimateItemCategoriesQuery:
         # Cast generic envelope to concrete typed result
         return EstimateItemCategoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2281,7 +2281,7 @@ class ExpensesQuery:
         # Cast generic envelope to concrete typed result
         return ExpensesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2410,7 +2410,7 @@ class ExpenseCategoriesQuery:
         # Cast generic envelope to concrete typed result
         return ExpenseCategoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2534,7 +2534,7 @@ class RolesQuery:
         # Cast generic envelope to concrete typed result
         return RolesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2656,7 +2656,7 @@ class UserAssignmentsQuery:
         # Cast generic envelope to concrete typed result
         return UserAssignmentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2757,7 +2757,7 @@ class TaskAssignmentsQuery:
         # Cast generic envelope to concrete typed result
         return TaskAssignmentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2863,7 +2863,7 @@ class TimeProjectsQuery:
         # Cast generic envelope to concrete typed result
         return TimeProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2969,7 +2969,7 @@ class TimeTasksQuery:
         # Cast generic envelope to concrete typed result
         return TimeTasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

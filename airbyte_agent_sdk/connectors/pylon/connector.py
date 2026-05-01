@@ -162,8 +162,8 @@ class PylonConnector:
     """
 
     connector_name = "pylon"
-    connector_version = "0.1.9"
-    sdk_version = "0.1.140"
+    connector_version = "0.1.10"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1026,7 +1026,7 @@ class IssuesQuery:
         # Cast generic envelope to concrete typed result
         return IssuesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1397,7 +1397,7 @@ class MessagesQuery:
         # Cast generic envelope to concrete typed result
         return MessagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1574,7 +1574,7 @@ class AccountsQuery:
         # Cast generic envelope to concrete typed result
         return AccountsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1785,7 +1785,7 @@ class ContactsQuery:
         # Cast generic envelope to concrete typed result
         return ContactsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1975,7 +1975,7 @@ class TeamsQuery:
         # Cast generic envelope to concrete typed result
         return TeamsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2147,7 +2147,7 @@ class TagsQuery:
         # Cast generic envelope to concrete typed result
         return TagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2329,7 +2329,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2454,7 +2454,7 @@ class CustomFieldsQuery:
         # Cast generic envelope to concrete typed result
         return CustomFieldsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2578,7 +2578,7 @@ class TicketFormsQuery:
         # Cast generic envelope to concrete typed result
         return TicketFormsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2674,7 +2674,7 @@ class UserRolesQuery:
         # Cast generic envelope to concrete typed result
         return UserRolesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

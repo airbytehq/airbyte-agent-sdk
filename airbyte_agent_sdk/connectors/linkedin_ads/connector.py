@@ -107,8 +107,8 @@ class LinkedinAdsConnector:
     """
 
     connector_name = "linkedin-ads"
-    connector_version = "1.0.4"
-    sdk_version = "0.1.140"
+    connector_version = "1.0.5"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -659,7 +659,7 @@ class AccountsQuery:
         # Cast generic envelope to concrete typed result
         return AccountsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -799,7 +799,7 @@ class AccountUsersQuery:
         # Cast generic envelope to concrete typed result
         return AccountUsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -903,7 +903,7 @@ class CampaignsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1056,7 +1056,7 @@ class CampaignGroupsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1195,7 +1195,7 @@ class CreativesQuery:
         # Cast generic envelope to concrete typed result
         return CreativesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1337,7 +1337,7 @@ class ConversionsQuery:
         # Cast generic envelope to concrete typed result
         return ConversionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

@@ -35,7 +35,7 @@ from uuid import (
 PylonConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6'),
     name='pylon',
-    version='0.1.9',
+    version='0.1.10',
     base_url='https://api.usepylon.com',
     auth=AuthConfig(
         type=AuthType.BEARER,
@@ -76,11 +76,13 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                         'start_time': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-01-01T00:00:00Z',
                             'format': 'date-time',
                         },
                         'end_time': {
                             'type': 'string',
                             'required': True,
+                            'default': '2099-12-31T23:59:59Z',
                             'format': 'date-time',
                         },
                         'cursor': {'type': 'string', 'required': False},
@@ -4583,6 +4585,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                         'object_type': {
                             'type': 'string',
                             'required': True,
+                            'default': 'issue',
                             'enum': ['account', 'issue', 'contact'],
                         },
                         'cursor': {'type': 'string', 'required': False},

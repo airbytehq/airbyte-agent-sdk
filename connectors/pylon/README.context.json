@@ -3,8 +3,8 @@
   "class_name": "PylonConnector",
   "package_name": "airbyte_agent_sdk.connectors.pylon",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.9",
-  "yaml_version": "0.1.9",
+  "package_version": "0.1.10",
+  "yaml_version": "0.1.10",
   "api_reference_url": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference",
   "commit_sha": "unknown",
   "auth_example": "PylonAuthConfig(api_token=\"...\")",
@@ -47,7 +47,8 @@
         "type": "str",
         "schema": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "default": "2024-01-01T00:00:00Z"
         },
         "required": true,
         "description": "The start time (RFC3339) of the time range to get issues for.",
@@ -59,7 +60,8 @@
         "type": "str",
         "schema": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "default": "2099-12-31T23:59:59Z"
         },
         "required": true,
         "description": "The end time (RFC3339) of the time range to get issues for.",
@@ -127,7 +129,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "default": "2024-01-01T00:00:00Z"
             },
             "required": true,
             "description": "The start time (RFC3339) of the time range to get issues for.",
@@ -139,7 +142,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "default": "2099-12-31T23:59:59Z"
             },
             "required": true,
             "description": "The end time (RFC3339) of the time range to get issues for.",
@@ -1737,7 +1741,8 @@
                 "account",
                 "issue",
                 "contact"
-              ]
+              ],
+              "default": "issue"
             },
             "required": true,
             "description": "The object type of the custom fields. Can be \"account\", \"issue\", or \"contact\".",

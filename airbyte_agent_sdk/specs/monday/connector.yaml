@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Monday.com API Connector
-  version: 1.0.3
+  version: 1.0.4
   description: >
     Connector for the Monday.com platform API. Monday.com is a work operating system
     that enables teams to build workflows for project management, CRM, software development,
@@ -49,6 +49,18 @@ info:
       - "Update a column value"
       - "Add a new user to the account"
       - "Create a webhook subscription"
+
+  x-airbyte-entity-relationships:
+  - source_entity: items
+    target_entity: boards
+    foreign_key: board_id
+    target_key: id
+    cardinality: many_to_one
+  - source_entity: activity_logs
+    target_entity: boards
+    foreign_key: board_id
+    target_key: id
+    cardinality: many_to_one
 
   x-airbyte-context-store:
     disable_compaction: true

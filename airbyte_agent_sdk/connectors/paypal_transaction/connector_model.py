@@ -29,7 +29,7 @@ from uuid import (
 PaypalTransactionConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('d913b0f2-cc51-4e55-a44c-8ba1697b9239'),
     name='paypal-transaction',
-    version='1.0.2',
+    version='1.0.3',
     base_url='https://api-m.sandbox.paypal.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -212,8 +212,16 @@ PaypalTransactionConnectorModel: ConnectorModel = ConnectorModel(
                         'balance_affecting_records_only',
                     ],
                     query_params_schema={
-                        'start_date': {'type': 'string', 'required': True},
-                        'end_date': {'type': 'string', 'required': True},
+                        'start_date': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '2024-01-01T00:00:00Z',
+                        },
+                        'end_date': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '2024-01-31T00:00:00Z',
+                        },
                         'transaction_id': {'type': 'string', 'required': False},
                         'transaction_type': {'type': 'string', 'required': False},
                         'transaction_status': {

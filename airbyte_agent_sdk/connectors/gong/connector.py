@@ -124,7 +124,7 @@ class GongConnector:
 
     connector_name = "gong"
     connector_version = "0.1.23"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -735,7 +735,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -874,7 +874,7 @@ class CallsQuery:
         # Cast generic envelope to concrete typed result
         return CallsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1017,7 +1017,7 @@ class CallsExtensiveQuery:
         # Cast generic envelope to concrete typed result
         return CallsExtensiveListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1310,7 +1310,7 @@ class CallTranscriptsQuery:
         # Cast generic envelope to concrete typed result
         return CallTranscriptsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1348,7 +1348,7 @@ class StatsActivityAggregateQuery:
         # Cast generic envelope to concrete typed result
         return StatsActivityAggregateListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1386,7 +1386,7 @@ class StatsActivityDayByDayQuery:
         # Cast generic envelope to concrete typed result
         return StatsActivityDayByDayListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1424,7 +1424,7 @@ class StatsInteractionQuery:
         # Cast generic envelope to concrete typed result
         return StatsInteractionListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1638,7 +1638,7 @@ class LibraryFolderContentQuery:
         # Cast generic envelope to concrete typed result
         return LibraryFolderContentListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1725,7 +1725,7 @@ class StatsActivityScorecardsQuery:
         # Cast generic envelope to concrete typed result
         return StatsActivityScorecardsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

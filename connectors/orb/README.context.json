@@ -3,8 +3,8 @@
   "class_name": "OrbConnector",
   "package_name": "airbyte_agent_sdk.connectors.orb",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.7",
-  "yaml_version": "0.1.7",
+  "package_version": "0.1.8",
+  "yaml_version": "0.1.8",
   "api_reference_url": "https://docs.withorb.com/api-reference",
   "commit_sha": "unknown",
   "auth_example": "OrbAuthConfig(api_key=\"...\")",
@@ -40,8 +40,8 @@
         "type": "str",
         "required": true,
         "title": "Start Date",
-        "description": "UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data.",
-        "format": "date-time",
+        "description": "UTC date in YYYY-MM-DD format from which to start replicating data.",
+        "format": "date",
         "default": null
       }
     ]

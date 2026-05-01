@@ -36,7 +36,7 @@ from uuid import (
 GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('253487c0-2246-43ba-a21f-5116b20a2c50'),
     name='google-ads',
-    version='1.0.8',
+    version='1.0.9',
     base_url='https://googleads.googleapis.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,

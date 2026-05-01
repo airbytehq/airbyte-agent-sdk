@@ -3,8 +3,8 @@
   "class_name": "KlaviyoConnector",
   "package_name": "airbyte_agent_sdk.connectors.klaviyo",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.4",
-  "yaml_version": "1.0.4",
+  "package_version": "1.0.5",
+  "yaml_version": "1.0.5",
   "api_reference_url": "https://developers.klaviyo.com/en/reference/api_overview",
   "commit_sha": "unknown",
   "auth_example": "KlaviyoAuthConfig(api_key=\"...\")",
@@ -444,6 +444,18 @@
         "entity": "metrics",
         "action": "list",
         "parameters": [
+          {
+            "name": "filter",
+            "python_name": "filter",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "default": "greater-than(updated,2020-01-01T00:00:00Z)"
+            },
+            "required": true,
+            "description": "Filter expression (Klaviyo requires a filter on /metrics; date-based filters always match)",
+            "is_deep_object": false
+          },
           {
             "name": "page[size]",
             "python_name": "page_size",

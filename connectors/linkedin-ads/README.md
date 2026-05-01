@@ -361,6 +361,6 @@ See the official [Linkedin-Ads API reference](https://learn.microsoft.com/en-us/
 
 ## Version information
 
-- **Package version:** 1.0.4
-- **Connector version:** 1.0.4
+- **Package version:** 1.0.5
+- **Connector version:** 1.0.5
 - **Generated with Connector SDK commit SHA:** unknown

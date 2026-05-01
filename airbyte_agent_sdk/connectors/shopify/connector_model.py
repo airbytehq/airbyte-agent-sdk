@@ -32,7 +32,7 @@ from uuid import (
 ShopifyConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9da77001-af33-4bcd-be46-6252bf9342b9'),
     name='shopify',
-    version='0.1.12',
+    version='0.1.13',
     base_url='https://{shop}.myshopify.com/admin/api/2025-01',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -6496,7 +6496,11 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     description='Returns a list of inventory items',
                     query_params=['ids', 'limit'],
                     query_params_schema={
-                        'ids': {'type': 'string', 'required': True},
+                        'ids': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '',
+                        },
                         'limit': {
                             'type': 'integer',
                             'required': False,

@@ -101,7 +101,7 @@ class GoogleSearchConsoleConnector:
 
     connector_name = "google-search-console"
     connector_version = "1.0.3"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -886,7 +886,7 @@ class SearchAnalyticsByDateQuery:
         # Cast generic envelope to concrete typed result
         return SearchAnalyticsByDateListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1013,7 +1013,7 @@ class SearchAnalyticsByCountryQuery:
         # Cast generic envelope to concrete typed result
         return SearchAnalyticsByCountryListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1141,7 +1141,7 @@ class SearchAnalyticsByDeviceQuery:
         # Cast generic envelope to concrete typed result
         return SearchAnalyticsByDeviceListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1269,7 +1269,7 @@ class SearchAnalyticsByPageQuery:
         # Cast generic envelope to concrete typed result
         return SearchAnalyticsByPageListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1397,7 +1397,7 @@ class SearchAnalyticsByQueryQuery:
         # Cast generic envelope to concrete typed result
         return SearchAnalyticsByQueryListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1525,7 +1525,7 @@ class SearchAnalyticsAllFieldsQuery:
         # Cast generic envelope to concrete typed result
         return SearchAnalyticsAllFieldsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

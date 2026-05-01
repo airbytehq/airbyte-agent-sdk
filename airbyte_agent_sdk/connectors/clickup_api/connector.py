@@ -134,7 +134,7 @@ class ClickupApiConnector:
 
     connector_name = "clickup-api"
     connector_version = "0.1.5"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1338,7 +1338,7 @@ class TasksQuery:
         # Cast generic envelope to concrete typed result
         return TasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1445,7 +1445,7 @@ Operators: = (contains), == (exact), <, <=, >, >=, !=, !==, IS NULL, IS NOT NULL
         # Cast generic envelope to concrete typed result
         return TasksApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1925,7 +1925,7 @@ class ViewTasksQuery:
         # Cast generic envelope to concrete typed result
         return ViewTasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2133,7 +2133,7 @@ class DocsQuery:
         # Cast generic envelope to concrete typed result
         return DocsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

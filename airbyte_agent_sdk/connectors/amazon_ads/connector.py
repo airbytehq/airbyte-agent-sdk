@@ -87,7 +87,7 @@ class AmazonAdsConnector:
 
     connector_name = "amazon-ads"
     connector_version = "1.0.10"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -788,7 +788,7 @@ group campaigns together for organizational and budget management purposes.
         # Cast generic envelope to concrete typed result
         return PortfoliosListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -860,7 +860,7 @@ Sponsored Products campaigns promote individual product listings on Amazon.
         # Cast generic envelope to concrete typed result
         return SponsoredProductCampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -932,7 +932,7 @@ Ad groups are used to organize ads and targeting within a campaign.
         # Cast generic envelope to concrete typed result
         return SponsoredProductAdGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -978,7 +978,7 @@ Keywords are used in manual targeting campaigns to match shopper search queries.
         # Cast generic envelope to concrete typed result
         return SponsoredProductKeywordsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1024,7 +1024,7 @@ Product ads associate an advertised product with an ad group.
         # Cast generic envelope to concrete typed result
         return SponsoredProductProductAdsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1070,7 +1070,7 @@ Targeting clauses define product or category targeting for ad groups.
         # Cast generic envelope to concrete typed result
         return SponsoredProductTargetsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1116,7 +1116,7 @@ Negative keywords prevent ads from showing for specific search terms.
         # Cast generic envelope to concrete typed result
         return SponsoredProductNegativeKeywordsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1162,7 +1162,7 @@ Negative targeting clauses exclude specific products or categories from targetin
         # Cast generic envelope to concrete typed result
         return SponsoredProductNegativeTargetsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1208,7 +1208,7 @@ Sponsored Brands campaigns help drive discovery and sales with creative ad exper
         # Cast generic envelope to concrete typed result
         return SponsoredBrandsCampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1254,7 +1254,7 @@ Ad groups organize ads and targeting within a Sponsored Brands campaign.
         # Cast generic envelope to concrete typed result
         return SponsoredBrandsAdGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

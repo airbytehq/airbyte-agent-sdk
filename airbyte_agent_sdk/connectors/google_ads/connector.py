@@ -69,7 +69,6 @@ from .models import (
     CampaignLabelsListResult,
     AdGroupLabelsListResult,
     AdGroupAdLabelsListResult,
-    AccessibleCustomer,
     Account,
     AdGroup,
     AdGroupAd,
@@ -114,8 +113,8 @@ class GoogleAdsConnector:
     """
 
     connector_name = "google-ads"
-    connector_version = "1.0.8"
-    sdk_version = "0.1.140"
+    connector_version = "1.0.9"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -700,7 +699,7 @@ class AccountsQuery:
         # Cast generic envelope to concrete typed result
         return AccountsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -822,7 +821,7 @@ class CampaignsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -981,7 +980,7 @@ class AdGroupsQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1132,7 +1131,7 @@ class AdGroupAdsQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupAdsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1251,7 +1250,7 @@ class CampaignLabelsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignLabelsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1385,7 +1384,7 @@ class AdGroupLabelsQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupLabelsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1519,7 +1518,7 @@ class AdGroupAdLabelsQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupAdLabelsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

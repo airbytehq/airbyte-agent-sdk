@@ -157,7 +157,7 @@ class RevisionsGetParams(TypedDict):
 
 class ChangesListParams(TypedDict):
     """Parameters for changes.list operation"""
-    page_token: str
+    page_token: NotRequired[str]
     page_size: NotRequired[int]
     drive_id: NotRequired[str]
     include_items_from_all_drives: NotRequired[bool]

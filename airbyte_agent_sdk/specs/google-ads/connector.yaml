@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Google Ads API Connector
-  version: 1.0.8
+  version: 1.0.9
   description: >-
     Google Ads API connector for accessing advertising account data including
     campaigns, ad groups, ads, and labels. This connector uses the Google Ads

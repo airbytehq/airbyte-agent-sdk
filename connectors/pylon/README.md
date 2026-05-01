@@ -379,6 +379,6 @@ See the official [Pylon API reference](https://docs.usepylon.com/pylon-docs/deve
 
 ## Version information
 
-- **Package version:** 0.1.9
-- **Connector version:** 0.1.9
+- **Package version:** 0.1.10
+- **Connector version:** 0.1.10
 - **Generated with Connector SDK commit SHA:** unknown

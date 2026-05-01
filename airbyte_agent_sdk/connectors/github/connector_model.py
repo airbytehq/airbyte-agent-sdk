@@ -20,6 +20,10 @@ from airbyte_agent_sdk.schema.security import (
     AuthConfigFieldSpec,
     AuthConfigSpec,
 )
+from airbyte_agent_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+    ScopingParamConfig,
+)
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -33,7 +37,7 @@ from uuid import (
 GithubConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('ef69ef6e-aa7f-4af1-a01d-ef775033524e'),
     name='github',
-    version='0.1.18',
+    version='0.1.19',
     base_url='https://api.github.com',
     auth=AuthConfig(
         options=[
@@ -1662,6 +1666,15 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'comments',
                 'x-airbyte-stream-name': 'comments',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='comments',
+                    target_entity='issues',
+                    foreign_key='number',
+                    target_key='number',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='pull_requests',
@@ -2143,6 +2156,15 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                 'x-airbyte-entity-name': 'reviews',
                 'x-airbyte-stream-name': 'reviews',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='reviews',
+                    target_entity='pull_requests',
+                    foreign_key='number',
+                    target_key='number',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='pr_comments',
@@ -2272,6 +2294,15 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.data.node',
                 ),
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='pr_comments',
+                    target_entity='pull_requests',
+                    foreign_key='number',
+                    target_key='number',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='labels',
@@ -3586,6 +3617,15 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     meta_extractor={'has_next_page': '$.data.organization.projectV2.items.pageInfo.hasNextPage', 'end_cursor': '$.data.organization.projectV2.items.pageInfo.endCursor'},
                 ),
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='project_items',
+                    target_entity='projects',
+                    foreign_key='project_number',
+                    target_key='number',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='discussions',
@@ -3899,7 +3939,11 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     query_params_schema={
                         'owner': {'type': 'string', 'required': True},
                         'repo': {'type': 'string', 'required': True},
-                        'path': {'type': 'string', 'required': True},
+                        'path': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '',
+                        },
                         'ref': {
                             'type': 'string',
                             'required': False,
@@ -4145,4 +4189,22 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
             'Delete an issue or comment',
         ],
     ),
+    scoping=[
+        ScopingParamConfig(
+            param='owner',
+            config_key='repositories',
+        ),
+        ScopingParamConfig(
+            param='repo',
+            config_key='repositories',
+        ),
+        ScopingParamConfig(
+            param='username',
+            config_key='repositories',
+        ),
+        ScopingParamConfig(
+            param='org',
+            config_key='repositories',
+        ),
+    ],
 )

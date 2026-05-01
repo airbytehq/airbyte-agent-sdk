@@ -104,7 +104,7 @@ class GmailConnector:
 
     connector_name = "gmail"
     connector_version = "0.1.4"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -815,7 +815,7 @@ class MessagesQuery:
         # Cast generic envelope to concrete typed result
         return MessagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1227,7 +1227,7 @@ class DraftsQuery:
         # Cast generic envelope to concrete typed result
         return DraftsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1473,7 +1473,7 @@ class ThreadsQuery:
         # Cast generic envelope to concrete typed result
         return ThreadsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

@@ -35,7 +35,7 @@ from uuid import (
 LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('137ece28-5434-455c-8f34-69dc3782f451'),
     name='linkedin-ads',
-    version='1.0.4',
+    version='1.0.5',
     base_url='https://api.linkedin.com/rest',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -502,7 +502,11 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                             'required': True,
                             'default': 'accounts',
                         },
-                        'accounts': {'type': 'string', 'required': True},
+                        'accounts': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '',
+                        },
                         'count': {
                             'type': 'integer',
                             'required': False,
@@ -2194,7 +2198,11 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                             'required': True,
                             'default': 'account',
                         },
-                        'account': {'type': 'string', 'required': True},
+                        'account': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '',
+                        },
                         'count': {
                             'type': 'integer',
                             'required': False,
@@ -2631,8 +2639,16 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                             'default': 'DAILY',
                             'enum': ['DAILY', 'MONTHLY', 'ALL'],
                         },
-                        'dateRange': {'type': 'string', 'required': True},
-                        'campaigns': {'type': 'string', 'required': True},
+                        'dateRange': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '(start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))',
+                        },
+                        'campaigns': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'List()',
+                        },
                         'fields': {'type': 'string', 'required': False},
                     },
                     header_params=['LinkedIn-Version', 'X-Restli-Protocol-Version'],
@@ -2953,8 +2969,16 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                             'default': 'DAILY',
                             'enum': ['DAILY', 'MONTHLY', 'ALL'],
                         },
-                        'dateRange': {'type': 'string', 'required': True},
-                        'creatives': {'type': 'string', 'required': True},
+                        'dateRange': {
+                            'type': 'string',
+                            'required': True,
+                            'default': '(start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))',
+                        },
+                        'creatives': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'List()',
+                        },
                         'fields': {'type': 'string', 'required': False},
                     },
                     header_params=['LinkedIn-Version', 'X-Restli-Protocol-Version'],

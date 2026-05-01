@@ -111,7 +111,7 @@ class AshbyConnector:
 
     connector_name = "ashby"
     connector_version = "0.1.4"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -723,7 +723,7 @@ class CandidatesQuery:
         # Cast generic envelope to concrete typed result
         return CandidatesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -848,7 +848,7 @@ class ApplicationsQuery:
         # Cast generic envelope to concrete typed result
         return ApplicationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -973,7 +973,7 @@ class JobsQuery:
         # Cast generic envelope to concrete typed result
         return JobsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1098,7 +1098,7 @@ class DepartmentsQuery:
         # Cast generic envelope to concrete typed result
         return DepartmentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1164,7 +1164,7 @@ class LocationsQuery:
         # Cast generic envelope to concrete typed result
         return LocationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1230,7 +1230,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1354,7 +1354,7 @@ class JobPostingsQuery:
         # Cast generic envelope to concrete typed result
         return JobPostingsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1479,7 +1479,7 @@ class SourcesQuery:
         # Cast generic envelope to concrete typed result
         return SourcesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1520,7 +1520,7 @@ class ArchiveReasonsQuery:
         # Cast generic envelope to concrete typed result
         return ArchiveReasonsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1561,7 +1561,7 @@ class CandidateTagsQuery:
         # Cast generic envelope to concrete typed result
         return CandidateTagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1602,7 +1602,7 @@ class CustomFieldsQuery:
         # Cast generic envelope to concrete typed result
         return CustomFieldsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1643,7 +1643,7 @@ class FeedbackFormDefinitionsQuery:
         # Cast generic envelope to concrete typed result
         return FeedbackFormDefinitionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

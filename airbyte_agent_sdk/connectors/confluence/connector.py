@@ -84,7 +84,7 @@ class ConfluenceConnector:
 
     connector_name = "confluence"
     connector_version = "1.0.1"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -598,7 +598,7 @@ class SpacesQuery:
         # Cast generic envelope to concrete typed result
         return SpacesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -747,7 +747,7 @@ class PagesQuery:
         # Cast generic envelope to concrete typed result
         return PagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -902,7 +902,7 @@ class BlogPostsQuery:
         # Cast generic envelope to concrete typed result
         return BlogPostsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1037,7 +1037,7 @@ class GroupsQuery:
         # Cast generic envelope to concrete typed result
         return GroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1145,7 +1145,7 @@ class AuditQuery:
         # Cast generic envelope to concrete typed result
         return AuditListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

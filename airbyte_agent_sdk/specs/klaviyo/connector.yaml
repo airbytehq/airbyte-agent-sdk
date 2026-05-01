@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Klaviyo API Connector
-  version: 1.0.4
+  version: 1.0.5
   description: |
     Klaviyo is a marketing automation platform that helps businesses build customer relationships
     through personalized email, SMS, and push notifications. This connector provides access to
@@ -1479,6 +1479,13 @@ paths:
           schema:
             type: string
             default: "2024-10-15"
+        - name: filter
+          in: query
+          required: true
+          description: Filter expression (Klaviyo requires a filter on /metrics; date-based filters always match)
+          schema:
+            type: string
+            default: "greater-than(updated,2020-01-01T00:00:00Z)"
         - name: page[size]
           in: query
           description: Number of results per page (max 100)

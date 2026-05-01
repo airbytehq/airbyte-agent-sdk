@@ -360,6 +360,6 @@ See the official [Tiktok-Marketing API reference](https://business-api.tiktok.co
 
 ## Version information
 
-- **Package version:** 1.1.5
-- **Connector version:** 1.1.5
+- **Package version:** 1.1.6
+- **Connector version:** 1.1.6
 - **Generated with Connector SDK commit SHA:** unknown

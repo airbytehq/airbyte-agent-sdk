@@ -378,6 +378,6 @@ See the official [Google-Drive API reference](https://developers.google.com/work
 
 ## Version information
 
-- **Package version:** 0.2.4
-- **Connector version:** 0.2.4
+- **Package version:** 0.2.5
+- **Connector version:** 0.2.5
 - **Generated with Connector SDK commit SHA:** unknown

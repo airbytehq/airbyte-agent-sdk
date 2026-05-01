@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: TikTok Marketing API Connector
-  version: 1.1.5
+  version: 1.1.6
   description: >-
     Connector for the TikTok Marketing API (Business API v1.3). Provides access to
     advertiser accounts, campaigns, ad groups, ads, audiences, creative assets
@@ -34,6 +34,11 @@ info:
       - start_date
     replication_config_key_mapping:
       start_date: start_date
+  x-airbyte-scoping:
+    - param: advertiser_id
+      config_key: advertiser_id
+    - param: advertiser_ids
+      config_key: advertiser_id
   x-airbyte-context-store:
     disable_compaction: false
     entities:
@@ -2843,6 +2848,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-01-01"
         - name: end_date
           in: query
           required: true
@@ -2850,6 +2856,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-12-31"
         - name: page
           in: query
           description: Page number
@@ -2957,6 +2964,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-01-01"
         - name: end_date
           in: query
           required: true
@@ -2964,6 +2972,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-12-31"
         - name: page
           in: query
           description: Page number
@@ -3071,6 +3080,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-01-01"
         - name: end_date
           in: query
           required: true
@@ -3078,6 +3088,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-12-31"
         - name: page
           in: query
           description: Page number
@@ -3185,6 +3196,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-01-01"
         - name: end_date
           in: query
           required: true
@@ -3192,6 +3204,7 @@ paths:
           schema:
             type: string
             format: date
+            default: "2024-12-31"
         - name: page
           in: query
           description: Page number

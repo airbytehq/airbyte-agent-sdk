@@ -3,8 +3,8 @@
   "class_name": "PaypalTransactionConnector",
   "package_name": "airbyte_agent_sdk.connectors.paypal_transaction",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.2",
-  "yaml_version": "1.0.2",
+  "package_version": "1.0.3",
+  "yaml_version": "1.0.3",
   "api_reference_url": "https://developer.paypal.com/docs/api/transaction-search/v1/",
   "commit_sha": "unknown",
   "auth_example": "PaypalTransactionAuthConfig(client_id=\"...\", client_secret=\"...\", access_token=\"...\")",
@@ -163,7 +163,8 @@
             "python_name": "start_date",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "2024-01-01T00:00:00Z"
             },
             "required": true,
             "description": "Start date and time in ISO 8601 format. Seconds are required.\n",
@@ -174,7 +175,8 @@
             "python_name": "end_date",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "2024-01-31T00:00:00Z"
             },
             "required": true,
             "description": "End date and time in ISO 8601 format. Seconds are required. Maximum supported range is 31 days.\n",

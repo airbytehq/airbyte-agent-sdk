@@ -371,6 +371,6 @@ See the official [Google-Ads API reference](https://developers.google.com/google
 
 ## Version information
 
-- **Package version:** 1.0.8
-- **Connector version:** 1.0.8
+- **Package version:** 1.0.9
+- **Connector version:** 1.0.9
 - **Generated with Connector SDK commit SHA:** unknown

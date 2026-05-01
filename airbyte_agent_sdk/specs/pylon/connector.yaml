@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Pylon API Connector
-  version: 0.1.9
+  version: 0.1.10
   description: |
     Pylon is a customer support platform that helps B2B companies manage customer interactions
     across Slack, email, chat widgets, and other channels. This connector provides access to
@@ -368,6 +368,7 @@ paths:
         schema:
           type: string
           format: date-time
+          default: "2024-01-01T00:00:00Z"
       - name: end_time
         in: query
         description: The end time (RFC3339) of the time range to get issues for.
@@ -375,6 +376,7 @@ paths:
         schema:
           type: string
           format: date-time
+          default: "2099-12-31T23:59:59Z"
       - name: cursor
         in: query
         description: Cursor for pagination
@@ -1248,6 +1250,7 @@ paths:
           - account
           - issue
           - contact
+          default: issue
       - name: cursor
         in: query
         description: Cursor for pagination

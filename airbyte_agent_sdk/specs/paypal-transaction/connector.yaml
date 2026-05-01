@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: PayPal Transaction API Connector
-  version: 1.0.2
+  version: 1.0.3
   description: >
     Connector for the PayPal Transaction Search API. Provides access to
     transaction history, account balances, payments, disputes, catalog
@@ -500,6 +500,7 @@ paths:
             Start date and time in ISO 8601 format. Seconds are required.
           schema:
             type: string
+            default: "2024-01-01T00:00:00Z"
         - name: end_date
           in: query
           required: true
@@ -508,6 +509,7 @@ paths:
             Maximum supported range is 31 days.
           schema:
             type: string
+            default: "2024-01-31T00:00:00Z"
         - name: transaction_id
           in: query
           required: false

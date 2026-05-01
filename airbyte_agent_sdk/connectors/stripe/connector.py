@@ -164,7 +164,7 @@ class StripeConnector:
 
     connector_name = "stripe"
     connector_version = "0.1.13"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1062,7 +1062,7 @@ class CustomersQuery:
         # Cast generic envelope to concrete typed result
         return CustomersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1191,7 +1191,7 @@ class CustomersQuery:
         # Cast generic envelope to concrete typed result
         return CustomersApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1338,7 +1338,7 @@ class InvoicesQuery:
         # Cast generic envelope to concrete typed result
         return InvoicesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1681,7 +1681,7 @@ class ChargesQuery:
         # Cast generic envelope to concrete typed result
         return ChargesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1916,7 +1916,7 @@ class SubscriptionsQuery:
         # Cast generic envelope to concrete typed result
         return SubscriptionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2202,7 +2202,7 @@ class RefundsQuery:
         # Cast generic envelope to concrete typed result
         return RefundsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2375,7 +2375,7 @@ class ProductsQuery:
         # Cast generic envelope to concrete typed result
         return ProductsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2504,7 +2504,7 @@ class ProductsQuery:
         # Cast generic envelope to concrete typed result
         return ProductsApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2591,7 +2591,7 @@ class BalanceTransactionsQuery:
         # Cast generic envelope to concrete typed result
         return BalanceTransactionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2669,7 +2669,7 @@ class PaymentIntentsQuery:
         # Cast generic envelope to concrete typed result
         return PaymentIntentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2773,7 +2773,7 @@ class PaymentIntentsQuery:
         # Cast generic envelope to concrete typed result
         return PaymentIntentsApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2984,7 +2984,7 @@ class DisputesQuery:
         # Cast generic envelope to concrete typed result
         return DisputesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3065,7 +3065,7 @@ class PayoutsQuery:
         # Cast generic envelope to concrete typed result
         return PayoutsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

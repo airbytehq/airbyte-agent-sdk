@@ -3,8 +3,8 @@
   "class_name": "TiktokMarketingConnector",
   "package_name": "airbyte_agent_sdk.connectors.tiktok_marketing",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.1.5",
-  "yaml_version": "1.1.5",
+  "package_version": "1.1.6",
+  "yaml_version": "1.1.6",
   "api_reference_url": "https://business-api.tiktok.com/portal/docs?id=1740302848670722",
   "commit_sha": "unknown",
   "auth_example": "TiktokMarketingAuthConfig(access_token=\"...\")",
@@ -797,7 +797,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-01-01"
             },
             "required": true,
             "description": "Report start date (YYYY-MM-DD)",
@@ -809,7 +810,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-12-31"
             },
             "required": true,
             "description": "Report end date (YYYY-MM-DD)",
@@ -964,7 +966,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-01-01"
             },
             "required": true,
             "description": "Report start date (YYYY-MM-DD)",
@@ -976,7 +979,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-12-31"
             },
             "required": true,
             "description": "Report end date (YYYY-MM-DD)",
@@ -1131,7 +1135,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-01-01"
             },
             "required": true,
             "description": "Report start date (YYYY-MM-DD)",
@@ -1143,7 +1148,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-12-31"
             },
             "required": true,
             "description": "Report end date (YYYY-MM-DD)",
@@ -1298,7 +1304,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-01-01"
             },
             "required": true,
             "description": "Report start date (YYYY-MM-DD)",
@@ -1310,7 +1317,8 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "default": "2024-12-31"
             },
             "required": true,
             "description": "Report end date (YYYY-MM-DD)",

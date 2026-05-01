@@ -360,6 +360,6 @@ See the official [Orb API reference](https://docs.withorb.com/api-reference).
 
 ## Version information
 
-- **Package version:** 0.1.7
-- **Connector version:** 0.1.7
+- **Package version:** 0.1.8
+- **Connector version:** 0.1.8
 - **Generated with Connector SDK commit SHA:** unknown

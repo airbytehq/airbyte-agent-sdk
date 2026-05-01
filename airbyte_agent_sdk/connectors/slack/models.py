@@ -191,6 +191,14 @@ class ChannelResponse(BaseModel):
     ok: bool | None = Field(default=None)
     channel: Channel | None = Field(default=None)
 
+class Reaction(BaseModel):
+    """Message reaction"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None = Field(default=None)
+    users: list[str] | None = Field(default=None)
+    count: int | None = Field(default=None)
+
 class Attachment(BaseModel):
     """Message attachment"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -211,14 +219,6 @@ class Attachment(BaseModel):
     footer: str | None = Field(default=None)
     footer_icon: str | None = Field(default=None)
     ts: Any | None = Field(default=None)
-
-class Reaction(BaseModel):
-    """Message reaction"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None = Field(default=None)
-    users: list[str] | None = Field(default=None)
-    count: int | None = Field(default=None)
 
 class File(BaseModel):
     """File object"""
@@ -702,7 +702,7 @@ class SlackExecuteResultWithMeta(SlackExecuteResult[T], Generic[T, S]):
 
     Used for actions that return both data and metadata (e.g., pagination info).
     """
-    meta: S
+    meta: S | None = None
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
 # ===== SEARCH DATA MODELS =====

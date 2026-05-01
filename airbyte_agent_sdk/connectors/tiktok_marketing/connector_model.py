@@ -25,6 +25,9 @@ from airbyte_agent_sdk.schema.base import (
 from airbyte_agent_sdk.schema.components import (
     PathOverrideConfig,
 )
+from airbyte_agent_sdk.schema.extensions import (
+    ScopingParamConfig,
+)
 from uuid import (
     UUID,
 )
@@ -32,7 +35,7 @@ from uuid import (
 TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('4bfac00d-ce15-44ff-95b9-9e3c3e8fbd35'),
     name='tiktok-marketing',
-    version='1.1.5',
+    version='1.1.6',
     base_url='https://business-api.tiktok.com/open_api/v1.3',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -2523,11 +2526,13 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         'start_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-01-01',
                             'format': 'date',
                         },
                         'end_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-12-31',
                             'format': 'date',
                         },
                         'page': {
@@ -2916,11 +2921,13 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         'start_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-01-01',
                             'format': 'date',
                         },
                         'end_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-12-31',
                             'format': 'date',
                         },
                         'page': {
@@ -3301,11 +3308,13 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         'start_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-01-01',
                             'format': 'date',
                         },
                         'end_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-12-31',
                             'format': 'date',
                         },
                         'page': {
@@ -3830,11 +3839,13 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         'start_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-01-01',
                             'format': 'date',
                         },
                         'end_date': {
                             'type': 'string',
                             'required': True,
+                            'default': '2024-12-31',
                             'format': 'date',
                         },
                         'page': {
@@ -4652,4 +4663,14 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
         ],
         unsupported=['Create a new campaign', 'Update ad group targeting', 'Delete an ad'],
     ),
+    scoping=[
+        ScopingParamConfig(
+            param='advertiser_id',
+            config_key='advertiser_id',
+        ),
+        ScopingParamConfig(
+            param='advertiser_ids',
+            config_key='advertiser_id',
+        ),
+    ],
 )

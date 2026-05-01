@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Zendesk Talk API Connector
-  version: 1.0.2
+  version: 1.0.3
   description: |
     Connector for the Zendesk Talk (Voice) API. Provides access to phone numbers,
     addresses, greetings, IVR configurations, call data, and agent/account statistics
@@ -1071,6 +1071,7 @@ paths:
           description: Unix epoch time to start from (e.g. 1704067200 for 2024-01-01)
           schema:
             type: integer
+            default: 0
       responses:
         "200":
           description: List of calls
@@ -1097,6 +1098,7 @@ paths:
           description: Unix epoch time to start from (e.g. 1704067200 for 2024-01-01)
           schema:
             type: integer
+            default: 0
       responses:
         "200":
           description: List of call legs

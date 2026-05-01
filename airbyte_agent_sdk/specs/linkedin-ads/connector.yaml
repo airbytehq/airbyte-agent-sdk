@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: LinkedIn Ads API Connector
-  version: 1.0.4
+  version: 1.0.5
   description: >
     Connector for the LinkedIn Ads Marketing API. Provides access to ad accounts,
     campaigns, campaign groups, creatives, conversions, and ad analytics data.
@@ -718,6 +718,7 @@ paths:
         required: true
         schema:
           type: string
+          default: ""
       - name: count
         in: query
         description: Number of items per page
@@ -1073,6 +1074,7 @@ paths:
         required: true
         schema:
           type: string
+          default: ""
       - name: count
         in: query
         description: Number of items per page
@@ -1191,12 +1193,14 @@ paths:
         description: "Date range in LinkedIn format, e.g. (start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
         schema:
           type: string
+          default: "(start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
       - name: campaigns
         in: query
         required: true
         description: "List of campaign URNs, e.g. List(urn%3Ali%3AsponsoredCampaign%3A123)"
         schema:
           type: string
+          default: "List()"
       - name: fields
         in: query
         description: Comma-separated list of metric fields to return
@@ -1266,12 +1270,14 @@ paths:
         description: "Date range in LinkedIn format, e.g. (start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
         schema:
           type: string
+          default: "(start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
       - name: creatives
         in: query
         required: true
         description: "List of creative URNs, e.g. List(urn%3Ali%3AsponsoredCreative%3A123)"
         schema:
           type: string
+          default: "List()"
       - name: fields
         in: query
         description: Comma-separated list of metric fields to return

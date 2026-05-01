@@ -20,6 +20,9 @@ from airbyte_agent_sdk.schema.security import (
     AuthConfigFieldSpec,
     AuthConfigSpec,
 )
+from airbyte_agent_sdk.schema.extensions import (
+    EntityRelationshipConfig,
+)
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
 )
@@ -33,7 +36,7 @@ from uuid import (
 MondayConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('80a54ea2-9959-4040-aac1-eee42423ec9b'),
     name='monday',
-    version='1.0.3',
+    version='1.0.4',
     base_url='https://api.monday.com',
     auth=AuthConfig(
         options=[
@@ -1619,6 +1622,14 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['Show items on a Monday board', 'Find items assigned to me'],
                 'search_strategy': 'Search by name or filter by board and column values',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='items',
+                    target_entity='boards',
+                    foreign_key='board_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
         EntityDefinition(
             name='teams',
@@ -2922,6 +2933,14 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                 'example_questions': ['What activity happened on a board recently?'],
                 'search_strategy': 'Filter by board or date range',
             },
+            relationships=[
+                EntityRelationshipConfig(
+                    source_entity='activity_logs',
+                    target_entity='boards',
+                    foreign_key='board_id',
+                    cardinality='many_to_one',
+                ),
+            ],
         ),
     ],
     search_field_paths={

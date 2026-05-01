@@ -86,7 +86,7 @@ class NotionConnector:
 
     connector_name = "notion"
     connector_version = "0.1.11"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -600,7 +600,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -733,7 +733,7 @@ class PagesQuery:
         # Cast generic envelope to concrete typed result
         return PagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -873,7 +873,7 @@ class DataSourcesQuery:
         # Cast generic envelope to concrete typed result
         return DataSourcesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1013,7 +1013,7 @@ class BlocksQuery:
         # Cast generic envelope to concrete typed result
         return BlocksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1178,7 +1178,7 @@ class CommentsQuery:
         # Cast generic envelope to concrete typed result
         return CommentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

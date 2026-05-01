@@ -3,8 +3,8 @@
   "class_name": "LinkedinAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.linkedin_ads",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.4",
-  "yaml_version": "1.0.4",
+  "package_version": "1.0.5",
+  "yaml_version": "1.0.5",
   "api_reference_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
   "commit_sha": "unknown",
   "auth_example": "LinkedinAdsAuthConfig(refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
@@ -251,7 +251,8 @@
             "python_name": "accounts",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": ""
             },
             "required": true,
             "description": "Account URN, e.g. urn:li:sponsoredAccount:123456",
@@ -680,7 +681,8 @@
             "python_name": "account",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": ""
             },
             "required": true,
             "description": "Account URN, e.g. urn:li:sponsoredAccount:123456",
@@ -818,7 +820,8 @@
             "python_name": "date_range",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "(start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
             },
             "required": true,
             "description": "Date range in LinkedIn format, e.g. (start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))",
@@ -829,7 +832,8 @@
             "python_name": "campaigns",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "List()"
             },
             "required": true,
             "description": "List of campaign URNs, e.g. List(urn%3Ali%3AsponsoredCampaign%3A123)",
@@ -912,7 +916,8 @@
             "python_name": "date_range",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "(start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))"
             },
             "required": true,
             "description": "Date range in LinkedIn format, e.g. (start:(year:2024,month:1,day:1),end:(year:2024,month:12,day:31))",
@@ -923,7 +928,8 @@
             "python_name": "creatives",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "List()"
             },
             "required": true,
             "description": "List of creative URNs, e.g. List(urn%3Ali%3AsponsoredCreative%3A123)",

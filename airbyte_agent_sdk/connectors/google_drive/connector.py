@@ -81,8 +81,8 @@ class GoogleDriveConnector:
     """
 
     connector_name = "google-drive"
-    connector_version = "0.2.4"
-    sdk_version = "0.1.140"
+    connector_version = "0.2.5"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -737,7 +737,7 @@ class FilesQuery:
         # Cast generic envelope to concrete typed result
         return FilesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1174,7 +1174,7 @@ class DrivesQuery:
         # Cast generic envelope to concrete typed result
         return DrivesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1252,7 +1252,7 @@ class PermissionsQuery:
         # Cast generic envelope to concrete typed result
         return PermissionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1339,7 +1339,7 @@ class CommentsQuery:
         # Cast generic envelope to concrete typed result
         return CommentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1426,7 +1426,7 @@ class RepliesQuery:
         # Cast generic envelope to concrete typed result
         return RepliesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1507,7 +1507,7 @@ class RevisionsQuery:
         # Cast generic envelope to concrete typed result
         return RevisionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1551,7 +1551,7 @@ class ChangesQuery:
 
     async def list(
         self,
-        page_token: str,
+        page_token: str | None = None,
         page_size: int | None = None,
         drive_id: str | None = None,
         include_items_from_all_drives: bool | None = None,
@@ -1594,7 +1594,7 @@ class ChangesQuery:
         # Cast generic envelope to concrete typed result
         return ChangesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

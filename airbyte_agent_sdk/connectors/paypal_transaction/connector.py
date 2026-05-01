@@ -96,8 +96,8 @@ class PaypalTransactionConnector:
     """
 
     connector_name = "paypal-transaction"
-    connector_version = "1.0.2"
-    sdk_version = "0.1.140"
+    connector_version = "1.0.3"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -715,7 +715,7 @@ class TransactionsQuery:
         # Cast generic envelope to concrete typed result
         return TransactionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -827,7 +827,7 @@ class ListPaymentsQuery:
         # Cast generic envelope to concrete typed result
         return ListPaymentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -938,7 +938,7 @@ class ListDisputesQuery:
         # Cast generic envelope to concrete typed result
         return ListDisputesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1046,7 +1046,7 @@ class ListProductsQuery:
         # Cast generic envelope to concrete typed result
         return ListProductsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1248,7 +1248,7 @@ class SearchInvoicesQuery:
         # Cast generic envelope to concrete typed result
         return SearchInvoicesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

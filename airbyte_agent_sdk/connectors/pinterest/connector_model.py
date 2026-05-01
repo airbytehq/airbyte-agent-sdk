@@ -32,7 +32,7 @@ from uuid import (
 PinterestConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('5cb7e5fe-38c2-11ec-8d3d-0242ac130003'),
     name='pinterest',
-    version='0.1.4',
+    version='0.1.5',
     base_url='https://api.pinterest.com/v5',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -3528,6 +3528,12 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                     source_entity='keywords',
                     target_entity='ad_accounts',
                     foreign_key='ad_account_id',
+                    cardinality='many_to_one',
+                ),
+                EntityRelationshipConfig(
+                    source_entity='keywords',
+                    target_entity='ad_groups',
+                    foreign_key='ad_group_id',
                     cardinality='many_to_one',
                 ),
             ],

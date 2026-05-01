@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Orb API Connector
-  version: 0.1.7
+  version: 0.1.8
   description: |
     Orb is a usage-based billing platform that enables businesses to implement flexible pricing models,
     track customer usage, and manage subscriptions. This connector provides access to customers,
@@ -174,14 +174,14 @@ info:
       start_date:
         type: string
         title: Start Date
-        format: date-time
-        description: "UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data."
+        format: date
+        description: "UTC date in YYYY-MM-DD format from which to start replicating data."
     required:
       - start_date
     replication_config_key_mapping:
       start_date: start_date
     replication_config_constants:
-      start_date: "{{ day_delta(-180, '%Y-%m-%dT%H:%M:%SZ') }}"
+      start_date: "{{ day_delta(-180, '%Y-%m-%d') }}"
 
 servers:
   - url: https://api.billwithorb.com/v1

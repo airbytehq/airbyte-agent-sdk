@@ -1157,15 +1157,27 @@ class ConnectorGenerator:
                 # Default record_extractor to "$" (root) if not specified
                 record_extractor = operation.x_airbyte_record_extractor or "$"
                 meta_extractor = operation.x_airbyte_meta_extractor
+                record_transform = operation.x_airbyte_record_transform
 
                 # Extract parameters
                 parameters = self._extract_parameters(operation, action, entity)
 
                 # Always compute record_type (extractor defaults to "$" for root)
                 record_type = None
+                is_list = False
                 response_schema = self._get_response_schema_dict(operation)
                 if response_schema:
-                    record_type = self._determine_extracted_type(response_schema, record_extractor)
+                    record_type, is_list = self._determine_extracted_type(response_schema, record_extractor)
+
+                # When a record_transform is applied, the runtime reshapes each
+                # extracted record into a dict[str, Any] keyed by the transform
+                # mapping, so the typed result must reflect that shape rather
+                # than the pre-transform schema.
+                if record_transform and record_type:
+                    if is_list:
+                        record_type = "list[dict[str, Any]]"
+                    else:
+                        record_type = "dict[str, Any]"
 
                 # Infer meta type if meta extractor present
                 meta_fields = None
@@ -1515,15 +1527,13 @@ class ConnectorGenerator:
 
         return schema, ref_name
 
-    def _determine_extracted_type(self, response_schema: dict[str, Any], record_extractor: str) -> str:
+    def _determine_extracted_type(
+        self, response_schema: dict[str, Any], record_extractor: str
+    ) -> tuple[str, bool]:
         """Determine the Python type of extracted records.
 
-        Args:
-            response_schema: Response schema dict (may contain $ref)
-            record_extractor: JSONPath expression (e.g., '$.users', '$.list[*].customer', or '$' for root)
-
         Returns:
-            Python type string (e.g., 'list[User]', 'User', 'dict[str, Any]')
+            `(type_string, is_list)` — e.g. `('list[User]', True)` or `('User', False)`.
         """
         # Parse JSONPath parts (empty for root extraction "$" or "")
         path_parts = [p for p in record_extractor.strip("$").strip(".").split(".") if p]
@@ -1537,7 +1547,7 @@ class ConnectorGenerator:
         # Navigate through schema following the path
         for part in path_parts:
             if not isinstance(current_schema, dict):
-                return "dict[str, Any]"
+                return "dict[str, Any]", False
 
             # Strip array wildcard notation (e.g., "list[*]" -> "list")
             # JSONPath uses [*] to denote array traversal, but schema properties use bare names
@@ -1546,7 +1556,7 @@ class ConnectorGenerator:
 
             properties = current_schema.get("properties", {})
             if property_name not in properties:
-                return "dict[str, Any]"
+                return "dict[str, Any]", False
 
             current_schema, ref_name = self._resolve_schema_ref(properties[property_name])
 
@@ -1559,16 +1569,16 @@ class ConnectorGenerator:
         # If schema is an array, extract items type
         if isinstance(current_schema, dict) and current_schema.get("type") == "array":
             items_schema = current_schema.get("items", {})
-            return f"list[{self._openapi_type_to_python(items_schema)}]"
+            return f"list[{self._openapi_type_to_python(items_schema)}]", True
 
         # Determine the element type
         element_type = ref_name or self._openapi_type_to_python(current_schema)
 
         # If we traversed an array wildcard [*], the extractor produces a list of items
         if traversed_array:
-            return f"list[{element_type}]"
+            return f"list[{element_type}]", True
 
-        return element_type
+        return element_type, False
 
     def _get_envelope_type_name(self, entity: str, action: Action) -> str:
         """Generate result type name for operations with extractors.

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: GitHub API Connector
-  version: 0.1.18
+  version: 0.1.19
   description: |
     GitHub is a platform for version control and collaborative software development
     using Git. This connector provides access to repositories, branches, commits, issues,
@@ -79,6 +79,36 @@ info:
       - repositories
     replication_config_key_mapping:
       repositories: repositories
+  x-airbyte-scoping:
+    - param: owner
+      config_key: repositories
+    - param: repo
+      config_key: repositories
+    - param: username
+      config_key: repositories
+    - param: org
+      config_key: repositories
+  x-airbyte-entity-relationships:
+    - source_entity: reviews
+      target_entity: pull_requests
+      foreign_key: number
+      target_key: number
+      cardinality: many_to_one
+    - source_entity: comments
+      target_entity: issues
+      foreign_key: number
+      target_key: number
+      cardinality: many_to_one
+    - source_entity: pr_comments
+      target_entity: pull_requests
+      foreign_key: number
+      target_key: number
+      cardinality: many_to_one
+    - source_entity: project_items
+      target_entity: projects
+      foreign_key: project_number
+      target_key: number
+      cardinality: many_to_one
   x-airbyte-context-store:
     disable_compaction: false
     entities:
@@ -5956,6 +5986,7 @@ paths:
           description: "The directory path within the repository (e.g. 'src' or 'airbyte-integrations/connectors/source-stripe')"
           schema:
             type: string
+            default: ""
         - name: ref
           in: query
           required: false

@@ -102,7 +102,7 @@ class LinearConnector:
 
     connector_name = "linear"
     connector_version = "0.1.19"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -688,7 +688,7 @@ class IssuesQuery:
         # Cast generic envelope to concrete typed result
         return IssuesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -947,7 +947,7 @@ class ProjectsQuery:
         # Cast generic envelope to concrete typed result
         return ProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1195,7 +1195,7 @@ class TeamsQuery:
         # Cast generic envelope to concrete typed result
         return TeamsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1355,7 +1355,7 @@ class WorkflowStatesQuery:
         # Cast generic envelope to concrete typed result
         return WorkflowStatesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1461,7 +1461,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1604,7 +1604,7 @@ class CommentsQuery:
         # Cast generic envelope to concrete typed result
         return CommentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

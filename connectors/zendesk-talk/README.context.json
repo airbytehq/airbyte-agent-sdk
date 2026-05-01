@@ -3,8 +3,8 @@
   "class_name": "ZendeskTalkConnector",
   "package_name": "airbyte_agent_sdk.connectors.zendesk_talk",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.2",
-  "yaml_version": "1.0.2",
+  "package_version": "1.0.3",
+  "yaml_version": "1.0.3",
   "api_reference_url": "https://developer.zendesk.com/api-reference/voice/talk-api/introduction/",
   "commit_sha": "unknown",
   "auth_example": "ZendeskTalkAuthConfig(access_token=\"...\", refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
@@ -535,7 +535,8 @@
             "python_name": "start_time",
             "type": "int",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "default": 0
             },
             "required": true,
             "description": "Unix epoch time to start from (e.g. 1704067200 for 2024-01-01)",
@@ -592,7 +593,8 @@
             "python_name": "start_time",
             "type": "int",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "default": 0
             },
             "required": true,
             "description": "Unix epoch time to start from (e.g. 1704067200 for 2024-01-01)",

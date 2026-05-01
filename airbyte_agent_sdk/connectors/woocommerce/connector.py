@@ -175,7 +175,7 @@ class WoocommerceConnector:
 
     connector_name = "woocommerce"
     connector_version = "1.0.4"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -929,7 +929,7 @@ class CustomersQuery:
         # Cast generic envelope to concrete typed result
         return CustomersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1094,7 +1094,7 @@ class OrdersQuery:
         # Cast generic envelope to concrete typed result
         return OrdersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1306,7 +1306,7 @@ class ProductsQuery:
         # Cast generic envelope to concrete typed result
         return ProductsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1514,7 +1514,7 @@ class CouponsQuery:
         # Cast generic envelope to concrete typed result
         return CouponsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1682,7 +1682,7 @@ class ProductCategoriesQuery:
         # Cast generic envelope to concrete typed result
         return ProductCategoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1829,7 +1829,7 @@ class ProductTagsQuery:
         # Cast generic envelope to concrete typed result
         return ProductTagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1969,7 +1969,7 @@ class ProductReviewsQuery:
         # Cast generic envelope to concrete typed result
         return ProductReviewsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2099,7 +2099,7 @@ class ProductAttributesQuery:
         # Cast generic envelope to concrete typed result
         return ProductAttributesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2255,7 +2255,7 @@ class ProductVariationsQuery:
         # Cast generic envelope to concrete typed result
         return ProductVariationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2417,7 +2417,7 @@ class OrderNotesQuery:
         # Cast generic envelope to concrete typed result
         return OrderNotesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2548,7 +2548,7 @@ class RefundsQuery:
         # Cast generic envelope to concrete typed result
         return RefundsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2671,7 +2671,7 @@ class PaymentGatewaysQuery:
         # Cast generic envelope to concrete typed result
         return PaymentGatewaysListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2791,7 +2791,7 @@ class ShippingMethodsQuery:
         # Cast generic envelope to concrete typed result
         return ShippingMethodsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2905,7 +2905,7 @@ class ShippingZonesQuery:
         # Cast generic envelope to concrete typed result
         return ShippingZonesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3037,7 +3037,7 @@ class TaxRatesQuery:
         # Cast generic envelope to concrete typed result
         return TaxRatesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3162,7 +3162,7 @@ class TaxClassesQuery:
         # Cast generic envelope to concrete typed result
         return TaxClassesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

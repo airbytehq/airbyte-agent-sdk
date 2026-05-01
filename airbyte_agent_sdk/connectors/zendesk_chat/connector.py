@@ -110,7 +110,7 @@ class ZendeskChatConnector:
 
     connector_name = "zendesk-chat"
     connector_version = "0.1.10"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -890,7 +890,7 @@ class AgentTimelineQuery:
         # Cast generic envelope to concrete typed result
         return AgentTimelineListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -999,7 +999,7 @@ class ChatsQuery:
         # Cast generic envelope to concrete typed result
         return ChatsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

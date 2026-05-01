@@ -130,8 +130,8 @@ class ZendeskTalkConnector:
     """
 
     connector_name = "zendesk-talk"
-    connector_version = "1.0.2"
-    sdk_version = "0.1.140"
+    connector_version = "1.0.3"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -710,7 +710,7 @@ class PhoneNumbersQuery:
         # Cast generic envelope to concrete typed result
         return PhoneNumbersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -851,7 +851,7 @@ class AddressesQuery:
         # Cast generic envelope to concrete typed result
         return AddressesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -971,7 +971,7 @@ class GreetingsQuery:
         # Cast generic envelope to concrete typed result
         return GreetingsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1095,7 +1095,7 @@ class GreetingCategoriesQuery:
         # Cast generic envelope to concrete typed result
         return GreetingCategoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1208,7 +1208,7 @@ class IvrsQuery:
         # Cast generic envelope to concrete typed result
         return IvrsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1324,7 +1324,7 @@ class AgentsActivityQuery:
         # Cast generic envelope to concrete typed result
         return AgentsActivityListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1750,7 +1750,7 @@ class CallsQuery:
         # Cast generic envelope to concrete typed result
         return CallsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1883,7 +1883,7 @@ class CallLegsQuery:
         # Cast generic envelope to concrete typed result
         return CallLegsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

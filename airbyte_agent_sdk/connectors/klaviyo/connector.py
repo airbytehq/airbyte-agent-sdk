@@ -100,8 +100,8 @@ class KlaviyoConnector:
     """
 
     connector_name = "klaviyo"
-    connector_version = "1.0.4"
-    sdk_version = "0.1.140"
+    connector_version = "1.0.5"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -130,7 +130,7 @@ class KlaviyoConnector:
         ('campaigns', 'list'): {'filter': 'filter', 'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
         ('campaigns', 'get'): {'id': 'id'},
         ('events', 'list'): {'page_size': 'page[size]', 'page_cursor': 'page[cursor]', 'sort': 'sort'},
-        ('metrics', 'list'): {'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
+        ('metrics', 'list'): {'filter': 'filter', 'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
         ('metrics', 'get'): {'id': 'id'},
         ('flows', 'list'): {'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
         ('flows', 'get'): {'id': 'id'},
@@ -648,7 +648,7 @@ class ProfilesQuery:
         # Cast generic envelope to concrete typed result
         return ProfilesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -775,7 +775,7 @@ class ListsQuery:
         # Cast generic envelope to concrete typed result
         return ListsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -904,7 +904,7 @@ class CampaignsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1033,7 +1033,7 @@ class EventsQuery:
         # Cast generic envelope to concrete typed result
         return EventsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1109,6 +1109,7 @@ class MetricsQuery:
 
     async def list(
         self,
+        filter: str,
         page_size: int | None = None,
         page_cursor: str | None = None,
         **kwargs
@@ -1117,6 +1118,7 @@ class MetricsQuery:
         Returns a paginated list of metrics (event types)
 
         Args:
+            filter: Filter expression (Klaviyo requires a filter on /metrics; date-based filters always match)
             page_size: Number of results per page (max 100)
             page_cursor: Cursor for pagination
             **kwargs: Additional parameters
@@ -1125,6 +1127,7 @@ class MetricsQuery:
             MetricsListResult
         """
         params = {k: v for k, v in {
+            "filter": filter,
             "page[size]": page_size,
             "page[cursor]": page_cursor,
             **kwargs
@@ -1134,7 +1137,7 @@ class MetricsQuery:
         # Cast generic envelope to concrete typed result
         return MetricsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1260,7 +1263,7 @@ class FlowsQuery:
         # Cast generic envelope to concrete typed result
         return FlowsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1386,7 +1389,7 @@ class EmailTemplatesQuery:
         # Cast generic envelope to concrete typed result
         return EmailTemplatesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

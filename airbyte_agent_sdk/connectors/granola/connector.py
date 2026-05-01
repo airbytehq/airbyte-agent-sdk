@@ -54,7 +54,7 @@ class GranolaConnector:
 
     connector_name = "granola"
     connector_version = "1.0.6"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -491,7 +491,7 @@ class NotesQuery:
         # Cast generic envelope to concrete typed result
         return NotesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

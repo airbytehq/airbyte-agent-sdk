@@ -101,7 +101,7 @@ class IntercomConnector:
 
     connector_name = "intercom"
     connector_version = "0.1.10"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -727,7 +727,7 @@ class ContactsQuery:
         # Cast generic envelope to concrete typed result
         return ContactsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1014,7 +1014,7 @@ class ConversationsQuery:
         # Cast generic envelope to concrete typed result
         return ConversationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1167,7 +1167,7 @@ class CompaniesQuery:
         # Cast generic envelope to concrete typed result
         return CompaniesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

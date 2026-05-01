@@ -91,7 +91,7 @@ class TypeformConnector:
 
     connector_name = "typeform"
     connector_version = "1.0.4"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -576,7 +576,7 @@ class FormsQuery:
         # Cast generic envelope to concrete typed result
         return FormsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -731,7 +731,7 @@ class ResponsesQuery:
         # Cast generic envelope to concrete typed result
         return ResponsesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -937,7 +937,7 @@ class WorkspacesQuery:
         # Cast generic envelope to concrete typed result
         return WorkspacesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1132,7 +1132,7 @@ class ThemesQuery:
         # Cast generic envelope to concrete typed result
         return ThemesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

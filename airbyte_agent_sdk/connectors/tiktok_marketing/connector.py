@@ -124,8 +124,8 @@ class TiktokMarketingConnector:
     """
 
     connector_name = "tiktok-marketing"
-    connector_version = "1.1.5"
-    sdk_version = "0.1.140"
+    connector_version = "1.1.6"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -659,7 +659,7 @@ class AdvertisersQuery:
         # Cast generic envelope to concrete typed result
         return AdvertisersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -786,7 +786,7 @@ class CampaignsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -907,7 +907,7 @@ class AdGroupsQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1018,7 +1018,7 @@ class AdsQuery:
         # Cast generic envelope to concrete typed result
         return AdsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1131,7 +1131,7 @@ class AudiencesQuery:
         # Cast generic envelope to concrete typed result
         return AudiencesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1236,7 +1236,7 @@ class CreativeAssetsImagesQuery:
         # Cast generic envelope to concrete typed result
         return CreativeAssetsImagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1343,7 +1343,7 @@ class CreativeAssetsVideosQuery:
         # Cast generic envelope to concrete typed result
         return CreativeAssetsVideosListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1472,7 +1472,7 @@ class AdvertisersReportsDailyQuery:
         # Cast generic envelope to concrete typed result
         return AdvertisersReportsDailyListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1622,7 +1622,7 @@ class CampaignsReportsDailyQuery:
         # Cast generic envelope to concrete typed result
         return CampaignsReportsDailyListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1771,7 +1771,7 @@ class AdGroupsReportsDailyQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupsReportsDailyListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1938,7 +1938,7 @@ class AdsReportsDailyQuery:
         # Cast generic envelope to concrete typed result
         return AdsReportsDailyListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

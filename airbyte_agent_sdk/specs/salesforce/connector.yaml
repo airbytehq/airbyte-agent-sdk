@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Salesforce CRM API Connector
-  version: 1.0.17
+  version: 1.0.18
   description: |
     Salesforce is a cloud-based CRM platform that helps businesses manage customer
     relationships, sales pipelines, and business operations. This connector provides

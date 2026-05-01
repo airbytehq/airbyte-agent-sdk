@@ -147,8 +147,8 @@ class PinterestConnector:
     """
 
     connector_name = "pinterest"
-    connector_version = "0.1.4"
-    sdk_version = "0.1.140"
+    connector_version = "0.1.5"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -735,7 +735,7 @@ class AdAccountsQuery:
         # Cast generic envelope to concrete typed result
         return AdAccountsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -866,7 +866,7 @@ class BoardsQuery:
         # Cast generic envelope to concrete typed result
         return BoardsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1006,7 +1006,7 @@ class CampaignsQuery:
         # Cast generic envelope to concrete typed result
         return CampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1127,7 +1127,7 @@ class AdGroupsQuery:
         # Cast generic envelope to concrete typed result
         return AdGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1256,7 +1256,7 @@ class AdsQuery:
         # Cast generic envelope to concrete typed result
         return AdsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1382,7 +1382,7 @@ class BoardSectionsQuery:
         # Cast generic envelope to concrete typed result
         return BoardSectionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1482,7 +1482,7 @@ class BoardPinsQuery:
         # Cast generic envelope to concrete typed result
         return BoardPinsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1594,7 +1594,7 @@ class CatalogsQuery:
         # Cast generic envelope to concrete typed result
         return CatalogsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1694,7 +1694,7 @@ class CatalogsFeedsQuery:
         # Cast generic envelope to concrete typed result
         return CatalogsFeedsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1802,7 +1802,7 @@ class CatalogsProductGroupsQuery:
         # Cast generic envelope to concrete typed result
         return CatalogsProductGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1909,7 +1909,7 @@ class AudiencesQuery:
         # Cast generic envelope to concrete typed result
         return AudiencesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2018,7 +2018,7 @@ class ConversionTagsQuery:
         # Cast generic envelope to concrete typed result
         return ConversionTagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2125,7 +2125,7 @@ class CustomerListsQuery:
         # Cast generic envelope to concrete typed result
         return CustomerListsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2236,7 +2236,7 @@ class KeywordsQuery:
         # Cast generic envelope to concrete typed result
         return KeywordsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

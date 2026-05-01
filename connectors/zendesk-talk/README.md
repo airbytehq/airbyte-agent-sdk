@@ -363,6 +363,6 @@ See the official [Zendesk-Talk API reference](https://developer.zendesk.com/api-
 
 ## Version information
 
-- **Package version:** 1.0.2
-- **Connector version:** 1.0.2
+- **Package version:** 1.0.3
+- **Connector version:** 1.0.3
 - **Generated with Connector SDK commit SHA:** unknown

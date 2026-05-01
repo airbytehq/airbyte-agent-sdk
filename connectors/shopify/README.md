@@ -383,6 +383,6 @@ See the official [Shopify API reference](https://shopify.dev/docs/api/admin-rest
 
 ## Version information
 
-- **Package version:** 0.1.12
-- **Connector version:** 0.1.12
+- **Package version:** 0.1.13
+- **Connector version:** 0.1.13
 - **Generated with Connector SDK commit SHA:** unknown

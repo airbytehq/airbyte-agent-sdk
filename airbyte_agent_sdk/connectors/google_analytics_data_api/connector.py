@@ -121,7 +121,7 @@ class GoogleAnalyticsDataApiConnector:
 
     connector_name = "google-analytics-data-api"
     connector_version = "1.0.5"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -634,7 +634,7 @@ class WebsiteOverviewQuery:
         # Cast generic envelope to concrete typed result
         return WebsiteOverviewListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -756,7 +756,7 @@ class DailyActiveUsersQuery:
         # Cast generic envelope to concrete typed result
         return DailyActiveUsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -871,7 +871,7 @@ class WeeklyActiveUsersQuery:
         # Cast generic envelope to concrete typed result
         return WeeklyActiveUsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -986,7 +986,7 @@ class FourWeeklyActiveUsersQuery:
         # Cast generic envelope to concrete typed result
         return FourWeeklyActiveUsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1101,7 +1101,7 @@ class TrafficSourcesQuery:
         # Cast generic envelope to concrete typed result
         return TrafficSourcesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1225,7 +1225,7 @@ class PagesQuery:
         # Cast generic envelope to concrete typed result
         return PagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1343,7 +1343,7 @@ class DevicesQuery:
         # Cast generic envelope to concrete typed result
         return DevicesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1468,7 +1468,7 @@ class LocationsQuery:
         # Cast generic envelope to concrete typed result
         return LocationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

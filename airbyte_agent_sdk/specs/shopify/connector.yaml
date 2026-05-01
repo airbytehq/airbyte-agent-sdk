@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Shopify API Connector
-  version: 0.1.12
+  version: 0.1.13
   description: |
     Shopify is an e-commerce platform that enables businesses to create online stores,
     manage products, process orders, and handle customer relationships. This connector
@@ -1613,6 +1613,7 @@ paths:
         description: Comma-separated list of inventory item IDs
         schema:
           type: string
+          default: ""
       - name: limit
         in: query
         description: Maximum number of results to return (max 250)

@@ -177,7 +177,7 @@ class AsanaConnector:
 
     connector_name = "asana"
     connector_version = "0.1.20"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1111,7 +1111,7 @@ class TasksQuery:
         # Cast generic envelope to concrete typed result
         return TasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1360,7 +1360,7 @@ class ProjectTasksQuery:
         # Cast generic envelope to concrete typed result
         return ProjectTasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1455,7 +1455,7 @@ IMPORTANT: At least one search filter parameter must be provided. Valid filter p
         # Cast generic envelope to concrete typed result
         return WorkspaceTaskSearchListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1505,7 +1505,7 @@ class ProjectsQuery:
         # Cast generic envelope to concrete typed result
         return ProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1737,7 +1737,7 @@ class TaskProjectsQuery:
         # Cast generic envelope to concrete typed result
         return TaskProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1784,7 +1784,7 @@ class TeamProjectsQuery:
         # Cast generic envelope to concrete typed result
         return TeamProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1831,7 +1831,7 @@ class WorkspaceProjectsQuery:
         # Cast generic envelope to concrete typed result
         return WorkspaceProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1872,7 +1872,7 @@ class WorkspacesQuery:
         # Cast generic envelope to concrete typed result
         return WorkspacesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2003,7 +2003,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2132,7 +2132,7 @@ class WorkspaceUsersQuery:
         # Cast generic envelope to concrete typed result
         return WorkspaceUsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2176,7 +2176,7 @@ class TeamUsersQuery:
         # Cast generic envelope to concrete typed result
         return TeamUsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2315,7 +2315,7 @@ class WorkspaceTeamsQuery:
         # Cast generic envelope to concrete typed result
         return WorkspaceTeamsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2362,7 +2362,7 @@ class UserTeamsQuery:
         # Cast generic envelope to concrete typed result
         return UserTeamsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2406,7 +2406,7 @@ class AttachmentsQuery:
         # Cast generic envelope to concrete typed result
         return AttachmentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2603,7 +2603,7 @@ class WorkspaceTagsQuery:
         # Cast generic envelope to concrete typed result
         return WorkspaceTagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2833,7 +2833,7 @@ Tasks can have more than one tag at a time.
         # Cast generic envelope to concrete typed result
         return TagTasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2877,7 +2877,7 @@ class ProjectSectionsQuery:
         # Cast generic envelope to concrete typed result
         return ProjectSectionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3105,7 +3105,7 @@ class SectionTasksQuery:
         # Cast generic envelope to concrete typed result
         return SectionTasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3180,7 +3180,7 @@ class TaskSubtasksQuery:
         # Cast generic envelope to concrete typed result
         return TaskSubtasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3224,7 +3224,7 @@ class TaskDependenciesQuery:
         # Cast generic envelope to concrete typed result
         return TaskDependenciesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3268,7 +3268,7 @@ class TaskDependentsQuery:
         # Cast generic envelope to concrete typed result
         return TaskDependentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

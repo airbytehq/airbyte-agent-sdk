@@ -223,8 +223,8 @@ class GithubConnector:
     """
 
     connector_name = "github"
-    connector_version = "0.1.18"
-    sdk_version = "0.1.140"
+    connector_version = "0.1.19"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1198,7 +1198,7 @@ If not provided, uses default fields.
         # Cast generic envelope to concrete typed result
         return RepositoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1240,7 +1240,7 @@ If not provided, uses default fields.
         # Cast generic envelope to concrete typed result
         return RepositoriesApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1354,7 +1354,7 @@ class OrgRepositoriesQuery:
         # Cast generic envelope to concrete typed result
         return OrgRepositoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1458,7 +1458,7 @@ class BranchesQuery:
         # Cast generic envelope to concrete typed result
         return BranchesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1601,7 +1601,7 @@ class CommitsQuery:
         # Cast generic envelope to concrete typed result
         return CommitsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1749,7 +1749,7 @@ class ReleasesQuery:
         # Cast generic envelope to concrete typed result
         return ReleasesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1900,7 +1900,7 @@ class IssuesQuery:
         # Cast generic envelope to concrete typed result
         return IssuesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1972,7 +1972,7 @@ class IssuesQuery:
         # Cast generic envelope to concrete typed result
         return IssuesApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2228,7 +2228,7 @@ Any user with read access can create a comment.
         # Cast generic envelope to concrete typed result
         return CommentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2423,7 +2423,7 @@ To open or update a pull request in a public repository, you must have write acc
         # Cast generic envelope to concrete typed result
         return PullRequestsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2495,7 +2495,7 @@ To open or update a pull request in a public repository, you must have write acc
         # Cast generic envelope to concrete typed result
         return PullRequestsApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2616,7 +2616,7 @@ class ReviewsQuery:
         # Cast generic envelope to concrete typed result
         return ReviewsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2731,7 +2731,7 @@ class PrCommentsQuery:
         # Cast generic envelope to concrete typed result
         return PrCommentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2868,7 +2868,7 @@ class LabelsQuery:
         # Cast generic envelope to concrete typed result
         return LabelsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3015,7 +3015,7 @@ class MilestonesQuery:
         # Cast generic envelope to concrete typed result
         return MilestonesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3188,7 +3188,7 @@ class OrganizationsQuery:
         # Cast generic envelope to concrete typed result
         return OrganizationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3326,7 +3326,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3364,7 +3364,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3476,7 +3476,7 @@ class TeamsQuery:
         # Cast generic envelope to concrete typed result
         return TeamsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3620,7 +3620,7 @@ class TagsQuery:
         # Cast generic envelope to concrete typed result
         return TagsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3760,7 +3760,7 @@ class StargazersQuery:
         # Cast generic envelope to concrete typed result
         return StargazersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3953,7 +3953,7 @@ automatically lists repositories for the current authenticated user.
         # Cast generic envelope to concrete typed result
         return ViewerRepositoriesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -4056,7 +4056,7 @@ Projects V2 are the new project boards that replaced classic projects.
         # Cast generic envelope to concrete typed result
         return ProjectsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -4202,7 +4202,7 @@ Each item includes its field values like Status, Priority, etc.
         # Cast generic envelope to concrete typed result
         return ProjectItemsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -4312,7 +4312,7 @@ class DiscussionsQuery:
         # Cast generic envelope to concrete typed result
         return DiscussionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -4384,7 +4384,7 @@ class DiscussionsQuery:
         # Cast generic envelope to concrete typed result
         return DiscussionsApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

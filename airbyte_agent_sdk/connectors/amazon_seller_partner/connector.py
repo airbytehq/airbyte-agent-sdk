@@ -85,7 +85,7 @@ class AmazonSellerPartnerConnector:
 
     connector_name = "amazon-seller-partner"
     connector_version = "1.0.5"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -620,7 +620,7 @@ class OrdersQuery:
         # Cast generic envelope to concrete typed result
         return OrdersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -774,7 +774,7 @@ class OrderItemsQuery:
         # Cast generic envelope to concrete typed result
         return OrderItemsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -912,7 +912,7 @@ class ListFinancialEventGroupsQuery:
         # Cast generic envelope to concrete typed result
         return ListFinancialEventGroupsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1024,7 +1024,7 @@ class ListFinancialEventsQuery:
         # Cast generic envelope to concrete typed result
         return ListFinancialEventsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1169,7 +1169,7 @@ class CatalogItemsQuery:
         # Cast generic envelope to concrete typed result
         return CatalogItemsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1256,7 +1256,7 @@ class ReportsQuery:
         # Cast generic envelope to concrete typed result
         return ReportsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

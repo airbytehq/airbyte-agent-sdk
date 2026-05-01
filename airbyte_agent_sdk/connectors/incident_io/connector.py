@@ -141,7 +141,7 @@ class IncidentIoConnector:
 
     connector_name = "incident-io"
     connector_version = "1.0.4"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -787,7 +787,7 @@ class IncidentsQuery:
         # Cast generic envelope to concrete typed result
         return IncidentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -932,7 +932,7 @@ class AlertsQuery:
         # Cast generic envelope to concrete typed result
         return AlertsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1063,7 +1063,7 @@ class EscalationsQuery:
         # Cast generic envelope to concrete typed result
         return EscalationsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1194,7 +1194,7 @@ class UsersQuery:
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1321,7 +1321,7 @@ class IncidentUpdatesQuery:
         # Cast generic envelope to concrete typed result
         return IncidentUpdatesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2131,7 +2131,7 @@ class SchedulesQuery:
         # Cast generic envelope to concrete typed result
         return SchedulesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

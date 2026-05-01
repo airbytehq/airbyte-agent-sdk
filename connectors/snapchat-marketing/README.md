@@ -362,6 +362,6 @@ See the official [Snapchat-Marketing API reference](https://developers.snap.com/
 
 ## Version information
 
-- **Package version:** 1.0.4
-- **Connector version:** 1.0.4
+- **Package version:** 1.0.5
+- **Connector version:** 1.0.5
 - **Generated with Connector SDK commit SHA:** unknown

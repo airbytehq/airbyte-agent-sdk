@@ -156,8 +156,8 @@ class SalesforceConnector:
     """
 
     connector_name = "salesforce"
-    connector_version = "1.0.17"
-    sdk_version = "0.1.140"
+    connector_version = "1.0.18"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1040,7 +1040,7 @@ fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return AccountsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1242,7 +1242,7 @@ relationship fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return ContactsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1438,7 +1438,7 @@ ConvertedOpportunity.Name) to resolve relationship fields inline instead of retu
         # Cast generic envelope to concrete typed result
         return LeadsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1642,7 +1642,7 @@ relationship fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return OpportunitiesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1839,7 +1839,7 @@ polymorphic WhoId/WhatId references to the related record's name.
         # Cast generic envelope to concrete typed result
         return TasksListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2034,7 +2034,7 @@ polymorphic WhoId/WhatId references to the related record's name.
         # Cast generic envelope to concrete typed result
         return EventsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2150,7 +2150,7 @@ instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return CampaignsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2266,7 +2266,7 @@ relationship fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return CasesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2382,7 +2382,7 @@ instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return NotesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2492,7 +2492,7 @@ Example: "SELECT Id, Title, FileExtension, ContentSize FROM ContentVersion WHERE
         # Cast generic envelope to concrete typed result
         return ContentVersionsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2638,7 +2638,7 @@ Example: "SELECT Id, Name, ContentType, BodyLength, ParentId FROM Attachment WHE
         # Cast generic envelope to concrete typed result
         return AttachmentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -2861,7 +2861,7 @@ relationship fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return UsersListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3028,7 +3028,7 @@ relationship fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return OpportunityStagesListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -3179,7 +3179,7 @@ fields inline instead of returning raw IDs.
         # Cast generic envelope to concrete typed result
         return QueryListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

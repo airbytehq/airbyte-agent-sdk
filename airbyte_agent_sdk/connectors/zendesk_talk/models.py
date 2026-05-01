@@ -565,7 +565,7 @@ class ZendeskTalkExecuteResultWithMeta(ZendeskTalkExecuteResult[T], Generic[T, S
 
     Used for actions that return both data and metadata (e.g., pagination info).
     """
-    meta: S
+    meta: S | None = None
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
 # ===== SEARCH DATA MODELS =====

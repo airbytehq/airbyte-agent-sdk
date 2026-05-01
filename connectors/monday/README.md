@@ -354,6 +354,6 @@ See the official [Monday API reference](https://developer.monday.com/api-referen
 
 ## Version information
 
-- **Package version:** 1.0.3
-- **Connector version:** 1.0.3
+- **Package version:** 1.0.4
+- **Connector version:** 1.0.4
 - **Generated with Connector SDK commit SHA:** unknown

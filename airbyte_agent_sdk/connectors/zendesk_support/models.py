@@ -503,6 +503,13 @@ class JobStatus(BaseModel):
     status: str | None = Field(default=None)
     message: str | None = Field(default=None)
 
+class TicketCreateParamsTicketCustomFieldsItem(BaseModel):
+    """Nested schema for TicketCreateParamsTicket.custom_fields_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None = Field(default=None)
+    value: str | None = Field(default=None)
+
 class TicketCreateParamsTicketComment(BaseModel):
     """An object that defines the initial comment on the ticket"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -513,13 +520,6 @@ class TicketCreateParamsTicketComment(BaseModel):
     """The HTML body of the comment"""
     public: bool | None = Field(default=None, description="Whether the comment is public (default true)")
     """Whether the comment is public (default true)"""
-
-class TicketCreateParamsTicketCustomFieldsItem(BaseModel):
-    """Nested schema for TicketCreateParamsTicket.custom_fields_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None = Field(default=None)
-    value: str | None = Field(default=None)
 
 class TicketCreateParamsTicket(BaseModel):
     """The ticket object to create"""
@@ -959,7 +959,7 @@ class ZendeskSupportExecuteResultWithMeta(ZendeskSupportExecuteResult[T], Generi
 
     Used for actions that return both data and metadata (e.g., pagination info).
     """
-    meta: S
+    meta: S | None = None
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
 # ===== SEARCH DATA MODELS =====

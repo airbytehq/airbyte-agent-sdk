@@ -3,8 +3,8 @@
   "class_name": "GoogleAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.google_ads",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.8",
-  "yaml_version": "1.0.8",
+  "package_version": "1.0.9",
+  "yaml_version": "1.0.9",
   "api_reference_url": "https://developers.google.com/google-ads/api/rest/reference/rest",
   "commit_sha": "unknown",
   "auth_example": "GoogleAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\", developer_token=\"...\")",
@@ -101,7 +101,7 @@
     "record_extractor": "$.resourceNames",
     "meta_extractor": null,
     "needs_envelope": true,
-    "record_type": "list[AccessibleCustomer]",
+    "record_type": "list[dict[str, Any]]",
     "meta_fields": null,
     "is_download": false
   },
@@ -120,7 +120,7 @@
         "record_extractor": "$.resourceNames",
         "meta_extractor": null,
         "needs_envelope": true,
-        "record_type": "list[AccessibleCustomer]",
+        "record_type": "list[dict[str, Any]]",
         "meta_fields": null,
         "is_download": false
       }

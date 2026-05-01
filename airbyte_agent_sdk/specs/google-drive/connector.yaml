@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Google Drive API Connector
-  version: 0.2.4
+  version: 0.2.5
   description: |
     Google Drive is a cloud-based file storage and synchronization service that allows users
     to store files, share content, and collaborate on documents. This connector provides
@@ -1006,7 +1006,7 @@ paths:
       parameters:
         - name: pageToken
           in: query
-          required: true
+          required: false
           description: Token for the page of changes to retrieve (from changes.getStartPageToken or previous response)
           schema:
             type: string

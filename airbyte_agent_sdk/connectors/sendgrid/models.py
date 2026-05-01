@@ -152,14 +152,6 @@ class CampaignsList(BaseModel):
     result: list[Campaign] | None = Field(default=None)
     metadata: CampaignsListMetadata | None = Field(default=None, alias="_metadata")
 
-class SingleSendSendTo(BaseModel):
-    """Recipients configuration"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    list_ids: list[str] | None | None = Field(default=None)
-    segment_ids: list[str] | None | None = Field(default=None)
-    all: bool | None = Field(default=None)
-
 class SingleSendEmailConfig(BaseModel):
     """Email configuration details"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -174,6 +166,14 @@ class SingleSendEmailConfig(BaseModel):
     custom_unsubscribe_url: str | None | None = Field(default=None)
     sender_id: int | None | None = Field(default=None)
     ip_pool: str | None | None = Field(default=None)
+
+class SingleSendSendTo(BaseModel):
+    """Recipients configuration"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    list_ids: list[str] | None | None = Field(default=None)
+    segment_ids: list[str] | None | None = Field(default=None)
+    all: bool | None = Field(default=None)
 
 class SingleSend(BaseModel):
     """A SendGrid single send"""
@@ -444,7 +444,7 @@ class SendgridExecuteResultWithMeta(SendgridExecuteResult[T], Generic[T, S]):
 
     Used for actions that return both data and metadata (e.g., pagination info).
     """
-    meta: S
+    meta: S | None = None
     """Metadata about the response (e.g., pagination cursors, record counts)."""
 
 # ===== SEARCH DATA MODELS =====

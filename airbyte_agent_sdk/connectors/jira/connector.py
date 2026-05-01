@@ -127,7 +127,7 @@ class JiraConnector:
 
     connector_name = "jira"
     connector_version = "1.1.9"
-    sdk_version = "0.1.140"
+    sdk_version = "0.1.141"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -813,7 +813,7 @@ IMPORTANT: This endpoint requires a bounded JQL query. A bounded query must incl
         # Cast generic envelope to concrete typed result
         return IssuesApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1105,7 +1105,7 @@ class ProjectsQuery:
         # Cast generic envelope to concrete typed result
         return ProjectsApiSearchResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1592,7 +1592,7 @@ class IssueCommentsQuery:
         # Cast generic envelope to concrete typed result
         return IssueCommentsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 
@@ -1872,7 +1872,7 @@ class IssueWorklogsQuery:
         # Cast generic envelope to concrete typed result
         return IssueWorklogsListResult(
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
         )
 
 

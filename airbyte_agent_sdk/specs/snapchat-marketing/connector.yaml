@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Snapchat Marketing API Connector
-  version: 1.0.4
+  version: 1.0.5
   description: >
     Connector for the Snapchat Marketing API (Ads API). Provides access to
     Snapchat advertising entities including organizations, ad accounts,

@@ -30,7 +30,7 @@ from uuid import (
 ZendeskTalkConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('c8630570-086d-4a40-99ae-ea5b18673071'),
     name='zendesk-talk',
-    version='1.0.2',
+    version='1.0.3',
     base_url='https://{subdomain}.zendesk.com/api/v2/channels/voice',
     auth=AuthConfig(
         options=[
@@ -2458,7 +2458,11 @@ ZendeskTalkConnectorModel: ConnectorModel = ConnectorModel(
                     description='Returns incremental call data. Requires a start_time parameter (Unix epoch timestamp).',
                     query_params=['start_time'],
                     query_params_schema={
-                        'start_time': {'type': 'integer', 'required': True},
+                        'start_time': {
+                            'type': 'integer',
+                            'required': True,
+                            'default': 0,
+                        },
                     },
                     response_schema={
                         'type': 'object',
@@ -2919,7 +2923,11 @@ ZendeskTalkConnectorModel: ConnectorModel = ConnectorModel(
                     description='Returns incremental call leg data. Requires a start_time parameter (Unix epoch timestamp).',
                     query_params=['start_time'],
                     query_params_schema={
-                        'start_time': {'type': 'integer', 'required': True},
+                        'start_time': {
+                            'type': 'integer',
+                            'required': True,
+                            'default': 0,
+                        },
                     },
                     response_schema={
                         'type': 'object',

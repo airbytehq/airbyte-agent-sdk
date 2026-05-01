@@ -605,7 +605,7 @@ class {{ entity_class_name }}Query:
         return {{ op.entity | pascal_case }}{{ op.action | pascal_case }}Result(
 {% if op.meta_fields %}
             data=result.data,
-            meta=result.meta
+            meta=getattr(result, "meta", None)
 {% else %}
             data=result.data
 {% endif %}
