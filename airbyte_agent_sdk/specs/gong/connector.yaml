@@ -36,6 +36,9 @@ info:
       - "Schedule a new meeting"
       - "Send feedback to a team member"
       - "Modify tracker keywords"
+  x-airbyte-auth-tooltip:
+    "OAuth2.0": |
+      **Tech admin** role is required. An "Insufficient permissions" error on the Gong consent screen may surface when this permission is missing. See [Gong's documentation](https://help.gong.io/docs/create-an-app-for-gong#set-up-oauth-access) for details.
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Gong API Documentation
