@@ -75,10 +75,19 @@ info:
         description: "List of GitHub organizations/repositories, e.g. `airbytehq/airbyte` for single repository, `airbytehq/*` for all repositories from organization"
         items:
           type: string
+      start_date:
+        type: string
+        title: Start Date
+        description: UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data.
+        format: date-time
     required:
       - repositories
+      - start_date
     replication_config_key_mapping:
       repositories: repositories
+      start_date: start_date
+    replication_config_constants:
+      start_date: "{{ day_delta(-90, '%Y-%m-%dT%H:%M:%SZ') }}"
   x-airbyte-scoping:
     - param: owner
       config_key: repositories
