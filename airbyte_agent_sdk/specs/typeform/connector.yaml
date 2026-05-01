@@ -65,6 +65,7 @@ info:
     disable_compaction: true
     entities:
     - entity: forms
+      x-airbyte-name: forms
       suggested: true
       fields:
       - name: _links
@@ -208,6 +209,7 @@ info:
           href:
             type: ["null", "string"]
     - entity: responses
+      x-airbyte-name: responses
       suggested: true
       fields:
       - name: answers
@@ -259,6 +261,7 @@ info:
         type: ["null", "array"]
         description: Variables associated with the response
     - entity: webhooks
+      x-airbyte-name: webhooks
       fields:
       - name: created_at
         type: ["null", "string"]
@@ -285,6 +288,7 @@ info:
         type: ["null", "boolean"]
         description: Whether SSL verification is enforced
     - entity: workspaces
+      x-airbyte-name: workspaces
       fields:
       - name: account_id
         type: ["null", "string"]
@@ -316,6 +320,7 @@ info:
         type: ["null", "boolean"]
         description: Whether this workspace is shared
     - entity: images
+      x-airbyte-name: images
       fields:
       - name: avg_color
         type: ["null", "string"]
@@ -342,6 +347,7 @@ info:
         type: ["null", "integer"]
         description: Width of the image in pixels
     - entity: themes
+      x-airbyte-name: themes
       fields:
       - name: background
         type: ["null", "object"]

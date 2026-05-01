@@ -74,6 +74,7 @@ info:
     disable_compaction: true
     entities:
       - entity: companies
+        x-airbyte-name: companies
         suggested: true
         fields:
           - name: app_id
@@ -198,6 +199,7 @@ info:
               - "string"
             description: "The website of the company"
       - entity: contacts
+        x-airbyte-name: contacts
         suggested: true
         fields:
           - name: android_app_name
@@ -611,6 +613,7 @@ info:
               - "string"
             description: "The unique identifier of the workspace associated with the contact."
       - entity: conversation_parts
+        x-airbyte-name: conversation_parts
         fields:
           - name: assigned_to
             type:
@@ -711,6 +714,7 @@ info:
               - "integer"
             description: "The date and time when the conversation part was last updated."
       - entity: conversations
+        x-airbyte-name: conversations
         suggested: true
         fields:
           - name: admin_assignee_id
@@ -1188,6 +1192,7 @@ info:
               - "integer"
             description: "Timestamp since waiting for a response"
       - entity: teams
+        x-airbyte-name: teams
         suggested: true
         fields:
           - name: admin_ids

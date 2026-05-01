@@ -56,6 +56,7 @@ info:
     disable_compaction: true
     entities:
     - entity: events
+      x-airbyte-name: events
       suggested: true
       fields:
       - name: _meta
@@ -167,6 +168,7 @@ info:
           ip_address:
             type: ["null", "string"]
     - entity: issues
+      x-airbyte-name: issues
       suggested: true
       fields:
       - name: annotations
@@ -270,6 +272,7 @@ info:
         type: ["integer", "null"]
         description: Number of users affected.
     - entity: projects
+      x-airbyte-name: projects
       suggested: true
       fields:
       - name: access
@@ -365,6 +368,7 @@ info:
         type: ["string", "null"]
         description: Project status.
     - entity: releases
+      x-airbyte-name: releases
       suggested: true
       fields:
       - name: authors

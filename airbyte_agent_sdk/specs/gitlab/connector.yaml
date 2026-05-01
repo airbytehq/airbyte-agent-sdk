@@ -93,6 +93,7 @@ info:
     disable_compaction: true
     entities:
     - entity: projects
+      x-airbyte-name: projects
       suggested: true
       fields:
       - name: id
@@ -491,6 +492,7 @@ info:
         - boolean
         description: Whether the latest artifact is kept
     - entity: issues
+      x-airbyte-name: issues
       suggested: true
       fields:
       - name: id
@@ -679,6 +681,7 @@ info:
         - string
         description: Severity level of the issue
     - entity: merge_requests
+      x-airbyte-name: merge_requests
       suggested: true
       fields:
       - name: id
@@ -932,6 +935,7 @@ info:
         - object
         description: User who performed the merge
     - entity: users
+      x-airbyte-name: users
       suggested: true
       fields:
       - name: id
@@ -970,6 +974,7 @@ info:
         - boolean
         description: Whether the user account is locked
     - entity: commits
+      x-airbyte-name: commits
       suggested: true
       fields:
       - name: project_id
@@ -1053,6 +1058,7 @@ info:
         - object
         description: Commit statistics
     - entity: groups
+      x-airbyte-name: groups
       fields:
       - name: id
         type:
@@ -1180,6 +1186,7 @@ info:
         - array
         description: Projects in the group
     - entity: branches
+      x-airbyte-name: branches
       fields:
       - name: project_id
         type:
@@ -1237,6 +1244,7 @@ info:
         - object
         description: Head commit details
     - entity: pipelines
+      x-airbyte-name: pipelines
       fields:
       - name: id
         type:
@@ -1294,6 +1302,7 @@ info:
         - string
         description: Name of the pipeline
     - entity: group_members
+      x-airbyte-name: group_members
       fields:
       - name: group_id
         type:
@@ -1361,6 +1370,7 @@ info:
         - boolean
         description: Whether the member account is locked
     - entity: project_members
+      x-airbyte-name: project_members
       fields:
       - name: project_id
         type:
@@ -1428,6 +1438,7 @@ info:
         - boolean
         description: Whether the member account is locked
     - entity: releases
+      x-airbyte-name: releases
       fields:
       - name: name
         type:
@@ -1515,6 +1526,7 @@ info:
         - integer
         description: ID of the project
     - entity: tags
+      x-airbyte-name: tags
       fields:
       - name: name
         type:
@@ -1557,6 +1569,7 @@ info:
         - integer
         description: ID of the project
     - entity: group_milestones
+      x-airbyte-name: group_milestones
       fields:
       - name: id
         type:
@@ -1619,6 +1632,7 @@ info:
         - string
         description: Web URL of the milestone
     - entity: project_milestones
+      x-airbyte-name: project_milestones
       fields:
       - name: id
         type:

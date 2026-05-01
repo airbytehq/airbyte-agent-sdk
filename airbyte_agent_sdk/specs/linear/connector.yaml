@@ -91,6 +91,7 @@ info:
     disable_compaction: true
     entities:
       - entity: attachments
+        x-airbyte-name: attachments
         fields:
           - name: createdAt
             type:
@@ -153,6 +154,7 @@ info:
               - 'null'
             description: ''
       - entity: comments
+        x-airbyte-name: comments
         suggested: true
         fields:
           - name: body
@@ -231,6 +233,7 @@ info:
               - 'null'
             description: ''
       - entity: customer_needs
+        x-airbyte-name: customer_needs
         fields:
           - name: attachment
             type:
@@ -303,6 +306,7 @@ info:
               - 'null'
             description: ''
       - entity: customer_statuses
+        x-airbyte-name: customer_statuses
         fields:
           - name: color
             type:
@@ -335,6 +339,7 @@ info:
               - 'null'
             description: ''
       - entity: customer_tiers
+        x-airbyte-name: customer_tiers
         fields:
           - name: color
             type:
@@ -372,6 +377,7 @@ info:
               - 'null'
             description: ''
       - entity: customers
+        x-airbyte-name: customers
         fields:
           - name: approximateNeedCount
             type:
@@ -444,6 +450,7 @@ info:
               - 'null'
             description: ''
       - entity: cycles
+        x-airbyte-name: cycles
         fields:
           - name: completedAt
             type:
@@ -546,6 +553,7 @@ info:
               - 'null'
             description: ''
       - entity: issue_labels
+        x-airbyte-name: issue_labels
         fields:
           - name: color
             type:
@@ -618,6 +626,7 @@ info:
               - 'null'
             description: ''
       - entity: issue_relations
+        x-airbyte-name: issue_relations
         fields:
           - name: createdAt
             type:
@@ -660,6 +669,7 @@ info:
               - 'null'
             description: ''
       - entity: issues
+        x-airbyte-name: issues
         suggested: true
         fields:
           - name: addedToCycleAt
@@ -928,6 +938,7 @@ info:
               - 'null'
             description: ''
       - entity: project_milestones
+        x-airbyte-name: project_milestones
         fields:
           - name: createdAt
             type:
@@ -990,6 +1001,7 @@ info:
               - 'null'
             description: ''
       - entity: project_statuses
+        x-airbyte-name: project_statuses
         fields:
           - name: color
             type:
@@ -1032,6 +1044,7 @@ info:
               - 'null'
             description: ''
       - entity: projects
+        x-airbyte-name: projects
         suggested: true
         fields:
           - name: canceledAt
@@ -1235,6 +1248,7 @@ info:
               - 'null'
             description: ''
       - entity: teams
+        x-airbyte-name: teams
         suggested: true
         fields:
           - name: activeCycle
@@ -1438,6 +1452,7 @@ info:
               - 'null'
             description: ''
       - entity: users
+        x-airbyte-name: users
         suggested: true
         fields:
           - name: active
@@ -1541,6 +1556,7 @@ info:
               - 'null'
             description: ''
       - entity: workflow_states
+        x-airbyte-name: workflow_states
         fields:
           - name: color
             type:

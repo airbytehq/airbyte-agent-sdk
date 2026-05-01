@@ -1405,6 +1405,36 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
         )
     total_errors += len(cache_presence_errors)
 
+    # Require x-airbyte-name on every context-store entity.
+    # Entities annotated with x-airbyte-skip-searchable-fields have no
+    # replication stream, so x-airbyte-name must be explicitly set to null.
+    cache_name_errors: list[str] = []
+    if cache_config is not None:
+        for entity_def in cache_config.get("entities") or []:
+            entity_name = entity_def.get("entity", "")
+            if not entity_name:
+                continue
+            has_skip = "x-airbyte-skip-searchable-fields" in entity_def
+            has_name_key = "x-airbyte-name" in entity_def
+            name_value = entity_def.get("x-airbyte-name")
+            if not has_name_key:
+                cache_name_errors.append(
+                    f"Entity '{entity_name}' in x-airbyte-context-store is missing x-airbyte-name. "
+                    f"Add x-airbyte-name with the replication connector's stream name, "
+                    f"or set it to null if the entity is annotated with x-airbyte-skip-searchable-fields."
+                )
+            elif has_skip and name_value is not None:
+                cache_name_errors.append(
+                    f"Entity '{entity_name}' has x-airbyte-skip-searchable-fields but x-airbyte-name "
+                    f"is not null. Set x-airbyte-name to null for entities without a replication stream."
+                )
+            elif not has_skip and name_value is None:
+                cache_name_errors.append(
+                    f"Entity '{entity_name}' has x-airbyte-name set to null but is not annotated with "
+                    f"x-airbyte-skip-searchable-fields. Provide a valid stream name or add the skip annotation."
+                )
+    total_errors += len(cache_name_errors)
+
     # Validate x-airbyte-context-store entities against manifest (skip if opted out)
     if not skip_context_store:
         cache_result = validate_cache_against_manifest(
@@ -1455,6 +1485,7 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
         and total_operations > 0
         and len(replication_errors) == 0
         and len(cache_presence_errors) == 0
+        and len(cache_name_errors) == 0
         and len(cache_errors) == 0
         and len(cache_field_errors) == 0
         and auth_valid
@@ -1484,6 +1515,7 @@ def validate_connector_readiness(connector_dir: str | Path) -> Dict[str, Any]:
     # Add cache presence errors to readiness_errors
     readiness_errors = list(relationship_coverage_errors)  # copy to avoid mutating original
     readiness_errors.extend(cache_presence_errors)
+    readiness_errors.extend(cache_name_errors)
     readiness_errors.extend(list_pagination_errors)
     readiness_errors.extend(cache_field_errors)
 

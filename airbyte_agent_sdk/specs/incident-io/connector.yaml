@@ -49,6 +49,7 @@ info:
     disable_compaction: true
     entities:
       - entity: incidents
+        x-airbyte-name: incidents
         suggested: true
         fields:
           - name: created_at
@@ -186,6 +187,7 @@ info:
             type: ["null", "number"]
             description: Minutes of workload classified as working
       - entity: alerts
+        x-airbyte-name: alerts
         suggested: true
         fields:
           - name: alert_source_id
@@ -222,6 +224,7 @@ info:
             type: ["null", "string"]
             description: When the alert was last updated
       - entity: users
+        x-airbyte-name: users
         suggested: true
         fields:
           - name: base_role
@@ -255,6 +258,7 @@ info:
             type: ["null", "string"]
             description: Slack user ID
       - entity: incident_updates
+        x-airbyte-name: incident_updates
         suggested: true
         fields:
           - name: created_at
@@ -321,6 +325,7 @@ info:
                   slack_user_id:
                     type: ["null", "string"]
       - entity: incident_roles
+        x-airbyte-name: incident_roles
         suggested: true
         fields:
           - name: created_at
@@ -351,6 +356,7 @@ info:
             type: ["null", "string"]
             description: When the role was last updated
       - entity: incident_statuses
+        x-airbyte-name: incident_statuses
         suggested: true
         fields:
           - name: category
@@ -375,6 +381,7 @@ info:
             type: ["null", "string"]
             description: When the status was last updated
       - entity: incident_timestamps
+        x-airbyte-name: incident_timestamps
         suggested: true
         fields:
           - name: id
@@ -387,6 +394,7 @@ info:
             type: ["null", "number"]
             description: Rank for ordering
       - entity: severities
+        x-airbyte-name: severities
         suggested: true
         fields:
           - name: created_at
@@ -408,6 +416,7 @@ info:
             type: ["null", "string"]
             description: When the severity was last updated
       - entity: custom_fields
+        x-airbyte-name: custom_fields
         suggested: true
         fields:
           - name: created_at
@@ -429,6 +438,7 @@ info:
             type: ["null", "string"]
             description: When the custom field was last updated
       - entity: catalog_types
+        x-airbyte-name: catalog_types
         fields:
           - name: annotations
             type: ["null", "object"]
@@ -487,6 +497,7 @@ info:
             type: ["null", "string"]
             description: When the catalog type was last updated
       - entity: schedules
+        x-airbyte-name: schedules
         suggested: true
         fields:
           - name: annotations
@@ -517,6 +528,7 @@ info:
             type: ["null", "string"]
             description: When the schedule was last updated
       - entity: escalations
+        x-airbyte-name: escalations
         suggested: true
         fields:
           - name: created_at

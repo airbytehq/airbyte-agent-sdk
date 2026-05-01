@@ -120,6 +120,7 @@ info:
     disable_compaction: true
     entities:
     - entity: accounts
+      x-airbyte-name: accounts
       suggested: true
       fields:
       - name: sid
@@ -163,6 +164,7 @@ info:
         - "string"
         description: The URI for accessing the account resource
     - entity: calls
+      x-airbyte-name: calls
       suggested: true
       fields:
       - name: sid
@@ -231,6 +233,7 @@ info:
         - "string"
         description: The date and time when the call record was last updated
     - entity: messages
+      x-airbyte-name: messages
       suggested: true
       fields:
       - name: sid
@@ -309,6 +312,7 @@ info:
         - "string"
         description: The number of media files included in the message
     - entity: incoming_phone_numbers
+      x-airbyte-name: incoming_phone_numbers
       fields:
       - name: sid
         type:
@@ -351,6 +355,7 @@ info:
         - "string"
         description: When the phone number was last updated
     - entity: recordings
+      x-airbyte-name: recordings
       fields:
       - name: sid
         type:
@@ -403,6 +408,7 @@ info:
         - "string"
         description: When the recording started
     - entity: conferences
+      x-airbyte-name: conferences
       fields:
       - name: sid
         type:
@@ -440,6 +446,7 @@ info:
         - "string"
         description: When the conference was last updated
     - entity: usage_records
+      x-airbyte-name: usage_records
       fields:
       - name: account_sid
         type:
@@ -497,6 +504,7 @@ info:
         - "string"
         description: The end date of the usage period
     - entity: addresses
+      x-airbyte-name: addresses
       fields:
       - name: sid
         type:
@@ -554,6 +562,7 @@ info:
         - "boolean"
         description: Whether the address has been verified
     - entity: queues
+      x-airbyte-name: queues
       fields:
       - name: sid
         type:
@@ -596,6 +605,7 @@ info:
         - "string"
         description: When the queue was last updated
     - entity: transcriptions
+      x-airbyte-name: transcriptions
       fields:
       - name: sid
         type:
@@ -643,6 +653,7 @@ info:
         - "string"
         description: When the transcription was last updated
     - entity: outgoing_caller_ids
+      x-airbyte-name: outgoing_caller_ids
       fields:
       - name: sid
         type:

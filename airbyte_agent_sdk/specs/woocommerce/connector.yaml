@@ -75,6 +75,7 @@ info:
     disable_compaction: true
     entities:
     - entity: customers
+      x-airbyte-name: customers
       suggested: true
       fields:
       - name: avatar_url
@@ -165,6 +166,7 @@ info:
         type: ["null", "string"]
         description: Customer login name
     - entity: orders
+      x-airbyte-name: orders
       suggested: true
       fields:
       - name: billing
@@ -291,6 +293,7 @@ info:
         type: ["null", "string"]
         description: Version of WooCommerce which last updated the order
     - entity: products
+      x-airbyte-name: products
       suggested: true
       fields:
       - name: attributes
@@ -486,6 +489,7 @@ info:
         type: ["null", "string"]
         description: Product weight
     - entity: coupons
+      x-airbyte-name: coupons
       suggested: true
       fields:
       - name: amount
@@ -570,6 +574,7 @@ info:
         type: ["null", "array"]
         description: Users who have used the coupon
     - entity: product_categories
+      x-airbyte-name: product_categories
       fields:
       - name: count
         type: ["null", "integer"]
@@ -599,6 +604,7 @@ info:
         type: ["null", "string"]
         description: An alphanumeric identifier
     - entity: product_tags
+      x-airbyte-name: product_tags
       fields:
       - name: count
         type: ["null", "integer"]
@@ -616,6 +622,7 @@ info:
         type: ["null", "string"]
         description: Alphanumeric identifier
     - entity: product_reviews
+      x-airbyte-name: product_reviews
       fields:
       - name: date_created
         type: ["null", "string"]
@@ -648,6 +655,7 @@ info:
         type: ["null", "boolean"]
         description: Shows if the reviewer bought the product
     - entity: product_attributes
+      x-airbyte-name: product_attributes
       fields:
       - name: has_archives
         type: ["null", "boolean"]
@@ -668,6 +676,7 @@ info:
         type: ["null", "string"]
         description: Type of attribute
     - entity: product_variations
+      x-airbyte-name: product_variations
       suggested: true
       fields:
       - name: attributes
@@ -788,6 +797,7 @@ info:
         type: ["null", "string"]
         description: Variation weight
     - entity: order_notes
+      x-airbyte-name: order_notes
       fields:
       - name: author
         type: ["null", "string"]
@@ -805,6 +815,7 @@ info:
         type: ["null", "string"]
         description: Order note content
     - entity: refunds
+      x-airbyte-name: refunds
       suggested: true
       fields:
       - name: amount
@@ -835,6 +846,7 @@ info:
         type: ["null", "boolean"]
         description: If the payment was refunded via the API
     - entity: payment_gateways
+      x-airbyte-name: payment_gateways
       fields:
       - name: description
         type: ["null", "string"]
@@ -864,6 +876,7 @@ info:
         type: ["null", "string"]
         description: Payment gateway title on checkout
     - entity: shipping_methods
+      x-airbyte-name: shipping_methods
       fields:
       - name: description
         type: ["null", "string"]
@@ -875,6 +888,7 @@ info:
         type: ["null", "string"]
         description: Shipping method title
     - entity: shipping_zones
+      x-airbyte-name: shipping_zones
       fields:
       - name: id
         type: ["null", "integer"]
@@ -886,6 +900,7 @@ info:
         type: ["null", "integer"]
         description: Shipping zone order
     - entity: tax_rates
+      x-airbyte-name: tax_rates
       fields:
       - name: cities
         type: ["null", "array"]
@@ -930,6 +945,7 @@ info:
         type: ["null", "string"]
         description: State code
     - entity: tax_classes
+      x-airbyte-name: tax_classes
       fields:
       - name: name
         type: ["null", "string"]

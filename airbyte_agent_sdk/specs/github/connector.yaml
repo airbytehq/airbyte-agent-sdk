@@ -180,10 +180,13 @@ info:
             type: ["null", "string"]
             description: "Permalink to the commit on GitHub"
       - entity: directory_content
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Directory listing endpoint returns tree entries for a specific path, not a record stream with a stable schema; no upstream source-github replication stream exists."
       - entity: discussions
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Upstream source-github replication does not include a discussions stream; only reachable via direct GraphQL calls (list, get, api_search)."
       - entity: file_content
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "File payload retrieval endpoint returns a single blob (text or binary) for a specific path, not a record stream; no upstream source-github replication equivalent."
       - entity: issues
         suggested: true
@@ -307,10 +310,13 @@ info:
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the organization was created"
       - entity: org_repositories
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Scope-variant of repositories that returns the same underlying records filtered to an organization owner; the `repositories` context-store entity already covers cached search against the upstream source-github `repositories` stream."
       - entity: pr_comments
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Top-level pull request comments are stored in the same upstream source-github `comments` stream as issue comments (pull requests are issues in GitHub's data model); the `comments` context-store entity already covers cached search against that data."
       - entity: project_items
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Projects V2 items are derived from issues and pull requests already present in the cache; no dedicated upstream source-github replication stream exists for project items."
       - entity: projects
         x-airbyte-name: projects_v2
@@ -574,8 +580,10 @@ info:
             type: ["null", "boolean"]
             description: "Whether the user has marked themselves as available for hire"
       - entity: viewer
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Singleton endpoint returning the authenticated user's own profile; not a record stream and has no upstream source-github replication equivalent."
       - entity: viewer_repositories
+        x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "Identity-scoped subset of `repositories` returning only repos owned by the authenticated viewer; the `repositories` context-store entity already covers cached search."
 
 servers:

@@ -207,6 +207,7 @@ info:
     disable_compaction: true
     entities:
     - entity: attachments
+      x-airbyte-name: attachments
       fields:
       - name: connected_to_app
         type:
@@ -290,6 +291,7 @@ info:
         - 'string'
         description: ''
     - entity: attachments_compact
+      x-airbyte-name: attachments_compact
       fields:
       - name: gid
         type:
@@ -312,6 +314,7 @@ info:
         - 'string'
         description: ''
     - entity: custom_fields
+      x-airbyte-name: custom_fields
       fields:
       - name: created_by
         type:
@@ -443,6 +446,7 @@ info:
         - 'string'
         description: ''
     - entity: events
+      x-airbyte-name: events
       fields:
       - name: action
         type:
@@ -540,6 +544,7 @@ info:
             - 'null'
             - 'string'
     - entity: organization_exports
+      x-airbyte-name: organization_exports
       fields:
       - name: created_at
         type:
@@ -585,6 +590,7 @@ info:
         - 'string'
         description: ''
     - entity: portfolio_items
+      x-airbyte-name: portfolio_items
       fields:
       - name: gid
         type:
@@ -602,6 +608,7 @@ info:
         - 'string'
         description: ''
     - entity: portfolios
+      x-airbyte-name: portfolios
       fields:
       - name: color
         type:
@@ -761,6 +768,7 @@ info:
             - 'null'
             - 'string'
     - entity: portfolios_compact
+      x-airbyte-name: portfolios_compact
       fields:
       - name: gid
         type:
@@ -778,6 +786,7 @@ info:
         - 'string'
         description: ''
     - entity: portfolios_memberships
+      x-airbyte-name: portfolios_memberships
       fields:
       - name: gid
         type:
@@ -826,6 +835,7 @@ info:
             - 'string'
             - 'null'
     - entity: projects
+      x-airbyte-name: projects
       suggested: true
       fields:
       - name: archived
@@ -1034,6 +1044,7 @@ info:
             - 'null'
             - 'string'
     - entity: sections
+      x-airbyte-name: sections
       suggested: true
       fields:
       - name: created_at
@@ -1075,6 +1086,7 @@ info:
         - 'string'
         description: ''
     - entity: sections_compact
+      x-airbyte-name: sections_compact
       fields:
       - name: gid
         type:
@@ -1092,6 +1104,7 @@ info:
         - 'string'
         description: ''
     - entity: stories
+      x-airbyte-name: stories
       fields:
       - name: created_at
         type:
@@ -1204,6 +1217,7 @@ info:
         - 'string'
         description: ''
     - entity: stories_compact
+      x-airbyte-name: stories_compact
       fields:
       - name: created_at
         type:
@@ -1298,6 +1312,7 @@ info:
         - 'string'
         description: ''
     - entity: tags
+      x-airbyte-name: tags
       suggested: true
       fields:
       - name: color
@@ -1349,6 +1364,7 @@ info:
             - 'null'
             - 'string'
     - entity: tasks
+      x-airbyte-name: tasks
       suggested: true
       fields:
       - name: actual_time_minutes
@@ -1593,6 +1609,7 @@ info:
             - 'null'
             - 'string'
     - entity: team_memberships
+      x-airbyte-name: team_memberships
       fields:
       - name: gid
         type:
@@ -1646,6 +1663,7 @@ info:
             - 'null'
             - 'string'
     - entity: teams
+      x-airbyte-name: teams
       suggested: true
       fields:
       - name: description
@@ -1697,6 +1715,7 @@ info:
         - 'string'
         description: ''
     - entity: users
+      x-airbyte-name: users
       suggested: true
       fields:
       - name: email
@@ -1751,6 +1770,7 @@ info:
         - 'array'
         description: ''
     - entity: workspaces
+      x-airbyte-name: workspaces
       suggested: true
       fields:
       - name: email_domains

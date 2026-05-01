@@ -71,6 +71,7 @@ info:
     disable_compaction: true
     entities:
     - entity: accounts
+      x-airbyte-name: accounts
       suggested: true
       fields:
       - name: id
@@ -119,6 +120,7 @@ info:
           versionTag:
             type: ["null", "string"]
     - entity: account_users
+      x-airbyte-name: account_users
       suggested: true
       fields:
       - name: account
@@ -131,6 +133,7 @@ info:
         type: ["null", "string"]
         description: User role in the account
     - entity: campaigns
+      x-airbyte-name: campaigns
       suggested: true
       fields:
       - name: id
@@ -234,6 +237,7 @@ info:
           versionTag:
             type: ["null", "string"]
     - entity: campaign_groups
+      x-airbyte-name: campaign_groups
       suggested: true
       fields:
       - name: id
@@ -277,6 +281,7 @@ info:
         type: ["null", "array"]
         description: Types of campaigns allowed in this group
     - entity: creatives
+      x-airbyte-name: creatives
       suggested: true
       fields:
       - name: id
@@ -319,6 +324,7 @@ info:
         type: ["null", "array"]
         description: Reasons for holding creative from serving
     - entity: conversions
+      x-airbyte-name: conversions
       fields:
       - name: id
         type: ["null", "integer"]
@@ -368,6 +374,7 @@ info:
           currencyCode:
             type: ["null", "string"]
     - entity: ad_campaign_analytics
+      x-airbyte-name: ad_campaign_analytics
       suggested: true
       fields:
       - name: impressions
@@ -488,6 +495,7 @@ info:
         type: ["null", "string"]
         description: End date of the ad analytics data
     - entity: ad_creative_analytics
+      x-airbyte-name: ad_creative_analytics
       suggested: true
       fields:
       - name: impressions

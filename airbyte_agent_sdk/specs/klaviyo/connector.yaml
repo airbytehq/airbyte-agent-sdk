@@ -46,6 +46,7 @@ info:
     disable_compaction: true
     entities:
     - entity: profiles
+      x-airbyte-name: profiles
       suggested: true
       fields:
       - name: attributes
@@ -423,6 +424,7 @@ info:
         - string
         description: ''
     - entity: events
+      x-airbyte-name: events
       suggested: true
       fields:
       - name: attributes
@@ -563,6 +565,7 @@ info:
         - string
         description: ''
     - entity: email_templates
+      x-airbyte-name: email_templates
       fields:
       - name: attributes
         type:
@@ -624,6 +627,7 @@ info:
         - string
         description: ''
     - entity: campaigns
+      x-airbyte-name: campaigns
       suggested: true
       fields:
       - name: attributes
@@ -843,6 +847,7 @@ info:
         - string
         description: ''
     - entity: flows
+      x-airbyte-name: flows
       suggested: true
       fields:
       - name: attributes
@@ -951,6 +956,7 @@ info:
         - string
         description: ''
     - entity: metrics
+      x-airbyte-name: metrics
       suggested: true
       fields:
       - name: attributes
@@ -1038,6 +1044,7 @@ info:
         - string
         description: ''
     - entity: lists
+      x-airbyte-name: lists
       suggested: true
       fields:
       - name: attributes

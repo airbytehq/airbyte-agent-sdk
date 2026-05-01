@@ -43,6 +43,7 @@ info:
     disable_compaction: true
     entities:
       - entity: tickets
+        x-airbyte-name: tickets
         suggested: true
         fields:
           - name: id
@@ -148,6 +149,7 @@ info:
             type: ["string", "null"]
             description: Ticket last update timestamp
       - entity: agents
+        x-airbyte-name: agents
         suggested: true
         fields:
           - name: id
@@ -184,6 +186,7 @@ info:
             type: ["string", "null"]
             description: Agent last update timestamp
       - entity: groups
+        x-airbyte-name: groups
         suggested: true
         fields:
           - name: id
@@ -217,6 +220,7 @@ info:
             type: ["null", "string"]
             description: Group last update timestamp
       - entity: contacts
+        x-airbyte-name: contacts
         suggested: true
         fields:
           - name: id
@@ -280,6 +284,7 @@ info:
             type: ["string", "null"]
             description: Contact last update timestamp
       - entity: companies
+        x-airbyte-name: companies
         suggested: true
         fields:
           - name: id
@@ -319,6 +324,7 @@ info:
             type: ["string", "null"]
             description: Company last update timestamp
       - entity: roles
+        x-airbyte-name: roles
         fields:
           - name: id
             type: ["integer", "null"]
@@ -339,6 +345,7 @@ info:
             type: ["string", "null"]
             description: Role last update timestamp
       - entity: satisfaction_ratings
+        x-airbyte-name: satisfaction_ratings
         fields:
           - name: id
             type: ["integer", "null"]
@@ -371,6 +378,7 @@ info:
             type: ["string", "null"]
             description: Rating last update timestamp
       - entity: surveys
+        x-airbyte-name: surveys
         fields:
           - name: id
             type: ["integer", "null"]
@@ -391,6 +399,7 @@ info:
             type: ["string", "null"]
             description: Survey last update timestamp
       - entity: time_entries
+        x-airbyte-name: time_entries
         fields:
           - name: id
             type: ["integer", "null"]
@@ -429,6 +438,7 @@ info:
             type: ["string", "null"]
             description: Time entry last update timestamp
       - entity: ticket_fields
+        x-airbyte-name: ticket_fields
         fields:
           - name: id
             type: ["integer", "null"]

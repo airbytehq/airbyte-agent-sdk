@@ -43,6 +43,7 @@ info:
     disable_compaction: true
     entities:
       - entity: bases
+        x-airbyte-name: bases
         suggested: true
         fields:
           - name: id
@@ -61,6 +62,7 @@ info:
               - 'string'
             description: Permission level for the base
       - entity: tables
+        x-airbyte-name: tables
         suggested: true
         fields:
           - name: id

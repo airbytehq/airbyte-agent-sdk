@@ -59,6 +59,7 @@ info:
     disable_compaction: true
     entities:
       - entity: bounces
+        x-airbyte-name: bounces
         fields:
           - name: created
             type: ["null", "integer"]
@@ -73,6 +74,7 @@ info:
             type: ["null", "string"]
             description: The enhanced status code for the bounce
       - entity: blocks
+        x-airbyte-name: blocks
         fields:
           - name: created
             type: ["null", "integer"]
@@ -87,6 +89,7 @@ info:
             type: ["null", "string"]
             description: The status code for the block
       - entity: campaigns
+        x-airbyte-name: campaigns
         suggested: true
         fields:
           - name: channels
@@ -111,6 +114,7 @@ info:
             type: ["null", "string"]
             description: When the campaign was last updated
       - entity: contacts
+        x-airbyte-name: contacts
         suggested: true
         fields:
           - name: address_line_1
@@ -174,6 +178,7 @@ info:
             type: ["null", "string"]
             description: WhatsApp number
       - entity: global_suppressions
+        x-airbyte-name: global_suppressions
         fields:
           - name: created
             type: ["null", "integer"]
@@ -182,6 +187,7 @@ info:
             type: ["null", "string"]
             description: The globally suppressed email address
       - entity: invalid_emails
+        x-airbyte-name: invalid_emails
         fields:
           - name: created
             type: ["null", "integer"]
@@ -193,6 +199,7 @@ info:
             type: ["null", "string"]
             description: The reason the email is invalid
       - entity: lists
+        x-airbyte-name: lists
         suggested: true
         fields:
           - name: _metadata
@@ -211,6 +218,7 @@ info:
             type: ["null", "string"]
             description: Name of the list
       - entity: segments
+        x-airbyte-name: segments
         suggested: true
         fields:
           - name: contacts_count
@@ -247,6 +255,7 @@ info:
             type: ["null", "string"]
             description: When the segment was last updated
       - entity: singlesend_stats
+        x-airbyte-name: singlesend_stats
         suggested: true
         fields:
           - name: ab_phase
@@ -290,6 +299,7 @@ info:
               unsubscribes:
                 type: ["null", "integer"]
       - entity: singlesends
+        x-airbyte-name: singlesends
         suggested: true
         fields:
           - name: categories
@@ -317,6 +327,7 @@ info:
             type: ["null", "string"]
             description: When the single send was last updated
       - entity: stats_automations
+        x-airbyte-name: stats_automations
         fields:
           - name: aggregation
             type: ["null", "string"]
@@ -356,6 +367,7 @@ info:
             type: ["null", "string"]
             description: The automation step ID
       - entity: suppression_group_members
+        x-airbyte-name: suppression_group_members
         fields:
           - name: created_at
             type: ["null", "integer"]
@@ -370,6 +382,7 @@ info:
             type: ["null", "string"]
             description: Name of the suppression group
       - entity: suppression_groups
+        x-airbyte-name: suppression_groups
         fields:
           - name: description
             type: ["null", "string"]
@@ -387,6 +400,7 @@ info:
             type: ["null", "integer"]
             description: Number of unsubscribes in this group
       - entity: templates
+        x-airbyte-name: templates
         suggested: true
         fields:
           - name: generation

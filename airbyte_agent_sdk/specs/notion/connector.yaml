@@ -38,6 +38,7 @@ info:
     disable_compaction: false
     entities:
       - entity: pages
+        x-airbyte-name: pages
         suggested: true
         fields:
           - name: archived
@@ -111,6 +112,7 @@ info:
               - string
             description: URL of the page within the service.
       - entity: users
+        x-airbyte-name: users
         fields:
           - name: avatar_url
             type:
@@ -148,6 +150,7 @@ info:
               - object
             description: Type of user (person or bot)
       - entity: data_sources
+        x-airbyte-name: data_sources
         suggested: true
         fields:
           - name: archived
@@ -236,6 +239,7 @@ info:
               - string
             description: URL or reference to access the data source.
       - entity: blocks
+        x-airbyte-name: blocks
         suggested: true
         fields:
           - name: archived

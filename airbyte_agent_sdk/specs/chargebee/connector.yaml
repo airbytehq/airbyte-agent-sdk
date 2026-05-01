@@ -65,6 +65,7 @@ info:
     disable_compaction: true
     entities:
       - entity: subscription
+        x-airbyte-name: subscription
         suggested: true
         fields:
           - name: activated_at
@@ -296,6 +297,7 @@ info:
             type: ["null", "integer"]
             description: "The date and time when the subscription was last updated."
       - entity: customer
+        x-airbyte-name: customer
         suggested: true
         fields:
           - name: allow_direct_debit
@@ -488,6 +490,7 @@ info:
             type: ["null", "integer"]
             description: "Date and time when the VAT number was validated."
       - entity: invoice
+        x-airbyte-name: invoice
         suggested: true
         fields:
           - name: adjustment_credit_notes
@@ -698,6 +701,7 @@ info:
             type: ["null", "integer"]
             description: "Amount written off"
       - entity: credit_note
+        x-airbyte-name: credit_note
         suggested: true
         fields:
           - name: allocations
@@ -848,6 +852,7 @@ info:
             type: ["null", "integer"]
             description: "The date when the credit note was voided."
       - entity: coupon
+        x-airbyte-name: coupon
         suggested: true
         fields:
           - name: apply_discount_on
@@ -935,6 +940,7 @@ info:
             type: ["null", "integer"]
             description: "Date until which the coupon is valid for use."
       - entity: transaction
+        x-airbyte-name: transaction
         suggested: true
         fields:
           - name: amount
@@ -1103,6 +1109,7 @@ info:
             type: ["null", "integer"]
             description: "Date when the transaction was voided."
       - entity: event
+        x-airbyte-name: event
         fields:
           - name: api_version
             type: ["null", "string"]
@@ -1138,6 +1145,7 @@ info:
             type: ["null", "array"]
             description: "List of webhooks associated with the event."
       - entity: order
+        x-airbyte-name: order
         suggested: true
         fields:
           - name: amount_adjusted
@@ -1321,6 +1329,7 @@ info:
             type: ["null", "integer"]
             description: "Timestamp when the order data was last updated."
       - entity: payment_source
+        x-airbyte-name: payment_source
         suggested: true
         fields:
           - name: amazon_payment
@@ -1390,6 +1399,7 @@ info:
             type: ["null", "object"]
             description: "Data related to UPI payment source"
       - entity: item
+        x-airbyte-name: item
         suggested: true
         fields:
           - name: applicable_items
@@ -1471,6 +1481,7 @@ info:
             type: ["null", "string"]
             description: "Calculation method used for item usage"
       - entity: item_price
+        x-airbyte-name: item_price
         suggested: true
         fields:
           - name: accounting_detail

@@ -66,6 +66,7 @@ info:
     disable_compaction: true
     entities:
       - entity: activity_logs
+        x-airbyte-name: activity_logs
         fields:
           - name: board_id
             type: ["null", "integer"]
@@ -95,6 +96,7 @@ info:
             type: ["null", "string"]
             description: ID of the user who performed the action
       - entity: boards
+        x-airbyte-name: boards
         suggested: true
         fields:
           - name: board_kind
@@ -173,6 +175,7 @@ info:
               description:
                 type: ["null", "string"]
       - entity: items
+        x-airbyte-name: items
         suggested: true
         fields:
           - name: assets
@@ -229,6 +232,7 @@ info:
             type: ["null", "array"]
             description: Item updates
       - entity: tags
+        x-airbyte-name: tags
         suggested: true
         fields:
           - name: color
@@ -241,6 +245,7 @@ info:
             type: ["null", "string"]
             description: Tag name
       - entity: teams
+        x-airbyte-name: teams
         suggested: true
         fields:
           - name: id
@@ -256,6 +261,7 @@ info:
             type: ["null", "array"]
             description: Team members
       - entity: updates
+        x-airbyte-name: updates
         suggested: true
         fields:
           - name: assets
@@ -286,6 +292,7 @@ info:
             type: ["null", "string"]
             description: When the update was last modified
       - entity: users
+        x-airbyte-name: users
         suggested: true
         fields:
           - name: birthday
@@ -364,6 +371,7 @@ info:
             type: ["null", "integer"]
             description: UTC hours difference for the user's timezone
       - entity: workspaces
+        x-airbyte-name: workspaces
         suggested: true
         fields:
           - name: account_product

@@ -58,6 +58,7 @@ info:
     disable_compaction: false
     entities:
         - entity: charges
+          x-airbyte-name: charges
           suggested: true
           fields:
           - name: amount
@@ -346,6 +347,7 @@ info:
             - integer
             description: Timestamp of the last update to this charge object.
         - entity: customers
+          x-airbyte-name: customers
           suggested: true
           fields:
           - name: account_balance
@@ -516,6 +518,7 @@ info:
             - integer
             description: Timestamp indicating when the customer object was last updated.
         - entity: invoices
+          x-airbyte-name: invoices
           suggested: true
           fields:
           - name: account_country
@@ -1005,6 +1008,7 @@ info:
             description: Timestamp indicating when webhooks for this invoice were successfully
               delivered.
         - entity: refunds
+          x-airbyte-name: refunds
           suggested: true
           fields:
           - name: amount
@@ -1097,6 +1101,7 @@ info:
             - integer
             description: Timestamp indicating when the refund was last updated.
         - entity: subscriptions
+          x-airbyte-name: subscriptions
           suggested: true
           fields:
           - name: application

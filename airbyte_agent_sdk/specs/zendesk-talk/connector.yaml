@@ -37,6 +37,7 @@ info:
     disable_compaction: true
     entities:
       - entity: addresses
+        x-airbyte-name: addresses
         fields:
           - name: city
             type: ["null", "string"]
@@ -66,6 +67,7 @@ info:
             type: ["null", "string"]
             description: Zip code of the address
       - entity: agents_activity
+        x-airbyte-name: agents_activity
         suggested: true
         fields:
           - name: accepted_third_party_conferences
@@ -147,6 +149,7 @@ info:
             type: ["null", "string"]
             description: Channel the agent is registered on
       - entity: agents_overview
+        x-airbyte-name: agents_overview
         suggested: true
         fields:
           - name: average_accepted_transfers
@@ -219,6 +222,7 @@ info:
             type: ["null", "integer"]
             description: Total wrap-up time
       - entity: greeting_categories
+        x-airbyte-name: greeting_categories
         fields:
           - name: id
             type: ["null", "integer"]
@@ -227,6 +231,7 @@ info:
             type: ["null", "string"]
             description: Name of the greeting category
       - entity: greetings
+        x-airbyte-name: greetings
         fields:
           - name: active
             type: ["null", "boolean"]
@@ -268,6 +273,7 @@ info:
             type: ["null", "integer"]
             description: Upload ID associated with the greeting
       - entity: phone_numbers
+        x-airbyte-name: phone_numbers
         suggested: true
         fields:
           - name: call_recording_consent
@@ -370,6 +376,7 @@ info:
             type: ["null", "boolean"]
             description: Whether voice is enabled
       - entity: call_legs
+        x-airbyte-name: call_legs
         suggested: true
         fields:
           - name: agent_id
@@ -448,6 +455,7 @@ info:
             type: ["null", "integer"]
             description: Wrap-up time in seconds
       - entity: calls
+        x-airbyte-name: calls
         suggested: true
         fields:
           - name: agent_id
@@ -574,6 +582,7 @@ info:
             type: ["null", "integer"]
             description: Wrap-up time in seconds
       - entity: current_queue_activity
+        x-airbyte-name: current_queue_activity
         suggested: true
         fields:
           - name: agents_online
@@ -598,6 +607,7 @@ info:
             type: ["null", "integer"]
             description: Longest wait time for any caller (seconds)
       - entity: account_overview
+        x-airbyte-name: account_overview
         fields:
           - name: average_call_duration
             type: ["null", "integer"]
@@ -669,6 +679,7 @@ info:
             type: ["null", "integer"]
             description: Total wrap-up time
       - entity: ivrs
+        x-airbyte-name: ivrs
         suggested: true
         fields:
           - name: id
@@ -687,6 +698,7 @@ info:
             type: ["null", "array"]
             description: Names of phone numbers configured with this IVR
       - entity: ivr_menus
+        x-airbyte-name: ivr_menus
         fields:
           - name: default
             type: ["null", "boolean"]
@@ -704,6 +716,7 @@ info:
             type: ["null", "string"]
             description: Name of the IVR menu
       - entity: ivr_routes
+        x-airbyte-name: ivr_routes
         fields:
           - name: action
             type: ["null", "string"]

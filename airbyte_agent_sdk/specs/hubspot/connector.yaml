@@ -48,6 +48,7 @@ info:
     disable_compaction: false
     entities:
     - entity: companies
+      x-airbyte-name: companies
       suggested: true
       fields:
       - name: archived
@@ -80,6 +81,7 @@ info:
         - 'string'
         description: Timestamp when the company record was last modified
     - entity: contacts
+      x-airbyte-name: contacts
       suggested: true
       fields:
       - name: archived
@@ -112,6 +114,7 @@ info:
         - 'string'
         description: Timestamp indicating when the contact record was last modified.
     - entity: deals
+      x-airbyte-name: deals
       suggested: true
       fields:
       - name: archived
@@ -154,6 +157,7 @@ info:
         - 'string'
         description: Timestamp when the deal record was last modified
     - entity: tickets
+      x-airbyte-name: tickets
       suggested: true
       fields:
       - name: archived

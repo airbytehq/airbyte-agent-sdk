@@ -60,6 +60,7 @@ info:
     disable_compaction: true
     entities:
       - entity: clients
+        x-airbyte-name: clients
         suggested: true
         fields:
           - name: address
@@ -84,6 +85,7 @@ info:
             type: ["null", "string"]
             description: "When the client record was last updated"
       - entity: company
+        x-airbyte-name: company
         fields:
           - name: base_uri
             type: ["null", "string"]
@@ -107,6 +109,7 @@ info:
             type: ["null", "integer"]
             description: "Weekly capacity in seconds"
       - entity: contacts
+        x-airbyte-name: contacts
         fields:
           - name: client
             type: ["null", "object"]
@@ -133,6 +136,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: estimate_item_categories
+        x-airbyte-name: estimate_item_categories
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -147,6 +151,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: estimates
+        x-airbyte-name: estimates
         fields:
           - name: amount
             type: ["null", "number"]
@@ -179,6 +184,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: expense_categories
+        x-airbyte-name: expense_categories
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -202,6 +208,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: expenses
+        x-airbyte-name: expenses
         fields:
           - name: billable
             type: ["null", "boolean"]
@@ -240,6 +247,7 @@ info:
             type: ["null", "object"]
             description: "Associated user"
       - entity: invoice_item_categories
+        x-airbyte-name: invoice_item_categories
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -260,6 +268,7 @@ info:
             type: ["null", "boolean"]
             description: "Whether used as service type"
       - entity: invoices
+        x-airbyte-name: invoices
         suggested: true
         fields:
           - name: amount
@@ -299,6 +308,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: projects
+        x-airbyte-name: projects
         suggested: true
         fields:
           - name: budget
@@ -335,6 +345,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: roles
+        x-airbyte-name: roles
         fields:
           - name: created_at
             type: ["null", "string"]
@@ -352,6 +363,7 @@ info:
             type: ["null", "array"]
             description: "User IDs with this role"
       - entity: task_assignments
+        x-airbyte-name: task_assignments
         fields:
           - name: billable
             type: ["null", "boolean"]
@@ -378,6 +390,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: tasks
+        x-airbyte-name: tasks
         suggested: true
         fields:
           - name: billable_by_default
@@ -402,6 +415,7 @@ info:
             type: ["null", "string"]
             description: "When last updated"
       - entity: time_entries
+        x-airbyte-name: time_entries
         suggested: true
         fields:
           - name: billable
@@ -441,6 +455,7 @@ info:
             type: ["null", "object"]
             description: "Associated user"
       - entity: time_projects
+        x-airbyte-name: time_projects
         fields:
           - name: billable_amount
             type: ["null", "number"]
@@ -467,6 +482,7 @@ info:
             type: ["null", "number"]
             description: "Total hours spent"
       - entity: time_tasks
+        x-airbyte-name: time_tasks
         fields:
           - name: billable_amount
             type: ["null", "number"]
@@ -487,6 +503,7 @@ info:
             type: ["null", "number"]
             description: "Total hours spent"
       - entity: user_assignments
+        x-airbyte-name: user_assignments
         fields:
           - name: budget
             type: ["null", "number"]
@@ -516,6 +533,7 @@ info:
             type: ["null", "object"]
             description: "Associated user"
       - entity: users
+        x-airbyte-name: users
         suggested: true
         fields:
           - name: avatar_url

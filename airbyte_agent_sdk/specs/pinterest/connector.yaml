@@ -110,6 +110,7 @@ info:
     disable_compaction: true
     entities:
     - entity: ad_accounts
+      x-airbyte-name: ad_accounts
       suggested: true
       fields:
       - name: country
@@ -142,6 +143,7 @@ info:
         type: ["null", "integer"]
         description: Timestamp when the ad account was last updated (Unix seconds)
     - entity: boards
+      x-airbyte-name: boards
       fields:
       - name: board_pins_modified_at
         type: ["null", "string"]
@@ -180,6 +182,7 @@ info:
         type: ["null", "string"]
         description: Board privacy setting
     - entity: campaigns
+      x-airbyte-name: campaigns
       suggested: true
       fields:
       - name: ad_account_id
@@ -234,6 +237,7 @@ info:
         type: ["null", "integer"]
         description: Last update timestamp (Unix seconds)
     - entity: ad_groups
+      x-airbyte-name: ad_groups
       suggested: true
       fields:
       - name: ad_account_id
@@ -312,6 +316,7 @@ info:
         type: ["null", "number"]
         description: Last update timestamp (Unix seconds)
     - entity: ads
+      x-airbyte-name: ads
       suggested: true
       fields:
       - name: ad_account_id
@@ -399,6 +404,7 @@ info:
         type: ["null", "string"]
         description: View tracking URL
     - entity: board_sections
+      x-airbyte-name: board_sections
       fields:
       - name: id
         type: ["null", "string"]
@@ -407,6 +413,7 @@ info:
         type: ["null", "string"]
         description: Name of the board section
     - entity: board_pins
+      x-airbyte-name: board_pins
       fields:
       - name: alt_text
         type: ["null", "string"]
@@ -463,6 +470,7 @@ info:
         type: ["null", "string"]
         description: Pin title
     - entity: catalogs
+      x-airbyte-name: catalogs
       fields:
       - name: catalog_type
         type: ["null", "string"]
@@ -480,6 +488,7 @@ info:
         type: ["null", "string"]
         description: Timestamp when the catalog was last updated
     - entity: catalogs_feeds
+      x-airbyte-name: catalogs_feeds
       fields:
       - name: catalog_type
         type: ["null", "string"]
@@ -521,6 +530,7 @@ info:
         type: ["null", "string"]
         description: Timestamp when the feed was last updated
     - entity: catalogs_product_groups
+      x-airbyte-name: catalogs_product_groups
       fields:
       - name: created_at
         type: ["null", "integer"]
@@ -550,6 +560,7 @@ info:
         type: ["null", "integer"]
         description: Last update timestamp (Unix seconds)
     - entity: audiences
+      x-airbyte-name: audiences
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -585,6 +596,7 @@ info:
         type: ["null", "integer"]
         description: Last update time (Unix seconds)
     - entity: conversion_tags
+      x-airbyte-name: conversion_tags
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -614,6 +626,7 @@ info:
         type: ["null", "string"]
         description: Version number
     - entity: customer_lists
+      x-airbyte-name: customer_lists
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -646,6 +659,7 @@ info:
         type: ["null", "integer"]
         description: Last update time (Unix seconds)
     - entity: keywords
+      x-airbyte-name: keywords
       suggested: true
       fields:
       - name: archived

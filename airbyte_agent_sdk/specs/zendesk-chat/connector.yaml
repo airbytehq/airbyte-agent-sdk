@@ -82,6 +82,7 @@ info:
     disable_compaction: true
     entities:
       - entity: agents
+        x-airbyte-name: agents
         suggested: true
         fields:
           - name: id
@@ -129,6 +130,7 @@ info:
             description: When agent was created
 
       - entity: chats
+        x-airbyte-name: chats
         suggested: true
         fields:
           - name: id
@@ -176,6 +178,7 @@ info:
             description: IDs of agents in chat
 
       - entity: departments
+        x-airbyte-name: departments
         suggested: true
         fields:
           - name: id
@@ -198,6 +201,7 @@ info:
             description: Agent IDs in department
 
       - entity: shortcuts
+        x-airbyte-name: shortcuts
         fields:
           - name: id
             type: integer
@@ -219,6 +223,7 @@ info:
             description: Tags applied when shortcut is used
 
       - entity: triggers
+        x-airbyte-name: triggers
         fields:
           - name: id
             type: integer

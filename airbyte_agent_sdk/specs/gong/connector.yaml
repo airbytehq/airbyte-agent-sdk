@@ -50,6 +50,7 @@ info:
     disable_compaction: false
     entities:
       - entity: users
+        x-airbyte-name: users
         suggested: true
         fields:
           - name: active
@@ -133,6 +134,7 @@ info:
               - string
             description: An email address that is considered trusted for the user
       - entity: calls
+        x-airbyte-name: calls
         suggested: true
         fields:
           - name: calendarEventId

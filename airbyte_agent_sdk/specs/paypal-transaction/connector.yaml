@@ -20,6 +20,7 @@ info:
     disable_compaction: true
     entities:
       - entity: transactions
+        x-airbyte-name: transactions
         suggested: true
         fields:
           - name: auction_info
@@ -171,6 +172,7 @@ info:
             type: ["null", "string"]
             description: Date and time when the transaction was last updated
       - entity: balances
+        x-airbyte-name: balances
         suggested: true
         fields:
           - name: account_id
@@ -186,6 +188,7 @@ info:
             type: ["null", "string"]
             description: The timestamp when the balances data was last refreshed.
       - entity: list_products
+        x-airbyte-name: list_products
         suggested: true
         fields:
           - name: create_time
@@ -204,6 +207,7 @@ info:
             type: ["null", "string"]
             description: The name or title of the product
       - entity: show_product_details
+        x-airbyte-name: show_product_details
         fields:
           - name: category
             type: ["null", "string"]
@@ -236,6 +240,7 @@ info:
             type: ["null", "string"]
             description: The date and time when the product was last updated
       - entity: list_disputes
+        x-airbyte-name: list_disputes
         suggested: true
         fields:
           - name: create_time
@@ -283,6 +288,7 @@ info:
             type: ["null", "string"]
             description: The cut-off timestamp for the last update.
       - entity: search_invoices
+        x-airbyte-name: search_invoices
         suggested: true
         fields:
           - name: additional_recipients
@@ -345,6 +351,7 @@ info:
             type: ["null", "string"]
             description: Current status of the invoice
       - entity: list_payments
+        x-airbyte-name: list_payments
         suggested: true
         fields:
           - name: cart

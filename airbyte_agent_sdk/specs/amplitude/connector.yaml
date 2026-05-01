@@ -20,6 +20,7 @@ info:
     disable_compaction: true
     entities:
       - entity: annotations
+        x-airbyte-name: annotations
         fields:
           - name: date
             type: ["null", "string"]
@@ -34,6 +35,7 @@ info:
             type: ["null", "string"]
             description: The label assigned to the annotation
       - entity: cohorts
+        x-airbyte-name: cohorts
         suggested: true
         fields:
           - name: appId
@@ -115,6 +117,7 @@ info:
             type: ["null", "array"]
             description: Users or viewers who have access to the cohort data
       - entity: events_list
+        x-airbyte-name: events_list
         suggested: true
         fields:
           - name: autohidden
@@ -160,6 +163,7 @@ info:
             type: ["null", "string"]
             description: Raw event name in the data
       - entity: active_users
+        x-airbyte-name: active_users
         suggested: true
         fields:
           - name: date
@@ -169,6 +173,7 @@ info:
             type: ["null", "object"]
             description: The statistics related to the active users for the given date
       - entity: events
+        x-airbyte-name: events
         fields:
           - name: $insert_id
             type: ["null", "string"]
@@ -337,6 +342,7 @@ info:
             type: ["null", "string"]
             description: Version name associated with the event
       - entity: average_session_length
+        x-airbyte-name: average_session_length
         suggested: true
         fields:
           - name: date

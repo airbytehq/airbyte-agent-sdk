@@ -89,6 +89,7 @@ info:
     disable_compaction: true
     entities:
     - entity: organizations
+      x-airbyte-name: organizations
       fields:
       - name: accepted_term_version
         type: ["null", "string"]
@@ -160,6 +161,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: adaccounts
+      x-airbyte-name: adaccounts
       suggested: true
       fields:
       - name: advertiser_organization_id
@@ -214,6 +216,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: campaigns
+      x-airbyte-name: campaigns
       suggested: true
       fields:
       - name: ad_account_id
@@ -250,6 +253,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: adsquads
+      x-airbyte-name: adsquads
       suggested: true
       fields:
       - name: auto_bid
@@ -368,6 +372,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: ads
+      x-airbyte-name: ads
       suggested: true
       fields:
       - name: ad_squad_id
@@ -407,6 +412,7 @@ info:
         type: ["null", "string"]
         description: Last update timestamp
     - entity: creatives
+      x-airbyte-name: creatives
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -483,6 +489,7 @@ info:
           use_immersive_mode:
             type: ["null", "boolean"]
     - entity: media
+      x-airbyte-name: media
       fields:
       - name: ad_account_id
         type: ["null", "string"]
@@ -543,6 +550,7 @@ info:
         type: ["null", "string"]
         description: Media visibility setting
     - entity: segments
+      x-airbyte-name: segments
       fields:
       - name: ad_account_id
         type: ["null", "string"]

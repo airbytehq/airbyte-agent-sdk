@@ -45,6 +45,7 @@ info:
     disable_compaction: true
     entities:
       - entity: applications
+        x-airbyte-name: applications
         suggested: true
         fields:
           - name: answers
@@ -222,6 +223,7 @@ info:
               - 'string'
             description: 'Status of the application.'
       - entity: candidates
+        x-airbyte-name: candidates
         suggested: true
         fields:
           - name: addresses
@@ -357,6 +359,7 @@ info:
               - 'array'
             description: 'List of candidate''s website addresses'
       - entity: departments
+        x-airbyte-name: departments
         fields:
           - name: child_department_external_ids
             type:
@@ -394,6 +397,7 @@ info:
               - 'integer'
             description: 'Unique ID of the parent department of this department.'
       - entity: job_posts
+        x-airbyte-name: job_posts
         suggested: true
         fields:
           - name: active
@@ -489,6 +493,7 @@ info:
               - 'string'
             description: 'Date and time when the job post was last updated.'
       - entity: jobs
+        x-airbyte-name: jobs
         suggested: true
         fields:
           - name: closed_at
@@ -609,6 +614,7 @@ info:
               - 'string'
             description: 'The date and time the job was last updated'
       - entity: offers
+        x-airbyte-name: offers
         suggested: true
         fields:
           - name: application_id
@@ -721,6 +727,7 @@ info:
               - 'integer'
             description: 'Version of the offer data'
       - entity: offices
+        x-airbyte-name: offices
         fields:
           - name: child_ids
             type:
@@ -773,6 +780,7 @@ info:
               - 'integer'
             description: 'User ID of the primary contact person for this office'
       - entity: sources
+        x-airbyte-name: sources
         fields:
           - name: id
             type:
@@ -799,6 +807,7 @@ info:
                   - 'null'
                   - 'string'
       - entity: users
+        x-airbyte-name: users
         fields:
           - name: created_at
             type:

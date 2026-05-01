@@ -110,6 +110,7 @@ info:
     disable_compaction: true
     entities:
       - entity: channel_members
+        x-airbyte-name: channel_members
         suggested: true
         fields:
           - name: channel_id
@@ -123,6 +124,7 @@ info:
               - "string"
             description: "The unique identifier for the member within the channel."
       - entity: channels
+        x-airbyte-name: channels
         suggested: true
         fields:
           - name: context_team_id
@@ -307,6 +309,7 @@ info:
               - "integer"
             description: "The timestamp when the channel was last updated."
       - entity: channel_messages
+        x-airbyte-name: channel_messages
         suggested: true
         fields:
           - name: type
@@ -400,6 +403,7 @@ info:
               - "string"
             description: "Team ID."
       - entity: threads
+        x-airbyte-name: threads
         suggested: true
         fields:
           - name: type
@@ -483,6 +487,7 @@ info:
               - "string"
             description: "Team ID."
       - entity: users
+        x-airbyte-name: users
         suggested: true
         fields:
           - name: color
