@@ -3,7 +3,7 @@
   "class_name": "SlackConnector",
   "package_name": "airbyte_agent_sdk.connectors.slack",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.1.20",
+  "yaml_version": "0.1.21",
   "api_reference_url": "https://api.slack.com/methods",
   "auth_example": "SlackAuthConfig(bot_key=\"...\")",
   "auth_import": ", SlackAuthConfig",
@@ -87,6 +87,24 @@
         "required": true,
         "title": "Join Channels",
         "description": "Whether to automatically join public channels to sync messages.",
+        "format": null,
+        "default": null
+      },
+      {
+        "name": "include_archived_channels",
+        "type": "bool",
+        "required": true,
+        "title": "Include Archived Channels",
+        "description": "Whether to include archived channels in the sync. When disabled (default), archived channels are excluded from the Slack API response, reducing the number of API calls for downstream streams such as channel_messages, threads, and channel_members.",
+        "format": null,
+        "default": null
+      },
+      {
+        "name": "threads_ignore_no_replies",
+        "type": "bool",
+        "required": true,
+        "title": "Ignore Messages With No Replies in Threads Stream",
+        "description": "When enabled, the threads stream will skip messages that have no replies, reducing the number of API calls. Disabled by default to make the Threads stream contain unthreaded messages in its records.",
         "format": null,
         "default": null
       }

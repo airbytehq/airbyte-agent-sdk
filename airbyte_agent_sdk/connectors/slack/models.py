@@ -48,6 +48,10 @@ class SlackReplicationConfig(BaseModel):
     """Number of days to look back when syncing data (0-365)."""
     join_channels: bool
     """Whether to automatically join public channels to sync messages."""
+    include_archived_channels: bool
+    """Whether to include archived channels in the sync. When disabled (default), archived channels are excluded from the Slack API response, reducing the number of API calls for downstream streams such as channel_messages, threads, and channel_members."""
+    threads_ignore_no_replies: bool
+    """When enabled, the threads stream will skip messages that have no replies, reducing the number of API calls. Disabled by default to make the Threads stream contain unthreaded messages in its records."""
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
@@ -191,14 +195,6 @@ class ChannelResponse(BaseModel):
     ok: bool | None = Field(default=None)
     channel: Channel | None = Field(default=None)
 
-class Reaction(BaseModel):
-    """Message reaction"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None = Field(default=None)
-    users: list[str] | None = Field(default=None)
-    count: int | None = Field(default=None)
-
 class Attachment(BaseModel):
     """Message attachment"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -243,6 +239,14 @@ class File(BaseModel):
     permalink_public: str | None = Field(default=None)
     created: int | None = Field(default=None)
     timestamp: int | None = Field(default=None)
+
+class Reaction(BaseModel):
+    """Message reaction"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None = Field(default=None)
+    users: list[str] | None = Field(default=None)
+    count: int | None = Field(default=None)
 
 class Message(BaseModel):
     """Slack message object"""

@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Slack API Connector
-  version: 0.1.20
+  version: 0.1.21
   description: |
     Slack is a business communication platform that offers messaging, file sharing, and integrations
     with other tools. This connector provides read access to users, channels, channel members, channel
@@ -93,18 +93,32 @@ info:
         type: boolean
         title: Join Channels
         description: Whether to automatically join public channels to sync messages.
+      include_archived_channels:
+        type: boolean
+        title: Include Archived Channels
+        description: Whether to include archived channels in the sync. When disabled (default), archived channels are excluded from the Slack API response, reducing the number of API calls for downstream streams such as channel_messages, threads, and channel_members.
+      threads_ignore_no_replies:
+        type: boolean
+        title: Ignore Messages With No Replies in Threads Stream
+        description: When enabled, the threads stream will skip messages that have no replies, reducing the number of API calls. Disabled by default to make the Threads stream contain unthreaded messages in its records.
     required:
       - start_date
       - lookback_window
       - join_channels
+      - include_archived_channels
+      - threads_ignore_no_replies
     replication_config_key_mapping:
       start_date: start_date
       lookback_window: lookback_window
       join_channels: join_channels
+      include_archived_channels: include_archived_channels
+      threads_ignore_no_replies: threads_ignore_no_replies
     replication_config_constants:
       start_date: "{{ day_delta(-180, '%Y-%m-%dT%H:%M:%SZ') }}"
       lookback_window: 0
       join_channels: false
+      include_archived_channels: false
+      threads_ignore_no_replies: true
 
   x-airbyte-context-store:
     disable_compaction: true
