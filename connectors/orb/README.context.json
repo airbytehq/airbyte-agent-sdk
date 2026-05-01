@@ -3,10 +3,8 @@
   "class_name": "OrbConnector",
   "package_name": "airbyte_agent_sdk.connectors.orb",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.8",
   "yaml_version": "0.1.8",
   "api_reference_url": "https://docs.withorb.com/api-reference",
-  "commit_sha": "unknown",
   "auth_example": "OrbAuthConfig(api_key=\"...\")",
   "auth_import": ", OrbAuthConfig",
   "auth_config": {

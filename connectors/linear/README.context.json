@@ -3,10 +3,8 @@
   "class_name": "LinearConnector",
   "package_name": "airbyte_agent_sdk.connectors.linear",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.19",
   "yaml_version": "0.1.19",
   "api_reference_url": "https://linear.app/developers/graphql",
-  "commit_sha": "unknown",
   "auth_example": "LinearAuthConfig(api_key=\"...\")",
   "auth_import": ", LinearAuthConfig",
   "auth_config": {

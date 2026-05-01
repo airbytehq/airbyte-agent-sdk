@@ -104,7 +104,7 @@ class GmailConnector:
 
     connector_name = "gmail"
     connector_version = "0.1.4"
-    sdk_version = "0.1.147"
+    sdk_version = "0.1.148"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

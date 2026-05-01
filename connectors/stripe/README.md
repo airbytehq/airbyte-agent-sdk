@@ -7,7 +7,7 @@ manage subscriptions, and handle financial transactions. This connector provides
 access to customers for payment analytics and customer management.
 
 
-## Example questions
+## Example prompts
 
 The Stripe connector is optimized to handle prompts like these.
 
@@ -35,123 +35,58 @@ The Stripe connector is optimized to handle prompts like these.
 - What are the key financial insights from my customer base?
 - Break down my customers by their average transaction value
 
-## Unsupported questions
+## Unsupported prompts
 
 The Stripe connector isn't currently able to handle prompts like these.
 
 - Send a payment reminder to \{customer\}
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Customers | [List](./REFERENCE.md#customers-list), [Create](./REFERENCE.md#customers-create), [Get](./REFERENCE.md#customers-get), [Update](./REFERENCE.md#customers-update), [Delete](./REFERENCE.md#customers-delete), [API Search](./REFERENCE.md#customers-api_search), [Context Store Search](./REFERENCE.md#customers-context-store-search) |
+| Invoices | [List](./REFERENCE.md#invoices-list), [Create](./REFERENCE.md#invoices-create), [Get](./REFERENCE.md#invoices-get), [API Search](./REFERENCE.md#invoices-api_search), [Context Store Search](./REFERENCE.md#invoices-context-store-search) |
+| Invoice Finalizations | [Create](./REFERENCE.md#invoice-finalizations-create) |
+| Invoice Sends | [Create](./REFERENCE.md#invoice-sends-create) |
+| Charges | [List](./REFERENCE.md#charges-list), [Get](./REFERENCE.md#charges-get), [API Search](./REFERENCE.md#charges-api_search), [Context Store Search](./REFERENCE.md#charges-context-store-search) |
+| Subscriptions | [List](./REFERENCE.md#subscriptions-list), [Create](./REFERENCE.md#subscriptions-create), [Get](./REFERENCE.md#subscriptions-get), [Update](./REFERENCE.md#subscriptions-update), [Delete](./REFERENCE.md#subscriptions-delete), [API Search](./REFERENCE.md#subscriptions-api_search), [Context Store Search](./REFERENCE.md#subscriptions-context-store-search) |
+| Refunds | [List](./REFERENCE.md#refunds-list), [Create](./REFERENCE.md#refunds-create), [Get](./REFERENCE.md#refunds-get), [Context Store Search](./REFERENCE.md#refunds-context-store-search) |
+| Products | [List](./REFERENCE.md#products-list), [Create](./REFERENCE.md#products-create), [Get](./REFERENCE.md#products-get), [Update](./REFERENCE.md#products-update), [Delete](./REFERENCE.md#products-delete), [API Search](./REFERENCE.md#products-api_search) |
+| Balance | [Get](./REFERENCE.md#balance-get) |
+| Balance Transactions | [List](./REFERENCE.md#balance-transactions-list), [Get](./REFERENCE.md#balance-transactions-get) |
+| Payment Intents | [List](./REFERENCE.md#payment-intents-list), [Create](./REFERENCE.md#payment-intents-create), [Get](./REFERENCE.md#payment-intents-get), [Update](./REFERENCE.md#payment-intents-update), [API Search](./REFERENCE.md#payment-intents-api_search) |
+| Payment Intent Confirmations | [Create](./REFERENCE.md#payment-intent-confirmations-create) |
+| Payment Intent Cancellations | [Create](./REFERENCE.md#payment-intent-cancellations-create) |
+| Prices | [Create](./REFERENCE.md#prices-create) |
+| Checkout Sessions | [Create](./REFERENCE.md#checkout-sessions-create) |
+| Payment Method Attachments | [Create](./REFERENCE.md#payment-method-attachments-create) |
+| Disputes | [List](./REFERENCE.md#disputes-list), [Get](./REFERENCE.md#disputes-get) |
+| Payouts | [List](./REFERENCE.md#payouts-list), [Get](./REFERENCE.md#payouts-get) |
+
+
+## Stripe API docs
+
+See the official [Stripe API reference](https://docs.stripe.com/api).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
-
-connector = StripeConnector(
-    auth_config=StripeAuthConfig(
-        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@StripeConnector.tool_utils
-async def stripe_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
-
-connector = StripeConnector(
-    auth_config=StripeAuthConfig(
-        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
-    )
-)
-
-@tool
-@StripeConnector.tool_utils
-async def stripe_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Stripe connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
-
-connector = StripeConnector(
-    auth_config=StripeAuthConfig(
-        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@StripeConnector.tool_utils(framework="openai_agents")
-async def stripe_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Stripe connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Stripe Assistant", tools=[stripe_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
-
-connector = StripeConnector(
-    auth_config=StripeAuthConfig(
-        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
-    )
-)
-
-mcp = FastMCP("Stripe Agent")
-
-@mcp.tool
-@StripeConnector.tool_utils
-async def stripe_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Stripe connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `StripeConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -336,44 +271,105 @@ async def stripe_execute(entity: str, action: str, params: dict | None = None):
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Customers | [List](./REFERENCE.md#customers-list), [Create](./REFERENCE.md#customers-create), [Get](./REFERENCE.md#customers-get), [Update](./REFERENCE.md#customers-update), [Delete](./REFERENCE.md#customers-delete), [API Search](./REFERENCE.md#customers-api_search), [Context Store Search](./REFERENCE.md#customers-context-store-search) |
-| Invoices | [List](./REFERENCE.md#invoices-list), [Create](./REFERENCE.md#invoices-create), [Get](./REFERENCE.md#invoices-get), [API Search](./REFERENCE.md#invoices-api_search), [Context Store Search](./REFERENCE.md#invoices-context-store-search) |
-| Invoice Finalizations | [Create](./REFERENCE.md#invoice-finalizations-create) |
-| Invoice Sends | [Create](./REFERENCE.md#invoice-sends-create) |
-| Charges | [List](./REFERENCE.md#charges-list), [Get](./REFERENCE.md#charges-get), [API Search](./REFERENCE.md#charges-api_search), [Context Store Search](./REFERENCE.md#charges-context-store-search) |
-| Subscriptions | [List](./REFERENCE.md#subscriptions-list), [Create](./REFERENCE.md#subscriptions-create), [Get](./REFERENCE.md#subscriptions-get), [Update](./REFERENCE.md#subscriptions-update), [Delete](./REFERENCE.md#subscriptions-delete), [API Search](./REFERENCE.md#subscriptions-api_search), [Context Store Search](./REFERENCE.md#subscriptions-context-store-search) |
-| Refunds | [List](./REFERENCE.md#refunds-list), [Create](./REFERENCE.md#refunds-create), [Get](./REFERENCE.md#refunds-get), [Context Store Search](./REFERENCE.md#refunds-context-store-search) |
-| Products | [List](./REFERENCE.md#products-list), [Create](./REFERENCE.md#products-create), [Get](./REFERENCE.md#products-get), [Update](./REFERENCE.md#products-update), [Delete](./REFERENCE.md#products-delete), [API Search](./REFERENCE.md#products-api_search) |
-| Balance | [Get](./REFERENCE.md#balance-get) |
-| Balance Transactions | [List](./REFERENCE.md#balance-transactions-list), [Get](./REFERENCE.md#balance-transactions-get) |
-| Payment Intents | [List](./REFERENCE.md#payment-intents-list), [Create](./REFERENCE.md#payment-intents-create), [Get](./REFERENCE.md#payment-intents-get), [Update](./REFERENCE.md#payment-intents-update), [API Search](./REFERENCE.md#payment-intents-api_search) |
-| Payment Intent Confirmations | [Create](./REFERENCE.md#payment-intent-confirmations-create) |
-| Payment Intent Cancellations | [Create](./REFERENCE.md#payment-intent-cancellations-create) |
-| Prices | [Create](./REFERENCE.md#prices-create) |
-| Checkout Sessions | [Create](./REFERENCE.md#checkout-sessions-create) |
-| Payment Method Attachments | [Create](./REFERENCE.md#payment-method-attachments-create) |
-| Disputes | [List](./REFERENCE.md#disputes-list), [Get](./REFERENCE.md#disputes-get) |
-| Payouts | [List](./REFERENCE.md#payouts-list), [Get](./REFERENCE.md#payouts-get) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.stripe import StripeConnector
+from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
 
+connector = StripeConnector(
+    auth_config=StripeAuthConfig(
+        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@StripeConnector.tool_utils
+async def stripe_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.stripe import StripeConnector
+from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
+
+connector = StripeConnector(
+    auth_config=StripeAuthConfig(
+        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
+    )
+)
+
+@tool
+@StripeConnector.tool_utils
+async def stripe_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Stripe connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.stripe import StripeConnector
+from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
+
+connector = StripeConnector(
+    auth_config=StripeAuthConfig(
+        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@StripeConnector.tool_utils(framework="openai_agents")
+async def stripe_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Stripe connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Stripe Assistant", tools=[stripe_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.stripe import StripeConnector
+from airbyte_agent_sdk.connectors.stripe.models import StripeAuthConfig
+
+connector = StripeConnector(
+    auth_config=StripeAuthConfig(
+        api_key="<Your Stripe API Key (starts with sk_test_ or sk_live_)>"
+    )
+)
+
+mcp = FastMCP("Stripe Agent")
+
+@mcp.tool
+@StripeConnector.tool_utils
+async def stripe_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Stripe connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Stripe API docs
-
-See the official [Stripe API reference](https://docs.stripe.com/api).
-
 ## Version information
 
-- **Package version:** 0.1.13
-- **Connector version:** 0.1.13
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 0.1.13

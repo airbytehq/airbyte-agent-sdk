@@ -103,7 +103,7 @@ class ConnectorGenerator:
 
         Args:
             output_dir: Parent directory where package directory will be created
-            commit_sha: Git commit SHA of the connector-sdk used for generation
+            commit_sha: Deprecated, unused. Kept for backward compatibility
 
         Creates airbyte_agent_{name}/ directory containing:
             - __init__.py
@@ -153,7 +153,6 @@ class ConnectorGenerator:
             connector_version,
             operations,
             auth_config,
-            commit_sha,
         )
         # Generate envelope types for docs generation
         envelope_types = self._generate_envelope_types(operations)
@@ -471,7 +470,6 @@ class ConnectorGenerator:
         connector_version: str,
         operations: list,
         auth_config: dict[str, Any] | None = None,
-        commit_sha: str | None = None,
     ):
         """Generate README.md with usage documentation using Jinja template.
 
@@ -550,10 +548,8 @@ class ConnectorGenerator:
             "class_name": class_name,
             "package_name": package_name,
             "install_package": install_package,
-            "package_version": connector_version,
             "yaml_version": connector_version,
             "api_reference_url": api_reference_url,
-            "commit_sha": commit_sha or "unknown",
             "auth_example": auth_example,
             "auth_import": auth_import,
             "auth_config": auth_config,

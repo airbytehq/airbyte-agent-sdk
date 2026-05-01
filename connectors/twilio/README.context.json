@@ -3,10 +3,8 @@
   "class_name": "TwilioConnector",
   "package_name": "airbyte_agent_sdk.connectors.twilio",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.4",
   "yaml_version": "1.0.4",
   "api_reference_url": "https://www.twilio.com/docs/usage/api",
-  "commit_sha": "unknown",
   "auth_example": "TwilioAuthConfig(account_sid=\"...\", auth_token=\"...\")",
   "auth_import": ", TwilioAuthConfig",
   "auth_config": {

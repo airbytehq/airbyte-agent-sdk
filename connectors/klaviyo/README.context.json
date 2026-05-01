@@ -3,10 +3,8 @@
   "class_name": "KlaviyoConnector",
   "package_name": "airbyte_agent_sdk.connectors.klaviyo",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.5",
   "yaml_version": "1.0.5",
   "api_reference_url": "https://developers.klaviyo.com/en/reference/api_overview",
-  "commit_sha": "unknown",
   "auth_example": "KlaviyoAuthConfig(api_key=\"...\")",
   "auth_import": ", KlaviyoAuthConfig",
   "auth_config": {

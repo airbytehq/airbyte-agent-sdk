@@ -25,7 +25,7 @@ Zendesk Chat API uses the `Retry-After` header for rate limit backoff.
 The connector handles this automatically.
 
 
-## Example questions
+## Example prompts
 
 The Zendesk-Chat connector is optimized to handle prompts like these.
 
@@ -38,7 +38,7 @@ The Zendesk-Chat connector is optimized to handle prompts like these.
 - What triggers are currently active?
 - Show agent activity timeline for today
 
-## Unsupported questions
+## Unsupported prompts
 
 The Zendesk-Chat connector isn't currently able to handle prompts like these.
 
@@ -48,117 +48,46 @@ The Zendesk-Chat connector isn't currently able to handle prompts like these.
 - Update department settings
 - Delete a shortcut
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Accounts | [Get](./REFERENCE.md#accounts-get) |
+| Agents | [List](./REFERENCE.md#agents-list), [Get](./REFERENCE.md#agents-get), [Context Store Search](./REFERENCE.md#agents-context-store-search) |
+| Agent Timeline | [List](./REFERENCE.md#agent-timeline-list) |
+| Bans | [List](./REFERENCE.md#bans-list), [Get](./REFERENCE.md#bans-get) |
+| Chats | [List](./REFERENCE.md#chats-list), [Get](./REFERENCE.md#chats-get), [Context Store Search](./REFERENCE.md#chats-context-store-search) |
+| Departments | [List](./REFERENCE.md#departments-list), [Get](./REFERENCE.md#departments-get), [Context Store Search](./REFERENCE.md#departments-context-store-search) |
+| Goals | [List](./REFERENCE.md#goals-list), [Get](./REFERENCE.md#goals-get) |
+| Roles | [List](./REFERENCE.md#roles-list), [Get](./REFERENCE.md#roles-get) |
+| Routing Settings | [Get](./REFERENCE.md#routing-settings-get) |
+| Shortcuts | [List](./REFERENCE.md#shortcuts-list), [Get](./REFERENCE.md#shortcuts-get), [Context Store Search](./REFERENCE.md#shortcuts-context-store-search) |
+| Skills | [List](./REFERENCE.md#skills-list), [Get](./REFERENCE.md#skills-get) |
+| Triggers | [List](./REFERENCE.md#triggers-list), [Context Store Search](./REFERENCE.md#triggers-context-store-search) |
+
+
+## Zendesk-Chat API docs
+
+See the official [Zendesk-Chat API reference](https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
-from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
-
-connector = ZendeskChatConnector(
-    auth_config=ZendeskChatAuthConfig(
-        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@ZendeskChatConnector.tool_utils
-async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
-from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
-
-connector = ZendeskChatConnector(
-    auth_config=ZendeskChatAuthConfig(
-        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
-    )
-)
-
-@tool
-@ZendeskChatConnector.tool_utils
-async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Zendesk-Chat connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
-from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
-
-connector = ZendeskChatConnector(
-    auth_config=ZendeskChatAuthConfig(
-        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@ZendeskChatConnector.tool_utils(framework="openai_agents")
-async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Zendesk-Chat connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Zendesk-Chat Assistant", tools=[zendesk_chat_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
-from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
-
-connector = ZendeskChatConnector(
-    auth_config=ZendeskChatAuthConfig(
-        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
-    )
-)
-
-mcp = FastMCP("Zendesk-Chat Agent")
-
-@mcp.tool
-@ZendeskChatConnector.tool_utils
-async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Zendesk-Chat connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `ZendeskChatConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -343,38 +272,105 @@ async def zendesk_chat_execute(entity: str, action: str, params: dict | None = N
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Accounts | [Get](./REFERENCE.md#accounts-get) |
-| Agents | [List](./REFERENCE.md#agents-list), [Get](./REFERENCE.md#agents-get), [Context Store Search](./REFERENCE.md#agents-context-store-search) |
-| Agent Timeline | [List](./REFERENCE.md#agent-timeline-list) |
-| Bans | [List](./REFERENCE.md#bans-list), [Get](./REFERENCE.md#bans-get) |
-| Chats | [List](./REFERENCE.md#chats-list), [Get](./REFERENCE.md#chats-get), [Context Store Search](./REFERENCE.md#chats-context-store-search) |
-| Departments | [List](./REFERENCE.md#departments-list), [Get](./REFERENCE.md#departments-get), [Context Store Search](./REFERENCE.md#departments-context-store-search) |
-| Goals | [List](./REFERENCE.md#goals-list), [Get](./REFERENCE.md#goals-get) |
-| Roles | [List](./REFERENCE.md#roles-list), [Get](./REFERENCE.md#roles-get) |
-| Routing Settings | [Get](./REFERENCE.md#routing-settings-get) |
-| Shortcuts | [List](./REFERENCE.md#shortcuts-list), [Get](./REFERENCE.md#shortcuts-get), [Context Store Search](./REFERENCE.md#shortcuts-context-store-search) |
-| Skills | [List](./REFERENCE.md#skills-list), [Get](./REFERENCE.md#skills-get) |
-| Triggers | [List](./REFERENCE.md#triggers-list), [Context Store Search](./REFERENCE.md#triggers-context-store-search) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
+from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
 
+connector = ZendeskChatConnector(
+    auth_config=ZendeskChatAuthConfig(
+        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@ZendeskChatConnector.tool_utils
+async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
+from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
+
+connector = ZendeskChatConnector(
+    auth_config=ZendeskChatAuthConfig(
+        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
+    )
+)
+
+@tool
+@ZendeskChatConnector.tool_utils
+async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Zendesk-Chat connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
+from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
+
+connector = ZendeskChatConnector(
+    auth_config=ZendeskChatAuthConfig(
+        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@ZendeskChatConnector.tool_utils(framework="openai_agents")
+async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Zendesk-Chat connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Zendesk-Chat Assistant", tools=[zendesk_chat_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.zendesk_chat import ZendeskChatConnector
+from airbyte_agent_sdk.connectors.zendesk_chat.models import ZendeskChatAuthConfig
+
+connector = ZendeskChatConnector(
+    auth_config=ZendeskChatAuthConfig(
+        access_token="<Your Zendesk Chat OAuth 2.0 access token>"
+    )
+)
+
+mcp = FastMCP("Zendesk-Chat Agent")
+
+@mcp.tool
+@ZendeskChatConnector.tool_utils
+async def zendesk_chat_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Zendesk-Chat connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Zendesk-Chat API docs
-
-See the official [Zendesk-Chat API reference](https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/).
-
 ## Version information
 
-- **Package version:** 0.1.10
-- **Connector version:** 0.1.10
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 0.1.10

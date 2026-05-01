@@ -3,10 +3,8 @@
   "class_name": "JiraConnector",
   "package_name": "airbyte_agent_sdk.connectors.jira",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.1.9",
   "yaml_version": "1.1.9",
   "api_reference_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
-  "commit_sha": "unknown",
   "auth_example": "JiraAuthConfig(username=\"...\", password=\"...\")",
   "auth_import": ", JiraAuthConfig",
   "auth_config": {

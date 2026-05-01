@@ -3,10 +3,8 @@
   "class_name": "NotionConnector",
   "package_name": "airbyte_agent_sdk.connectors.notion",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.11",
   "yaml_version": "0.1.11",
   "api_reference_url": "https://developers.notion.com/reference/intro",
-  "commit_sha": "unknown",
   "auth_example": "NotionAuthConfig(client_id=\"...\", client_secret=\"...\", access_token=\"...\")",
   "auth_import": ", NotionAuthConfig",
   "auth_config": {

@@ -3,10 +3,8 @@
   "class_name": "GongConnector",
   "package_name": "airbyte_agent_sdk.connectors.gong",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.23",
   "yaml_version": "0.1.23",
   "api_reference_url": "https://gong.app.gong.io/settings/api/documentation",
-  "commit_sha": "unknown",
   "auth_example": "GongAuthConfig(access_token=\"...\", refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
   "auth_import": ", GongAuthConfig",
   "auth_config": {

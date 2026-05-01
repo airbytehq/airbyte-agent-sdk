@@ -4,7 +4,7 @@ The Confluence agent connector is a Python package that equips AI agents to inte
 
 Connector for the Confluence Cloud REST API. Provides read access to Confluence spaces, pages, blog posts, groups, and audit logs. Uses the Confluence Cloud REST API v2 for spaces, pages, and blog posts, and the v1 API for groups and audit records. Authenticates via HTTP Basic using an Atlassian account email and API token.
 
-## Example questions
+## Example prompts
 
 The Confluence connector is optimized to handle prompts like these.
 
@@ -22,7 +22,7 @@ The Confluence connector is optimized to handle prompts like these.
 - Find blog posts by a specific author
 - What audit events happened this week?
 
-## Unsupported questions
+## Unsupported prompts
 
 The Confluence connector isn't currently able to handle prompts like these.
 
@@ -32,121 +32,39 @@ The Confluence connector isn't currently able to handle prompts like these.
 - Upload an attachment to a page
 - Manage space permissions
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Spaces | [List](./REFERENCE.md#spaces-list), [Get](./REFERENCE.md#spaces-get), [Context Store Search](./REFERENCE.md#spaces-context-store-search) |
+| Pages | [List](./REFERENCE.md#pages-list), [Get](./REFERENCE.md#pages-get), [Context Store Search](./REFERENCE.md#pages-context-store-search) |
+| Blog Posts | [List](./REFERENCE.md#blog-posts-list), [Get](./REFERENCE.md#blog-posts-get), [Context Store Search](./REFERENCE.md#blog-posts-context-store-search) |
+| Groups | [List](./REFERENCE.md#groups-list), [Context Store Search](./REFERENCE.md#groups-context-store-search) |
+| Audit | [List](./REFERENCE.md#audit-list), [Context Store Search](./REFERENCE.md#audit-context-store-search) |
+
+
+## Confluence API docs
+
+See the official [Confluence API reference](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
-from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
-
-connector = ConfluenceConnector(
-    auth_config=ConfluenceAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@ConfluenceConnector.tool_utils
-async def confluence_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
-from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
-
-connector = ConfluenceConnector(
-    auth_config=ConfluenceAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-@tool
-@ConfluenceConnector.tool_utils
-async def confluence_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Confluence connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
-from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
-
-connector = ConfluenceConnector(
-    auth_config=ConfluenceAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@ConfluenceConnector.tool_utils(framework="openai_agents")
-async def confluence_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Confluence connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Confluence Assistant", tools=[confluence_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
-from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
-
-connector = ConfluenceConnector(
-    auth_config=ConfluenceAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-mcp = FastMCP("Confluence Agent")
-
-@mcp.tool
-@ConfluenceConnector.tool_utils
-async def confluence_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Confluence connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `ConfluenceConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -331,31 +249,109 @@ async def confluence_execute(entity: str, action: str, params: dict | None = Non
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Spaces | [List](./REFERENCE.md#spaces-list), [Get](./REFERENCE.md#spaces-get), [Context Store Search](./REFERENCE.md#spaces-context-store-search) |
-| Pages | [List](./REFERENCE.md#pages-list), [Get](./REFERENCE.md#pages-get), [Context Store Search](./REFERENCE.md#pages-context-store-search) |
-| Blog Posts | [List](./REFERENCE.md#blog-posts-list), [Get](./REFERENCE.md#blog-posts-get), [Context Store Search](./REFERENCE.md#blog-posts-context-store-search) |
-| Groups | [List](./REFERENCE.md#groups-list), [Context Store Search](./REFERENCE.md#groups-context-store-search) |
-| Audit | [List](./REFERENCE.md#audit-list), [Context Store Search](./REFERENCE.md#audit-context-store-search) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
+from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
 
+connector = ConfluenceConnector(
+    auth_config=ConfluenceAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@ConfluenceConnector.tool_utils
+async def confluence_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
+from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
+
+connector = ConfluenceConnector(
+    auth_config=ConfluenceAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
+
+@tool
+@ConfluenceConnector.tool_utils
+async def confluence_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Confluence connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
+from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
+
+connector = ConfluenceConnector(
+    auth_config=ConfluenceAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@ConfluenceConnector.tool_utils(framework="openai_agents")
+async def confluence_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Confluence connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Confluence Assistant", tools=[confluence_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.confluence import ConfluenceConnector
+from airbyte_agent_sdk.connectors.confluence.models import ConfluenceAuthConfig
+
+connector = ConfluenceConnector(
+    auth_config=ConfluenceAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Confluence API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
+
+mcp = FastMCP("Confluence Agent")
+
+@mcp.tool
+@ConfluenceConnector.tool_utils
+async def confluence_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Confluence connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Confluence API docs
-
-See the official [Confluence API reference](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/).
-
 ## Version information
 
-- **Package version:** 1.0.1
-- **Connector version:** 1.0.1
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 1.0.1

@@ -9,7 +9,7 @@ data, as well as write operations including sending messages, managing drafts, m
 message labels, and creating or updating labels.
 
 
-## Example questions
+## Example prompts
 
 The Gmail connector is optimized to handle prompts like these.
 
@@ -36,7 +36,7 @@ The Gmail connector is optimized to handle prompts like these.
 - Find emails from a specific sender
 - Show me emails with attachments
 
-## Unsupported questions
+## Unsupported prompts
 
 The Gmail connector isn't currently able to handle prompts like these.
 
@@ -47,129 +47,42 @@ The Gmail connector isn't currently able to handle prompts like these.
 - Access Google Calendar events
 - Manage contacts
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Profile | [Get](./REFERENCE.md#profile-get), [Context Store Search](./REFERENCE.md#profile-context-store-search) |
+| Messages | [List](./REFERENCE.md#messages-list), [Get](./REFERENCE.md#messages-get), [Create](./REFERENCE.md#messages-create), [Update](./REFERENCE.md#messages-update), [Context Store Search](./REFERENCE.md#messages-context-store-search) |
+| Labels | [List](./REFERENCE.md#labels-list), [Create](./REFERENCE.md#labels-create), [Get](./REFERENCE.md#labels-get), [Update](./REFERENCE.md#labels-update), [Delete](./REFERENCE.md#labels-delete), [Context Store Search](./REFERENCE.md#labels-context-store-search) |
+| Drafts | [List](./REFERENCE.md#drafts-list), [Create](./REFERENCE.md#drafts-create), [Get](./REFERENCE.md#drafts-get), [Update](./REFERENCE.md#drafts-update), [Delete](./REFERENCE.md#drafts-delete), [Context Store Search](./REFERENCE.md#drafts-context-store-search) |
+| Drafts Send | [Create](./REFERENCE.md#drafts-send-create) |
+| Threads | [List](./REFERENCE.md#threads-list), [Get](./REFERENCE.md#threads-get), [Context Store Search](./REFERENCE.md#threads-context-store-search) |
+| Messages Trash | [Create](./REFERENCE.md#messages-trash-create) |
+| Messages Untrash | [Create](./REFERENCE.md#messages-untrash-create) |
+
+
+## Gmail API docs
+
+See the official [Gmail API reference](https://developers.google.com/gmail/api/reference/rest).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.gmail import GmailConnector
-from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
-
-connector = GmailConnector(
-    auth_config=GmailAuthConfig(
-        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
-        refresh_token="<Your Google OAuth2 Refresh Token>",
-        client_id="<Your Google OAuth2 Client ID>",
-        client_secret="<Your Google OAuth2 Client Secret>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@GmailConnector.tool_utils
-async def gmail_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.gmail import GmailConnector
-from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
-
-connector = GmailConnector(
-    auth_config=GmailAuthConfig(
-        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
-        refresh_token="<Your Google OAuth2 Refresh Token>",
-        client_id="<Your Google OAuth2 Client ID>",
-        client_secret="<Your Google OAuth2 Client Secret>"
-    )
-)
-
-@tool
-@GmailConnector.tool_utils
-async def gmail_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Gmail connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.gmail import GmailConnector
-from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
-
-connector = GmailConnector(
-    auth_config=GmailAuthConfig(
-        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
-        refresh_token="<Your Google OAuth2 Refresh Token>",
-        client_id="<Your Google OAuth2 Client ID>",
-        client_secret="<Your Google OAuth2 Client Secret>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@GmailConnector.tool_utils(framework="openai_agents")
-async def gmail_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Gmail connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Gmail Assistant", tools=[gmail_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.gmail import GmailConnector
-from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
-
-connector = GmailConnector(
-    auth_config=GmailAuthConfig(
-        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
-        refresh_token="<Your Google OAuth2 Refresh Token>",
-        client_id="<Your Google OAuth2 Client ID>",
-        client_secret="<Your Google OAuth2 Client Secret>"
-    )
-)
-
-mcp = FastMCP("Gmail Agent")
-
-@mcp.tool
-@GmailConnector.tool_utils
-async def gmail_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Gmail connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `GmailConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -354,34 +267,117 @@ async def gmail_execute(entity: str, action: str, params: dict | None = None):
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Profile | [Get](./REFERENCE.md#profile-get), [Context Store Search](./REFERENCE.md#profile-context-store-search) |
-| Messages | [List](./REFERENCE.md#messages-list), [Get](./REFERENCE.md#messages-get), [Create](./REFERENCE.md#messages-create), [Update](./REFERENCE.md#messages-update), [Context Store Search](./REFERENCE.md#messages-context-store-search) |
-| Labels | [List](./REFERENCE.md#labels-list), [Create](./REFERENCE.md#labels-create), [Get](./REFERENCE.md#labels-get), [Update](./REFERENCE.md#labels-update), [Delete](./REFERENCE.md#labels-delete), [Context Store Search](./REFERENCE.md#labels-context-store-search) |
-| Drafts | [List](./REFERENCE.md#drafts-list), [Create](./REFERENCE.md#drafts-create), [Get](./REFERENCE.md#drafts-get), [Update](./REFERENCE.md#drafts-update), [Delete](./REFERENCE.md#drafts-delete), [Context Store Search](./REFERENCE.md#drafts-context-store-search) |
-| Drafts Send | [Create](./REFERENCE.md#drafts-send-create) |
-| Threads | [List](./REFERENCE.md#threads-list), [Get](./REFERENCE.md#threads-get), [Context Store Search](./REFERENCE.md#threads-context-store-search) |
-| Messages Trash | [Create](./REFERENCE.md#messages-trash-create) |
-| Messages Untrash | [Create](./REFERENCE.md#messages-untrash-create) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.gmail import GmailConnector
+from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
 
+connector = GmailConnector(
+    auth_config=GmailAuthConfig(
+        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
+        refresh_token="<Your Google OAuth2 Refresh Token>",
+        client_id="<Your Google OAuth2 Client ID>",
+        client_secret="<Your Google OAuth2 Client Secret>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@GmailConnector.tool_utils
+async def gmail_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.gmail import GmailConnector
+from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
+
+connector = GmailConnector(
+    auth_config=GmailAuthConfig(
+        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
+        refresh_token="<Your Google OAuth2 Refresh Token>",
+        client_id="<Your Google OAuth2 Client ID>",
+        client_secret="<Your Google OAuth2 Client Secret>"
+    )
+)
+
+@tool
+@GmailConnector.tool_utils
+async def gmail_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Gmail connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.gmail import GmailConnector
+from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
+
+connector = GmailConnector(
+    auth_config=GmailAuthConfig(
+        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
+        refresh_token="<Your Google OAuth2 Refresh Token>",
+        client_id="<Your Google OAuth2 Client ID>",
+        client_secret="<Your Google OAuth2 Client Secret>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@GmailConnector.tool_utils(framework="openai_agents")
+async def gmail_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Gmail connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Gmail Assistant", tools=[gmail_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.gmail import GmailConnector
+from airbyte_agent_sdk.connectors.gmail.models import GmailAuthConfig
+
+connector = GmailConnector(
+    auth_config=GmailAuthConfig(
+        access_token="<Your Google OAuth2 Access Token (optional, will be obtained via refresh)>",
+        refresh_token="<Your Google OAuth2 Refresh Token>",
+        client_id="<Your Google OAuth2 Client ID>",
+        client_secret="<Your Google OAuth2 Client Secret>"
+    )
+)
+
+mcp = FastMCP("Gmail Agent")
+
+@mcp.tool
+@GmailConnector.tool_utils
+async def gmail_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Gmail connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Gmail API docs
-
-See the official [Gmail API reference](https://developers.google.com/gmail/api/reference/rest).
-
 ## Version information
 
-- **Package version:** 0.1.4
-- **Connector version:** 0.1.4
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 0.1.4

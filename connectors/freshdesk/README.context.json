@@ -3,10 +3,8 @@
   "class_name": "FreshdeskConnector",
   "package_name": "airbyte_agent_sdk.connectors.freshdesk",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.3",
   "yaml_version": "1.0.3",
   "api_reference_url": "https://developers.freshdesk.com/api/",
-  "commit_sha": "unknown",
   "auth_example": "FreshdeskAuthConfig(api_key=\"...\")",
   "auth_import": ", FreshdeskAuthConfig",
   "auth_config": {

@@ -10,7 +10,7 @@ Type-safe {{ connector_name | title }} API connector with full IDE autocomplete 
 {% endif %}
 
 {% if supported_questions %}
-## Example questions
+## Example prompts
 
 The {{ connector_name | title }} connector is optimized to handle prompts like these.
 
@@ -18,22 +18,69 @@ The {{ connector_name | title }} connector is optimized to handle prompts like t
 
 {% endif %}
 {% if unsupported_questions %}
-## Unsupported questions
+## Unsupported prompts
 
 The {{ connector_name | title }} connector isn't currently able to handle prompts like these.
 
 {{ unsupported_questions | mdx_escape }}
 
 {% endif %}
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+{{ supported_entities_actions_table(entities_grouped, reference_path="./REFERENCE.md", search_schemas=search_schemas) }}
+
+{% if api_reference_url %}
+## {{ connector_name | title }} API docs
+
+See the official [{{ connector_name | title }} API reference]({{ api_reference_url }}).
+
+{% endif %}
+## SDK installation
 
 ```bash
 uv pip install {{ install_package }}
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
+Connectors can run in hosted or open source mode.
+
+### Hosted
+
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
+If your Airbyte client can access multiple organizations, also set `organization_id`.
+
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
+
+The `connect()` factory returns a fully typed `{{ class_name }}` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
+
+{% set connect_init_lines -%}
+from airbyte_agent_sdk import connect
+from {{ package_name }} import {{ class_name }}
+
+connector = connect("{{ connector_name }}", workspace_name="<your_workspace_name>")
+{%- endset %}
+
+{{ framework_usage_blocks(class_name, connector_name, package_name, connect_init_lines) }}
+
+Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
+
+{% set hosted_init_lines -%}
+from {{ package_name }} import {{ class_name }}
+from airbyte_agent_sdk.types import AirbyteAuthConfig
+
+connector = {{ class_name }}(
+    auth_config=AirbyteAuthConfig(
+        workspace_name="<your_workspace_name>",
+        organization_id="<your_organization_id>",  # Optional for multi-org clients
+        airbyte_client_id="<your-client-id>",
+        airbyte_client_secret="<your-client-secret>"
+    )
+)
+{%- endset %}
+{{ framework_usage_blocks(class_name, connector_name, package_name, hosted_init_lines) }}
 
 ### Open source
 
@@ -74,61 +121,11 @@ connector = {{ class_name }}()
 {{ framework_usage_blocks(class_name, connector_name, package_name, oss_init_lines) }}
 {% endif %}
 
-### Hosted
-
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
-If your Airbyte client can access multiple organizations, also set `organization_id`.
-
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
-
-The `connect()` factory returns a fully typed `{{ class_name }}` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
-
-{% set connect_init_lines -%}
-from airbyte_agent_sdk import connect
-from {{ package_name }} import {{ class_name }}
-
-connector = connect("{{ connector_name }}", workspace_name="<your_workspace_name>")
-{%- endset %}
-
-{{ framework_usage_blocks(class_name, connector_name, package_name, connect_init_lines) }}
-
-Or pass credentials explicitly (equivalent, useful when you're not loading them from the environment):
-
-{% set hosted_init_lines -%}
-from {{ package_name }} import {{ class_name }}
-from airbyte_agent_sdk.types import AirbyteAuthConfig
-
-connector = {{ class_name }}(
-    auth_config=AirbyteAuthConfig(
-        workspace_name="<your_workspace_name>",
-        organization_id="<your_organization_id>",  # Optional for multi-org clients
-        airbyte_client_id="<your-client-id>",
-        airbyte_client_secret="<your-client-secret>"
-    )
-)
-{%- endset %}
-{{ framework_usage_blocks(class_name, connector_name, package_name, hosted_init_lines) }}
-
-## Full documentation
-
-### Entities and actions
-
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
-
-{{ supported_entities_actions_table(entities_grouped, reference_path="./REFERENCE.md", search_schemas=search_schemas) }}
-
-### Authentication
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-{% if api_reference_url %}
-### {{ connector_name | title }} API docs
-
-See the official [{{ connector_name | title }} API reference]({{ api_reference_url }}).
-{% endif %}
-
 ## Version information
 
-- **Package version:** {{ package_version }}
-- **Connector version:** {{ yaml_version }}
-- **Generated with Connector SDK commit SHA:** {{ commit_sha }}
+**Connector version:** {{ yaml_version }}
+

@@ -3,10 +3,8 @@
   "class_name": "LinkedinAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.linkedin_ads",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.5",
   "yaml_version": "1.0.5",
   "api_reference_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
-  "commit_sha": "unknown",
   "auth_example": "LinkedinAdsAuthConfig(refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
   "auth_import": ", LinkedinAdsAuthConfig",
   "auth_config": {

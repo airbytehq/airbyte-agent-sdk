@@ -3,10 +3,8 @@
   "class_name": "SlackConnector",
   "package_name": "airbyte_agent_sdk.connectors.slack",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.20",
   "yaml_version": "0.1.20",
   "api_reference_url": "https://api.slack.com/methods",
-  "commit_sha": "unknown",
   "auth_example": "SlackAuthConfig(bot_key=\"...\")",
   "auth_import": ", SlackAuthConfig",
   "auth_config": {

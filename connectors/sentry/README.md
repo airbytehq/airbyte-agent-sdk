@@ -4,7 +4,7 @@ The Sentry agent connector is a Python package that equips AI agents to interact
 
 Connector for the Sentry error monitoring and performance tracking API. Provides access to projects, issues, events, and releases within your Sentry organization. Supports listing and retrieving detailed information about error tracking data, project configurations, and software releases.
 
-## Example questions
+## Example prompts
 
 The Sentry connector is optimized to handle prompts like these.
 
@@ -18,7 +18,7 @@ The Sentry connector is optimized to handle prompts like these.
 - Show me issues that were first seen this week
 - Find releases created in the last month
 
-## Unsupported questions
+## Unsupported prompts
 
 The Sentry connector isn't currently able to handle prompts like these.
 
@@ -27,117 +27,39 @@ The Sentry connector isn't currently able to handle prompts like these.
 - Update a release
 - Resolve all issues in a project
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
+| Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
+| Events | [List](./REFERENCE.md#events-list), [Get](./REFERENCE.md#events-get), [Context Store Search](./REFERENCE.md#events-context-store-search) |
+| Releases | [List](./REFERENCE.md#releases-list), [Get](./REFERENCE.md#releases-get), [Context Store Search](./REFERENCE.md#releases-context-store-search) |
+| Project Detail | [Get](./REFERENCE.md#project-detail-get) |
+
+
+## Sentry API docs
+
+See the official [Sentry API reference](https://docs.sentry.io/api/).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.sentry import SentryConnector
-from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
-
-connector = SentryConnector(
-    auth_config=SentryAuthConfig(
-        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@SentryConnector.tool_utils
-async def sentry_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.sentry import SentryConnector
-from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
-
-connector = SentryConnector(
-    auth_config=SentryAuthConfig(
-        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
-    )
-)
-
-@tool
-@SentryConnector.tool_utils
-async def sentry_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Sentry connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.sentry import SentryConnector
-from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
-
-connector = SentryConnector(
-    auth_config=SentryAuthConfig(
-        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@SentryConnector.tool_utils(framework="openai_agents")
-async def sentry_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Sentry connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Sentry Assistant", tools=[sentry_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.sentry import SentryConnector
-from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
-
-connector = SentryConnector(
-    auth_config=SentryAuthConfig(
-        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
-    )
-)
-
-mcp = FastMCP("Sentry Agent")
-
-@mcp.tool
-@SentryConnector.tool_utils
-async def sentry_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Sentry connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `SentryConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -322,31 +244,105 @@ async def sentry_execute(entity: str, action: str, params: dict | None = None):
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
-| Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
-| Events | [List](./REFERENCE.md#events-list), [Get](./REFERENCE.md#events-get), [Context Store Search](./REFERENCE.md#events-context-store-search) |
-| Releases | [List](./REFERENCE.md#releases-list), [Get](./REFERENCE.md#releases-get), [Context Store Search](./REFERENCE.md#releases-context-store-search) |
-| Project Detail | [Get](./REFERENCE.md#project-detail-get) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.sentry import SentryConnector
+from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
 
+connector = SentryConnector(
+    auth_config=SentryAuthConfig(
+        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@SentryConnector.tool_utils
+async def sentry_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.sentry import SentryConnector
+from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
+
+connector = SentryConnector(
+    auth_config=SentryAuthConfig(
+        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
+    )
+)
+
+@tool
+@SentryConnector.tool_utils
+async def sentry_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Sentry connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.sentry import SentryConnector
+from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
+
+connector = SentryConnector(
+    auth_config=SentryAuthConfig(
+        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@SentryConnector.tool_utils(framework="openai_agents")
+async def sentry_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Sentry connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Sentry Assistant", tools=[sentry_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.sentry import SentryConnector
+from airbyte_agent_sdk.connectors.sentry.models import SentryAuthConfig
+
+connector = SentryConnector(
+    auth_config=SentryAuthConfig(
+        auth_token="<Sentry authentication token. Log into Sentry and create one at Settings > Account > API > Auth Tokens.>"
+    )
+)
+
+mcp = FastMCP("Sentry Agent")
+
+@mcp.tool
+@SentryConnector.tool_utils
+async def sentry_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Sentry connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Sentry API docs
-
-See the official [Sentry API reference](https://docs.sentry.io/api/).
-
 ## Version information
 
-- **Package version:** 1.0.4
-- **Connector version:** 1.0.4
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 1.0.4

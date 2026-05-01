@@ -3,10 +3,8 @@
   "class_name": "ZendeskSupportConnector",
   "package_name": "airbyte_agent_sdk.connectors.zendesk_support",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.20",
   "yaml_version": "0.1.20",
   "api_reference_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/",
-  "commit_sha": "unknown",
   "auth_example": "ZendeskSupportAuthConfig(access_token=\"...\", refresh_token=\"...\")",
   "auth_import": ", ZendeskSupportAuthConfig",
   "auth_config": {

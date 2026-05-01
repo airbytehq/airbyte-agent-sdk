@@ -3,10 +3,8 @@
   "class_name": "HubspotConnector",
   "package_name": "airbyte_agent_sdk.connectors.hubspot",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.18",
   "yaml_version": "0.1.18",
   "api_reference_url": "https://developers.hubspot.com/docs/api/crm/understanding-the-crm",
-  "commit_sha": "unknown",
   "auth_example": "HubspotAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\", access_token=\"...\")",
   "auth_import": ", HubspotAuthConfig",
   "auth_config": {

@@ -3,10 +3,8 @@
   "class_name": "AmplitudeConnector",
   "package_name": "airbyte_agent_sdk.connectors.amplitude",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.3",
   "yaml_version": "1.0.3",
   "api_reference_url": "https://www.docs.developers.amplitude.com/analytics/apis/",
-  "commit_sha": "unknown",
   "auth_example": "AmplitudeAuthConfig(api_key=\"...\", secret_key=\"...\")",
   "auth_import": ", AmplitudeAuthConfig",
   "auth_config": {

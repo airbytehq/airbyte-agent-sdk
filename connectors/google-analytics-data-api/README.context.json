@@ -3,10 +3,8 @@
   "class_name": "GoogleAnalyticsDataApiConnector",
   "package_name": "airbyte_agent_sdk.connectors.google_analytics_data_api",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.5",
   "yaml_version": "1.0.5",
   "api_reference_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
-  "commit_sha": "unknown",
   "auth_example": "GoogleAnalyticsDataApiAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\")",
   "auth_import": ", GoogleAnalyticsDataApiAuthConfig",
   "auth_config": {

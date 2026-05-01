@@ -3,10 +3,8 @@
   "class_name": "GoogleAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.google_ads",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.9",
   "yaml_version": "1.0.9",
   "api_reference_url": "https://developers.google.com/google-ads/api/rest/reference/rest",
-  "commit_sha": "unknown",
   "auth_example": "GoogleAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\", developer_token=\"...\")",
   "auth_import": ", GoogleAdsAuthConfig",
   "auth_config": {

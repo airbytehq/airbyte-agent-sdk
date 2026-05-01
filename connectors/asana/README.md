@@ -7,7 +7,7 @@ projects and tasks. This connector provides access to tasks, projects, workspace
 teams, and users for project tracking, workload analysis, and productivity insights.
 
 
-## Example questions
+## Example prompts
 
 The Asana connector is optimized to handle prompts like these.
 
@@ -43,123 +43,67 @@ The Asana connector is optimized to handle prompts like these.
 - Rename the tag 'WIP' to 'In Progress'
 - Delete the tag 'Deprecated'
 
-## Unsupported questions
+## Unsupported prompts
 
 The Asana connector isn't currently able to handle prompts like these.
 
 - Move this task to another project
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Tasks | [List](./REFERENCE.md#tasks-list), [Create](./REFERENCE.md#tasks-create), [Get](./REFERENCE.md#tasks-get), [Update](./REFERENCE.md#tasks-update), [Delete](./REFERENCE.md#tasks-delete), [Context Store Search](./REFERENCE.md#tasks-context-store-search) |
+| Project Tasks | [List](./REFERENCE.md#project-tasks-list) |
+| Workspace Task Search | [List](./REFERENCE.md#workspace-task-search-list) |
+| Projects | [List](./REFERENCE.md#projects-list), [Create](./REFERENCE.md#projects-create), [Get](./REFERENCE.md#projects-get), [Update](./REFERENCE.md#projects-update), [Delete](./REFERENCE.md#projects-delete), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
+| Task Projects | [List](./REFERENCE.md#task-projects-list) |
+| Team Projects | [List](./REFERENCE.md#team-projects-list) |
+| Workspace Projects | [List](./REFERENCE.md#workspace-projects-list) |
+| Workspaces | [List](./REFERENCE.md#workspaces-list), [Get](./REFERENCE.md#workspaces-get), [Context Store Search](./REFERENCE.md#workspaces-context-store-search) |
+| Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get), [Context Store Search](./REFERENCE.md#users-context-store-search) |
+| Workspace Users | [List](./REFERENCE.md#workspace-users-list) |
+| Team Users | [List](./REFERENCE.md#team-users-list) |
+| Teams | [Get](./REFERENCE.md#teams-get), [Context Store Search](./REFERENCE.md#teams-context-store-search) |
+| Workspace Teams | [List](./REFERENCE.md#workspace-teams-list) |
+| User Teams | [List](./REFERENCE.md#user-teams-list) |
+| Attachments | [List](./REFERENCE.md#attachments-list), [Get](./REFERENCE.md#attachments-get), [Download](./REFERENCE.md#attachments-download), [Context Store Search](./REFERENCE.md#attachments-context-store-search) |
+| Workspace Tags | [List](./REFERENCE.md#workspace-tags-list), [Create](./REFERENCE.md#workspace-tags-create) |
+| Tags | [Get](./REFERENCE.md#tags-get), [Update](./REFERENCE.md#tags-update), [Delete](./REFERENCE.md#tags-delete), [Context Store Search](./REFERENCE.md#tags-context-store-search) |
+| Tag Tasks | [List](./REFERENCE.md#tag-tasks-list) |
+| Project Sections | [List](./REFERENCE.md#project-sections-list), [Create](./REFERENCE.md#project-sections-create) |
+| Sections | [Get](./REFERENCE.md#sections-get), [Update](./REFERENCE.md#sections-update), [Delete](./REFERENCE.md#sections-delete), [Context Store Search](./REFERENCE.md#sections-context-store-search) |
+| Section Tasks | [List](./REFERENCE.md#section-tasks-list), [Create](./REFERENCE.md#section-tasks-create) |
+| Task Subtasks | [List](./REFERENCE.md#task-subtasks-list) |
+| Task Dependencies | [List](./REFERENCE.md#task-dependencies-list) |
+| Task Dependents | [List](./REFERENCE.md#task-dependents-list) |
+| Task Stories | [Create](./REFERENCE.md#task-stories-create) |
+| Task Tags | [Create](./REFERENCE.md#task-tags-create), [Delete](./REFERENCE.md#task-tags-delete) |
+| Workspace Memberships | [Create](./REFERENCE.md#workspace-memberships-create) |
+
+
+## Asana API docs
+
+See the official [Asana API reference](https://developers.asana.com/reference/rest-api-reference).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.asana import AsanaConnector
-from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
-
-connector = AsanaConnector(
-    auth_config=AsanaPersonalAccessTokenAuthConfig(
-        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@AsanaConnector.tool_utils
-async def asana_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.asana import AsanaConnector
-from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
-
-connector = AsanaConnector(
-    auth_config=AsanaPersonalAccessTokenAuthConfig(
-        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
-    )
-)
-
-@tool
-@AsanaConnector.tool_utils
-async def asana_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Asana connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.asana import AsanaConnector
-from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
-
-connector = AsanaConnector(
-    auth_config=AsanaPersonalAccessTokenAuthConfig(
-        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@AsanaConnector.tool_utils(framework="openai_agents")
-async def asana_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Asana connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Asana Assistant", tools=[asana_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.asana import AsanaConnector
-from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
-
-connector = AsanaConnector(
-    auth_config=AsanaPersonalAccessTokenAuthConfig(
-        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
-    )
-)
-
-mcp = FastMCP("Asana Agent")
-
-@mcp.tool
-@AsanaConnector.tool_utils
-async def asana_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Asana connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `AsanaConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -344,53 +288,105 @@ async def asana_execute(entity: str, action: str, params: dict | None = None):
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Tasks | [List](./REFERENCE.md#tasks-list), [Create](./REFERENCE.md#tasks-create), [Get](./REFERENCE.md#tasks-get), [Update](./REFERENCE.md#tasks-update), [Delete](./REFERENCE.md#tasks-delete), [Context Store Search](./REFERENCE.md#tasks-context-store-search) |
-| Project Tasks | [List](./REFERENCE.md#project-tasks-list) |
-| Workspace Task Search | [List](./REFERENCE.md#workspace-task-search-list) |
-| Projects | [List](./REFERENCE.md#projects-list), [Create](./REFERENCE.md#projects-create), [Get](./REFERENCE.md#projects-get), [Update](./REFERENCE.md#projects-update), [Delete](./REFERENCE.md#projects-delete), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
-| Task Projects | [List](./REFERENCE.md#task-projects-list) |
-| Team Projects | [List](./REFERENCE.md#team-projects-list) |
-| Workspace Projects | [List](./REFERENCE.md#workspace-projects-list) |
-| Workspaces | [List](./REFERENCE.md#workspaces-list), [Get](./REFERENCE.md#workspaces-get), [Context Store Search](./REFERENCE.md#workspaces-context-store-search) |
-| Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get), [Context Store Search](./REFERENCE.md#users-context-store-search) |
-| Workspace Users | [List](./REFERENCE.md#workspace-users-list) |
-| Team Users | [List](./REFERENCE.md#team-users-list) |
-| Teams | [Get](./REFERENCE.md#teams-get), [Context Store Search](./REFERENCE.md#teams-context-store-search) |
-| Workspace Teams | [List](./REFERENCE.md#workspace-teams-list) |
-| User Teams | [List](./REFERENCE.md#user-teams-list) |
-| Attachments | [List](./REFERENCE.md#attachments-list), [Get](./REFERENCE.md#attachments-get), [Download](./REFERENCE.md#attachments-download), [Context Store Search](./REFERENCE.md#attachments-context-store-search) |
-| Workspace Tags | [List](./REFERENCE.md#workspace-tags-list), [Create](./REFERENCE.md#workspace-tags-create) |
-| Tags | [Get](./REFERENCE.md#tags-get), [Update](./REFERENCE.md#tags-update), [Delete](./REFERENCE.md#tags-delete), [Context Store Search](./REFERENCE.md#tags-context-store-search) |
-| Tag Tasks | [List](./REFERENCE.md#tag-tasks-list) |
-| Project Sections | [List](./REFERENCE.md#project-sections-list), [Create](./REFERENCE.md#project-sections-create) |
-| Sections | [Get](./REFERENCE.md#sections-get), [Update](./REFERENCE.md#sections-update), [Delete](./REFERENCE.md#sections-delete), [Context Store Search](./REFERENCE.md#sections-context-store-search) |
-| Section Tasks | [List](./REFERENCE.md#section-tasks-list), [Create](./REFERENCE.md#section-tasks-create) |
-| Task Subtasks | [List](./REFERENCE.md#task-subtasks-list) |
-| Task Dependencies | [List](./REFERENCE.md#task-dependencies-list) |
-| Task Dependents | [List](./REFERENCE.md#task-dependents-list) |
-| Task Stories | [Create](./REFERENCE.md#task-stories-create) |
-| Task Tags | [Create](./REFERENCE.md#task-tags-create), [Delete](./REFERENCE.md#task-tags-delete) |
-| Workspace Memberships | [Create](./REFERENCE.md#workspace-memberships-create) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.asana import AsanaConnector
+from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
 
+connector = AsanaConnector(
+    auth_config=AsanaPersonalAccessTokenAuthConfig(
+        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@AsanaConnector.tool_utils
+async def asana_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.asana import AsanaConnector
+from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
+
+connector = AsanaConnector(
+    auth_config=AsanaPersonalAccessTokenAuthConfig(
+        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
+    )
+)
+
+@tool
+@AsanaConnector.tool_utils
+async def asana_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Asana connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.asana import AsanaConnector
+from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
+
+connector = AsanaConnector(
+    auth_config=AsanaPersonalAccessTokenAuthConfig(
+        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@AsanaConnector.tool_utils(framework="openai_agents")
+async def asana_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Asana connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Asana Assistant", tools=[asana_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.asana import AsanaConnector
+from airbyte_agent_sdk.connectors.asana.models import AsanaPersonalAccessTokenAuthConfig
+
+connector = AsanaConnector(
+    auth_config=AsanaPersonalAccessTokenAuthConfig(
+        token="<Your Asana Personal Access Token. Generate one at https://app.asana.com/0/my-apps>"
+    )
+)
+
+mcp = FastMCP("Asana Agent")
+
+@mcp.tool
+@AsanaConnector.tool_utils
+async def asana_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Asana connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Asana API docs
-
-See the official [Asana API reference](https://developers.asana.com/reference/rest-api-reference).
-
 ## Version information
 
-- **Package version:** 0.1.20
-- **Connector version:** 0.1.20
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 0.1.20

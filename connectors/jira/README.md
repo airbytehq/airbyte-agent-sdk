@@ -4,7 +4,7 @@ The Jira agent connector is a Python package that equips AI agents to interact w
 
 Connector for Jira API
 
-## Example questions
+## Example prompts
 
 The Jira connector is optimized to handle prompts like these.
 
@@ -38,128 +38,50 @@ The Jira connector is optimized to handle prompts like these.
 - What projects have the most issues?
 - Search for users named \{user_name\}
 
-## Unsupported questions
+## Unsupported prompts
 
 The Jira connector isn't currently able to handle prompts like these.
 
 - Attach a file to \{issue_key\}
 - Add a watcher to \{issue_key\}
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Issues | [API Search](./REFERENCE.md#issues-api_search), [Create](./REFERENCE.md#issues-create), [Get](./REFERENCE.md#issues-get), [Update](./REFERENCE.md#issues-update), [Delete](./REFERENCE.md#issues-delete), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
+| Projects | [API Search](./REFERENCE.md#projects-api_search), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
+| Users | [Get](./REFERENCE.md#users-get), [List](./REFERENCE.md#users-list), [API Search](./REFERENCE.md#users-api_search), [Context Store Search](./REFERENCE.md#users-context-store-search) |
+| Issue Fields | [List](./REFERENCE.md#issue-fields-list), [API Search](./REFERENCE.md#issue-fields-api_search), [Context Store Search](./REFERENCE.md#issue-fields-context-store-search) |
+| Issue Comments | [List](./REFERENCE.md#issue-comments-list), [Create](./REFERENCE.md#issue-comments-create), [Get](./REFERENCE.md#issue-comments-get), [Update](./REFERENCE.md#issue-comments-update), [Delete](./REFERENCE.md#issue-comments-delete), [Context Store Search](./REFERENCE.md#issue-comments-context-store-search) |
+| Issue Worklogs | [Get](./REFERENCE.md#issue-worklogs-get), [List](./REFERENCE.md#issue-worklogs-list), [Create](./REFERENCE.md#issue-worklogs-create), [Context Store Search](./REFERENCE.md#issue-worklogs-context-store-search) |
+| Issues Assignee | [Update](./REFERENCE.md#issues-assignee-update) |
+| Issue Transitions | [List](./REFERENCE.md#issue-transitions-list), [Create](./REFERENCE.md#issue-transitions-create) |
+| Issue Links | [Create](./REFERENCE.md#issue-links-create) |
+
+
+## Jira API docs
+
+See the official [Jira API reference](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.jira import JiraConnector
-from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
-
-connector = JiraConnector(
-    auth_config=JiraAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@JiraConnector.tool_utils
-async def jira_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.jira import JiraConnector
-from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
-
-connector = JiraConnector(
-    auth_config=JiraAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-@tool
-@JiraConnector.tool_utils
-async def jira_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Jira connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.jira import JiraConnector
-from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
-
-connector = JiraConnector(
-    auth_config=JiraAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@JiraConnector.tool_utils(framework="openai_agents")
-async def jira_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Jira connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Jira Assistant", tools=[jira_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.jira import JiraConnector
-from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
-
-connector = JiraConnector(
-    auth_config=JiraAuthConfig(
-        username="<Your Atlassian account email address>",
-        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
-    )
-)
-
-mcp = FastMCP("Jira Agent")
-
-@mcp.tool
-@JiraConnector.tool_utils
-async def jira_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Jira connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `JiraConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -344,35 +266,109 @@ async def jira_execute(entity: str, action: str, params: dict | None = None):
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Issues | [API Search](./REFERENCE.md#issues-api_search), [Create](./REFERENCE.md#issues-create), [Get](./REFERENCE.md#issues-get), [Update](./REFERENCE.md#issues-update), [Delete](./REFERENCE.md#issues-delete), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
-| Projects | [API Search](./REFERENCE.md#projects-api_search), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
-| Users | [Get](./REFERENCE.md#users-get), [List](./REFERENCE.md#users-list), [API Search](./REFERENCE.md#users-api_search), [Context Store Search](./REFERENCE.md#users-context-store-search) |
-| Issue Fields | [List](./REFERENCE.md#issue-fields-list), [API Search](./REFERENCE.md#issue-fields-api_search), [Context Store Search](./REFERENCE.md#issue-fields-context-store-search) |
-| Issue Comments | [List](./REFERENCE.md#issue-comments-list), [Create](./REFERENCE.md#issue-comments-create), [Get](./REFERENCE.md#issue-comments-get), [Update](./REFERENCE.md#issue-comments-update), [Delete](./REFERENCE.md#issue-comments-delete), [Context Store Search](./REFERENCE.md#issue-comments-context-store-search) |
-| Issue Worklogs | [Get](./REFERENCE.md#issue-worklogs-get), [List](./REFERENCE.md#issue-worklogs-list), [Create](./REFERENCE.md#issue-worklogs-create), [Context Store Search](./REFERENCE.md#issue-worklogs-context-store-search) |
-| Issues Assignee | [Update](./REFERENCE.md#issues-assignee-update) |
-| Issue Transitions | [List](./REFERENCE.md#issue-transitions-list), [Create](./REFERENCE.md#issue-transitions-create) |
-| Issue Links | [Create](./REFERENCE.md#issue-links-create) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.jira import JiraConnector
+from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
 
+connector = JiraConnector(
+    auth_config=JiraAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@JiraConnector.tool_utils
+async def jira_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.jira import JiraConnector
+from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
+
+connector = JiraConnector(
+    auth_config=JiraAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
+
+@tool
+@JiraConnector.tool_utils
+async def jira_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Jira connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.jira import JiraConnector
+from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
+
+connector = JiraConnector(
+    auth_config=JiraAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@JiraConnector.tool_utils(framework="openai_agents")
+async def jira_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Jira connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Jira Assistant", tools=[jira_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.jira import JiraConnector
+from airbyte_agent_sdk.connectors.jira.models import JiraAuthConfig
+
+connector = JiraConnector(
+    auth_config=JiraAuthConfig(
+        username="<Your Atlassian account email address>",
+        password="<Your Jira API token from https://id.atlassian.com/manage-profile/security/api-tokens>"
+    )
+)
+
+mcp = FastMCP("Jira Agent")
+
+@mcp.tool
+@JiraConnector.tool_utils
+async def jira_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Jira connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Jira API docs
-
-See the official [Jira API reference](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/).
-
 ## Version information
 
-- **Package version:** 1.1.9
-- **Connector version:** 1.1.9
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 1.1.9

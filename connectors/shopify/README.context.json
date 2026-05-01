@@ -3,10 +3,8 @@
   "class_name": "ShopifyConnector",
   "package_name": "airbyte_agent_sdk.connectors.shopify",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.13",
   "yaml_version": "0.1.13",
   "api_reference_url": "https://shopify.dev/docs/api/admin-rest",
-  "commit_sha": "unknown",
   "auth_example": "ShopifyAuthConfig(api_key=\"...\")",
   "auth_import": ", ShopifyAuthConfig",
   "auth_config": {

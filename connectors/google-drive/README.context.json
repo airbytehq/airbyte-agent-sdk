@@ -3,10 +3,8 @@
   "class_name": "GoogleDriveConnector",
   "package_name": "airbyte_agent_sdk.connectors.google_drive",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.2.5",
   "yaml_version": "0.2.5",
   "api_reference_url": "https://developers.google.com/workspace/drive/api/reference/rest/v3",
-  "commit_sha": "unknown",
   "auth_example": "GoogleDriveAuthConfig(access_token=\"...\", refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
   "auth_import": ", GoogleDriveAuthConfig",
   "auth_config": {

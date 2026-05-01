@@ -3,10 +3,8 @@
   "class_name": "GreenhouseConnector",
   "package_name": "airbyte_agent_sdk.connectors.greenhouse",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.8",
   "yaml_version": "0.1.8",
   "api_reference_url": "https://developers.greenhouse.io/harvest.html",
-  "commit_sha": "unknown",
   "auth_example": "GreenhouseAuthConfig(api_key=\"...\")",
   "auth_import": ", GreenhouseAuthConfig",
   "auth_config": {

@@ -3,10 +3,8 @@
   "class_name": "AmazonAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.amazon_ads",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.10",
   "yaml_version": "1.0.10",
   "api_reference_url": "https://advertising.amazon.com/API/docs/en-us",
-  "commit_sha": "unknown",
   "auth_example": "AmazonAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\")",
   "auth_import": ", AmazonAdsAuthConfig",
   "auth_config": {

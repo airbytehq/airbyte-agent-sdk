@@ -3,10 +3,8 @@
   "class_name": "StripeConnector",
   "package_name": "airbyte_agent_sdk.connectors.stripe",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "0.1.13",
   "yaml_version": "0.1.13",
   "api_reference_url": "https://docs.stripe.com/api",
-  "commit_sha": "unknown",
   "auth_example": "StripeAuthConfig(api_key=\"...\")",
   "auth_import": ", StripeAuthConfig",
   "auth_config": {

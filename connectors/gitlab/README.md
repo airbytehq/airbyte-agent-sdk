@@ -5,7 +5,7 @@ The Gitlab agent connector is a Python package that equips AI agents to interact
 Connector for the GitLab REST API (v4). Provides access to projects, issues, merge requests, commits, pipelines, groups, branches, releases, tags, members, milestones, and users. Supports both Personal Access Token and OAuth2 authentication.
 
 
-## Example questions
+## Example prompts
 
 The Gitlab connector is optimized to handle prompts like these.
 
@@ -22,7 +22,7 @@ The Gitlab connector is optimized to handle prompts like these.
 - Show merge requests that are still open
 - List projects with the most commits
 
-## Unsupported questions
+## Unsupported prompts
 
 The Gitlab connector isn't currently able to handle prompts like these.
 
@@ -31,117 +31,48 @@ The Gitlab connector isn't currently able to handle prompts like these.
 - Merge a merge request
 - Trigger a pipeline
 
-## Installation
+## Entities and actions
+
+This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+
+| Entity | Actions |
+|--------|---------|
+| Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
+| Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
+| Merge Requests | [List](./REFERENCE.md#merge-requests-list), [Get](./REFERENCE.md#merge-requests-get), [Context Store Search](./REFERENCE.md#merge-requests-context-store-search) |
+| Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get), [Context Store Search](./REFERENCE.md#users-context-store-search) |
+| Commits | [List](./REFERENCE.md#commits-list), [Get](./REFERENCE.md#commits-get), [Context Store Search](./REFERENCE.md#commits-context-store-search) |
+| Groups | [List](./REFERENCE.md#groups-list), [Get](./REFERENCE.md#groups-get), [Context Store Search](./REFERENCE.md#groups-context-store-search) |
+| Branches | [List](./REFERENCE.md#branches-list), [Get](./REFERENCE.md#branches-get), [Context Store Search](./REFERENCE.md#branches-context-store-search) |
+| Pipelines | [List](./REFERENCE.md#pipelines-list), [Get](./REFERENCE.md#pipelines-get), [Context Store Search](./REFERENCE.md#pipelines-context-store-search) |
+| Group Members | [List](./REFERENCE.md#group-members-list), [Get](./REFERENCE.md#group-members-get), [Context Store Search](./REFERENCE.md#group-members-context-store-search) |
+| Project Members | [List](./REFERENCE.md#project-members-list), [Get](./REFERENCE.md#project-members-get), [Context Store Search](./REFERENCE.md#project-members-context-store-search) |
+| Releases | [List](./REFERENCE.md#releases-list), [Get](./REFERENCE.md#releases-get), [Context Store Search](./REFERENCE.md#releases-context-store-search) |
+| Tags | [List](./REFERENCE.md#tags-list), [Get](./REFERENCE.md#tags-get), [Context Store Search](./REFERENCE.md#tags-context-store-search) |
+| Group Milestones | [List](./REFERENCE.md#group-milestones-list), [Get](./REFERENCE.md#group-milestones-get), [Context Store Search](./REFERENCE.md#group-milestones-context-store-search) |
+| Project Milestones | [List](./REFERENCE.md#project-milestones-list), [Get](./REFERENCE.md#project-milestones-get), [Context Store Search](./REFERENCE.md#project-milestones-context-store-search) |
+
+
+## Gitlab API docs
+
+See the official [Gitlab API reference](https://docs.gitlab.com/ee/api/rest/).
+
+## SDK installation
 
 ```bash
 uv pip install airbyte-agent-sdk
 ```
 
-## Usage
+## SDK usage
 
-Connectors can run in open source or hosted mode.
-
-### Open source
-
-In open source mode, you provide API credentials directly to the connector.
-
-**Pydantic AI**
-
-```python title="Pydantic AI"
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
-from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
-
-connector = GitlabConnector(
-    auth_config=GitlabPersonalAccessTokenAuthConfig(
-        access_token="<Log into your GitLab account and generate a personal access token.>"
-    )
-)
-
-agent = Agent("openai:gpt-4o")
-
-@agent.tool_plain
-@GitlabConnector.tool_utils
-async def gitlab_execute(entity: str, action: str, params: dict | None = None):
-    return await connector.execute(entity, action, params or {})
-```
-
-**LangChain**
-
-```python title="LangChain"
-from langchain_core.tools import tool
-from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
-from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
-
-connector = GitlabConnector(
-    auth_config=GitlabPersonalAccessTokenAuthConfig(
-        access_token="<Log into your GitLab account and generate a personal access token.>"
-    )
-)
-
-@tool
-@GitlabConnector.tool_utils
-async def gitlab_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Gitlab connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
-
-**OpenAI Agents**
-
-```python title="OpenAI Agents"
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
-from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
-
-connector = GitlabConnector(
-    auth_config=GitlabPersonalAccessTokenAuthConfig(
-        access_token="<Log into your GitLab account and generate a personal access token.>"
-    )
-)
-
-# strict_mode=False because `params: dict` is permissive and the default strict
-# JSON schema rejects objects with additionalProperties.
-@function_tool(strict_mode=False)
-@GitlabConnector.tool_utils(framework="openai_agents")
-async def gitlab_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Gitlab connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-
-agent = Agent(name="Gitlab Assistant", tools=[gitlab_execute])
-```
-
-**FastMCP**
-
-```python title="FastMCP"
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
-from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
-
-connector = GitlabConnector(
-    auth_config=GitlabPersonalAccessTokenAuthConfig(
-        access_token="<Log into your GitLab account and generate a personal access token.>"
-    )
-)
-
-mcp = FastMCP("Gitlab Agent")
-
-@mcp.tool
-@GitlabConnector.tool_utils
-async def gitlab_execute(entity: str, action: str, params: dict | None = None):
-    """Execute Gitlab connector operations."""
-    result = await connector.execute(entity, action, params or {})
-    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
-```
+Connectors can run in hosted or open source mode.
 
 ### Hosted
 
-In hosted mode, API credentials are stored securely in Airbyte Cloud. You provide your Airbyte credentials instead. 
+In hosted mode, API credentials are stored securely in Airbyte Agents. You provide your Airbyte credentials instead.
 If your Airbyte client can access multiple organizations, also set `organization_id`.
 
-This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/quickstarts/tutorial-hosted).
+This example assumes you've already authenticated your connector with Airbyte. See [Authentication](AUTH.md) to learn more about authenticating. If you need a step-by-step guide, see the [hosted execution tutorial](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
 
 The `connect()` factory returns a fully typed `GitlabConnector` and reads `AIRBYTE_CLIENT_ID` / `AIRBYTE_CLIENT_SECRET` from the environment:
 
@@ -326,40 +257,105 @@ async def gitlab_execute(entity: str, action: str, params: dict | None = None):
     return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
 ```
 
-## Full documentation
+### Open source
 
-### Entities and actions
+In open source mode, you provide API credentials directly to the connector.
 
-This connector supports the following entities and actions. For more details, see this connector's [full reference documentation](REFERENCE.md).
+**Pydantic AI**
 
-| Entity | Actions |
-|--------|---------|
-| Projects | [List](./REFERENCE.md#projects-list), [Get](./REFERENCE.md#projects-get), [Context Store Search](./REFERENCE.md#projects-context-store-search) |
-| Issues | [List](./REFERENCE.md#issues-list), [Get](./REFERENCE.md#issues-get), [Context Store Search](./REFERENCE.md#issues-context-store-search) |
-| Merge Requests | [List](./REFERENCE.md#merge-requests-list), [Get](./REFERENCE.md#merge-requests-get), [Context Store Search](./REFERENCE.md#merge-requests-context-store-search) |
-| Users | [List](./REFERENCE.md#users-list), [Get](./REFERENCE.md#users-get), [Context Store Search](./REFERENCE.md#users-context-store-search) |
-| Commits | [List](./REFERENCE.md#commits-list), [Get](./REFERENCE.md#commits-get), [Context Store Search](./REFERENCE.md#commits-context-store-search) |
-| Groups | [List](./REFERENCE.md#groups-list), [Get](./REFERENCE.md#groups-get), [Context Store Search](./REFERENCE.md#groups-context-store-search) |
-| Branches | [List](./REFERENCE.md#branches-list), [Get](./REFERENCE.md#branches-get), [Context Store Search](./REFERENCE.md#branches-context-store-search) |
-| Pipelines | [List](./REFERENCE.md#pipelines-list), [Get](./REFERENCE.md#pipelines-get), [Context Store Search](./REFERENCE.md#pipelines-context-store-search) |
-| Group Members | [List](./REFERENCE.md#group-members-list), [Get](./REFERENCE.md#group-members-get), [Context Store Search](./REFERENCE.md#group-members-context-store-search) |
-| Project Members | [List](./REFERENCE.md#project-members-list), [Get](./REFERENCE.md#project-members-get), [Context Store Search](./REFERENCE.md#project-members-context-store-search) |
-| Releases | [List](./REFERENCE.md#releases-list), [Get](./REFERENCE.md#releases-get), [Context Store Search](./REFERENCE.md#releases-context-store-search) |
-| Tags | [List](./REFERENCE.md#tags-list), [Get](./REFERENCE.md#tags-get), [Context Store Search](./REFERENCE.md#tags-context-store-search) |
-| Group Milestones | [List](./REFERENCE.md#group-milestones-list), [Get](./REFERENCE.md#group-milestones-get), [Context Store Search](./REFERENCE.md#group-milestones-context-store-search) |
-| Project Milestones | [List](./REFERENCE.md#project-milestones-list), [Get](./REFERENCE.md#project-milestones-get), [Context Store Search](./REFERENCE.md#project-milestones-context-store-search) |
+```python title="Pydantic AI"
+from pydantic_ai import Agent
+from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
+from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
 
+connector = GitlabConnector(
+    auth_config=GitlabPersonalAccessTokenAuthConfig(
+        access_token="<Log into your GitLab account and generate a personal access token.>"
+    )
+)
 
-### Authentication
+agent = Agent("openai:gpt-4o")
+
+@agent.tool_plain
+@GitlabConnector.tool_utils
+async def gitlab_execute(entity: str, action: str, params: dict | None = None):
+    return await connector.execute(entity, action, params or {})
+```
+
+**LangChain**
+
+```python title="LangChain"
+from langchain_core.tools import tool
+from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
+from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
+
+connector = GitlabConnector(
+    auth_config=GitlabPersonalAccessTokenAuthConfig(
+        access_token="<Log into your GitLab account and generate a personal access token.>"
+    )
+)
+
+@tool
+@GitlabConnector.tool_utils
+async def gitlab_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Gitlab connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    # connector.execute returns a Pydantic envelope for typed actions; fall back to raw data otherwise.
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+**OpenAI Agents**
+
+```python title="OpenAI Agents"
+from agents import Agent, function_tool
+from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
+from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
+
+connector = GitlabConnector(
+    auth_config=GitlabPersonalAccessTokenAuthConfig(
+        access_token="<Log into your GitLab account and generate a personal access token.>"
+    )
+)
+
+# strict_mode=False because `params: dict` is permissive and the default strict
+# JSON schema rejects objects with additionalProperties.
+@function_tool(strict_mode=False)
+@GitlabConnector.tool_utils(framework="openai_agents")
+async def gitlab_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Gitlab connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+
+agent = Agent(name="Gitlab Assistant", tools=[gitlab_execute])
+```
+
+**FastMCP**
+
+```python title="FastMCP"
+from fastmcp import FastMCP
+from airbyte_agent_sdk.connectors.gitlab import GitlabConnector
+from airbyte_agent_sdk.connectors.gitlab.models import GitlabPersonalAccessTokenAuthConfig
+
+connector = GitlabConnector(
+    auth_config=GitlabPersonalAccessTokenAuthConfig(
+        access_token="<Log into your GitLab account and generate a personal access token.>"
+    )
+)
+
+mcp = FastMCP("Gitlab Agent")
+
+@mcp.tool
+@GitlabConnector.tool_utils
+async def gitlab_execute(entity: str, action: str, params: dict | None = None):
+    """Execute Gitlab connector operations."""
+    result = await connector.execute(entity, action, params or {})
+    return result.model_dump(mode="json") if hasattr(result, "model_dump") else result
+```
+
+## Authentication
 
 For all authentication options, see the connector's [authentication documentation](AUTH.md).
 
-### Gitlab API docs
-
-See the official [Gitlab API reference](https://docs.gitlab.com/ee/api/rest/).
-
 ## Version information
 
-- **Package version:** 1.0.4
-- **Connector version:** 1.0.4
-- **Generated with Connector SDK commit SHA:** unknown
+**Connector version:** 1.0.4

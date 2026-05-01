@@ -3,10 +3,8 @@
   "class_name": "AmazonSellerPartnerConnector",
   "package_name": "airbyte_agent_sdk.connectors.amazon_seller_partner",
   "install_package": "airbyte-agent-sdk",
-  "package_version": "1.0.5",
   "yaml_version": "1.0.5",
   "api_reference_url": "https://developer-docs.amazon.com/sp-api/",
-  "commit_sha": "unknown",
   "auth_example": "AmazonSellerPartnerAuthConfig(lwa_app_id=\"...\", lwa_client_secret=\"...\", refresh_token=\"...\", access_token=\"...\")",
   "auth_import": ", AmazonSellerPartnerAuthConfig",
   "auth_config": {
