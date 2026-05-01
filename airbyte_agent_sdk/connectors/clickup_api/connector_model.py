@@ -2966,6 +2966,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='comments',
+            stream_name='list_comments',
             actions=[
                 Action.LIST,
                 Action.CREATE,
@@ -3015,6 +3016,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         'date': {'type': 'string', 'description': 'Comment date (Unix ms)'},
                                     },
                                     'x-airbyte-entity-name': 'comments',
+                                    'x-airbyte-stream-name': 'list_comments',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Comments on ClickUp tasks',
                                         'when_to_use': 'Looking for discussion or notes on specific tasks',
@@ -3104,6 +3106,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         'date': {'type': 'string', 'description': 'Comment date (Unix ms)'},
                                     },
                                     'x-airbyte-entity-name': 'comments',
+                                    'x-airbyte-stream-name': 'list_comments',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Comments on ClickUp tasks',
                                         'when_to_use': 'Looking for discussion or notes on specific tasks',
@@ -3167,6 +3170,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     'date': {'type': 'string', 'description': 'Comment date (Unix ms)'},
                 },
                 'x-airbyte-entity-name': 'comments',
+                'x-airbyte-stream-name': 'list_comments',
                 'x-airbyte-ai-hints': {
                     'summary': 'Comments on ClickUp tasks',
                     'when_to_use': 'Looking for discussion or notes on specific tasks',
@@ -3195,6 +3199,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='goals',
+            stream_name='team_goals',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3274,6 +3279,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'goals',
+                                    'x-airbyte-stream-name': 'team_goals',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Goals and targets tracked in ClickUp',
                                         'when_to_use': 'Questions about team goals, OKRs, or targets',
@@ -3374,6 +3380,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'goals',
+                                'x-airbyte-stream-name': 'team_goals',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Goals and targets tracked in ClickUp',
                                     'when_to_use': 'Questions about team goals, OKRs, or targets',
@@ -3457,6 +3464,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'goals',
+                'x-airbyte-stream-name': 'team_goals',
                 'x-airbyte-ai-hints': {
                     'summary': 'Goals and targets tracked in ClickUp',
                     'when_to_use': 'Questions about team goals, OKRs, or targets',

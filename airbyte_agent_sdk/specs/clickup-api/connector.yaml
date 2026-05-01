@@ -2266,6 +2266,7 @@ components:
     Comment:
       type: object
       x-airbyte-entity-name: comments
+      x-airbyte-stream-name: list_comments
       x-airbyte-ai-hints:
         summary: "Comments on ClickUp tasks"
         when_to_use: "Looking for discussion or notes on specific tasks"
@@ -2373,6 +2374,7 @@ components:
     Goal:
       type: object
       x-airbyte-entity-name: goals
+      x-airbyte-stream-name: team_goals
       x-airbyte-ai-hints:
         summary: "Goals and targets tracked in ClickUp"
         when_to_use: "Questions about team goals, OKRs, or targets"
