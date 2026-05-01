@@ -40,6 +40,8 @@ from .types import (
     DataSourcesSearchQuery,
     BlocksSearchFilter,
     BlocksSearchQuery,
+    CommentsSearchFilter,
+    CommentsSearchQuery,
 )
 from .models import NotionOauth20AuthConfig, NotionAccessTokenAuthConfig
 from .models import NotionAuthConfig
@@ -69,6 +71,8 @@ from .models import (
     DataSourcesSearchResult,
     BlocksSearchData,
     BlocksSearchResult,
+    CommentsSearchData,
+    CommentsSearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -85,8 +89,8 @@ class NotionConnector:
     """
 
     connector_name = "notion"
-    connector_version = "0.1.11"
-    sdk_version = "0.1.149"
+    connector_version = "0.1.12"
+    sdk_version = "0.1.150"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1182,3 +1186,65 @@ class CommentsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: CommentsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> CommentsSearchResult:
+        """
+        Search comments records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (CommentsSearchFilter):
+        - created_by: User who created the comment.
+        - created_time: Date and time when the comment was created.
+        - discussion_id: Discussion thread ID.
+        - id: Unique identifier for the comment.
+        - last_edited_time: Date and time when the comment was last edited.
+        - object_: Always comment.
+        - parent: Parent of the comment.
+        - rich_text: Content of the comment as rich text.
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            CommentsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("comments", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return CommentsSearchResult(
+            data=[
+                CommentsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )

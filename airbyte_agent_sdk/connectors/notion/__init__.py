@@ -18,6 +18,8 @@ from .models import (
     DataSourcesSearchResult,
     BlocksSearchData,
     BlocksSearchResult,
+    CommentsSearchData,
+    CommentsSearchResult,
 )
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 
@@ -36,4 +38,6 @@ __all__ = [
     "DataSourcesSearchResult",
     "BlocksSearchData",
     "BlocksSearchResult",
+    "CommentsSearchData",
+    "CommentsSearchResult",
 ]

@@ -1351,6 +1351,201 @@ class BlocksSearchQuery(TypedDict, total=False):
     sort: list[BlocksSortFilter]
 
 
+# ===== COMMENTS SEARCH TYPES =====
+
+class CommentsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering comments search queries."""
+    created_by: dict[str, Any] | None
+    """User who created the comment."""
+    created_time: str | None
+    """Date and time when the comment was created."""
+    discussion_id: str | None
+    """Discussion thread ID."""
+    id: str | None
+    """Unique identifier for the comment."""
+    last_edited_time: str | None
+    """Date and time when the comment was last edited."""
+    object_: str | None
+    """Always comment."""
+    parent: dict[str, Any] | None
+    """Parent of the comment."""
+    rich_text: list[Any] | None
+    """Content of the comment as rich text."""
+
+
+class CommentsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    created_by: list[dict[str, Any]]
+    """User who created the comment."""
+    created_time: list[str]
+    """Date and time when the comment was created."""
+    discussion_id: list[str]
+    """Discussion thread ID."""
+    id: list[str]
+    """Unique identifier for the comment."""
+    last_edited_time: list[str]
+    """Date and time when the comment was last edited."""
+    object_: list[str]
+    """Always comment."""
+    parent: list[dict[str, Any]]
+    """Parent of the comment."""
+    rich_text: list[list[Any]]
+    """Content of the comment as rich text."""
+
+
+class CommentsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    created_by: Any
+    """User who created the comment."""
+    created_time: Any
+    """Date and time when the comment was created."""
+    discussion_id: Any
+    """Discussion thread ID."""
+    id: Any
+    """Unique identifier for the comment."""
+    last_edited_time: Any
+    """Date and time when the comment was last edited."""
+    object_: Any
+    """Always comment."""
+    parent: Any
+    """Parent of the comment."""
+    rich_text: Any
+    """Content of the comment as rich text."""
+
+
+class CommentsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    created_by: str
+    """User who created the comment."""
+    created_time: str
+    """Date and time when the comment was created."""
+    discussion_id: str
+    """Discussion thread ID."""
+    id: str
+    """Unique identifier for the comment."""
+    last_edited_time: str
+    """Date and time when the comment was last edited."""
+    object_: str
+    """Always comment."""
+    parent: str
+    """Parent of the comment."""
+    rich_text: str
+    """Content of the comment as rich text."""
+
+
+class CommentsSortFilter(TypedDict, total=False):
+    """Available fields for sorting comments search results."""
+    created_by: AirbyteSortOrder
+    """User who created the comment."""
+    created_time: AirbyteSortOrder
+    """Date and time when the comment was created."""
+    discussion_id: AirbyteSortOrder
+    """Discussion thread ID."""
+    id: AirbyteSortOrder
+    """Unique identifier for the comment."""
+    last_edited_time: AirbyteSortOrder
+    """Date and time when the comment was last edited."""
+    object_: AirbyteSortOrder
+    """Always comment."""
+    parent: AirbyteSortOrder
+    """Parent of the comment."""
+    rich_text: AirbyteSortOrder
+    """Content of the comment as rich text."""
+
+
+# Entity-specific condition types for comments
+class CommentsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: CommentsSearchFilter
+
+
+class CommentsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: CommentsSearchFilter
+
+
+class CommentsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: CommentsSearchFilter
+
+
+class CommentsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: CommentsSearchFilter
+
+
+class CommentsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: CommentsSearchFilter
+
+
+class CommentsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: CommentsSearchFilter
+
+
+class CommentsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: CommentsStringFilter
+
+
+class CommentsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: CommentsStringFilter
+
+
+class CommentsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: CommentsStringFilter
+
+
+class CommentsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: CommentsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+CommentsInCondition = TypedDict("CommentsInCondition", {"in": CommentsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+CommentsNotCondition = TypedDict("CommentsNotCondition", {"not": "CommentsCondition"}, total=False)
+"""Negates the nested condition."""
+
+CommentsAndCondition = TypedDict("CommentsAndCondition", {"and": "list[CommentsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+CommentsOrCondition = TypedDict("CommentsOrCondition", {"or": "list[CommentsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+CommentsAnyCondition = TypedDict("CommentsAnyCondition", {"any": CommentsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all comments condition types
+CommentsCondition = (
+    CommentsEqCondition
+    | CommentsNeqCondition
+    | CommentsGtCondition
+    | CommentsGteCondition
+    | CommentsLtCondition
+    | CommentsLteCondition
+    | CommentsInCondition
+    | CommentsLikeCondition
+    | CommentsFuzzyCondition
+    | CommentsKeywordCondition
+    | CommentsContainsCondition
+    | CommentsNotCondition
+    | CommentsAndCondition
+    | CommentsOrCondition
+    | CommentsAnyCondition
+)
+
+
+class CommentsSearchQuery(TypedDict, total=False):
+    """Search query for comments entity."""
+    filter: CommentsCondition
+    sort: list[CommentsSortFilter]
+
+
 
 # ===== SEARCH PARAMS =====
 

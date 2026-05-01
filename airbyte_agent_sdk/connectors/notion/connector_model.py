@@ -36,7 +36,7 @@ from uuid import (
 NotionConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('6e00b415-b02e-4160-bf02-58176a0ae687'),
     name='notion',
-    version='0.1.11',
+    version='0.1.12',
     base_url='https://api.notion.com',
     auth=AuthConfig(
         options=[
@@ -4838,6 +4838,17 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
             'type',
             'unsupported',
             'video',
+        ],
+        'comments': [
+            'created_by',
+            'created_time',
+            'discussion_id',
+            'id',
+            'last_edited_time',
+            'object',
+            'parent',
+            'rich_text',
+            'rich_text[]',
         ],
     },
     example_questions=ExampleQuestions(

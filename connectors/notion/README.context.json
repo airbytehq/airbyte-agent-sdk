@@ -3,7 +3,7 @@
   "class_name": "NotionConnector",
   "package_name": "airbyte_agent_sdk.connectors.notion",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.1.11",
+  "yaml_version": "0.1.12",
   "api_reference_url": "https://developers.notion.com/reference/intro",
   "auth_example": "NotionAuthConfig(client_id=\"...\", client_secret=\"...\", access_token=\"...\")",
   "auth_import": ", NotionAuthConfig",
@@ -1409,6 +1409,85 @@
           "json_type": "null | object",
           "example_value_json": "{}",
           "description": "Represents a video block."
+        }
+      ]
+    },
+    "comments": {
+      "entity": "comments",
+      "data_type_name": "CommentsSearchData",
+      "filter_type_name": "CommentsSearchFilter",
+      "in_filter_type_name": "CommentsInFilter",
+      "any_value_filter_type_name": "CommentsAnyValueFilter",
+      "string_filter_type_name": "CommentsStringFilter",
+      "sort_filter_type_name": "CommentsSortFilter",
+      "result_type_name": "CommentsSearchResult",
+      "query_type_name": "CommentsSearchQuery",
+      "condition_prefix": "Comments",
+      "condition_type_name": "CommentsCondition",
+      "fields": [
+        {
+          "name": "created_by",
+          "python_name": "created_by",
+          "type": "dict[str, Any] | None",
+          "json_type": "null | object",
+          "example_value_json": "{}",
+          "description": "User who created the comment."
+        },
+        {
+          "name": "created_time",
+          "python_name": "created_time",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Date and time when the comment was created."
+        },
+        {
+          "name": "discussion_id",
+          "python_name": "discussion_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Discussion thread ID."
+        },
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Unique identifier for the comment."
+        },
+        {
+          "name": "last_edited_time",
+          "python_name": "last_edited_time",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Date and time when the comment was last edited."
+        },
+        {
+          "name": "object",
+          "python_name": "object_",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Always comment."
+        },
+        {
+          "name": "parent",
+          "python_name": "parent",
+          "type": "dict[str, Any] | None",
+          "json_type": "null | object",
+          "example_value_json": "{}",
+          "description": "Parent of the comment."
+        },
+        {
+          "name": "rich_text",
+          "python_name": "rich_text",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "Content of the comment as rich text."
         }
       ]
     }

@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Notion API Connector
-  version: 0.1.11
+  version: 0.1.12
   description: |
     Notion is an all-in-one workspace for notes, docs, wikis, projects, and collaboration.
     This connector provides read access to Notion workspaces including users, pages, data sources,
@@ -452,6 +452,49 @@ info:
               - 'null'
               - object
             description: Represents a video block.
+      - entity: comments
+        x-airbyte-name: comments
+        fields:
+          - name: created_by
+            type:
+              - 'null'
+              - object
+            description: User who created the comment.
+          - name: created_time
+            type:
+              - 'null'
+              - string
+            description: Date and time when the comment was created.
+          - name: discussion_id
+            type:
+              - 'null'
+              - string
+            description: Discussion thread ID.
+          - name: id
+            type:
+              - 'null'
+              - string
+            description: Unique identifier for the comment.
+          - name: last_edited_time
+            type:
+              - 'null'
+              - string
+            description: Date and time when the comment was last edited.
+          - name: object
+            type:
+              - 'null'
+              - string
+            description: Always comment.
+          - name: parent
+            type:
+              - 'null'
+              - object
+            description: Parent of the comment.
+          - name: rich_text
+            type:
+              - 'null'
+              - array
+            description: Content of the comment as rich text.
   x-airbyte-example-questions:
     direct:
       - "List all users in my Notion workspace"

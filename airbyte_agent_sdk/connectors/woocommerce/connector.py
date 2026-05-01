@@ -175,7 +175,7 @@ class WoocommerceConnector:
 
     connector_name = "woocommerce"
     connector_version = "1.0.4"
-    sdk_version = "0.1.149"
+    sdk_version = "0.1.150"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
