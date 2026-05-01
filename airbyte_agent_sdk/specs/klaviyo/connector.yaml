@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Klaviyo API Connector
-  version: 1.0.5
+  version: 1.0.6
   description: |
     Klaviyo is a marketing automation platform that helps businesses build customer relationships
     through personalized email, SMS, and push notifications. This connector provides access to
@@ -1278,12 +1278,12 @@ paths:
             default: "2024-10-15"
         - name: page[size]
           in: query
-          description: Number of results per page (max 100)
+          description: Number of results per page (max 10)
           schema:
             type: integer
             minimum: 1
-            maximum: 100
-            default: 20
+            maximum: 10
+            default: 10
         - name: page[cursor]
           in: query
           description: Cursor for pagination
@@ -1361,14 +1361,6 @@ paths:
           schema:
             type: string
             default: "equals(messages.channel,'email')"
-        - name: page[size]
-          in: query
-          description: Number of results per page (max 100)
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 20
         - name: page[cursor]
           in: query
           description: Cursor for pagination
@@ -1488,19 +1480,10 @@ paths:
             default: "2024-10-15"
         - name: filter
           in: query
-          required: true
-          description: Filter expression (Klaviyo requires a filter on /metrics; date-based filters always match)
+          required: false
+          description: Filter expression for metrics. Allowed fields are integration.name and integration.category.
           schema:
             type: string
-            default: "greater-than(updated,2020-01-01T00:00:00Z)"
-        - name: page[size]
-          in: query
-          description: Number of results per page (max 100)
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 20
         - name: page[cursor]
           in: query
           description: Cursor for pagination
@@ -1651,12 +1634,12 @@ paths:
             default: "2024-10-15"
         - name: page[size]
           in: query
-          description: Number of results per page (max 100)
+          description: Number of results per page (max 10)
           schema:
             type: integer
             minimum: 1
-            maximum: 100
-            default: 20
+            maximum: 10
+            default: 10
         - name: page[cursor]
           in: query
           description: Cursor for pagination

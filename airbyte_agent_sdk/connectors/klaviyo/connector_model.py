@@ -29,7 +29,7 @@ from uuid import (
 KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('95e8cffd-b8c4-4039-968e-d32fb4a69bde'),
     name='klaviyo',
-    version='1.0.5',
+    version='1.0.6',
     base_url='https://a.klaviyo.com/api',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -520,9 +520,9 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'page[size]': {
                             'type': 'integer',
                             'required': False,
-                            'default': 20,
+                            'default': 10,
                             'minimum': 1,
-                            'maximum': 100,
+                            'maximum': 10,
                         },
                         'page[cursor]': {'type': 'string', 'required': False},
                     },
@@ -769,19 +769,12 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                     path='/campaigns',
                     action=Action.LIST,
                     description='Returns a paginated list of campaigns. A channel filter is required.',
-                    query_params=['filter', 'page[size]', 'page[cursor]'],
+                    query_params=['filter', 'page[cursor]'],
                     query_params_schema={
                         'filter': {
                             'type': 'string',
                             'required': True,
                             'default': "equals(messages.channel,'email')",
-                        },
-                        'page[size]': {
-                            'type': 'integer',
-                            'required': False,
-                            'default': 20,
-                            'minimum': 1,
-                            'maximum': 100,
                         },
                         'page[cursor]': {'type': 'string', 'required': False},
                     },
@@ -1380,20 +1373,9 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                     path='/metrics',
                     action=Action.LIST,
                     description='Returns a paginated list of metrics (event types)',
-                    query_params=['filter', 'page[size]', 'page[cursor]'],
+                    query_params=['filter', 'page[cursor]'],
                     query_params_schema={
-                        'filter': {
-                            'type': 'string',
-                            'required': True,
-                            'default': 'greater-than(updated,2020-01-01T00:00:00Z)',
-                        },
-                        'page[size]': {
-                            'type': 'integer',
-                            'required': False,
-                            'default': 20,
-                            'minimum': 1,
-                            'maximum': 100,
-                        },
+                        'filter': {'type': 'string', 'required': False},
                         'page[cursor]': {'type': 'string', 'required': False},
                     },
                     header_params=['revision'],
@@ -1975,9 +1957,9 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'page[size]': {
                             'type': 'integer',
                             'required': False,
-                            'default': 20,
+                            'default': 10,
                             'minimum': 1,
-                            'maximum': 100,
+                            'maximum': 10,
                         },
                         'page[cursor]': {'type': 'string', 'required': False},
                     },

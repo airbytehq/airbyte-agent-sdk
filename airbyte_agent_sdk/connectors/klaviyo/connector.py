@@ -100,8 +100,8 @@ class KlaviyoConnector:
     """
 
     connector_name = "klaviyo"
-    connector_version = "1.0.5"
-    sdk_version = "0.1.148"
+    connector_version = "1.0.6"
+    sdk_version = "0.1.149"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -127,10 +127,10 @@ class KlaviyoConnector:
         ('profiles', 'get'): {'id': 'id'},
         ('lists', 'list'): {'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
         ('lists', 'get'): {'id': 'id'},
-        ('campaigns', 'list'): {'filter': 'filter', 'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
+        ('campaigns', 'list'): {'filter': 'filter', 'page_cursor': 'page[cursor]'},
         ('campaigns', 'get'): {'id': 'id'},
         ('events', 'list'): {'page_size': 'page[size]', 'page_cursor': 'page[cursor]', 'sort': 'sort'},
-        ('metrics', 'list'): {'filter': 'filter', 'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
+        ('metrics', 'list'): {'filter': 'filter', 'page_cursor': 'page[cursor]'},
         ('metrics', 'get'): {'id': 'id'},
         ('flows', 'list'): {'page_size': 'page[size]', 'page_cursor': 'page[cursor]'},
         ('flows', 'get'): {'id': 'id'},
@@ -758,7 +758,7 @@ class ListsQuery:
         Returns a paginated list of all lists in your Klaviyo account
 
         Args:
-            page_size: Number of results per page (max 100)
+            page_size: Number of results per page (max 10)
             page_cursor: Cursor for pagination
             **kwargs: Additional parameters
 
@@ -877,7 +877,6 @@ class CampaignsQuery:
     async def list(
         self,
         filter: str,
-        page_size: int | None = None,
         page_cursor: str | None = None,
         **kwargs
     ) -> CampaignsListResult:
@@ -886,7 +885,6 @@ class CampaignsQuery:
 
         Args:
             filter: Filter by channel (email or sms)
-            page_size: Number of results per page (max 100)
             page_cursor: Cursor for pagination
             **kwargs: Additional parameters
 
@@ -895,7 +893,6 @@ class CampaignsQuery:
         """
         params = {k: v for k, v in {
             "filter": filter,
-            "page[size]": page_size,
             "page[cursor]": page_cursor,
             **kwargs
         }.items() if v is not None}
@@ -1109,8 +1106,7 @@ class MetricsQuery:
 
     async def list(
         self,
-        filter: str,
-        page_size: int | None = None,
+        filter: str | None = None,
         page_cursor: str | None = None,
         **kwargs
     ) -> MetricsListResult:
@@ -1118,8 +1114,7 @@ class MetricsQuery:
         Returns a paginated list of metrics (event types)
 
         Args:
-            filter: Filter expression (Klaviyo requires a filter on /metrics; date-based filters always match)
-            page_size: Number of results per page (max 100)
+            filter: Filter expression for metrics. Allowed fields are integration.name and integration.category.
             page_cursor: Cursor for pagination
             **kwargs: Additional parameters
 
@@ -1128,7 +1123,6 @@ class MetricsQuery:
         """
         params = {k: v for k, v in {
             "filter": filter,
-            "page[size]": page_size,
             "page[cursor]": page_cursor,
             **kwargs
         }.items() if v is not None}
@@ -1372,7 +1366,7 @@ class EmailTemplatesQuery:
         Returns a paginated list of email templates
 
         Args:
-            page_size: Number of results per page (max 100)
+            page_size: Number of results per page (max 10)
             page_cursor: Cursor for pagination
             **kwargs: Additional parameters
 

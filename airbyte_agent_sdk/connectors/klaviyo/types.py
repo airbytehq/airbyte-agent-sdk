@@ -40,7 +40,6 @@ class ListsGetParams(TypedDict):
 class CampaignsListParams(TypedDict):
     """Parameters for campaigns.list operation"""
     filter: str
-    page_size: NotRequired[int]
     page_cursor: NotRequired[str]
 
 class CampaignsGetParams(TypedDict):
@@ -55,8 +54,7 @@ class EventsListParams(TypedDict):
 
 class MetricsListParams(TypedDict):
     """Parameters for metrics.list operation"""
-    filter: str
-    page_size: NotRequired[int]
+    filter: NotRequired[str]
     page_cursor: NotRequired[str]
 
 class MetricsGetParams(TypedDict):

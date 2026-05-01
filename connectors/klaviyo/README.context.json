@@ -3,7 +3,7 @@
   "class_name": "KlaviyoConnector",
   "package_name": "airbyte_agent_sdk.connectors.klaviyo",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.5",
+  "yaml_version": "1.0.6",
   "api_reference_url": "https://developers.klaviyo.com/en/reference/api_overview",
   "auth_example": "KlaviyoAuthConfig(api_key=\"...\")",
   "auth_import": ", KlaviyoAuthConfig",
@@ -192,11 +192,11 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100,
-              "default": 20
+              "maximum": 10,
+              "default": 10
             },
             "required": null,
-            "description": "Number of results per page (max 100)",
+            "description": "Number of results per page (max 10)",
             "is_deep_object": false
           },
           {
@@ -282,20 +282,6 @@
             },
             "required": true,
             "description": "Filter by channel (email or sms)",
-            "is_deep_object": false
-          },
-          {
-            "name": "page[size]",
-            "python_name": "page_size",
-            "type": "int",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 20
-            },
-            "required": null,
-            "description": "Number of results per page (max 100)",
             "is_deep_object": false
           },
           {
@@ -447,25 +433,10 @@
             "python_name": "filter",
             "type": "str",
             "schema": {
-              "type": "string",
-              "default": "greater-than(updated,2020-01-01T00:00:00Z)"
+              "type": "string"
             },
-            "required": true,
-            "description": "Filter expression (Klaviyo requires a filter on /metrics; date-based filters always match)",
-            "is_deep_object": false
-          },
-          {
-            "name": "page[size]",
-            "python_name": "page_size",
-            "type": "int",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 20
-            },
-            "required": null,
-            "description": "Number of results per page (max 100)",
+            "required": false,
+            "description": "Filter expression for metrics. Allowed fields are integration.name and integration.category.",
             "is_deep_object": false
           },
           {
@@ -635,11 +606,11 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100,
-              "default": 20
+              "maximum": 10,
+              "default": 10
             },
             "required": null,
-            "description": "Number of results per page (max 100)",
+            "description": "Number of results per page (max 10)",
             "is_deep_object": false
           },
           {
