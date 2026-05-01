@@ -114,7 +114,7 @@ info:
       include_archived_channels: include_archived_channels
       threads_ignore_no_replies: threads_ignore_no_replies
     replication_config_constants:
-      start_date: "{{ day_delta(-180, '%Y-%m-%dT%H:%M:%SZ') }}"
+      start_date: "{{ day_delta(-30, '%Y-%m-%dT%H:%M:%SZ') }}"
       lookback_window: 0
       join_channels: false
       include_archived_channels: false
