@@ -35,8 +35,6 @@ info:
     - "Delete a form response"
     - "Update form settings"
     - "Send a webhook notification"
-  x-airbyte-skip-auth-methods:
-    - oauth2
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from Typeform
