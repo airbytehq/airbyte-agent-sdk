@@ -76,7 +76,7 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                         'credentials.client_id': 'client_id',
                         'credentials.client_secret': 'client_secret',
                     },
-                    replication_auth_key_constants={'credentials.auth_type': 'oauth2.0'},
+                    replication_auth_key_constants={'credentials.auth_type': 'oauth2.0', 'credentials.subdomain': ''},
                 ),
             ),
             AuthOption(

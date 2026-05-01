@@ -16,8 +16,6 @@ info:
     title: Replication Configuration
     description: Settings for data replication from Monday.com.
     properties: {}
-    replication_config_constants:
-      subdomain_slug: ""
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Monday.com API Reference
@@ -1504,6 +1502,7 @@ components:
           credentials.client_secret: "client_secret"
         replication_auth_key_constants:
           credentials.auth_type: "oauth2.0"
+          credentials.subdomain: ""
 
     mondayApiToken:
       type: http
