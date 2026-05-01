@@ -233,7 +233,6 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data.list',
                     meta_extractor={'page_info': '$.data.page_info'},
-                    preferred_for_check=True,
                 ),
             },
             entity_schema={

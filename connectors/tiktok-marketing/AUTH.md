@@ -51,6 +51,7 @@ Create a connector with OAuth credentials.
 
 | Field Name | Type | Required | Description |
 |------------|------|----------|-------------|
+| `advertiser_id` | `str` | Yes | The TikTok advertiser account ID to scope all data requests. This is required to access campaigns, ads, and reporting data. |
 | `start_date` | `str (date)` | Yes | The start date in YYYY-MM-DD format. Any data before this date will not be replicated. If not set, defaults to 2016-09-01. |
 
 Example request:
@@ -67,6 +68,7 @@ curl -X POST "https://api.airbyte.ai/api/v1/integrations/connectors" \
       "access_token": "<Your TikTok Marketing API access token>"
     },
     "replication_config": {
+      "advertiser_id": "<The TikTok advertiser account ID to scope all data requests. This is required to access campaigns, ads, and reporting data.>",
       "start_date": "<The start date in YYYY-MM-DD format. Any data before this date will not be replicated. If not set, defaults to 2016-09-01.>"
     }
   }'
