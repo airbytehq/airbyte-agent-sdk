@@ -71,33 +71,6 @@ info:
               - "null"
               - "boolean"
             description: "Whether the issue is visible in the customer portal"
-      - entity: messages
-        suggested: true
-        x-airbyte-name: issue_messages
-        fields:
-          - name: id
-            type: string
-            description: "Unique identifier for the message"
-          - name: timestamp
-            type:
-              - "null"
-              - "string"
-            description: "Timestamp the message was posted, in ISO 8601 format"
-          - name: is_private
-            type:
-              - "null"
-              - "boolean"
-            description: "Whether the message is an internal note (not visible to the customer)"
-          - name: source
-            type:
-              - "null"
-              - "string"
-            description: "Channel the message was sent through (e.g. email, slack)"
-          - name: thread_id
-            type:
-              - "null"
-              - "string"
-            description: "Identifier of the thread this message belongs to"
       - entity: accounts
         suggested: true
         x-airbyte-name: accounts

@@ -5840,13 +5840,6 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
             'snoozed_until_time',
             'customer_portal_visible',
         ],
-        'messages': [
-            'id',
-            'timestamp',
-            'is_private',
-            'source',
-            'thread_id',
-        ],
         'accounts': [
             'id',
             'name',

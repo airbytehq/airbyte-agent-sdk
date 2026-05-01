@@ -955,22 +955,6 @@ class IssuesSearchData(BaseModel):
     """Whether the issue is visible in the customer portal"""
 
 
-class MessagesSearchData(BaseModel):
-    """Search result data for messages entity."""
-    model_config = ConfigDict(extra="allow")
-
-    id: str = None
-    """Unique identifier for the message"""
-    timestamp: str | None = None
-    """Timestamp the message was posted, in ISO 8601 format"""
-    is_private: bool | None = None
-    """Whether the message is an internal note (not visible to the customer)"""
-    source: str | None = None
-    """Channel the message was sent through (e.g. email, slack)"""
-    thread_id: str | None = None
-    """Identifier of the thread this message belongs to"""
-
-
 class AccountsSearchData(BaseModel):
     """Search result data for accounts entity."""
     model_config = ConfigDict(extra="allow")
@@ -1121,9 +1105,6 @@ class AirbyteSearchResult(BaseModel, Generic[D]):
 
 IssuesSearchResult = AirbyteSearchResult[IssuesSearchData]
 """Search result type for issues entity."""
-
-MessagesSearchResult = AirbyteSearchResult[MessagesSearchData]
-"""Search result type for messages entity."""
 
 AccountsSearchResult = AirbyteSearchResult[AccountsSearchData]
 """Search result type for accounts entity."""

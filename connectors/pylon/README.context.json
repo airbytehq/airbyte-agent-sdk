@@ -2674,61 +2674,6 @@
         }
       ]
     },
-    "messages": {
-      "entity": "messages",
-      "data_type_name": "MessagesSearchData",
-      "filter_type_name": "MessagesSearchFilter",
-      "in_filter_type_name": "MessagesInFilter",
-      "any_value_filter_type_name": "MessagesAnyValueFilter",
-      "string_filter_type_name": "MessagesStringFilter",
-      "sort_filter_type_name": "MessagesSortFilter",
-      "result_type_name": "MessagesSearchResult",
-      "query_type_name": "MessagesSearchQuery",
-      "condition_prefix": "Messages",
-      "condition_type_name": "MessagesCondition",
-      "fields": [
-        {
-          "name": "id",
-          "python_name": "id",
-          "type": "str",
-          "json_type": "string",
-          "example_value_json": "\"<str>\"",
-          "description": "Unique identifier for the message"
-        },
-        {
-          "name": "timestamp",
-          "python_name": "timestamp",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Timestamp the message was posted, in ISO 8601 format"
-        },
-        {
-          "name": "is_private",
-          "python_name": "is_private",
-          "type": "bool | None",
-          "json_type": "null | boolean",
-          "example_value_json": "True",
-          "description": "Whether the message is an internal note (not visible to the customer)"
-        },
-        {
-          "name": "source",
-          "python_name": "source",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Channel the message was sent through (e.g. email, slack)"
-        },
-        {
-          "name": "thread_id",
-          "python_name": "thread_id",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "description": "Identifier of the thread this message belongs to"
-        }
-      ]
-    },
     "accounts": {
       "entity": "accounts",
       "data_type_name": "AccountsSearchData",
