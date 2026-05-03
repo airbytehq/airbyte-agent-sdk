@@ -3,7 +3,7 @@
   "class_name": "WoocommerceConnector",
   "package_name": "airbyte_agent_sdk.connectors.woocommerce",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.4",
+  "yaml_version": "1.0.5",
   "api_reference_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
   "auth_example": "WoocommerceAuthConfig(api_key=\"...\", api_secret=\"...\")",
   "auth_import": ", WoocommerceAuthConfig",
@@ -45,8 +45,8 @@
         "type": "str",
         "required": true,
         "title": "Start Date",
-        "description": "UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ from which to start replicating data.",
-        "format": "date-time",
+        "description": "UTC date in the format YYYY-MM-DD from which to start replicating data.",
+        "format": "date",
         "default": null
       }
     ]
