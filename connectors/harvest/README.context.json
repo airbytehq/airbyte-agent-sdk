@@ -3,7 +3,7 @@
   "class_name": "HarvestConnector",
   "package_name": "airbyte_agent_sdk.connectors.harvest",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.3",
+  "yaml_version": "1.0.4",
   "api_reference_url": "https://help.getharvest.com/api-v2/",
   "auth_example": "HarvestAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\", account_id=\"...\")",
   "auth_import": ", HarvestAuthConfig",
@@ -78,12 +78,12 @@
     "description": "Settings for data replication from Harvest.",
     "fields": [
       {
-        "name": "replication_start_date",
+        "name": "account_id",
         "type": "str",
         "required": true,
-        "title": "Start Date",
-        "description": "UTC date and time in YYYY-MM-DDTHH:mm:ssZ format from which to start replicating data. Data before this date will not be replicated.",
-        "format": "date-time",
+        "title": "Account ID",
+        "description": "Your Harvest account ID. Required for all API requests.",
+        "format": null,
         "default": null
       }
     ]
