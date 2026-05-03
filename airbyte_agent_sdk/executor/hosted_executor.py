@@ -73,20 +73,26 @@ class HostedExecutor:
     ):
         """Initialize hosted executor.
 
-        Either provide connector_id directly OR (workspace_name + connector_definition_id)
-        for lookup.
+        Either provide `connector_id` directly OR (`workspace_name` +
+        `connector_definition_id`) for lookup. When neither `connector_id`
+        nor `workspace_name` is provided, `workspace_name` defaults to
+        `"default"`, so the lookup resolves against the workspace literally
+        named "default" as long as `connector_definition_id` is supplied.
 
         Args:
             airbyte_client_id: Airbyte client ID for authentication
             airbyte_client_secret: Airbyte client secret for authentication
             connector_id: Direct connector/source ID (skips lookup if provided)
-            workspace_name: Workspace name for connector lookup
+            workspace_name: Workspace name for connector lookup. Defaults to
+                `"default"` when neither this nor `connector_id` is provided.
             connector_definition_id: Connector definition ID (for lookup)
             organization_id: Optional Airbyte organization ID for multi-org request routing
             model: Optional ConnectorModel for health check operation selection
 
         Raises:
-            ValueError: If neither connector_id nor (workspace_name + connector_definition_id) provided
+            ValueError: If neither `connector_id` nor `connector_definition_id` is provided
+                (a missing `workspace_name` alone no longer raises, since it now
+                defaults to `"default"`).
 
         Example:
             # With explicit connector_id (no lookup)
@@ -105,6 +111,13 @@ class HostedExecutor:
                 connector_definition_id="abc123-def456-ghi789",
             )
         """
+        # When neither a direct connector_id nor a workspace_name is supplied,
+        # fall back to the workspace literally named "default" so callers like
+        # `LinearConnector(auth_config=AirbyteAuthConfig(client_id, secret))`
+        # do not have to pass workspace_name explicitly.
+        if not connector_id and not workspace_name:
+            workspace_name = "default"
+
         resolved_workspace_name = workspace_name
 
         # Validate: either connector_id OR (workspace_name + connector_definition_id) required
