@@ -123,20 +123,6 @@ info:
   x-airbyte-context-store:
     disable_compaction: true
     entities:
-      - entity: channel_members
-        x-airbyte-name: channel_members
-        suggested: true
-        fields:
-          - name: channel_id
-            type:
-              - "null"
-              - "string"
-            description: "The unique identifier for the channel where the member is associated."
-          - name: member_id
-            type:
-              - "null"
-              - "string"
-            description: "The unique identifier for the member within the channel."
       - entity: channels
         x-airbyte-name: channels
         suggested: true

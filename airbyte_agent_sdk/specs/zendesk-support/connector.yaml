@@ -730,39 +730,6 @@ info:
         - "null"
         - "string"
         description: URL of the ticket form
-    - entity: ticket_metric_events
-      x-airbyte-name: ticket_metric_events
-      fields:
-      - name: id
-        type:
-        - "null"
-        - "integer"
-        description: "Unique identifier for the ticket metric event, automatically assigned when the record is created"
-      - name: instance_id
-        type:
-        - "null"
-        - "integer"
-        description: Instance identifier tracking occurrences of metric events that can happen multiple times per ticket
-      - name: metric
-        type:
-        - "null"
-        - "string"
-        description: "The specific metric being tracked, such as agent work time, reply time, or requester wait time"
-      - name: ticket_id
-        type:
-        - "null"
-        - "integer"
-        description: Identifier of the associated ticket for which the metric event was recorded
-      - name: time
-        type:
-        - "null"
-        - "string"
-        description: Timestamp indicating when the metric event occurred
-      - name: type
-        type:
-        - "null"
-        - "string"
-        description: "The category of metric event, such as activate, pause, fulfill, apply_sla, breach, or update_status"
     - entity: ticket_metrics
       x-airbyte-name: ticket_metrics
       suggested: true

@@ -326,46 +326,6 @@ info:
           - name: updated_at
             type: ["null", "string"]
             description: When the single send was last updated
-      - entity: stats_automations
-        x-airbyte-name: stats_automations
-        fields:
-          - name: aggregation
-            type: ["null", "string"]
-            description: The aggregation type for stats
-          - name: id
-            type: ["null", "string"]
-            description: The automation ID
-          - name: stats
-            type: ["null", "object"]
-            description: Email statistics for the automation
-            properties:
-              bounce_drops:
-                type: ["null", "integer"]
-              bounces:
-                type: ["null", "integer"]
-              clicks:
-                type: ["null", "integer"]
-              delivered:
-                type: ["null", "integer"]
-              invalid_emails:
-                type: ["null", "integer"]
-              opens:
-                type: ["null", "integer"]
-              requests:
-                type: ["null", "integer"]
-              spam_report_drops:
-                type: ["null", "integer"]
-              spam_reports:
-                type: ["null", "integer"]
-              unique_clicks:
-                type: ["null", "integer"]
-              unique_opens:
-                type: ["null", "integer"]
-              unsubscribes:
-                type: ["null", "integer"]
-          - name: step_id
-            type: ["null", "string"]
-            description: The automation step ID
       - entity: suppression_group_members
         x-airbyte-name: suppression_group_members
         fields:

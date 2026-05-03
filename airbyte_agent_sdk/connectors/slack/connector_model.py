@@ -4213,7 +4213,6 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
         ),
     ],
     search_field_paths={
-        'channel_members': ['channel_id', 'member_id'],
         'channels': [
             'context_team_id',
             'created',

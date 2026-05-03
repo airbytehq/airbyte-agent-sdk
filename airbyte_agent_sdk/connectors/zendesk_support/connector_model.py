@@ -6649,14 +6649,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
             'updated_at',
             'url',
         ],
-        'ticket_metric_events': [
-            'id',
-            'instance_id',
-            'metric',
-            'ticket_id',
-            'time',
-            'type',
-        ],
         'ticket_metrics': [
             'agent_wait_time_in_minutes',
             'assigned_at',

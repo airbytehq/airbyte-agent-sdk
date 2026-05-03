@@ -3431,25 +3431,6 @@ ZendeskTalkConnectorModel: ConnectorModel = ConnectorModel(
             'phone_number_names',
             'phone_number_names[]',
         ],
-        'ivr_menus': [
-            'default',
-            'greeting_id',
-            'id',
-            'ivr_id',
-            'name',
-        ],
-        'ivr_routes': [
-            'action',
-            'greeting',
-            'id',
-            'ivr_id',
-            'ivr_menu_id',
-            'keypress',
-            'option_text',
-            'options',
-            'overflow_options',
-            'overflow_options[]',
-        ],
     },
     example_questions=ExampleQuestions(
         direct=[
