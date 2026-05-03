@@ -1575,8 +1575,6 @@ components:
         example_questions:
           - "What Twilio accounts do I have?"
       description: A Twilio account
-      required:
-      - sid
       properties:
         auth_token:
           type: ["null", "string"]
@@ -1648,8 +1646,6 @@ components:
           - "Show recent Twilio calls"
           - "How many calls were made today?"
       description: A Twilio call
-      required:
-      - sid
       properties:
         sid:
           type: ["null", "string"]
@@ -1774,8 +1770,6 @@ components:
           - "Show recent text messages"
           - "Were there any failed SMS?"
       description: A Twilio message
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]
@@ -1877,8 +1871,6 @@ components:
         example_questions:
           - "What phone numbers do I have in Twilio?"
       description: A Twilio incoming phone number
-      required:
-      - sid
       properties:
         sid:
           type: ["null", "string"]
@@ -2037,8 +2029,6 @@ components:
         example_questions:
           - "Show call recordings"
       description: A Twilio recording
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]
@@ -2138,8 +2128,6 @@ components:
         example_questions:
           - "Show recent conference calls"
       description: A Twilio conference
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]
@@ -2299,8 +2287,6 @@ components:
         example_questions:
           - "What addresses are registered?"
       description: A Twilio address
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]
@@ -2388,8 +2374,6 @@ components:
         example_questions:
           - "What call queues are configured?"
       description: A Twilio queue
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]
@@ -2460,8 +2444,6 @@ components:
         example_questions:
           - "Show call transcriptions"
       description: A Twilio transcription
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]
@@ -2540,8 +2522,6 @@ components:
         example_questions:
           - "What outgoing caller IDs are verified?"
       description: A Twilio outgoing caller ID
-      required:
-      - sid
       properties:
         account_sid:
           type: ["null", "string"]

@@ -131,7 +131,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'description': 'The URI for accessing the account resource',
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'accounts',
                                     'x-airbyte-stream-name': 'accounts',
                                     'x-airbyte-ai-hints': {
@@ -230,7 +229,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The URI for accessing the account resource',
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'accounts',
                         'x-airbyte-stream-name': 'accounts',
                         'x-airbyte-ai-hints': {
@@ -292,7 +290,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'description': 'The URI for accessing the account resource',
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'accounts',
                 'x-airbyte-stream-name': 'accounts',
                 'x-airbyte-ai-hints': {
@@ -461,7 +458,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'additionalProperties': True,
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'calls',
                                     'x-airbyte-stream-name': 'calls',
                                     'x-airbyte-ai-hints': {
@@ -675,7 +671,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'calls',
                         'x-airbyte-stream-name': 'calls',
                         'x-airbyte-ai-hints': {
@@ -821,7 +816,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'calls',
                         'x-airbyte-stream-name': 'calls',
                         'x-airbyte-ai-hints': {
@@ -958,7 +952,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'calls',
                 'x-airbyte-stream-name': 'calls',
                 'x-airbyte-ai-hints': {
@@ -1117,7 +1110,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'description': 'The URI for this message',
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'messages',
                                     'x-airbyte-stream-name': 'messages',
                                     'x-airbyte-ai-hints': {
@@ -1288,7 +1280,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The URI for this message',
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'messages',
                         'x-airbyte-stream-name': 'messages',
                         'x-airbyte-ai-hints': {
@@ -1405,7 +1396,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The URI for this message',
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'messages',
                         'x-airbyte-stream-name': 'messages',
                         'x-airbyte-ai-hints': {
@@ -1513,7 +1503,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'description': 'The URI for this message',
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'messages',
                 'x-airbyte-stream-name': 'messages',
                 'x-airbyte-ai-hints': {
@@ -1750,7 +1739,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'additionalProperties': True,
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'incoming_phone_numbers',
                                     'x-airbyte-stream-name': 'incoming_phone_numbers',
                                     'x-airbyte-ai-hints': {
@@ -2004,7 +1992,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'incoming_phone_numbers',
                         'x-airbyte-stream-name': 'incoming_phone_numbers',
                         'x-airbyte-ai-hints': {
@@ -2194,7 +2181,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'incoming_phone_numbers',
                         'x-airbyte-stream-name': 'incoming_phone_numbers',
                         'x-airbyte-ai-hints': {
@@ -2375,7 +2361,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'incoming_phone_numbers',
                 'x-airbyte-stream-name': 'incoming_phone_numbers',
                 'x-airbyte-ai-hints': {
@@ -2521,7 +2506,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'additionalProperties': True,
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'recordings',
                                     'x-airbyte-stream-name': 'recordings',
                                     'x-airbyte-ai-hints': {
@@ -2658,7 +2642,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'recordings',
                         'x-airbyte-stream-name': 'recordings',
                         'x-airbyte-ai-hints': {
@@ -2758,7 +2741,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'recordings',
                 'x-airbyte-stream-name': 'recordings',
                 'x-airbyte-ai-hints': {
@@ -2874,7 +2856,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'additionalProperties': True,
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'conferences',
                                     'x-airbyte-stream-name': 'conferences',
                                     'x-airbyte-ai-hints': {
@@ -2981,7 +2962,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'conferences',
                         'x-airbyte-stream-name': 'conferences',
                         'x-airbyte-ai-hints': {
@@ -3051,7 +3031,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'conferences',
                 'x-airbyte-stream-name': 'conferences',
                 'x-airbyte-ai-hints': {
@@ -3429,7 +3408,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'description': 'The URI of the address resource',
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'addresses',
                                     'x-airbyte-stream-name': 'addresses',
                                     'x-airbyte-ai-hints': {
@@ -3551,7 +3529,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The URI of the address resource',
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'addresses',
                         'x-airbyte-stream-name': 'addresses',
                         'x-airbyte-ai-hints': {
@@ -3636,7 +3613,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'description': 'The URI of the address resource',
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'addresses',
                 'x-airbyte-stream-name': 'addresses',
                 'x-airbyte-ai-hints': {
@@ -3744,7 +3720,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'additionalProperties': True,
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'queues',
                                     'x-airbyte-stream-name': 'queues',
                                     'x-airbyte-ai-hints': {
@@ -3843,7 +3818,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'additionalProperties': True,
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'queues',
                         'x-airbyte-stream-name': 'queues',
                         'x-airbyte-ai-hints': {
@@ -3905,7 +3879,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'queues',
                 'x-airbyte-stream-name': 'queues',
                 'x-airbyte-ai-hints': {
@@ -4024,7 +3997,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'description': 'The URI of the transcription',
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'transcriptions',
                                     'x-airbyte-stream-name': 'transcriptions',
                                     'x-airbyte-ai-hints': {
@@ -4134,7 +4106,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The URI of the transcription',
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'transcriptions',
                         'x-airbyte-stream-name': 'transcriptions',
                         'x-airbyte-ai-hints': {
@@ -4207,7 +4178,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'description': 'The URI of the transcription',
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'transcriptions',
                 'x-airbyte-stream-name': 'transcriptions',
                 'x-airbyte-ai-hints': {
@@ -4302,7 +4272,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'description': 'The URI of the resource',
                                         },
                                     },
-                                    'required': ['sid'],
                                     'x-airbyte-entity-name': 'outgoing_caller_ids',
                                     'x-airbyte-stream-name': 'outgoing_caller_ids',
                                     'x-airbyte-ai-hints': {
@@ -4388,7 +4357,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The URI of the resource',
                             },
                         },
-                        'required': ['sid'],
                         'x-airbyte-entity-name': 'outgoing_caller_ids',
                         'x-airbyte-stream-name': 'outgoing_caller_ids',
                         'x-airbyte-ai-hints': {
@@ -4437,7 +4405,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'description': 'The URI of the resource',
                     },
                 },
-                'required': ['sid'],
                 'x-airbyte-entity-name': 'outgoing_caller_ids',
                 'x-airbyte-stream-name': 'outgoing_caller_ids',
                 'x-airbyte-ai-hints': {

@@ -44,7 +44,7 @@ class Account(BaseModel):
     date_updated: str | None = Field(default=None)
     friendly_name: str | None = Field(default=None)
     owner_account_sid: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     status: str | None = Field(default=None)
     subresource_uris: dict[str, Any] | None = Field(default=None)
     type_: str | None = Field(default=None, alias="type")
@@ -66,7 +66,7 @@ class Call(BaseModel):
     """A Twilio call"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    sid: str | None
+    sid: str | None = Field(default=None)
     date_created: str | None = Field(default=None)
     date_updated: str | None = Field(default=None)
     parent_call_sid: str | None = Field(default=None)
@@ -125,7 +125,7 @@ class Message(BaseModel):
     num_segments: str | None = Field(default=None)
     price: str | None = Field(default=None)
     price_unit: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     status: str | None = Field(default=None)
     subresource_uris: dict[str, Any] | None = Field(default=None)
     to: str | None = Field(default=None)
@@ -156,7 +156,7 @@ class IncomingPhoneNumber(BaseModel):
     """A Twilio incoming phone number"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    sid: str | None
+    sid: str | None = Field(default=None)
     account_sid: str | None = Field(default=None)
     friendly_name: str | None = Field(default=None)
     phone_number: str | None = Field(default=None)
@@ -217,7 +217,7 @@ class Recording(BaseModel):
     date_updated: str | None = Field(default=None)
     start_time: str | None = Field(default=None)
     duration: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     price: str | None = Field(default=None)
     price_unit: str | None = Field(default=None)
     status: str | None = Field(default=None)
@@ -251,7 +251,7 @@ class Conference(BaseModel):
     api_version: str | None = Field(default=None)
     friendly_name: str | None = Field(default=None)
     region: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     status: str | None = Field(default=None)
     uri: str | None = Field(default=None)
     reason_conference_ended: str | None = Field(default=None)
@@ -316,7 +316,7 @@ class Address(BaseModel):
     iso_country: str | None = Field(default=None)
     postal_code: str | None = Field(default=None)
     region: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     street: str | None = Field(default=None)
     street_secondary: str | None = Field(default=None)
     validated: bool | None = Field(default=None)
@@ -346,7 +346,7 @@ class Queue(BaseModel):
     date_updated: str | None = Field(default=None)
     friendly_name: str | None = Field(default=None)
     max_size: int | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     uri: str | None = Field(default=None)
     subresource_uris: dict[str, Any] | None = Field(default=None)
 
@@ -374,7 +374,7 @@ class Transcription(BaseModel):
     price: str | None = Field(default=None)
     price_unit: str | None = Field(default=None)
     recording_sid: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     status: str | None = Field(default=None)
     transcription_text: str | None = Field(default=None)
     type_: str | None = Field(default=None, alias="type")
@@ -401,7 +401,7 @@ class OutgoingCallerId(BaseModel):
     date_updated: str | None = Field(default=None)
     friendly_name: str | None = Field(default=None)
     phone_number: str | None = Field(default=None)
-    sid: str | None
+    sid: str | None = Field(default=None)
     uri: str | None = Field(default=None)
 
 class OutgoingCallerIdsList(BaseModel):
