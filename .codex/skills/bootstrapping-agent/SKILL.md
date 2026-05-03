@@ -29,7 +29,14 @@ connector = StripeConnector(
     )
 )
 
-agent = Agent("openai:gpt-4o", system_prompt="You have access to Stripe data.")
+agent = Agent(
+    "<provider:model>",
+    system_prompt=(
+        "You are a helpful assistant with access to Stripe. "
+        "Use the stripe_execute tool to look up customer, invoice, and balance data. "
+        "Ask for clarification if a request is ambiguous."
+    ),
+)
 
 @agent.tool_plain
 @StripeConnector.tool_utils

@@ -44,7 +44,7 @@ async def stripe_execute(entity: str, action: str, params: dict | None = None) -
 
 async def main():
     runner = client.beta.messages.tool_runner(
-        model="claude-sonnet-4-5-20250929",
+        model="<model>",
         max_tokens=4096,
         tools=[stripe_execute],
         messages=[{"role": "user", "content": "List my recent customers"}],
@@ -128,7 +128,7 @@ async def slack_execute(entity: str, action: str, params: dict | None = None) ->
 
 async def main():
     runner = client.beta.messages.tool_runner(
-        model="claude-sonnet-4-5-20250929",
+        model="<model>",
         max_tokens=4096,
         tools=[jira_execute, slack_execute],
         messages=[{"role": "user", "content": "Find open bugs in Jira and post a summary to #engineering"}],

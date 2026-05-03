@@ -18,8 +18,12 @@ connector = StripeConnector(
 )
 
 agent = Agent(
-    "openai:gpt-4o",
-    system_prompt="You are a helpful assistant with access to Stripe data.",
+    "<provider:model>",
+    system_prompt=(
+        "You are a helpful assistant with access to Stripe. "
+        "Use the stripe_execute tool to look up customer, invoice, and balance data. "
+        "Ask for clarification if a request is ambiguous."
+    ),
 )
 
 
@@ -92,7 +96,7 @@ jira = JiraConnector(auth_config=auth)
 slack = SlackConnector(auth_config=auth)
 
 agent = Agent(
-    "openai:gpt-4o",
+    "<provider:model>",
     system_prompt=(
         "You are a project assistant. You can read Jira issues and post to Slack channels. "
         "Use the jira tool to query project data and the slack tool to send messages."
@@ -138,7 +142,7 @@ Describe what the agent can do in terms of the connectors:
 
 ```python
 agent = Agent(
-    "openai:gpt-4o",
+    "<provider:model>",
     system_prompt=(
         "You are a customer support assistant. "
         "You can look up customer details in Stripe and create tickets in Jira. "

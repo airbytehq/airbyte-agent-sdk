@@ -55,8 +55,12 @@ Each connector gets its own tool function — don't combine them into a mega-too
 
 ```python
 agent = Agent(
-    "openai:gpt-4o",
-    system_prompt="You monitor Jira issues and post summaries to Slack.",
+    "<provider:model>",
+    system_prompt=(
+        "You are a helpful assistant with access to Jira and Slack. "
+        "Use the jira_execute tool to read Jira issues and the slack_execute tool to post messages. "
+        "Ask for clarification if a request is ambiguous."
+    ),
 )
 
 @agent.tool_plain
@@ -76,7 +80,7 @@ Describe the agent's purpose and what each connector does:
 
 ```python
 agent = Agent(
-    "openai:gpt-4o",
+    "<provider:model>",
     system_prompt=(
         "You are a customer support assistant. "
         "Use the stripe tool to look up customer billing data. "
