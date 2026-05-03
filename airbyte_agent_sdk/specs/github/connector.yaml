@@ -65,6 +65,8 @@ info:
       [Install the Airbyte GitHub App](https://github.com/apps/airbyte-agent-engine)
       and grant it access to the repositories you want to sync before this
       connection will work.
+  x-airbyte-skip-auth-methods:
+    - oauth2
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from GitHub.
