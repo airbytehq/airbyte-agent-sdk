@@ -208,18 +208,11 @@ class EventAttributes(BaseModel):
     event_properties: dict[str, Any] | None | None = Field(default=None, description="Custom event properties")
     """Custom event properties"""
 
-class EventRelationshipsProfileData(BaseModel):
-    """Nested schema for EventRelationshipsProfile.data"""
+class EventLinks(BaseModel):
+    """Related links"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type_: str | None | None = Field(default=None, alias="type")
-    id: str | None | None = Field(default=None)
-
-class EventRelationshipsProfile(BaseModel):
-    """Nested schema for EventRelationships.profile"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: EventRelationshipsProfileData | None | None = Field(default=None)
+    self: str | None | None = Field(default=None)
 
 class EventRelationshipsMetricData(BaseModel):
     """Nested schema for EventRelationshipsMetric.data"""
@@ -234,18 +227,25 @@ class EventRelationshipsMetric(BaseModel):
 
     data: EventRelationshipsMetricData | None | None = Field(default=None)
 
+class EventRelationshipsProfileData(BaseModel):
+    """Nested schema for EventRelationshipsProfile.data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type")
+    id: str | None | None = Field(default=None)
+
+class EventRelationshipsProfile(BaseModel):
+    """Nested schema for EventRelationships.profile"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: EventRelationshipsProfileData | None | None = Field(default=None)
+
 class EventRelationships(BaseModel):
     """Related resources"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     profile: EventRelationshipsProfile | None | None = Field(default=None)
     metric: EventRelationshipsMetric | None | None = Field(default=None)
-
-class EventLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
 
 class Event(BaseModel):
     """A Klaviyo event representing an action taken by a profile"""
