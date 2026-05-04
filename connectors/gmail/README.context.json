@@ -281,10 +281,13 @@
             "type": "str",
             "schema": {
               "type": "string",
-              "description": "The entire email message in RFC 2822 format, base64url encoded"
+              "description": "Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before sending.",
+              "x-airbyte-ai-hints": {
+                "encoding": "Do not send plain text here; send the base64url encoding of the complete RFC 2822/MIME message."
+              }
             },
             "required": true,
-            "description": "The entire email message in RFC 2822 format, base64url encoded"
+            "description": "Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before sending."
           },
           {
             "name": "threadId",
@@ -300,7 +303,7 @@
         ],
         "params_type_name": "MessagesCreateParams",
         "response_type": "Message",
-        "description": "Sends a new email message. The message should be provided as a base64url-encoded\nRFC 2822 formatted string in the 'raw' field.\n",
+        "description": "Sends a new email message. The message should be provided as a base64url-encoded\nRFC 2822 formatted string in the 'raw' field. Build the complete MIME message\nfirst, including headers such as To and Subject plus a blank line before the\nbody, then base64url-encode that message before calling this operation.\n",
         "record_extractor": "$",
         "meta_extractor": null,
         "needs_envelope": null,
@@ -731,14 +734,17 @@
             "type": "DraftsCreateParamsMessage",
             "schema": {
               "type": "object",
-              "description": "The draft message content",
+              "description": "The draft message content encoded in Gmail raw message format",
               "required": [
                 "raw"
               ],
               "properties": {
                 "raw": {
                   "type": "string",
-                  "description": "The draft message in RFC 2822 format, base64url encoded"
+                  "description": "Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before creating or updating the draft.",
+                  "x-airbyte-ai-hints": {
+                    "encoding": "Do not send plain text here; send the base64url encoding of the complete RFC 2822/MIME message."
+                  }
                 },
                 "threadId": {
                   "type": "string",
@@ -747,7 +753,7 @@
               }
             },
             "required": true,
-            "description": "The draft message content"
+            "description": "The draft message content encoded in Gmail raw message format"
           }
         ],
         "params_type_name": "DraftsCreateParams",
@@ -819,14 +825,17 @@
             "type": "DraftsUpdateParamsMessage",
             "schema": {
               "type": "object",
-              "description": "The draft message content",
+              "description": "The draft message content encoded in Gmail raw message format",
               "required": [
                 "raw"
               ],
               "properties": {
                 "raw": {
                   "type": "string",
-                  "description": "The draft message in RFC 2822 format, base64url encoded"
+                  "description": "Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before creating or updating the draft.",
+                  "x-airbyte-ai-hints": {
+                    "encoding": "Do not send plain text here; send the base64url encoding of the complete RFC 2822/MIME message."
+                  }
                 },
                 "threadId": {
                   "type": "string",
@@ -835,7 +844,7 @@
               }
             },
             "required": true,
-            "description": "The draft message content"
+            "description": "The draft message content encoded in Gmail raw message format"
           },
           {
             "name": "draftId",
@@ -1218,6 +1227,54 @@
           "json_type": "string | null",
           "example_value_json": "\"<str>\"",
           "description": "Identifier of the thread this message belongs to"
+        },
+        {
+          "name": "labelIds",
+          "python_name": "label_ids",
+          "type": "list[Any] | None",
+          "json_type": "array | null",
+          "example_value_json": "[]",
+          "description": "Labels applied to the message"
+        },
+        {
+          "name": "snippet",
+          "python_name": "snippet",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Short snippet of the message text"
+        },
+        {
+          "name": "historyId",
+          "python_name": "history_id",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Mailbox history record identifier for the message"
+        },
+        {
+          "name": "internalDate",
+          "python_name": "internal_date",
+          "type": "str | None",
+          "json_type": "string | null",
+          "example_value_json": "\"<str>\"",
+          "description": "Internal message creation timestamp in epoch milliseconds"
+        },
+        {
+          "name": "sizeEstimate",
+          "python_name": "size_estimate",
+          "type": "int | None",
+          "json_type": "integer | null",
+          "example_value_json": "0",
+          "description": "Estimated size of the message in bytes"
+        },
+        {
+          "name": "payload",
+          "python_name": "payload",
+          "type": "dict[str, Any] | None",
+          "json_type": "object | null",
+          "example_value_json": "{}",
+          "description": "Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."
         }
       ]
     },

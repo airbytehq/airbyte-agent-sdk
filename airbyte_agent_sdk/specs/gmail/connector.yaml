@@ -43,7 +43,7 @@ info:
             description: "Total number of threads currently in the mailbox"
       - entity: messages
         suggested: true
-        x-airbyte-name: messages
+        x-airbyte-name: messages_details
         fields:
           - name: id
             type: string
@@ -53,6 +53,126 @@ info:
               - "string"
               - "null"
             description: "Identifier of the thread this message belongs to"
+          - name: labelIds
+            type:
+              - "array"
+              - "null"
+            description: "Labels applied to the message"
+          - name: snippet
+            type:
+              - "string"
+              - "null"
+            description: "Short snippet of the message text"
+          - name: historyId
+            type:
+              - "string"
+              - "null"
+            description: "Mailbox history record identifier for the message"
+          - name: internalDate
+            type:
+              - "string"
+              - "null"
+            description: "Internal message creation timestamp in epoch milliseconds"
+          - name: sizeEstimate
+            type:
+              - "integer"
+              - "null"
+            description: "Estimated size of the message in bytes"
+          - name: payload
+            type:
+              - "object"
+              - "null"
+            description: "Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."
+            properties:
+              partId:
+                type:
+                  - "string"
+                  - "null"
+              mimeType:
+                type:
+                  - "string"
+                  - "null"
+              filename:
+                type:
+                  - "string"
+                  - "null"
+              headers:
+                type:
+                  - "array"
+                  - "null"
+                properties:
+                  name:
+                    type:
+                      - "string"
+                      - "null"
+                  value:
+                    type:
+                      - "string"
+                      - "null"
+              body:
+                type:
+                  - "object"
+                  - "null"
+                properties:
+                  attachmentId:
+                    type:
+                      - "string"
+                      - "null"
+                  size:
+                    type:
+                      - "integer"
+                      - "null"
+                  data:
+                    type:
+                      - "string"
+                      - "null"
+              parts:
+                type:
+                  - "array"
+                  - "null"
+                properties:
+                  partId:
+                    type:
+                      - "string"
+                      - "null"
+                  mimeType:
+                    type:
+                      - "string"
+                      - "null"
+                  filename:
+                    type:
+                      - "string"
+                      - "null"
+                  headers:
+                    type:
+                      - "array"
+                      - "null"
+                    properties:
+                      name:
+                        type:
+                          - "string"
+                          - "null"
+                      value:
+                        type:
+                          - "string"
+                          - "null"
+                  body:
+                    type:
+                      - "object"
+                      - "null"
+                    properties:
+                      attachmentId:
+                        type:
+                          - "string"
+                          - "null"
+                      size:
+                        type:
+                          - "integer"
+                          - "null"
+                      data:
+                        type:
+                          - "string"
+                          - "null"
       - entity: labels
         x-airbyte-name: labels
         fields:
@@ -744,7 +864,9 @@ paths:
       summary: Send a message
       description: |
         Sends a new email message. The message should be provided as a base64url-encoded
-        RFC 2822 formatted string in the 'raw' field.
+        RFC 2822 formatted string in the 'raw' field. Build the complete MIME message
+        first, including headers such as To and Subject plus a blank line before the
+        body, then base64url-encode that message before calling this operation.
       operationId: sendMessage
       x-airbyte-entity: messages
       x-airbyte-action: create
@@ -875,6 +997,32 @@ components:
             https://www.googleapis.com/auth/gmail.compose: Manage drafts and send emails
             https://www.googleapis.com/auth/gmail.labels: Manage mailbox labels
             https://mail.google.com/: Full access to the account's mailboxes including permanent deletion
+      # Google may show previously granted Airbyte scopes on the consent screen
+      # when include_granted_scopes=true; this mapping is what Sonar requests.
+      x-airbyte-oauth-scopes:
+        - scope: "https://www.googleapis.com/auth/gmail.readonly"
+          mode: read
+          entities:
+            - profile
+            - messages
+            - threads
+            - drafts
+        - scope: "https://www.googleapis.com/auth/gmail.labels"
+          mode: read_write
+          entities:
+            - labels
+        - scope: "https://www.googleapis.com/auth/gmail.modify"
+          mode: write
+          entities:
+            - messages
+            - messages_trash
+            - messages_untrash
+        - scope: "https://www.googleapis.com/auth/gmail.compose"
+          mode: write
+          entities:
+            - messages
+            - drafts
+            - drafts_send
       x-airbyte-auth-config:
         title: "OAuth 2.0 Authentication"
         type: object
@@ -903,9 +1051,11 @@ components:
           client_id: "${client_id}"
           client_secret: "${client_secret}"
         replication_auth_key_mapping:
-          client_id: "client_id"
-          client_secret: "client_secret"
-          client_refresh_token: "refresh_token"
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.client_refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          credentials.auth_type: "Client"
 
   schemas:
     # ========================================================================
@@ -996,13 +1146,13 @@ components:
     Message:
       type: object
       x-airbyte-entity-name: messages
-      x-airbyte-stream-name: messages
+      x-airbyte-stream-name: messages_details
       x-airbyte-ai-hints:
         summary: "Gmail email messages with subject, sender, body, and attachments"
         when_to_use: "Looking for emails, searching inbox, or finding specific messages"
         trigger_phrases: ["email", "gmail message", "inbox", "find email", "who emailed"]
         freshness: live
-        search_strategy: "Search by subject, sender, or keywords in the body using Gmail query syntax"
+        search_strategy: "Search by subject, sender, or keywords in the body. Use snippet for message previews, payload.headers[].value for headers such as From/To/Subject/Date, and payload.body.data or payload.parts[].body.data for body content when available."
         example_questions:
           - "Find emails from a specific sender"
           - "Show unread messages"
@@ -1253,13 +1403,17 @@ components:
 
     MessageSendParams:
       type: object
-      description: Parameters for sending a message
+      description: |
+        Parameters for sending a message. The raw value must be a base64url-encoded
+        RFC 2822/MIME email, not plain body text.
       required:
         - raw
       properties:
         raw:
           type: string
-          description: The entire email message in RFC 2822 format, base64url encoded
+          description: "Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before sending."
+          x-airbyte-ai-hints:
+            encoding: "Do not send plain text here; send the base64url encoding of the complete RFC 2822/MIME message."
         threadId:
           type: string
           description: The thread ID to reply to (for threading replies in a conversation)
@@ -1348,19 +1502,23 @@ components:
 
     DraftCreateParams:
       type: object
-      description: Parameters for creating or updating a draft
+      description: |
+        Parameters for creating or updating a draft. The nested message.raw value must
+        be a base64url-encoded RFC 2822/MIME email, not plain body text.
       required:
         - message
       properties:
         message:
           type: object
-          description: The draft message content
+          description: The draft message content encoded in Gmail raw message format
           required:
             - raw
           properties:
             raw:
               type: string
-              description: The draft message in RFC 2822 format, base64url encoded
+              description: "Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before creating or updating the draft."
+              x-airbyte-ai-hints:
+                encoding: "Do not send plain text here; send the base64url encoding of the complete RFC 2822/MIME message."
             threadId:
               type: string
               description: The thread ID for the draft (for threading in a conversation)

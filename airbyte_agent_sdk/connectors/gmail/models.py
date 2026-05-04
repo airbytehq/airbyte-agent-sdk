@@ -179,7 +179,9 @@ class ThreadsListResponse(BaseModel):
     result_size_estimate: int | None = Field(default=None, alias="resultSizeEstimate")
 
 class MessageSendParams(BaseModel):
-    """Parameters for sending a message"""
+    """Parameters for sending a message. The raw value must be a base64url-encoded
+RFC 2822/MIME email, not plain body text.
+"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     raw: str
@@ -230,16 +232,18 @@ class LabelUpdateParams(BaseModel):
     color: LabelUpdateParamsColor | None = Field(default=None)
 
 class DraftCreateParamsMessage(BaseModel):
-    """The draft message content"""
+    """The draft message content encoded in Gmail raw message format"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    raw: str = Field(description="The draft message in RFC 2822 format, base64url encoded")
-    """The draft message in RFC 2822 format, base64url encoded"""
+    raw: str = Field(description="Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before creating or updating the draft.")
+    """Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before creating or updating the draft."""
     thread_id: str | None = Field(default=None, alias="threadId", description="The thread ID for the draft (for threading in a conversation)")
     """The thread ID for the draft (for threading in a conversation)"""
 
 class DraftCreateParams(BaseModel):
-    """Parameters for creating or updating a draft"""
+    """Parameters for creating or updating a draft. The nested message.raw value must
+be a base64url-encoded RFC 2822/MIME email, not plain body text.
+"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     message: DraftCreateParamsMessage
@@ -347,6 +351,18 @@ class MessagesSearchData(BaseModel):
     """Unique identifier for the message"""
     thread_id: str | None = None
     """Identifier of the thread this message belongs to"""
+    label_ids: list[Any] | None = None
+    """Labels applied to the message"""
+    snippet: str | None = None
+    """Short snippet of the message text"""
+    history_id: str | None = None
+    """Mailbox history record identifier for the message"""
+    internal_date: str | None = None
+    """Internal message creation timestamp in epoch milliseconds"""
+    size_estimate: int | None = None
+    """Estimated size of the message in bytes"""
+    payload: dict[str, Any] | None = None
+    """Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."""
 
 
 class LabelsSearchData(BaseModel):

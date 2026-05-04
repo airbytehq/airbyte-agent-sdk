@@ -104,7 +104,7 @@ class GmailConnector:
 
     connector_name = "gmail"
     connector_version = "0.1.4"
-    sdk_version = "0.1.170"
+    sdk_version = "0.1.171"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -859,11 +859,13 @@ class MessagesQuery:
     ) -> Message:
         """
         Sends a new email message. The message should be provided as a base64url-encoded
-RFC 2822 formatted string in the 'raw' field.
+RFC 2822 formatted string in the 'raw' field. Build the complete MIME message
+first, including headers such as To and Subject plus a blank line before the
+body, then base64url-encode that message before calling this operation.
 
 
         Args:
-            raw: The entire email message in RFC 2822 format, base64url encoded
+            raw: Base64url-encoded RFC 2822/MIME email; construct headers plus a blank line plus body, then URL-safe-base64 encode the UTF-8 bytes before sending.
             thread_id: The thread ID to reply to (for threading replies in a conversation)
             **kwargs: Additional parameters
 
@@ -931,6 +933,12 @@ star (add STARRED label), or apply custom labels.
         Available filter fields (MessagesSearchFilter):
         - id: Unique identifier for the message
         - thread_id: Identifier of the thread this message belongs to
+        - label_ids: Labels applied to the message
+        - snippet: Short snippet of the message text
+        - history_id: Mailbox history record identifier for the message
+        - internal_date: Internal message creation timestamp in epoch milliseconds
+        - size_estimate: Estimated size of the message in bytes
+        - payload: Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers.
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1241,7 +1249,7 @@ class DraftsQuery:
         Creates a new draft with the specified message content
 
         Args:
-            message: The draft message content
+            message: The draft message content encoded in Gmail raw message format
             **kwargs: Additional parameters
 
         Returns:
@@ -1295,7 +1303,7 @@ class DraftsQuery:
         Replaces a draft's content with the specified message content
 
         Args:
-            message: The draft message content
+            message: The draft message content encoded in Gmail raw message format
             draft_id: The ID of the draft to update
             **kwargs: Additional parameters
 

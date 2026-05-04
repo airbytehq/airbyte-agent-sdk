@@ -28,12 +28,12 @@ class LabelsUpdateParamsColor(TypedDict):
     backgroundColor: NotRequired[str]
 
 class DraftsCreateParamsMessage(TypedDict):
-    """The draft message content"""
+    """The draft message content encoded in Gmail raw message format"""
     raw: str
     threadId: NotRequired[str]
 
 class DraftsUpdateParamsMessage(TypedDict):
-    """The draft message content"""
+    """The draft message content encoded in Gmail raw message format"""
     raw: str
     threadId: NotRequired[str]
 
@@ -315,6 +315,18 @@ class MessagesSearchFilter(TypedDict, total=False):
     """Unique identifier for the message"""
     thread_id: str | None
     """Identifier of the thread this message belongs to"""
+    label_ids: list[Any] | None
+    """Labels applied to the message"""
+    snippet: str | None
+    """Short snippet of the message text"""
+    history_id: str | None
+    """Mailbox history record identifier for the message"""
+    internal_date: str | None
+    """Internal message creation timestamp in epoch milliseconds"""
+    size_estimate: int | None
+    """Estimated size of the message in bytes"""
+    payload: dict[str, Any] | None
+    """Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."""
 
 
 class MessagesInFilter(TypedDict, total=False):
@@ -323,6 +335,18 @@ class MessagesInFilter(TypedDict, total=False):
     """Unique identifier for the message"""
     thread_id: list[str]
     """Identifier of the thread this message belongs to"""
+    label_ids: list[list[Any]]
+    """Labels applied to the message"""
+    snippet: list[str]
+    """Short snippet of the message text"""
+    history_id: list[str]
+    """Mailbox history record identifier for the message"""
+    internal_date: list[str]
+    """Internal message creation timestamp in epoch milliseconds"""
+    size_estimate: list[int]
+    """Estimated size of the message in bytes"""
+    payload: list[dict[str, Any]]
+    """Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."""
 
 
 class MessagesAnyValueFilter(TypedDict, total=False):
@@ -331,6 +355,18 @@ class MessagesAnyValueFilter(TypedDict, total=False):
     """Unique identifier for the message"""
     thread_id: Any
     """Identifier of the thread this message belongs to"""
+    label_ids: Any
+    """Labels applied to the message"""
+    snippet: Any
+    """Short snippet of the message text"""
+    history_id: Any
+    """Mailbox history record identifier for the message"""
+    internal_date: Any
+    """Internal message creation timestamp in epoch milliseconds"""
+    size_estimate: Any
+    """Estimated size of the message in bytes"""
+    payload: Any
+    """Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."""
 
 
 class MessagesStringFilter(TypedDict, total=False):
@@ -339,6 +375,18 @@ class MessagesStringFilter(TypedDict, total=False):
     """Unique identifier for the message"""
     thread_id: str
     """Identifier of the thread this message belongs to"""
+    label_ids: str
+    """Labels applied to the message"""
+    snippet: str
+    """Short snippet of the message text"""
+    history_id: str
+    """Mailbox history record identifier for the message"""
+    internal_date: str
+    """Internal message creation timestamp in epoch milliseconds"""
+    size_estimate: str
+    """Estimated size of the message in bytes"""
+    payload: str
+    """Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."""
 
 
 class MessagesSortFilter(TypedDict, total=False):
@@ -347,6 +395,18 @@ class MessagesSortFilter(TypedDict, total=False):
     """Unique identifier for the message"""
     thread_id: AirbyteSortOrder
     """Identifier of the thread this message belongs to"""
+    label_ids: AirbyteSortOrder
+    """Labels applied to the message"""
+    snippet: AirbyteSortOrder
+    """Short snippet of the message text"""
+    history_id: AirbyteSortOrder
+    """Mailbox history record identifier for the message"""
+    internal_date: AirbyteSortOrder
+    """Internal message creation timestamp in epoch milliseconds"""
+    size_estimate: AirbyteSortOrder
+    """Estimated size of the message in bytes"""
+    payload: AirbyteSortOrder
+    """Parsed MIME payload including headers, body, nested MIME parts, and attachment metadata. Use payload.headers for sender, recipients, subject, date, and other email headers."""
 
 
 # Entity-specific condition types for messages
