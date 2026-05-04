@@ -4275,6 +4275,1756 @@ class UsersSearchQuery(TypedDict, total=False):
     sort: list[UsersSortFilter]
 
 
+# ===== ARTICLES SEARCH TYPES =====
+
+class ArticlesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering articles search queries."""
+    id: int | None
+    """The unique ID of the article"""
+    url: str | None
+    """The API URL of the article"""
+    html_url: str | None
+    """The public URL of the article"""
+    title: str | None
+    """The title of the article"""
+    body: str | None
+    """The body content of the article (HTML)"""
+    locale: str | None
+    """The locale of the article"""
+    author_id: int | None
+    """The ID of the user who created the article"""
+    section_id: int | None
+    """The ID of the section the article belongs to"""
+    created_at: str | None
+    """The time the article was created"""
+    updated_at: str | None
+    """The time the article was last updated"""
+    vote_sum: int | None
+    """Sum of upvotes and downvotes"""
+    vote_count: int | None
+    """Number of votes"""
+    label_names: list[Any] | None
+    """List of label names associated with the article"""
+    draft: bool | None
+    """Whether the article is a draft"""
+    promoted: bool | None
+    """Whether the article is promoted"""
+    position: int | None
+    """Position of the article in the section"""
+
+
+class ArticlesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """The unique ID of the article"""
+    url: list[str]
+    """The API URL of the article"""
+    html_url: list[str]
+    """The public URL of the article"""
+    title: list[str]
+    """The title of the article"""
+    body: list[str]
+    """The body content of the article (HTML)"""
+    locale: list[str]
+    """The locale of the article"""
+    author_id: list[int]
+    """The ID of the user who created the article"""
+    section_id: list[int]
+    """The ID of the section the article belongs to"""
+    created_at: list[str]
+    """The time the article was created"""
+    updated_at: list[str]
+    """The time the article was last updated"""
+    vote_sum: list[int]
+    """Sum of upvotes and downvotes"""
+    vote_count: list[int]
+    """Number of votes"""
+    label_names: list[list[Any]]
+    """List of label names associated with the article"""
+    draft: list[bool]
+    """Whether the article is a draft"""
+    promoted: list[bool]
+    """Whether the article is promoted"""
+    position: list[int]
+    """Position of the article in the section"""
+
+
+class ArticlesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """The unique ID of the article"""
+    url: Any
+    """The API URL of the article"""
+    html_url: Any
+    """The public URL of the article"""
+    title: Any
+    """The title of the article"""
+    body: Any
+    """The body content of the article (HTML)"""
+    locale: Any
+    """The locale of the article"""
+    author_id: Any
+    """The ID of the user who created the article"""
+    section_id: Any
+    """The ID of the section the article belongs to"""
+    created_at: Any
+    """The time the article was created"""
+    updated_at: Any
+    """The time the article was last updated"""
+    vote_sum: Any
+    """Sum of upvotes and downvotes"""
+    vote_count: Any
+    """Number of votes"""
+    label_names: Any
+    """List of label names associated with the article"""
+    draft: Any
+    """Whether the article is a draft"""
+    promoted: Any
+    """Whether the article is promoted"""
+    position: Any
+    """Position of the article in the section"""
+
+
+class ArticlesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """The unique ID of the article"""
+    url: str
+    """The API URL of the article"""
+    html_url: str
+    """The public URL of the article"""
+    title: str
+    """The title of the article"""
+    body: str
+    """The body content of the article (HTML)"""
+    locale: str
+    """The locale of the article"""
+    author_id: str
+    """The ID of the user who created the article"""
+    section_id: str
+    """The ID of the section the article belongs to"""
+    created_at: str
+    """The time the article was created"""
+    updated_at: str
+    """The time the article was last updated"""
+    vote_sum: str
+    """Sum of upvotes and downvotes"""
+    vote_count: str
+    """Number of votes"""
+    label_names: str
+    """List of label names associated with the article"""
+    draft: str
+    """Whether the article is a draft"""
+    promoted: str
+    """Whether the article is promoted"""
+    position: str
+    """Position of the article in the section"""
+
+
+class ArticlesSortFilter(TypedDict, total=False):
+    """Available fields for sorting articles search results."""
+    id: AirbyteSortOrder
+    """The unique ID of the article"""
+    url: AirbyteSortOrder
+    """The API URL of the article"""
+    html_url: AirbyteSortOrder
+    """The public URL of the article"""
+    title: AirbyteSortOrder
+    """The title of the article"""
+    body: AirbyteSortOrder
+    """The body content of the article (HTML)"""
+    locale: AirbyteSortOrder
+    """The locale of the article"""
+    author_id: AirbyteSortOrder
+    """The ID of the user who created the article"""
+    section_id: AirbyteSortOrder
+    """The ID of the section the article belongs to"""
+    created_at: AirbyteSortOrder
+    """The time the article was created"""
+    updated_at: AirbyteSortOrder
+    """The time the article was last updated"""
+    vote_sum: AirbyteSortOrder
+    """Sum of upvotes and downvotes"""
+    vote_count: AirbyteSortOrder
+    """Number of votes"""
+    label_names: AirbyteSortOrder
+    """List of label names associated with the article"""
+    draft: AirbyteSortOrder
+    """Whether the article is a draft"""
+    promoted: AirbyteSortOrder
+    """Whether the article is promoted"""
+    position: AirbyteSortOrder
+    """Position of the article in the section"""
+
+
+# Entity-specific condition types for articles
+class ArticlesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ArticlesSearchFilter
+
+
+class ArticlesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ArticlesSearchFilter
+
+
+class ArticlesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ArticlesSearchFilter
+
+
+class ArticlesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ArticlesSearchFilter
+
+
+class ArticlesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ArticlesSearchFilter
+
+
+class ArticlesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ArticlesSearchFilter
+
+
+class ArticlesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ArticlesStringFilter
+
+
+class ArticlesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ArticlesStringFilter
+
+
+class ArticlesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ArticlesStringFilter
+
+
+class ArticlesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ArticlesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ArticlesInCondition = TypedDict("ArticlesInCondition", {"in": ArticlesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ArticlesNotCondition = TypedDict("ArticlesNotCondition", {"not": "ArticlesCondition"}, total=False)
+"""Negates the nested condition."""
+
+ArticlesAndCondition = TypedDict("ArticlesAndCondition", {"and": "list[ArticlesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ArticlesOrCondition = TypedDict("ArticlesOrCondition", {"or": "list[ArticlesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ArticlesAnyCondition = TypedDict("ArticlesAnyCondition", {"any": ArticlesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all articles condition types
+ArticlesCondition = (
+    ArticlesEqCondition
+    | ArticlesNeqCondition
+    | ArticlesGtCondition
+    | ArticlesGteCondition
+    | ArticlesLtCondition
+    | ArticlesLteCondition
+    | ArticlesInCondition
+    | ArticlesLikeCondition
+    | ArticlesFuzzyCondition
+    | ArticlesKeywordCondition
+    | ArticlesContainsCondition
+    | ArticlesNotCondition
+    | ArticlesAndCondition
+    | ArticlesOrCondition
+    | ArticlesAnyCondition
+)
+
+
+class ArticlesSearchQuery(TypedDict, total=False):
+    """Search query for articles entity."""
+    filter: ArticlesCondition
+    sort: list[ArticlesSortFilter]
+
+
+# ===== ARTICLE_ATTACHMENTS SEARCH TYPES =====
+
+class ArticleAttachmentsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering article_attachments search queries."""
+    id: int | None
+    """The unique ID of the attachment"""
+    url: str | None
+    """The API URL of the attachment"""
+    article_id: int | None
+    """The ID of the article this attachment belongs to"""
+    file_name: str | None
+    """The name of the attached file"""
+    content_type: str | None
+    """The MIME type of the attachment"""
+    content_url: str | None
+    """The URL to download the attachment"""
+    size: int | None
+    """The size of the attachment in bytes"""
+    inline: bool | None
+    """Whether the attachment is displayed inline"""
+    created_at: str | None
+    """The time the attachment was created"""
+    updated_at: str | None
+    """The time the attachment was last updated"""
+
+
+class ArticleAttachmentsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """The unique ID of the attachment"""
+    url: list[str]
+    """The API URL of the attachment"""
+    article_id: list[int]
+    """The ID of the article this attachment belongs to"""
+    file_name: list[str]
+    """The name of the attached file"""
+    content_type: list[str]
+    """The MIME type of the attachment"""
+    content_url: list[str]
+    """The URL to download the attachment"""
+    size: list[int]
+    """The size of the attachment in bytes"""
+    inline: list[bool]
+    """Whether the attachment is displayed inline"""
+    created_at: list[str]
+    """The time the attachment was created"""
+    updated_at: list[str]
+    """The time the attachment was last updated"""
+
+
+class ArticleAttachmentsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """The unique ID of the attachment"""
+    url: Any
+    """The API URL of the attachment"""
+    article_id: Any
+    """The ID of the article this attachment belongs to"""
+    file_name: Any
+    """The name of the attached file"""
+    content_type: Any
+    """The MIME type of the attachment"""
+    content_url: Any
+    """The URL to download the attachment"""
+    size: Any
+    """The size of the attachment in bytes"""
+    inline: Any
+    """Whether the attachment is displayed inline"""
+    created_at: Any
+    """The time the attachment was created"""
+    updated_at: Any
+    """The time the attachment was last updated"""
+
+
+class ArticleAttachmentsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """The unique ID of the attachment"""
+    url: str
+    """The API URL of the attachment"""
+    article_id: str
+    """The ID of the article this attachment belongs to"""
+    file_name: str
+    """The name of the attached file"""
+    content_type: str
+    """The MIME type of the attachment"""
+    content_url: str
+    """The URL to download the attachment"""
+    size: str
+    """The size of the attachment in bytes"""
+    inline: str
+    """Whether the attachment is displayed inline"""
+    created_at: str
+    """The time the attachment was created"""
+    updated_at: str
+    """The time the attachment was last updated"""
+
+
+class ArticleAttachmentsSortFilter(TypedDict, total=False):
+    """Available fields for sorting article_attachments search results."""
+    id: AirbyteSortOrder
+    """The unique ID of the attachment"""
+    url: AirbyteSortOrder
+    """The API URL of the attachment"""
+    article_id: AirbyteSortOrder
+    """The ID of the article this attachment belongs to"""
+    file_name: AirbyteSortOrder
+    """The name of the attached file"""
+    content_type: AirbyteSortOrder
+    """The MIME type of the attachment"""
+    content_url: AirbyteSortOrder
+    """The URL to download the attachment"""
+    size: AirbyteSortOrder
+    """The size of the attachment in bytes"""
+    inline: AirbyteSortOrder
+    """Whether the attachment is displayed inline"""
+    created_at: AirbyteSortOrder
+    """The time the attachment was created"""
+    updated_at: AirbyteSortOrder
+    """The time the attachment was last updated"""
+
+
+# Entity-specific condition types for article_attachments
+class ArticleAttachmentsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: ArticleAttachmentsSearchFilter
+
+
+class ArticleAttachmentsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: ArticleAttachmentsSearchFilter
+
+
+class ArticleAttachmentsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: ArticleAttachmentsSearchFilter
+
+
+class ArticleAttachmentsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: ArticleAttachmentsSearchFilter
+
+
+class ArticleAttachmentsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: ArticleAttachmentsSearchFilter
+
+
+class ArticleAttachmentsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: ArticleAttachmentsSearchFilter
+
+
+class ArticleAttachmentsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: ArticleAttachmentsStringFilter
+
+
+class ArticleAttachmentsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: ArticleAttachmentsStringFilter
+
+
+class ArticleAttachmentsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: ArticleAttachmentsStringFilter
+
+
+class ArticleAttachmentsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: ArticleAttachmentsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+ArticleAttachmentsInCondition = TypedDict("ArticleAttachmentsInCondition", {"in": ArticleAttachmentsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+ArticleAttachmentsNotCondition = TypedDict("ArticleAttachmentsNotCondition", {"not": "ArticleAttachmentsCondition"}, total=False)
+"""Negates the nested condition."""
+
+ArticleAttachmentsAndCondition = TypedDict("ArticleAttachmentsAndCondition", {"and": "list[ArticleAttachmentsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+ArticleAttachmentsOrCondition = TypedDict("ArticleAttachmentsOrCondition", {"or": "list[ArticleAttachmentsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+ArticleAttachmentsAnyCondition = TypedDict("ArticleAttachmentsAnyCondition", {"any": ArticleAttachmentsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all article_attachments condition types
+ArticleAttachmentsCondition = (
+    ArticleAttachmentsEqCondition
+    | ArticleAttachmentsNeqCondition
+    | ArticleAttachmentsGtCondition
+    | ArticleAttachmentsGteCondition
+    | ArticleAttachmentsLtCondition
+    | ArticleAttachmentsLteCondition
+    | ArticleAttachmentsInCondition
+    | ArticleAttachmentsLikeCondition
+    | ArticleAttachmentsFuzzyCondition
+    | ArticleAttachmentsKeywordCondition
+    | ArticleAttachmentsContainsCondition
+    | ArticleAttachmentsNotCondition
+    | ArticleAttachmentsAndCondition
+    | ArticleAttachmentsOrCondition
+    | ArticleAttachmentsAnyCondition
+)
+
+
+class ArticleAttachmentsSearchQuery(TypedDict, total=False):
+    """Search query for article_attachments entity."""
+    filter: ArticleAttachmentsCondition
+    sort: list[ArticleAttachmentsSortFilter]
+
+
+# ===== AUTOMATIONS SEARCH TYPES =====
+
+class AutomationsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering automations search queries."""
+    id: int | None
+    """Automatically assigned when created"""
+    title: str | None
+    """The title of the automation"""
+    active: bool | None
+    """Whether the automation is active"""
+    position: int | None
+    """The position of the automation"""
+    conditions: dict[str, Any] | None
+    """An object that describes the conditions under which the automation will execute"""
+    actions: list[Any] | None
+    """An array of actions"""
+    raw_title: str | None
+    """The dynamic content placeholder for title"""
+    created_at: str | None
+    """The time the automation was created"""
+    updated_at: str | None
+    """The time the automation was last updated"""
+
+
+class AutomationsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Automatically assigned when created"""
+    title: list[str]
+    """The title of the automation"""
+    active: list[bool]
+    """Whether the automation is active"""
+    position: list[int]
+    """The position of the automation"""
+    conditions: list[dict[str, Any]]
+    """An object that describes the conditions under which the automation will execute"""
+    actions: list[list[Any]]
+    """An array of actions"""
+    raw_title: list[str]
+    """The dynamic content placeholder for title"""
+    created_at: list[str]
+    """The time the automation was created"""
+    updated_at: list[str]
+    """The time the automation was last updated"""
+
+
+class AutomationsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Automatically assigned when created"""
+    title: Any
+    """The title of the automation"""
+    active: Any
+    """Whether the automation is active"""
+    position: Any
+    """The position of the automation"""
+    conditions: Any
+    """An object that describes the conditions under which the automation will execute"""
+    actions: Any
+    """An array of actions"""
+    raw_title: Any
+    """The dynamic content placeholder for title"""
+    created_at: Any
+    """The time the automation was created"""
+    updated_at: Any
+    """The time the automation was last updated"""
+
+
+class AutomationsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Automatically assigned when created"""
+    title: str
+    """The title of the automation"""
+    active: str
+    """Whether the automation is active"""
+    position: str
+    """The position of the automation"""
+    conditions: str
+    """An object that describes the conditions under which the automation will execute"""
+    actions: str
+    """An array of actions"""
+    raw_title: str
+    """The dynamic content placeholder for title"""
+    created_at: str
+    """The time the automation was created"""
+    updated_at: str
+    """The time the automation was last updated"""
+
+
+class AutomationsSortFilter(TypedDict, total=False):
+    """Available fields for sorting automations search results."""
+    id: AirbyteSortOrder
+    """Automatically assigned when created"""
+    title: AirbyteSortOrder
+    """The title of the automation"""
+    active: AirbyteSortOrder
+    """Whether the automation is active"""
+    position: AirbyteSortOrder
+    """The position of the automation"""
+    conditions: AirbyteSortOrder
+    """An object that describes the conditions under which the automation will execute"""
+    actions: AirbyteSortOrder
+    """An array of actions"""
+    raw_title: AirbyteSortOrder
+    """The dynamic content placeholder for title"""
+    created_at: AirbyteSortOrder
+    """The time the automation was created"""
+    updated_at: AirbyteSortOrder
+    """The time the automation was last updated"""
+
+
+# Entity-specific condition types for automations
+class AutomationsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: AutomationsSearchFilter
+
+
+class AutomationsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: AutomationsSearchFilter
+
+
+class AutomationsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: AutomationsSearchFilter
+
+
+class AutomationsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: AutomationsSearchFilter
+
+
+class AutomationsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: AutomationsSearchFilter
+
+
+class AutomationsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: AutomationsSearchFilter
+
+
+class AutomationsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: AutomationsStringFilter
+
+
+class AutomationsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: AutomationsStringFilter
+
+
+class AutomationsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: AutomationsStringFilter
+
+
+class AutomationsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: AutomationsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+AutomationsInCondition = TypedDict("AutomationsInCondition", {"in": AutomationsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+AutomationsNotCondition = TypedDict("AutomationsNotCondition", {"not": "AutomationsCondition"}, total=False)
+"""Negates the nested condition."""
+
+AutomationsAndCondition = TypedDict("AutomationsAndCondition", {"and": "list[AutomationsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+AutomationsOrCondition = TypedDict("AutomationsOrCondition", {"or": "list[AutomationsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+AutomationsAnyCondition = TypedDict("AutomationsAnyCondition", {"any": AutomationsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all automations condition types
+AutomationsCondition = (
+    AutomationsEqCondition
+    | AutomationsNeqCondition
+    | AutomationsGtCondition
+    | AutomationsGteCondition
+    | AutomationsLtCondition
+    | AutomationsLteCondition
+    | AutomationsInCondition
+    | AutomationsLikeCondition
+    | AutomationsFuzzyCondition
+    | AutomationsKeywordCondition
+    | AutomationsContainsCondition
+    | AutomationsNotCondition
+    | AutomationsAndCondition
+    | AutomationsOrCondition
+    | AutomationsAnyCondition
+)
+
+
+class AutomationsSearchQuery(TypedDict, total=False):
+    """Search query for automations entity."""
+    filter: AutomationsCondition
+    sort: list[AutomationsSortFilter]
+
+
+# ===== GROUP_MEMBERSHIPS SEARCH TYPES =====
+
+class GroupMembershipsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering group_memberships search queries."""
+    id: int | None
+    """Automatically assigned upon creation"""
+    url: str | None
+    """The API url of this record"""
+    user_id: int | None
+    """The id of an agent"""
+    group_id: int | None
+    """The id of a group"""
+    default: bool | None
+    """If true, tickets assigned directly to the agent will assume this membership's group"""
+    created_at: str | None
+    """When the group membership was created"""
+    updated_at: str | None
+    """When the group membership was last updated"""
+
+
+class GroupMembershipsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Automatically assigned upon creation"""
+    url: list[str]
+    """The API url of this record"""
+    user_id: list[int]
+    """The id of an agent"""
+    group_id: list[int]
+    """The id of a group"""
+    default: list[bool]
+    """If true, tickets assigned directly to the agent will assume this membership's group"""
+    created_at: list[str]
+    """When the group membership was created"""
+    updated_at: list[str]
+    """When the group membership was last updated"""
+
+
+class GroupMembershipsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Automatically assigned upon creation"""
+    url: Any
+    """The API url of this record"""
+    user_id: Any
+    """The id of an agent"""
+    group_id: Any
+    """The id of a group"""
+    default: Any
+    """If true, tickets assigned directly to the agent will assume this membership's group"""
+    created_at: Any
+    """When the group membership was created"""
+    updated_at: Any
+    """When the group membership was last updated"""
+
+
+class GroupMembershipsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Automatically assigned upon creation"""
+    url: str
+    """The API url of this record"""
+    user_id: str
+    """The id of an agent"""
+    group_id: str
+    """The id of a group"""
+    default: str
+    """If true, tickets assigned directly to the agent will assume this membership's group"""
+    created_at: str
+    """When the group membership was created"""
+    updated_at: str
+    """When the group membership was last updated"""
+
+
+class GroupMembershipsSortFilter(TypedDict, total=False):
+    """Available fields for sorting group_memberships search results."""
+    id: AirbyteSortOrder
+    """Automatically assigned upon creation"""
+    url: AirbyteSortOrder
+    """The API url of this record"""
+    user_id: AirbyteSortOrder
+    """The id of an agent"""
+    group_id: AirbyteSortOrder
+    """The id of a group"""
+    default: AirbyteSortOrder
+    """If true, tickets assigned directly to the agent will assume this membership's group"""
+    created_at: AirbyteSortOrder
+    """When the group membership was created"""
+    updated_at: AirbyteSortOrder
+    """When the group membership was last updated"""
+
+
+# Entity-specific condition types for group_memberships
+class GroupMembershipsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: GroupMembershipsSearchFilter
+
+
+class GroupMembershipsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: GroupMembershipsSearchFilter
+
+
+class GroupMembershipsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: GroupMembershipsSearchFilter
+
+
+class GroupMembershipsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: GroupMembershipsSearchFilter
+
+
+class GroupMembershipsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: GroupMembershipsSearchFilter
+
+
+class GroupMembershipsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: GroupMembershipsSearchFilter
+
+
+class GroupMembershipsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: GroupMembershipsStringFilter
+
+
+class GroupMembershipsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: GroupMembershipsStringFilter
+
+
+class GroupMembershipsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: GroupMembershipsStringFilter
+
+
+class GroupMembershipsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: GroupMembershipsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+GroupMembershipsInCondition = TypedDict("GroupMembershipsInCondition", {"in": GroupMembershipsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+GroupMembershipsNotCondition = TypedDict("GroupMembershipsNotCondition", {"not": "GroupMembershipsCondition"}, total=False)
+"""Negates the nested condition."""
+
+GroupMembershipsAndCondition = TypedDict("GroupMembershipsAndCondition", {"and": "list[GroupMembershipsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+GroupMembershipsOrCondition = TypedDict("GroupMembershipsOrCondition", {"or": "list[GroupMembershipsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+GroupMembershipsAnyCondition = TypedDict("GroupMembershipsAnyCondition", {"any": GroupMembershipsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all group_memberships condition types
+GroupMembershipsCondition = (
+    GroupMembershipsEqCondition
+    | GroupMembershipsNeqCondition
+    | GroupMembershipsGtCondition
+    | GroupMembershipsGteCondition
+    | GroupMembershipsLtCondition
+    | GroupMembershipsLteCondition
+    | GroupMembershipsInCondition
+    | GroupMembershipsLikeCondition
+    | GroupMembershipsFuzzyCondition
+    | GroupMembershipsKeywordCondition
+    | GroupMembershipsContainsCondition
+    | GroupMembershipsNotCondition
+    | GroupMembershipsAndCondition
+    | GroupMembershipsOrCondition
+    | GroupMembershipsAnyCondition
+)
+
+
+class GroupMembershipsSearchQuery(TypedDict, total=False):
+    """Search query for group_memberships entity."""
+    filter: GroupMembershipsCondition
+    sort: list[GroupMembershipsSortFilter]
+
+
+# ===== MACROS SEARCH TYPES =====
+
+class MacrosSearchFilter(TypedDict, total=False):
+    """Available fields for filtering macros search queries."""
+    id: int | None
+    """Automatically assigned when the macro is created"""
+    url: str | None
+    """A URL to access the macro's details"""
+    title: str | None
+    """The title of the macro"""
+    active: bool | None
+    """Useful for determining if the macro should be displayed"""
+    position: int | None
+    """The position of the macro"""
+    description: str | None
+    """The description of the macro"""
+    actions: list[Any] | None
+    """Actions to perform when macro is applied"""
+    restriction: dict[str, Any] | None
+    """Who may access this macro"""
+    raw_title: str | None
+    """The dynamic content placeholder for title"""
+    created_at: str | None
+    """The time the macro was created"""
+    updated_at: str | None
+    """The time the macro was last updated"""
+
+
+class MacrosInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Automatically assigned when the macro is created"""
+    url: list[str]
+    """A URL to access the macro's details"""
+    title: list[str]
+    """The title of the macro"""
+    active: list[bool]
+    """Useful for determining if the macro should be displayed"""
+    position: list[int]
+    """The position of the macro"""
+    description: list[str]
+    """The description of the macro"""
+    actions: list[list[Any]]
+    """Actions to perform when macro is applied"""
+    restriction: list[dict[str, Any]]
+    """Who may access this macro"""
+    raw_title: list[str]
+    """The dynamic content placeholder for title"""
+    created_at: list[str]
+    """The time the macro was created"""
+    updated_at: list[str]
+    """The time the macro was last updated"""
+
+
+class MacrosAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Automatically assigned when the macro is created"""
+    url: Any
+    """A URL to access the macro's details"""
+    title: Any
+    """The title of the macro"""
+    active: Any
+    """Useful for determining if the macro should be displayed"""
+    position: Any
+    """The position of the macro"""
+    description: Any
+    """The description of the macro"""
+    actions: Any
+    """Actions to perform when macro is applied"""
+    restriction: Any
+    """Who may access this macro"""
+    raw_title: Any
+    """The dynamic content placeholder for title"""
+    created_at: Any
+    """The time the macro was created"""
+    updated_at: Any
+    """The time the macro was last updated"""
+
+
+class MacrosStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Automatically assigned when the macro is created"""
+    url: str
+    """A URL to access the macro's details"""
+    title: str
+    """The title of the macro"""
+    active: str
+    """Useful for determining if the macro should be displayed"""
+    position: str
+    """The position of the macro"""
+    description: str
+    """The description of the macro"""
+    actions: str
+    """Actions to perform when macro is applied"""
+    restriction: str
+    """Who may access this macro"""
+    raw_title: str
+    """The dynamic content placeholder for title"""
+    created_at: str
+    """The time the macro was created"""
+    updated_at: str
+    """The time the macro was last updated"""
+
+
+class MacrosSortFilter(TypedDict, total=False):
+    """Available fields for sorting macros search results."""
+    id: AirbyteSortOrder
+    """Automatically assigned when the macro is created"""
+    url: AirbyteSortOrder
+    """A URL to access the macro's details"""
+    title: AirbyteSortOrder
+    """The title of the macro"""
+    active: AirbyteSortOrder
+    """Useful for determining if the macro should be displayed"""
+    position: AirbyteSortOrder
+    """The position of the macro"""
+    description: AirbyteSortOrder
+    """The description of the macro"""
+    actions: AirbyteSortOrder
+    """Actions to perform when macro is applied"""
+    restriction: AirbyteSortOrder
+    """Who may access this macro"""
+    raw_title: AirbyteSortOrder
+    """The dynamic content placeholder for title"""
+    created_at: AirbyteSortOrder
+    """The time the macro was created"""
+    updated_at: AirbyteSortOrder
+    """The time the macro was last updated"""
+
+
+# Entity-specific condition types for macros
+class MacrosEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: MacrosSearchFilter
+
+
+class MacrosNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: MacrosSearchFilter
+
+
+class MacrosGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: MacrosSearchFilter
+
+
+class MacrosGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: MacrosSearchFilter
+
+
+class MacrosLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: MacrosSearchFilter
+
+
+class MacrosLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: MacrosSearchFilter
+
+
+class MacrosLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: MacrosStringFilter
+
+
+class MacrosFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: MacrosStringFilter
+
+
+class MacrosKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: MacrosStringFilter
+
+
+class MacrosContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: MacrosAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+MacrosInCondition = TypedDict("MacrosInCondition", {"in": MacrosInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+MacrosNotCondition = TypedDict("MacrosNotCondition", {"not": "MacrosCondition"}, total=False)
+"""Negates the nested condition."""
+
+MacrosAndCondition = TypedDict("MacrosAndCondition", {"and": "list[MacrosCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+MacrosOrCondition = TypedDict("MacrosOrCondition", {"or": "list[MacrosCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+MacrosAnyCondition = TypedDict("MacrosAnyCondition", {"any": MacrosAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all macros condition types
+MacrosCondition = (
+    MacrosEqCondition
+    | MacrosNeqCondition
+    | MacrosGtCondition
+    | MacrosGteCondition
+    | MacrosLtCondition
+    | MacrosLteCondition
+    | MacrosInCondition
+    | MacrosLikeCondition
+    | MacrosFuzzyCondition
+    | MacrosKeywordCondition
+    | MacrosContainsCondition
+    | MacrosNotCondition
+    | MacrosAndCondition
+    | MacrosOrCondition
+    | MacrosAnyCondition
+)
+
+
+class MacrosSearchQuery(TypedDict, total=False):
+    """Search query for macros entity."""
+    filter: MacrosCondition
+    sort: list[MacrosSortFilter]
+
+
+# ===== ORGANIZATION_MEMBERSHIPS SEARCH TYPES =====
+
+class OrganizationMembershipsSearchFilter(TypedDict, total=False):
+    """Available fields for filtering organization_memberships search queries."""
+    id: int | None
+    """Automatically assigned when the membership is created"""
+    url: str | None
+    """The API url of this membership"""
+    user_id: int | None
+    """The ID of the user for whom this memberships belongs"""
+    organization_id: int | None
+    """The ID of the organization associated with this user"""
+    default: bool | None
+    """If true, this is the default organization for the user"""
+    organization_name: str | None
+    """The name of the organization"""
+    view_tickets: bool | None
+    """If true, this user can view tickets from this organization"""
+    created_at: str | None
+    """When the membership was created"""
+    updated_at: str | None
+    """When the membership was last updated"""
+
+
+class OrganizationMembershipsInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Automatically assigned when the membership is created"""
+    url: list[str]
+    """The API url of this membership"""
+    user_id: list[int]
+    """The ID of the user for whom this memberships belongs"""
+    organization_id: list[int]
+    """The ID of the organization associated with this user"""
+    default: list[bool]
+    """If true, this is the default organization for the user"""
+    organization_name: list[str]
+    """The name of the organization"""
+    view_tickets: list[bool]
+    """If true, this user can view tickets from this organization"""
+    created_at: list[str]
+    """When the membership was created"""
+    updated_at: list[str]
+    """When the membership was last updated"""
+
+
+class OrganizationMembershipsAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Automatically assigned when the membership is created"""
+    url: Any
+    """The API url of this membership"""
+    user_id: Any
+    """The ID of the user for whom this memberships belongs"""
+    organization_id: Any
+    """The ID of the organization associated with this user"""
+    default: Any
+    """If true, this is the default organization for the user"""
+    organization_name: Any
+    """The name of the organization"""
+    view_tickets: Any
+    """If true, this user can view tickets from this organization"""
+    created_at: Any
+    """When the membership was created"""
+    updated_at: Any
+    """When the membership was last updated"""
+
+
+class OrganizationMembershipsStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Automatically assigned when the membership is created"""
+    url: str
+    """The API url of this membership"""
+    user_id: str
+    """The ID of the user for whom this memberships belongs"""
+    organization_id: str
+    """The ID of the organization associated with this user"""
+    default: str
+    """If true, this is the default organization for the user"""
+    organization_name: str
+    """The name of the organization"""
+    view_tickets: str
+    """If true, this user can view tickets from this organization"""
+    created_at: str
+    """When the membership was created"""
+    updated_at: str
+    """When the membership was last updated"""
+
+
+class OrganizationMembershipsSortFilter(TypedDict, total=False):
+    """Available fields for sorting organization_memberships search results."""
+    id: AirbyteSortOrder
+    """Automatically assigned when the membership is created"""
+    url: AirbyteSortOrder
+    """The API url of this membership"""
+    user_id: AirbyteSortOrder
+    """The ID of the user for whom this memberships belongs"""
+    organization_id: AirbyteSortOrder
+    """The ID of the organization associated with this user"""
+    default: AirbyteSortOrder
+    """If true, this is the default organization for the user"""
+    organization_name: AirbyteSortOrder
+    """The name of the organization"""
+    view_tickets: AirbyteSortOrder
+    """If true, this user can view tickets from this organization"""
+    created_at: AirbyteSortOrder
+    """When the membership was created"""
+    updated_at: AirbyteSortOrder
+    """When the membership was last updated"""
+
+
+# Entity-specific condition types for organization_memberships
+class OrganizationMembershipsEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: OrganizationMembershipsSearchFilter
+
+
+class OrganizationMembershipsNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: OrganizationMembershipsSearchFilter
+
+
+class OrganizationMembershipsGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: OrganizationMembershipsSearchFilter
+
+
+class OrganizationMembershipsGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: OrganizationMembershipsSearchFilter
+
+
+class OrganizationMembershipsLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: OrganizationMembershipsSearchFilter
+
+
+class OrganizationMembershipsLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: OrganizationMembershipsSearchFilter
+
+
+class OrganizationMembershipsLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: OrganizationMembershipsStringFilter
+
+
+class OrganizationMembershipsFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: OrganizationMembershipsStringFilter
+
+
+class OrganizationMembershipsKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: OrganizationMembershipsStringFilter
+
+
+class OrganizationMembershipsContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: OrganizationMembershipsAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+OrganizationMembershipsInCondition = TypedDict("OrganizationMembershipsInCondition", {"in": OrganizationMembershipsInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+OrganizationMembershipsNotCondition = TypedDict("OrganizationMembershipsNotCondition", {"not": "OrganizationMembershipsCondition"}, total=False)
+"""Negates the nested condition."""
+
+OrganizationMembershipsAndCondition = TypedDict("OrganizationMembershipsAndCondition", {"and": "list[OrganizationMembershipsCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+OrganizationMembershipsOrCondition = TypedDict("OrganizationMembershipsOrCondition", {"or": "list[OrganizationMembershipsCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+OrganizationMembershipsAnyCondition = TypedDict("OrganizationMembershipsAnyCondition", {"any": OrganizationMembershipsAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all organization_memberships condition types
+OrganizationMembershipsCondition = (
+    OrganizationMembershipsEqCondition
+    | OrganizationMembershipsNeqCondition
+    | OrganizationMembershipsGtCondition
+    | OrganizationMembershipsGteCondition
+    | OrganizationMembershipsLtCondition
+    | OrganizationMembershipsLteCondition
+    | OrganizationMembershipsInCondition
+    | OrganizationMembershipsLikeCondition
+    | OrganizationMembershipsFuzzyCondition
+    | OrganizationMembershipsKeywordCondition
+    | OrganizationMembershipsContainsCondition
+    | OrganizationMembershipsNotCondition
+    | OrganizationMembershipsAndCondition
+    | OrganizationMembershipsOrCondition
+    | OrganizationMembershipsAnyCondition
+)
+
+
+class OrganizationMembershipsSearchQuery(TypedDict, total=False):
+    """Search query for organization_memberships entity."""
+    filter: OrganizationMembershipsCondition
+    sort: list[OrganizationMembershipsSortFilter]
+
+
+# ===== SLA_POLICIES SEARCH TYPES =====
+
+class SlaPoliciesSearchFilter(TypedDict, total=False):
+    """Available fields for filtering sla_policies search queries."""
+    id: int | None
+    """Automatically assigned when the SLA policy is created"""
+    url: str | None
+    """URL of the SLA policy"""
+    title: str | None
+    """The title of the SLA policy"""
+    description: str | None
+    """The description of the SLA policy"""
+    position: int | None
+    """Position of the SLA policy"""
+    filter: dict[str, Any] | None
+    """Filter for the SLA policy"""
+    policy_metrics: list[Any] | None
+    """Array of policy metrics"""
+    created_at: str | None
+    """When the SLA policy was created"""
+    updated_at: str | None
+    """When the SLA policy was last updated"""
+
+
+class SlaPoliciesInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Automatically assigned when the SLA policy is created"""
+    url: list[str]
+    """URL of the SLA policy"""
+    title: list[str]
+    """The title of the SLA policy"""
+    description: list[str]
+    """The description of the SLA policy"""
+    position: list[int]
+    """Position of the SLA policy"""
+    filter: list[dict[str, Any]]
+    """Filter for the SLA policy"""
+    policy_metrics: list[list[Any]]
+    """Array of policy metrics"""
+    created_at: list[str]
+    """When the SLA policy was created"""
+    updated_at: list[str]
+    """When the SLA policy was last updated"""
+
+
+class SlaPoliciesAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Automatically assigned when the SLA policy is created"""
+    url: Any
+    """URL of the SLA policy"""
+    title: Any
+    """The title of the SLA policy"""
+    description: Any
+    """The description of the SLA policy"""
+    position: Any
+    """Position of the SLA policy"""
+    filter: Any
+    """Filter for the SLA policy"""
+    policy_metrics: Any
+    """Array of policy metrics"""
+    created_at: Any
+    """When the SLA policy was created"""
+    updated_at: Any
+    """When the SLA policy was last updated"""
+
+
+class SlaPoliciesStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Automatically assigned when the SLA policy is created"""
+    url: str
+    """URL of the SLA policy"""
+    title: str
+    """The title of the SLA policy"""
+    description: str
+    """The description of the SLA policy"""
+    position: str
+    """Position of the SLA policy"""
+    filter: str
+    """Filter for the SLA policy"""
+    policy_metrics: str
+    """Array of policy metrics"""
+    created_at: str
+    """When the SLA policy was created"""
+    updated_at: str
+    """When the SLA policy was last updated"""
+
+
+class SlaPoliciesSortFilter(TypedDict, total=False):
+    """Available fields for sorting sla_policies search results."""
+    id: AirbyteSortOrder
+    """Automatically assigned when the SLA policy is created"""
+    url: AirbyteSortOrder
+    """URL of the SLA policy"""
+    title: AirbyteSortOrder
+    """The title of the SLA policy"""
+    description: AirbyteSortOrder
+    """The description of the SLA policy"""
+    position: AirbyteSortOrder
+    """Position of the SLA policy"""
+    filter: AirbyteSortOrder
+    """Filter for the SLA policy"""
+    policy_metrics: AirbyteSortOrder
+    """Array of policy metrics"""
+    created_at: AirbyteSortOrder
+    """When the SLA policy was created"""
+    updated_at: AirbyteSortOrder
+    """When the SLA policy was last updated"""
+
+
+# Entity-specific condition types for sla_policies
+class SlaPoliciesEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: SlaPoliciesSearchFilter
+
+
+class SlaPoliciesNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: SlaPoliciesSearchFilter
+
+
+class SlaPoliciesGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: SlaPoliciesSearchFilter
+
+
+class SlaPoliciesGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: SlaPoliciesSearchFilter
+
+
+class SlaPoliciesLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: SlaPoliciesSearchFilter
+
+
+class SlaPoliciesLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: SlaPoliciesSearchFilter
+
+
+class SlaPoliciesLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: SlaPoliciesStringFilter
+
+
+class SlaPoliciesFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: SlaPoliciesStringFilter
+
+
+class SlaPoliciesKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: SlaPoliciesStringFilter
+
+
+class SlaPoliciesContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: SlaPoliciesAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+SlaPoliciesInCondition = TypedDict("SlaPoliciesInCondition", {"in": SlaPoliciesInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+SlaPoliciesNotCondition = TypedDict("SlaPoliciesNotCondition", {"not": "SlaPoliciesCondition"}, total=False)
+"""Negates the nested condition."""
+
+SlaPoliciesAndCondition = TypedDict("SlaPoliciesAndCondition", {"and": "list[SlaPoliciesCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+SlaPoliciesOrCondition = TypedDict("SlaPoliciesOrCondition", {"or": "list[SlaPoliciesCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+SlaPoliciesAnyCondition = TypedDict("SlaPoliciesAnyCondition", {"any": SlaPoliciesAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all sla_policies condition types
+SlaPoliciesCondition = (
+    SlaPoliciesEqCondition
+    | SlaPoliciesNeqCondition
+    | SlaPoliciesGtCondition
+    | SlaPoliciesGteCondition
+    | SlaPoliciesLtCondition
+    | SlaPoliciesLteCondition
+    | SlaPoliciesInCondition
+    | SlaPoliciesLikeCondition
+    | SlaPoliciesFuzzyCondition
+    | SlaPoliciesKeywordCondition
+    | SlaPoliciesContainsCondition
+    | SlaPoliciesNotCondition
+    | SlaPoliciesAndCondition
+    | SlaPoliciesOrCondition
+    | SlaPoliciesAnyCondition
+)
+
+
+class SlaPoliciesSearchQuery(TypedDict, total=False):
+    """Search query for sla_policies entity."""
+    filter: SlaPoliciesCondition
+    sort: list[SlaPoliciesSortFilter]
+
+
+# ===== TRIGGERS SEARCH TYPES =====
+
+class TriggersSearchFilter(TypedDict, total=False):
+    """Available fields for filtering triggers search queries."""
+    id: int | None
+    """Automatically assigned when created"""
+    url: str | None
+    """The URL of the trigger"""
+    title: str | None
+    """The title of the trigger"""
+    active: bool | None
+    """Whether the trigger is active"""
+    position: int | None
+    """Position of the trigger"""
+    description: str | None
+    """The description of the trigger"""
+    conditions: dict[str, Any] | None
+    """An object that describes the conditions under which the trigger will execute"""
+    actions: list[Any] | None
+    """An array of actions"""
+    raw_title: str | None
+    """The dynamic content placeholder for title"""
+    category_id: str | None
+    """The ID of the category the trigger belongs to"""
+    created_at: str | None
+    """The time the trigger was created"""
+    updated_at: str | None
+    """The time the trigger was last updated"""
+
+
+class TriggersInFilter(TypedDict, total=False):
+    """Available fields for 'in' condition (values are lists)."""
+    id: list[int]
+    """Automatically assigned when created"""
+    url: list[str]
+    """The URL of the trigger"""
+    title: list[str]
+    """The title of the trigger"""
+    active: list[bool]
+    """Whether the trigger is active"""
+    position: list[int]
+    """Position of the trigger"""
+    description: list[str]
+    """The description of the trigger"""
+    conditions: list[dict[str, Any]]
+    """An object that describes the conditions under which the trigger will execute"""
+    actions: list[list[Any]]
+    """An array of actions"""
+    raw_title: list[str]
+    """The dynamic content placeholder for title"""
+    category_id: list[str]
+    """The ID of the category the trigger belongs to"""
+    created_at: list[str]
+    """The time the trigger was created"""
+    updated_at: list[str]
+    """The time the trigger was last updated"""
+
+
+class TriggersAnyValueFilter(TypedDict, total=False):
+    """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
+    id: Any
+    """Automatically assigned when created"""
+    url: Any
+    """The URL of the trigger"""
+    title: Any
+    """The title of the trigger"""
+    active: Any
+    """Whether the trigger is active"""
+    position: Any
+    """Position of the trigger"""
+    description: Any
+    """The description of the trigger"""
+    conditions: Any
+    """An object that describes the conditions under which the trigger will execute"""
+    actions: Any
+    """An array of actions"""
+    raw_title: Any
+    """The dynamic content placeholder for title"""
+    category_id: Any
+    """The ID of the category the trigger belongs to"""
+    created_at: Any
+    """The time the trigger was created"""
+    updated_at: Any
+    """The time the trigger was last updated"""
+
+
+class TriggersStringFilter(TypedDict, total=False):
+    """String fields for text search conditions (like, fuzzy, keyword)."""
+    id: str
+    """Automatically assigned when created"""
+    url: str
+    """The URL of the trigger"""
+    title: str
+    """The title of the trigger"""
+    active: str
+    """Whether the trigger is active"""
+    position: str
+    """Position of the trigger"""
+    description: str
+    """The description of the trigger"""
+    conditions: str
+    """An object that describes the conditions under which the trigger will execute"""
+    actions: str
+    """An array of actions"""
+    raw_title: str
+    """The dynamic content placeholder for title"""
+    category_id: str
+    """The ID of the category the trigger belongs to"""
+    created_at: str
+    """The time the trigger was created"""
+    updated_at: str
+    """The time the trigger was last updated"""
+
+
+class TriggersSortFilter(TypedDict, total=False):
+    """Available fields for sorting triggers search results."""
+    id: AirbyteSortOrder
+    """Automatically assigned when created"""
+    url: AirbyteSortOrder
+    """The URL of the trigger"""
+    title: AirbyteSortOrder
+    """The title of the trigger"""
+    active: AirbyteSortOrder
+    """Whether the trigger is active"""
+    position: AirbyteSortOrder
+    """Position of the trigger"""
+    description: AirbyteSortOrder
+    """The description of the trigger"""
+    conditions: AirbyteSortOrder
+    """An object that describes the conditions under which the trigger will execute"""
+    actions: AirbyteSortOrder
+    """An array of actions"""
+    raw_title: AirbyteSortOrder
+    """The dynamic content placeholder for title"""
+    category_id: AirbyteSortOrder
+    """The ID of the category the trigger belongs to"""
+    created_at: AirbyteSortOrder
+    """The time the trigger was created"""
+    updated_at: AirbyteSortOrder
+    """The time the trigger was last updated"""
+
+
+# Entity-specific condition types for triggers
+class TriggersEqCondition(TypedDict, total=False):
+    """Equal to: field equals value."""
+    eq: TriggersSearchFilter
+
+
+class TriggersNeqCondition(TypedDict, total=False):
+    """Not equal to: field does not equal value."""
+    neq: TriggersSearchFilter
+
+
+class TriggersGtCondition(TypedDict, total=False):
+    """Greater than: field > value."""
+    gt: TriggersSearchFilter
+
+
+class TriggersGteCondition(TypedDict, total=False):
+    """Greater than or equal: field >= value."""
+    gte: TriggersSearchFilter
+
+
+class TriggersLtCondition(TypedDict, total=False):
+    """Less than: field < value."""
+    lt: TriggersSearchFilter
+
+
+class TriggersLteCondition(TypedDict, total=False):
+    """Less than or equal: field <= value."""
+    lte: TriggersSearchFilter
+
+
+class TriggersLikeCondition(TypedDict, total=False):
+    """Partial string match with % wildcards."""
+    like: TriggersStringFilter
+
+
+class TriggersFuzzyCondition(TypedDict, total=False):
+    """Ordered word text match (case-insensitive)."""
+    fuzzy: TriggersStringFilter
+
+
+class TriggersKeywordCondition(TypedDict, total=False):
+    """Keyword text match (any word present)."""
+    keyword: TriggersStringFilter
+
+
+class TriggersContainsCondition(TypedDict, total=False):
+    """Check if value exists in array field. Example: {"contains": {"tags": "premium"}}"""
+    contains: TriggersAnyValueFilter
+
+
+# Reserved keyword conditions using functional TypedDict syntax
+TriggersInCondition = TypedDict("TriggersInCondition", {"in": TriggersInFilter}, total=False)
+"""In list: field value is in list. Example: {"in": {"status": ["active", "pending"]}}"""
+
+TriggersNotCondition = TypedDict("TriggersNotCondition", {"not": "TriggersCondition"}, total=False)
+"""Negates the nested condition."""
+
+TriggersAndCondition = TypedDict("TriggersAndCondition", {"and": "list[TriggersCondition]"}, total=False)
+"""True if all nested conditions are true."""
+
+TriggersOrCondition = TypedDict("TriggersOrCondition", {"or": "list[TriggersCondition]"}, total=False)
+"""True if any nested condition is true."""
+
+TriggersAnyCondition = TypedDict("TriggersAnyCondition", {"any": TriggersAnyValueFilter}, total=False)
+"""Match if ANY element in array field matches nested condition. Example: {"any": {"addresses": {"eq": {"state": "CA"}}}}"""
+
+# Union of all triggers condition types
+TriggersCondition = (
+    TriggersEqCondition
+    | TriggersNeqCondition
+    | TriggersGtCondition
+    | TriggersGteCondition
+    | TriggersLtCondition
+    | TriggersLteCondition
+    | TriggersInCondition
+    | TriggersLikeCondition
+    | TriggersFuzzyCondition
+    | TriggersKeywordCondition
+    | TriggersContainsCondition
+    | TriggersNotCondition
+    | TriggersAndCondition
+    | TriggersOrCondition
+    | TriggersAnyCondition
+)
+
+
+class TriggersSearchQuery(TypedDict, total=False):
+    """Search query for triggers entity."""
+    filter: TriggersCondition
+    sort: list[TriggersSortFilter]
+
+
 
 # ===== SEARCH PARAMS =====
 

@@ -1326,6 +1326,453 @@ info:
         - "null"
         - "boolean"
         description: "Indicates if the user's identity has been verified"
+    - entity: articles
+      x-airbyte-name: articles
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: The unique ID of the article
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL of the article
+      - name: html_url
+        type:
+        - "null"
+        - "string"
+        description: The public URL of the article
+      - name: title
+        type:
+        - "null"
+        - "string"
+        description: The title of the article
+      - name: body
+        type:
+        - "null"
+        - "string"
+        description: The body content of the article (HTML)
+      - name: locale
+        type:
+        - "null"
+        - "string"
+        description: The locale of the article
+      - name: author_id
+        type:
+        - "null"
+        - "integer"
+        description: The ID of the user who created the article
+      - name: section_id
+        type:
+        - "null"
+        - "integer"
+        description: The ID of the section the article belongs to
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: The time the article was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: The time the article was last updated
+      - name: vote_sum
+        type:
+        - "null"
+        - "integer"
+        description: Sum of upvotes and downvotes
+      - name: vote_count
+        type:
+        - "null"
+        - "integer"
+        description: Number of votes
+      - name: label_names
+        type:
+        - "null"
+        - "array"
+        description: List of label names associated with the article
+      - name: draft
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the article is a draft
+      - name: promoted
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the article is promoted
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: Position of the article in the section
+    - entity: article_attachments
+      x-airbyte-name: article_attachments
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: The unique ID of the attachment
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API URL of the attachment
+      - name: article_id
+        type:
+        - "null"
+        - "integer"
+        description: The ID of the article this attachment belongs to
+      - name: file_name
+        type:
+        - "null"
+        - "string"
+        description: The name of the attached file
+      - name: content_type
+        type:
+        - "null"
+        - "string"
+        description: The MIME type of the attachment
+      - name: content_url
+        type:
+        - "null"
+        - "string"
+        description: The URL to download the attachment
+      - name: size
+        type:
+        - "null"
+        - "integer"
+        description: The size of the attachment in bytes
+      - name: inline
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the attachment is displayed inline
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: The time the attachment was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: The time the attachment was last updated
+    - entity: automations
+      x-airbyte-name: automations
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Automatically assigned when created
+      - name: title
+        type:
+        - "null"
+        - "string"
+        description: The title of the automation
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the automation is active
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: The position of the automation
+      - name: conditions
+        type:
+        - "null"
+        - "object"
+        description: An object that describes the conditions under which the automation will execute
+      - name: actions
+        type:
+        - "null"
+        - "array"
+        description: An array of actions
+      - name: raw_title
+        type:
+        - "null"
+        - "string"
+        description: The dynamic content placeholder for title
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: The time the automation was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: The time the automation was last updated
+    - entity: group_memberships
+      x-airbyte-name: group_memberships
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Automatically assigned upon creation
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API url of this record
+      - name: user_id
+        type:
+        - "null"
+        - "integer"
+        description: The id of an agent
+      - name: group_id
+        type:
+        - "null"
+        - "integer"
+        description: The id of a group
+      - name: default
+        type:
+        - "null"
+        - "boolean"
+        description: "If true, tickets assigned directly to the agent will assume this membership's group"
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: When the group membership was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: When the group membership was last updated
+    - entity: macros
+      x-airbyte-name: macros
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Automatically assigned when the macro is created
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: A URL to access the macro's details
+      - name: title
+        type:
+        - "null"
+        - "string"
+        description: The title of the macro
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Useful for determining if the macro should be displayed
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: The position of the macro
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: The description of the macro
+      - name: actions
+        type:
+        - "null"
+        - "array"
+        description: Actions to perform when macro is applied
+      - name: restriction
+        type:
+        - "null"
+        - "object"
+        description: Who may access this macro
+      - name: raw_title
+        type:
+        - "null"
+        - "string"
+        description: The dynamic content placeholder for title
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: The time the macro was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: The time the macro was last updated
+    - entity: organization_memberships
+      x-airbyte-name: organization_memberships
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Automatically assigned when the membership is created
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The API url of this membership
+      - name: user_id
+        type:
+        - "null"
+        - "integer"
+        description: The ID of the user for whom this memberships belongs
+      - name: organization_id
+        type:
+        - "null"
+        - "integer"
+        description: The ID of the organization associated with this user
+      - name: default
+        type:
+        - "null"
+        - "boolean"
+        description: "If true, this is the default organization for the user"
+      - name: organization_name
+        type:
+        - "null"
+        - "string"
+        description: The name of the organization
+      - name: view_tickets
+        type:
+        - "null"
+        - "boolean"
+        description: "If true, this user can view tickets from this organization"
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: When the membership was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: When the membership was last updated
+    - entity: sla_policies
+      x-airbyte-name: sla_policies
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Automatically assigned when the SLA policy is created
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: URL of the SLA policy
+      - name: title
+        type:
+        - "null"
+        - "string"
+        description: The title of the SLA policy
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: The description of the SLA policy
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: Position of the SLA policy
+      - name: filter
+        type:
+        - "null"
+        - "object"
+        description: Filter for the SLA policy
+      - name: policy_metrics
+        type:
+        - "null"
+        - "array"
+        description: Array of policy metrics
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: When the SLA policy was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: When the SLA policy was last updated
+    - entity: triggers
+      x-airbyte-name: triggers
+      suggested: true
+      fields:
+      - name: id
+        type:
+        - "null"
+        - "integer"
+        description: Automatically assigned when created
+      - name: url
+        type:
+        - "null"
+        - "string"
+        description: The URL of the trigger
+      - name: title
+        type:
+        - "null"
+        - "string"
+        description: The title of the trigger
+      - name: active
+        type:
+        - "null"
+        - "boolean"
+        description: Whether the trigger is active
+      - name: position
+        type:
+        - "null"
+        - "integer"
+        description: Position of the trigger
+      - name: description
+        type:
+        - "null"
+        - "string"
+        description: The description of the trigger
+      - name: conditions
+        type:
+        - "null"
+        - "object"
+        description: An object that describes the conditions under which the trigger will execute
+      - name: actions
+        type:
+        - "null"
+        - "array"
+        description: An array of actions
+      - name: raw_title
+        type:
+        - "null"
+        - "string"
+        description: The dynamic content placeholder for title
+      - name: category_id
+        type:
+        - "null"
+        - "string"
+        description: The ID of the category the trigger belongs to
+      - name: created_at
+        type:
+        - "null"
+        - "string"
+        description: The time the trigger was created
+      - name: updated_at
+        type:
+        - "null"
+        - "string"
+        description: The time the trigger was last updated
 
 servers:
 - url: https://{subdomain}.zendesk.com/api/v2

@@ -5942,6 +5942,790 @@
           "description": "Indicates if the user's identity has been verified"
         }
       ]
+    },
+    "articles": {
+      "entity": "articles",
+      "data_type_name": "ArticlesSearchData",
+      "filter_type_name": "ArticlesSearchFilter",
+      "in_filter_type_name": "ArticlesInFilter",
+      "any_value_filter_type_name": "ArticlesAnyValueFilter",
+      "string_filter_type_name": "ArticlesStringFilter",
+      "sort_filter_type_name": "ArticlesSortFilter",
+      "result_type_name": "ArticlesSearchResult",
+      "query_type_name": "ArticlesSearchQuery",
+      "condition_prefix": "Articles",
+      "condition_type_name": "ArticlesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The unique ID of the article"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The API URL of the article"
+        },
+        {
+          "name": "html_url",
+          "python_name": "html_url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The public URL of the article"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The title of the article"
+        },
+        {
+          "name": "body",
+          "python_name": "body",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The body content of the article (HTML)"
+        },
+        {
+          "name": "locale",
+          "python_name": "locale",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The locale of the article"
+        },
+        {
+          "name": "author_id",
+          "python_name": "author_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The ID of the user who created the article"
+        },
+        {
+          "name": "section_id",
+          "python_name": "section_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The ID of the section the article belongs to"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the article was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the article was last updated"
+        },
+        {
+          "name": "vote_sum",
+          "python_name": "vote_sum",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Sum of upvotes and downvotes"
+        },
+        {
+          "name": "vote_count",
+          "python_name": "vote_count",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Number of votes"
+        },
+        {
+          "name": "label_names",
+          "python_name": "label_names",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "List of label names associated with the article"
+        },
+        {
+          "name": "draft",
+          "python_name": "draft",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the article is a draft"
+        },
+        {
+          "name": "promoted",
+          "python_name": "promoted",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the article is promoted"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Position of the article in the section"
+        }
+      ]
+    },
+    "article_attachments": {
+      "entity": "article_attachments",
+      "data_type_name": "ArticleAttachmentsSearchData",
+      "filter_type_name": "ArticleAttachmentsSearchFilter",
+      "in_filter_type_name": "ArticleAttachmentsInFilter",
+      "any_value_filter_type_name": "ArticleAttachmentsAnyValueFilter",
+      "string_filter_type_name": "ArticleAttachmentsStringFilter",
+      "sort_filter_type_name": "ArticleAttachmentsSortFilter",
+      "result_type_name": "ArticleAttachmentsSearchResult",
+      "query_type_name": "ArticleAttachmentsSearchQuery",
+      "condition_prefix": "ArticleAttachments",
+      "condition_type_name": "ArticleAttachmentsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The unique ID of the attachment"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The API URL of the attachment"
+        },
+        {
+          "name": "article_id",
+          "python_name": "article_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The ID of the article this attachment belongs to"
+        },
+        {
+          "name": "file_name",
+          "python_name": "file_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The name of the attached file"
+        },
+        {
+          "name": "content_type",
+          "python_name": "content_type",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The MIME type of the attachment"
+        },
+        {
+          "name": "content_url",
+          "python_name": "content_url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The URL to download the attachment"
+        },
+        {
+          "name": "size",
+          "python_name": "size",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The size of the attachment in bytes"
+        },
+        {
+          "name": "inline",
+          "python_name": "inline",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the attachment is displayed inline"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the attachment was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the attachment was last updated"
+        }
+      ]
+    },
+    "automations": {
+      "entity": "automations",
+      "data_type_name": "AutomationsSearchData",
+      "filter_type_name": "AutomationsSearchFilter",
+      "in_filter_type_name": "AutomationsInFilter",
+      "any_value_filter_type_name": "AutomationsAnyValueFilter",
+      "string_filter_type_name": "AutomationsStringFilter",
+      "sort_filter_type_name": "AutomationsSortFilter",
+      "result_type_name": "AutomationsSearchResult",
+      "query_type_name": "AutomationsSearchQuery",
+      "condition_prefix": "Automations",
+      "condition_type_name": "AutomationsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Automatically assigned when created"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The title of the automation"
+        },
+        {
+          "name": "active",
+          "python_name": "active",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the automation is active"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The position of the automation"
+        },
+        {
+          "name": "conditions",
+          "python_name": "conditions",
+          "type": "dict[str, Any] | None",
+          "json_type": "null | object",
+          "example_value_json": "{}",
+          "description": "An object that describes the conditions under which the automation will execute"
+        },
+        {
+          "name": "actions",
+          "python_name": "actions",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "An array of actions"
+        },
+        {
+          "name": "raw_title",
+          "python_name": "raw_title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The dynamic content placeholder for title"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the automation was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the automation was last updated"
+        }
+      ]
+    },
+    "group_memberships": {
+      "entity": "group_memberships",
+      "data_type_name": "GroupMembershipsSearchData",
+      "filter_type_name": "GroupMembershipsSearchFilter",
+      "in_filter_type_name": "GroupMembershipsInFilter",
+      "any_value_filter_type_name": "GroupMembershipsAnyValueFilter",
+      "string_filter_type_name": "GroupMembershipsStringFilter",
+      "sort_filter_type_name": "GroupMembershipsSortFilter",
+      "result_type_name": "GroupMembershipsSearchResult",
+      "query_type_name": "GroupMembershipsSearchQuery",
+      "condition_prefix": "GroupMemberships",
+      "condition_type_name": "GroupMembershipsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Automatically assigned upon creation"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The API url of this record"
+        },
+        {
+          "name": "user_id",
+          "python_name": "user_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The id of an agent"
+        },
+        {
+          "name": "group_id",
+          "python_name": "group_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The id of a group"
+        },
+        {
+          "name": "default",
+          "python_name": "default",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "If true, tickets assigned directly to the agent will assume this membership's group"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "When the group membership was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "When the group membership was last updated"
+        }
+      ]
+    },
+    "macros": {
+      "entity": "macros",
+      "data_type_name": "MacrosSearchData",
+      "filter_type_name": "MacrosSearchFilter",
+      "in_filter_type_name": "MacrosInFilter",
+      "any_value_filter_type_name": "MacrosAnyValueFilter",
+      "string_filter_type_name": "MacrosStringFilter",
+      "sort_filter_type_name": "MacrosSortFilter",
+      "result_type_name": "MacrosSearchResult",
+      "query_type_name": "MacrosSearchQuery",
+      "condition_prefix": "Macros",
+      "condition_type_name": "MacrosCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Automatically assigned when the macro is created"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "A URL to access the macro's details"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The title of the macro"
+        },
+        {
+          "name": "active",
+          "python_name": "active",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Useful for determining if the macro should be displayed"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The position of the macro"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The description of the macro"
+        },
+        {
+          "name": "actions",
+          "python_name": "actions",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "Actions to perform when macro is applied"
+        },
+        {
+          "name": "restriction",
+          "python_name": "restriction",
+          "type": "dict[str, Any] | None",
+          "json_type": "null | object",
+          "example_value_json": "{}",
+          "description": "Who may access this macro"
+        },
+        {
+          "name": "raw_title",
+          "python_name": "raw_title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The dynamic content placeholder for title"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the macro was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the macro was last updated"
+        }
+      ]
+    },
+    "organization_memberships": {
+      "entity": "organization_memberships",
+      "data_type_name": "OrganizationMembershipsSearchData",
+      "filter_type_name": "OrganizationMembershipsSearchFilter",
+      "in_filter_type_name": "OrganizationMembershipsInFilter",
+      "any_value_filter_type_name": "OrganizationMembershipsAnyValueFilter",
+      "string_filter_type_name": "OrganizationMembershipsStringFilter",
+      "sort_filter_type_name": "OrganizationMembershipsSortFilter",
+      "result_type_name": "OrganizationMembershipsSearchResult",
+      "query_type_name": "OrganizationMembershipsSearchQuery",
+      "condition_prefix": "OrganizationMemberships",
+      "condition_type_name": "OrganizationMembershipsCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Automatically assigned when the membership is created"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The API url of this membership"
+        },
+        {
+          "name": "user_id",
+          "python_name": "user_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The ID of the user for whom this memberships belongs"
+        },
+        {
+          "name": "organization_id",
+          "python_name": "organization_id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "The ID of the organization associated with this user"
+        },
+        {
+          "name": "default",
+          "python_name": "default",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "If true, this is the default organization for the user"
+        },
+        {
+          "name": "organization_name",
+          "python_name": "organization_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The name of the organization"
+        },
+        {
+          "name": "view_tickets",
+          "python_name": "view_tickets",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "If true, this user can view tickets from this organization"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "When the membership was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "When the membership was last updated"
+        }
+      ]
+    },
+    "sla_policies": {
+      "entity": "sla_policies",
+      "data_type_name": "SlaPoliciesSearchData",
+      "filter_type_name": "SlaPoliciesSearchFilter",
+      "in_filter_type_name": "SlaPoliciesInFilter",
+      "any_value_filter_type_name": "SlaPoliciesAnyValueFilter",
+      "string_filter_type_name": "SlaPoliciesStringFilter",
+      "sort_filter_type_name": "SlaPoliciesSortFilter",
+      "result_type_name": "SlaPoliciesSearchResult",
+      "query_type_name": "SlaPoliciesSearchQuery",
+      "condition_prefix": "SlaPolicies",
+      "condition_type_name": "SlaPoliciesCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Automatically assigned when the SLA policy is created"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "URL of the SLA policy"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The title of the SLA policy"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The description of the SLA policy"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Position of the SLA policy"
+        },
+        {
+          "name": "filter",
+          "python_name": "filter",
+          "type": "dict[str, Any] | None",
+          "json_type": "null | object",
+          "example_value_json": "{}",
+          "description": "Filter for the SLA policy"
+        },
+        {
+          "name": "policy_metrics",
+          "python_name": "policy_metrics",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "Array of policy metrics"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "When the SLA policy was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "When the SLA policy was last updated"
+        }
+      ]
+    },
+    "triggers": {
+      "entity": "triggers",
+      "data_type_name": "TriggersSearchData",
+      "filter_type_name": "TriggersSearchFilter",
+      "in_filter_type_name": "TriggersInFilter",
+      "any_value_filter_type_name": "TriggersAnyValueFilter",
+      "string_filter_type_name": "TriggersStringFilter",
+      "sort_filter_type_name": "TriggersSortFilter",
+      "result_type_name": "TriggersSearchResult",
+      "query_type_name": "TriggersSearchQuery",
+      "condition_prefix": "Triggers",
+      "condition_type_name": "TriggersCondition",
+      "fields": [
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Automatically assigned when created"
+        },
+        {
+          "name": "url",
+          "python_name": "url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The URL of the trigger"
+        },
+        {
+          "name": "title",
+          "python_name": "title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The title of the trigger"
+        },
+        {
+          "name": "active",
+          "python_name": "active",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "description": "Whether the trigger is active"
+        },
+        {
+          "name": "position",
+          "python_name": "position",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "description": "Position of the trigger"
+        },
+        {
+          "name": "description",
+          "python_name": "description",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The description of the trigger"
+        },
+        {
+          "name": "conditions",
+          "python_name": "conditions",
+          "type": "dict[str, Any] | None",
+          "json_type": "null | object",
+          "example_value_json": "{}",
+          "description": "An object that describes the conditions under which the trigger will execute"
+        },
+        {
+          "name": "actions",
+          "python_name": "actions",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "description": "An array of actions"
+        },
+        {
+          "name": "raw_title",
+          "python_name": "raw_title",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The dynamic content placeholder for title"
+        },
+        {
+          "name": "category_id",
+          "python_name": "category_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The ID of the category the trigger belongs to"
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the trigger was created"
+        },
+        {
+          "name": "updated_at",
+          "python_name": "updated_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "The time the trigger was last updated"
+        }
+      ]
     }
   }
 }

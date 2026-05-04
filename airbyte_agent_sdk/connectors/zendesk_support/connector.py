@@ -97,6 +97,22 @@ from .types import (
     DeletedTicketsSearchQuery,
     UsersSearchFilter,
     UsersSearchQuery,
+    ArticlesSearchFilter,
+    ArticlesSearchQuery,
+    ArticleAttachmentsSearchFilter,
+    ArticleAttachmentsSearchQuery,
+    AutomationsSearchFilter,
+    AutomationsSearchQuery,
+    GroupMembershipsSearchFilter,
+    GroupMembershipsSearchQuery,
+    MacrosSearchFilter,
+    MacrosSearchQuery,
+    OrganizationMembershipsSearchFilter,
+    OrganizationMembershipsSearchQuery,
+    SlaPoliciesSearchFilter,
+    SlaPoliciesSearchQuery,
+    TriggersSearchFilter,
+    TriggersSearchQuery,
 )
 from .models import ZendeskSupportOauth20AuthConfig, ZendeskSupportApiTokenAuthConfig
 from .models import ZendeskSupportAuthConfig
@@ -181,6 +197,22 @@ from .models import (
     DeletedTicketsSearchResult,
     UsersSearchData,
     UsersSearchResult,
+    ArticlesSearchData,
+    ArticlesSearchResult,
+    ArticleAttachmentsSearchData,
+    ArticleAttachmentsSearchResult,
+    AutomationsSearchData,
+    AutomationsSearchResult,
+    GroupMembershipsSearchData,
+    GroupMembershipsSearchResult,
+    MacrosSearchData,
+    MacrosSearchResult,
+    OrganizationMembershipsSearchData,
+    OrganizationMembershipsSearchResult,
+    SlaPoliciesSearchData,
+    SlaPoliciesSearchResult,
+    TriggersSearchData,
+    TriggersSearchResult,
 )
 
 # TypeVar for decorator type preservation
@@ -198,7 +230,7 @@ class ZendeskSupportConnector:
 
     connector_name = "zendesk-support"
     connector_version = "0.1.20"
-    sdk_version = "0.1.167"
+    sdk_version = "0.1.168"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -2891,6 +2923,71 @@ class MacrosQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: MacrosSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> MacrosSearchResult:
+        """
+        Search macros records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (MacrosSearchFilter):
+        - id: Automatically assigned when the macro is created
+        - url: A URL to access the macro's details
+        - title: The title of the macro
+        - active: Useful for determining if the macro should be displayed
+        - position: The position of the macro
+        - description: The description of the macro
+        - actions: Actions to perform when macro is applied
+        - restriction: Who may access this macro
+        - raw_title: The dynamic content placeholder for title
+        - created_at: The time the macro was created
+        - updated_at: The time the macro was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            MacrosSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("macros", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return MacrosSearchResult(
+            data=[
+                MacrosSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class TriggersQuery:
     """
     Query class for Triggers entity operations.
@@ -2969,6 +3066,72 @@ class TriggersQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: TriggersSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> TriggersSearchResult:
+        """
+        Search triggers records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (TriggersSearchFilter):
+        - id: Automatically assigned when created
+        - url: The URL of the trigger
+        - title: The title of the trigger
+        - active: Whether the trigger is active
+        - position: Position of the trigger
+        - description: The description of the trigger
+        - conditions: An object that describes the conditions under which the trigger will execute
+        - actions: An array of actions
+        - raw_title: The dynamic content placeholder for title
+        - category_id: The ID of the category the trigger belongs to
+        - created_at: The time the trigger was created
+        - updated_at: The time the trigger was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            TriggersSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("triggers", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return TriggersSearchResult(
+            data=[
+                TriggersSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class AutomationsQuery:
     """
     Query class for Automations entity operations.
@@ -3043,6 +3206,69 @@ class AutomationsQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: AutomationsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> AutomationsSearchResult:
+        """
+        Search automations records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (AutomationsSearchFilter):
+        - id: Automatically assigned when created
+        - title: The title of the automation
+        - active: Whether the automation is active
+        - position: The position of the automation
+        - conditions: An object that describes the conditions under which the automation will execute
+        - actions: An array of actions
+        - raw_title: The dynamic content placeholder for title
+        - created_at: The time the automation was created
+        - updated_at: The time the automation was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            AutomationsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("automations", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return AutomationsSearchResult(
+            data=[
+                AutomationsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class TagsQuery:
     """
@@ -3323,6 +3549,67 @@ class GroupMembershipsQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: GroupMembershipsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> GroupMembershipsSearchResult:
+        """
+        Search group_memberships records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (GroupMembershipsSearchFilter):
+        - id: Automatically assigned upon creation
+        - url: The API url of this record
+        - user_id: The id of an agent
+        - group_id: The id of a group
+        - default: If true, tickets assigned directly to the agent will assume this membership's group
+        - created_at: When the group membership was created
+        - updated_at: When the group membership was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            GroupMembershipsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("group_memberships", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return GroupMembershipsSearchResult(
+            data=[
+                GroupMembershipsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class OrganizationMembershipsQuery:
     """
     Query class for OrganizationMemberships entity operations.
@@ -3363,6 +3650,69 @@ class OrganizationMembershipsQuery:
         )
 
 
+
+    async def context_store_search(
+        self,
+        query: OrganizationMembershipsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> OrganizationMembershipsSearchResult:
+        """
+        Search organization_memberships records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (OrganizationMembershipsSearchFilter):
+        - id: Automatically assigned when the membership is created
+        - url: The API url of this membership
+        - user_id: The ID of the user for whom this memberships belongs
+        - organization_id: The ID of the organization associated with this user
+        - default: If true, this is the default organization for the user
+        - organization_name: The name of the organization
+        - view_tickets: If true, this user can view tickets from this organization
+        - created_at: When the membership was created
+        - updated_at: When the membership was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            OrganizationMembershipsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("organization_memberships", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return OrganizationMembershipsSearchResult(
+            data=[
+                OrganizationMembershipsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class SlaPoliciesQuery:
     """
@@ -3429,6 +3779,69 @@ class SlaPoliciesQuery:
         return result
 
 
+
+    async def context_store_search(
+        self,
+        query: SlaPoliciesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> SlaPoliciesSearchResult:
+        """
+        Search sla_policies records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (SlaPoliciesSearchFilter):
+        - id: Automatically assigned when the SLA policy is created
+        - url: URL of the SLA policy
+        - title: The title of the SLA policy
+        - description: The description of the SLA policy
+        - position: Position of the SLA policy
+        - filter: Filter for the SLA policy
+        - policy_metrics: Array of policy metrics
+        - created_at: When the SLA policy was created
+        - updated_at: When the SLA policy was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            SlaPoliciesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("sla_policies", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return SlaPoliciesSearchResult(
+            data=[
+                SlaPoliciesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
 
 class TicketFormsQuery:
     """
@@ -3645,6 +4058,76 @@ class ArticlesQuery:
 
 
 
+    async def context_store_search(
+        self,
+        query: ArticlesSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ArticlesSearchResult:
+        """
+        Search articles records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ArticlesSearchFilter):
+        - id: The unique ID of the article
+        - url: The API URL of the article
+        - html_url: The public URL of the article
+        - title: The title of the article
+        - body: The body content of the article (HTML)
+        - locale: The locale of the article
+        - author_id: The ID of the user who created the article
+        - section_id: The ID of the section the article belongs to
+        - created_at: The time the article was created
+        - updated_at: The time the article was last updated
+        - vote_sum: Sum of upvotes and downvotes
+        - vote_count: Number of votes
+        - label_names: List of label names associated with the article
+        - draft: Whether the article is a draft
+        - promoted: Whether the article is promoted
+        - position: Position of the article in the section
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ArticlesSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("articles", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ArticlesSearchResult(
+            data=[
+                ArticlesSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )
+
 class ArticleAttachmentsQuery:
     """
     Query class for ArticleAttachments entity operations.
@@ -3780,3 +4263,67 @@ class ArticleAttachmentsQuery:
 
         return await save_download(content_iterator, path)
 
+
+    async def context_store_search(
+        self,
+        query: ArticleAttachmentsSearchQuery,
+        limit: int | None = None,
+        cursor: str | None = None,
+        fields: list[list[str]] | None = None,
+    ) -> ArticleAttachmentsSearchResult:
+        """
+        Search article_attachments records from Airbyte cache.
+
+        This operation searches cached data from Airbyte syncs.
+        Only available in hosted execution mode.
+
+        Available filter fields (ArticleAttachmentsSearchFilter):
+        - id: The unique ID of the attachment
+        - url: The API URL of the attachment
+        - article_id: The ID of the article this attachment belongs to
+        - file_name: The name of the attached file
+        - content_type: The MIME type of the attachment
+        - content_url: The URL to download the attachment
+        - size: The size of the attachment in bytes
+        - inline: Whether the attachment is displayed inline
+        - created_at: The time the attachment was created
+        - updated_at: The time the attachment was last updated
+
+        Args:
+            query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
+                   in, like, fuzzy, keyword, not, and, or. Example: {"filter": {"eq": {"status": "active"}}}
+            limit: Maximum results to return (default 1000)
+            cursor: Pagination cursor from previous response's meta.cursor
+            fields: Field paths to include in results. Each path is a list of keys for nested access.
+                    Example: [["id"], ["user", "name"]] returns id and user.name fields.
+
+        Returns:
+            ArticleAttachmentsSearchResult with typed records, pagination metadata, and optional search metadata
+
+        Raises:
+            NotImplementedError: If called in local execution mode
+        """
+        params: dict[str, Any] = {"query": query}
+        if limit is not None:
+            params["limit"] = limit
+        if cursor is not None:
+            params["cursor"] = cursor
+        if fields is not None:
+            params["fields"] = fields
+
+        result = await self._connector.execute("article_attachments", "context_store_search", params)
+
+        # Parse response into typed result
+        meta_data = result.get("meta")
+        return ArticleAttachmentsSearchResult(
+            data=[
+                ArticleAttachmentsSearchData(**row)
+                for row in result.get("data", [])
+                if isinstance(row, dict)
+            ],
+            meta=AirbyteSearchMeta(
+                has_more=meta_data.get("has_more", False) if isinstance(meta_data, dict) else False,
+                cursor=meta_data.get("cursor") if isinstance(meta_data, dict) else None,
+                took_ms=meta_data.get("took_ms") if isinstance(meta_data, dict) else None,
+            ),
+        )

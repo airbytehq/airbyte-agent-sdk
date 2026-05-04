@@ -503,6 +503,13 @@ class JobStatus(BaseModel):
     status: str | None = Field(default=None)
     message: str | None = Field(default=None)
 
+class TicketCreateParamsTicketCustomFieldsItem(BaseModel):
+    """Nested schema for TicketCreateParamsTicket.custom_fields_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None = Field(default=None)
+    value: str | None = Field(default=None)
+
 class TicketCreateParamsTicketComment(BaseModel):
     """An object that defines the initial comment on the ticket"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -513,13 +520,6 @@ class TicketCreateParamsTicketComment(BaseModel):
     """The HTML body of the comment"""
     public: bool | None = Field(default=None, description="Whether the comment is public (default true)")
     """Whether the comment is public (default true)"""
-
-class TicketCreateParamsTicketCustomFieldsItem(BaseModel):
-    """Nested schema for TicketCreateParamsTicket.custom_fields_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None = Field(default=None)
-    value: str | None = Field(default=None)
 
 class TicketCreateParamsTicket(BaseModel):
     """The ticket object to create"""
@@ -1524,6 +1524,220 @@ class UsersSearchData(BaseModel):
     """Indicates if the user's identity has been verified"""
 
 
+class ArticlesSearchData(BaseModel):
+    """Search result data for articles entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """The unique ID of the article"""
+    url: str | None = None
+    """The API URL of the article"""
+    html_url: str | None = None
+    """The public URL of the article"""
+    title: str | None = None
+    """The title of the article"""
+    body: str | None = None
+    """The body content of the article (HTML)"""
+    locale: str | None = None
+    """The locale of the article"""
+    author_id: int | None = None
+    """The ID of the user who created the article"""
+    section_id: int | None = None
+    """The ID of the section the article belongs to"""
+    created_at: str | None = None
+    """The time the article was created"""
+    updated_at: str | None = None
+    """The time the article was last updated"""
+    vote_sum: int | None = None
+    """Sum of upvotes and downvotes"""
+    vote_count: int | None = None
+    """Number of votes"""
+    label_names: list[Any] | None = None
+    """List of label names associated with the article"""
+    draft: bool | None = None
+    """Whether the article is a draft"""
+    promoted: bool | None = None
+    """Whether the article is promoted"""
+    position: int | None = None
+    """Position of the article in the section"""
+
+
+class ArticleAttachmentsSearchData(BaseModel):
+    """Search result data for article_attachments entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """The unique ID of the attachment"""
+    url: str | None = None
+    """The API URL of the attachment"""
+    article_id: int | None = None
+    """The ID of the article this attachment belongs to"""
+    file_name: str | None = None
+    """The name of the attached file"""
+    content_type: str | None = None
+    """The MIME type of the attachment"""
+    content_url: str | None = None
+    """The URL to download the attachment"""
+    size: int | None = None
+    """The size of the attachment in bytes"""
+    inline: bool | None = None
+    """Whether the attachment is displayed inline"""
+    created_at: str | None = None
+    """The time the attachment was created"""
+    updated_at: str | None = None
+    """The time the attachment was last updated"""
+
+
+class AutomationsSearchData(BaseModel):
+    """Search result data for automations entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Automatically assigned when created"""
+    title: str | None = None
+    """The title of the automation"""
+    active: bool | None = None
+    """Whether the automation is active"""
+    position: int | None = None
+    """The position of the automation"""
+    conditions: dict[str, Any] | None = None
+    """An object that describes the conditions under which the automation will execute"""
+    actions: list[Any] | None = None
+    """An array of actions"""
+    raw_title: str | None = None
+    """The dynamic content placeholder for title"""
+    created_at: str | None = None
+    """The time the automation was created"""
+    updated_at: str | None = None
+    """The time the automation was last updated"""
+
+
+class GroupMembershipsSearchData(BaseModel):
+    """Search result data for group_memberships entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Automatically assigned upon creation"""
+    url: str | None = None
+    """The API url of this record"""
+    user_id: int | None = None
+    """The id of an agent"""
+    group_id: int | None = None
+    """The id of a group"""
+    default: bool | None = None
+    """If true, tickets assigned directly to the agent will assume this membership's group"""
+    created_at: str | None = None
+    """When the group membership was created"""
+    updated_at: str | None = None
+    """When the group membership was last updated"""
+
+
+class MacrosSearchData(BaseModel):
+    """Search result data for macros entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Automatically assigned when the macro is created"""
+    url: str | None = None
+    """A URL to access the macro's details"""
+    title: str | None = None
+    """The title of the macro"""
+    active: bool | None = None
+    """Useful for determining if the macro should be displayed"""
+    position: int | None = None
+    """The position of the macro"""
+    description: str | None = None
+    """The description of the macro"""
+    actions: list[Any] | None = None
+    """Actions to perform when macro is applied"""
+    restriction: dict[str, Any] | None = None
+    """Who may access this macro"""
+    raw_title: str | None = None
+    """The dynamic content placeholder for title"""
+    created_at: str | None = None
+    """The time the macro was created"""
+    updated_at: str | None = None
+    """The time the macro was last updated"""
+
+
+class OrganizationMembershipsSearchData(BaseModel):
+    """Search result data for organization_memberships entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Automatically assigned when the membership is created"""
+    url: str | None = None
+    """The API url of this membership"""
+    user_id: int | None = None
+    """The ID of the user for whom this memberships belongs"""
+    organization_id: int | None = None
+    """The ID of the organization associated with this user"""
+    default: bool | None = None
+    """If true, this is the default organization for the user"""
+    organization_name: str | None = None
+    """The name of the organization"""
+    view_tickets: bool | None = None
+    """If true, this user can view tickets from this organization"""
+    created_at: str | None = None
+    """When the membership was created"""
+    updated_at: str | None = None
+    """When the membership was last updated"""
+
+
+class SlaPoliciesSearchData(BaseModel):
+    """Search result data for sla_policies entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Automatically assigned when the SLA policy is created"""
+    url: str | None = None
+    """URL of the SLA policy"""
+    title: str | None = None
+    """The title of the SLA policy"""
+    description: str | None = None
+    """The description of the SLA policy"""
+    position: int | None = None
+    """Position of the SLA policy"""
+    filter: dict[str, Any] | None = None
+    """Filter for the SLA policy"""
+    policy_metrics: list[Any] | None = None
+    """Array of policy metrics"""
+    created_at: str | None = None
+    """When the SLA policy was created"""
+    updated_at: str | None = None
+    """When the SLA policy was last updated"""
+
+
+class TriggersSearchData(BaseModel):
+    """Search result data for triggers entity."""
+    model_config = ConfigDict(extra="allow")
+
+    id: int | None = None
+    """Automatically assigned when created"""
+    url: str | None = None
+    """The URL of the trigger"""
+    title: str | None = None
+    """The title of the trigger"""
+    active: bool | None = None
+    """Whether the trigger is active"""
+    position: int | None = None
+    """Position of the trigger"""
+    description: str | None = None
+    """The description of the trigger"""
+    conditions: dict[str, Any] | None = None
+    """An object that describes the conditions under which the trigger will execute"""
+    actions: list[Any] | None = None
+    """An array of actions"""
+    raw_title: str | None = None
+    """The dynamic content placeholder for title"""
+    category_id: str | None = None
+    """The ID of the category the trigger belongs to"""
+    created_at: str | None = None
+    """The time the trigger was created"""
+    updated_at: str | None = None
+    """The time the trigger was last updated"""
+
+
 # ===== GENERIC SEARCH RESULT TYPES =====
 
 class AirbyteSearchMeta(BaseModel):
@@ -1588,6 +1802,30 @@ DeletedTicketsSearchResult = AirbyteSearchResult[DeletedTicketsSearchData]
 
 UsersSearchResult = AirbyteSearchResult[UsersSearchData]
 """Search result type for users entity."""
+
+ArticlesSearchResult = AirbyteSearchResult[ArticlesSearchData]
+"""Search result type for articles entity."""
+
+ArticleAttachmentsSearchResult = AirbyteSearchResult[ArticleAttachmentsSearchData]
+"""Search result type for article_attachments entity."""
+
+AutomationsSearchResult = AirbyteSearchResult[AutomationsSearchData]
+"""Search result type for automations entity."""
+
+GroupMembershipsSearchResult = AirbyteSearchResult[GroupMembershipsSearchData]
+"""Search result type for group_memberships entity."""
+
+MacrosSearchResult = AirbyteSearchResult[MacrosSearchData]
+"""Search result type for macros entity."""
+
+OrganizationMembershipsSearchResult = AirbyteSearchResult[OrganizationMembershipsSearchData]
+"""Search result type for organization_memberships entity."""
+
+SlaPoliciesSearchResult = AirbyteSearchResult[SlaPoliciesSearchData]
+"""Search result type for sla_policies entity."""
+
+TriggersSearchResult = AirbyteSearchResult[TriggersSearchData]
+"""Search result type for triggers entity."""
 
 
 
