@@ -11,8 +11,8 @@ info:
     analysis and content management insights.
   x-airbyte-connector-name: notion
   x-airbyte-connector-definition-id: 6e00b415-b02e-4160-bf02-58176a0ae687
-  x-airbyte-replication-version: "4.0.2"
-  x-airbyte-replication-compatibility: ">=4.0.1, <5.0.0"
+  x-airbyte-replication-version: "4.0.7"
+  x-airbyte-replication-compatibility: ">=4.0.7, <5.0.0"
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Notion API Documentation
