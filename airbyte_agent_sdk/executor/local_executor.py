@@ -1872,10 +1872,30 @@ class LocalExecutor:
                 # Path not found - return empty based on action
                 return [] if is_array_action else None
 
-            # Return extracted data with primitive wrapping
+            # Return extracted data with primitive wrapping. Mirror codegen's
+            # `_determine_extracted_type` so runtime shape matches the typed envelope:
+            # codegen emits `list[X]` only when the JSONPath traverses `[*]`. Without
+            # `[*]` the extractor surfaces a single value whose shape codegen takes
+            # at face value.
             if is_array_action:
-                # For array actions, return the array (or list of matches)
-                result = matches[0] if len(matches) == 1 else matches
+                contains_wildcard = "[*]" in extractor
+                if len(matches) == 1:
+                    single = matches[0]
+                    if isinstance(single, list) or single is response_data or not contains_wildcard:
+                        # Pass through:
+                        #   - already a list (extractor pointed at the array container, e.g. `$.users`)
+                        #   - the root response (`$` or jsonpath_ng quirks like `$[*][*]`)
+                        #   - no `[*]` projection (`$.data` returning a single object,
+                        #     `$.account_overview` returning a stats dict — codegen emits a
+                        #     non-list type for these)
+                        result = single
+                    else:
+                        # Wildcard projection with one element: wrap as singleton list so
+                        # the typed envelope's `data: list[X]` contract is honored.
+                        result = [single]
+                else:
+                    # Multiple matches always come from per-element projection.
+                    result = matches
             else:
                 # For single record actions, return first match
                 result = matches[0]

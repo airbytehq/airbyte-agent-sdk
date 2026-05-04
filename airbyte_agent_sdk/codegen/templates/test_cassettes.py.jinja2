@@ -91,12 +91,19 @@ async def test_{{ test.test_name }}():
     record_matches = record_path.find(mock_response)
 
     if record_matches:
-        # When JSONPath contains wildcards (e.g., $.list[*].item), multiple matches are returned
-        # Collect all matches when there are multiple, use single value when there's one
-        if len(record_matches) > 1:
-            expected_data = [m.value for m in record_matches]
+        # Mirror local_executor._extract_records discrimination:
+        # - len > 1: per-element projection, list of values.
+        # - len == 1: pass through if already-shaped (list / root / no-`[*]` extractor);
+        #   otherwise wrap as singleton list to honor `data: list[X]`.
+        _contains_wildcard = "[*]" in "{{ test.record_extractor }}"
+        if len(record_matches) == 1:
+            _single = record_matches[0].value
+            if isinstance(_single, list) or _single is mock_response or not _contains_wildcard:
+                expected_data = _single
+            else:
+                expected_data = [_single]
         else:
-            expected_data = record_matches[0].value
+            expected_data = [m.value for m in record_matches]
 {% if test.record_transform %}
 
         # Apply x-airbyte-record-transform to expected records.
@@ -183,7 +190,8 @@ async def test_{{ test.test_name }}():
     record_matches = record_path.find(mock_response)
 
     if record_matches:
-        # When JSONPath contains wildcards (e.g., $.list[*].item), multiple matches are returned
+        # Non-envelope (get/create/update/delete): runtime returns matches[0] directly
+        # (local_executor.py:1881). Mirror that here.
         if len(record_matches) > 1:
             expected_data = [m.value for m in record_matches]
         else:
