@@ -56,6 +56,12 @@ class AccessibleCustomersList(BaseModel):
 
     resource_names: list[AccessibleCustomer] | None = Field(default=None, alias="resourceNames")
 
+class AccountCustomerRemarketingsetting(BaseModel):
+    """Nested schema for AccountCustomer.remarketingSetting"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    google_global_site_tag: str | None = Field(default=None, alias="googleGlobalSiteTag")
+
 class AccountCustomerCallreportingsetting(BaseModel):
     """Nested schema for AccountCustomer.callReportingSetting"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -70,12 +76,6 @@ class AccountCustomerConversiontrackingsetting(BaseModel):
 
     conversion_tracking_id: str | None = Field(default=None, alias="conversionTrackingId")
     cross_account_conversion_tracking_id: str | None = Field(default=None, alias="crossAccountConversionTrackingId")
-
-class AccountCustomerRemarketingsetting(BaseModel):
-    """Nested schema for AccountCustomer.remarketingSetting"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    google_global_site_tag: str | None = Field(default=None, alias="googleGlobalSiteTag")
 
 class AccountCustomer(BaseModel):
     """Nested schema for Account.customer"""
@@ -203,6 +203,27 @@ class CampaignSearchResponse(BaseModel):
     field_mask: str | None = Field(default=None, alias="fieldMask")
     query_resource_consumption: str | None = Field(default=None, alias="queryResourceConsumption")
 
+class AdGroupCampaign(BaseModel):
+    """Nested schema for AdGroup.campaign"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None, description="Parent campaign ID")
+    """Parent campaign ID"""
+    resource_name: str | None = Field(default=None, alias="resourceName", description="Parent campaign resource name")
+    """Parent campaign resource name"""
+
+class AdGroupMetrics(BaseModel):
+    """Nested schema for AdGroup.metrics"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    cost_micros: str | None = Field(default=None, alias="costMicros")
+
+class AdGroupSegments(BaseModel):
+    """Nested schema for AdGroup.segments"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    date: str | None = Field(default=None)
+
 class AdGroupAdgroup(BaseModel):
     """Nested schema for AdGroup.adGroup"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -230,27 +251,6 @@ class AdGroupAdgroup(BaseModel):
     target_roas: float | None = Field(default=None, alias="targetRoas")
     tracking_url_template: str | None = Field(default=None, alias="trackingUrlTemplate")
 
-class AdGroupCampaign(BaseModel):
-    """Nested schema for AdGroup.campaign"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="Parent campaign ID")
-    """Parent campaign ID"""
-    resource_name: str | None = Field(default=None, alias="resourceName", description="Parent campaign resource name")
-    """Parent campaign resource name"""
-
-class AdGroupMetrics(BaseModel):
-    """Nested schema for AdGroup.metrics"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    cost_micros: str | None = Field(default=None, alias="costMicros")
-
-class AdGroupSegments(BaseModel):
-    """Nested schema for AdGroup.segments"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    date: str | None = Field(default=None)
-
 class AdGroup(BaseModel):
     """Google Ads ad group"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -269,22 +269,6 @@ class AdGroupSearchResponse(BaseModel):
     field_mask: str | None = Field(default=None, alias="fieldMask")
     query_resource_consumption: str | None = Field(default=None, alias="queryResourceConsumption")
 
-class AdGroupAdAdgroup(BaseModel):
-    """Nested schema for AdGroupAd.adGroup"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="Parent ad group ID")
-    """Parent ad group ID"""
-    resource_name: str | None = Field(default=None, alias="resourceName", description="Parent ad group resource name")
-    """Parent ad group resource name"""
-
-class AdGroupAdAdgroupadPolicysummary(BaseModel):
-    """Nested schema for AdGroupAdAdgroupad.policySummary"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    approval_status: str | None = Field(default=None, alias="approvalStatus")
-    review_status: str | None = Field(default=None, alias="reviewStatus")
-
 class AdGroupAdAdgroupadAd(BaseModel):
     """Nested schema for AdGroupAdAdgroupad.ad"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -299,6 +283,13 @@ class AdGroupAdAdgroupadAd(BaseModel):
     final_url_suffix: str | None = Field(default=None, alias="finalUrlSuffix")
     tracking_url_template: str | None = Field(default=None, alias="trackingUrlTemplate")
     resource_name: str | None = Field(default=None, alias="resourceName")
+
+class AdGroupAdAdgroupadPolicysummary(BaseModel):
+    """Nested schema for AdGroupAdAdgroupad.policySummary"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    approval_status: str | None = Field(default=None, alias="approvalStatus")
+    review_status: str | None = Field(default=None, alias="reviewStatus")
 
 class AdGroupAdAdgroupad(BaseModel):
     """Nested schema for AdGroupAd.adGroupAd"""
@@ -318,6 +309,15 @@ class AdGroupAdSegments(BaseModel):
 
     date: str | None = Field(default=None)
 
+class AdGroupAdAdgroup(BaseModel):
+    """Nested schema for AdGroupAd.adGroup"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None, description="Parent ad group ID")
+    """Parent ad group ID"""
+    resource_name: str | None = Field(default=None, alias="resourceName", description="Parent ad group resource name")
+    """Parent ad group resource name"""
+
 class AdGroupAd(BaseModel):
     """Google Ads ad group ad"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -335,20 +335,20 @@ class AdGroupAdSearchResponse(BaseModel):
     field_mask: str | None = Field(default=None, alias="fieldMask")
     query_resource_consumption: str | None = Field(default=None, alias="queryResourceConsumption")
 
-class CampaignLabelCampaignlabel(BaseModel):
-    """Nested schema for CampaignLabel.campaignLabel"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    campaign: str | None = Field(default=None)
-    label: str | None = Field(default=None)
-    resource_name: str | None = Field(default=None, alias="resourceName")
-
 class CampaignLabelLabel(BaseModel):
     """Nested schema for CampaignLabel.label"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: str | None = Field(default=None)
     name: str | None = Field(default=None)
+    resource_name: str | None = Field(default=None, alias="resourceName")
+
+class CampaignLabelCampaignlabel(BaseModel):
+    """Nested schema for CampaignLabel.campaignLabel"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    campaign: str | None = Field(default=None)
+    label: str | None = Field(default=None)
     resource_name: str | None = Field(default=None, alias="resourceName")
 
 class CampaignLabelCampaign(BaseModel):
@@ -374,6 +374,12 @@ class CampaignLabelSearchResponse(BaseModel):
     field_mask: str | None = Field(default=None, alias="fieldMask")
     query_resource_consumption: str | None = Field(default=None, alias="queryResourceConsumption")
 
+class AdGroupLabelAdgroup(BaseModel):
+    """Nested schema for AdGroupLabel.adGroup"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None)
+
 class AdGroupLabelAdgrouplabel(BaseModel):
     """Nested schema for AdGroupLabel.adGroupLabel"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -381,12 +387,6 @@ class AdGroupLabelAdgrouplabel(BaseModel):
     ad_group: str | None = Field(default=None, alias="adGroup")
     label: str | None = Field(default=None)
     resource_name: str | None = Field(default=None, alias="resourceName")
-
-class AdGroupLabelAdgroup(BaseModel):
-    """Nested schema for AdGroupLabel.adGroup"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None)
 
 class AdGroupLabelLabel(BaseModel):
     """Nested schema for AdGroupLabel.label"""
@@ -413,6 +413,18 @@ class AdGroupLabelSearchResponse(BaseModel):
     field_mask: str | None = Field(default=None, alias="fieldMask")
     query_resource_consumption: str | None = Field(default=None, alias="queryResourceConsumption")
 
+class AdGroupAdLabelAdgroupadAd(BaseModel):
+    """Nested schema for AdGroupAdLabelAdgroupad.ad"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None)
+
+class AdGroupAdLabelAdgroupad(BaseModel):
+    """Nested schema for AdGroupAdLabel.adGroupAd"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    ad: AdGroupAdLabelAdgroupadAd | None = Field(default=None)
+
 class AdGroupAdLabelLabel(BaseModel):
     """Nested schema for AdGroupAdLabel.label"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -428,18 +440,6 @@ class AdGroupAdLabelAdgroupadlabel(BaseModel):
     ad_group_ad: str | None = Field(default=None, alias="adGroupAd")
     label: str | None = Field(default=None)
     resource_name: str | None = Field(default=None, alias="resourceName")
-
-class AdGroupAdLabelAdgroupadAd(BaseModel):
-    """Nested schema for AdGroupAdLabelAdgroupad.ad"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None)
-
-class AdGroupAdLabelAdgroupad(BaseModel):
-    """Nested schema for AdGroupAdLabel.adGroupAd"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    ad: AdGroupAdLabelAdgroupadAd | None = Field(default=None)
 
 class AdGroupAdLabel(BaseModel):
     """Ad group ad label association"""

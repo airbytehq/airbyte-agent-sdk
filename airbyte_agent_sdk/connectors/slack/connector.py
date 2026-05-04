@@ -105,7 +105,7 @@ class SlackConnector:
 
     connector_name = "slack"
     connector_version = "0.1.21"
-    sdk_version = "0.1.169"
+    sdk_version = "0.1.170"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
