@@ -107,8 +107,7 @@ def _format_message(error: Exception) -> str:
 
 def _missing_framework_runtime_error(framework: FrameworkName, module_name: str) -> RuntimeError:
     return RuntimeError(
-        f"framework={framework!r} requested but {module_name} is not installed; "
-        f"choose from: pydantic_ai, langchain, openai_agents, mcp"
+        f"framework={framework!r} requested but {module_name} is not installed; " f"choose from: pydantic_ai, langchain, openai_agents, mcp"
     )
 
 

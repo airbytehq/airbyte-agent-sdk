@@ -1523,9 +1523,7 @@ class ConnectorGenerator:
 
         return schema, ref_name
 
-    def _determine_extracted_type(
-        self, response_schema: dict[str, Any], record_extractor: str
-    ) -> tuple[str, bool]:
+    def _determine_extracted_type(self, response_schema: dict[str, Any], record_extractor: str) -> tuple[str, bool]:
         """Determine the Python type of extracted records.
 
         Returns:

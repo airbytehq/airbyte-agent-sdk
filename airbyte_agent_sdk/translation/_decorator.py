@@ -216,8 +216,7 @@ def translate_exceptions(
         # translate_exceptions only wraps regular sync/async callables.
         if inspect.isgeneratorfunction(fn) or inspect.isasyncgenfunction(fn):
             raise TypeError(
-                f"translate_exceptions does not support generator/async-generator tools "
-                f"(got {fn.__name__}); return a list/dict instead"
+                f"translate_exceptions does not support generator/async-generator tools " f"(got {fn.__name__}); return a list/dict instead"
             )
 
         # Double-wrap guard: if the function is already wrapped by translate_exceptions,

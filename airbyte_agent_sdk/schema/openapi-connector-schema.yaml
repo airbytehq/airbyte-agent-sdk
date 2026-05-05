@@ -560,17 +560,19 @@ $defs:
         title: Description
       parent_record_filter:
         anyOf:
-        - type: object
-          additionalProperties:
-            type: array
+        - additionalProperties:
             items:
               type: string
+            type: array
+          type: object
         - type: 'null'
         default: null
-        description: Optional filter applied to parent entity records during check-time
-          parameter resolution. Keys are field names on the parent record, values are
-          lists of acceptable values. Only records matching all conditions are considered
-          when resolving the foreign key.
+        description: 'Optional filter applied to parent entity records during check-time
+          parameter resolution. Keys are field names on the parent record, values
+          are lists of acceptable values. Only records matching all conditions are
+          considered when resolving the foreign key. Example: `parent_record_filter:
+          {type: [list, board]}` picks only parent records whose `type` field is `list`
+          or `board`.'
         title: Parent Record Filter
     required:
     - source_entity
@@ -757,56 +759,26 @@ $defs:
     type: object
   Info:
     additionalProperties: true
-    description: 'API metadata information.
-
-
-      OpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#info-object
-
-
-      Unknown `x-*` fields are accepted so that older SDK versions can still parse
-
-      specs that carry newer Airbyte extensions. Unknown non-extension fields still
-
-      raise at SDK load time (via `_reject_unknown_non_extension_fields`) — that''s
-
-      where typos in standard OpenAPI keys get caught. Note: this rejection is a
-
-      Python-level validator and is NOT expressible in JSON Schema, so external
-
-      consumers validating directly against the published YAML (where
-
-      `additionalProperties: true` for `Info`) will not see it.
-
-
-      Extensions:
-
-      - x-airbyte-connector-name: Name of the connector (Airbyte extension)
-
-      - x-airbyte-connector-definition-id: UUID of the connector (Airbyte extension)
-
-      - x-airbyte-external-documentation-urls: List of external documentation URLs
-      (Airbyte extension)
-
-      - x-airbyte-retry-config: Retry configuration for transient errors (Airbyte
-      extension)
-
-      - x-airbyte-example-questions: Example questions for AI connector README (Airbyte
-      extension)
-
-      - x-airbyte-auth-tooltip: Short, non-technical multiline string shown to end
-      users in the embedded widget to describe how to authenticate the connector (Airbyte
-      extension)
-
-      - x-airbyte-context-store: Cache configuration for field mapping between API
-      and cache schemas (Airbyte extension)
-
-      - x-airbyte-replication-config: Replication configuration for MULTI mode connectors
-      (Airbyte extension)
-
-      - x-airbyte-entity-relationships: Entity relationship declarations (Airbyte
-      extension)
-
-      - x-airbyte-scoping: Scoping parameter resolution from config (Airbyte extension)'
+    description: "API metadata information.\n\nOpenAPI Reference: https://spec.openapis.org/oas/v3.1.0#info-object\n\
+      \nUnknown `x-*` fields are accepted so that older SDK versions can still parse\n\
+      specs that carry newer Airbyte extensions. Unknown non-extension fields still\n\
+      raise at SDK load time (via `_reject_unknown_non_extension_fields`) — that's\n\
+      where typos in standard OpenAPI keys get caught. Note: this rejection is a\n\
+      Python-level validator and is NOT expressible in JSON Schema, so external\n\
+      consumers validating directly against the published YAML (where\n`additionalProperties:\
+      \ true` for `Info`) will not see it.\n\nExtensions:\n- x-airbyte-connector-name:\
+      \ Name of the connector (Airbyte extension)\n- x-airbyte-connector-definition-id:\
+      \ UUID of the connector (Airbyte extension)\n- x-airbyte-external-documentation-urls:\
+      \ List of external documentation URLs (Airbyte extension)\n- x-airbyte-retry-config:\
+      \ Retry configuration for transient errors (Airbyte extension)\n- x-airbyte-example-questions:\
+      \ Example questions for AI connector README (Airbyte extension)\n- x-airbyte-auth-tooltip:\
+      \ Short, non-technical multiline string shown to end users in the embedded widget\
+      \ to describe\n  how to authenticate the connector (Airbyte extension)\n- x-airbyte-context-store:\
+      \ Cache configuration for field mapping between API and cache schemas (Airbyte\
+      \ extension)\n- x-airbyte-replication-config: Replication configuration for\
+      \ MULTI mode connectors (Airbyte extension)\n- x-airbyte-entity-relationships:\
+      \ Entity relationship declarations (Airbyte extension)\n- x-airbyte-scoping:\
+      \ Scoping parameter resolution from config (Airbyte extension)"
     properties:
       title:
         title: Title
@@ -1203,19 +1175,6 @@ $defs:
           full response. Returns array for list/api_search actions, single record
           for get/create/update/delete actions.
         title: X-Airbyte-Record-Extractor
-      x-airbyte-record-transform:
-        anyOf:
-        - additionalProperties:
-            type: string
-          type: object
-        - type: 'null'
-        default: null
-        description: 'Dictionary mapping output field names to Jinja expressions
-          evaluated per extracted record. Runs after `x-airbyte-record-extractor`
-          and before `x-airbyte-record-filter`. The template receives the current
-          record as `record` and the connector config as `config`. Primitive extracted
-          records are wrapped as `{value: ...}` before evaluation.'
-        title: X-Airbyte-Record-Transform
       x-airbyte-record-filter:
         anyOf:
         - type: string
@@ -1229,6 +1188,20 @@ $defs:
           strings). Example: `{{ not record.isPrivate }}`. Only valid on `list` and
           `api_search` operations.'
         title: X-Airbyte-Record-Filter
+      x-airbyte-record-transform:
+        anyOf:
+        - additionalProperties:
+            type: string
+          type: object
+        - type: 'null'
+        default: null
+        description: 'Dictionary mapping output field names to Jinja expressions evaluated
+          per extracted record. Runs after `x-airbyte-record-extractor` and before
+          `x-airbyte-record-filter`. The template receives the current record as `record`
+          and the connector config as `config`. Primitive extracted records are wrapped
+          as `{value: ...}` before evaluation. Example: {''customer_id'': "{{ record.value
+          | replace(''customers/'', '''') }}"}.'
+        title: X-Airbyte-Record-Transform
       x-airbyte-meta-extractor:
         anyOf:
         - additionalProperties:

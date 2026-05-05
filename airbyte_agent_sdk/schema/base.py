@@ -149,7 +149,8 @@ class Info(BaseModel):
     - x-airbyte-external-documentation-urls: List of external documentation URLs (Airbyte extension)
     - x-airbyte-retry-config: Retry configuration for transient errors (Airbyte extension)
     - x-airbyte-example-questions: Example questions for AI connector README (Airbyte extension)
-    - x-airbyte-auth-tooltip: Short, non-technical multiline string shown to end users in the embedded widget to describe how to authenticate the connector (Airbyte extension)
+    - x-airbyte-auth-tooltip: Short, non-technical multiline string shown to end users in the embedded widget to describe
+      how to authenticate the connector (Airbyte extension)
     - x-airbyte-context-store: Cache configuration for field mapping between API and cache schemas (Airbyte extension)
     - x-airbyte-replication-config: Replication configuration for MULTI mode connectors (Airbyte extension)
     - x-airbyte-entity-relationships: Entity relationship declarations (Airbyte extension)
