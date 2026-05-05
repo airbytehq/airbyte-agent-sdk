@@ -252,6 +252,9 @@ info:
       - "Search for messages matching a query"
       - "Find emails from a specific sender"
       - "Show me emails with attachments"
+      - "Show me my latest emails"
+      - "Find recent unread emails about {topic}"
+      - "Show the conversation with {person} about {topic}"
     unsupported:
       - "Attach a file to an email"
       - "Forward an email to someone"
@@ -1149,13 +1152,14 @@ components:
       x-airbyte-stream-name: messages_details
       x-airbyte-ai-hints:
         summary: "Gmail email messages with subject, sender, body, and attachments"
-        when_to_use: "Looking for emails, searching inbox, or finding specific messages"
-        trigger_phrases: ["email", "gmail message", "inbox", "find email", "who emailed"]
+        when_to_use: "Looking for emails, searching inbox, finding recent messages, or showing specific emails"
+        trigger_phrases: ["search email", "find email", "show emails", "recent emails", "latest emails", "show latest emails", "show inbox", "email", "gmail message", "inbox", "who emailed"]
         freshness: live
-        search_strategy: "Search by subject, sender, or keywords in the body. Use snippet for message previews, payload.headers[].value for headers such as From/To/Subject/Date, and payload.body.data or payload.parts[].body.data for body content when available."
+        search_strategy: "Use `messages.context_store_search` first for normal read/search questions. For latest or recent emails, sort by `internalDate` descending. Read From, To, Subject, and Date from `payload.headers`. Use snippet for previews and message body fields when needed."
         example_questions:
           - "Find emails from a specific sender"
           - "Show unread messages"
+          - "What are my latest emails about billing?"
       description: A Gmail email message
       properties:
         id:
@@ -1357,13 +1361,14 @@ components:
       x-airbyte-stream-name: threads
       x-airbyte-ai-hints:
         summary: "Gmail conversation threads grouping related messages"
-        when_to_use: "Looking at email conversations or thread history"
-        trigger_phrases: ["email thread", "conversation", "email chain"]
+        when_to_use: "Looking at email conversations, thread history, or related message chains"
+        trigger_phrases: ["email thread", "conversation", "email chain", "show conversation", "find thread"]
         freshness: live
-        search_strategy: "Search by subject or participant"
+        search_strategy: "Use `threads.context_store_search` first for conversation lookups. Search by subject, participant, or snippet."
         example_questions:
           - "Show the email thread about a topic"
           - "Find conversations with a person"
+          - "Show the conversation with finance about invoices"
       description: A Gmail thread (email conversation)
       properties:
         id:
