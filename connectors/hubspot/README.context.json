@@ -3,7 +3,7 @@
   "class_name": "HubspotConnector",
   "package_name": "airbyte_agent_sdk.connectors.hubspot",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.1.18",
+  "yaml_version": "0.1.19",
   "api_reference_url": "https://developers.hubspot.com/docs/api/crm/understanding-the-crm",
   "auth_example": "HubspotAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\", access_token=\"...\")",
   "auth_import": ", HubspotAuthConfig",
@@ -2045,6 +2045,54 @@
           "description": "Object containing all property values for the company"
         },
         {
+          "name": "properties.createdate",
+          "python_name": "properties_createdate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Date the company was created"
+        },
+        {
+          "name": "properties.domain",
+          "python_name": "properties_domain",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Company domain name"
+        },
+        {
+          "name": "properties.hs_lastmodifieddate",
+          "python_name": "properties_hs_lastmodifieddate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last modified date of the company"
+        },
+        {
+          "name": "properties.hs_object_id",
+          "python_name": "properties_hs_object_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "HubSpot object ID"
+        },
+        {
+          "name": "properties.hubspot_owner_id",
+          "python_name": "properties_hubspot_owner_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ID of the HubSpot owner assigned to this company"
+        },
+        {
+          "name": "properties.name",
+          "python_name": "properties_name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Company name"
+        },
+        {
           "name": "updatedAt",
           "python_name": "updated_at",
           "type": "str | None",
@@ -2073,7 +2121,7 @@
           "type": "bool | None",
           "json_type": "null | boolean",
           "example_value_json": "True",
-          "description": "Boolean flag indicating whether the contact has been archived or deleted."
+          "description": "Boolean flag indicating whether the contact has been archived or deleted"
         },
         {
           "name": "companies",
@@ -2081,7 +2129,7 @@
           "type": "list[Any] | None",
           "json_type": "null | array",
           "example_value_json": "[]",
-          "description": "Associated company records linked to this contact."
+          "description": "Associated company records linked to this contact"
         },
         {
           "name": "createdAt",
@@ -2089,7 +2137,7 @@
           "type": "str | None",
           "json_type": "null | string",
           "example_value_json": "\"<str>\"",
-          "description": "Timestamp indicating when the contact was first created in the system."
+          "description": "Timestamp indicating when the contact was first created in the system"
         },
         {
           "name": "id",
@@ -2097,7 +2145,7 @@
           "type": "str | None",
           "json_type": "null | string",
           "example_value_json": "\"<str>\"",
-          "description": "Unique identifier for the contact record."
+          "description": "Unique identifier for the contact record"
         },
         {
           "name": "properties",
@@ -2108,12 +2156,76 @@
           "description": "Key-value object storing all contact properties and their values."
         },
         {
+          "name": "properties.associatedcompanyid",
+          "python_name": "properties_associatedcompanyid",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ID of the associated company"
+        },
+        {
+          "name": "properties.createdate",
+          "python_name": "properties_createdate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Date the contact was created"
+        },
+        {
+          "name": "properties.email",
+          "python_name": "properties_email",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Contact email address"
+        },
+        {
+          "name": "properties.firstname",
+          "python_name": "properties_firstname",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Contact first name"
+        },
+        {
+          "name": "properties.hs_object_id",
+          "python_name": "properties_hs_object_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "HubSpot object ID"
+        },
+        {
+          "name": "properties.hubspot_owner_id",
+          "python_name": "properties_hubspot_owner_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ID of the HubSpot owner assigned to this contact"
+        },
+        {
+          "name": "properties.lastmodifieddate",
+          "python_name": "properties_lastmodifieddate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last modified date of the contact"
+        },
+        {
+          "name": "properties.lastname",
+          "python_name": "properties_lastname",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Contact last name"
+        },
+        {
           "name": "updatedAt",
           "python_name": "updated_at",
           "type": "str | None",
           "json_type": "null | string",
           "example_value_json": "\"<str>\"",
-          "description": "Timestamp indicating when the contact record was last modified."
+          "description": "Timestamp indicating when the contact record was last modified"
         }
       ]
     },
@@ -2187,6 +2299,78 @@
           "description": "Key-value object containing all deal properties and custom fields"
         },
         {
+          "name": "properties.amount",
+          "python_name": "properties_amount",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Deal amount"
+        },
+        {
+          "name": "properties.closedate",
+          "python_name": "properties_closedate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Expected close date of the deal"
+        },
+        {
+          "name": "properties.createdate",
+          "python_name": "properties_createdate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Date the deal was created"
+        },
+        {
+          "name": "properties.dealname",
+          "python_name": "properties_dealname",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Deal name"
+        },
+        {
+          "name": "properties.dealstage",
+          "python_name": "properties_dealstage",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Current deal stage"
+        },
+        {
+          "name": "properties.hs_lastmodifieddate",
+          "python_name": "properties_hs_lastmodifieddate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last modified date of the deal"
+        },
+        {
+          "name": "properties.hs_object_id",
+          "python_name": "properties_hs_object_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "HubSpot object ID"
+        },
+        {
+          "name": "properties.hubspot_owner_id",
+          "python_name": "properties_hubspot_owner_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "ID of the HubSpot owner assigned to this deal"
+        },
+        {
+          "name": "properties.pipeline",
+          "python_name": "properties_pipeline",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Deal pipeline"
+        },
+        {
           "name": "updatedAt",
           "python_name": "updated_at",
           "type": "str | None",
@@ -2255,7 +2439,79 @@
           "type": "dict[str, Any]",
           "json_type": "object",
           "example_value_json": "{}",
-          "description": "Key-value object containing all ticket properties and custom fields"
+          "description": "Object containing all property values for the ticket"
+        },
+        {
+          "name": "properties.content",
+          "python_name": "properties_content",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Ticket content/description"
+        },
+        {
+          "name": "properties.createdate",
+          "python_name": "properties_createdate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Date the ticket was created"
+        },
+        {
+          "name": "properties.hs_lastmodifieddate",
+          "python_name": "properties_hs_lastmodifieddate",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Last modified date of the ticket"
+        },
+        {
+          "name": "properties.hs_object_id",
+          "python_name": "properties_hs_object_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "HubSpot object ID"
+        },
+        {
+          "name": "properties.hs_pipeline",
+          "python_name": "properties_hs_pipeline",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Ticket pipeline"
+        },
+        {
+          "name": "properties.hs_pipeline_stage",
+          "python_name": "properties_hs_pipeline_stage",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Current pipeline stage of the ticket"
+        },
+        {
+          "name": "properties.hs_ticket_category",
+          "python_name": "properties_hs_ticket_category",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Ticket category"
+        },
+        {
+          "name": "properties.hs_ticket_priority",
+          "python_name": "properties_hs_ticket_priority",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Ticket priority level"
+        },
+        {
+          "name": "properties.subject",
+          "python_name": "properties_subject",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "description": "Ticket subject line"
         },
         {
           "name": "updatedAt",

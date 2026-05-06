@@ -102,8 +102,8 @@ class HubspotConnector:
     """
 
     connector_name = "hubspot"
-    connector_version = "0.1.18"
-    sdk_version = "0.1.176"
+    connector_version = "0.1.19"
+    sdk_version = "0.1.177"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -803,12 +803,20 @@ class ContactsQuery:
         Only available in hosted execution mode.
 
         Available filter fields (ContactsSearchFilter):
-        - archived: Boolean flag indicating whether the contact has been archived or deleted.
-        - companies: Associated company records linked to this contact.
-        - created_at: Timestamp indicating when the contact was first created in the system.
-        - id: Unique identifier for the contact record.
+        - archived: Boolean flag indicating whether the contact has been archived or deleted
+        - companies: Associated company records linked to this contact
+        - created_at: Timestamp indicating when the contact was first created in the system
+        - id: Unique identifier for the contact record
         - properties: Key-value object storing all contact properties and their values.
-        - updated_at: Timestamp indicating when the contact record was last modified.
+        - properties_associatedcompanyid: ID of the associated company
+        - properties_createdate: Date the contact was created
+        - properties_email: Contact email address
+        - properties_firstname: Contact first name
+        - properties_hs_object_id: HubSpot object ID
+        - properties_hubspot_owner_id: ID of the HubSpot owner assigned to this contact
+        - properties_lastmodifieddate: Last modified date of the contact
+        - properties_lastname: Contact last name
+        - updated_at: Timestamp indicating when the contact record was last modified
 
         Args:
             query: Filter and sort conditions. Supports operators like eq, neq, gt, gte, lt, lte,
@@ -1005,6 +1013,12 @@ class CompaniesQuery:
         - created_at: Timestamp when the company record was created
         - id: Unique identifier for the company record
         - properties: Object containing all property values for the company
+        - properties_createdate: Date the company was created
+        - properties_domain: Company domain name
+        - properties_hs_lastmodifieddate: Last modified date of the company
+        - properties_hs_object_id: HubSpot object ID
+        - properties_hubspot_owner_id: ID of the HubSpot owner assigned to this company
+        - properties_name: Company name
         - updated_at: Timestamp when the company record was last modified
 
         Args:
@@ -1204,6 +1218,15 @@ class DealsQuery:
         - id: Unique identifier for the deal record
         - line_items: Collection of product line items associated with the deal
         - properties: Key-value object containing all deal properties and custom fields
+        - properties_amount: Deal amount
+        - properties_closedate: Expected close date of the deal
+        - properties_createdate: Date the deal was created
+        - properties_dealname: Deal name
+        - properties_dealstage: Current deal stage
+        - properties_hs_lastmodifieddate: Last modified date of the deal
+        - properties_hs_object_id: HubSpot object ID
+        - properties_hubspot_owner_id: ID of the HubSpot owner assigned to this deal
+        - properties_pipeline: Deal pipeline
         - updated_at: Timestamp when the deal record was last modified
 
         Args:
@@ -1401,7 +1424,16 @@ class TicketsQuery:
         - contacts: Collection of contact records associated with the ticket
         - created_at: Timestamp when the ticket record was originally created
         - id: Unique identifier for the ticket record
-        - properties: Key-value object containing all ticket properties and custom fields
+        - properties: Object containing all property values for the ticket
+        - properties_content: Ticket content/description
+        - properties_createdate: Date the ticket was created
+        - properties_hs_lastmodifieddate: Last modified date of the ticket
+        - properties_hs_object_id: HubSpot object ID
+        - properties_hs_pipeline: Ticket pipeline
+        - properties_hs_pipeline_stage: Current pipeline stage of the ticket
+        - properties_hs_ticket_category: Ticket category
+        - properties_hs_ticket_priority: Ticket priority level
+        - properties_subject: Ticket subject line
         - updated_at: Timestamp when the ticket record was last modified
 
         Args:

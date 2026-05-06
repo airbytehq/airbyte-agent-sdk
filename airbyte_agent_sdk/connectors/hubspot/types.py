@@ -238,6 +238,18 @@ class CompaniesSearchFilter(TypedDict, total=False):
     """Unique identifier for the company record"""
     properties: dict[str, Any]
     """Object containing all property values for the company"""
+    properties_createdate: str | None
+    """Date the company was created"""
+    properties_domain: str | None
+    """Company domain name"""
+    properties_hs_lastmodifieddate: str | None
+    """Last modified date of the company"""
+    properties_hs_object_id: str | None
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str | None
+    """ID of the HubSpot owner assigned to this company"""
+    properties_name: str | None
+    """Company name"""
     updated_at: str | None
     """Timestamp when the company record was last modified"""
 
@@ -254,6 +266,18 @@ class CompaniesInFilter(TypedDict, total=False):
     """Unique identifier for the company record"""
     properties: list[dict[str, Any]]
     """Object containing all property values for the company"""
+    properties_createdate: list[str]
+    """Date the company was created"""
+    properties_domain: list[str]
+    """Company domain name"""
+    properties_hs_lastmodifieddate: list[str]
+    """Last modified date of the company"""
+    properties_hs_object_id: list[str]
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: list[str]
+    """ID of the HubSpot owner assigned to this company"""
+    properties_name: list[str]
+    """Company name"""
     updated_at: list[str]
     """Timestamp when the company record was last modified"""
 
@@ -270,6 +294,18 @@ class CompaniesAnyValueFilter(TypedDict, total=False):
     """Unique identifier for the company record"""
     properties: Any
     """Object containing all property values for the company"""
+    properties_createdate: Any
+    """Date the company was created"""
+    properties_domain: Any
+    """Company domain name"""
+    properties_hs_lastmodifieddate: Any
+    """Last modified date of the company"""
+    properties_hs_object_id: Any
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: Any
+    """ID of the HubSpot owner assigned to this company"""
+    properties_name: Any
+    """Company name"""
     updated_at: Any
     """Timestamp when the company record was last modified"""
 
@@ -286,6 +322,18 @@ class CompaniesStringFilter(TypedDict, total=False):
     """Unique identifier for the company record"""
     properties: str
     """Object containing all property values for the company"""
+    properties_createdate: str
+    """Date the company was created"""
+    properties_domain: str
+    """Company domain name"""
+    properties_hs_lastmodifieddate: str
+    """Last modified date of the company"""
+    properties_hs_object_id: str
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str
+    """ID of the HubSpot owner assigned to this company"""
+    properties_name: str
+    """Company name"""
     updated_at: str
     """Timestamp when the company record was last modified"""
 
@@ -302,6 +350,18 @@ class CompaniesSortFilter(TypedDict, total=False):
     """Unique identifier for the company record"""
     properties: AirbyteSortOrder
     """Object containing all property values for the company"""
+    properties_createdate: AirbyteSortOrder
+    """Date the company was created"""
+    properties_domain: AirbyteSortOrder
+    """Company domain name"""
+    properties_hs_lastmodifieddate: AirbyteSortOrder
+    """Last modified date of the company"""
+    properties_hs_object_id: AirbyteSortOrder
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: AirbyteSortOrder
+    """ID of the HubSpot owner assigned to this company"""
+    properties_name: AirbyteSortOrder
+    """Company name"""
     updated_at: AirbyteSortOrder
     """Timestamp when the company record was last modified"""
 
@@ -404,81 +464,161 @@ class CompaniesSearchQuery(TypedDict, total=False):
 class ContactsSearchFilter(TypedDict, total=False):
     """Available fields for filtering contacts search queries."""
     archived: bool | None
-    """Boolean flag indicating whether the contact has been archived or deleted."""
+    """Boolean flag indicating whether the contact has been archived or deleted"""
     companies: list[Any] | None
-    """Associated company records linked to this contact."""
+    """Associated company records linked to this contact"""
     created_at: str | None
-    """Timestamp indicating when the contact was first created in the system."""
+    """Timestamp indicating when the contact was first created in the system"""
     id: str | None
-    """Unique identifier for the contact record."""
+    """Unique identifier for the contact record"""
     properties: dict[str, Any]
     """Key-value object storing all contact properties and their values."""
+    properties_associatedcompanyid: str | None
+    """ID of the associated company"""
+    properties_createdate: str | None
+    """Date the contact was created"""
+    properties_email: str | None
+    """Contact email address"""
+    properties_firstname: str | None
+    """Contact first name"""
+    properties_hs_object_id: str | None
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str | None
+    """ID of the HubSpot owner assigned to this contact"""
+    properties_lastmodifieddate: str | None
+    """Last modified date of the contact"""
+    properties_lastname: str | None
+    """Contact last name"""
     updated_at: str | None
-    """Timestamp indicating when the contact record was last modified."""
+    """Timestamp indicating when the contact record was last modified"""
 
 
 class ContactsInFilter(TypedDict, total=False):
     """Available fields for 'in' condition (values are lists)."""
     archived: list[bool]
-    """Boolean flag indicating whether the contact has been archived or deleted."""
+    """Boolean flag indicating whether the contact has been archived or deleted"""
     companies: list[list[Any]]
-    """Associated company records linked to this contact."""
+    """Associated company records linked to this contact"""
     created_at: list[str]
-    """Timestamp indicating when the contact was first created in the system."""
+    """Timestamp indicating when the contact was first created in the system"""
     id: list[str]
-    """Unique identifier for the contact record."""
+    """Unique identifier for the contact record"""
     properties: list[dict[str, Any]]
     """Key-value object storing all contact properties and their values."""
+    properties_associatedcompanyid: list[str]
+    """ID of the associated company"""
+    properties_createdate: list[str]
+    """Date the contact was created"""
+    properties_email: list[str]
+    """Contact email address"""
+    properties_firstname: list[str]
+    """Contact first name"""
+    properties_hs_object_id: list[str]
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: list[str]
+    """ID of the HubSpot owner assigned to this contact"""
+    properties_lastmodifieddate: list[str]
+    """Last modified date of the contact"""
+    properties_lastname: list[str]
+    """Contact last name"""
     updated_at: list[str]
-    """Timestamp indicating when the contact record was last modified."""
+    """Timestamp indicating when the contact record was last modified"""
 
 
 class ContactsAnyValueFilter(TypedDict, total=False):
     """Available fields with Any value type. Used for 'contains' and 'any' conditions."""
     archived: Any
-    """Boolean flag indicating whether the contact has been archived or deleted."""
+    """Boolean flag indicating whether the contact has been archived or deleted"""
     companies: Any
-    """Associated company records linked to this contact."""
+    """Associated company records linked to this contact"""
     created_at: Any
-    """Timestamp indicating when the contact was first created in the system."""
+    """Timestamp indicating when the contact was first created in the system"""
     id: Any
-    """Unique identifier for the contact record."""
+    """Unique identifier for the contact record"""
     properties: Any
     """Key-value object storing all contact properties and their values."""
+    properties_associatedcompanyid: Any
+    """ID of the associated company"""
+    properties_createdate: Any
+    """Date the contact was created"""
+    properties_email: Any
+    """Contact email address"""
+    properties_firstname: Any
+    """Contact first name"""
+    properties_hs_object_id: Any
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: Any
+    """ID of the HubSpot owner assigned to this contact"""
+    properties_lastmodifieddate: Any
+    """Last modified date of the contact"""
+    properties_lastname: Any
+    """Contact last name"""
     updated_at: Any
-    """Timestamp indicating when the contact record was last modified."""
+    """Timestamp indicating when the contact record was last modified"""
 
 
 class ContactsStringFilter(TypedDict, total=False):
     """String fields for text search conditions (like, fuzzy, keyword)."""
     archived: str
-    """Boolean flag indicating whether the contact has been archived or deleted."""
+    """Boolean flag indicating whether the contact has been archived or deleted"""
     companies: str
-    """Associated company records linked to this contact."""
+    """Associated company records linked to this contact"""
     created_at: str
-    """Timestamp indicating when the contact was first created in the system."""
+    """Timestamp indicating when the contact was first created in the system"""
     id: str
-    """Unique identifier for the contact record."""
+    """Unique identifier for the contact record"""
     properties: str
     """Key-value object storing all contact properties and their values."""
+    properties_associatedcompanyid: str
+    """ID of the associated company"""
+    properties_createdate: str
+    """Date the contact was created"""
+    properties_email: str
+    """Contact email address"""
+    properties_firstname: str
+    """Contact first name"""
+    properties_hs_object_id: str
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str
+    """ID of the HubSpot owner assigned to this contact"""
+    properties_lastmodifieddate: str
+    """Last modified date of the contact"""
+    properties_lastname: str
+    """Contact last name"""
     updated_at: str
-    """Timestamp indicating when the contact record was last modified."""
+    """Timestamp indicating when the contact record was last modified"""
 
 
 class ContactsSortFilter(TypedDict, total=False):
     """Available fields for sorting contacts search results."""
     archived: AirbyteSortOrder
-    """Boolean flag indicating whether the contact has been archived or deleted."""
+    """Boolean flag indicating whether the contact has been archived or deleted"""
     companies: AirbyteSortOrder
-    """Associated company records linked to this contact."""
+    """Associated company records linked to this contact"""
     created_at: AirbyteSortOrder
-    """Timestamp indicating when the contact was first created in the system."""
+    """Timestamp indicating when the contact was first created in the system"""
     id: AirbyteSortOrder
-    """Unique identifier for the contact record."""
+    """Unique identifier for the contact record"""
     properties: AirbyteSortOrder
     """Key-value object storing all contact properties and their values."""
+    properties_associatedcompanyid: AirbyteSortOrder
+    """ID of the associated company"""
+    properties_createdate: AirbyteSortOrder
+    """Date the contact was created"""
+    properties_email: AirbyteSortOrder
+    """Contact email address"""
+    properties_firstname: AirbyteSortOrder
+    """Contact first name"""
+    properties_hs_object_id: AirbyteSortOrder
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: AirbyteSortOrder
+    """ID of the HubSpot owner assigned to this contact"""
+    properties_lastmodifieddate: AirbyteSortOrder
+    """Last modified date of the contact"""
+    properties_lastname: AirbyteSortOrder
+    """Contact last name"""
     updated_at: AirbyteSortOrder
-    """Timestamp indicating when the contact record was last modified."""
+    """Timestamp indicating when the contact record was last modified"""
 
 
 # Entity-specific condition types for contacts
@@ -592,6 +732,24 @@ class DealsSearchFilter(TypedDict, total=False):
     """Collection of product line items associated with the deal"""
     properties: dict[str, Any]
     """Key-value object containing all deal properties and custom fields"""
+    properties_amount: str | None
+    """Deal amount"""
+    properties_closedate: str | None
+    """Expected close date of the deal"""
+    properties_createdate: str | None
+    """Date the deal was created"""
+    properties_dealname: str | None
+    """Deal name"""
+    properties_dealstage: str | None
+    """Current deal stage"""
+    properties_hs_lastmodifieddate: str | None
+    """Last modified date of the deal"""
+    properties_hs_object_id: str | None
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str | None
+    """ID of the HubSpot owner assigned to this deal"""
+    properties_pipeline: str | None
+    """Deal pipeline"""
     updated_at: str | None
     """Timestamp when the deal record was last modified"""
 
@@ -612,6 +770,24 @@ class DealsInFilter(TypedDict, total=False):
     """Collection of product line items associated with the deal"""
     properties: list[dict[str, Any]]
     """Key-value object containing all deal properties and custom fields"""
+    properties_amount: list[str]
+    """Deal amount"""
+    properties_closedate: list[str]
+    """Expected close date of the deal"""
+    properties_createdate: list[str]
+    """Date the deal was created"""
+    properties_dealname: list[str]
+    """Deal name"""
+    properties_dealstage: list[str]
+    """Current deal stage"""
+    properties_hs_lastmodifieddate: list[str]
+    """Last modified date of the deal"""
+    properties_hs_object_id: list[str]
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: list[str]
+    """ID of the HubSpot owner assigned to this deal"""
+    properties_pipeline: list[str]
+    """Deal pipeline"""
     updated_at: list[str]
     """Timestamp when the deal record was last modified"""
 
@@ -632,6 +808,24 @@ class DealsAnyValueFilter(TypedDict, total=False):
     """Collection of product line items associated with the deal"""
     properties: Any
     """Key-value object containing all deal properties and custom fields"""
+    properties_amount: Any
+    """Deal amount"""
+    properties_closedate: Any
+    """Expected close date of the deal"""
+    properties_createdate: Any
+    """Date the deal was created"""
+    properties_dealname: Any
+    """Deal name"""
+    properties_dealstage: Any
+    """Current deal stage"""
+    properties_hs_lastmodifieddate: Any
+    """Last modified date of the deal"""
+    properties_hs_object_id: Any
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: Any
+    """ID of the HubSpot owner assigned to this deal"""
+    properties_pipeline: Any
+    """Deal pipeline"""
     updated_at: Any
     """Timestamp when the deal record was last modified"""
 
@@ -652,6 +846,24 @@ class DealsStringFilter(TypedDict, total=False):
     """Collection of product line items associated with the deal"""
     properties: str
     """Key-value object containing all deal properties and custom fields"""
+    properties_amount: str
+    """Deal amount"""
+    properties_closedate: str
+    """Expected close date of the deal"""
+    properties_createdate: str
+    """Date the deal was created"""
+    properties_dealname: str
+    """Deal name"""
+    properties_dealstage: str
+    """Current deal stage"""
+    properties_hs_lastmodifieddate: str
+    """Last modified date of the deal"""
+    properties_hs_object_id: str
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str
+    """ID of the HubSpot owner assigned to this deal"""
+    properties_pipeline: str
+    """Deal pipeline"""
     updated_at: str
     """Timestamp when the deal record was last modified"""
 
@@ -672,6 +884,24 @@ class DealsSortFilter(TypedDict, total=False):
     """Collection of product line items associated with the deal"""
     properties: AirbyteSortOrder
     """Key-value object containing all deal properties and custom fields"""
+    properties_amount: AirbyteSortOrder
+    """Deal amount"""
+    properties_closedate: AirbyteSortOrder
+    """Expected close date of the deal"""
+    properties_createdate: AirbyteSortOrder
+    """Date the deal was created"""
+    properties_dealname: AirbyteSortOrder
+    """Deal name"""
+    properties_dealstage: AirbyteSortOrder
+    """Current deal stage"""
+    properties_hs_lastmodifieddate: AirbyteSortOrder
+    """Last modified date of the deal"""
+    properties_hs_object_id: AirbyteSortOrder
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: AirbyteSortOrder
+    """ID of the HubSpot owner assigned to this deal"""
+    properties_pipeline: AirbyteSortOrder
+    """Deal pipeline"""
     updated_at: AirbyteSortOrder
     """Timestamp when the deal record was last modified"""
 
@@ -784,7 +1014,25 @@ class TicketsSearchFilter(TypedDict, total=False):
     id: str | None
     """Unique identifier for the ticket record"""
     properties: dict[str, Any]
-    """Key-value object containing all ticket properties and custom fields"""
+    """Object containing all property values for the ticket"""
+    properties_content: str | None
+    """Ticket content/description"""
+    properties_createdate: str | None
+    """Date the ticket was created"""
+    properties_hs_lastmodifieddate: str | None
+    """Last modified date of the ticket"""
+    properties_hs_object_id: str | None
+    """HubSpot object ID"""
+    properties_hs_pipeline: str | None
+    """Ticket pipeline"""
+    properties_hs_pipeline_stage: str | None
+    """Current pipeline stage of the ticket"""
+    properties_hs_ticket_category: str | None
+    """Ticket category"""
+    properties_hs_ticket_priority: str | None
+    """Ticket priority level"""
+    properties_subject: str | None
+    """Ticket subject line"""
     updated_at: str | None
     """Timestamp when the ticket record was last modified"""
 
@@ -802,7 +1050,25 @@ class TicketsInFilter(TypedDict, total=False):
     id: list[str]
     """Unique identifier for the ticket record"""
     properties: list[dict[str, Any]]
-    """Key-value object containing all ticket properties and custom fields"""
+    """Object containing all property values for the ticket"""
+    properties_content: list[str]
+    """Ticket content/description"""
+    properties_createdate: list[str]
+    """Date the ticket was created"""
+    properties_hs_lastmodifieddate: list[str]
+    """Last modified date of the ticket"""
+    properties_hs_object_id: list[str]
+    """HubSpot object ID"""
+    properties_hs_pipeline: list[str]
+    """Ticket pipeline"""
+    properties_hs_pipeline_stage: list[str]
+    """Current pipeline stage of the ticket"""
+    properties_hs_ticket_category: list[str]
+    """Ticket category"""
+    properties_hs_ticket_priority: list[str]
+    """Ticket priority level"""
+    properties_subject: list[str]
+    """Ticket subject line"""
     updated_at: list[str]
     """Timestamp when the ticket record was last modified"""
 
@@ -820,7 +1086,25 @@ class TicketsAnyValueFilter(TypedDict, total=False):
     id: Any
     """Unique identifier for the ticket record"""
     properties: Any
-    """Key-value object containing all ticket properties and custom fields"""
+    """Object containing all property values for the ticket"""
+    properties_content: Any
+    """Ticket content/description"""
+    properties_createdate: Any
+    """Date the ticket was created"""
+    properties_hs_lastmodifieddate: Any
+    """Last modified date of the ticket"""
+    properties_hs_object_id: Any
+    """HubSpot object ID"""
+    properties_hs_pipeline: Any
+    """Ticket pipeline"""
+    properties_hs_pipeline_stage: Any
+    """Current pipeline stage of the ticket"""
+    properties_hs_ticket_category: Any
+    """Ticket category"""
+    properties_hs_ticket_priority: Any
+    """Ticket priority level"""
+    properties_subject: Any
+    """Ticket subject line"""
     updated_at: Any
     """Timestamp when the ticket record was last modified"""
 
@@ -838,7 +1122,25 @@ class TicketsStringFilter(TypedDict, total=False):
     id: str
     """Unique identifier for the ticket record"""
     properties: str
-    """Key-value object containing all ticket properties and custom fields"""
+    """Object containing all property values for the ticket"""
+    properties_content: str
+    """Ticket content/description"""
+    properties_createdate: str
+    """Date the ticket was created"""
+    properties_hs_lastmodifieddate: str
+    """Last modified date of the ticket"""
+    properties_hs_object_id: str
+    """HubSpot object ID"""
+    properties_hs_pipeline: str
+    """Ticket pipeline"""
+    properties_hs_pipeline_stage: str
+    """Current pipeline stage of the ticket"""
+    properties_hs_ticket_category: str
+    """Ticket category"""
+    properties_hs_ticket_priority: str
+    """Ticket priority level"""
+    properties_subject: str
+    """Ticket subject line"""
     updated_at: str
     """Timestamp when the ticket record was last modified"""
 
@@ -856,7 +1158,25 @@ class TicketsSortFilter(TypedDict, total=False):
     id: AirbyteSortOrder
     """Unique identifier for the ticket record"""
     properties: AirbyteSortOrder
-    """Key-value object containing all ticket properties and custom fields"""
+    """Object containing all property values for the ticket"""
+    properties_content: AirbyteSortOrder
+    """Ticket content/description"""
+    properties_createdate: AirbyteSortOrder
+    """Date the ticket was created"""
+    properties_hs_lastmodifieddate: AirbyteSortOrder
+    """Last modified date of the ticket"""
+    properties_hs_object_id: AirbyteSortOrder
+    """HubSpot object ID"""
+    properties_hs_pipeline: AirbyteSortOrder
+    """Ticket pipeline"""
+    properties_hs_pipeline_stage: AirbyteSortOrder
+    """Current pipeline stage of the ticket"""
+    properties_hs_ticket_category: AirbyteSortOrder
+    """Ticket category"""
+    properties_hs_ticket_priority: AirbyteSortOrder
+    """Ticket priority level"""
+    properties_subject: AirbyteSortOrder
+    """Ticket subject line"""
     updated_at: AirbyteSortOrder
     """Timestamp when the ticket record was last modified"""
 

@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: HubSpot API Connector
-  version: 0.1.18
+  version: 0.1.19
   description: |
     HubSpot is a CRM platform that provides tools for marketing, sales, customer service,
     and content management. This connector provides access to contacts, companies, deals,
@@ -75,6 +75,42 @@ info:
         type:
         - 'object'
         description: Object containing all property values for the company
+      - name: properties.createdate
+        x-airbyte-name: properties_createdate
+        type:
+        - 'null'
+        - 'string'
+        description: Date the company was created
+      - name: properties.domain
+        x-airbyte-name: properties_domain
+        type:
+        - 'null'
+        - 'string'
+        description: Company domain name
+      - name: properties.hs_lastmodifieddate
+        x-airbyte-name: properties_hs_lastmodifieddate
+        type:
+        - 'null'
+        - 'string'
+        description: Last modified date of the company
+      - name: properties.hs_object_id
+        x-airbyte-name: properties_hs_object_id
+        type:
+        - 'null'
+        - 'string'
+        description: HubSpot object ID
+      - name: properties.hubspot_owner_id
+        x-airbyte-name: properties_hubspot_owner_id
+        type:
+        - 'null'
+        - 'string'
+        description: ID of the HubSpot owner assigned to this company
+      - name: properties.name
+        x-airbyte-name: properties_name
+        type:
+        - 'null'
+        - 'string'
+        description: Company name
       - name: updatedAt
         type:
         - 'null'
@@ -88,31 +124,79 @@ info:
         type:
         - 'null'
         - 'boolean'
-        description: Boolean flag indicating whether the contact has been archived or deleted.
+        description: Boolean flag indicating whether the contact has been archived or deleted
       - name: companies
         type:
         - 'null'
         - 'array'
-        description: Associated company records linked to this contact.
+        description: Associated company records linked to this contact
       - name: createdAt
         type:
         - 'null'
         - 'string'
-        description: Timestamp indicating when the contact was first created in the system.
+        description: Timestamp indicating when the contact was first created in the system
       - name: id
         type:
         - 'null'
         - 'string'
-        description: Unique identifier for the contact record.
+        description: Unique identifier for the contact record
       - name: properties
         type:
         - 'object'
         description: "Key-value object storing all contact properties and their values."
+      - name: properties.associatedcompanyid
+        x-airbyte-name: properties_associatedcompanyid
+        type:
+        - 'null'
+        - 'string'
+        description: ID of the associated company
+      - name: properties.createdate
+        x-airbyte-name: properties_createdate
+        type:
+        - 'null'
+        - 'string'
+        description: Date the contact was created
+      - name: properties.email
+        x-airbyte-name: properties_email
+        type:
+        - 'null'
+        - 'string'
+        description: Contact email address
+      - name: properties.firstname
+        x-airbyte-name: properties_firstname
+        type:
+        - 'null'
+        - 'string'
+        description: Contact first name
+      - name: properties.hs_object_id
+        x-airbyte-name: properties_hs_object_id
+        type:
+        - 'null'
+        - 'string'
+        description: HubSpot object ID
+      - name: properties.hubspot_owner_id
+        x-airbyte-name: properties_hubspot_owner_id
+        type:
+        - 'null'
+        - 'string'
+        description: ID of the HubSpot owner assigned to this contact
+      - name: properties.lastmodifieddate
+        x-airbyte-name: properties_lastmodifieddate
+        type:
+        - 'null'
+        - 'string'
+        description: Last modified date of the contact
+      - name: properties.lastname
+        x-airbyte-name: properties_lastname
+        type:
+        - 'null'
+        - 'string'
+        description: Contact last name
       - name: updatedAt
         type:
         - 'null'
         - 'string'
-        description: Timestamp indicating when the contact record was last modified.
+        description: Timestamp indicating when the contact record was last modified
     - entity: deals
       x-airbyte-name: deals
       suggested: true
@@ -151,6 +235,60 @@ info:
         type:
         - 'object'
         description: "Key-value object containing all deal properties and custom fields"
+      - name: properties.amount
+        x-airbyte-name: properties_amount
+        type:
+        - 'null'
+        - 'string'
+        description: Deal amount
+      - name: properties.closedate
+        x-airbyte-name: properties_closedate
+        type:
+        - 'null'
+        - 'string'
+        description: Expected close date of the deal
+      - name: properties.createdate
+        x-airbyte-name: properties_createdate
+        type:
+        - 'null'
+        - 'string'
+        description: Date the deal was created
+      - name: properties.dealname
+        x-airbyte-name: properties_dealname
+        type:
+        - 'null'
+        - 'string'
+        description: Deal name
+      - name: properties.dealstage
+        x-airbyte-name: properties_dealstage
+        type:
+        - 'null'
+        - 'string'
+        description: Current deal stage
+      - name: properties.hs_lastmodifieddate
+        x-airbyte-name: properties_hs_lastmodifieddate
+        type:
+        - 'null'
+        - 'string'
+        description: Last modified date of the deal
+      - name: properties.hs_object_id
+        x-airbyte-name: properties_hs_object_id
+        type:
+        - 'null'
+        - 'string'
+        description: HubSpot object ID
+      - name: properties.hubspot_owner_id
+        x-airbyte-name: properties_hubspot_owner_id
+        type:
+        - 'null'
+        - 'string'
+        description: ID of the HubSpot owner assigned to this deal
+      - name: properties.pipeline
+        x-airbyte-name: properties_pipeline
+        type:
+        - 'null'
+        - 'string'
+        description: Deal pipeline
       - name: updatedAt
         type:
         - 'null'
@@ -188,7 +326,61 @@ info:
       - name: properties
         type:
         - 'object'
-        description: "Key-value object containing all ticket properties and custom fields"
+        description: Object containing all property values for the ticket
+      - name: properties.content
+        x-airbyte-name: properties_content
+        type:
+        - 'null'
+        - 'string'
+        description: Ticket content/description
+      - name: properties.createdate
+        x-airbyte-name: properties_createdate
+        type:
+        - 'null'
+        - 'string'
+        description: Date the ticket was created
+      - name: properties.hs_lastmodifieddate
+        x-airbyte-name: properties_hs_lastmodifieddate
+        type:
+        - 'null'
+        - 'string'
+        description: Last modified date of the ticket
+      - name: properties.hs_object_id
+        x-airbyte-name: properties_hs_object_id
+        type:
+        - 'null'
+        - 'string'
+        description: HubSpot object ID
+      - name: properties.hs_pipeline
+        x-airbyte-name: properties_hs_pipeline
+        type:
+        - 'null'
+        - 'string'
+        description: Ticket pipeline
+      - name: properties.hs_pipeline_stage
+        x-airbyte-name: properties_hs_pipeline_stage
+        type:
+        - 'null'
+        - 'string'
+        description: Current pipeline stage of the ticket
+      - name: properties.hs_ticket_category
+        x-airbyte-name: properties_hs_ticket_category
+        type:
+        - 'null'
+        - 'string'
+        description: Ticket category
+      - name: properties.hs_ticket_priority
+        x-airbyte-name: properties_hs_ticket_priority
+        type:
+        - 'null'
+        - 'string'
+        description: Ticket priority level
+      - name: properties.subject
+        x-airbyte-name: properties_subject
+        type:
+        - 'null'
+        - 'string'
+        description: Ticket subject line
       - name: updatedAt
         type:
         - 'null'

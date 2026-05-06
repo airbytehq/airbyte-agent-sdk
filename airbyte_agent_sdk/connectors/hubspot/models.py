@@ -213,23 +213,6 @@ class SchemaLabels(BaseModel):
     singular: str | None = Field(default=None)
     plural: str | None = Field(default=None)
 
-class SchemaAssociationsItem(BaseModel):
-    """Nested schema for Schema.associations_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    from_object_type_id: str | None = Field(default=None, alias="fromObjectTypeId")
-    to_object_type_id: str | None = Field(default=None, alias="toObjectTypeId")
-    name: str | None = Field(default=None)
-    cardinality: str | None = Field(default=None)
-    id: str | None = Field(default=None)
-    inverse_cardinality: str | None = Field(default=None, alias="inverseCardinality")
-    has_user_enforced_max_to_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxToObjectIds")
-    has_user_enforced_max_from_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxFromObjectIds")
-    max_to_object_ids: int | None = Field(default=None, alias="maxToObjectIds")
-    max_from_object_ids: int | None = Field(default=None, alias="maxFromObjectIds")
-    created_at: str | None | None = Field(default=None, alias="createdAt")
-    updated_at: str | None | None = Field(default=None, alias="updatedAt")
-
 class SchemaPropertiesItemModificationmetadata(BaseModel):
     """Nested schema for SchemaPropertiesItem.modificationMetadata"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -265,6 +248,23 @@ class SchemaPropertiesItem(BaseModel):
     updated_user_id: str | None = Field(default=None, alias="updatedUserId")
     show_currency_symbol: bool | None = Field(default=None, alias="showCurrencySymbol")
     modification_metadata: SchemaPropertiesItemModificationmetadata | None = Field(default=None, alias="modificationMetadata")
+
+class SchemaAssociationsItem(BaseModel):
+    """Nested schema for Schema.associations_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    from_object_type_id: str | None = Field(default=None, alias="fromObjectTypeId")
+    to_object_type_id: str | None = Field(default=None, alias="toObjectTypeId")
+    name: str | None = Field(default=None)
+    cardinality: str | None = Field(default=None)
+    id: str | None = Field(default=None)
+    inverse_cardinality: str | None = Field(default=None, alias="inverseCardinality")
+    has_user_enforced_max_to_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxToObjectIds")
+    has_user_enforced_max_from_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxFromObjectIds")
+    max_to_object_ids: int | None = Field(default=None, alias="maxToObjectIds")
+    max_from_object_ids: int | None = Field(default=None, alias="maxFromObjectIds")
+    created_at: str | None | None = Field(default=None, alias="createdAt")
+    updated_at: str | None | None = Field(default=None, alias="updatedAt")
 
 class Schema(BaseModel):
     """Custom object schema definition"""
@@ -462,6 +462,18 @@ class CompaniesSearchData(BaseModel):
     """Unique identifier for the company record"""
     properties: dict[str, Any] = None
     """Object containing all property values for the company"""
+    properties_createdate: str | None = None
+    """Date the company was created"""
+    properties_domain: str | None = None
+    """Company domain name"""
+    properties_hs_lastmodifieddate: str | None = None
+    """Last modified date of the company"""
+    properties_hs_object_id: str | None = None
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str | None = None
+    """ID of the HubSpot owner assigned to this company"""
+    properties_name: str | None = None
+    """Company name"""
     updated_at: str | None = None
     """Timestamp when the company record was last modified"""
 
@@ -471,17 +483,33 @@ class ContactsSearchData(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     archived: bool | None = None
-    """Boolean flag indicating whether the contact has been archived or deleted."""
+    """Boolean flag indicating whether the contact has been archived or deleted"""
     companies: list[Any] | None = None
-    """Associated company records linked to this contact."""
+    """Associated company records linked to this contact"""
     created_at: str | None = None
-    """Timestamp indicating when the contact was first created in the system."""
+    """Timestamp indicating when the contact was first created in the system"""
     id: str | None = None
-    """Unique identifier for the contact record."""
+    """Unique identifier for the contact record"""
     properties: dict[str, Any] = None
     """Key-value object storing all contact properties and their values."""
+    properties_associatedcompanyid: str | None = None
+    """ID of the associated company"""
+    properties_createdate: str | None = None
+    """Date the contact was created"""
+    properties_email: str | None = None
+    """Contact email address"""
+    properties_firstname: str | None = None
+    """Contact first name"""
+    properties_hs_object_id: str | None = None
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str | None = None
+    """ID of the HubSpot owner assigned to this contact"""
+    properties_lastmodifieddate: str | None = None
+    """Last modified date of the contact"""
+    properties_lastname: str | None = None
+    """Contact last name"""
     updated_at: str | None = None
-    """Timestamp indicating when the contact record was last modified."""
+    """Timestamp indicating when the contact record was last modified"""
 
 
 class DealsSearchData(BaseModel):
@@ -502,6 +530,24 @@ class DealsSearchData(BaseModel):
     """Collection of product line items associated with the deal"""
     properties: dict[str, Any] = None
     """Key-value object containing all deal properties and custom fields"""
+    properties_amount: str | None = None
+    """Deal amount"""
+    properties_closedate: str | None = None
+    """Expected close date of the deal"""
+    properties_createdate: str | None = None
+    """Date the deal was created"""
+    properties_dealname: str | None = None
+    """Deal name"""
+    properties_dealstage: str | None = None
+    """Current deal stage"""
+    properties_hs_lastmodifieddate: str | None = None
+    """Last modified date of the deal"""
+    properties_hs_object_id: str | None = None
+    """HubSpot object ID"""
+    properties_hubspot_owner_id: str | None = None
+    """ID of the HubSpot owner assigned to this deal"""
+    properties_pipeline: str | None = None
+    """Deal pipeline"""
     updated_at: str | None = None
     """Timestamp when the deal record was last modified"""
 
@@ -521,7 +567,25 @@ class TicketsSearchData(BaseModel):
     id: str | None = None
     """Unique identifier for the ticket record"""
     properties: dict[str, Any] = None
-    """Key-value object containing all ticket properties and custom fields"""
+    """Object containing all property values for the ticket"""
+    properties_content: str | None = None
+    """Ticket content/description"""
+    properties_createdate: str | None = None
+    """Date the ticket was created"""
+    properties_hs_lastmodifieddate: str | None = None
+    """Last modified date of the ticket"""
+    properties_hs_object_id: str | None = None
+    """HubSpot object ID"""
+    properties_hs_pipeline: str | None = None
+    """Ticket pipeline"""
+    properties_hs_pipeline_stage: str | None = None
+    """Current pipeline stage of the ticket"""
+    properties_hs_ticket_category: str | None = None
+    """Ticket category"""
+    properties_hs_ticket_priority: str | None = None
+    """Ticket priority level"""
+    properties_subject: str | None = None
+    """Ticket subject line"""
     updated_at: str | None = None
     """Timestamp when the ticket record was last modified"""
 
