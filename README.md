@@ -14,13 +14,13 @@ uv pip install airbyte-agent-sdk
 
 ## Documentation
 
-Full documentation is available at [docs.airbyte.com/ai-agents/about/](https://docs.airbyte.com/ai-agents/about/).
+Full documentation is available at [docs.airbyte.com/ai-agents](https://docs.airbyte.com/ai-agents).
 
 ## Tool integration
 
 The SDK ships two decorators for turning a connector call into an LLM tool with retry-aware exception translation, output-size guards, and framework-specific error signalling.
 
-- **`@<Connector>.tool_utils`** — preferred for typed connectors. Auto-detects the installed framework (pydantic-ai, LangChain, OpenAI Agents, or FastMCP) and composes [`translate_exceptions`](https://airbytehq.github.io/airbyte-embedded/airbyte_agent_sdk/translation.html) under the hood. Pass `framework="..."` to override auto-detection. Forwards `update_docstring`, `max_output_chars`, `framework`, `internal_retries`, `should_internal_retry`, and `exhausted_runtime_failure_message`.
+- **`@<Connector>.tool_utils`** — preferred for typed connectors. Auto-detects the installed framework (pydantic-ai, LangChain, OpenAI Agents, or FastMCP) and composes [`translate_exceptions`](https://docs.airbyte.com/ai-agents/reference/sdk/airbyte_agent_sdk/translation) under the hood. Pass `framework="..."` to override auto-detection. Forwards `update_docstring`, `max_output_chars`, `framework`, `internal_retries`, `should_internal_retry`, and `exhausted_runtime_failure_message`.
 - **`@translate_exceptions`** — same translation behaviour for any callable that is not a generated `Connector` (custom helpers, eval harnesses, ad-hoc tools).
 
 Both decorators preserve sync/async, `__name__`, and `__doc__`. Transient runtime failures (429/5xx, network, timeout) can be retried silently via `internal_retries=N` on **either** decorator. Output exceeding `max_output_chars` (default 100 KB) is converted to the framework's retry signal so the LLM can narrow the query.
@@ -107,7 +107,7 @@ async def list_customers(limit: int = 10) -> list[dict]:
 
 Failures raise `fastmcp.exceptions.ToolError`, which FastMCP serialises as an MCP error response to the client.
 
-See the [`translate_exceptions`](https://airbytehq.github.io/airbyte-embedded/airbyte_agent_sdk/translation.html) reference for advanced kwargs (`internal_retries`, `should_internal_retry`, `exhausted_runtime_failure_message`).
+See the [`translate_exceptions`](https://docs.airbyte.com/ai-agents/reference/sdk/airbyte_agent_sdk/translation) reference for advanced kwargs (`internal_retries`, `should_internal_retry`, `exhausted_runtime_failure_message`).
 
 ## How to install the skills
 
@@ -133,4 +133,4 @@ git clone https://github.com/airbytehq/airbyte-agent-sdk ~/.codex/skills/airbyte
 ln -s ~/.codex/skills/airbyte-agent-sdk-src/connector-sdk/.claude/skills/* ~/.codex/skills/
 ```
 
-See [docs.airbyte.com/ai-agents/about/](https://docs.airbyte.com/ai-agents/about/) for full documentation.
+See [docs.airbyte.com/ai-agents](https://docs.airbyte.com/ai-agents) for full documentation.
