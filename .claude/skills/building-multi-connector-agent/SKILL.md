@@ -9,13 +9,13 @@ Use this when an agent needs two or more Airbyte connectors.
 
 ## Going from Single to Multi
 
-The `bootstrapping-agent` skill shows the single-connector pattern: direct class construction with `AirbyteAuthConfig` + `@Connector.tool_utils` decorator. Multi-connector agents use the **same pattern**, just repeated:
+The `bootstrapping-agent` skill shows the default single-connector pattern: `AirbyteAuthConfig` plus `build_connector_tools`. The builder's `execute`, `inspect_connector`, and `read_skill_docs` names are fixed, so the tool sets for more than one connector collide when registered on the same agent. Renaming the callables at registration avoids the collision, but the generated `execute` guidance still names `inspect_connector` and `read_skill_docs`, pointing the model at the wrong tools. Multi-connector agents write their own tool functions with `@Connector.agent_tool(...)`, which weaves the real names in through `inspect_tool=` and `docs_tool=`:
 
 1. Build a single `AirbyteAuthConfig(...)` so credentials are shared across connectors.
 2. Construct one typed connector per service (e.g. `JiraConnector(auth_config=auth)`).
-3. Define one tool function per connector, each with its own `@Connector.tool_utils` decorator.
+3. Define execute, inspect, and docs functions for each connector, each with its own `@Connector.agent_tool(...)` decorator.
 
-There are no new APIs — same install, same constructor, same classmethod decorator.
+Use connector-specific function names so the framework registers six unambiguous tools for two connectors.
 
 ## Install the SDK
 
@@ -23,7 +23,7 @@ There are no new APIs — same install, same constructor, same classmethod decor
 uv pip install airbyte-agent-sdk
 ```
 
-The single `airbyte-agent-sdk` package bundles every typed connector, so `tool_utils`, `list_entities()`, and `entity_schema()` are available on each one without per-connector installs.
+The single `airbyte-agent-sdk` package bundles every typed connector without per-connector installs.
 
 ## Core Pattern (PydanticAI)
 
@@ -47,11 +47,11 @@ slack = SlackConnector(auth_config=auth)
 
 If the workspace contains multiple connectors of the same type, pin one by passing `connector_id=os.getenv("JIRA_CONNECTOR_ID")` to the constructor.
 
-## One Tool Per Connector
+## Three Progressive Tools Per Connector
 
-Each connector gets its own tool function — don't combine them into a mega-tool. Separate tools give the LLM clear, independent tool descriptions.
+Each connector gets its own execute, inspect, and docs functions. Do not combine connectors into a mega-tool; separate names give the LLM clear, independent tool descriptions and let it read only the relevant connector docs.
 
-`tool_utils` is a `@classmethod` — decorate with `@JiraConnector.tool_utils`, not `@jira.tool_utils`.
+`agent_tool` is a `@classmethod` — decorate with `@JiraConnector.agent_tool(...)`, not `@jira.agent_tool(...)`.
 
 ```python
 agent = Agent(
@@ -64,15 +64,47 @@ agent = Agent(
 )
 
 @agent.tool_plain
-@JiraConnector.tool_utils
+@JiraConnector.agent_tool(
+    framework="pydantic_ai",
+    inspect_tool="jira_inspect",
+    docs_tool="jira_read_docs",
+)
 async def jira_execute(entity: str, action: str, params: dict | None = None):
     return await jira.execute(entity, action, params or {})
 
 @agent.tool_plain
-@SlackConnector.tool_utils
+@JiraConnector.agent_tool(framework="pydantic_ai")
+async def jira_inspect():
+    return await jira.inspect_connector()
+
+@agent.tool_plain
+@JiraConnector.agent_tool(framework="pydantic_ai")
+async def jira_read_docs(section: str | None = None):
+    return await jira.read_skill_docs(section)
+
+@agent.tool_plain
+@SlackConnector.agent_tool(
+    framework="pydantic_ai",
+    inspect_tool="slack_inspect",
+    docs_tool="slack_read_docs",
+)
 async def slack_execute(entity: str, action: str, params: dict | None = None):
     return await slack.execute(entity, action, params or {})
+
+@agent.tool_plain
+@SlackConnector.agent_tool(framework="pydantic_ai")
+async def slack_inspect():
+    return await slack.inspect_connector()
+
+@agent.tool_plain
+@SlackConnector.agent_tool(framework="pydantic_ai")
+async def slack_read_docs(section: str | None = None):
+    return await slack.read_skill_docs(section)
 ```
+
+For LangChain, OpenAI Agents, or FastMCP, keep the same three-functions-per-connector structure and change `framework=` plus the outer registration decorator. Omit `framework=` for unsupported frameworks and handle `AirbyteToolError` in the dispatch loop.
+
+`Connector.tool_utils` is deprecated and remains available only for backwards compatibility with existing one-tool integrations. Do not generate it for new multi-connector agents.
 
 ## System Prompt
 
@@ -145,7 +177,7 @@ AIRBYTE_WORKSPACE_NAME=your_workspace_name
 
 ## References
 
-- [SDK API reference](../airbyte-sdk-reference/sdk-api.md) — `AirbyteAuthConfig`, typed connector constructors, `tool_utils`
+- [SDK API reference](../airbyte-sdk-reference/sdk-api.md) — `AirbyteAuthConfig`, `build_connector_tools`, and `agent_tool`
 - [PydanticAI patterns](../airbyte-sdk-reference/pydantic-ai.md) — multi-connector example
 - [Claude SDK patterns](../airbyte-sdk-reference/claude-sdk.md) — multi-connector example
 - [Connector discovery](../airbyte-sdk-reference/connector-discovery.md) — finding available connectors

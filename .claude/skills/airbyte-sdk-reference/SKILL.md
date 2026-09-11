@@ -9,7 +9,7 @@ Reference documentation for the Airbyte per-connector typed SDK packages. Use fo
 
 ## Contents
 
-- [SDK API](./sdk-api.md) — public API surface: `configure()`, `connect()`, `Workspace`, `tool_utils`, `list_entities()`, `entity_schema()`.
+- [SDK API](./sdk-api.md) — public API surface: `configure()`, `connect()`, `build_connector_tools()`, `agent_tool`, deprecated `tool_utils`, `list_entities()`, and `entity_schema()`.
 - [Connector discovery](./connector-discovery.md) — enumerating available connectors and locating per-connector documentation.
 - [PydanticAI patterns](./pydantic-ai.md) — wiring typed connectors into PydanticAI agents.
 - [Claude SDK patterns](./claude-sdk.md) — wiring typed connectors into the Anthropic Python SDK.
