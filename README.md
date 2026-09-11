@@ -22,18 +22,18 @@ Full documentation is available at [docs.airbyte.com/ai-agents/about/](https://d
 
 ## Tool integration
 
-The SDK ships a hosted tool builder and two decorators for turning connector calls into LLM tools with retry-aware exception translation, output-size guards, and framework-specific error signalling.
+The SDK ships a tool builder and two connector-tool decorators for turning connector calls into LLM tools with retry-aware exception translation, output-size guards, and framework-specific error signalling, plus `translate_exceptions` for callables that are not connector tools. Pick from these in this order:
 
-- **`build_connector_tools(connector, framework="...")`** — preferred for hosted connector agents. Returns `inspect_connector`, `read_skill_docs`, and `execute` callables bound to one connector. Hosted connectors, or local connectors passed an explicit `docs_provider`, use outline-only guidance and tell the agent to inspect/read docs before execution; local/offline connectors without a docs provider keep generated YAML-derived rich docs. Pass `use_progressive_docs=False` to make `tools.as_list()` expose only `execute` with the legacy rich description.
-- **`@<Connector>.agent_tool(...)`** — preferred when you write your own tool functions, especially on frameworks the SDK does not natively support. The progressive-docs sibling of `tool_utils`: decorate three functions (execute, inspect, docs) and the execute docstring steers the agent through the inspect → docs → execute flow instead of embedding the full entity/action reference. Tool failures raise `AirbyteToolError` by default (`framework="none"`, no auto-detection); pass `framework="..."` to target a supported framework's signal.
-- **`@<Connector>.tool_utils`** — preferred for typed connectors on supported frameworks. Auto-detects the installed framework (pydantic-ai, LangChain, OpenAI Agents, or FastMCP; falls back to `framework="none"` with a warning when none is installed) and composes [`translate_exceptions`](https://airbytehq.github.io/sonar/airbyte_agent_sdk/translation.html) under the hood. Pass `framework="..."` to override auto-detection. Forwards `update_docstring`, `max_output_chars`, `framework`, `internal_retries`, `should_internal_retry`, and `exhausted_runtime_failure_message`.
+- **`build_connector_tools(connector, framework="...")`** — the simplest, preferred default on supported frameworks (PydanticAI, LangChain, OpenAI Agents, FastMCP) when you do not need custom tool bodies. Returns `inspect_connector`, `read_skill_docs`, and `execute` callables bound to one connector; the tool names are fixed, so register one connector's tool set per agent. Hosted connectors, or local connectors passed an explicit `docs_provider`, use outline-only guidance and tell the agent to inspect/read docs before execution; local/offline connectors without a docs provider keep generated YAML-derived rich docs. Pass `use_progressive_docs=False` to make `tools.as_list()` expose only `execute` with the legacy rich description.
+- **`@<Connector>.agent_tool(...)`** — use when you need custom tool bodies, a framework the SDK does not natively support, or a multi-connector agent. Decorate three functions (execute, inspect, docs) and the execute docstring steers the agent through the inspect → docs → execute flow instead of embedding the full entity/action reference. On supported frameworks pass `framework="pydantic_ai"`, `"langchain"`, `"openai_agents"`, or `"mcp"` to target that framework's failure signal; on unsupported frameworks omit it and failures raise `AirbyteToolError` (`framework="none"`; no auto-detection).
+- **`@<Connector>.tool_utils`** — deprecated; retained only for backwards compatibility with existing integrations that use one broad, generated-description tool. Do not use it for new tools. It auto-detects supported frameworks and remains available so existing integrations can migrate independently.
 - **`@translate_exceptions`** — same translation behaviour for any callable that is not a generated `Connector` (custom helpers, eval harnesses, ad-hoc tools).
 
 The builder and decorators preserve async callables, `__name__`, and `__doc__`. Transient runtime failures (429/5xx, network, timeout) can be retried silently via `internal_retries=N`. Output exceeding `max_output_chars` (default 100 KB) is converted to the framework's retry signal so the LLM can narrow the query.
 
-> **Pick one decorator per tool.** Stacking `@translate_exceptions` over `@<Connector>.tool_utils` (or vice versa) is detected at decoration time: the inner layer is preserved and the outer layer logs a warning and short-circuits, so double-translation is impossible.
+> **Pick one SDK decorator per tool.** `agent_tool` and legacy `tool_utils` already include exception translation. Stacking `@translate_exceptions` with either decorator is detected and short-circuited.
 
-### Hosted connector tools
+### Prebuilt connector tools (default)
 
 ```python
 from pydantic_ai import Agent
@@ -55,6 +55,8 @@ agent = Agent("openai:gpt-4o", tools=tools.as_list())
 
 The model-facing docs flow is `inspect_connector()` -> `read_skill_docs()` -> `read_skill_docs(section="...")` -> `execute(...)`. The docs tool binds the hosted `docs_skill_id` internally, so the model only passes an optional `section`.
 
+The builder covers one connector per agent — the tool names are fixed (`inspect_connector`, `read_skill_docs`, `execute`), so the tool sets for multiple connectors collide when registered on the same agent. Renaming the callables at registration avoids the collision, but the generated `execute` guidance still tells the model to call `inspect_connector` and `read_skill_docs`, so it points at the wrong tools. Multi-connector agents use `agent_tool` with connector-specific function names, which weaves those names into the guidance via `inspect_tool=` and `docs_tool=`.
+
 To opt out of the progressive inspect/docs flow:
 
 ```python
@@ -62,123 +64,99 @@ tools = build_connector_tools(stripe, framework="pydantic_ai", use_progressive_d
 agent = Agent("openai:gpt-4o", tools=tools.as_list())  # exposes execute only
 ```
 
-### Unsupported frameworks — `agent_tool`
+### Custom tool bodies and unsupported frameworks — `agent_tool`
 
-For frameworks without a native strategy (or any harness that consumes plain
-callables), write the three tool functions yourself and decorate each with
+When you need custom tool bodies, or when your framework is not one the SDK
+natively supports, write the three functions yourself and decorate each with
 `agent_tool`. The role is inferred from the signature — `(entity, action, ...)`
 is execute, `(section, ...)` is docs, `()` is inspect — or pass it explicitly
 (`agent_tool("execute")`). Extra parameters are allowed.
 
 ```python
-from airbyte_agent_sdk import AirbyteToolError
 from airbyte_agent_sdk.connectors.stripe import StripeConnector
 from airbyte_agent_sdk.types import AirbyteAuthConfig
+from pydantic_ai import Agent
 
 stripe = StripeConnector(auth_config=AirbyteAuthConfig(...))
+agent = Agent("openai:gpt-4o")
 
-@StripeConnector.agent_tool(inspect_tool="stripe_inspect", docs_tool="stripe_read_docs")
+@agent.tool_plain
+@StripeConnector.agent_tool(
+    framework="pydantic_ai",
+    inspect_tool="stripe_inspect",
+    docs_tool="stripe_read_docs",
+)
 async def stripe_execute(entity: str, action: str, params: dict | None = None):
     result = await stripe.execute(entity, action, params or {})
     return result.data if hasattr(result, "data") else result
 
-@StripeConnector.agent_tool()
+@agent.tool_plain
+@StripeConnector.agent_tool(framework="pydantic_ai")
 async def stripe_inspect():
     return await stripe.inspect_connector()
 
-@StripeConnector.agent_tool()
+@agent.tool_plain
+@StripeConnector.agent_tool(framework="pydantic_ai")
 async def stripe_read_docs(section: str | None = None):
     return await stripe.read_skill_docs(section)
-
-# Register the three callables with your framework of choice. Failures raise
-# AirbyteToolError — catch it in your tool-dispatch loop and feed the message
-# back to the model.
 ```
 
 The optional `inspect_tool=`/`docs_tool=` kwargs weave the exact registered
 sibling-tool names into the execute docstring for tighter steering; omitting
-them uses generic phrasing. On a supported framework, pass `framework="..."`
-to raise that framework's retry signal instead of `AirbyteToolError`.
+them uses generic phrasing. Register the same three-function pattern with any
+other framework and set `framework=` to match it.
 
-### pydantic-ai
+`framework=` decides what a tool failure looks like to the agent. This applies
+equally to `build_connector_tools`, `agent_tool`, and `translate_exceptions`:
+
+| `framework=` | Tool failures surface as | Framework-side wiring |
+|--------------|--------------------------|-----------------------|
+| `"pydantic_ai"` | raises `pydantic_ai.ModelRetry` | none — the agent retries |
+| `"langchain"` | raises `langchain_core.tools.ToolException` | pass `handle_tool_error=True` to the tool so the message goes back to the model instead of aborting the run |
+| `"openai_agents"` | returns the failure message as the tool result | register with `function_tool(..., strict_mode=False)` for `params: dict` |
+| `"mcp"` | raises `fastmcp.exceptions.ToolError` | FastMCP serializes it as an errored tool result |
+| `"none"` | raises `airbyte_agent_sdk.AirbyteToolError` | catch it in your dispatch loop and hand the message to the model |
+
+An explicit `framework=` whose package is not installed raises `RuntimeError` at
+call time. `agent_tool` defaults to `"none"` and never auto-detects;
+`build_connector_tools`, `tool_utils`, and `translate_exceptions` auto-detect
+when `framework` is omitted and fall back to `"none"` with a warning if no
+supported framework is installed.
+
+On a framework the SDK does not support natively, omit `framework=` and handle
+the failure yourself:
 
 ```python
-from pydantic_ai import Agent
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
+from airbyte_agent_sdk import AirbyteToolError
 
-agent = Agent("openai:gpt-4o")
+# `handlers` maps each registered tool name to its decorated function;
+# `tool_name`/`tool_args` come from the model's tool call.
+handlers = {fn.__name__: fn for fn in (stripe_inspect, stripe_read_docs, stripe_execute)}
 
-@agent.tool_plain
+try:
+    content = await handlers[tool_name](**tool_args)
+except AirbyteToolError as err:
+    content = str(err)  # return to the model as an errored tool result
+```
+
+### Legacy: `tool_utils`
+
+Existing integrations can keep `tool_utils` without changing behavior:
+
+```python
+legacy_agent = Agent("openai:gpt-4o")
+
+@legacy_agent.tool_plain
 @StripeConnector.tool_utils
-async def list_customers(limit: int = 10) -> list[dict]:
-    async with StripeConnector(connector_id="src_123") as stripe:
-        result = await stripe.execute("customers", "list", params={"limit": limit})
-        return result.data
+async def legacy_stripe_execute(entity: str, action: str, params: dict | None = None):
+    result = await stripe.execute(entity, action, params or {})
+    return result.data if hasattr(result, "data") else result
 ```
 
-Failures raise `pydantic_ai.ModelRetry` so the agent can retry with corrected arguments.
-
-### LangChain
-
-```python
-from langchain_core.tools import StructuredTool
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-
-@StripeConnector.tool_utils(framework="langchain")
-async def list_customers(limit: int = 10) -> list[dict]:
-    async with StripeConnector(connector_id="src_123") as stripe:
-        result = await stripe.execute("customers", "list", params={"limit": limit})
-        return result.data
-
-tool = StructuredTool.from_function(
-    coroutine=list_customers,
-    name="list_customers",
-    description="List Stripe customers.",
-    handle_tool_error=True,  # surfaces ToolException as the tool's string result
-)
-```
-
-Failures raise `langchain_core.tools.ToolException`; `handle_tool_error=True` turns that into the tool's string result for the LLM.
-
-> Alternative for non-typed callables: replace `@StripeConnector.tool_utils(framework="langchain")` with `@translate_exceptions(framework="langchain")` from `airbyte_agent_sdk`.
-
-### OpenAI Agents
-
-```python
-from agents import Agent, function_tool
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-
-@function_tool
-@StripeConnector.tool_utils(framework="openai_agents")
-async def list_customers(limit: int = 10) -> list[dict]:
-    async with StripeConnector(connector_id="src_123") as stripe:
-        result = await stripe.execute("customers", "list", params={"limit": limit})
-        return result.data
-
-agent = Agent(name="stripe", tools=[list_customers])
-```
-
-Note: the OpenAI Agents strategy uses **catch-and-return-string semantics** — `tool_utils` catches the failure and *returns* a string (e.g. `"ConnectorValidationError: entity must be one of: ..."`) instead of raising. The OpenAI runner serialises this string verbatim into the tool result the LLM sees.
-
-> Alternative for non-typed callables: replace `@StripeConnector.tool_utils(framework="openai_agents")` with `@translate_exceptions(framework="openai_agents")` from `airbyte_agent_sdk`.
-
-### FastMCP
-
-```python
-from fastmcp import FastMCP
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-
-mcp = FastMCP("stripe-tools")
-
-@mcp.tool()
-@StripeConnector.tool_utils(framework="mcp")
-async def list_customers(limit: int = 10) -> list[dict]:
-    async with StripeConnector(connector_id="src_123") as stripe:
-        result = await stripe.execute("customers", "list", params={"limit": limit})
-        return result.data
-```
-
-Failures raise `fastmcp.exceptions.ToolError`, which FastMCP serialises as an MCP error response to the client.
+`tool_utils` embeds the full generated connector catalog in one tool description
+and auto-detects the installed supported framework. It is deprecated and kept
+only so existing integrations can migrate independently; new code uses
+`build_connector_tools` or `agent_tool(framework="...")`.
 
 See the [`translate_exceptions`](https://airbytehq.github.io/sonar/airbyte_agent_sdk/translation.html) reference for advanced kwargs (`internal_retries`, `should_internal_retry`, `exhausted_runtime_failure_message`).
 

@@ -239,6 +239,7 @@ connector = connect("{{ connector_name }}", workspace_name="<your_workspace_name
     connector_name,
     package_name,
     connect_exec_init_lines,
+    custom_tools_heading="#### Custom tool bodies",
     alternatives_heading="#### Legacy alternatives",
 ) }}
 
@@ -264,6 +265,7 @@ connector = {{ class_name }}(
     package_name,
     hosted_exec_init_lines,
     include_recommendation=False,
+    include_custom_tools=False,
     include_alternatives=False,
 ) }}
 

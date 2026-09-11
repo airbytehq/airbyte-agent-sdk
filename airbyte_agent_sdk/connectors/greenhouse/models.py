@@ -30,10 +30,19 @@ class GreenhouseAuthConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class CandidateSocialMediaAddressesItem(BaseModel):
-    """Nested schema for Candidate.social_media_addresses_item"""
+class CandidateCustomFields(BaseModel):
+    """Nested schema for Candidate.custom_fields"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
+    name: str | None | None = Field(default=None)
+    type_: str | None | None = Field(default=None, alias="type")
+    value: Any | None = Field(default=None)
+
+class CandidateWebsiteAddressesItem(BaseModel):
+    """Nested schema for Candidate.website_addresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
 class CandidatePhoneNumbersItem(BaseModel):
@@ -43,13 +52,11 @@ class CandidatePhoneNumbersItem(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
-class CandidateCustomFields(BaseModel):
-    """Nested schema for Candidate.custom_fields"""
+class CandidateSocialMediaAddressesItem(BaseModel):
+    """Nested schema for Candidate.social_media_addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    name: str | None | None = Field(default=None)
-    type_: str | None | None = Field(default=None, alias="type")
-    value: Any | None = Field(default=None)
+    value: str | None | None = Field(default=None)
 
 class CandidateEmailAddressesItem(BaseModel):
     """Nested schema for Candidate.email_addresses_item"""
@@ -60,13 +67,6 @@ class CandidateEmailAddressesItem(BaseModel):
 
 class CandidateAddressesItem(BaseModel):
     """Nested schema for Candidate.addresses_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: str | None | None = Field(default=None, alias="type")
-    value: str | None | None = Field(default=None)
-
-class CandidateWebsiteAddressesItem(BaseModel):
-    """Nested schema for Candidate.website_addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     type_: str | None | None = Field(default=None, alias="type")
