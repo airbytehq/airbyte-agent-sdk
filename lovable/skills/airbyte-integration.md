@@ -208,7 +208,7 @@ export function useAirbyteQuery<T = unknown>(
 | `list` | **Default after widget setup.** Live API — works immediately, no sync needed. |
 | `context_store_search` | **Default for existing connectors.** Searches synced data with filters/sorting. Requires first sync to complete (automatic, takes a few minutes). Fetch by ID: `{ query: { filter: { eq: { Id: "..." } } }, limit: 1 }` |
 | `get` | Fetch one record by ID — **only if REFERENCE.md lists it.** Params: `{ id: "..." }`. Otherwise use `context_store_search` with `eq`. |
-| `api_search` | Connector-native search (Salesforce SOSL, Jira JQL). Params vary — check REFERENCE.md. |
+| `search` | Connector-native search (Salesforce SOSL, Jira JQL). Params vary — check REFERENCE.md. |
 | `create` | Create a record. Params: the record fields. |
 | `update` | Update a record. Params: `{ id: "...", ...fields }` |
 | `delete` | Delete a record. Params: `{ id: "..." }` |

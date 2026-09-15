@@ -72,7 +72,7 @@ auth = AirbyteAuthConfig(
 ```python
 result = await connector.execute(
     entity: str,              # e.g. "customers", "issues"
-    action: str,              # "list", "get", "create", "update", "delete", "api_search"
+    action: str,              # "list", "get", "create", "update", "delete", "search"
     params: dict | None = None,
 )
 # List actions return envelope: result.data (list) + result.meta (has_more, etc.)
