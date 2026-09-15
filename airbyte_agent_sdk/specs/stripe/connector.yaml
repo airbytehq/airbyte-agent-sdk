@@ -1572,7 +1572,7 @@ paths:
       description: Search for customers using Stripe's Search Query Language.
       operationId: Customers_Search
       x-airbyte-entity: customers
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.data
       x-airbyte-meta-extractor:
         has_more: $.has_more
@@ -1803,7 +1803,7 @@ paths:
       description: Search for invoices using Stripe's Search Query Language
       operationId: Invoices_Search
       x-airbyte-entity: invoices
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       tags:
         - Invoices
       parameters:
@@ -1932,7 +1932,7 @@ paths:
       description: Search for charges using Stripe's Search Query Language
       operationId: Charges_Search
       x-airbyte-entity: charges
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       tags:
         - Charges
       parameters:
@@ -2201,7 +2201,7 @@ paths:
       description: Search for subscriptions using Stripe's Search Query Language
       operationId: Subscriptions_Search
       x-airbyte-entity: subscriptions
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       tags:
         - Subscriptions
       parameters:
@@ -2529,7 +2529,7 @@ paths:
       description: Search for products using Stripe's Search Query Language.
       operationId: Products_Search
       x-airbyte-entity: products
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.data
       x-airbyte-meta-extractor:
         has_more: $.has_more
@@ -2892,7 +2892,7 @@ paths:
       description: Search for payment intents using Stripe's Search Query Language.
       operationId: PaymentIntents_Search
       x-airbyte-entity: payment_intents
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.data
       x-airbyte-meta-extractor:
         has_more: $.has_more

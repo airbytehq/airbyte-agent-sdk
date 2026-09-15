@@ -374,7 +374,7 @@
         "http_method": "get",
         "path": "/api/v2/team/{team_id}/task",
         "entity": "tasks",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "team_id",
@@ -554,8 +554,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "TasksApiSearchParams",
-        "response_type": "TasksApiSearchResult",
+        "params_type_name": "TasksSearchParams",
+        "response_type": "TasksSearchResult",
         "description": "View the tasks that meet specific criteria from a workspace. Supports free-text search\nand structured filters including status, assignee, tags, priority, and date ranges.\nResponses are limited to 100 tasks per page.\n",
         "record_extractor": "$.tasks",
         "meta_extractor": {

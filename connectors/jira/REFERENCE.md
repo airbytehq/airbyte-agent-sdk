@@ -8,10 +8,10 @@ The Jira connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Issues | [API Search](#issues-api-search), [Create](#issues-create), [Get](#issues-get), [Update](#issues-update), [Delete](#issues-delete), [Context Store Search](#issues-context-store-search), [Context Store SQL Query](#issues-context-store-sql-query) |
-| Projects | [API Search](#projects-api-search), [Get](#projects-get), [Context Store Search](#projects-context-store-search), [Context Store SQL Query](#projects-context-store-sql-query) |
-| Users | [Get](#users-get), [List](#users-list), [API Search](#users-api-search), [Context Store Search](#users-context-store-search), [Context Store SQL Query](#users-context-store-sql-query) |
-| Issue Fields | [List](#issue-fields-list), [API Search](#issue-fields-api-search), [Context Store Search](#issue-fields-context-store-search), [Context Store SQL Query](#issue-fields-context-store-sql-query) |
+| Issues | [Search](#issues-search), [Create](#issues-create), [Get](#issues-get), [Update](#issues-update), [Delete](#issues-delete), [Context Store Search](#issues-context-store-search), [Context Store SQL Query](#issues-context-store-sql-query) |
+| Projects | [Search](#projects-search), [Get](#projects-get), [Context Store Search](#projects-context-store-search), [Context Store SQL Query](#projects-context-store-sql-query) |
+| Users | [Get](#users-get), [List](#users-list), [Search](#users-search), [Context Store Search](#users-context-store-search), [Context Store SQL Query](#users-context-store-sql-query) |
+| Issue Fields | [List](#issue-fields-list), [Search](#issue-fields-search), [Context Store Search](#issue-fields-context-store-search), [Context Store SQL Query](#issue-fields-context-store-sql-query) |
 | Issue Comments | [List](#issue-comments-list), [Create](#issue-comments-create), [Get](#issue-comments-get), [Update](#issue-comments-update), [Delete](#issue-comments-delete), [Context Store Search](#issue-comments-context-store-search), [Context Store SQL Query](#issue-comments-context-store-sql-query) |
 | Issue Worklogs | [Get](#issue-worklogs-get), [List](#issue-worklogs-list), [Create](#issue-worklogs-create), [Context Store Search](#issue-worklogs-context-store-search), [Context Store SQL Query](#issue-worklogs-context-store-sql-query) |
 | Issues Assignee | [Update](#issues-assignee-update) |
@@ -20,7 +20,7 @@ The Jira connector supports the following entities and actions.
 
 ## Issues
 
-### Issues API Search
+### Issues Search
 
 Retrieve issues based on JQL query with pagination support.
 
@@ -34,14 +34,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "jira",
   "entity": "issues",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await jira.issues.api_search()
+await jira.issues.search()
 ```
 
 #### API
@@ -52,7 +52,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "issues",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 
@@ -614,7 +614,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 ## Projects
 
-### Projects API Search
+### Projects Search
 
 Search and filter projects with advanced query parameters
 
@@ -625,14 +625,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "jira",
   "entity": "projects",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await jira.projects.api_search()
+await jira.projects.search()
 ```
 
 #### API
@@ -643,7 +643,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "projects",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 
@@ -1136,7 +1136,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Users API Search
+### Users Search
 
 Search for users using a query string
 
@@ -1147,14 +1147,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "jira",
   "entity": "users",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await jira.users.api_search()
+await jira.users.search()
 ```
 
 #### API
@@ -1165,7 +1165,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "users",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 
@@ -1436,7 +1436,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Issue Fields API Search
+### Issue Fields Search
 
 Search and filter issue fields with query parameters
 
@@ -1447,14 +1447,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "jira",
   "entity": "issue_fields",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await jira.issue_fields.api_search()
+await jira.issue_fields.search()
 ```
 
 #### API
@@ -1465,7 +1465,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "issue_fields",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 

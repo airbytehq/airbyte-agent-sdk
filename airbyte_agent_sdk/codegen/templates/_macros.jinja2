@@ -1,11 +1,11 @@
 {# Shared macros for connector documentation templates #}
 
-{# Format action name for display (e.g., "api_search" -> "API Search") #}
+{# Format action name for display (e.g., "search" -> "Search") #}
 {% macro format_action(action) -%}
 {{ action.replace('_', ' ')|title|replace('Api ', 'API ')|replace('Sql ', 'SQL ') }}
 {%- endmacro %}
 
-{# Generate anchor slug (e.g., "customers", "api_search" -> "customers-api-search") #}
+{# Generate anchor slug (e.g., "customers", "search" -> "customers-search") #}
 {% macro anchor(entity, action) -%}
 {{ entity.replace('_', '-')|lower }}-{{ action.replace('_', '-')|lower }}
 {%- endmacro %}

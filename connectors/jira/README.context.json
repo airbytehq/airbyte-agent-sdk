@@ -88,7 +88,7 @@
     "http_method": "get",
     "path": "/rest/api/3/search/jql",
     "entity": "issues",
-    "action": "api_search",
+    "action": "search",
     "parameters": [
       {
         "name": "jql",
@@ -179,8 +179,8 @@
         "is_deep_object": false
       }
     ],
-    "params_type_name": "IssuesApiSearchParams",
-    "response_type": "IssuesApiSearchResult",
+    "params_type_name": "IssuesSearchParams",
+    "response_type": "IssuesSearchResult",
     "description": "Retrieve issues based on JQL query with pagination support.\n\nIMPORTANT: This endpoint requires a bounded JQL query. A bounded query must include a search restriction that limits the scope of the search. Examples of valid restrictions include: project (e.g., \"project = MYPROJECT\"), assignee (e.g., \"assignee = currentUser()\"), reporter, issue key, sprint, or date-based filters combined with a project restriction. An unbounded query like \"order by key desc\" will be rejected with a 400 error. Example bounded query: \"project = MYPROJECT AND updated >= -7d ORDER BY created DESC\".\n",
     "record_extractor": "$.issues",
     "meta_extractor": {
@@ -234,7 +234,7 @@
         "http_method": "get",
         "path": "/rest/api/3/search/jql",
         "entity": "issues",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "jql",
@@ -325,8 +325,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "IssuesApiSearchParams",
-        "response_type": "IssuesApiSearchResult",
+        "params_type_name": "IssuesSearchParams",
+        "response_type": "IssuesSearchResult",
         "description": "Retrieve issues based on JQL query with pagination support.\n\nIMPORTANT: This endpoint requires a bounded JQL query. A bounded query must include a search restriction that limits the scope of the search. Examples of valid restrictions include: project (e.g., \"project = MYPROJECT\"), assignee (e.g., \"assignee = currentUser()\"), reporter, issue key, sprint, or date-based filters combined with a project restriction. An unbounded query like \"order by key desc\" will be rejected with a 400 error. Example bounded query: \"project = MYPROJECT AND updated >= -7d ORDER BY created DESC\".\n",
         "record_extractor": "$.issues",
         "meta_extractor": {
@@ -901,7 +901,7 @@
         "http_method": "get",
         "path": "/rest/api/3/project/search",
         "entity": "projects",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "startAt",
@@ -1084,8 +1084,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "ProjectsApiSearchParams",
-        "response_type": "ProjectsApiSearchResult",
+        "params_type_name": "ProjectsSearchParams",
+        "response_type": "ProjectsSearchResult",
         "description": "Search and filter projects with advanced query parameters",
         "record_extractor": "$.values",
         "meta_extractor": {
@@ -1264,7 +1264,7 @@
         "http_method": "get",
         "path": "/rest/api/3/user/search",
         "entity": "users",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -1329,8 +1329,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "UsersApiSearchParams",
-        "response_type": "UsersApiSearchResult",
+        "params_type_name": "UsersSearchParams",
+        "response_type": "UsersSearchResult",
         "description": "Search for users using a query string",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -1363,7 +1363,7 @@
         "http_method": "get",
         "path": "/rest/api/3/field/search",
         "entity": "issue_fields",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "startAt",
@@ -1474,8 +1474,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "IssueFieldsApiSearchParams",
-        "response_type": "IssueFieldsApiSearchResult",
+        "params_type_name": "IssueFieldsSearchParams",
+        "response_type": "IssueFieldsSearchResult",
         "description": "Search and filter issue fields with query parameters",
         "record_extractor": "$",
         "meta_extractor": null,

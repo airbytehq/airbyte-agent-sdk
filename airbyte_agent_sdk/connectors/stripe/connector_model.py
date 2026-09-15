@@ -65,7 +65,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.UPDATE,
                 Action.DELETE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3914,10 +3914,10 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/v1/customers/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for customers using Stripe's Search Query Language.",
                     query_params=['query', 'limit', 'page'],
                     query_params_schema={
@@ -5278,7 +5278,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                 Action.LIST,
                 Action.CREATE,
                 Action.GET,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -8621,10 +8621,10 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/v1/invoices/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for invoices using Stripe's Search Query Language",
                     query_params=['query', 'limit', 'page'],
                     query_params_schema={
@@ -12999,7 +12999,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='charges',
             stream_name='charges',
-            actions=[Action.LIST, Action.GET, Action.API_SEARCH],
+            actions=[Action.LIST, Action.GET, Action.SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -13828,10 +13828,10 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/v1/charges/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for charges using Stripe's Search Query Language",
                     query_params=['query', 'limit', 'page'],
                     query_params_schema={
@@ -14650,7 +14650,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.UPDATE,
                 Action.DELETE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -17528,10 +17528,10 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/v1/subscriptions/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for subscriptions using Stripe's Search Query Language",
                     query_params=['query', 'limit', 'page'],
                     query_params_schema={
@@ -20523,7 +20523,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.UPDATE,
                 Action.DELETE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -21182,10 +21182,10 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/v1/products/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for products using Stripe's Search Query Language.",
                     query_params=['query', 'limit', 'page'],
                     query_params_schema={
@@ -22290,7 +22290,7 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                 Action.CREATE,
                 Action.GET,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -22732,10 +22732,10 @@ StripeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/v1/payment_intents/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for payment intents using Stripe's Search Query Language.",
                     query_params=['query', 'limit', 'page'],
                     query_params_schema={

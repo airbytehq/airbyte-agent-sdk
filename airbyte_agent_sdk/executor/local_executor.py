@@ -28,6 +28,7 @@ from airbyte_agent_sdk.constants import (
     DEFAULT_MAX_CONNECTIONS,
     DEFAULT_MAX_KEEPALIVE_CONNECTIONS,
 )
+from airbyte_agent_sdk.deprecated_action_aliases import resolve_action_alias
 from airbyte_agent_sdk.http.exceptions import ConnectorValidationError, HTTPClientError
 from airbyte_agent_sdk.http_client import HTTPClient, TokenRefreshCallback
 from airbyte_agent_sdk.logging import NullLogger, RequestLogger
@@ -855,15 +856,16 @@ class LocalExecutor:
             if action is not None or params is not None:
                 raise TypeError("Cannot pass action or params when using ExecutionConfig")
             config = config_or_entity
+        action_value = resolve_action_alias(config.action) if isinstance(config.action, str) else config.action
         try:
-            if config.action in HOSTED_ONLY_CONTEXT_STORE_ACTIONS:
+            if action_value in HOSTED_ONLY_CONTEXT_STORE_ACTIONS:
                 raise NotImplementedError(
-                    f"{config.action} is only available in hosted execution mode."
+                    f"{action_value} is only available in hosted execution mode."
                     " Initialize the connector with an AirbyteAuthConfig to use this feature."
                 )
 
             # Convert config to internal format
-            action = Action(config.action) if isinstance(config.action, str) else config.action
+            action = Action(action_value) if isinstance(action_value, str) else action_value
             params = self._merge_scoping_defaults(config.params or {})
             download_json_requested = action == Action.DOWNLOAD and _download_json_requested(params)
             download_json_format = _download_json_format(params) if download_json_requested else None
@@ -1349,7 +1351,7 @@ class LocalExecutor:
             HTTPClientError: If API request fails
         """
         params = self._merge_scoping_defaults(params or {})
-        action = Action(action) if isinstance(action, str) else action
+        action = Action(resolve_action_alias(action)) if isinstance(action, str) else action
 
         # Delegate to the appropriate handler
         handler = next((h for h in self._operation_handlers if h.can_handle(action)), None)
@@ -2290,7 +2292,7 @@ class LocalExecutor:
 
         If the endpoint defines `record_filter` (Jinja expression), it is evaluated
         per record after JSONPath extraction; records for which the expression is
-        truthy are kept, others are dropped. Only applies to list/api_search actions.
+        truthy are kept, others are dropped. Only applies to list/search actions.
 
         Args:
             response_data: Full API response (can be dict, list, primitive, or None)
@@ -2313,7 +2315,7 @@ class LocalExecutor:
         if not action:
             return self._wrap_primitives(response_data)
 
-        is_array_action = action in (Action.LIST, Action.API_SEARCH)
+        is_array_action = action in (Action.LIST, Action.SEARCH)
 
         try:
             # Parse and apply JSONPath expression
@@ -2380,7 +2382,7 @@ class LocalExecutor:
 
         result = self._wrap_primitives(result)
 
-        # Apply record_filter (Jinja expression) on list/api_search actions.
+        # Apply record_filter (Jinja expression) on list/search actions.
         # Intentionally outside the try/except above: a failing record_filter is
         # a connector configuration bug, and for privacy-critical filters silent
         # recovery would leak records. Let the exception propagate.
@@ -2737,7 +2739,7 @@ class LocalExecutor:
 
 
 class _StandardOperationHandler:
-    """Handler for standard REST operations (GET, LIST, CREATE, UPDATE, DELETE, API_SEARCH, AUTHORIZE)."""
+    """Handler for standard REST operations (GET, LIST, CREATE, UPDATE, DELETE, SEARCH, AUTHORIZE)."""
 
     def __init__(self, context: _OperationContext):
         self.ctx = context
@@ -2750,7 +2752,7 @@ class _StandardOperationHandler:
             Action.CREATE,
             Action.UPDATE,
             Action.DELETE,
-            Action.API_SEARCH,
+            Action.SEARCH,
             Action.AUTHORIZE,
         }
 

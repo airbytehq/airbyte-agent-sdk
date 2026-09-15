@@ -1237,7 +1237,7 @@ paths:
       description: Search for contacts by filtering on properties, searching through associations, and sorting results.
       operationId: searchContacts
       x-airbyte-entity: contacts
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.results
       x-airbyte-meta-extractor:
         total: $.total
@@ -1492,7 +1492,7 @@ paths:
       description: Search for companies by filtering on properties, searching through associations, and sorting results.
       operationId: searchCompanies
       x-airbyte-entity: companies
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.results
       x-airbyte-meta-extractor:
         total: $.total
@@ -1745,7 +1745,7 @@ paths:
       description: Search deals with filters and sorting
       operationId: searchDeals
       x-airbyte-entity: deals
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.results
       x-airbyte-meta-extractor:
         total: $.total
@@ -1998,7 +1998,7 @@ paths:
       description: Search for tickets by filtering on properties, searching through associations, and sorting results.
       operationId: searchTickets
       x-airbyte-entity: tickets
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.results
       x-airbyte-meta-extractor:
         total: $.total

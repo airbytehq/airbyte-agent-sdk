@@ -8,10 +8,10 @@ The Hubspot connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Contacts | [List](#contacts-list), [Create](#contacts-create), [Get](#contacts-get), [Update](#contacts-update), [API Search](#contacts-api-search), [Context Store Search](#contacts-context-store-search), [Context Store SQL Query](#contacts-context-store-sql-query) |
-| Companies | [List](#companies-list), [Create](#companies-create), [Get](#companies-get), [Update](#companies-update), [API Search](#companies-api-search), [Context Store Search](#companies-context-store-search), [Context Store SQL Query](#companies-context-store-sql-query) |
-| Deals | [List](#deals-list), [Create](#deals-create), [Get](#deals-get), [Update](#deals-update), [API Search](#deals-api-search), [Context Store Search](#deals-context-store-search), [Context Store SQL Query](#deals-context-store-sql-query) |
-| Tickets | [List](#tickets-list), [Create](#tickets-create), [Get](#tickets-get), [Update](#tickets-update), [API Search](#tickets-api-search), [Context Store Search](#tickets-context-store-search), [Context Store SQL Query](#tickets-context-store-sql-query), [Semantic Search](#tickets-semantic-search) |
+| Contacts | [List](#contacts-list), [Create](#contacts-create), [Get](#contacts-get), [Update](#contacts-update), [Search](#contacts-search), [Context Store Search](#contacts-context-store-search), [Context Store SQL Query](#contacts-context-store-sql-query) |
+| Companies | [List](#companies-list), [Create](#companies-create), [Get](#companies-get), [Update](#companies-update), [Search](#companies-search), [Context Store Search](#companies-context-store-search), [Context Store SQL Query](#companies-context-store-sql-query) |
+| Deals | [List](#deals-list), [Create](#deals-create), [Get](#deals-get), [Update](#deals-update), [Search](#deals-search), [Context Store Search](#deals-context-store-search), [Context Store SQL Query](#deals-context-store-sql-query) |
+| Tickets | [List](#tickets-list), [Create](#tickets-create), [Get](#tickets-get), [Update](#tickets-update), [Search](#tickets-search), [Context Store Search](#tickets-context-store-search), [Context Store SQL Query](#tickets-context-store-sql-query), [Semantic Search](#tickets-semantic-search) |
 | Notes | [List](#notes-list), [Create](#notes-create), [Get](#notes-get), [Update](#notes-update), [Delete](#notes-delete), [Context Store Search](#notes-context-store-search), [Context Store SQL Query](#notes-context-store-sql-query), [Semantic Search](#notes-semantic-search) |
 | Calls | [List](#calls-list), [Create](#calls-create), [Get](#calls-get), [Update](#calls-update), [Delete](#calls-delete), [Context Store Search](#calls-context-store-search), [Context Store SQL Query](#calls-context-store-sql-query), [Semantic Search](#calls-semantic-search) |
 | Emails | [List](#emails-list), [Create](#emails-create), [Get](#emails-get), [Update](#emails-update), [Delete](#emails-delete), [Context Store Search](#emails-context-store-search), [Context Store SQL Query](#emails-context-store-sql-query), [Semantic Search](#emails-semantic-search) |
@@ -340,7 +340,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Contacts API Search
+### Contacts Search
 
 Search for contacts by filtering on properties, searching through associations, and sorting results.
 
@@ -351,14 +351,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "hubspot",
   "entity": "contacts",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await hubspot.contacts.api_search()
+await hubspot.contacts.search()
 ```
 
 #### API
@@ -369,7 +369,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "contacts",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 
@@ -918,7 +918,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Companies API Search
+### Companies Search
 
 Search for companies by filtering on properties, searching through associations, and sorting results.
 
@@ -929,14 +929,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "hubspot",
   "entity": "companies",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await hubspot.companies.api_search()
+await hubspot.companies.search()
 ```
 
 #### API
@@ -947,7 +947,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "companies",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 
@@ -1480,7 +1480,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Deals API Search
+### Deals Search
 
 Search deals with filters and sorting
 
@@ -1491,14 +1491,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "hubspot",
   "entity": "deals",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await hubspot.deals.api_search()
+await hubspot.deals.search()
 ```
 
 #### API
@@ -1509,7 +1509,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "deals",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 
@@ -2056,7 +2056,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Tickets API Search
+### Tickets Search
 
 Search for tickets by filtering on properties, searching through associations, and sorting results.
 
@@ -2067,14 +2067,14 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "hubspot",
   "entity": "tickets",
-  "action": "api_search"
+  "action": "search"
 }'
 ```
 
 #### Python SDK
 
 ```python
-await hubspot.tickets.api_search()
+await hubspot.tickets.search()
 ```
 
 #### API
@@ -2085,7 +2085,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "tickets",
-    "action": "api_search"
+    "action": "search"
 }'
 ```
 

@@ -192,7 +192,7 @@ info:
         x-airbyte-skip-searchable-fields: "Directory listing endpoint returns tree entries for a specific path, not a record stream with a stable schema; no upstream source-github replication stream exists."
       - entity: discussions
         x-airbyte-name: null
-        x-airbyte-skip-searchable-fields: "Upstream source-github replication does not include a discussions stream; only reachable via direct GraphQL calls (list, get, api_search)."
+        x-airbyte-skip-searchable-fields: "Upstream source-github replication does not include a discussions stream; only reachable via direct GraphQL calls (list, get, search)."
       - entity: file_content
         x-airbyte-name: null
         x-airbyte-skip-searchable-fields: "File payload retrieval endpoint returns a single blob (text or binary) for a specific path, not a record stream; no upstream source-github replication equivalent."
@@ -1655,7 +1655,7 @@ paths:
         Examples: "language:python stars:>1000", "topic:machine-learning", "org:facebook is:public"
       operationId: Repositories_Search
       x-airbyte-entity: repositories
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /graphql
       x-airbyte-record-extractor: $.data.search.nodes
@@ -2680,7 +2680,7 @@ paths:
       description: Search for issues using GitHub's search syntax
       operationId: Issues_Search
       x-airbyte-entity: issues
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /graphql
       x-airbyte-record-extractor: $.data.search.nodes
@@ -3208,7 +3208,7 @@ paths:
       description: Search for pull requests using GitHub's search syntax
       operationId: PullRequests_Search
       x-airbyte-entity: pull_requests
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /graphql
       x-airbyte-record-extractor: $.data.search.nodes
@@ -4544,7 +4544,7 @@ paths:
       description: Search for GitHub users using search syntax
       operationId: Users_Search
       x-airbyte-entity: users
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /graphql
       x-airbyte-record-extractor: $.data.search.nodes
@@ -5874,7 +5874,7 @@ paths:
       description: Search for discussions using GitHub's search syntax
       operationId: Discussions_Search
       x-airbyte-entity: discussions
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /graphql
       x-airbyte-record-extractor: $.data.search.nodes

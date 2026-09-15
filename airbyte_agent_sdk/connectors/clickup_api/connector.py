@@ -35,9 +35,9 @@ from .types import (
     MembersListParams,
     SpacesGetParams,
     SpacesListParams,
-    TasksApiSearchParams,
     TasksGetParams,
     TasksListParams,
+    TasksSearchParams,
     TeamsListParams,
     TimeTrackingGetParams,
     TimeTrackingListParams,
@@ -77,7 +77,7 @@ from .models import (
     FoldersListResult,
     ListsListResult,
     TasksListResult,
-    TasksApiSearchResult,
+    TasksSearchResult,
     CommentsListResult,
     GoalsListResult,
     ViewsListResult,
@@ -136,7 +136,7 @@ class ClickupApiConnector:
 
     connector_name = "clickup-api"
     connector_version = "0.1.5"
-    sdk_version = "0.1.341"
+    sdk_version = "0.1.342"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -150,7 +150,7 @@ class ClickupApiConnector:
         ("lists", "get"): None,
         ("tasks", "list"): True,
         ("tasks", "get"): None,
-        ("tasks", "api_search"): True,
+        ("tasks", "search"): True,
         ("comments", "list"): True,
         ("comments", "create"): None,
         ("comments", "get"): None,
@@ -178,7 +178,7 @@ class ClickupApiConnector:
         ('lists', 'get'): {'list_id': 'list_id'},
         ('tasks', 'list'): {'list_id': 'list_id', 'page': 'page'},
         ('tasks', 'get'): {'task_id': 'task_id', 'custom_task_ids': 'custom_task_ids', 'include_subtasks': 'include_subtasks'},
-        ('tasks', 'api_search'): {'team_id': 'team_id', 'search': 'search', 'statuses': 'statuses[]', 'assignees': 'assignees[]', 'tags': 'tags[]', 'priority': 'priority', 'due_date_gt': 'due_date_gt', 'due_date_lt': 'due_date_lt', 'date_created_gt': 'date_created_gt', 'date_created_lt': 'date_created_lt', 'date_updated_gt': 'date_updated_gt', 'date_updated_lt': 'date_updated_lt', 'custom_fields': 'custom_fields', 'include_closed': 'include_closed', 'page': 'page'},
+        ('tasks', 'search'): {'team_id': 'team_id', 'search': 'search', 'statuses': 'statuses[]', 'assignees': 'assignees[]', 'tags': 'tags[]', 'priority': 'priority', 'due_date_gt': 'due_date_gt', 'due_date_lt': 'due_date_lt', 'date_created_gt': 'date_created_gt', 'date_created_lt': 'date_created_lt', 'date_updated_gt': 'date_updated_gt', 'date_updated_lt': 'date_updated_lt', 'custom_fields': 'custom_fields', 'include_closed': 'include_closed', 'page': 'page'},
         ('comments', 'list'): {'task_id': 'task_id'},
         ('comments', 'create'): {'comment_text': 'comment_text', 'assignee': 'assignee', 'notify_all': 'notify_all', 'task_id': 'task_id'},
         ('comments', 'get'): {'comment_id': 'comment_id'},
@@ -428,13 +428,13 @@ class ClickupApiConnector:
     async def execute(
         self,
         entity: Literal["tasks"],
-        action: Literal["api_search"],
-        params: "TasksApiSearchParams",
+        action: Literal["search"],
+        params: "TasksSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "TasksApiSearchResult": ...
+    ) -> "TasksSearchResult": ...
 
     @overload
     async def execute(
@@ -609,7 +609,7 @@ class ClickupApiConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["get", "list", "api_search", "create", "update", "context_store_search", "context_store_sql_query"],
+        action: Literal["get", "list", "search", "create", "update", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any],
         *,
         select_fields: list[str] | None = ...,
@@ -620,7 +620,7 @@ class ClickupApiConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["get", "list", "api_search", "create", "update", "context_store_search", "context_store_sql_query"],
+        action: Literal["get", "list", "search", "create", "update", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any] | None = None,
         *,
         select_fields: list[str] | None = None,
@@ -1831,7 +1831,7 @@ class TasksQuery:
 
 
 
-    async def api_search(
+    async def search(
         self,
         team_id: str,
         search: str | None = None,
@@ -1849,7 +1849,7 @@ class TasksQuery:
         include_closed: bool | None = None,
         page: int | None = None,
         **kwargs
-    ) -> TasksApiSearchResult:
+    ) -> TasksSearchResult:
         """
         View the tasks that meet specific criteria from a workspace. Supports free-text search
 and structured filters including status, assignee, tags, priority, and date ranges.
@@ -1877,7 +1877,7 @@ Operators: = (contains), == (exact), <, <=, >, >=, !=, !==, IS NULL, IS NOT NULL
             **kwargs: Additional parameters
 
         Returns:
-            TasksApiSearchResult
+            TasksSearchResult
         """
         params = {k: v for k, v in {
             "team_id": team_id,
@@ -1898,9 +1898,9 @@ Operators: = (contains), == (exact), <, <=, >, >=, !=, !==, IS NULL, IS NOT NULL
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("tasks", "api_search", params)
+        result = await self._connector.execute("tasks", "search", params)
         # Cast generic envelope to concrete typed result
-        return TasksApiSearchResult(
+        return TasksSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )

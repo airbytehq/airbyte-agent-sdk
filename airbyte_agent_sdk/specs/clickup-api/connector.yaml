@@ -637,7 +637,7 @@ paths:
         "404":
           description: Task not found
 
-  # ── Tasks: api_search (Workspace-Wide Filtered Tasks) ──
+  # ── Tasks: search (Workspace-Wide Filtered Tasks) ──
   "/api/v2/team/{team_id}/task":
     get:
       summary: Search tasks across workspace
@@ -647,7 +647,7 @@ paths:
         Responses are limited to 100 tasks per page.
       operationId: searchTasks
       x-airbyte-entity: tasks
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-record-extractor: $.tasks
       x-airbyte-meta-extractor:
         last_page: $.last_page

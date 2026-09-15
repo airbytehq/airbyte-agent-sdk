@@ -3,7 +3,7 @@ Extension models for connector configuration.
 
 Provides Pydantic models for OpenAPI x-airbyte-* extensions:
 - RetryConfig: retry strategy with exponential backoff
-- CacheConfig / CacheEntityConfig / CacheFieldConfig: cache mapping for api_search
+- CacheConfig / CacheEntityConfig / CacheFieldConfig: cache mapping for search
 - ReplicationConfig: replication settings for MULTI mode connectors
 - EntityRelationshipConfig: entity relationship declarations
 - ScopingParamConfig: scoping parameter resolution from config
@@ -588,7 +588,7 @@ class CacheFieldConfig(ExtensionAwareModel):
     For object-type fields, supports nested properties to define the internal structure
     of complex nested schemas.
 
-    Used in x-airbyte-context-store extension for api_search operations.
+    Used in x-airbyte-context-store extension for search operations.
     """
 
     name: str
@@ -910,7 +910,7 @@ class CacheEntityConfig(ExtensionAwareModel):
     Defines a cache-enabled entity with its fields and optional name aliasing
     to map between user-facing entity names and cache storage names.
 
-    Used in x-airbyte-context-store extension for api_search operations.
+    Used in x-airbyte-context-store extension for search operations.
     """
 
     entity: str
@@ -1071,7 +1071,7 @@ class CacheConfig(ExtensionAwareModel):
     """
     Cache configuration extension (x-airbyte-context-store).
 
-    Defines cache-enabled entities and their field mappings for api_search operations.
+    Defines cache-enabled entities and their field mappings for search operations.
     Supports optional name aliasing via x-airbyte-name for both entities and fields,
     enabling bidirectional mapping between user-facing names and cache storage names.
 

@@ -29,8 +29,8 @@ from .types import (
     IssueCommentsUpdateParams,
     IssueCommentsUpdateParamsBody,
     IssueCommentsUpdateParamsVisibility,
-    IssueFieldsApiSearchParams,
     IssueFieldsListParams,
+    IssueFieldsSearchParams,
     IssueLinksCreateParams,
     IssueLinksCreateParamsComment,
     IssueLinksCreateParamsInwardissue,
@@ -44,20 +44,20 @@ from .types import (
     IssueWorklogsCreateParamsVisibility,
     IssueWorklogsGetParams,
     IssueWorklogsListParams,
-    IssuesApiSearchParams,
     IssuesAssigneeUpdateParams,
     IssuesCreateParams,
     IssuesCreateParamsFields,
     IssuesDeleteParams,
     IssuesGetParams,
+    IssuesSearchParams,
     IssuesUpdateParams,
     IssuesUpdateParamsFields,
     IssuesUpdateParamsTransition,
-    ProjectsApiSearchParams,
     ProjectsGetParams,
-    UsersApiSearchParams,
+    ProjectsSearchParams,
     UsersGetParams,
     UsersListParams,
+    UsersSearchParams,
     AirbyteSearchParams,
     IssuesSearchFilter,
     IssuesSearchQuery,
@@ -80,12 +80,12 @@ from .models import (
     JiraCheckResult,
     JiraExecuteResult,
     JiraExecuteResultWithMeta,
-    IssuesApiSearchResult,
-    ProjectsApiSearchResult,
+    IssuesSearchResult,
+    ProjectsSearchResult,
     UsersListResult,
-    UsersApiSearchResult,
+    UsersSearchResult,
     IssueFieldsListResult,
-    IssueFieldsApiSearchResult,
+    IssueFieldsSearchResult,
     IssueCommentsListResult,
     IssueTransitionsListResult,
     IssueWorklogsListResult,
@@ -130,22 +130,22 @@ class JiraConnector:
 
     connector_name = "jira"
     connector_version = "1.2.0"
-    sdk_version = "0.1.341"
+    sdk_version = "0.1.342"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
-        ("issues", "api_search"): True,
+        ("issues", "search"): True,
         ("issues", "create"): None,
         ("issues", "get"): None,
         ("issues", "update"): None,
         ("issues", "delete"): None,
-        ("projects", "api_search"): True,
+        ("projects", "search"): True,
         ("projects", "get"): None,
         ("users", "get"): None,
         ("users", "list"): True,
-        ("users", "api_search"): True,
+        ("users", "search"): True,
         ("issue_fields", "list"): True,
-        ("issue_fields", "api_search"): True,
+        ("issue_fields", "search"): True,
         ("issue_comments", "list"): True,
         ("issue_comments", "create"): None,
         ("issue_comments", "get"): None,
@@ -163,17 +163,17 @@ class JiraConnector:
     # Map of (entity, action) -> {python_param_name: api_param_name}
     # Used to convert snake_case TypedDict keys to API parameter names in execute()
     _PARAM_MAP = {
-        ('issues', 'api_search'): {'jql': 'jql', 'next_page_token': 'nextPageToken', 'max_results': 'maxResults', 'fields': 'fields', 'expand': 'expand', 'properties': 'properties', 'fields_by_keys': 'fieldsByKeys', 'fail_fast': 'failFast'},
+        ('issues', 'search'): {'jql': 'jql', 'next_page_token': 'nextPageToken', 'max_results': 'maxResults', 'fields': 'fields', 'expand': 'expand', 'properties': 'properties', 'fields_by_keys': 'fieldsByKeys', 'fail_fast': 'failFast'},
         ('issues', 'create'): {'fields': 'fields', 'update': 'update', 'update_history': 'updateHistory'},
         ('issues', 'get'): {'issue_id_or_key': 'issueIdOrKey', 'fields': 'fields', 'expand': 'expand', 'properties': 'properties', 'fields_by_keys': 'fieldsByKeys', 'update_history': 'updateHistory', 'fail_fast': 'failFast'},
         ('issues', 'update'): {'fields': 'fields', 'update': 'update', 'transition': 'transition', 'issue_id_or_key': 'issueIdOrKey', 'notify_users': 'notifyUsers', 'override_screen_security': 'overrideScreenSecurity', 'override_editable_flag': 'overrideEditableFlag', 'return_issue': 'returnIssue', 'expand': 'expand'},
         ('issues', 'delete'): {'issue_id_or_key': 'issueIdOrKey', 'delete_subtasks': 'deleteSubtasks'},
-        ('projects', 'api_search'): {'start_at': 'startAt', 'max_results': 'maxResults', 'order_by': 'orderBy', 'id': 'id', 'keys': 'keys', 'query': 'query', 'type_key': 'typeKey', 'category_id': 'categoryId', 'action': 'action', 'expand': 'expand', 'status': 'status'},
+        ('projects', 'search'): {'start_at': 'startAt', 'max_results': 'maxResults', 'order_by': 'orderBy', 'id': 'id', 'keys': 'keys', 'query': 'query', 'type_key': 'typeKey', 'category_id': 'categoryId', 'action': 'action', 'expand': 'expand', 'status': 'status'},
         ('projects', 'get'): {'project_id_or_key': 'projectIdOrKey', 'expand': 'expand', 'properties': 'properties'},
         ('users', 'get'): {'account_id': 'accountId', 'expand': 'expand'},
         ('users', 'list'): {'start_at': 'startAt', 'max_results': 'maxResults'},
-        ('users', 'api_search'): {'query': 'query', 'start_at': 'startAt', 'max_results': 'maxResults', 'account_id': 'accountId', 'property': 'property'},
-        ('issue_fields', 'api_search'): {'start_at': 'startAt', 'max_results': 'maxResults', 'type': 'type', 'id': 'id', 'query': 'query', 'order_by': 'orderBy', 'expand': 'expand'},
+        ('users', 'search'): {'query': 'query', 'start_at': 'startAt', 'max_results': 'maxResults', 'account_id': 'accountId', 'property': 'property'},
+        ('issue_fields', 'search'): {'start_at': 'startAt', 'max_results': 'maxResults', 'type': 'type', 'id': 'id', 'query': 'query', 'order_by': 'orderBy', 'expand': 'expand'},
         ('issue_comments', 'list'): {'issue_id_or_key': 'issueIdOrKey', 'start_at': 'startAt', 'max_results': 'maxResults', 'order_by': 'orderBy', 'expand': 'expand'},
         ('issue_comments', 'create'): {'body': 'body', 'visibility': 'visibility', 'properties': 'properties', 'issue_id_or_key': 'issueIdOrKey', 'expand': 'expand'},
         ('issue_comments', 'get'): {'issue_id_or_key': 'issueIdOrKey', 'comment_id': 'commentId', 'expand': 'expand'},
@@ -313,13 +313,13 @@ class JiraConnector:
     async def execute(
         self,
         entity: Literal["issues"],
-        action: Literal["api_search"],
-        params: "IssuesApiSearchParams",
+        action: Literal["search"],
+        params: "IssuesSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "IssuesApiSearchResult": ...
+    ) -> "IssuesSearchResult": ...
 
     @overload
     async def execute(
@@ -373,13 +373,13 @@ class JiraConnector:
     async def execute(
         self,
         entity: Literal["projects"],
-        action: Literal["api_search"],
-        params: "ProjectsApiSearchParams",
+        action: Literal["search"],
+        params: "ProjectsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "ProjectsApiSearchResult": ...
+    ) -> "ProjectsSearchResult": ...
 
     @overload
     async def execute(
@@ -421,13 +421,13 @@ class JiraConnector:
     async def execute(
         self,
         entity: Literal["users"],
-        action: Literal["api_search"],
-        params: "UsersApiSearchParams",
+        action: Literal["search"],
+        params: "UsersSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "UsersApiSearchResult": ...
+    ) -> "UsersSearchResult": ...
 
     @overload
     async def execute(
@@ -445,13 +445,13 @@ class JiraConnector:
     async def execute(
         self,
         entity: Literal["issue_fields"],
-        action: Literal["api_search"],
-        params: "IssueFieldsApiSearchParams",
+        action: Literal["search"],
+        params: "IssueFieldsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "IssueFieldsApiSearchResult": ...
+    ) -> "IssueFieldsSearchResult": ...
 
     @overload
     async def execute(
@@ -602,7 +602,7 @@ class JiraConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["api_search", "create", "get", "update", "delete", "list", "context_store_search", "context_store_sql_query"],
+        action: Literal["search", "create", "get", "update", "delete", "list", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any],
         *,
         select_fields: list[str] | None = ...,
@@ -613,7 +613,7 @@ class JiraConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["api_search", "create", "get", "update", "delete", "list", "context_store_search", "context_store_sql_query"],
+        action: Literal["search", "create", "get", "update", "delete", "list", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any] | None = None,
         *,
         select_fields: list[str] | None = None,
@@ -1048,7 +1048,7 @@ class IssuesQuery:
         """Initialize query with connector reference."""
         self._connector = connector
 
-    async def api_search(
+    async def search(
         self,
         jql: str | None = None,
         next_page_token: str | None = None,
@@ -1059,7 +1059,7 @@ class IssuesQuery:
         fields_by_keys: bool | None = None,
         fail_fast: bool | None = None,
         **kwargs
-    ) -> IssuesApiSearchResult:
+    ) -> IssuesSearchResult:
         """
         Retrieve issues based on JQL query with pagination support.
 
@@ -1078,7 +1078,7 @@ IMPORTANT: This endpoint requires a bounded JQL query. A bounded query must incl
             **kwargs: Additional parameters
 
         Returns:
-            IssuesApiSearchResult
+            IssuesSearchResult
         """
         params = {k: v for k, v in {
             "jql": jql,
@@ -1092,9 +1092,9 @@ IMPORTANT: This endpoint requires a bounded JQL query. A bounded query must incl
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("issues", "api_search", params)
+        result = await self._connector.execute("issues", "search", params)
         # Cast generic envelope to concrete typed result
-        return IssuesApiSearchResult(
+        return IssuesSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )
@@ -1370,7 +1370,7 @@ class ProjectsQuery:
         """Initialize query with connector reference."""
         self._connector = connector
 
-    async def api_search(
+    async def search(
         self,
         start_at: int | None = None,
         max_results: int | None = None,
@@ -1384,7 +1384,7 @@ class ProjectsQuery:
         expand: str | None = None,
         status: list[str] | None = None,
         **kwargs
-    ) -> ProjectsApiSearchResult:
+    ) -> ProjectsSearchResult:
         """
         Search and filter projects with advanced query parameters
 
@@ -1403,7 +1403,7 @@ class ProjectsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            ProjectsApiSearchResult
+            ProjectsSearchResult
         """
         params = {k: v for k, v in {
             "startAt": start_at,
@@ -1420,9 +1420,9 @@ class ProjectsQuery:
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("projects", "api_search", params)
+        result = await self._connector.execute("projects", "search", params)
         # Cast generic envelope to concrete typed result
-        return ProjectsApiSearchResult(
+        return ProjectsSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )
@@ -1652,7 +1652,7 @@ class UsersQuery:
 
 
 
-    async def api_search(
+    async def search(
         self,
         query: str | None = None,
         start_at: int | None = None,
@@ -1660,7 +1660,7 @@ class UsersQuery:
         account_id: str | None = None,
         property: str | None = None,
         **kwargs
-    ) -> UsersApiSearchResult:
+    ) -> UsersSearchResult:
         """
         Search for users using a query string
 
@@ -1673,7 +1673,7 @@ class UsersQuery:
             **kwargs: Additional parameters
 
         Returns:
-            UsersApiSearchResult
+            UsersSearchResult
         """
         params = {k: v for k, v in {
             "query": query,
@@ -1684,9 +1684,9 @@ class UsersQuery:
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("users", "api_search", params)
+        result = await self._connector.execute("users", "search", params)
         # Cast generic envelope to concrete typed result
-        return UsersApiSearchResult(
+        return UsersSearchResult(
             data=result.data
         )
 
@@ -1827,7 +1827,7 @@ class IssueFieldsQuery:
 
 
 
-    async def api_search(
+    async def search(
         self,
         start_at: int | None = None,
         max_results: int | None = None,
@@ -1837,7 +1837,7 @@ class IssueFieldsQuery:
         order_by: str | None = None,
         expand: str | None = None,
         **kwargs
-    ) -> IssueFieldsApiSearchResult:
+    ) -> IssueFieldsSearchResult:
         """
         Search and filter issue fields with query parameters
 
@@ -1852,7 +1852,7 @@ class IssueFieldsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            IssueFieldsApiSearchResult
+            IssueFieldsSearchResult
         """
         params = {k: v for k, v in {
             "startAt": start_at,
@@ -1865,9 +1865,9 @@ class IssueFieldsQuery:
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("issue_fields", "api_search", params)
+        result = await self._connector.execute("issue_fields", "search", params)
         # Cast generic envelope to concrete typed result
-        return IssueFieldsApiSearchResult(
+        return IssueFieldsSearchResult(
             data=result.data
         )
 

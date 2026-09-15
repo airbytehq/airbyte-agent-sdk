@@ -8,17 +8,17 @@ The Stripe connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Customers | [List](#customers-list), [Create](#customers-create), [Get](#customers-get), [Update](#customers-update), [Delete](#customers-delete), [API Search](#customers-api-search), [Context Store Search](#customers-context-store-search), [Context Store SQL Query](#customers-context-store-sql-query) |
-| Invoices | [List](#invoices-list), [Create](#invoices-create), [Get](#invoices-get), [API Search](#invoices-api-search), [Context Store Search](#invoices-context-store-search), [Context Store SQL Query](#invoices-context-store-sql-query) |
+| Customers | [List](#customers-list), [Create](#customers-create), [Get](#customers-get), [Update](#customers-update), [Delete](#customers-delete), [Search](#customers-search), [Context Store Search](#customers-context-store-search), [Context Store SQL Query](#customers-context-store-sql-query) |
+| Invoices | [List](#invoices-list), [Create](#invoices-create), [Get](#invoices-get), [Search](#invoices-search), [Context Store Search](#invoices-context-store-search), [Context Store SQL Query](#invoices-context-store-sql-query) |
 | Invoice Finalizations | [Create](#invoice-finalizations-create) |
 | Invoice Sends | [Create](#invoice-sends-create) |
-| Charges | [List](#charges-list), [Get](#charges-get), [API Search](#charges-api-search), [Context Store Search](#charges-context-store-search), [Context Store SQL Query](#charges-context-store-sql-query) |
-| Subscriptions | [List](#subscriptions-list), [Create](#subscriptions-create), [Get](#subscriptions-get), [Update](#subscriptions-update), [Delete](#subscriptions-delete), [API Search](#subscriptions-api-search), [Context Store Search](#subscriptions-context-store-search), [Context Store SQL Query](#subscriptions-context-store-sql-query) |
+| Charges | [List](#charges-list), [Get](#charges-get), [Search](#charges-search), [Context Store Search](#charges-context-store-search), [Context Store SQL Query](#charges-context-store-sql-query) |
+| Subscriptions | [List](#subscriptions-list), [Create](#subscriptions-create), [Get](#subscriptions-get), [Update](#subscriptions-update), [Delete](#subscriptions-delete), [Search](#subscriptions-search), [Context Store Search](#subscriptions-context-store-search), [Context Store SQL Query](#subscriptions-context-store-sql-query) |
 | Refunds | [List](#refunds-list), [Create](#refunds-create), [Get](#refunds-get), [Context Store Search](#refunds-context-store-search), [Context Store SQL Query](#refunds-context-store-sql-query) |
-| Products | [List](#products-list), [Create](#products-create), [Get](#products-get), [Update](#products-update), [Delete](#products-delete), [API Search](#products-api-search) |
+| Products | [List](#products-list), [Create](#products-create), [Get](#products-get), [Update](#products-update), [Delete](#products-delete), [Search](#products-search) |
 | Balance | [Get](#balance-get) |
 | Balance Transactions | [List](#balance-transactions-list), [Get](#balance-transactions-get) |
-| Payment Intents | [List](#payment-intents-list), [Create](#payment-intents-create), [Get](#payment-intents-get), [Update](#payment-intents-update), [API Search](#payment-intents-api-search) |
+| Payment Intents | [List](#payment-intents-list), [Create](#payment-intents-create), [Get](#payment-intents-get), [Update](#payment-intents-update), [Search](#payment-intents-search) |
 | Payment Intent Confirmations | [Create](#payment-intent-confirmations-create) |
 | Payment Intent Cancellations | [Create](#payment-intent-cancellations-create) |
 | Prices | [Create](#prices-create) |
@@ -444,7 +444,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Customers API Search
+### Customers Search
 
 Search for customers using Stripe's Search Query Language.
 
@@ -455,7 +455,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "stripe",
   "entity": "customers",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -465,7 +465,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await stripe.customers.api_search(
+await stripe.customers.search(
     query="<str>"
 )
 ```
@@ -478,7 +478,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "customers",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -1191,7 +1191,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Invoices API Search
+### Invoices Search
 
 Search for invoices using Stripe's Search Query Language
 
@@ -1202,7 +1202,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "stripe",
   "entity": "invoices",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -1212,7 +1212,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await stripe.invoices.api_search(
+await stripe.invoices.search(
     query="<str>"
 )
 ```
@@ -1225,7 +1225,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "invoices",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -2200,7 +2200,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Charges API Search
+### Charges Search
 
 Search for charges using Stripe's Search Query Language
 
@@ -2211,7 +2211,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "stripe",
   "entity": "charges",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -2221,7 +2221,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await stripe.charges.api_search(
+await stripe.charges.search(
     query="<str>"
 )
 ```
@@ -2234,7 +2234,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "charges",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -3118,7 +3118,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Subscriptions API Search
+### Subscriptions Search
 
 Search for subscriptions using Stripe's Search Query Language
 
@@ -3129,7 +3129,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "stripe",
   "entity": "subscriptions",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -3139,7 +3139,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await stripe.subscriptions.api_search(
+await stripe.subscriptions.search(
     query="<str>"
 )
 ```
@@ -3152,7 +3152,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "subscriptions",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -4269,7 +4269,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Products API Search
+### Products Search
 
 Search for products using Stripe's Search Query Language.
 
@@ -4280,7 +4280,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "stripe",
   "entity": "products",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -4290,7 +4290,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await stripe.products.api_search(
+await stripe.products.search(
     query="<str>"
 )
 ```
@@ -4303,7 +4303,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "products",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -4888,7 +4888,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Payment Intents API Search
+### Payment Intents Search
 
 Search for payment intents using Stripe's Search Query Language.
 
@@ -4899,7 +4899,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "stripe",
   "entity": "payment_intents",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -4909,7 +4909,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await stripe.payment_intents.api_search(
+await stripe.payment_intents.search(
     query="<str>"
 )
 ```
@@ -4922,7 +4922,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "payment_intents",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }

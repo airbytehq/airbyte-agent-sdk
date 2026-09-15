@@ -63,8 +63,8 @@ class TasksGetParams(TypedDict):
     custom_task_ids: NotRequired[bool]
     include_subtasks: NotRequired[bool]
 
-class TasksApiSearchParams(TypedDict):
-    """Parameters for tasks.api_search operation"""
+class TasksSearchParams(TypedDict):
+    """Parameters for tasks.search operation"""
     team_id: str
     search: NotRequired[str]
     statuses: NotRequired[list[str]]

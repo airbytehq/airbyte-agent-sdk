@@ -21,6 +21,8 @@ Usage:
 from enum import Enum
 from typing import Literal
 
+from airbyte_agent_sdk.deprecated_action_aliases import DEPRECATED_ACTION_ALIASES, resolve_action_alias
+
 # =============================================================================
 # Extension Name Constants
 # =============================================================================
@@ -314,13 +316,13 @@ Example:
       /graphql:repositories:  # OpenAPI path (for uniqueness)
         post:
           x-airbyte-entity: repositories
-          x-airbyte-action: api_search
+          x-airbyte-action: search
           x-airbyte-path-override:
             path: /graphql  # Actual HTTP endpoint
       /graphql:issues:  # Different OpenAPI path
         post:
           x-airbyte-entity: issues
-          x-airbyte-action: api_search
+          x-airbyte-action: search
           x-airbyte-path-override:
             path: /graphql  # Same actual endpoint
     ```
@@ -340,7 +342,7 @@ Description:
     where to find the actual records.
 
     Return type is automatically inferred from x-airbyte-action:
-    - list, api_search actions: Returns array ([] if path not found)
+    - list, search actions: Returns array ([] if path not found)
     - get, create, update, delete actions: Returns single record (None if path not found)
 
 Example:
@@ -736,11 +738,17 @@ class ActionType(str, Enum):
     DELETE = "delete"
     """Delete a record"""
 
-    API_SEARCH = "api_search"
+    SEARCH = "search"
     """Search for records matching specific query criteria via API"""
 
     DOWNLOAD = "download"
     """Download file content from a URL specified in the metadata response"""
+
+    @classmethod
+    def _missing_(cls, value: object) -> "ActionType | None":
+        if isinstance(value, str) and value in DEPRECATED_ACTION_ALIASES:
+            return cls(resolve_action_alias(value))
+        return None
 
 
 class BodyType(str, Enum):
@@ -755,7 +763,7 @@ class BodyType(str, Enum):
 
 
 # Type alias for use in Pydantic models
-ActionTypeLiteral = Literal["get", "list", "create", "update", "delete", "api_search", "download"]
+ActionTypeLiteral = Literal["get", "list", "create", "update", "delete", "search", "download"]
 
 
 # =============================================================================
@@ -773,7 +781,7 @@ def is_valid_action(action: str) -> bool:
     Returns:
         True if the action is valid, False otherwise
     """
-    return action in [a.value for a in ActionType]
+    return resolve_action_alias(action) in [a.value for a in ActionType]
 
 
 def get_all_extension_names() -> list[str]:

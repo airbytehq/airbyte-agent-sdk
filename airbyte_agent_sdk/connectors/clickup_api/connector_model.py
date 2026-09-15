@@ -1940,7 +1940,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='tasks',
             stream_name='task',
-            actions=[Action.LIST, Action.GET, Action.API_SEARCH],
+            actions=[Action.LIST, Action.GET, Action.SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -2429,10 +2429,10 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/api/v2/team/{team_id}/task',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='View the tasks that meet specific criteria from a workspace. Supports free-text search\nand structured filters including status, assignee, tags, priority, and date ranges.\nResponses are limited to 100 tasks per page.\n',
                     query_params=[
                         'search',

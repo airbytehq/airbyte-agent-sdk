@@ -364,7 +364,7 @@
         "http_method": "get",
         "path": "/v1/customers/search",
         "entity": "customers",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -402,8 +402,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "CustomersApiSearchParams",
-        "response_type": "CustomersApiSearchResult",
+        "params_type_name": "CustomersSearchParams",
+        "response_type": "CustomersSearchResult",
         "description": "Search for customers using Stripe's Search Query Language.",
         "record_extractor": "$.data",
         "meta_extractor": {
@@ -635,7 +635,7 @@
         "http_method": "get",
         "path": "/v1/invoices/search",
         "entity": "invoices",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -673,8 +673,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "InvoicesApiSearchParams",
-        "response_type": "InvoicesApiSearchResult",
+        "params_type_name": "InvoicesSearchParams",
+        "response_type": "InvoicesSearchResult",
         "description": "Search for invoices using Stripe's Search Query Language",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -893,7 +893,7 @@
         "http_method": "get",
         "path": "/v1/charges/search",
         "entity": "charges",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -931,8 +931,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "ChargesApiSearchParams",
-        "response_type": "ChargesApiSearchResult",
+        "params_type_name": "ChargesSearchParams",
+        "response_type": "ChargesSearchResult",
         "description": "Search for charges using Stripe's Search Query Language",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -1282,7 +1282,7 @@
         "http_method": "get",
         "path": "/v1/subscriptions/search",
         "entity": "subscriptions",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -1320,8 +1320,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "SubscriptionsApiSearchParams",
-        "response_type": "SubscriptionsApiSearchResult",
+        "params_type_name": "SubscriptionsSearchParams",
+        "response_type": "SubscriptionsSearchResult",
         "description": "Search for subscriptions using Stripe's Search Query Language",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -1740,7 +1740,7 @@
         "http_method": "get",
         "path": "/v1/products/search",
         "entity": "products",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -1778,8 +1778,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "ProductsApiSearchParams",
-        "response_type": "ProductsApiSearchResult",
+        "params_type_name": "ProductsSearchParams",
+        "response_type": "ProductsSearchResult",
         "description": "Search for products using Stripe's Search Query Language.",
         "record_extractor": "$.data",
         "meta_extractor": {
@@ -2180,7 +2180,7 @@
         "http_method": "get",
         "path": "/v1/payment_intents/search",
         "entity": "payment_intents",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -2218,8 +2218,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "PaymentIntentsApiSearchParams",
-        "response_type": "PaymentIntentsApiSearchResult",
+        "params_type_name": "PaymentIntentsSearchParams",
+        "response_type": "PaymentIntentsSearchResult",
         "description": "Search for payment intents using Stripe's Search Query Language.",
         "record_extractor": "$.data",
         "meta_extractor": {

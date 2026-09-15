@@ -9,15 +9,15 @@ The Salesforce connector supports the following entities and actions.
 | Entity | Actions |
 |--------|---------|
 | Sobjects | [List](#sobjects-list), [Create](#sobjects-create), [Get](#sobjects-get), [Update](#sobjects-update), [Delete](#sobjects-delete) |
-| Accounts | [List](#accounts-list), [Create](#accounts-create), [Get](#accounts-get), [Update](#accounts-update), [Delete](#accounts-delete), [API Search](#accounts-api-search), [Context Store Search](#accounts-context-store-search), [Context Store SQL Query](#accounts-context-store-sql-query) |
-| Contacts | [List](#contacts-list), [Create](#contacts-create), [Get](#contacts-get), [Update](#contacts-update), [Delete](#contacts-delete), [API Search](#contacts-api-search), [Context Store Search](#contacts-context-store-search), [Context Store SQL Query](#contacts-context-store-sql-query) |
-| Leads | [List](#leads-list), [Create](#leads-create), [Get](#leads-get), [Update](#leads-update), [Delete](#leads-delete), [API Search](#leads-api-search), [Context Store Search](#leads-context-store-search), [Context Store SQL Query](#leads-context-store-sql-query) |
-| Opportunities | [List](#opportunities-list), [Create](#opportunities-create), [Get](#opportunities-get), [Update](#opportunities-update), [Delete](#opportunities-delete), [API Search](#opportunities-api-search), [Context Store Search](#opportunities-context-store-search), [Context Store SQL Query](#opportunities-context-store-sql-query) |
-| Tasks | [List](#tasks-list), [Create](#tasks-create), [Get](#tasks-get), [Update](#tasks-update), [Delete](#tasks-delete), [API Search](#tasks-api-search), [Context Store Search](#tasks-context-store-search), [Context Store SQL Query](#tasks-context-store-sql-query) |
-| Events | [List](#events-list), [Create](#events-create), [Get](#events-get), [Update](#events-update), [Delete](#events-delete), [API Search](#events-api-search) |
-| Campaigns | [List](#campaigns-list), [Create](#campaigns-create), [Get](#campaigns-get), [Update](#campaigns-update), [Delete](#campaigns-delete), [API Search](#campaigns-api-search) |
-| Cases | [List](#cases-list), [Create](#cases-create), [Get](#cases-get), [Update](#cases-update), [Delete](#cases-delete), [API Search](#cases-api-search) |
-| Notes | [List](#notes-list), [Create](#notes-create), [Get](#notes-get), [Update](#notes-update), [Delete](#notes-delete), [API Search](#notes-api-search) |
+| Accounts | [List](#accounts-list), [Create](#accounts-create), [Get](#accounts-get), [Update](#accounts-update), [Delete](#accounts-delete), [Search](#accounts-search), [Context Store Search](#accounts-context-store-search), [Context Store SQL Query](#accounts-context-store-sql-query) |
+| Contacts | [List](#contacts-list), [Create](#contacts-create), [Get](#contacts-get), [Update](#contacts-update), [Delete](#contacts-delete), [Search](#contacts-search), [Context Store Search](#contacts-context-store-search), [Context Store SQL Query](#contacts-context-store-sql-query) |
+| Leads | [List](#leads-list), [Create](#leads-create), [Get](#leads-get), [Update](#leads-update), [Delete](#leads-delete), [Search](#leads-search), [Context Store Search](#leads-context-store-search), [Context Store SQL Query](#leads-context-store-sql-query) |
+| Opportunities | [List](#opportunities-list), [Create](#opportunities-create), [Get](#opportunities-get), [Update](#opportunities-update), [Delete](#opportunities-delete), [Search](#opportunities-search), [Context Store Search](#opportunities-context-store-search), [Context Store SQL Query](#opportunities-context-store-sql-query) |
+| Tasks | [List](#tasks-list), [Create](#tasks-create), [Get](#tasks-get), [Update](#tasks-update), [Delete](#tasks-delete), [Search](#tasks-search), [Context Store Search](#tasks-context-store-search), [Context Store SQL Query](#tasks-context-store-sql-query) |
+| Events | [List](#events-list), [Create](#events-create), [Get](#events-get), [Update](#events-update), [Delete](#events-delete), [Search](#events-search) |
+| Campaigns | [List](#campaigns-list), [Create](#campaigns-create), [Get](#campaigns-get), [Update](#campaigns-update), [Delete](#campaigns-delete), [Search](#campaigns-search) |
+| Cases | [List](#cases-list), [Create](#cases-create), [Get](#cases-get), [Update](#cases-update), [Delete](#cases-delete), [Search](#cases-search) |
+| Notes | [List](#notes-list), [Create](#notes-create), [Get](#notes-get), [Update](#notes-update), [Delete](#notes-delete), [Search](#notes-search) |
 | Content Versions | [List](#content-versions-list), [Get](#content-versions-get), [Download](#content-versions-download) |
 | Attachments | [List](#attachments-list), [Get](#attachments-get), [Download](#attachments-download) |
 | Reports | [List](#reports-list), [Get](#reports-get) |
@@ -750,7 +750,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Accounts API Search
+### Accounts Search
 
 Search for accounts using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields and objects.
@@ -764,7 +764,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "accounts",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -774,7 +774,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.accounts.api_search(
+await salesforce.accounts.search(
     q="<str>"
 )
 ```
@@ -787,7 +787,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "accounts",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -1447,7 +1447,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Contacts API Search
+### Contacts Search
 
 Search for contacts using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -1460,7 +1460,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "contacts",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -1470,7 +1470,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.contacts.api_search(
+await salesforce.contacts.search(
     q="<str>"
 )
 ```
@@ -1483,7 +1483,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "contacts",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -2182,7 +2182,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Leads API Search
+### Leads Search
 
 Search for leads using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -2195,7 +2195,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "leads",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -2205,7 +2205,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.leads.api_search(
+await salesforce.leads.search(
     q="<str>"
 )
 ```
@@ -2218,7 +2218,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "leads",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -2874,7 +2874,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Opportunities API Search
+### Opportunities Search
 
 Search for opportunities using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -2887,7 +2887,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "opportunities",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -2897,7 +2897,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.opportunities.api_search(
+await salesforce.opportunities.search(
     q="<str>"
 )
 ```
@@ -2910,7 +2910,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "opportunities",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -3530,7 +3530,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Tasks API Search
+### Tasks Search
 
 Search for tasks using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -3543,7 +3543,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "tasks",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -3553,7 +3553,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.tasks.api_search(
+await salesforce.tasks.search(
     q="<str>"
 )
 ```
@@ -3566,7 +3566,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "tasks",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -4182,7 +4182,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Events API Search
+### Events Search
 
 Search for events using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -4195,7 +4195,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "events",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -4205,7 +4205,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.events.api_search(
+await salesforce.events.search(
     q="<str>"
 )
 ```
@@ -4218,7 +4218,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "events",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -4670,7 +4670,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Campaigns API Search
+### Campaigns Search
 
 Search for campaigns using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -4683,7 +4683,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "campaigns",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -4693,7 +4693,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.campaigns.api_search(
+await salesforce.campaigns.search(
     q="<str>"
 )
 ```
@@ -4706,7 +4706,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "campaigns",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -5168,7 +5168,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Cases API Search
+### Cases Search
 
 Search for cases using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -5181,7 +5181,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "cases",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -5191,7 +5191,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.cases.api_search(
+await salesforce.cases.search(
     q="<str>"
 )
 ```
@@ -5204,7 +5204,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "cases",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }
@@ -5582,7 +5582,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `id` | `string` | Yes |  |
 
 
-### Notes API Search
+### Notes Search
 
 Search for notes using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -5595,7 +5595,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "salesforce",
   "entity": "notes",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "q": "<str>"
   }
@@ -5605,7 +5605,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await salesforce.notes.api_search(
+await salesforce.notes.search(
     q="<str>"
 )
 ```
@@ -5618,7 +5618,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "notes",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "q": "<str>"
     }

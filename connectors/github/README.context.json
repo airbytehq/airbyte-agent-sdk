@@ -279,7 +279,7 @@
         "http_method": "post",
         "path": "/graphql:repositories",
         "entity": "repositories",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -332,8 +332,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "RepositoriesApiSearchParams",
-        "response_type": "RepositoriesApiSearchResult",
+        "params_type_name": "RepositoriesSearchParams",
+        "response_type": "RepositoriesSearchResult",
         "description": "Search for GitHub repositories using GitHub's powerful search syntax.\nExamples: \"language:python stars:>1000\", \"topic:machine-learning\", \"org:facebook is:public\"\n",
         "record_extractor": "$.data.search.nodes",
         "meta_extractor": {
@@ -1178,7 +1178,7 @@
         "http_method": "post",
         "path": "/graphql:issues:search",
         "entity": "issues",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -1231,8 +1231,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "IssuesApiSearchParams",
-        "response_type": "IssuesApiSearchResult",
+        "params_type_name": "IssuesSearchParams",
+        "response_type": "IssuesSearchResult",
         "description": "Search for issues using GitHub's search syntax",
         "record_extractor": "$.data.search.nodes",
         "meta_extractor": {
@@ -2036,7 +2036,7 @@
         "http_method": "post",
         "path": "/graphql:pull_requests:search",
         "entity": "pull_requests",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -2089,8 +2089,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "PullRequestsApiSearchParams",
-        "response_type": "PullRequestsApiSearchResult",
+        "params_type_name": "PullRequestsSearchParams",
+        "response_type": "PullRequestsSearchResult",
         "description": "Search for pull requests using GitHub's search syntax",
         "record_extractor": "$.data.search.nodes",
         "meta_extractor": {
@@ -3037,7 +3037,7 @@
         "http_method": "post",
         "path": "/graphql:users:search",
         "entity": "users",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -3090,8 +3090,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "UsersApiSearchParams",
-        "response_type": "UsersApiSearchResult",
+        "params_type_name": "UsersSearchParams",
+        "response_type": "UsersSearchResult",
         "description": "Search for GitHub users using search syntax",
         "record_extractor": "$.data.search.nodes",
         "meta_extractor": {
@@ -4119,7 +4119,7 @@
         "http_method": "post",
         "path": "/graphql:discussions:search",
         "entity": "discussions",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "query",
@@ -4172,8 +4172,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "DiscussionsApiSearchParams",
-        "response_type": "DiscussionsApiSearchResult",
+        "params_type_name": "DiscussionsSearchParams",
+        "response_type": "DiscussionsSearchResult",
         "description": "Search for discussions using GitHub's search syntax",
         "record_extractor": "$.data.search.nodes",
         "meta_extractor": {

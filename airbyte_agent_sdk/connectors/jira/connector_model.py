@@ -119,17 +119,17 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
             name='issues',
             stream_name='issues',
             actions=[
-                Action.API_SEARCH,
+                Action.SEARCH,
                 Action.CREATE,
                 Action.GET,
                 Action.UPDATE,
                 Action.DELETE,
             ],
             endpoints={
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/rest/api/3/search/jql',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Retrieve issues based on JQL query with pagination support.\n\nIMPORTANT: This endpoint requires a bounded JQL query. A bounded query must include a search restriction that limits the scope of the search. Examples of valid restrictions include: project (e.g., "project = MYPROJECT"), assignee (e.g., "assignee = currentUser()"), reporter, issue key, sprint, or date-based filters combined with a project restriction. An unbounded query like "order by key desc" will be rejected with a 400 error. Example bounded query: "project = MYPROJECT AND updated >= -7d ORDER BY created DESC".\n',
                     query_params=[
                         'jql',
@@ -1203,12 +1203,12 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='projects',
             stream_name='projects',
-            actions=[Action.API_SEARCH, Action.GET],
+            actions=[Action.SEARCH, Action.GET],
             endpoints={
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/rest/api/3/project/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search and filter projects with advanced query parameters',
                     query_params=[
                         'startAt',
@@ -1876,7 +1876,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='users',
             stream_name='users',
-            actions=[Action.GET, Action.LIST, Action.API_SEARCH],
+            actions=[Action.GET, Action.LIST, Action.SEARCH],
             endpoints={
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2172,10 +2172,10 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     no_pagination='Jira Cloud /users endpoint paginates via startAt/maxResults query parameters but returns a raw JSON array with no wrapper object, so the response exposes no next-page cursor or total count; pagination termination is derived client-side from page-size exhaustion (fewer than maxResults users returned).',
                     preferred_for_check=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/rest/api/3/user/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for users using a query string',
                     query_params=[
                         'query',
@@ -2475,7 +2475,7 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='issue_fields',
             stream_name='issue_fields',
-            actions=[Action.LIST, Action.API_SEARCH],
+            actions=[Action.LIST, Action.SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -2590,10 +2590,10 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_pagination='Jira Cloud /field endpoint returns the full collection of system and custom fields in a single response; the API does not expose pagination on this endpoint.',
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/rest/api/3/field/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search and filter issue fields with query parameters',
                     query_params=[
                         'startAt',

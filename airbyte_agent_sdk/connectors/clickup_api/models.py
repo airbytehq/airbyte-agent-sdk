@@ -97,19 +97,12 @@ class TeamsListResponse(BaseModel):
 
     teams: list[Team] | None = Field(default=None)
 
-class SpaceFeaturesDependencyWarning(BaseModel):
-    """Dependency warning feature settings"""
+class SpaceFeaturesMilestones(BaseModel):
+    """Milestones feature settings"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    enabled: bool | None = Field(default=None, description="Whether dependency warnings are enabled")
-    """Whether dependency warnings are enabled"""
-
-class SpaceFeaturesPoints(BaseModel):
-    """Points feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether points are enabled")
-    """Whether points are enabled"""
+    enabled: bool | None = Field(default=None, description="Whether milestones are enabled")
+    """Whether milestones are enabled"""
 
 class SpaceFeaturesCustomItems(BaseModel):
     """Custom items feature settings"""
@@ -134,12 +127,59 @@ class SpaceFeaturesDependencyEnforcement(BaseModel):
     enforcement_mode: int | None | None = Field(default=None, description="Enforcement mode")
     """Enforcement mode"""
 
-class SpaceFeaturesRescheduleClosedDependencies(BaseModel):
-    """Reschedule closed dependencies settings"""
+class SpaceFeaturesCheckUnresolved(BaseModel):
+    """Check unresolved feature settings"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    enabled: bool | None = Field(default=None, description="Whether rescheduling closed dependencies is enabled")
-    """Whether rescheduling closed dependencies is enabled"""
+    enabled: bool | None = Field(default=None, description="Whether check unresolved is enabled")
+    """Whether check unresolved is enabled"""
+    subtasks: bool | None | None = Field(default=None, description="Check unresolved subtasks")
+    """Check unresolved subtasks"""
+    checklists: bool | None | None = Field(default=None, description="Check unresolved checklists")
+    """Check unresolved checklists"""
+    comments: bool | None | None = Field(default=None, description="Check unresolved comments")
+    """Check unresolved comments"""
+
+class SpaceFeaturesMultipleAssignees(BaseModel):
+    """Multiple assignees feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether multiple assignees are enabled")
+    """Whether multiple assignees are enabled"""
+
+class SpaceFeaturesDependencyWarning(BaseModel):
+    """Dependency warning feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether dependency warnings are enabled")
+    """Whether dependency warnings are enabled"""
+
+class SpaceFeaturesDueDates(BaseModel):
+    """Due dates feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether due dates are enabled")
+    """Whether due dates are enabled"""
+    start_date: bool | None = Field(default=None, description="Whether start dates are enabled")
+    """Whether start dates are enabled"""
+    remap_due_dates: bool | None = Field(default=None, description="Whether due dates are remapped")
+    """Whether due dates are remapped"""
+    remap_closed_due_date: bool | None = Field(default=None, description="Whether closed due dates are remapped")
+    """Whether closed due dates are remapped"""
+
+class SpaceFeaturesPoints(BaseModel):
+    """Points feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether points are enabled")
+    """Whether points are enabled"""
+
+class SpaceFeaturesCustomFields(BaseModel):
+    """Custom fields feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether custom fields are enabled")
+    """Whether custom fields are enabled"""
 
 class SpaceFeaturesTags(BaseModel):
     """Tags feature settings"""
@@ -147,30 +187,6 @@ class SpaceFeaturesTags(BaseModel):
 
     enabled: bool | None = Field(default=None, description="Whether tags are enabled")
     """Whether tags are enabled"""
-
-class SpaceFeaturesTimeEstimates(BaseModel):
-    """Time estimates feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether time estimates are enabled")
-    """Whether time estimates are enabled"""
-    rollup: bool | None = Field(default=None, description="Whether time estimate rollup is enabled")
-    """Whether time estimate rollup is enabled"""
-    per_assignee: bool | None = Field(default=None, description="Whether per-assignee estimates are enabled")
-    """Whether per-assignee estimates are enabled"""
-
-class SpaceFeaturesTimeTracking(BaseModel):
-    """Time tracking feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether time tracking is enabled")
-    """Whether time tracking is enabled"""
-    harvest: bool | None = Field(default=None, description="Whether Harvest integration is enabled")
-    """Whether Harvest integration is enabled"""
-    rollup: bool | None = Field(default=None, description="Whether time rollup is enabled")
-    """Whether time rollup is enabled"""
-    default_to_billable: int | None | None = Field(default=None, description="Default billable setting")
-    """Default billable setting"""
 
 class SpaceFeaturesPrioritiesPrioritiesItem(BaseModel):
     """Nested schema for SpaceFeaturesPriorities.priorities_item"""
@@ -194,18 +210,23 @@ class SpaceFeaturesPriorities(BaseModel):
     priorities: list[SpaceFeaturesPrioritiesPrioritiesItem] | None = Field(default=None, description="Priority levels")
     """Priority levels"""
 
-class SpaceFeaturesCheckUnresolved(BaseModel):
-    """Check unresolved feature settings"""
+class SpaceFeaturesTimeEstimates(BaseModel):
+    """Time estimates feature settings"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    enabled: bool | None = Field(default=None, description="Whether check unresolved is enabled")
-    """Whether check unresolved is enabled"""
-    subtasks: bool | None | None = Field(default=None, description="Check unresolved subtasks")
-    """Check unresolved subtasks"""
-    checklists: bool | None | None = Field(default=None, description="Check unresolved checklists")
-    """Check unresolved checklists"""
-    comments: bool | None | None = Field(default=None, description="Check unresolved comments")
-    """Check unresolved comments"""
+    enabled: bool | None = Field(default=None, description="Whether time estimates are enabled")
+    """Whether time estimates are enabled"""
+    rollup: bool | None = Field(default=None, description="Whether time estimate rollup is enabled")
+    """Whether time estimate rollup is enabled"""
+    per_assignee: bool | None = Field(default=None, description="Whether per-assignee estimates are enabled")
+    """Whether per-assignee estimates are enabled"""
+
+class SpaceFeaturesEmails(BaseModel):
+    """Emails feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether emails are enabled")
+    """Whether emails are enabled"""
 
 class SpaceFeaturesSprints(BaseModel):
     """Sprints feature settings"""
@@ -214,40 +235,6 @@ class SpaceFeaturesSprints(BaseModel):
     enabled: bool | None = Field(default=None, description="Whether sprints are enabled")
     """Whether sprints are enabled"""
 
-class SpaceFeaturesMilestones(BaseModel):
-    """Milestones feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether milestones are enabled")
-    """Whether milestones are enabled"""
-
-class SpaceFeaturesCustomFields(BaseModel):
-    """Custom fields feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether custom fields are enabled")
-    """Whether custom fields are enabled"""
-
-class SpaceFeaturesMultipleAssignees(BaseModel):
-    """Multiple assignees feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether multiple assignees are enabled")
-    """Whether multiple assignees are enabled"""
-
-class SpaceFeaturesDueDates(BaseModel):
-    """Due dates feature settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    enabled: bool | None = Field(default=None, description="Whether due dates are enabled")
-    """Whether due dates are enabled"""
-    start_date: bool | None = Field(default=None, description="Whether start dates are enabled")
-    """Whether start dates are enabled"""
-    remap_due_dates: bool | None = Field(default=None, description="Whether due dates are remapped")
-    """Whether due dates are remapped"""
-    remap_closed_due_date: bool | None = Field(default=None, description="Whether closed due dates are remapped")
-    """Whether closed due dates are remapped"""
-
 class SpaceFeaturesRemapDependencies(BaseModel):
     """Remap dependencies feature settings"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -255,12 +242,25 @@ class SpaceFeaturesRemapDependencies(BaseModel):
     enabled: bool | None = Field(default=None, description="Whether remap dependencies is enabled")
     """Whether remap dependencies is enabled"""
 
-class SpaceFeaturesEmails(BaseModel):
-    """Emails feature settings"""
+class SpaceFeaturesRescheduleClosedDependencies(BaseModel):
+    """Reschedule closed dependencies settings"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    enabled: bool | None = Field(default=None, description="Whether emails are enabled")
-    """Whether emails are enabled"""
+    enabled: bool | None = Field(default=None, description="Whether rescheduling closed dependencies is enabled")
+    """Whether rescheduling closed dependencies is enabled"""
+
+class SpaceFeaturesTimeTracking(BaseModel):
+    """Time tracking feature settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    enabled: bool | None = Field(default=None, description="Whether time tracking is enabled")
+    """Whether time tracking is enabled"""
+    harvest: bool | None = Field(default=None, description="Whether Harvest integration is enabled")
+    """Whether Harvest integration is enabled"""
+    rollup: bool | None = Field(default=None, description="Whether time rollup is enabled")
+    """Whether time rollup is enabled"""
+    default_to_billable: int | None | None = Field(default=None, description="Default billable setting")
+    """Default billable setting"""
 
 class SpaceFeatures(BaseModel):
     """Feature flags for the space"""
@@ -343,17 +343,6 @@ class SpacesListResponse(BaseModel):
 
     spaces: list[Space] | None = Field(default=None)
 
-class FolderSpace(BaseModel):
-    """Parent space reference"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="Space ID")
-    """Space ID"""
-    name: str | None = Field(default=None, description="Space name")
-    """Space name"""
-    access: bool | None | None = Field(default=None, description="Whether user has access")
-    """Whether user has access"""
-
 class FolderStatusesItem(BaseModel):
     """Nested schema for Folder.statuses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -420,6 +409,17 @@ class FolderListsItem(BaseModel):
     """List statuses"""
     permission_level: str | None | None = Field(default=None, description="User permission level")
     """User permission level"""
+
+class FolderSpace(BaseModel):
+    """Parent space reference"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None, description="Space ID")
+    """Space ID"""
+    name: str | None = Field(default=None, description="Space name")
+    """Space name"""
+    access: bool | None | None = Field(default=None, description="Whether user has access")
+    """Whether user has access"""
 
 class Folder(BaseModel):
     """Folder type definition"""
@@ -826,8 +826,8 @@ class TasksListResultMeta(BaseModel):
 
     last_page: bool | None = Field(default=None)
 
-class TasksApiSearchResultMeta(BaseModel):
-    """Metadata for tasks.Action.API_SEARCH operation"""
+class TasksSearchResultMeta(BaseModel):
+    """Metadata for tasks.Action.SEARCH operation"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     last_page: bool | None = Field(default=None)
@@ -1110,8 +1110,8 @@ ListsListResult = ClickupApiExecuteResult[list[List]]
 TasksListResult = ClickupApiExecuteResultWithMeta[list[Task], TasksListResultMeta]
 """Result type for tasks.list operation with data and metadata."""
 
-TasksApiSearchResult = ClickupApiExecuteResultWithMeta[list[Task], TasksApiSearchResultMeta]
-"""Result type for tasks.api_search operation with data and metadata."""
+TasksSearchResult = ClickupApiExecuteResultWithMeta[list[Task], TasksSearchResultMeta]
+"""Result type for tasks.search operation with data and metadata."""
 
 CommentsListResult = ClickupApiExecuteResult[list[Comment]]
 """Result type for comments.list operation."""

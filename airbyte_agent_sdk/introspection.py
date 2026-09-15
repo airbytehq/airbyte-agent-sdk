@@ -95,11 +95,12 @@ EXECUTE_INSTRUCTIONS = (
     "signature (this connector uses camelCase, e.g. `fileId`, `mimeType`). Do NOT snake_case them — "
     "`file_id` is wrong and will fail with a missing-parameter error.\n"
     "RESPONSE STRUCTURE:\n"
-    "  - list/api_search: {data: [...], meta: {has_more: bool}}\n"
+    "  - list/search: {data: [...], meta: {has_more: bool}}\n"
     "  - get: Returns entity directly (no envelope)\n"
     "  To paginate: pass cursor=<last_cursor> while has_more is true"
     "\n\n"
-    "ACTIONS: list, get, api_search, context_store_search, create, update, download. " + CONTEXT_STORE_READ_GUIDANCE + "\n\n"
+    "DEPRECATED: `api_search` is a deprecated alias for `search`.\n"
+    "ACTIONS: list, get, search, context_store_search, create, update, download. " + CONTEXT_STORE_READ_GUIDANCE + "\n\n"
     "HOW TO USE DOWNLOAD:\n"
     "- By default, download returns a stream for API/SDK clients. For agent/MCP JSON responses, omit `range_header` "
     'and pass params={"_airbyte_response_type": "json", "_airbyte_response_format": "text", "_airbyte_max_chars": 20000}.\n'
@@ -1025,7 +1026,7 @@ def generate_tool_description(
 
     # Response structure
     lines.append("RESPONSE STRUCTURE:")
-    lines.append("  - list/api_search: {data: [...], meta: {has_more: bool}}")
+    lines.append("  - list/search: {data: [...], meta: {has_more: bool}}")
     lines.append("  - get: Returns entity directly (no envelope)")
     lines.append("  To paginate: pass starting_after=<last_id> while has_more is true")
 

@@ -95,7 +95,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='repositories',
             stream_name='repositories',
-            actions=[Action.GET, Action.LIST, Action.API_SEARCH],
+            actions=[Action.GET, Action.LIST, Action.SEARCH],
             endpoints={
                 Action.GET: EndpointDefinition(
                     method='POST',
@@ -212,13 +212,13 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     meta_extractor={'has_next_page': '$.data.user.repositories.pageInfo.hasNextPage', 'end_cursor': '$.data.user.repositories.pageInfo.endCursor'},
                     preferred_for_check=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/graphql:repositories',
                     path_override=PathOverrideConfig(
                         path='/graphql',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for GitHub repositories using GitHub\'s powerful search syntax.\nExamples: "language:python stars:>1000", "topic:machine-learning", "org:facebook is:public"\n',
                     query_params=[
                         'query',
@@ -826,7 +826,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
             actions=[
                 Action.LIST,
                 Action.GET,
-                Action.API_SEARCH,
+                Action.SEARCH,
                 Action.CREATE,
                 Action.UPDATE,
             ],
@@ -972,13 +972,13 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data.repository.issue',
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/graphql:issues:search',
                     path_override=PathOverrideConfig(
                         path='/graphql',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for issues using GitHub's search syntax",
                     query_params=[
                         'query',
@@ -1693,7 +1693,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                 Action.CREATE,
                 Action.LIST,
                 Action.GET,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.CREATE: EndpointDefinition(
@@ -1985,13 +1985,13 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data.repository.pullRequest',
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/graphql:pull_requests:search',
                     path_override=PathOverrideConfig(
                         path='/graphql',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for pull requests using GitHub's search syntax",
                     query_params=[
                         'query',
@@ -2737,7 +2737,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='users',
             stream_name='users',
-            actions=[Action.GET, Action.LIST, Action.API_SEARCH],
+            actions=[Action.GET, Action.LIST, Action.SEARCH],
             endpoints={
                 Action.GET: EndpointDefinition(
                     method='POST',
@@ -2851,13 +2851,13 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.data.organization.membersWithRole.nodes',
                     meta_extractor={'has_next_page': '$.data.organization.membersWithRole.pageInfo.hasNextPage', 'end_cursor': '$.data.organization.membersWithRole.pageInfo.endCursor'},
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/graphql:users:search',
                     path_override=PathOverrideConfig(
                         path='/graphql',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for GitHub users using search syntax',
                     query_params=[
                         'query',
@@ -3639,7 +3639,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='discussions',
-            actions=[Action.LIST, Action.GET, Action.API_SEARCH],
+            actions=[Action.LIST, Action.GET, Action.SEARCH],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='POST',
@@ -3785,13 +3785,13 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data.repository.discussion',
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/graphql:discussions:search',
                     path_override=PathOverrideConfig(
                         path='/graphql',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description="Search for discussions using GitHub's search syntax",
                     query_params=[
                         'query',
@@ -4131,7 +4131,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
             ),
             CacheEntityConfig(
                 entity='discussions',
-                x_airbyte_skip_searchable_fields='Upstream source-github replication does not include a discussions stream; only reachable via direct GraphQL calls (list, get, api_search).',
+                x_airbyte_skip_searchable_fields='Upstream source-github replication does not include a discussions stream; only reachable via direct GraphQL calls (list, get, search).',
             ),
             CacheEntityConfig(
                 entity='file_content',

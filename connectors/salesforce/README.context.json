@@ -736,7 +736,7 @@
         "http_method": "get",
         "path": "/search:accounts",
         "entity": "accounts",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -750,8 +750,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "AccountsApiSearchParams",
-        "response_type": "AccountsApiSearchResult",
+        "params_type_name": "AccountsSearchParams",
+        "response_type": "AccountsSearchResult",
         "description": "Search for accounts using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields and objects.\nUse SOQL (list action) for structured queries with specific field conditions.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -1230,7 +1230,7 @@
         "http_method": "get",
         "path": "/search:contacts",
         "entity": "contacts",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -1244,8 +1244,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "ContactsApiSearchParams",
-        "response_type": "ContactsApiSearchResult",
+        "params_type_name": "ContactsSearchParams",
+        "response_type": "ContactsSearchResult",
         "description": "Search for contacts using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -1844,7 +1844,7 @@
         "http_method": "get",
         "path": "/search:leads",
         "entity": "leads",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -1858,8 +1858,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "LeadsApiSearchParams",
-        "response_type": "LeadsApiSearchResult",
+        "params_type_name": "LeadsSearchParams",
+        "response_type": "LeadsSearchResult",
         "description": "Search for leads using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -2302,7 +2302,7 @@
         "http_method": "get",
         "path": "/search:opportunities",
         "entity": "opportunities",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -2316,8 +2316,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "OpportunitiesApiSearchParams",
-        "response_type": "OpportunitiesApiSearchResult",
+        "params_type_name": "OpportunitiesSearchParams",
+        "response_type": "OpportunitiesSearchResult",
         "description": "Search for opportunities using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -2726,7 +2726,7 @@
         "http_method": "get",
         "path": "/search:tasks",
         "entity": "tasks",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -2740,8 +2740,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "TasksApiSearchParams",
-        "response_type": "TasksApiSearchResult",
+        "params_type_name": "TasksSearchParams",
+        "response_type": "TasksSearchResult",
         "description": "Search for tasks using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -3144,7 +3144,7 @@
         "http_method": "get",
         "path": "/search:events",
         "entity": "events",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -3158,8 +3158,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "EventsApiSearchParams",
-        "response_type": "EventsApiSearchResult",
+        "params_type_name": "EventsSearchParams",
+        "response_type": "EventsSearchResult",
         "description": "Search for events using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -3622,7 +3622,7 @@
         "http_method": "get",
         "path": "/search:campaigns",
         "entity": "campaigns",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -3636,8 +3636,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "CampaignsApiSearchParams",
-        "response_type": "CampaignsApiSearchResult",
+        "params_type_name": "CampaignsSearchParams",
+        "response_type": "CampaignsSearchResult",
         "description": "Search for campaigns using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -4116,7 +4116,7 @@
         "http_method": "get",
         "path": "/search:cases",
         "entity": "cases",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -4130,8 +4130,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "CasesApiSearchParams",
-        "response_type": "CasesApiSearchResult",
+        "params_type_name": "CasesSearchParams",
+        "response_type": "CasesSearchResult",
         "description": "Search for cases using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,
@@ -4407,7 +4407,7 @@
         "http_method": "get",
         "path": "/search:notes",
         "entity": "notes",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "q",
@@ -4421,8 +4421,8 @@
             "is_deep_object": false
           }
         ],
-        "params_type_name": "NotesApiSearchParams",
-        "response_type": "NotesApiSearchResult",
+        "params_type_name": "NotesSearchParams",
+        "response_type": "NotesSearchResult",
         "description": "Search for notes using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n",
         "record_extractor": "$",
         "meta_extractor": null,

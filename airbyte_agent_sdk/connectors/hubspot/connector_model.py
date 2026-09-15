@@ -123,7 +123,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                 Action.CREATE,
                 Action.GET,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -597,10 +597,10 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/crm/v3/objects/contacts/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for contacts by filtering on properties, searching through associations, and sorting results.',
                     body_fields=[
                         'filterGroups',
@@ -914,7 +914,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                 Action.CREATE,
                 Action.GET,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1381,10 +1381,10 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/crm/v3/objects/companies/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for companies by filtering on properties, searching through associations, and sorting results.',
                     body_fields=[
                         'filterGroups',
@@ -1689,7 +1689,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                 Action.CREATE,
                 Action.GET,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2184,10 +2184,10 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/crm/v3/objects/deals/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search deals with filters and sorting',
                     body_fields=[
                         'filterGroups',
@@ -2513,7 +2513,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                 Action.CREATE,
                 Action.GET,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2994,10 +2994,10 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='POST',
                     path='/crm/v3/objects/tickets/search',
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for tickets by filtering on properties, searching through associations, and sorting results.',
                     body_fields=[
                         'filterGroups',

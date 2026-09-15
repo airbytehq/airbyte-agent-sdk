@@ -96,8 +96,8 @@ class AccountsDeleteParams(TypedDict):
     """Parameters for accounts.delete operation"""
     id: str
 
-class AccountsApiSearchParams(TypedDict):
-    """Parameters for accounts.api_search operation"""
+class AccountsSearchParams(TypedDict):
+    """Parameters for accounts.search operation"""
     q: str
 
 class ContactsListParams(TypedDict):
@@ -150,8 +150,8 @@ class ContactsDeleteParams(TypedDict):
     """Parameters for contacts.delete operation"""
     id: str
 
-class ContactsApiSearchParams(TypedDict):
-    """Parameters for contacts.api_search operation"""
+class ContactsSearchParams(TypedDict):
+    """Parameters for contacts.search operation"""
     q: str
 
 class LeadsListParams(TypedDict):
@@ -216,8 +216,8 @@ class LeadsDeleteParams(TypedDict):
     """Parameters for leads.delete operation"""
     id: str
 
-class LeadsApiSearchParams(TypedDict):
-    """Parameters for leads.api_search operation"""
+class LeadsSearchParams(TypedDict):
+    """Parameters for leads.search operation"""
     q: str
 
 class OpportunitiesListParams(TypedDict):
@@ -266,8 +266,8 @@ class OpportunitiesDeleteParams(TypedDict):
     """Parameters for opportunities.delete operation"""
     id: str
 
-class OpportunitiesApiSearchParams(TypedDict):
-    """Parameters for opportunities.api_search operation"""
+class OpportunitiesSearchParams(TypedDict):
+    """Parameters for opportunities.search operation"""
     q: str
 
 class TasksListParams(TypedDict):
@@ -312,8 +312,8 @@ class TasksDeleteParams(TypedDict):
     """Parameters for tasks.delete operation"""
     id: str
 
-class TasksApiSearchParams(TypedDict):
-    """Parameters for tasks.api_search operation"""
+class TasksSearchParams(TypedDict):
+    """Parameters for tasks.search operation"""
     q: str
 
 class EventsListParams(TypedDict):
@@ -358,8 +358,8 @@ class EventsDeleteParams(TypedDict):
     """Parameters for events.delete operation"""
     id: str
 
-class EventsApiSearchParams(TypedDict):
-    """Parameters for events.api_search operation"""
+class EventsSearchParams(TypedDict):
+    """Parameters for events.search operation"""
     q: str
 
 class CampaignsListParams(TypedDict):
@@ -410,8 +410,8 @@ class CampaignsDeleteParams(TypedDict):
     """Parameters for campaigns.delete operation"""
     id: str
 
-class CampaignsApiSearchParams(TypedDict):
-    """Parameters for campaigns.api_search operation"""
+class CampaignsSearchParams(TypedDict):
+    """Parameters for campaigns.search operation"""
     q: str
 
 class CasesListParams(TypedDict):
@@ -464,8 +464,8 @@ class CasesDeleteParams(TypedDict):
     """Parameters for cases.delete operation"""
     id: str
 
-class CasesApiSearchParams(TypedDict):
-    """Parameters for cases.api_search operation"""
+class CasesSearchParams(TypedDict):
+    """Parameters for cases.search operation"""
     q: str
 
 class NotesListParams(TypedDict):
@@ -497,8 +497,8 @@ class NotesDeleteParams(TypedDict):
     """Parameters for notes.delete operation"""
     id: str
 
-class NotesApiSearchParams(TypedDict):
-    """Parameters for notes.api_search operation"""
+class NotesSearchParams(TypedDict):
+    """Parameters for notes.search operation"""
     q: str
 
 class ContentVersionsListParams(TypedDict):

@@ -8,20 +8,20 @@ The Github connector supports the following entities and actions.
 
 | Entity | Actions |
 |--------|---------|
-| Repositories | [Get](#repositories-get), [List](#repositories-list), [API Search](#repositories-api-search), [Context Store Search](#repositories-context-store-search), [Context Store SQL Query](#repositories-context-store-sql-query) |
+| Repositories | [Get](#repositories-get), [List](#repositories-list), [Search](#repositories-search), [Context Store Search](#repositories-context-store-search), [Context Store SQL Query](#repositories-context-store-sql-query) |
 | Org Repositories | [List](#org-repositories-list), [Context Store Search](#org-repositories-context-store-search), [Context Store SQL Query](#org-repositories-context-store-sql-query) |
 | Branches | [List](#branches-list), [Get](#branches-get), [Context Store Search](#branches-context-store-search), [Context Store SQL Query](#branches-context-store-sql-query) |
 | Commits | [List](#commits-list), [Get](#commits-get), [Context Store Search](#commits-context-store-search), [Context Store SQL Query](#commits-context-store-sql-query) |
 | Releases | [List](#releases-list), [Get](#releases-get), [Context Store Search](#releases-context-store-search), [Context Store SQL Query](#releases-context-store-sql-query) |
-| Issues | [List](#issues-list), [Get](#issues-get), [API Search](#issues-api-search), [Create](#issues-create), [Update](#issues-update), [Context Store Search](#issues-context-store-search), [Context Store SQL Query](#issues-context-store-sql-query), [Semantic Search](#issues-semantic-search) |
+| Issues | [List](#issues-list), [Get](#issues-get), [Search](#issues-search), [Create](#issues-create), [Update](#issues-update), [Context Store Search](#issues-context-store-search), [Context Store SQL Query](#issues-context-store-sql-query), [Semantic Search](#issues-semantic-search) |
 | Comments | [Create](#comments-create), [List](#comments-list), [Get](#comments-get), [Context Store Search](#comments-context-store-search), [Context Store SQL Query](#comments-context-store-sql-query), [Semantic Search](#comments-semantic-search) |
-| Pull Requests | [Create](#pull-requests-create), [List](#pull-requests-list), [Get](#pull-requests-get), [API Search](#pull-requests-api-search), [Context Store Search](#pull-requests-context-store-search), [Context Store SQL Query](#pull-requests-context-store-sql-query), [Semantic Search](#pull-requests-semantic-search) |
+| Pull Requests | [Create](#pull-requests-create), [List](#pull-requests-list), [Get](#pull-requests-get), [Search](#pull-requests-search), [Context Store Search](#pull-requests-context-store-search), [Context Store SQL Query](#pull-requests-context-store-sql-query), [Semantic Search](#pull-requests-semantic-search) |
 | Reviews | [List](#reviews-list), [Context Store Search](#reviews-context-store-search), [Context Store SQL Query](#reviews-context-store-sql-query) |
 | Pr Comments | [List](#pr-comments-list), [Get](#pr-comments-get), [Context Store Search](#pr-comments-context-store-search), [Context Store SQL Query](#pr-comments-context-store-sql-query) |
 | Labels | [List](#labels-list), [Get](#labels-get), [Context Store Search](#labels-context-store-search), [Context Store SQL Query](#labels-context-store-sql-query) |
 | Milestones | [List](#milestones-list), [Get](#milestones-get), [Context Store Search](#milestones-context-store-search), [Context Store SQL Query](#milestones-context-store-sql-query) |
 | Organizations | [Get](#organizations-get), [List](#organizations-list), [Context Store Search](#organizations-context-store-search), [Context Store SQL Query](#organizations-context-store-sql-query) |
-| Users | [Get](#users-get), [List](#users-list), [API Search](#users-api-search), [Context Store Search](#users-context-store-search), [Context Store SQL Query](#users-context-store-sql-query) |
+| Users | [Get](#users-get), [List](#users-list), [Search](#users-search), [Context Store Search](#users-context-store-search), [Context Store SQL Query](#users-context-store-sql-query) |
 | Teams | [List](#teams-list), [Get](#teams-get), [Context Store Search](#teams-context-store-search), [Context Store SQL Query](#teams-context-store-sql-query) |
 | Tags | [List](#tags-list), [Get](#tags-get), [Context Store Search](#tags-context-store-search), [Context Store SQL Query](#tags-context-store-sql-query) |
 | Stargazers | [List](#stargazers-list), [Context Store Search](#stargazers-context-store-search), [Context Store SQL Query](#stargazers-context-store-sql-query) |
@@ -29,7 +29,7 @@ The Github connector supports the following entities and actions.
 | Viewer Repositories | [List](#viewer-repositories-list), [Context Store Search](#viewer-repositories-context-store-search), [Context Store SQL Query](#viewer-repositories-context-store-sql-query) |
 | Projects | [List](#projects-list), [Get](#projects-get), [Context Store Search](#projects-context-store-search), [Context Store SQL Query](#projects-context-store-sql-query) |
 | Project Items | [List](#project-items-list), [Context Store Search](#project-items-context-store-search), [Context Store SQL Query](#project-items-context-store-sql-query) |
-| Discussions | [List](#discussions-list), [Get](#discussions-get), [API Search](#discussions-api-search), [Context Store Search](#discussions-context-store-search), [Context Store SQL Query](#discussions-context-store-sql-query) |
+| Discussions | [List](#discussions-list), [Get](#discussions-get), [Search](#discussions-search), [Context Store Search](#discussions-context-store-search), [Context Store SQL Query](#discussions-context-store-sql-query) |
 | File Content | [Get](#file-content-get), [Context Store Search](#file-content-context-store-search), [Context Store SQL Query](#file-content-context-store-sql-query) |
 | Directory Content | [List](#directory-content-list), [Context Store Search](#directory-content-context-store-search), [Context Store SQL Query](#directory-content-context-store-sql-query) |
 
@@ -159,7 +159,7 @@ If not provided, uses default fields.
 
 </details>
 
-### Repositories API Search
+### Repositories Search
 
 Search for GitHub repositories using GitHub's powerful search syntax.
 Examples: "language:python stars:\>1000", "topic:machine-learning", "org:facebook is:public"
@@ -172,7 +172,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "github",
   "entity": "repositories",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -182,7 +182,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await github.repositories.api_search(
+await github.repositories.search(
     query="<str>"
 )
 ```
@@ -195,7 +195,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "repositories",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -1569,7 +1569,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `fields` | `array<string>` | No | Optional array of field names to select |
 
 
-### Issues API Search
+### Issues Search
 
 Search for issues using GitHub's search syntax
 
@@ -1580,7 +1580,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "github",
   "entity": "issues",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -1590,7 +1590,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await github.issues.api_search(
+await github.issues.search(
     query="<str>"
 )
 ```
@@ -1603,7 +1603,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "issues",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -2848,7 +2848,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `fields` | `array<string>` | No | Optional array of field names to select |
 
 
-### Pull Requests API Search
+### Pull Requests Search
 
 Search for pull requests using GitHub's search syntax
 
@@ -2859,7 +2859,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "github",
   "entity": "pull_requests",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -2869,7 +2869,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await github.pull_requests.api_search(
+await github.pull_requests.search(
     query="<str>"
 )
 ```
@@ -2882,7 +2882,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "pull_requests",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -4627,7 +4627,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Users API Search
+### Users Search
 
 Search for GitHub users using search syntax
 
@@ -4638,7 +4638,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "github",
   "entity": "users",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -4648,7 +4648,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await github.users.api_search(
+await github.users.search(
     query="<str>"
 )
 ```
@@ -4661,7 +4661,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "users",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }
@@ -6612,7 +6612,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 | `fields` | `array<string>` | No | Optional array of field names to select |
 
 
-### Discussions API Search
+### Discussions Search
 
 Search for discussions using GitHub's search syntax
 
@@ -6623,7 +6623,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "github",
   "entity": "discussions",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "query": "<str>"
   }
@@ -6633,7 +6633,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await github.discussions.api_search(
+await github.discussions.search(
     query="<str>"
 )
 ```
@@ -6646,7 +6646,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "discussions",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "query": "<str>"
     }

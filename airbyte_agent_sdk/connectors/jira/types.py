@@ -214,8 +214,8 @@ class IssueLinksCreateParamsComment(TypedDict):
 
 # ===== OPERATION PARAMS TYPE DEFINITIONS =====
 
-class IssuesApiSearchParams(TypedDict):
-    """Parameters for issues.api_search operation"""
+class IssuesSearchParams(TypedDict):
+    """Parameters for issues.search operation"""
     jql: NotRequired[str]
     next_page_token: NotRequired[str]
     max_results: NotRequired[int]
@@ -258,8 +258,8 @@ class IssuesDeleteParams(TypedDict):
     issue_id_or_key: str
     delete_subtasks: NotRequired[bool]
 
-class ProjectsApiSearchParams(TypedDict):
-    """Parameters for projects.api_search operation"""
+class ProjectsSearchParams(TypedDict):
+    """Parameters for projects.search operation"""
     start_at: NotRequired[int]
     max_results: NotRequired[int]
     order_by: NotRequired[str]
@@ -288,8 +288,8 @@ class UsersListParams(TypedDict):
     start_at: NotRequired[int]
     max_results: NotRequired[int]
 
-class UsersApiSearchParams(TypedDict):
-    """Parameters for users.api_search operation"""
+class UsersSearchParams(TypedDict):
+    """Parameters for users.search operation"""
     query: NotRequired[str]
     start_at: NotRequired[int]
     max_results: NotRequired[int]
@@ -300,8 +300,8 @@ class IssueFieldsListParams(TypedDict):
     """Parameters for issue_fields.list operation"""
     pass
 
-class IssueFieldsApiSearchParams(TypedDict):
-    """Parameters for issue_fields.api_search operation"""
+class IssueFieldsSearchParams(TypedDict):
+    """Parameters for issue_fields.search operation"""
     start_at: NotRequired[int]
     max_results: NotRequired[int]
     type: NotRequired[list[str]]

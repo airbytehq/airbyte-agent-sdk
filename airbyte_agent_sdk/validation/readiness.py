@@ -688,7 +688,7 @@ _CALLER_SUPPLIED_PARAM_ACTIONS = {
     Action.DELETE,
     Action.DOWNLOAD,
     Action.AUTHORIZE,
-    Action.API_SEARCH,
+    Action.SEARCH,
 }
 
 
@@ -703,7 +703,7 @@ def _check_entity_relationships_coverage(config: ConnectorModel) -> Tuple[List[s
     `ParamResolutionError` during health checks). Non-list operations are warnings.
 
     Skips caller-supplied-param actions (get, create, update, delete, download,
-    authorize, api_search) when the entity also has a list action, since those
+    authorize, search) when the entity also has a list action, since those
     params are the entity's own primary key or agent-supplied values.
     """
     errors: List[str] = []
@@ -1512,7 +1512,7 @@ def validate_connector_readiness(
         if cache_config is None and not skip_context_store:
             cache_presence_errors.append(
                 "Connector is missing x-airbyte-context-store. "
-                "Either add x-airbyte-context-store with entity definitions to enable api_search, "
+                "Either add x-airbyte-context-store with entity definitions to enable search, "
                 "or add x-airbyte-skip-context-store with a justification to opt out."
             )
         elif cache_config is not None and not cache_config.get("entities"):

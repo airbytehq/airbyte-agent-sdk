@@ -527,12 +527,12 @@
         "http_method": "post",
         "path": "/crm/v3/objects/contacts/search",
         "entity": "contacts",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "filterGroups",
             "python_name": "filter_groups",
-            "type": "list[ContactsApiSearchParamsFiltergroupsItem]",
+            "type": "list[ContactsSearchParamsFiltergroupsItem]",
             "schema": {
               "type": "array",
               "description": "Up to 6 groups of filters defining additional query criteria.",
@@ -634,7 +634,7 @@
           {
             "name": "sorts",
             "python_name": "sorts",
-            "type": "list[ContactsApiSearchParamsSortsItem]",
+            "type": "list[ContactsSearchParamsSortsItem]",
             "schema": {
               "type": "array",
               "description": "Sort criteria",
@@ -670,8 +670,8 @@
             "description": "The search query string, up to 3000 characters."
           }
         ],
-        "params_type_name": "ContactsApiSearchParams",
-        "response_type": "ContactsApiSearchResult",
+        "params_type_name": "ContactsSearchParams",
+        "response_type": "ContactsSearchResult",
         "description": "Search for contacts by filtering on properties, searching through associations, and sorting results.",
         "record_extractor": "$.results",
         "meta_extractor": {
@@ -1100,12 +1100,12 @@
         "http_method": "post",
         "path": "/crm/v3/objects/companies/search",
         "entity": "companies",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "filterGroups",
             "python_name": "filter_groups",
-            "type": "list[CompaniesApiSearchParamsFiltergroupsItem]",
+            "type": "list[CompaniesSearchParamsFiltergroupsItem]",
             "schema": {
               "type": "array",
               "description": "Up to 6 groups of filters defining additional query criteria.",
@@ -1207,7 +1207,7 @@
           {
             "name": "sorts",
             "python_name": "sorts",
-            "type": "list[CompaniesApiSearchParamsSortsItem]",
+            "type": "list[CompaniesSearchParamsSortsItem]",
             "schema": {
               "type": "array",
               "description": "Sort criteria",
@@ -1243,8 +1243,8 @@
             "description": "The search query string, up to 3000 characters."
           }
         ],
-        "params_type_name": "CompaniesApiSearchParams",
-        "response_type": "CompaniesApiSearchResult",
+        "params_type_name": "CompaniesSearchParams",
+        "response_type": "CompaniesSearchResult",
         "description": "Search for companies by filtering on properties, searching through associations, and sorting results.",
         "record_extractor": "$.results",
         "meta_extractor": {
@@ -1625,12 +1625,12 @@
         "http_method": "post",
         "path": "/crm/v3/objects/deals/search",
         "entity": "deals",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "filterGroups",
             "python_name": "filter_groups",
-            "type": "list[DealsApiSearchParamsFiltergroupsItem]",
+            "type": "list[DealsSearchParamsFiltergroupsItem]",
             "schema": {
               "type": "array",
               "description": "Up to 6 groups of filters defining additional query criteria.",
@@ -1732,7 +1732,7 @@
           {
             "name": "sorts",
             "python_name": "sorts",
-            "type": "list[DealsApiSearchParamsSortsItem]",
+            "type": "list[DealsSearchParamsSortsItem]",
             "schema": {
               "type": "array",
               "description": "Sort criteria",
@@ -1768,8 +1768,8 @@
             "description": "The search query string, up to 3000 characters."
           }
         ],
-        "params_type_name": "DealsApiSearchParams",
-        "response_type": "DealsApiSearchResult",
+        "params_type_name": "DealsSearchParams",
+        "response_type": "DealsSearchResult",
         "description": "Search deals with filters and sorting",
         "record_extractor": "$.results",
         "meta_extractor": {
@@ -2144,12 +2144,12 @@
         "http_method": "post",
         "path": "/crm/v3/objects/tickets/search",
         "entity": "tickets",
-        "action": "api_search",
+        "action": "search",
         "parameters": [
           {
             "name": "filterGroups",
             "python_name": "filter_groups",
-            "type": "list[TicketsApiSearchParamsFiltergroupsItem]",
+            "type": "list[TicketsSearchParamsFiltergroupsItem]",
             "schema": {
               "type": "array",
               "description": "Up to 6 groups of filters defining additional query criteria.",
@@ -2251,7 +2251,7 @@
           {
             "name": "sorts",
             "python_name": "sorts",
-            "type": "list[TicketsApiSearchParamsSortsItem]",
+            "type": "list[TicketsSearchParamsSortsItem]",
             "schema": {
               "type": "array",
               "description": "Sort criteria",
@@ -2287,8 +2287,8 @@
             "description": "The search query string, up to 3000 characters."
           }
         ],
-        "params_type_name": "TicketsApiSearchParams",
-        "response_type": "TicketsApiSearchResult",
+        "params_type_name": "TicketsSearchParams",
+        "response_type": "TicketsSearchResult",
         "description": "Search for tickets by filtering on properties, searching through associations, and sorting results.",
         "record_extractor": "$.results",
         "meta_extractor": {

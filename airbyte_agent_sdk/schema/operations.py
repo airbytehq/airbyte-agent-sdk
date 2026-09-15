@@ -6,14 +6,19 @@ References:
 - https://spec.openapis.org/oas/v3.1.0#path-item-object
 """
 
-from typing import Any, Dict, List
+from typing import Annotated, Any, Dict, List
 
-from pydantic import Field, model_validator
+from pydantic import BeforeValidator, Field, model_validator
 
+from ..deprecated_action_aliases import resolve_action_alias
 from ..extensions import AIRBYTE_FILE_URL_DESCRIPTION, ActionTypeLiteral
 from .components import AiHints, Parameter, PathOverrideConfig, RequestBody, Response
 from .extensions import ExtensionAwareModel
 from .security import SecurityRequirement
+
+
+def _resolve_action_alias_if_str(value: object) -> object:
+    return resolve_action_alias(value) if isinstance(value, str) else value
 
 
 class Operation(ExtensionAwareModel):
@@ -47,7 +52,7 @@ class Operation(ExtensionAwareModel):
 
     # Airbyte extensions
     x_airbyte_entity: str = Field(..., alias="x-airbyte-entity")
-    x_airbyte_action: ActionTypeLiteral = Field(..., alias="x-airbyte-action")
+    x_airbyte_action: Annotated[ActionTypeLiteral, BeforeValidator(_resolve_action_alias_if_str)] = Field(..., alias="x-airbyte-action")
     x_airbyte_path_override: PathOverrideConfig | None = Field(
         None,
         alias="x-airbyte-path-override",
@@ -59,7 +64,7 @@ class Operation(ExtensionAwareModel):
         description=(
             "JSONPath expression to extract records from API response envelopes. "
             "When specified, executor extracts data at this path instead of returning "
-            "full response. Returns array for list/api_search actions, single record for "
+            "full response. Returns array for list/search actions, single record for "
             "get/create/update/delete actions."
         ),
     )
@@ -73,7 +78,7 @@ class Operation(ExtensionAwareModel):
             "dropped. The expression receives the current record as `record` and the "
             "connector config as `config`, and must render to a boolean-like value "
             "(`True`/`False`/`1`/`0`/non-empty strings). "
-            "Example: `{{ not record.isPrivate }}`. Only valid on `list` and `api_search` "
+            "Example: `{{ not record.isPrivate }}`. Only valid on `list` and `search` "
             "operations."
         ),
     )

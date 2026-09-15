@@ -1461,7 +1461,7 @@ paths:
         Use SOQL (list action) for structured queries with specific field conditions.
       operationId: searchAccounts
       x-airbyte-entity: accounts
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -1653,7 +1653,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchContacts
       x-airbyte-entity: contacts
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -1844,7 +1844,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchLeads
       x-airbyte-entity: leads
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -2040,7 +2040,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchOpportunities
       x-airbyte-entity: opportunities
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -2232,7 +2232,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchTasks
       x-airbyte-entity: tasks
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -2424,7 +2424,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchEvents
       x-airbyte-entity: events
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -2615,7 +2615,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchCampaigns
       x-airbyte-entity: campaigns
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -2806,7 +2806,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchCases
       x-airbyte-entity: cases
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:
@@ -3000,7 +3000,7 @@ paths:
         SOSL is optimized for text-based searches across multiple fields.
       operationId: searchNotes
       x-airbyte-entity: notes
-      x-airbyte-action: api_search
+      x-airbyte-action: search
       x-airbyte-path-override:
         path: /search
       tags:

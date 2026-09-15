@@ -13,7 +13,7 @@ The Clickup-Api connector supports the following entities and actions.
 | Spaces | [List](#spaces-list), [Get](#spaces-get), [Context Store Search](#spaces-context-store-search), [Context Store SQL Query](#spaces-context-store-sql-query) |
 | Folders | [List](#folders-list), [Get](#folders-get), [Context Store Search](#folders-context-store-search), [Context Store SQL Query](#folders-context-store-sql-query) |
 | Lists | [List](#lists-list), [Get](#lists-get), [Context Store Search](#lists-context-store-search), [Context Store SQL Query](#lists-context-store-sql-query) |
-| Tasks | [List](#tasks-list), [Get](#tasks-get), [API Search](#tasks-api-search), [Context Store Search](#tasks-context-store-search), [Context Store SQL Query](#tasks-context-store-sql-query) |
+| Tasks | [List](#tasks-list), [Get](#tasks-get), [Search](#tasks-search), [Context Store Search](#tasks-context-store-search), [Context Store SQL Query](#tasks-context-store-sql-query) |
 | Comments | [List](#comments-list), [Create](#comments-create), [Get](#comments-get), [Update](#comments-update), [Context Store Search](#comments-context-store-search), [Context Store SQL Query](#comments-context-store-sql-query) |
 | Goals | [List](#goals-list), [Get](#goals-get), [Context Store Search](#goals-context-store-search), [Context Store SQL Query](#goals-context-store-sql-query) |
 | Views | [List](#views-list), [Get](#views-get) |
@@ -1520,7 +1520,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 
 </details>
 
-### Tasks API Search
+### Tasks Search
 
 View the tasks that meet specific criteria from a workspace. Supports free-text search
 and structured filters including status, assignee, tags, priority, and date ranges.
@@ -1534,7 +1534,7 @@ airbyte-agent connectors execute --json '{
   "workspace": "<your_workspace_name>",
   "name": "clickup-api",
   "entity": "tasks",
-  "action": "api_search",
+  "action": "search",
   "params": {
     "team_id": "<str>"
   }
@@ -1544,7 +1544,7 @@ airbyte-agent connectors execute --json '{
 #### Python SDK
 
 ```python
-await clickup_api.tasks.api_search(
+await clickup_api.tasks.search(
     team_id="<str>"
 )
 ```
@@ -1557,7 +1557,7 @@ curl --location 'https://api.airbyte.ai/api/v1/integrations/connectors/{your_con
 --header 'Authorization: Bearer {your_auth_token}' \
 --data '{
     "entity": "tasks",
-    "action": "api_search",
+    "action": "search",
     "params": {
         "team_id": "<str>"
     }

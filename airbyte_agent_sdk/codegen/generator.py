@@ -35,7 +35,7 @@ from ..types import Action, AuthType
 from .filters import mdx_escape, py_str_escape, to_pascal_case, to_snake_case
 from .serializer import PythonCodeSerializer
 
-LIST_ACTIONS = frozenset({Action.LIST, Action.API_SEARCH})
+LIST_ACTIONS = frozenset({Action.LIST, Action.SEARCH})
 
 # Dynamically extract reserved names from Pydantic BaseModel
 # These are attributes/methods that would cause field name shadowing if used

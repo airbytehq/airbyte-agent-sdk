@@ -240,8 +240,8 @@ $defs:
   CacheConfig:
     additionalProperties: false
     description: "Cache configuration extension (x-airbyte-context-store).\n\nDefines\
-      \ cache-enabled entities and their field mappings for api_search operations.\n\
-      Supports optional name aliasing via x-airbyte-name for both entities and fields,\n\
+      \ cache-enabled entities and their field mappings for search operations.\nSupports\
+      \ optional name aliasing via x-airbyte-name for both entities and fields,\n\
       enabling bidirectional mapping between user-facing names and cache storage names.\n\
       \nThis extension is added to the Info model and provides field-level mapping\
       \ for\nsearch operations that use cached data.\n\nExample YAML usage:\n    info:\n\
@@ -299,7 +299,7 @@ $defs:
       to map between user-facing entity names and cache storage names.
 
 
-      Used in x-airbyte-context-store extension for api_search operations.'
+      Used in x-airbyte-context-store extension for search operations.'
     properties:
       entity:
         title: Entity
@@ -369,7 +369,7 @@ $defs:
       of complex nested schemas.
 
 
-      Used in x-airbyte-context-store extension for api_search operations.'
+      Used in x-airbyte-context-store extension for search operations.'
     properties:
       name:
         title: Name
@@ -1328,7 +1328,7 @@ $defs:
         - create
         - update
         - delete
-        - api_search
+        - search
         - download
         title: X-Airbyte-Action
         type: string
@@ -1346,8 +1346,8 @@ $defs:
         default: null
         description: JSONPath expression to extract records from API response envelopes.
           When specified, executor extracts data at this path instead of returning
-          full response. Returns array for list/api_search actions, single record
-          for get/create/update/delete actions.
+          full response. Returns array for list/search actions, single record for
+          get/create/update/delete actions.
         title: X-Airbyte-Record-Extractor
       x-airbyte-record-filter:
         anyOf:
@@ -1360,7 +1360,7 @@ $defs:
           dropped. The expression receives the current record as `record` and the
           connector config as `config`, and must render to a boolean-like value (`True`/`False`/`1`/`0`/non-empty
           strings). Example: `{{ not record.isPrivate }}`. Only valid on `list` and
-          `api_search` operations.'
+          `search` operations.'
         title: X-Airbyte-Record-Filter
       x-airbyte-record-transform:
         anyOf:

@@ -1287,56 +1287,56 @@ SobjectsListResult = SalesforceExecuteResult[list[SObject]]
 AccountsListResult = SalesforceExecuteResultWithMeta[list[Account], AccountsListResultMeta]
 """Result type for accounts.list operation with data and metadata."""
 
-AccountsApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for accounts.api_search operation."""
+AccountsSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for accounts.search operation."""
 
 ContactsListResult = SalesforceExecuteResultWithMeta[list[Contact], ContactsListResultMeta]
 """Result type for contacts.list operation with data and metadata."""
 
-ContactsApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for contacts.api_search operation."""
+ContactsSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for contacts.search operation."""
 
 LeadsListResult = SalesforceExecuteResultWithMeta[list[Lead], LeadsListResultMeta]
 """Result type for leads.list operation with data and metadata."""
 
-LeadsApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for leads.api_search operation."""
+LeadsSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for leads.search operation."""
 
 OpportunitiesListResult = SalesforceExecuteResultWithMeta[list[Opportunity], OpportunitiesListResultMeta]
 """Result type for opportunities.list operation with data and metadata."""
 
-OpportunitiesApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for opportunities.api_search operation."""
+OpportunitiesSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for opportunities.search operation."""
 
 TasksListResult = SalesforceExecuteResultWithMeta[list[Task], TasksListResultMeta]
 """Result type for tasks.list operation with data and metadata."""
 
-TasksApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for tasks.api_search operation."""
+TasksSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for tasks.search operation."""
 
 EventsListResult = SalesforceExecuteResultWithMeta[list[Event], EventsListResultMeta]
 """Result type for events.list operation with data and metadata."""
 
-EventsApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for events.api_search operation."""
+EventsSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for events.search operation."""
 
 CampaignsListResult = SalesforceExecuteResultWithMeta[list[Campaign], CampaignsListResultMeta]
 """Result type for campaigns.list operation with data and metadata."""
 
-CampaignsApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for campaigns.api_search operation."""
+CampaignsSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for campaigns.search operation."""
 
 CasesListResult = SalesforceExecuteResultWithMeta[list[Case], CasesListResultMeta]
 """Result type for cases.list operation with data and metadata."""
 
-CasesApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for cases.api_search operation."""
+CasesSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for cases.search operation."""
 
 NotesListResult = SalesforceExecuteResultWithMeta[list[Note], NotesListResultMeta]
 """Result type for notes.list operation with data and metadata."""
 
-NotesApiSearchResult = SalesforceExecuteResult[SearchResult]
-"""Result type for notes.api_search operation."""
+NotesSearchResult = SalesforceExecuteResult[SearchResult]
+"""Result type for notes.search operation."""
 
 ContentVersionsListResult = SalesforceExecuteResultWithMeta[list[ContentVersion], ContentVersionsListResultMeta]
 """Result type for content_versions.list operation with data and metadata."""

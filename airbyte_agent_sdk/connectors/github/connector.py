@@ -28,14 +28,14 @@ from .types import (
     CommitsGetParams,
     CommitsListParams,
     DirectoryContentListParams,
-    DiscussionsApiSearchParams,
     DiscussionsGetParams,
     DiscussionsListParams,
+    DiscussionsSearchParams,
     FileContentGetParams,
-    IssuesApiSearchParams,
     IssuesCreateParams,
     IssuesGetParams,
     IssuesListParams,
+    IssuesSearchParams,
     IssuesUpdateParams,
     LabelsGetParams,
     LabelsListParams,
@@ -49,24 +49,24 @@ from .types import (
     ProjectItemsListParams,
     ProjectsGetParams,
     ProjectsListParams,
-    PullRequestsApiSearchParams,
     PullRequestsCreateParams,
     PullRequestsGetParams,
     PullRequestsListParams,
+    PullRequestsSearchParams,
     ReleasesGetParams,
     ReleasesListParams,
-    RepositoriesApiSearchParams,
     RepositoriesGetParams,
     RepositoriesListParams,
+    RepositoriesSearchParams,
     ReviewsListParams,
     StargazersListParams,
     TagsGetParams,
     TagsListParams,
     TeamsGetParams,
     TeamsListParams,
-    UsersApiSearchParams,
     UsersGetParams,
     UsersListParams,
+    UsersSearchParams,
     ViewerGetParams,
     ViewerRepositoriesListParams,
     AirbyteSearchParams,
@@ -130,15 +130,15 @@ from .models import (
     GithubExecuteResult,
     GithubExecuteResultWithMeta,
     RepositoriesListResult,
-    RepositoriesApiSearchResult,
+    RepositoriesSearchResult,
     OrgRepositoriesListResult,
     BranchesListResult,
     CommitsListResult,
     ReleasesListResult,
     IssuesListResult,
-    IssuesApiSearchResult,
+    IssuesSearchResult,
     PullRequestsListResult,
-    PullRequestsApiSearchResult,
+    PullRequestsSearchResult,
     ReviewsListResult,
     CommentsListResult,
     PrCommentsListResult,
@@ -146,7 +146,7 @@ from .models import (
     MilestonesListResult,
     OrganizationsListResult,
     UsersListResult,
-    UsersApiSearchResult,
+    UsersSearchResult,
     TeamsListResult,
     TagsListResult,
     StargazersListResult,
@@ -154,7 +154,7 @@ from .models import (
     ProjectsListResult,
     ProjectItemsListResult,
     DiscussionsListResult,
-    DiscussionsApiSearchResult,
+    DiscussionsSearchResult,
     DirectoryContentListResult,
     CommentResponse,
     IssueResponse,
@@ -226,13 +226,13 @@ class GithubConnector:
 
     connector_name = "github"
     connector_version = "0.1.19"
-    sdk_version = "0.1.341"
+    sdk_version = "0.1.342"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
         ("repositories", "get"): None,
         ("repositories", "list"): True,
-        ("repositories", "api_search"): True,
+        ("repositories", "search"): True,
         ("org_repositories", "list"): True,
         ("branches", "list"): True,
         ("branches", "get"): None,
@@ -242,14 +242,14 @@ class GithubConnector:
         ("releases", "get"): None,
         ("issues", "list"): True,
         ("issues", "get"): None,
-        ("issues", "api_search"): True,
+        ("issues", "search"): True,
         ("issues", "create"): None,
         ("issues", "update"): None,
         ("comments", "create"): None,
         ("pull_requests", "create"): None,
         ("pull_requests", "list"): True,
         ("pull_requests", "get"): None,
-        ("pull_requests", "api_search"): True,
+        ("pull_requests", "search"): True,
         ("reviews", "list"): True,
         ("comments", "list"): True,
         ("comments", "get"): None,
@@ -263,7 +263,7 @@ class GithubConnector:
         ("organizations", "list"): True,
         ("users", "get"): None,
         ("users", "list"): True,
-        ("users", "api_search"): True,
+        ("users", "search"): True,
         ("teams", "list"): True,
         ("teams", "get"): None,
         ("tags", "list"): True,
@@ -276,7 +276,7 @@ class GithubConnector:
         ("project_items", "list"): True,
         ("discussions", "list"): True,
         ("discussions", "get"): None,
-        ("discussions", "api_search"): True,
+        ("discussions", "search"): True,
         ("file_content", "get"): None,
         ("directory_content", "list"): True,
     }
@@ -286,7 +286,7 @@ class GithubConnector:
     _PARAM_MAP = {
         ('repositories', 'get'): {'owner': 'owner', 'repo': 'repo', 'fields': 'fields'},
         ('repositories', 'list'): {'username': 'username', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
-        ('repositories', 'api_search'): {'query': 'query', 'limit': 'limit', 'after': 'after', 'fields': 'fields'},
+        ('repositories', 'search'): {'query': 'query', 'limit': 'limit', 'after': 'after', 'fields': 'fields'},
         ('org_repositories', 'list'): {'org': 'org', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('branches', 'list'): {'owner': 'owner', 'repo': 'repo', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('branches', 'get'): {'owner': 'owner', 'repo': 'repo', 'branch': 'branch', 'fields': 'fields'},
@@ -296,14 +296,14 @@ class GithubConnector:
         ('releases', 'get'): {'owner': 'owner', 'repo': 'repo', 'tag': 'tag', 'fields': 'fields'},
         ('issues', 'list'): {'owner': 'owner', 'repo': 'repo', 'states': 'states', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('issues', 'get'): {'owner': 'owner', 'repo': 'repo', 'number': 'number', 'fields': 'fields'},
-        ('issues', 'api_search'): {'query': 'query', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
+        ('issues', 'search'): {'query': 'query', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('issues', 'create'): {'title': 'title', 'body': 'body', 'labels': 'labels', 'assignees': 'assignees', 'milestone': 'milestone', 'owner': 'owner', 'repo': 'repo'},
         ('issues', 'update'): {'title': 'title', 'body': 'body', 'state': 'state', 'state_reason': 'state_reason', 'labels': 'labels', 'assignees': 'assignees', 'milestone': 'milestone', 'owner': 'owner', 'repo': 'repo', 'issue_number': 'issue_number'},
         ('comments', 'create'): {'body': 'body', 'owner': 'owner', 'repo': 'repo', 'issue_number': 'issue_number'},
         ('pull_requests', 'create'): {'title': 'title', 'head': 'head', 'base': 'base', 'body': 'body', 'draft': 'draft', 'maintainer_can_modify': 'maintainer_can_modify', 'owner': 'owner', 'repo': 'repo'},
         ('pull_requests', 'list'): {'owner': 'owner', 'repo': 'repo', 'states': 'states', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('pull_requests', 'get'): {'owner': 'owner', 'repo': 'repo', 'number': 'number', 'fields': 'fields'},
-        ('pull_requests', 'api_search'): {'query': 'query', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
+        ('pull_requests', 'search'): {'query': 'query', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('reviews', 'list'): {'owner': 'owner', 'repo': 'repo', 'number': 'number', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('comments', 'list'): {'owner': 'owner', 'repo': 'repo', 'number': 'number', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('comments', 'get'): {'id': 'id', 'fields': 'fields'},
@@ -317,7 +317,7 @@ class GithubConnector:
         ('organizations', 'list'): {'username': 'username', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('users', 'get'): {'username': 'username', 'fields': 'fields'},
         ('users', 'list'): {'org': 'org', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
-        ('users', 'api_search'): {'query': 'query', 'limit': 'limit', 'after': 'after', 'fields': 'fields'},
+        ('users', 'search'): {'query': 'query', 'limit': 'limit', 'after': 'after', 'fields': 'fields'},
         ('teams', 'list'): {'org': 'org', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('teams', 'get'): {'org': 'org', 'team_slug': 'team_slug', 'fields': 'fields'},
         ('tags', 'list'): {'owner': 'owner', 'repo': 'repo', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
@@ -330,7 +330,7 @@ class GithubConnector:
         ('project_items', 'list'): {'org': 'org', 'project_number': 'project_number', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('discussions', 'list'): {'owner': 'owner', 'repo': 'repo', 'states': 'states', 'answered': 'answered', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('discussions', 'get'): {'owner': 'owner', 'repo': 'repo', 'number': 'number', 'fields': 'fields'},
-        ('discussions', 'api_search'): {'query': 'query', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
+        ('discussions', 'search'): {'query': 'query', 'per_page': 'per_page', 'after': 'after', 'fields': 'fields'},
         ('file_content', 'get'): {'owner': 'owner', 'repo': 'repo', 'path': 'path', 'ref': 'ref', 'fields': 'fields'},
         ('directory_content', 'list'): {'owner': 'owner', 'repo': 'repo', 'path': 'path', 'ref': 'ref', 'fields': 'fields'},
     }
@@ -492,13 +492,13 @@ class GithubConnector:
     async def execute(
         self,
         entity: Literal["repositories"],
-        action: Literal["api_search"],
-        params: "RepositoriesApiSearchParams",
+        action: Literal["search"],
+        params: "RepositoriesSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "RepositoriesApiSearchResult": ...
+    ) -> "RepositoriesSearchResult": ...
 
     @overload
     async def execute(
@@ -612,13 +612,13 @@ class GithubConnector:
     async def execute(
         self,
         entity: Literal["issues"],
-        action: Literal["api_search"],
-        params: "IssuesApiSearchParams",
+        action: Literal["search"],
+        params: "IssuesSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "IssuesApiSearchResult": ...
+    ) -> "IssuesSearchResult": ...
 
     @overload
     async def execute(
@@ -696,13 +696,13 @@ class GithubConnector:
     async def execute(
         self,
         entity: Literal["pull_requests"],
-        action: Literal["api_search"],
-        params: "PullRequestsApiSearchParams",
+        action: Literal["search"],
+        params: "PullRequestsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "PullRequestsApiSearchResult": ...
+    ) -> "PullRequestsSearchResult": ...
 
     @overload
     async def execute(
@@ -864,13 +864,13 @@ class GithubConnector:
     async def execute(
         self,
         entity: Literal["users"],
-        action: Literal["api_search"],
-        params: "UsersApiSearchParams",
+        action: Literal["search"],
+        params: "UsersSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "UsersApiSearchResult": ...
+    ) -> "UsersSearchResult": ...
 
     @overload
     async def execute(
@@ -1020,13 +1020,13 @@ class GithubConnector:
     async def execute(
         self,
         entity: Literal["discussions"],
-        action: Literal["api_search"],
-        params: "DiscussionsApiSearchParams",
+        action: Literal["search"],
+        params: "DiscussionsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "DiscussionsApiSearchResult": ...
+    ) -> "DiscussionsSearchResult": ...
 
     @overload
     async def execute(
@@ -1057,7 +1057,7 @@ class GithubConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["get", "list", "api_search", "create", "update", "context_store_search", "context_store_sql_query"],
+        action: Literal["get", "list", "search", "create", "update", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any],
         *,
         select_fields: list[str] | None = ...,
@@ -1068,7 +1068,7 @@ class GithubConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["get", "list", "api_search", "create", "update", "context_store_search", "context_store_sql_query"],
+        action: Literal["get", "list", "search", "create", "update", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any] | None = None,
         *,
         select_fields: list[str] | None = None,
@@ -1576,14 +1576,14 @@ If not provided, uses default fields.
 
 
 
-    async def api_search(
+    async def search(
         self,
         query: str,
         limit: int | None = None,
         after: str | None = None,
         fields: list[str] | None = None,
         **kwargs
-    ) -> RepositoriesApiSearchResult:
+    ) -> RepositoriesSearchResult:
         """
         Search for GitHub repositories using GitHub's powerful search syntax.
 Examples: "language:python stars:>1000", "topic:machine-learning", "org:facebook is:public"
@@ -1599,7 +1599,7 @@ If not provided, uses default fields.
             **kwargs: Additional parameters
 
         Returns:
-            RepositoriesApiSearchResult
+            RepositoriesSearchResult
         """
         params = {k: v for k, v in {
             "query": query,
@@ -1609,9 +1609,9 @@ If not provided, uses default fields.
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("repositories", "api_search", params)
+        result = await self._connector.execute("repositories", "search", params)
         # Cast generic envelope to concrete typed result
-        return RepositoriesApiSearchResult(
+        return RepositoriesSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )
@@ -2484,14 +2484,14 @@ class IssuesQuery:
 
 
 
-    async def api_search(
+    async def search(
         self,
         query: str,
         per_page: int | None = None,
         after: str | None = None,
         fields: list[str] | None = None,
         **kwargs
-    ) -> IssuesApiSearchResult:
+    ) -> IssuesSearchResult:
         """
         Search for issues using GitHub's search syntax
 
@@ -2503,7 +2503,7 @@ class IssuesQuery:
             **kwargs: Additional parameters
 
         Returns:
-            IssuesApiSearchResult
+            IssuesSearchResult
         """
         params = {k: v for k, v in {
             "query": query,
@@ -2513,9 +2513,9 @@ class IssuesQuery:
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("issues", "api_search", params)
+        result = await self._connector.execute("issues", "search", params)
         # Cast generic envelope to concrete typed result
-        return IssuesApiSearchResult(
+        return IssuesSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )
@@ -3079,14 +3079,14 @@ To open or update a pull request in a public repository, you must have write acc
 
 
 
-    async def api_search(
+    async def search(
         self,
         query: str,
         per_page: int | None = None,
         after: str | None = None,
         fields: list[str] | None = None,
         **kwargs
-    ) -> PullRequestsApiSearchResult:
+    ) -> PullRequestsSearchResult:
         """
         Search for pull requests using GitHub's search syntax
 
@@ -3098,7 +3098,7 @@ To open or update a pull request in a public repository, you must have write acc
             **kwargs: Additional parameters
 
         Returns:
-            PullRequestsApiSearchResult
+            PullRequestsSearchResult
         """
         params = {k: v for k, v in {
             "query": query,
@@ -3108,9 +3108,9 @@ To open or update a pull request in a public repository, you must have write acc
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("pull_requests", "api_search", params)
+        result = await self._connector.execute("pull_requests", "search", params)
         # Cast generic envelope to concrete typed result
-        return PullRequestsApiSearchResult(
+        return PullRequestsSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )
@@ -4160,14 +4160,14 @@ class UsersQuery:
 
 
 
-    async def api_search(
+    async def search(
         self,
         query: str,
         limit: int | None = None,
         after: str | None = None,
         fields: list[str] | None = None,
         **kwargs
-    ) -> UsersApiSearchResult:
+    ) -> UsersSearchResult:
         """
         Search for GitHub users using search syntax
 
@@ -4179,7 +4179,7 @@ class UsersQuery:
             **kwargs: Additional parameters
 
         Returns:
-            UsersApiSearchResult
+            UsersSearchResult
         """
         params = {k: v for k, v in {
             "query": query,
@@ -4189,9 +4189,9 @@ class UsersQuery:
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("users", "api_search", params)
+        result = await self._connector.execute("users", "search", params)
         # Cast generic envelope to concrete typed result
-        return UsersApiSearchResult(
+        return UsersSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )
@@ -5458,14 +5458,14 @@ class DiscussionsQuery:
 
 
 
-    async def api_search(
+    async def search(
         self,
         query: str,
         per_page: int | None = None,
         after: str | None = None,
         fields: list[str] | None = None,
         **kwargs
-    ) -> DiscussionsApiSearchResult:
+    ) -> DiscussionsSearchResult:
         """
         Search for discussions using GitHub's search syntax
 
@@ -5477,7 +5477,7 @@ class DiscussionsQuery:
             **kwargs: Additional parameters
 
         Returns:
-            DiscussionsApiSearchResult
+            DiscussionsSearchResult
         """
         params = {k: v for k, v in {
             "query": query,
@@ -5487,9 +5487,9 @@ class DiscussionsQuery:
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("discussions", "api_search", params)
+        result = await self._connector.execute("discussions", "search", params)
         # Cast generic envelope to concrete typed result
-        return DiscussionsApiSearchResult(
+        return DiscussionsSearchResult(
             data=result.data,
             meta=getattr(result, "meta", None)
         )

@@ -340,7 +340,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -573,13 +573,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:accounts',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for accounts using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields and objects.\nUse SOQL (list action) for structured queries with specific field conditions.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -676,7 +676,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -893,13 +893,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:contacts',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for contacts using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -991,7 +991,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1242,13 +1242,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:leads',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for leads using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -1364,7 +1364,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1591,13 +1591,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:opportunities',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for opportunities using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -1721,7 +1721,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1932,13 +1932,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:tasks',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for tasks using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -2040,7 +2040,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2241,13 +2241,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:events',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for events using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -2323,7 +2323,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2536,13 +2536,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:campaigns',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for campaigns using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -2618,7 +2618,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -2835,13 +2835,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:cases',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for cases using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={
@@ -2918,7 +2918,7 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                 Action.GET,
                 Action.DELETE,
                 Action.UPDATE,
-                Action.API_SEARCH,
+                Action.SEARCH,
             ],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -3093,13 +3093,13 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     no_content_response=True,
                 ),
-                Action.API_SEARCH: EndpointDefinition(
+                Action.SEARCH: EndpointDefinition(
                     method='GET',
                     path='/search:notes',
                     path_override=PathOverrideConfig(
                         path='/search',
                     ),
-                    action=Action.API_SEARCH,
+                    action=Action.SEARCH,
                     description='Search for notes using SOSL (Salesforce Object Search Language).\nSOSL is optimized for text-based searches across multiple fields.\n',
                     query_params=['q'],
                     query_params_schema={

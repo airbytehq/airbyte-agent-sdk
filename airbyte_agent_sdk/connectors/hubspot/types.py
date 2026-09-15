@@ -42,19 +42,19 @@ class ContactsUpdateParamsProperties(TypedDict):
     jobtitle: NotRequired[str]
     hubspot_owner_id: NotRequired[str]
 
-class ContactsApiSearchParamsFiltergroupsItemFiltersItem(TypedDict):
-    """Nested schema for ContactsApiSearchParamsFiltergroupsItem.filters_item"""
+class ContactsSearchParamsFiltergroupsItemFiltersItem(TypedDict):
+    """Nested schema for ContactsSearchParamsFiltergroupsItem.filters_item"""
     operator: NotRequired[str]
     property_name: NotRequired[str]
     value: NotRequired[str]
     values: NotRequired[list[str]]
 
-class ContactsApiSearchParamsFiltergroupsItem(TypedDict):
-    """Nested schema for ContactsApiSearchParams.filterGroups_item"""
-    filters: NotRequired[list[ContactsApiSearchParamsFiltergroupsItemFiltersItem]]
+class ContactsSearchParamsFiltergroupsItem(TypedDict):
+    """Nested schema for ContactsSearchParams.filterGroups_item"""
+    filters: NotRequired[list[ContactsSearchParamsFiltergroupsItemFiltersItem]]
 
-class ContactsApiSearchParamsSortsItem(TypedDict):
-    """Nested schema for ContactsApiSearchParams.sorts_item"""
+class ContactsSearchParamsSortsItem(TypedDict):
+    """Nested schema for ContactsSearchParams.sorts_item"""
     property_name: NotRequired[str]
     direction: NotRequired[str]
 
@@ -92,19 +92,19 @@ class CompaniesUpdateParamsProperties(TypedDict):
     hubspot_owner_id: NotRequired[str]
     website: NotRequired[str]
 
-class CompaniesApiSearchParamsFiltergroupsItemFiltersItem(TypedDict):
-    """Nested schema for CompaniesApiSearchParamsFiltergroupsItem.filters_item"""
+class CompaniesSearchParamsFiltergroupsItemFiltersItem(TypedDict):
+    """Nested schema for CompaniesSearchParamsFiltergroupsItem.filters_item"""
     operator: NotRequired[str]
     property_name: NotRequired[str]
     value: NotRequired[str]
     values: NotRequired[list[str]]
 
-class CompaniesApiSearchParamsFiltergroupsItem(TypedDict):
-    """Nested schema for CompaniesApiSearchParams.filterGroups_item"""
-    filters: NotRequired[list[CompaniesApiSearchParamsFiltergroupsItemFiltersItem]]
+class CompaniesSearchParamsFiltergroupsItem(TypedDict):
+    """Nested schema for CompaniesSearchParams.filterGroups_item"""
+    filters: NotRequired[list[CompaniesSearchParamsFiltergroupsItemFiltersItem]]
 
-class CompaniesApiSearchParamsSortsItem(TypedDict):
-    """Nested schema for CompaniesApiSearchParams.sorts_item"""
+class CompaniesSearchParamsSortsItem(TypedDict):
+    """Nested schema for CompaniesSearchParams.sorts_item"""
     property_name: NotRequired[str]
     direction: NotRequired[str]
 
@@ -130,19 +130,19 @@ class DealsUpdateParamsProperties(TypedDict):
     description: NotRequired[str]
     hubspot_owner_id: NotRequired[str]
 
-class DealsApiSearchParamsFiltergroupsItemFiltersItem(TypedDict):
-    """Nested schema for DealsApiSearchParamsFiltergroupsItem.filters_item"""
+class DealsSearchParamsFiltergroupsItemFiltersItem(TypedDict):
+    """Nested schema for DealsSearchParamsFiltergroupsItem.filters_item"""
     operator: NotRequired[str]
     property_name: NotRequired[str]
     value: NotRequired[str]
     values: NotRequired[list[str]]
 
-class DealsApiSearchParamsFiltergroupsItem(TypedDict):
-    """Nested schema for DealsApiSearchParams.filterGroups_item"""
-    filters: NotRequired[list[DealsApiSearchParamsFiltergroupsItemFiltersItem]]
+class DealsSearchParamsFiltergroupsItem(TypedDict):
+    """Nested schema for DealsSearchParams.filterGroups_item"""
+    filters: NotRequired[list[DealsSearchParamsFiltergroupsItemFiltersItem]]
 
-class DealsApiSearchParamsSortsItem(TypedDict):
-    """Nested schema for DealsApiSearchParams.sorts_item"""
+class DealsSearchParamsSortsItem(TypedDict):
+    """Nested schema for DealsSearchParams.sorts_item"""
     property_name: NotRequired[str]
     direction: NotRequired[str]
 
@@ -166,19 +166,19 @@ class TicketsUpdateParamsProperties(TypedDict):
     hs_ticket_category: NotRequired[str]
     hubspot_owner_id: NotRequired[str]
 
-class TicketsApiSearchParamsFiltergroupsItemFiltersItem(TypedDict):
-    """Nested schema for TicketsApiSearchParamsFiltergroupsItem.filters_item"""
+class TicketsSearchParamsFiltergroupsItemFiltersItem(TypedDict):
+    """Nested schema for TicketsSearchParamsFiltergroupsItem.filters_item"""
     operator: NotRequired[str]
     property_name: NotRequired[str]
     value: NotRequired[str]
     values: NotRequired[list[str]]
 
-class TicketsApiSearchParamsFiltergroupsItem(TypedDict):
-    """Nested schema for TicketsApiSearchParams.filterGroups_item"""
-    filters: NotRequired[list[TicketsApiSearchParamsFiltergroupsItemFiltersItem]]
+class TicketsSearchParamsFiltergroupsItem(TypedDict):
+    """Nested schema for TicketsSearchParams.filterGroups_item"""
+    filters: NotRequired[list[TicketsSearchParamsFiltergroupsItemFiltersItem]]
 
-class TicketsApiSearchParamsSortsItem(TypedDict):
-    """Nested schema for TicketsApiSearchParams.sorts_item"""
+class TicketsSearchParamsSortsItem(TypedDict):
+    """Nested schema for TicketsSearchParams.sorts_item"""
     property_name: NotRequired[str]
     direction: NotRequired[str]
 
@@ -387,13 +387,13 @@ class ContactsUpdateParams(TypedDict):
     properties: ContactsUpdateParamsProperties
     contact_id: str
 
-class ContactsApiSearchParams(TypedDict):
-    """Parameters for contacts.api_search operation"""
-    filter_groups: NotRequired[list[ContactsApiSearchParamsFiltergroupsItem]]
+class ContactsSearchParams(TypedDict):
+    """Parameters for contacts.search operation"""
+    filter_groups: NotRequired[list[ContactsSearchParamsFiltergroupsItem]]
     properties: NotRequired[list[str]]
     limit: NotRequired[int]
     after: NotRequired[str]
-    sorts: NotRequired[list[ContactsApiSearchParamsSortsItem]]
+    sorts: NotRequired[list[ContactsSearchParamsSortsItem]]
     query: NotRequired[str]
 
 class CompaniesListParams(TypedDict):
@@ -423,13 +423,13 @@ class CompaniesUpdateParams(TypedDict):
     properties: CompaniesUpdateParamsProperties
     company_id: str
 
-class CompaniesApiSearchParams(TypedDict):
-    """Parameters for companies.api_search operation"""
-    filter_groups: NotRequired[list[CompaniesApiSearchParamsFiltergroupsItem]]
+class CompaniesSearchParams(TypedDict):
+    """Parameters for companies.search operation"""
+    filter_groups: NotRequired[list[CompaniesSearchParamsFiltergroupsItem]]
     properties: NotRequired[list[str]]
     limit: NotRequired[int]
     after: NotRequired[str]
-    sorts: NotRequired[list[CompaniesApiSearchParamsSortsItem]]
+    sorts: NotRequired[list[CompaniesSearchParamsSortsItem]]
     query: NotRequired[str]
 
 class DealsListParams(TypedDict):
@@ -459,13 +459,13 @@ class DealsUpdateParams(TypedDict):
     properties: DealsUpdateParamsProperties
     deal_id: str
 
-class DealsApiSearchParams(TypedDict):
-    """Parameters for deals.api_search operation"""
-    filter_groups: NotRequired[list[DealsApiSearchParamsFiltergroupsItem]]
+class DealsSearchParams(TypedDict):
+    """Parameters for deals.search operation"""
+    filter_groups: NotRequired[list[DealsSearchParamsFiltergroupsItem]]
     properties: NotRequired[list[str]]
     limit: NotRequired[int]
     after: NotRequired[str]
-    sorts: NotRequired[list[DealsApiSearchParamsSortsItem]]
+    sorts: NotRequired[list[DealsSearchParamsSortsItem]]
     query: NotRequired[str]
 
 class TicketsListParams(TypedDict):
@@ -495,13 +495,13 @@ class TicketsUpdateParams(TypedDict):
     properties: TicketsUpdateParamsProperties
     ticket_id: str
 
-class TicketsApiSearchParams(TypedDict):
-    """Parameters for tickets.api_search operation"""
-    filter_groups: NotRequired[list[TicketsApiSearchParamsFiltergroupsItem]]
+class TicketsSearchParams(TypedDict):
+    """Parameters for tickets.search operation"""
+    filter_groups: NotRequired[list[TicketsSearchParamsFiltergroupsItem]]
     properties: NotRequired[list[str]]
     limit: NotRequired[int]
     after: NotRequired[str]
-    sorts: NotRequired[list[TicketsApiSearchParamsSortsItem]]
+    sorts: NotRequired[list[TicketsSearchParamsSortsItem]]
     query: NotRequired[str]
 
 class NotesListParams(TypedDict):

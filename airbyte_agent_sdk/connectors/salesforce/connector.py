@@ -20,59 +20,59 @@ from airbyte_agent_sdk.tools import UNSET, AgentToolRole, SkillDocsAccessor, Uns
 from airbyte_agent_sdk.translation import DEFAULT_MAX_OUTPUT_CHARS, FrameworkName, translate_exceptions
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 from .types import (
-    AccountsApiSearchParams,
     AccountsCreateParams,
     AccountsDeleteParams,
     AccountsGetParams,
     AccountsListParams,
+    AccountsSearchParams,
     AccountsUpdateParams,
     AttachmentsDownloadParams,
     AttachmentsGetParams,
     AttachmentsListParams,
-    CampaignsApiSearchParams,
     CampaignsCreateParams,
     CampaignsDeleteParams,
     CampaignsGetParams,
     CampaignsListParams,
+    CampaignsSearchParams,
     CampaignsUpdateParams,
-    CasesApiSearchParams,
     CasesCreateParams,
     CasesDeleteParams,
     CasesGetParams,
     CasesListParams,
+    CasesSearchParams,
     CasesUpdateParams,
-    ContactsApiSearchParams,
     ContactsCreateParams,
     ContactsDeleteParams,
     ContactsGetParams,
     ContactsListParams,
+    ContactsSearchParams,
     ContactsUpdateParams,
     ContentVersionsDownloadParams,
     ContentVersionsGetParams,
     ContentVersionsListParams,
-    EventsApiSearchParams,
     EventsCreateParams,
     EventsDeleteParams,
     EventsGetParams,
     EventsListParams,
+    EventsSearchParams,
     EventsUpdateParams,
-    LeadsApiSearchParams,
     LeadsCreateParams,
     LeadsDeleteParams,
     LeadsGetParams,
     LeadsListParams,
+    LeadsSearchParams,
     LeadsUpdateParams,
-    NotesApiSearchParams,
     NotesCreateParams,
     NotesDeleteParams,
     NotesGetParams,
     NotesListParams,
+    NotesSearchParams,
     NotesUpdateParams,
-    OpportunitiesApiSearchParams,
     OpportunitiesCreateParams,
     OpportunitiesDeleteParams,
     OpportunitiesGetParams,
     OpportunitiesListParams,
+    OpportunitiesSearchParams,
     OpportunitiesUpdateParams,
     OpportunityStagesGetParams,
     OpportunityStagesListParams,
@@ -84,11 +84,11 @@ from .types import (
     SobjectsGetParams,
     SobjectsListParams,
     SobjectsUpdateParams,
-    TasksApiSearchParams,
     TasksCreateParams,
     TasksDeleteParams,
     TasksGetParams,
     TasksListParams,
+    TasksSearchParams,
     TasksUpdateParams,
     UsersCreateParams,
     UsersGetParams,
@@ -119,23 +119,23 @@ from .models import (
     SalesforceExecuteResultWithMeta,
     SobjectsListResult,
     AccountsListResult,
-    AccountsApiSearchResult,
+    AccountsSearchResult,
     ContactsListResult,
-    ContactsApiSearchResult,
+    ContactsSearchResult,
     LeadsListResult,
-    LeadsApiSearchResult,
+    LeadsSearchResult,
     OpportunitiesListResult,
-    OpportunitiesApiSearchResult,
+    OpportunitiesSearchResult,
     TasksListResult,
-    TasksApiSearchResult,
+    TasksSearchResult,
     EventsListResult,
-    EventsApiSearchResult,
+    EventsSearchResult,
     CampaignsListResult,
-    CampaignsApiSearchResult,
+    CampaignsSearchResult,
     CasesListResult,
-    CasesApiSearchResult,
+    CasesSearchResult,
     NotesListResult,
-    NotesApiSearchResult,
+    NotesSearchResult,
     ContentVersionsListResult,
     AttachmentsListResult,
     ReportsListResult,
@@ -193,7 +193,7 @@ class SalesforceConnector:
 
     connector_name = "salesforce"
     connector_version = "1.2.0"
-    sdk_version = "0.1.341"
+    sdk_version = "0.1.342"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -207,55 +207,55 @@ class SalesforceConnector:
         ("accounts", "get"): None,
         ("accounts", "update"): None,
         ("accounts", "delete"): None,
-        ("accounts", "api_search"): True,
+        ("accounts", "search"): True,
         ("contacts", "list"): True,
         ("contacts", "create"): None,
         ("contacts", "get"): None,
         ("contacts", "update"): None,
         ("contacts", "delete"): None,
-        ("contacts", "api_search"): True,
+        ("contacts", "search"): True,
         ("leads", "list"): True,
         ("leads", "create"): None,
         ("leads", "get"): None,
         ("leads", "update"): None,
         ("leads", "delete"): None,
-        ("leads", "api_search"): True,
+        ("leads", "search"): True,
         ("opportunities", "list"): True,
         ("opportunities", "create"): None,
         ("opportunities", "get"): None,
         ("opportunities", "update"): None,
         ("opportunities", "delete"): None,
-        ("opportunities", "api_search"): True,
+        ("opportunities", "search"): True,
         ("tasks", "list"): True,
         ("tasks", "create"): None,
         ("tasks", "get"): None,
         ("tasks", "update"): None,
         ("tasks", "delete"): None,
-        ("tasks", "api_search"): True,
+        ("tasks", "search"): True,
         ("events", "list"): True,
         ("events", "create"): None,
         ("events", "get"): None,
         ("events", "update"): None,
         ("events", "delete"): None,
-        ("events", "api_search"): True,
+        ("events", "search"): True,
         ("campaigns", "list"): True,
         ("campaigns", "create"): None,
         ("campaigns", "get"): None,
         ("campaigns", "update"): None,
         ("campaigns", "delete"): None,
-        ("campaigns", "api_search"): True,
+        ("campaigns", "search"): True,
         ("cases", "list"): True,
         ("cases", "create"): None,
         ("cases", "get"): None,
         ("cases", "update"): None,
         ("cases", "delete"): None,
-        ("cases", "api_search"): True,
+        ("cases", "search"): True,
         ("notes", "list"): True,
         ("notes", "create"): None,
         ("notes", "get"): None,
         ("notes", "update"): None,
         ("notes", "delete"): None,
-        ("notes", "api_search"): True,
+        ("notes", "search"): True,
         ("content_versions", "list"): True,
         ("content_versions", "get"): None,
         ("content_versions", "download"): None,
@@ -285,55 +285,55 @@ class SalesforceConnector:
         ('accounts', 'get'): {'id': 'id', 'fields': 'fields'},
         ('accounts', 'update'): {'name': 'Name', 'account_number': 'AccountNumber', 'type': 'Type', 'industry': 'Industry', 'phone': 'Phone', 'website': 'Website', 'billing_street': 'BillingStreet', 'billing_city': 'BillingCity', 'billing_state': 'BillingState', 'billing_postal_code': 'BillingPostalCode', 'billing_country': 'BillingCountry', 'annual_revenue': 'AnnualRevenue', 'number_of_employees': 'NumberOfEmployees', 'description': 'Description', 'owner_id': 'OwnerId', 'parent_id': 'ParentId', 'id': 'id'},
         ('accounts', 'delete'): {'id': 'id'},
-        ('accounts', 'api_search'): {'q': 'q'},
+        ('accounts', 'search'): {'q': 'q'},
         ('contacts', 'list'): {'q': 'q'},
         ('contacts', 'create'): {'first_name': 'FirstName', 'last_name': 'LastName', 'email': 'Email', 'phone': 'Phone', 'mobile_phone': 'MobilePhone', 'title': 'Title', 'department': 'Department', 'account_id': 'AccountId', 'mailing_street': 'MailingStreet', 'mailing_city': 'MailingCity', 'mailing_state': 'MailingState', 'mailing_postal_code': 'MailingPostalCode', 'mailing_country': 'MailingCountry', 'description': 'Description', 'owner_id': 'OwnerId'},
         ('contacts', 'get'): {'id': 'id', 'fields': 'fields'},
         ('contacts', 'update'): {'first_name': 'FirstName', 'last_name': 'LastName', 'email': 'Email', 'phone': 'Phone', 'mobile_phone': 'MobilePhone', 'title': 'Title', 'department': 'Department', 'account_id': 'AccountId', 'mailing_street': 'MailingStreet', 'mailing_city': 'MailingCity', 'mailing_state': 'MailingState', 'mailing_postal_code': 'MailingPostalCode', 'mailing_country': 'MailingCountry', 'description': 'Description', 'owner_id': 'OwnerId', 'id': 'id'},
         ('contacts', 'delete'): {'id': 'id'},
-        ('contacts', 'api_search'): {'q': 'q'},
+        ('contacts', 'search'): {'q': 'q'},
         ('leads', 'list'): {'q': 'q'},
         ('leads', 'create'): {'first_name': 'FirstName', 'last_name': 'LastName', 'company': 'Company', 'title': 'Title', 'email': 'Email', 'phone': 'Phone', 'mobile_phone': 'MobilePhone', 'website': 'Website', 'status': 'Status', 'lead_source': 'LeadSource', 'industry': 'Industry', 'rating': 'Rating', 'annual_revenue': 'AnnualRevenue', 'number_of_employees': 'NumberOfEmployees', 'street': 'Street', 'city': 'City', 'state': 'State', 'postal_code': 'PostalCode', 'country': 'Country', 'description': 'Description', 'owner_id': 'OwnerId'},
         ('leads', 'get'): {'id': 'id', 'fields': 'fields'},
         ('leads', 'update'): {'first_name': 'FirstName', 'last_name': 'LastName', 'company': 'Company', 'title': 'Title', 'email': 'Email', 'phone': 'Phone', 'mobile_phone': 'MobilePhone', 'website': 'Website', 'status': 'Status', 'lead_source': 'LeadSource', 'industry': 'Industry', 'rating': 'Rating', 'annual_revenue': 'AnnualRevenue', 'number_of_employees': 'NumberOfEmployees', 'street': 'Street', 'city': 'City', 'state': 'State', 'postal_code': 'PostalCode', 'country': 'Country', 'description': 'Description', 'owner_id': 'OwnerId', 'id': 'id'},
         ('leads', 'delete'): {'id': 'id'},
-        ('leads', 'api_search'): {'q': 'q'},
+        ('leads', 'search'): {'q': 'q'},
         ('opportunities', 'list'): {'q': 'q'},
         ('opportunities', 'create'): {'name': 'Name', 'account_id': 'AccountId', 'stage_name': 'StageName', 'close_date': 'CloseDate', 'amount': 'Amount', 'probability': 'Probability', 'type': 'Type', 'lead_source': 'LeadSource', 'next_step': 'NextStep', 'campaign_id': 'CampaignId', 'forecast_category_name': 'ForecastCategoryName', 'description': 'Description', 'owner_id': 'OwnerId'},
         ('opportunities', 'get'): {'id': 'id', 'fields': 'fields'},
         ('opportunities', 'update'): {'name': 'Name', 'account_id': 'AccountId', 'stage_name': 'StageName', 'close_date': 'CloseDate', 'amount': 'Amount', 'probability': 'Probability', 'type': 'Type', 'lead_source': 'LeadSource', 'next_step': 'NextStep', 'campaign_id': 'CampaignId', 'forecast_category_name': 'ForecastCategoryName', 'description': 'Description', 'owner_id': 'OwnerId', 'id': 'id'},
         ('opportunities', 'delete'): {'id': 'id'},
-        ('opportunities', 'api_search'): {'q': 'q'},
+        ('opportunities', 'search'): {'q': 'q'},
         ('tasks', 'list'): {'q': 'q'},
         ('tasks', 'create'): {'subject': 'Subject', 'status': 'Status', 'priority': 'Priority', 'activity_date': 'ActivityDate', 'who_id': 'WhoId', 'what_id': 'WhatId', 'description': 'Description', 'type': 'Type', 'is_reminder_set': 'IsReminderSet', 'reminder_date_time': 'ReminderDateTime', 'owner_id': 'OwnerId'},
         ('tasks', 'get'): {'id': 'id', 'fields': 'fields'},
         ('tasks', 'update'): {'subject': 'Subject', 'status': 'Status', 'priority': 'Priority', 'activity_date': 'ActivityDate', 'who_id': 'WhoId', 'what_id': 'WhatId', 'description': 'Description', 'type': 'Type', 'is_reminder_set': 'IsReminderSet', 'reminder_date_time': 'ReminderDateTime', 'owner_id': 'OwnerId', 'id': 'id'},
         ('tasks', 'delete'): {'id': 'id'},
-        ('tasks', 'api_search'): {'q': 'q'},
+        ('tasks', 'search'): {'q': 'q'},
         ('events', 'list'): {'q': 'q'},
         ('events', 'create'): {'subject': 'Subject', 'start_date_time': 'StartDateTime', 'end_date_time': 'EndDateTime', 'duration_in_minutes': 'DurationInMinutes', 'location': 'Location', 'description': 'Description', 'who_id': 'WhoId', 'what_id': 'WhatId', 'is_all_day_event': 'IsAllDayEvent', 'show_as': 'ShowAs', 'owner_id': 'OwnerId'},
         ('events', 'get'): {'id': 'id', 'fields': 'fields'},
         ('events', 'update'): {'subject': 'Subject', 'start_date_time': 'StartDateTime', 'end_date_time': 'EndDateTime', 'duration_in_minutes': 'DurationInMinutes', 'location': 'Location', 'description': 'Description', 'who_id': 'WhoId', 'what_id': 'WhatId', 'is_all_day_event': 'IsAllDayEvent', 'show_as': 'ShowAs', 'owner_id': 'OwnerId', 'id': 'id'},
         ('events', 'delete'): {'id': 'id'},
-        ('events', 'api_search'): {'q': 'q'},
+        ('events', 'search'): {'q': 'q'},
         ('campaigns', 'list'): {'q': 'q'},
         ('campaigns', 'create'): {'name': 'Name', 'type': 'Type', 'status': 'Status', 'start_date': 'StartDate', 'end_date': 'EndDate', 'is_active': 'IsActive', 'description': 'Description', 'expected_revenue': 'ExpectedRevenue', 'budgeted_cost': 'BudgetedCost', 'actual_cost': 'ActualCost', 'expected_response': 'ExpectedResponse', 'number_sent': 'NumberSent', 'parent_id': 'ParentId', 'owner_id': 'OwnerId'},
         ('campaigns', 'get'): {'id': 'id', 'fields': 'fields'},
         ('campaigns', 'update'): {'name': 'Name', 'type': 'Type', 'status': 'Status', 'start_date': 'StartDate', 'end_date': 'EndDate', 'is_active': 'IsActive', 'description': 'Description', 'expected_revenue': 'ExpectedRevenue', 'budgeted_cost': 'BudgetedCost', 'actual_cost': 'ActualCost', 'expected_response': 'ExpectedResponse', 'number_sent': 'NumberSent', 'parent_id': 'ParentId', 'owner_id': 'OwnerId', 'id': 'id'},
         ('campaigns', 'delete'): {'id': 'id'},
-        ('campaigns', 'api_search'): {'q': 'q'},
+        ('campaigns', 'search'): {'q': 'q'},
         ('cases', 'list'): {'q': 'q'},
         ('cases', 'create'): {'subject': 'Subject', 'status': 'Status', 'priority': 'Priority', 'origin': 'Origin', 'type': 'Type', 'reason': 'Reason', 'description': 'Description', 'account_id': 'AccountId', 'contact_id': 'ContactId', 'supplied_name': 'SuppliedName', 'supplied_email': 'SuppliedEmail', 'supplied_phone': 'SuppliedPhone', 'supplied_company': 'SuppliedCompany', 'owner_id': 'OwnerId', 'parent_id': 'ParentId'},
         ('cases', 'get'): {'id': 'id', 'fields': 'fields'},
         ('cases', 'update'): {'subject': 'Subject', 'status': 'Status', 'priority': 'Priority', 'origin': 'Origin', 'type': 'Type', 'reason': 'Reason', 'description': 'Description', 'account_id': 'AccountId', 'contact_id': 'ContactId', 'supplied_name': 'SuppliedName', 'supplied_email': 'SuppliedEmail', 'supplied_phone': 'SuppliedPhone', 'supplied_company': 'SuppliedCompany', 'owner_id': 'OwnerId', 'parent_id': 'ParentId', 'id': 'id'},
         ('cases', 'delete'): {'id': 'id'},
-        ('cases', 'api_search'): {'q': 'q'},
+        ('cases', 'search'): {'q': 'q'},
         ('notes', 'list'): {'q': 'q'},
         ('notes', 'create'): {'title': 'Title', 'body': 'Body', 'parent_id': 'ParentId', 'is_private': 'IsPrivate', 'owner_id': 'OwnerId'},
         ('notes', 'get'): {'id': 'id', 'fields': 'fields'},
         ('notes', 'update'): {'title': 'Title', 'body': 'Body', 'is_private': 'IsPrivate', 'owner_id': 'OwnerId', 'id': 'id'},
         ('notes', 'delete'): {'id': 'id'},
-        ('notes', 'api_search'): {'q': 'q'},
+        ('notes', 'search'): {'q': 'q'},
         ('content_versions', 'list'): {'q': 'q'},
         ('content_versions', 'get'): {'id': 'id', 'fields': 'fields'},
         ('content_versions', 'download'): {'id': 'id', 'range_header': 'range_header'},
@@ -593,13 +593,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["accounts"],
-        action: Literal["api_search"],
-        params: "AccountsApiSearchParams",
+        action: Literal["search"],
+        params: "AccountsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "AccountsApiSearchResult": ...
+    ) -> "AccountsSearchResult": ...
 
     @overload
     async def execute(
@@ -665,13 +665,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["contacts"],
-        action: Literal["api_search"],
-        params: "ContactsApiSearchParams",
+        action: Literal["search"],
+        params: "ContactsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "ContactsApiSearchResult": ...
+    ) -> "ContactsSearchResult": ...
 
     @overload
     async def execute(
@@ -737,13 +737,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["leads"],
-        action: Literal["api_search"],
-        params: "LeadsApiSearchParams",
+        action: Literal["search"],
+        params: "LeadsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "LeadsApiSearchResult": ...
+    ) -> "LeadsSearchResult": ...
 
     @overload
     async def execute(
@@ -809,13 +809,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["opportunities"],
-        action: Literal["api_search"],
-        params: "OpportunitiesApiSearchParams",
+        action: Literal["search"],
+        params: "OpportunitiesSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "OpportunitiesApiSearchResult": ...
+    ) -> "OpportunitiesSearchResult": ...
 
     @overload
     async def execute(
@@ -881,13 +881,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["tasks"],
-        action: Literal["api_search"],
-        params: "TasksApiSearchParams",
+        action: Literal["search"],
+        params: "TasksSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "TasksApiSearchResult": ...
+    ) -> "TasksSearchResult": ...
 
     @overload
     async def execute(
@@ -953,13 +953,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["events"],
-        action: Literal["api_search"],
-        params: "EventsApiSearchParams",
+        action: Literal["search"],
+        params: "EventsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "EventsApiSearchResult": ...
+    ) -> "EventsSearchResult": ...
 
     @overload
     async def execute(
@@ -1025,13 +1025,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["campaigns"],
-        action: Literal["api_search"],
-        params: "CampaignsApiSearchParams",
+        action: Literal["search"],
+        params: "CampaignsSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "CampaignsApiSearchResult": ...
+    ) -> "CampaignsSearchResult": ...
 
     @overload
     async def execute(
@@ -1097,13 +1097,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["cases"],
-        action: Literal["api_search"],
-        params: "CasesApiSearchParams",
+        action: Literal["search"],
+        params: "CasesSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "CasesApiSearchResult": ...
+    ) -> "CasesSearchResult": ...
 
     @overload
     async def execute(
@@ -1169,13 +1169,13 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: Literal["notes"],
-        action: Literal["api_search"],
-        params: "NotesApiSearchParams",
+        action: Literal["search"],
+        params: "NotesSearchParams",
         *,
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "NotesApiSearchResult": ...
+    ) -> "NotesSearchResult": ...
 
     @overload
     async def execute(
@@ -1362,7 +1362,7 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "create", "get", "update", "delete", "api_search", "download", "context_store_search", "context_store_sql_query"],
+        action: Literal["list", "create", "get", "update", "delete", "search", "download", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any],
         *,
         select_fields: list[str] | None = ...,
@@ -1373,7 +1373,7 @@ class SalesforceConnector:
     async def execute(
         self,
         entity: str,
-        action: Literal["list", "create", "get", "update", "delete", "api_search", "download", "context_store_search", "context_store_sql_query"],
+        action: Literal["list", "create", "get", "update", "delete", "search", "download", "context_store_search", "context_store_sql_query"],
         params: Mapping[str, Any] | None = None,
         *,
         select_fields: list[str] | None = None,
@@ -2212,11 +2212,11 @@ Example: "Id,Name,Industry,AnnualRevenue,Website"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> AccountsApiSearchResult:
+    ) -> AccountsSearchResult:
         """
         Search for accounts using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields and objects.
@@ -2233,16 +2233,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            AccountsApiSearchResult
+            AccountsSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("accounts", "api_search", params)
+        result = await self._connector.execute("accounts", "search", params)
         # Cast generic envelope to concrete typed result
-        return AccountsApiSearchResult(
+        return AccountsSearchResult(
             data=result.data
         )
 
@@ -2612,11 +2612,11 @@ Example: "Id,FirstName,LastName,Email,Phone,AccountId"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> ContactsApiSearchResult:
+    ) -> ContactsSearchResult:
         """
         Search for contacts using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -2631,16 +2631,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            ContactsApiSearchResult
+            ContactsSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("contacts", "api_search", params)
+        result = await self._connector.execute("contacts", "search", params)
         # Cast generic envelope to concrete typed result
-        return ContactsApiSearchResult(
+        return ContactsSearchResult(
             data=result.data
         )
 
@@ -3042,11 +3042,11 @@ Example: "Id,FirstName,LastName,Email,Company,Status,LeadSource"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> LeadsApiSearchResult:
+    ) -> LeadsSearchResult:
         """
         Search for leads using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -3061,16 +3061,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            LeadsApiSearchResult
+            LeadsSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("leads", "api_search", params)
+        result = await self._connector.execute("leads", "search", params)
         # Cast generic envelope to concrete typed result
-        return LeadsApiSearchResult(
+        return LeadsSearchResult(
             data=result.data
         )
 
@@ -3437,11 +3437,11 @@ Example: "Id,Name,Amount,StageName,CloseDate,AccountId"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> OpportunitiesApiSearchResult:
+    ) -> OpportunitiesSearchResult:
         """
         Search for opportunities using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -3456,16 +3456,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            OpportunitiesApiSearchResult
+            OpportunitiesSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("opportunities", "api_search", params)
+        result = await self._connector.execute("opportunities", "search", params)
         # Cast generic envelope to concrete typed result
-        return OpportunitiesApiSearchResult(
+        return OpportunitiesSearchResult(
             data=result.data
         )
 
@@ -3808,11 +3808,11 @@ Example: "Id,Subject,Status,Priority,ActivityDate,WhoId,WhatId"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> TasksApiSearchResult:
+    ) -> TasksSearchResult:
         """
         Search for tasks using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -3827,16 +3827,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            TasksApiSearchResult
+            TasksSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("tasks", "api_search", params)
+        result = await self._connector.execute("tasks", "search", params)
         # Cast generic envelope to concrete typed result
-        return TasksApiSearchResult(
+        return TasksSearchResult(
             data=result.data
         )
 
@@ -4177,11 +4177,11 @@ Example: "Id,Subject,StartDateTime,EndDateTime,Location,WhoId,WhatId"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> EventsApiSearchResult:
+    ) -> EventsSearchResult:
         """
         Search for events using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -4196,16 +4196,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            EventsApiSearchResult
+            EventsSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("events", "api_search", params)
+        result = await self._connector.execute("events", "search", params)
         # Cast generic envelope to concrete typed result
-        return EventsApiSearchResult(
+        return EventsSearchResult(
             data=result.data
         )
 
@@ -4449,11 +4449,11 @@ Example: "Id,Name,Type,Status,StartDate,EndDate,IsActive"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> CampaignsApiSearchResult:
+    ) -> CampaignsSearchResult:
         """
         Search for campaigns using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -4468,16 +4468,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            CampaignsApiSearchResult
+            CampaignsSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("campaigns", "api_search", params)
+        result = await self._connector.execute("campaigns", "search", params)
         # Cast generic envelope to concrete typed result
-        return CampaignsApiSearchResult(
+        return CampaignsSearchResult(
             data=result.data
         )
 
@@ -4727,11 +4727,11 @@ Example: "Id,CaseNumber,Subject,Status,Priority,ContactId,AccountId"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> CasesApiSearchResult:
+    ) -> CasesSearchResult:
         """
         Search for cases using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -4746,16 +4746,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            CasesApiSearchResult
+            CasesSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("cases", "api_search", params)
+        result = await self._connector.execute("cases", "search", params)
         # Cast generic envelope to concrete typed result
-        return CasesApiSearchResult(
+        return CasesSearchResult(
             data=result.data
         )
 
@@ -4944,11 +4944,11 @@ Example: "Id,Title,Body,ParentId,OwnerId"
 
 
 
-    async def api_search(
+    async def search(
         self,
         q: str,
         **kwargs
-    ) -> NotesApiSearchResult:
+    ) -> NotesSearchResult:
         """
         Search for notes using SOSL (Salesforce Object Search Language).
 SOSL is optimized for text-based searches across multiple fields.
@@ -4963,16 +4963,16 @@ Examples:
             **kwargs: Additional parameters
 
         Returns:
-            NotesApiSearchResult
+            NotesSearchResult
         """
         params = {k: v for k, v in {
             "q": q,
             **kwargs
         }.items() if v is not None}
 
-        result = await self._connector.execute("notes", "api_search", params)
+        result = await self._connector.execute("notes", "search", params)
         # Cast generic envelope to concrete typed result
-        return NotesApiSearchResult(
+        return NotesSearchResult(
             data=result.data
         )
 

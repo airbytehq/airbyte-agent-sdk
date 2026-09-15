@@ -9,6 +9,7 @@ from uuid import UUID
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 from airbyte_agent_sdk.constants import OPENAPI_DEFAULT_VERSION
+from airbyte_agent_sdk.deprecated_action_aliases import DEPRECATED_ACTION_ALIASES, resolve_action_alias
 from airbyte_agent_sdk.extensions import AIRBYTE_FILE_URL_DESCRIPTION
 from airbyte_agent_sdk.schema.base import ResponseErrorCheck
 from airbyte_agent_sdk.schema.components import PathOverrideConfig
@@ -91,7 +92,7 @@ class Action(str, Enum):
         GET, CREATE, UPDATE, DELETE, LIST
 
     Special actions:
-        API_SEARCH - Search via API endpoint
+        SEARCH - Search via API endpoint
         DOWNLOAD - Download file content
         AUTHORIZE - OAuth authorization flow
     """
@@ -101,9 +102,15 @@ class Action(str, Enum):
     UPDATE = "update"
     DELETE = "delete"
     LIST = "list"
-    API_SEARCH = "api_search"
+    SEARCH = "search"
     DOWNLOAD = "download"
     AUTHORIZE = "authorize"
+
+    @classmethod
+    def _missing_(cls, value: object) -> Action | None:
+        if isinstance(value, str) and value in DEPRECATED_ACTION_ALIASES:
+            return cls(resolve_action_alias(value))
+        return None
 
 
 class AuthType(str, Enum):
