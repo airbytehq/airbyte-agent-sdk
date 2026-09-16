@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Shopify API Connector
-  version: 0.1.13
+  version: 0.1.14
   description: |
     Shopify is an e-commerce platform that enables businesses to create online stores,
     manage products, process orders, and handle customer relationships. This connector
@@ -1385,7 +1385,7 @@ info:
             description: "ISO 8601 timestamp when the metafield was last updated"
 
 servers:
-- url: https://{shop}.myshopify.com/admin/api/2025-10
+- url: https://{shop}.myshopify.com/admin/api/2026-07
   description: Shopify Admin REST API Server
   variables:
     shop:
