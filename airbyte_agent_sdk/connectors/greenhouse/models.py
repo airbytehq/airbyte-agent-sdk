@@ -37,10 +37,11 @@ class CandidatePhoneNumbersItem(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
-class CandidateSocialMediaAddressesItem(BaseModel):
-    """Nested schema for Candidate.social_media_addresses_item"""
+class CandidateWebsiteAddressesItem(BaseModel):
+    """Nested schema for Candidate.website_addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
+    type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
 class CandidateCustomFields(BaseModel):
@@ -58,11 +59,10 @@ class CandidateAddressesItem(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
-class CandidateWebsiteAddressesItem(BaseModel):
-    """Nested schema for Candidate.website_addresses_item"""
+class CandidateSocialMediaAddressesItem(BaseModel):
+    """Nested schema for Candidate.social_media_addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
 class CandidateEmailAddressesItem(BaseModel):
@@ -97,6 +97,14 @@ class Candidate(BaseModel):
     updated_at: str | None = Field(default=None)
     website_addresses: list[CandidateWebsiteAddressesItem | None] | None = Field(default=None)
 
+class ApplicationCustomFields(BaseModel):
+    """Nested schema for Application.custom_fields"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None | None = Field(default=None)
+    type_: str | None | None = Field(default=None, alias="type")
+    value: Any | None = Field(default=None)
+
 class ApplicationAnswersItem(BaseModel):
     """Nested schema for Application.answers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -105,14 +113,6 @@ class ApplicationAnswersItem(BaseModel):
     """Candidate's free-text answer to the question."""
     question: str | None | None = Field(default=None, description="Application-form question the candidate answered.")
     """Application-form question the candidate answered."""
-
-class ApplicationCustomFields(BaseModel):
-    """Nested schema for Application.custom_fields"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None | None = Field(default=None)
-    type_: str | None | None = Field(default=None, alias="type")
-    value: Any | None = Field(default=None)
 
 class Application(BaseModel):
     """Greenhouse application object"""
@@ -197,13 +197,6 @@ class Offer(BaseModel):
     updated_at: str | None = Field(default=None)
     version: int | None = Field(default=None)
 
-class UserInterviewerTagsItem(BaseModel):
-    """Nested schema for User.interviewer_tags_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None)
-    name: str | None | None = Field(default=None)
-
 class UserCustomFields(BaseModel):
     """Nested schema for User.custom_fields"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -211,6 +204,13 @@ class UserCustomFields(BaseModel):
     name: str | None | None = Field(default=None)
     type_: str | None | None = Field(default=None, alias="type")
     value: Any | None = Field(default=None)
+
+class UserInterviewerTagsItem(BaseModel):
+    """Nested schema for User.interviewer_tags_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None)
+    name: str | None | None = Field(default=None)
 
 class User(BaseModel):
     """Greenhouse user object"""
