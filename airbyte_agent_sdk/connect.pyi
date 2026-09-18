@@ -45,6 +45,7 @@ from airbyte_agent_sdk.connectors.orb import OrbConnector
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.connectors.pinterest import PinterestConnector
 from airbyte_agent_sdk.connectors.pylon import PylonConnector
+from airbyte_agent_sdk.connectors.reddit_ads import RedditAdsConnector
 from airbyte_agent_sdk.connectors.salesforce import SalesforceConnector
 from airbyte_agent_sdk.connectors.sendgrid import SendgridConnector
 from airbyte_agent_sdk.connectors.sentry import SentryConnector
@@ -554,6 +555,19 @@ def connect(
     organization_id: str | None = ...,
     auth_config: AirbyteAuthConfig | None = ...,
 ) -> PylonConnector: ...
+
+
+@overload
+def connect(
+    connector_name: Literal["reddit-ads"],
+    *,
+    client_id: str | None = ...,
+    client_secret: str | None = ...,
+    workspace_name: str | None = ...,
+    connector_id: str | None = ...,
+    organization_id: str | None = ...,
+    auth_config: AirbyteAuthConfig | None = ...,
+) -> RedditAdsConnector: ...
 
 
 @overload

@@ -1,0 +1,1010 @@
+{
+  "connector_name": "reddit-ads",
+  "class_name": "RedditAdsConnector",
+  "package_name": "airbyte_agent_sdk.connectors.reddit_ads",
+  "install_package": "airbyte-agent-sdk",
+  "yaml_version": "1.0.0",
+  "api_reference_url": "https://ads-api.reddit.com/docs/v3/api/reddit-advertising-api",
+  "auth_example": "RedditAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\")",
+  "auth_import": ", RedditAdsAuthConfig",
+  "auth_config": {
+    "type_name": "RedditAdsAuthConfig",
+    "base_name": "RedditAds",
+    "options": [
+      {
+        "title": "Reddit OAuth2 Authentication",
+        "description": "",
+        "fields": [
+          {
+            "name": "client_id",
+            "type": "str",
+            "required": true,
+            "title": "Client ID",
+            "description": "The OAuth2 client ID from your Reddit developer application."
+          },
+          {
+            "name": "client_secret",
+            "type": "str",
+            "required": true,
+            "title": "Client Secret",
+            "description": "The OAuth2 client secret from your Reddit developer application."
+          },
+          {
+            "name": "refresh_token",
+            "type": "str",
+            "required": true,
+            "title": "Refresh Token",
+            "description": "The OAuth2 refresh token obtained through the authorization code flow.\n"
+          }
+        ],
+        "type_suffix": "RedditOauth2Authentication"
+      }
+    ],
+    "is_multi_auth": false
+  },
+  "server_variables": [],
+  "replication_config": {
+    "type_name": "RedditAdsReplicationConfig",
+    "title": "Replication Configuration",
+    "description": "Settings for data replication from Reddit Ads.",
+    "fields": [
+      {
+        "name": "ad_account_id",
+        "type": "str",
+        "required": true,
+        "title": "Ad Account ID",
+        "description": "The Reddit Ads account ID to replicate data from.",
+        "format": null,
+        "default": null
+      },
+      {
+        "name": "start_time",
+        "type": "str",
+        "required": false,
+        "title": "Start Time",
+        "description": "UTC date and time in the format YYYY-MM-DDTHH:mm:ssZ. Data will be replicated starting from this date. Defaults to 24 months ago.\n",
+        "format": "date-time",
+        "default": null
+      },
+      {
+        "name": "user_agent",
+        "type": "str",
+        "required": false,
+        "title": "User Agent",
+        "description": "A unique user agent string identifying the client. Recommended format: platform:app_id:version (by /u/username).\n",
+        "format": null,
+        "default": null
+      }
+    ]
+  },
+  "custom_description": "Connector for the Reddit Ads API v3. Provides read access to Reddit advertising account structure: businesses, ad accounts, campaigns, ad groups, and ads. Supports OAuth 2.0 authentication with automatic token refresh. All list endpoints support cursor-based pagination via page.token. Performance metrics (impressions, clicks, spend, CTR) are not exposed by this connector.\n",
+  "supported_questions": "- List all campaigns in my ad account\n- Show me my ad groups\n- Get details for a specific ad\n- List all ad accounts in my business\n- Which campaigns are paused and what are their objectives?\n- List ads in campaign X grouped by effective status\n- Which campaigns have a lifetime spend cap above $1000?\n- Find paused ad groups",
+  "unsupported_questions": "- Create a new campaign\n- Update ad group targeting\n- Delete an ad\n- Upload creative assets",
+  "first_operation": {
+    "method_name": "list_my_businesses",
+    "http_method": "get",
+    "path": "/me/businesses",
+    "entity": "businesses",
+    "action": "list",
+    "parameters": [
+      {
+        "name": "page.size",
+        "python_name": "page_size",
+        "type": "int",
+        "schema": {
+          "type": "integer",
+          "maximum": 1000
+        },
+        "required": false,
+        "description": "Number of items per page (max 1000)",
+        "is_deep_object": false
+      },
+      {
+        "name": "page.token",
+        "python_name": "page_token",
+        "type": "str",
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "Pagination token for next page",
+        "is_deep_object": false
+      }
+    ],
+    "params_type_name": "BusinessesListParams",
+    "response_type": "BusinessesListResult",
+    "description": "Retrieve all businesses associated with the authenticated user.",
+    "record_extractor": "$.data",
+    "meta_extractor": {
+      "next_link": "$.pagination.next_url"
+    },
+    "needs_envelope": true,
+    "record_type": "list[Business]",
+    "meta_fields": [
+      {
+        "name": "next_link",
+        "python_name": "next_link",
+        "type": "str",
+        "schema": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Full URL for next page. Null if this is the last page."
+        }
+      }
+    ],
+    "is_download": false
+  },
+  "entities_grouped": {
+    "businesses": [
+      {
+        "method_name": "list_my_businesses",
+        "http_method": "get",
+        "path": "/me/businesses",
+        "entity": "businesses",
+        "action": "list",
+        "parameters": [
+          {
+            "name": "page.size",
+            "python_name": "page_size",
+            "type": "int",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000
+            },
+            "required": false,
+            "description": "Number of items per page (max 1000)",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.token",
+            "python_name": "page_token",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Pagination token for next page",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "BusinessesListParams",
+        "response_type": "BusinessesListResult",
+        "description": "Retrieve all businesses associated with the authenticated user.",
+        "record_extractor": "$.data",
+        "meta_extractor": {
+          "next_link": "$.pagination.next_url"
+        },
+        "needs_envelope": true,
+        "record_type": "list[Business]",
+        "meta_fields": [
+          {
+            "name": "next_link",
+            "python_name": "next_link",
+            "type": "str",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Full URL for next page. Null if this is the last page."
+            }
+          }
+        ],
+        "is_download": false
+      }
+    ],
+    "ad_accounts": [
+      {
+        "method_name": "list_ad_accounts_by_business",
+        "http_method": "get",
+        "path": "/businesses/{business_id}/ad_accounts",
+        "entity": "ad_accounts",
+        "action": "list",
+        "parameters": [
+          {
+            "name": "business_id",
+            "python_name": "business_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The business ID"
+          },
+          {
+            "name": "page.size",
+            "python_name": "page_size",
+            "type": "int",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000
+            },
+            "required": false,
+            "description": "Number of items per page (max 1000)",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.token",
+            "python_name": "page_token",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Pagination token for next page",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "AdAccountsListParams",
+        "response_type": "AdAccountsListResult",
+        "description": "Retrieve the ad accounts in a business.",
+        "record_extractor": "$.data",
+        "meta_extractor": {
+          "next_link": "$.pagination.next_url"
+        },
+        "needs_envelope": true,
+        "record_type": "list[AdAccount]",
+        "meta_fields": [
+          {
+            "name": "next_link",
+            "python_name": "next_link",
+            "type": "str",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Full URL for next page. Null if this is the last page."
+            }
+          }
+        ],
+        "is_download": false
+      },
+      {
+        "method_name": "get_ad_account",
+        "http_method": "get",
+        "path": "/ad_accounts/{ad_account_id}",
+        "entity": "ad_accounts",
+        "action": "get",
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "python_name": "ad_account_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ad account ID"
+          }
+        ],
+        "params_type_name": "AdAccountsGetParams",
+        "response_type": "AdAccount",
+        "description": "Retrieve ad account by ID.",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "AdAccount",
+        "meta_fields": null,
+        "is_download": false
+      }
+    ],
+    "campaigns": [
+      {
+        "method_name": "list_campaigns",
+        "http_method": "get",
+        "path": "/ad_accounts/{ad_account_id}/campaigns",
+        "entity": "campaigns",
+        "action": "list",
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "python_name": "ad_account_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ad account ID"
+          },
+          {
+            "name": "id",
+            "python_name": "id",
+            "type": "list[str]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 200
+            },
+            "required": false,
+            "description": "Filter by campaign IDs (comma-separated)",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.size",
+            "python_name": "page_size",
+            "type": "int",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000
+            },
+            "required": false,
+            "description": "Number of items per page (max 1000)",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.token",
+            "python_name": "page_token",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Pagination token for next page",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "CampaignsListParams",
+        "response_type": "CampaignsListResult",
+        "description": "Retrieve campaigns by ad account.",
+        "record_extractor": "$.data",
+        "meta_extractor": {
+          "next_link": "$.pagination.next_url"
+        },
+        "needs_envelope": true,
+        "record_type": "list[Campaign]",
+        "meta_fields": [
+          {
+            "name": "next_link",
+            "python_name": "next_link",
+            "type": "str",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Full URL for next page. Null if this is the last page."
+            }
+          }
+        ],
+        "is_download": false
+      },
+      {
+        "method_name": "get_campaign",
+        "http_method": "get",
+        "path": "/campaigns/{campaign_id}",
+        "entity": "campaigns",
+        "action": "get",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "python_name": "campaign_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The campaign ID"
+          }
+        ],
+        "params_type_name": "CampaignsGetParams",
+        "response_type": "Campaign",
+        "description": "Retrieve a campaign by ID.",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Campaign",
+        "meta_fields": null,
+        "is_download": false
+      }
+    ],
+    "ad_groups": [
+      {
+        "method_name": "list_ad_groups",
+        "http_method": "get",
+        "path": "/ad_accounts/{ad_account_id}/ad_groups",
+        "entity": "ad_groups",
+        "action": "list",
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "python_name": "ad_account_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ad account ID"
+          },
+          {
+            "name": "campaign_id",
+            "python_name": "campaign_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Filter by campaign ID",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.size",
+            "python_name": "page_size",
+            "type": "int",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000
+            },
+            "required": false,
+            "description": "Number of items per page (max 1000)",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.token",
+            "python_name": "page_token",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Pagination token for next page",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "AdGroupsListParams",
+        "response_type": "AdGroupsListResult",
+        "description": "Retrieve ad groups by ad account.",
+        "record_extractor": "$.data",
+        "meta_extractor": {
+          "next_link": "$.pagination.next_url"
+        },
+        "needs_envelope": true,
+        "record_type": "list[AdGroup]",
+        "meta_fields": [
+          {
+            "name": "next_link",
+            "python_name": "next_link",
+            "type": "str",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Full URL for next page. Null if this is the last page."
+            }
+          }
+        ],
+        "is_download": false
+      },
+      {
+        "method_name": "get_ad_group",
+        "http_method": "get",
+        "path": "/ad_groups/{ad_group_id}",
+        "entity": "ad_groups",
+        "action": "get",
+        "parameters": [
+          {
+            "name": "ad_group_id",
+            "python_name": "ad_group_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ad group ID"
+          }
+        ],
+        "params_type_name": "AdGroupsGetParams",
+        "response_type": "AdGroup",
+        "description": "Retrieve an ad group by ID.",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "AdGroup",
+        "meta_fields": null,
+        "is_download": false
+      }
+    ],
+    "ads": [
+      {
+        "method_name": "list_ads",
+        "http_method": "get",
+        "path": "/ad_accounts/{ad_account_id}/ads",
+        "entity": "ads",
+        "action": "list",
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "python_name": "ad_account_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ad account ID"
+          },
+          {
+            "name": "campaign_id",
+            "python_name": "campaign_id",
+            "type": "list[str]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 200
+            },
+            "required": false,
+            "description": "Filter by campaign IDs (comma-separated)",
+            "is_deep_object": false
+          },
+          {
+            "name": "ad_group_id",
+            "python_name": "ad_group_id",
+            "type": "list[str]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 200
+            },
+            "required": false,
+            "description": "Filter by ad group IDs (comma-separated)",
+            "is_deep_object": false
+          },
+          {
+            "name": "configured_status",
+            "python_name": "configured_status",
+            "type": "list[str]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "ARCHIVED",
+                  "DELETED",
+                  "PAUSED"
+                ]
+              }
+            },
+            "required": false,
+            "description": "Filter by configured status",
+            "is_deep_object": false
+          },
+          {
+            "name": "effective_status",
+            "python_name": "effective_status",
+            "type": "list[str]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "AD_GROUP_PAUSED",
+                  "ARCHIVED",
+                  "CAMPAIGN_PAUSED",
+                  "COMPLETED",
+                  "DELETED",
+                  "MISSING_PERMISSIONS",
+                  "PAUSED",
+                  "PENDING_APPROVAL",
+                  "PENDING_BILLING_INFO",
+                  "PENDING_ID_VERIFICATION",
+                  "PROCESSING",
+                  "REJECTED"
+                ]
+              }
+            },
+            "required": false,
+            "description": "Filter by effective status",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.size",
+            "python_name": "page_size",
+            "type": "int",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000
+            },
+            "required": false,
+            "description": "Number of items per page (max 1000)",
+            "is_deep_object": false
+          },
+          {
+            "name": "page.token",
+            "python_name": "page_token",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Pagination token for next page",
+            "is_deep_object": false
+          }
+        ],
+        "params_type_name": "AdsListParams",
+        "response_type": "AdsListResult",
+        "description": "Retrieve ads by ad account. Filters combine with logical AND across different query parameters.\n",
+        "record_extractor": "$.data",
+        "meta_extractor": {
+          "next_link": "$.pagination.next_url"
+        },
+        "needs_envelope": true,
+        "record_type": "list[Ad]",
+        "meta_fields": [
+          {
+            "name": "next_link",
+            "python_name": "next_link",
+            "type": "str",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Full URL for next page. Null if this is the last page."
+            }
+          }
+        ],
+        "is_download": false
+      },
+      {
+        "method_name": "get_ad",
+        "http_method": "get",
+        "path": "/ads/{ad_id}",
+        "entity": "ads",
+        "action": "get",
+        "parameters": [
+          {
+            "name": "ad_id",
+            "python_name": "ad_id",
+            "type": "str",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ad ID"
+          }
+        ],
+        "params_type_name": "AdsGetParams",
+        "response_type": "Ad",
+        "description": "Retrieve an ad by ID.",
+        "record_extractor": "$.data",
+        "meta_extractor": null,
+        "needs_envelope": null,
+        "record_type": "Ad",
+        "meta_fields": null,
+        "is_download": false
+      }
+    ]
+  },
+  "search_schemas": {
+    "campaigns": {
+      "entity": "campaigns",
+      "kind": "DATA",
+      "data_type_name": "CampaignsSearchData",
+      "filter_type_name": "CampaignsSearchFilter",
+      "in_filter_type_name": "CampaignsInFilter",
+      "any_value_filter_type_name": "CampaignsAnyValueFilter",
+      "string_filter_type_name": "CampaignsStringFilter",
+      "sort_filter_type_name": "CampaignsSortFilter",
+      "result_type_name": "CampaignsSearchResult",
+      "query_type_name": "CampaignsSearchQuery",
+      "condition_prefix": "Campaigns",
+      "condition_type_name": "CampaignsCondition",
+      "fields": [
+        {
+          "name": "ad_account_id",
+          "python_name": "ad_account_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "The ad account this campaign belongs to",
+          "semantic": false
+        },
+        {
+          "name": "app_id",
+          "python_name": "app_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "App Store or Play Store ID",
+          "semantic": false
+        },
+        {
+          "name": "configured_status",
+          "python_name": "configured_status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "User-configured status (ACTIVE, ARCHIVED, DELETED, PAUSED)",
+          "semantic": false
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Creation timestamp in ISO 8601 format",
+          "semantic": false
+        },
+        {
+          "name": "effective_status",
+          "python_name": "effective_status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Effective delivery status",
+          "semantic": false
+        },
+        {
+          "name": "funding_instrument_id",
+          "python_name": "funding_instrument_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Funding instrument ID",
+          "semantic": false
+        },
+        {
+          "name": "goal_type",
+          "python_name": "goal_type",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Goal type (LIFETIME_SPEND, DAILY_SPEND)",
+          "semantic": false
+        },
+        {
+          "name": "goal_value",
+          "python_name": "goal_value",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "json_example_value": 0,
+          "description": "Goal value in microcurrency",
+          "semantic": false
+        },
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Unique campaign identifier",
+          "semantic": false
+        },
+        {
+          "name": "is_campaign_budget_optimization",
+          "python_name": "is_campaign_budget_optimization",
+          "type": "bool | None",
+          "json_type": "null | boolean",
+          "example_value_json": "True",
+          "json_example_value": true,
+          "description": "Whether campaign budget optimization is enabled",
+          "semantic": false
+        },
+        {
+          "name": "modified_at",
+          "python_name": "modified_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Last modification timestamp",
+          "semantic": false
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Campaign name",
+          "semantic": false
+        },
+        {
+          "name": "objective",
+          "python_name": "objective",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Campaign objective",
+          "semantic": false
+        },
+        {
+          "name": "spend_cap",
+          "python_name": "spend_cap",
+          "type": "int | None",
+          "json_type": "null | integer",
+          "example_value_json": "0",
+          "json_example_value": 0,
+          "description": "Spend cap in microcurrency",
+          "semantic": false
+        }
+      ],
+      "semantic_fields": [],
+      "semantic_entity_fields": [],
+      "semantic_metadata_fields": [],
+      "enrichment_outputs": []
+    },
+    "ads": {
+      "entity": "ads",
+      "kind": "DATA",
+      "data_type_name": "AdsSearchData",
+      "filter_type_name": "AdsSearchFilter",
+      "in_filter_type_name": "AdsInFilter",
+      "any_value_filter_type_name": "AdsAnyValueFilter",
+      "string_filter_type_name": "AdsStringFilter",
+      "sort_filter_type_name": "AdsSortFilter",
+      "result_type_name": "AdsSearchResult",
+      "query_type_name": "AdsSearchQuery",
+      "condition_prefix": "Ads",
+      "condition_type_name": "AdsCondition",
+      "fields": [
+        {
+          "name": "ad_account_id",
+          "python_name": "ad_account_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "The ad account this ad belongs to",
+          "semantic": false
+        },
+        {
+          "name": "ad_group_id",
+          "python_name": "ad_group_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "The ad group this ad belongs to",
+          "semantic": false
+        },
+        {
+          "name": "campaign_id",
+          "python_name": "campaign_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "The campaign this ad belongs to",
+          "semantic": false
+        },
+        {
+          "name": "click_url",
+          "python_name": "click_url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Click destination URL",
+          "semantic": false
+        },
+        {
+          "name": "configured_status",
+          "python_name": "configured_status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "User-configured status",
+          "semantic": false
+        },
+        {
+          "name": "created_at",
+          "python_name": "created_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Creation timestamp",
+          "semantic": false
+        },
+        {
+          "name": "effective_status",
+          "python_name": "effective_status",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Effective delivery status",
+          "semantic": false
+        },
+        {
+          "name": "id",
+          "python_name": "id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Unique ad identifier",
+          "semantic": false
+        },
+        {
+          "name": "modified_at",
+          "python_name": "modified_at",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Last modification timestamp",
+          "semantic": false
+        },
+        {
+          "name": "name",
+          "python_name": "name",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Ad name",
+          "semantic": false
+        },
+        {
+          "name": "post_id",
+          "python_name": "post_id",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Reddit post ID (t3_ prefix)",
+          "semantic": false
+        },
+        {
+          "name": "post_url",
+          "python_name": "post_url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Reddit post URL",
+          "semantic": false
+        },
+        {
+          "name": "preview_url",
+          "python_name": "preview_url",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Ad preview URL",
+          "semantic": false
+        },
+        {
+          "name": "rejection_reason",
+          "python_name": "rejection_reason",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "Reason the ad was rejected",
+          "semantic": false
+        }
+      ],
+      "semantic_fields": [],
+      "semantic_entity_fields": [],
+      "semantic_metadata_fields": [],
+      "enrichment_outputs": []
+    }
+  }
+}
