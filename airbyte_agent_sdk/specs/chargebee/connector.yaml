@@ -10,6 +10,9 @@ info:
     Chargebee is a recurring billing platform that helps SaaS and subscription
     businesses manage the full subscription lifecycle.
   x-airbyte-connector-name: chargebee
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 686473f1-76d9-4994-9cc7-9b13da46147c
   x-airbyte-replication-version: "0.10.44"
   x-airbyte-replication-compatibility: ">=0.10.44, <1.0.0"

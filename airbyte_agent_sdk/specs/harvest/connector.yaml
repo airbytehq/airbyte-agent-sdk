@@ -9,6 +9,9 @@ info:
     estimates, expenses, and more. Harvest is a cloud-based time tracking and invoicing
     solution that helps teams track time, manage projects, and streamline invoicing.
   x-airbyte-connector-name: harvest
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: fe2b4084-3386-4d3b-9ad6-308f61a6f1e6
   x-airbyte-replication-version: "1.2.48"
   x-airbyte-replication-compatibility: ">=1.2.48, <2.0.0"

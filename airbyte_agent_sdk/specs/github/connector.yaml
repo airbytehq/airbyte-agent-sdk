@@ -8,6 +8,9 @@ info:
     pull requests, reviews, comments, releases, discussions, organizations, teams, and users for
     development workflow analysis and project management insights.
   x-airbyte-connector-name: github
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: ef69ef6e-aa7f-4af1-a01d-ef775033524e
   x-airbyte-replication-version: "2.1.40"
   x-airbyte-replication-compatibility: ">=2.1.40, <3.0.0"

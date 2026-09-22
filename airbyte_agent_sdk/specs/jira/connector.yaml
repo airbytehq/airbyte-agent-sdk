@@ -5,6 +5,9 @@ info:
   version: 1.2.0
   description: Connector for Jira API
   x-airbyte-connector-name: jira
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 68e63de2-bb83-4c7e-93fa-a8a9051e3993
   x-airbyte-replication-version: "6.0.1"
   x-airbyte-replication-compatibility: ">=6.0.1, <7.0.0"

@@ -11,6 +11,9 @@ info:
     from the TikTok for Business platform. All list operations require an
     advertiser_id parameter to scope results to a specific advertiser account.
   x-airbyte-connector-name: tiktok-marketing
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 4bfac00d-ce15-44ff-95b9-9e3c3e8fbd35
   x-airbyte-replication-version: "5.1.11"
   x-airbyte-replication-compatibility: ">=5.1.11, <6.0.0"

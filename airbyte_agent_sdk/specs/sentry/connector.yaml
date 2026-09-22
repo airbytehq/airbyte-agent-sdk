@@ -9,6 +9,9 @@ info:
     Sentry organization. Supports listing and retrieving detailed information
     about error tracking data, project configurations, and software releases.
   x-airbyte-connector-name: sentry
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: cdaf146a-9b75-49fd-9dd2-9d64a0bb4781
   x-airbyte-replication-version: "1.0.6"
   x-airbyte-replication-compatibility: ">=1.0.6, <2.0.0"

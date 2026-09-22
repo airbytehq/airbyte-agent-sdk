@@ -9,6 +9,9 @@ info:
     products, and invoices for a PayPal account. Uses OAuth2 client
     credentials for authentication.
   x-airbyte-connector-name: paypal-transaction
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: d913b0f2-cc51-4e55-a44c-8ba1697b9239
   x-airbyte-replication-version: "2.6.44"
   x-airbyte-replication-compatibility: ">=2.6.44, <3.0.0"

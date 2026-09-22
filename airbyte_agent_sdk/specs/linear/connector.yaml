@@ -12,6 +12,9 @@ info:
     development teams. This connector provides access to issues, projects, and teams
     for sprint planning, backlog management, and development workflow analysis.
   x-airbyte-connector-name: linear
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 1c5d8316-ed42-4473-8fbc-2626f03f070c
   x-airbyte-replication-version: "1.0.0"
   x-airbyte-replication-compatibility: ">=1.0.0, <2.0.0"

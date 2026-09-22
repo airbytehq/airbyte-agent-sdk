@@ -9,6 +9,9 @@ info:
     API to list and retrieve notes, including summaries, transcripts, attendees,
     and calendar event details. Requires a Granola API key.
   x-airbyte-connector-name: granola
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 9023923c-002f-4131-9554-3ebdf56540a4
   x-airbyte-replication-version: "0.3.0"
   x-airbyte-replication-compatibility: ">=0.3.0, <1.0.0"

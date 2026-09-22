@@ -13,6 +13,9 @@ info:
     and negative keywords/targets), and Sponsored Brands campaigns and ad groups for managing and
     analyzing advertising campaigns across different marketplaces.
   x-airbyte-connector-name: amazon-ads
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: c6b0a29e-1da9-4512-9002-7bfd0cba2246
   x-airbyte-replication-version: "9.0.7"
   x-airbyte-replication-compatibility: ">=9.0.7, <10.0.0"

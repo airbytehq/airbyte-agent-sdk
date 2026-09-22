@@ -7,6 +7,9 @@ info:
     manage subscriptions, and handle financial transactions. This connector provides
     access to customers for payment analytics and customer management.
   x-airbyte-connector-name: stripe
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: e094cb9a-26de-4645-8761-65c0c425d1de
   x-airbyte-replication-version: "6.0.13"
   x-airbyte-replication-compatibility: ">=6.0.13, <7.0.0"

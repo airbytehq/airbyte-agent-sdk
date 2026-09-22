@@ -12,6 +12,9 @@ info:
 
     '
   x-airbyte-connector-name: facebook-marketing
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: e7778cfc-e97c-4458-9ecb-b4f2bba8946c
   x-airbyte-replication-version: "6.0.2"
   x-airbyte-replication-compatibility: ">=6.0.2, <7.0.0"

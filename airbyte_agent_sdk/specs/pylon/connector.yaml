@@ -9,6 +9,9 @@ info:
     issues, accounts, contacts, teams, tags, users, custom fields, ticket forms, and user roles
     for customer support analytics and account intelligence insights.
   x-airbyte-connector-name: pylon
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6
   x-airbyte-replication-version: "0.0.20"
   x-airbyte-replication-compatibility: ">=0.0.20, <1.0.0"

@@ -8,6 +8,9 @@ info:
     provides access to Shopify Admin REST API for reading store data including customers,
     orders, products, inventory, and more.
   x-airbyte-connector-name: shopify
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 9da77001-af33-4bcd-be46-6252bf9342b9
   x-airbyte-replication-version: "4.0.0"
   x-airbyte-replication-compatibility: ">=4.0.0, <5.0.0"

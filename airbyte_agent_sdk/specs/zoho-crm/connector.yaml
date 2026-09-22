@@ -10,6 +10,9 @@ info:
     data center support (US, EU, AU, IN, CN, JP). Supports read operations
     (list and get) for all entities.
   x-airbyte-connector-name: zoho-crm
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 4942d392-c7b5-4271-91f9-3b4f4e51eb3e
   x-airbyte-replication-version: "0.3.0"
   x-airbyte-replication-compatibility: ">=0.3.0, <1.0.0"

@@ -11,6 +11,9 @@ info:
     and provisioning phone numbers.
     Uses HTTP Basic authentication with Account SID and Auth Token.
   x-airbyte-connector-name: twilio
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: b9dc6155-672e-42ea-b10d-9f1f1fb95ab1
   x-airbyte-replication-version: "1.0.13"
   x-airbyte-replication-compatibility: ">=1.0.13, <2.0.0"

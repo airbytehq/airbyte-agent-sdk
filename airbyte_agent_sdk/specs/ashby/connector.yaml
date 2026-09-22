@@ -5,6 +5,9 @@ info:
   description: |
     Ashby is a modern applicant tracking system (ATS) and recruiting platform that helps companies manage their hiring process. This connector provides access to candidates, applications, jobs, departments, locations, users, job postings, sources, archive reasons, candidate tags, custom fields, and feedback form definitions for talent acquisition analytics and hiring insights.
   x-airbyte-connector-name: ashby
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 4e8c9fa0-3634-499b-b948-11581b5c3efa
   x-airbyte-replication-version: "1.0.0"
   x-airbyte-replication-compatibility: ">=1.0.0, <2.0.0"

@@ -8,6 +8,9 @@ info:
     webhooks, workspaces, images, and themes. Supports listing and retrieving
     typeform resources for survey and form management workflows.
   x-airbyte-connector-name: typeform
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: e7eff203-90bf-43e5-a240-19ea3056c474
   x-airbyte-replication-version: "1.4.8"
   x-airbyte-replication-compatibility: ">=1.4.8, <2.0.0"

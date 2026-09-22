@@ -15,6 +15,9 @@ info:
     and purposes, adding and removing reactions, pinning messages, adding bookmarks, and inviting users
     to channels.
   x-airbyte-connector-name: slack
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: c2281cee-86f9-4a86-bb48-d23286b4c7bd
   x-airbyte-replication-version: "3.2.18"
   x-airbyte-replication-compatibility: ">=3.2.18, <4.0.0"

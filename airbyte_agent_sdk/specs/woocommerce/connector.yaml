@@ -10,6 +10,9 @@ info:
     tax rates, and tax classes. Requires a WooCommerce store URL and REST API consumer
     key / consumer secret for authentication.
   x-airbyte-connector-name: woocommerce
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 2a2552ca-9f78-4c1c-9eb7-4d0dc66d72df
   x-airbyte-replication-version: "0.5.47"
   x-airbyte-replication-compatibility: ">=0.5.47, <1.0.0"

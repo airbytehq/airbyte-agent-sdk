@@ -11,6 +11,9 @@ info:
     property IDs. Supports OAuth2 and service account key authentication with Google
     Analytics read-only scope.
   x-airbyte-connector-name: google-analytics-data-api
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 3cc2eafd-84aa-4dca-93af-322d9dfeec1a
   x-airbyte-replication-version: "2.10.1"
   x-airbyte-replication-compatibility: ">=2.10.1, <3.0.0"

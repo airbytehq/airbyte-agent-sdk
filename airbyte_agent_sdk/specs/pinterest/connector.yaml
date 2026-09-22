@@ -9,6 +9,9 @@ info:
     ad groups, ads, board sections, board pins, catalogs, catalog feeds,
     catalog product groups, audiences, conversion tags, customer lists, and keywords.
   x-airbyte-connector-name: pinterest
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 5cb7e5fe-38c2-11ec-8d3d-0242ac130003
   x-airbyte-replication-version: "2.2.11"
   x-airbyte-replication-compatibility: ">=2.2.11, <3.0.0"

@@ -6,6 +6,9 @@ info:
 
     '
   x-airbyte-connector-name: gitlab
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 5e6175e5-68e1-4c17-bff9-56103bbb0d80
   x-airbyte-replication-version: "4.4.36"
   x-airbyte-replication-compatibility: ">=4.4.36, <5.0.0"

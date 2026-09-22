@@ -10,6 +10,9 @@ info:
     cloud-based customer support solution that enables companies to manage customer
     conversations across email, phone, chat, and social media.
   x-airbyte-connector-name: freshdesk
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: ec4b9503-13cb-48ab-a4ab-6ade4be46567
   x-airbyte-replication-version: "3.2.26"
   x-airbyte-replication-compatibility: ">=3.2.26, <4.0.0"

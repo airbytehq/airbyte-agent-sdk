@@ -9,6 +9,9 @@ info:
     type listings, active user counts, and average session length metrics.
     Authentication uses HTTP Basic with your Amplitude API key and secret key.
   x-airbyte-connector-name: amplitude
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: fa9f58c6-2d03-4237-aaa4-07d75e0c1396
   x-airbyte-replication-version: "0.7.37"
   x-airbyte-replication-compatibility: ">=0.7.37, <1.0.0"

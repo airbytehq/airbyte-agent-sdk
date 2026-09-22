@@ -13,6 +13,9 @@ info:
     API) and requires a Bearer-type App API key generated in your Customer.io
     workspace settings.
   x-airbyte-connector-name: customer-io
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 34f697bc-b989-4eda-b06f-d0f39b88825b
   x-airbyte-replication-version: "0.4.12"
   x-airbyte-replication-compatibility: ">=0.4.12, <1.0.0"

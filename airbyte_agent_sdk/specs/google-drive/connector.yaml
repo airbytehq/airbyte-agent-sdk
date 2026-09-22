@@ -12,6 +12,9 @@ info:
     access to files, shared drives, permissions, comments, replies, revisions,
     and change tracking, including the ability to create, update, delete, and upload files.
   x-airbyte-connector-name: google-drive
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 9f8dda77-1048-4368-815b-269bf54ee9b8
   x-airbyte-replication-version: "0.5.30"
   x-airbyte-replication-compatibility: ">=0.5.30, <1.0.0"

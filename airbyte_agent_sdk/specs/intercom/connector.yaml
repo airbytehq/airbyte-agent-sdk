@@ -15,6 +15,9 @@ info:
     creating, updating, and deleting conversations; creating notes; and creating, updating,
     and deleting internal articles.
   x-airbyte-connector-name: intercom
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: d8313939-3782-41b0-be29-b3ca20d8dd3a
   x-airbyte-replication-version: "0.13.24"
   x-airbyte-replication-compatibility: ">=0.13.24, <1.0.0"

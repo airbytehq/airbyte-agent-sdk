@@ -7,6 +7,9 @@ info:
     track customer usage, and manage subscriptions. This connector provides access to customers,
     subscriptions, plans, and invoices for billing analytics and customer management.
   x-airbyte-connector-name: orb
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 7f0455fb-4518-4ec0-b7a3-d808bf8081cc
   x-airbyte-replication-version: "2.1.22"
   x-airbyte-replication-compatibility: ">=2.1.22, <3.0.0"

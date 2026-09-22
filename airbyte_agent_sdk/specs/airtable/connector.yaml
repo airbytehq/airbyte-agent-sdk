@@ -8,6 +8,9 @@ info:
     power of a database. This connector provides access to bases, tables, and records for 
     data analysis and workflow automation.
   x-airbyte-connector-name: airtable
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 14c6e7ea-97ed-4f5e-a7b5-25e9a80b8212
   x-airbyte-replication-version: "4.6.36"
   x-airbyte-replication-compatibility: ">=4.6.36, <5.0.0"

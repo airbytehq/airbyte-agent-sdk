@@ -10,6 +10,9 @@ info:
     audit records. Authenticates via HTTP Basic using an Atlassian account email
     and API token.
   x-airbyte-connector-name: confluence
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: cf40a7f8-71f8-45ce-a7fa-fca053e4028c
   x-airbyte-replication-version: "1.0.34"
   x-airbyte-replication-compatibility: ">=1.0.34, <2.0.0"

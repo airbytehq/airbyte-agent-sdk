@@ -8,6 +8,9 @@ info:
     and time tracking for teams. This connector provides access to workspaces, spaces, folders, lists,
     tasks (including workspace-wide search), comments, goals, views, time tracking, members, and docs.
   x-airbyte-connector-name: clickup-api
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: 311a7a27-3fb5-4f7e-8265-5e4afe258b66
   x-airbyte-replication-version: "0.3.58"
   x-airbyte-replication-compatibility: ">=0.3.58, <1.0.0"
