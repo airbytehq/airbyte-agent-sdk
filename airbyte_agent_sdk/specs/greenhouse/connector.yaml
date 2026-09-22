@@ -21,6 +21,8 @@ info:
   x-airbyte-replication-compatibility: ">=1.0.0, <2.0.0"
   x-airbyte-skip-auth-methods:
     - basic
+  x-airbyte-skip-suggested-streams:
+    - scorecards
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Greenhouse API Reference documentation
