@@ -103,6 +103,32 @@ class Lead(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    converted: bool | None = Field(default=None, alias="$converted")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    zia_owner_assignment: str | None = Field(default=None, alias="$zia_owner_assignment")
+    email_opt_out: bool | None = Field(default=None, alias="Email_Opt_Out")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    record_image: str | None = Field(default=None, alias="Record_Image")
+    salutation: str | None = Field(default=None, alias="Salutation")
+    secondary_email: str | None = Field(default=None, alias="Secondary_Email")
+    skype_id: str | None = Field(default=None, alias="Skype_ID")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
+    twitter: str | None = Field(default=None, alias="Twitter")
+    unsubscribed_mode: str | None = Field(default=None, alias="Unsubscribed_Mode")
+    unsubscribed_time: str | None = Field(default=None, alias="Unsubscribed_Time")
 
 class LeadsList(BaseModel):
     """Paginated list of leads"""
@@ -145,6 +171,40 @@ class Contact(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    is_duplicate: bool | None = Field(default=None, alias="$is_duplicate")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    zia_owner_assignment: str | None = Field(default=None, alias="$zia_owner_assignment")
+    assistant: str | None = Field(default=None, alias="Assistant")
+    asst_phone: str | None = Field(default=None, alias="Asst_Phone")
+    contact_auto_number: str | None = Field(default=None, alias="Contact_Auto_Number")
+    email_opt_out: bool | None = Field(default=None, alias="Email_Opt_Out")
+    home_phone: str | None = Field(default=None, alias="Home_Phone")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    other_phone: str | None = Field(default=None, alias="Other_Phone")
+    record_image: str | None = Field(default=None, alias="Record_Image")
+    reporting_to: Any | None = Field(default=None, alias="Reporting_To")
+    salutation: str | None = Field(default=None, alias="Salutation")
+    secondary_email: str | None = Field(default=None, alias="Secondary_Email")
+    skype_id: str | None = Field(default=None, alias="Skype_ID")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
+    twitter: str | None = Field(default=None, alias="Twitter")
+    unsubscribed_mode: str | None = Field(default=None, alias="Unsubscribed_Mode")
+    unsubscribed_time: str | None = Field(default=None, alias="Unsubscribed_Time")
+    vendor_name: Any | None = Field(default=None, alias="Vendor_Name")
 
 class ContactsList(BaseModel):
     """Paginated list of contacts"""
@@ -189,6 +249,27 @@ class Account(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    is_duplicate: bool | None = Field(default=None, alias="$is_duplicate")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    zia_owner_assignment: str | None = Field(default=None, alias="$zia_owner_assignment")
+    account_site: str | None = Field(default=None, alias="Account_Site")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    record_image: str | None = Field(default=None, alias="Record_Image")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
 
 class AccountsList(BaseModel):
     """Paginated list of accounts"""
@@ -228,6 +309,30 @@ class Deal(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    followed: bool | None = Field(default=None, alias="$followed")
+    followers: list[Any] | None = Field(default=None, alias="$followers")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    zia_owner_assignment: str | None = Field(default=None, alias="$zia_owner_assignment")
+    expected_revenue: float | None = Field(default=None, alias="Expected_Revenue")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    lead_conversion_time: int | None = Field(default=None, alias="Lead_Conversion_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    overall_sales_duration: int | None = Field(default=None, alias="Overall_Sales_Duration")
+    sales_cycle_duration: int | None = Field(default=None, alias="Sales_Cycle_Duration")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
 
 class DealsList(BaseModel):
     """Paginated list of deals"""
@@ -258,6 +363,22 @@ class Campaign(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    parent_campaign: Any | None = Field(default=None, alias="Parent_Campaign")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
 
 class CampaignsList(BaseModel):
     """Paginated list of campaigns"""
@@ -288,6 +409,26 @@ class Task(BaseModel):
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
     closed_time: str | None = Field(default=None, alias="Closed_Time")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    se_module: str | None = Field(default=None, alias="$se_module")
+    state: str | None = Field(default=None, alias="$state")
+    u_id: str | None = Field(default=None, alias="$u_id")
+    zia_owner_assignment: str | None = Field(default=None, alias="$zia_owner_assignment")
+    best_time: list[Any] | None = Field(default=None, alias="BEST_TIME")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
 
 class TasksList(BaseModel):
     """Paginated list of tasks"""
@@ -329,6 +470,38 @@ class Event(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    calendar_booking_event: bool | None = Field(default=None, alias="$calendar_booking_event")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    meeting_details: dict[str, Any] | None = Field(default=None, alias="$meeting_details")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    recurrence_id: str | None = Field(default=None, alias="$recurrence_id")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    se_module: str | None = Field(default=None, alias="$se_module")
+    send_notification: bool | None = Field(default=None, alias="$send_notification")
+    state: str | None = Field(default=None, alias="$state")
+    u_id: str | None = Field(default=None, alias="$u_id")
+    check_in_address: str | None = Field(default=None, alias="Check_In_Address")
+    check_in_by: dict[str, Any] | None = Field(default=None, alias="Check_In_By")
+    check_in_city: str | None = Field(default=None, alias="Check_In_City")
+    check_in_comment: str | None = Field(default=None, alias="Check_In_Comment")
+    check_in_country: str | None = Field(default=None, alias="Check_In_Country")
+    check_in_state: str | None = Field(default=None, alias="Check_In_State")
+    check_in_status: str | None = Field(default=None, alias="Check_In_Status")
+    check_in_sub_locality: str | None = Field(default=None, alias="Check_In_Sub_Locality")
+    check_in_time: str | None = Field(default=None, alias="Check_In_Time")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    latitude: float | None = Field(default=None, alias="Latitude")
+    longitude: float | None = Field(default=None, alias="Longitude")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
+    zip_code: str | None = Field(default=None, alias="ZIP_Code")
 
 class EventsList(BaseModel):
     """Paginated list of events"""
@@ -361,6 +534,24 @@ class Call(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    calendar_booking_call: bool | None = Field(default=None, alias="$calendar_booking_call")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    se_module: str | None = Field(default=None, alias="$se_module")
+    state: str | None = Field(default=None, alias="$state")
+    dialled_number: str | None = Field(default=None, alias="Dialled_Number")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    reminder: str | None = Field(default=None, alias="Reminder")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
 
 class CallsList(BaseModel):
     """Paginated list of calls"""
@@ -399,6 +590,26 @@ class Product(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    record_image: str | None = Field(default=None, alias="Record_Image")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
+    taxable: bool | None = Field(default=None, alias="Taxable")
+    usage_unit: str | None = Field(default=None, alias="Usage_Unit")
 
 class ProductsList(BaseModel):
     """Paginated list of products"""
@@ -442,6 +653,28 @@ class Quote(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    converted: bool | None = Field(default=None, alias="$converted")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    line_tax: list[Any] | None = Field(default=None, alias="$line_tax")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    product_details: list[dict[str, Any]] | None = Field(default=None, alias="Product_Details")
+    quote_number: str | None = Field(default=None, alias="Quote_Number")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
+    team: str | None = Field(default=None, alias="Team")
 
 class QuotesList(BaseModel):
     """Paginated list of quotes"""
@@ -489,6 +722,26 @@ class Invoice(BaseModel):
     created_by: Any | None = Field(default=None, alias="Created_By")
     modified_by: Any | None = Field(default=None, alias="Modified_By")
     record_status_s: str | None = Field(default=None, alias="Record_Status__s")
+    approval: dict[str, Any] | None = Field(default=None, alias="$approval")
+    approval_state: str | None = Field(default=None, alias="$approval_state")
+    approved: bool | None = Field(default=None, alias="$approved")
+    currency_symbol: str | None = Field(default=None, alias="$currency_symbol")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    in_merge: bool | None = Field(default=None, alias="$in_merge")
+    layout_id: dict[str, Any] | None = Field(default=None, alias="$layout_id")
+    line_tax: list[Any] | None = Field(default=None, alias="$line_tax")
+    locked_for_me: bool | None = Field(default=None, alias="$locked_for_me")
+    orchestration: bool | None = Field(default=None, alias="$orchestration")
+    process_flow: bool | None = Field(default=None, alias="$process_flow")
+    review: dict[str, Any] | None = Field(default=None, alias="$review")
+    review_process: dict[str, Any] | None = Field(default=None, alias="$review_process")
+    state: str | None = Field(default=None, alias="$state")
+    last_activity_time: str | None = Field(default=None, alias="Last_Activity_Time")
+    locked_s: bool | None = Field(default=None, alias="Locked__s")
+    product_details: list[dict[str, Any]] | None = Field(default=None, alias="Product_Details")
+    sales_commission: float | None = Field(default=None, alias="Sales_Commission")
+    tag: list[dict[str, Any]] | None = Field(default=None, alias="Tag")
 
 class InvoicesList(BaseModel):
     """Paginated list of invoices"""
@@ -508,6 +761,16 @@ class Note(BaseModel):
     parent_id: Any | None = Field(default=None, alias="Parent_Id")
     created_time: str | None = Field(default=None, alias="Created_Time")
     modified_time: str | None = Field(default=None, alias="Modified_Time")
+    attachments: list[Any] | None = Field(default=None, alias="$attachments")
+    editable: bool | None = Field(default=None, alias="$editable")
+    field_states: dict[str, Any] | None = Field(default=None, alias="$field_states")
+    is_shared_to_client: bool | None = Field(default=None, alias="$is_shared_to_client")
+    se_module: str | None = Field(default=None, alias="$se_module")
+    size: int | None = Field(default=None, alias="$size")
+    state: str | None = Field(default=None, alias="$state")
+    voice_note: bool | None = Field(default=None, alias="$voice_note")
+    created_by: Any | None = Field(default=None, alias="Created_By")
+    modified_by: Any | None = Field(default=None, alias="Modified_By")
 
 class NotesList(BaseModel):
     """Paginated list of notes"""
@@ -515,425 +778,6 @@ class NotesList(BaseModel):
 
     data: list[Note] | None = Field(default=None)
     info: PaginationInfo | None = Field(default=None)
-
-class WriteResponseDetail(BaseModel):
-    """Details of a successfully written record"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    modified_time: str | None = Field(default=None, alias="Modified_Time")
-    modified_by: Any | None = Field(default=None, alias="Modified_By")
-    created_time: str | None = Field(default=None, alias="Created_Time")
-    id: str | None = Field(default=None)
-    created_by: Any | None = Field(default=None, alias="Created_By")
-
-class WriteResponseItem(BaseModel):
-    """Individual record write result"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    code: str | None = Field(default=None)
-    details: WriteResponseDetail | None = Field(default=None)
-    message: str | None = Field(default=None)
-    status: str | None = Field(default=None)
-
-class WriteResponse(BaseModel):
-    """Response from a create or update operation"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[WriteResponseItem] | None = Field(default=None)
-
-class LeadCreateParamsDataItem(BaseModel):
-    """Nested schema for LeadCreateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    first_name: str | None = Field(default=None, alias="First_Name", description="Lead's first name")
-    """Lead's first name"""
-    last_name: str = Field(alias="Last_Name", description="Lead's last name (required)")
-    """Lead's last name (required)"""
-    email: str | None = Field(default=None, alias="Email", description="Lead's email address")
-    """Lead's email address"""
-    phone: str | None = Field(default=None, alias="Phone", description="Lead's phone number")
-    """Lead's phone number"""
-    mobile: str | None = Field(default=None, alias="Mobile", description="Lead's mobile number")
-    """Lead's mobile number"""
-    company: str | None = Field(default=None, alias="Company", description="Company the lead is associated with")
-    """Company the lead is associated with"""
-    title: str | None = Field(default=None, alias="Title", description="Lead's job title")
-    """Lead's job title"""
-    lead_source: str | None = Field(default=None, alias="Lead_Source", description="Source from which the lead was generated")
-    """Source from which the lead was generated"""
-    industry: str | None = Field(default=None, alias="Industry", description="Industry the lead belongs to")
-    """Industry the lead belongs to"""
-    annual_revenue: float | None = Field(default=None, alias="Annual_Revenue", description="Annual revenue of the lead's company")
-    """Annual revenue of the lead's company"""
-    no_of_employees: int | None = Field(default=None, alias="No_of_Employees", description="Number of employees in the lead's company")
-    """Number of employees in the lead's company"""
-    rating: str | None = Field(default=None, alias="Rating", description="Lead rating")
-    """Lead rating"""
-    lead_status: str | None = Field(default=None, alias="Lead_Status", description="Current status of the lead")
-    """Current status of the lead"""
-    website: str | None = Field(default=None, alias="Website", description="Lead's website URL")
-    """Lead's website URL"""
-    street: str | None = Field(default=None, alias="Street", description="Street address")
-    """Street address"""
-    city: str | None = Field(default=None, alias="City", description="City")
-    """City"""
-    state: str | None = Field(default=None, alias="State", description="State or province")
-    """State or province"""
-    zip_code: str | None = Field(default=None, alias="Zip_Code", description="ZIP/postal code")
-    """ZIP/postal code"""
-    country: str | None = Field(default=None, alias="Country", description="Country")
-    """Country"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the lead")
-    """Description or notes about the lead"""
-
-class LeadCreateParams(BaseModel):
-    """Parameters for creating a lead. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[LeadCreateParamsDataItem]
-
-class LeadUpdateParamsDataItem(BaseModel):
-    """Nested schema for LeadUpdateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    first_name: str | None = Field(default=None, alias="First_Name", description="Lead's first name")
-    """Lead's first name"""
-    last_name: str | None = Field(default=None, alias="Last_Name", description="Lead's last name")
-    """Lead's last name"""
-    email: str | None = Field(default=None, alias="Email", description="Lead's email address")
-    """Lead's email address"""
-    phone: str | None = Field(default=None, alias="Phone", description="Lead's phone number")
-    """Lead's phone number"""
-    mobile: str | None = Field(default=None, alias="Mobile", description="Lead's mobile number")
-    """Lead's mobile number"""
-    company: str | None = Field(default=None, alias="Company", description="Company the lead is associated with")
-    """Company the lead is associated with"""
-    title: str | None = Field(default=None, alias="Title", description="Lead's job title")
-    """Lead's job title"""
-    lead_source: str | None = Field(default=None, alias="Lead_Source", description="Source from which the lead was generated")
-    """Source from which the lead was generated"""
-    industry: str | None = Field(default=None, alias="Industry", description="Industry the lead belongs to")
-    """Industry the lead belongs to"""
-    annual_revenue: float | None = Field(default=None, alias="Annual_Revenue", description="Annual revenue of the lead's company")
-    """Annual revenue of the lead's company"""
-    no_of_employees: int | None = Field(default=None, alias="No_of_Employees", description="Number of employees in the lead's company")
-    """Number of employees in the lead's company"""
-    rating: str | None = Field(default=None, alias="Rating", description="Lead rating")
-    """Lead rating"""
-    lead_status: str | None = Field(default=None, alias="Lead_Status", description="Current status of the lead")
-    """Current status of the lead"""
-    website: str | None = Field(default=None, alias="Website", description="Lead's website URL")
-    """Lead's website URL"""
-    street: str | None = Field(default=None, alias="Street", description="Street address")
-    """Street address"""
-    city: str | None = Field(default=None, alias="City", description="City")
-    """City"""
-    state: str | None = Field(default=None, alias="State", description="State or province")
-    """State or province"""
-    zip_code: str | None = Field(default=None, alias="Zip_Code", description="ZIP/postal code")
-    """ZIP/postal code"""
-    country: str | None = Field(default=None, alias="Country", description="Country")
-    """Country"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the lead")
-    """Description or notes about the lead"""
-
-class LeadUpdateParams(BaseModel):
-    """Parameters for updating a lead. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[LeadUpdateParamsDataItem]
-
-class ContactCreateParamsDataItem(BaseModel):
-    """Nested schema for ContactCreateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    first_name: str | None = Field(default=None, alias="First_Name", description="Contact's first name")
-    """Contact's first name"""
-    last_name: str = Field(alias="Last_Name", description="Contact's last name (required)")
-    """Contact's last name (required)"""
-    email: str | None = Field(default=None, alias="Email", description="Contact's email address")
-    """Contact's email address"""
-    phone: str | None = Field(default=None, alias="Phone", description="Contact's phone number")
-    """Contact's phone number"""
-    mobile: str | None = Field(default=None, alias="Mobile", description="Contact's mobile number")
-    """Contact's mobile number"""
-    title: str | None = Field(default=None, alias="Title", description="Contact's job title")
-    """Contact's job title"""
-    department: str | None = Field(default=None, alias="Department", description="Department the contact belongs to")
-    """Department the contact belongs to"""
-    lead_source: str | None = Field(default=None, alias="Lead_Source", description="Source from which the contact was generated")
-    """Source from which the contact was generated"""
-    date_of_birth: str | None = Field(default=None, alias="Date_of_Birth", description="Contact's date of birth (YYYY-MM-DD)")
-    """Contact's date of birth (YYYY-MM-DD)"""
-    mailing_street: str | None = Field(default=None, alias="Mailing_Street", description="Mailing street address")
-    """Mailing street address"""
-    mailing_city: str | None = Field(default=None, alias="Mailing_City", description="Mailing city")
-    """Mailing city"""
-    mailing_state: str | None = Field(default=None, alias="Mailing_State", description="Mailing state or province")
-    """Mailing state or province"""
-    mailing_zip: str | None = Field(default=None, alias="Mailing_Zip", description="Mailing ZIP/postal code")
-    """Mailing ZIP/postal code"""
-    mailing_country: str | None = Field(default=None, alias="Mailing_Country", description="Mailing country")
-    """Mailing country"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the contact")
-    """Description or notes about the contact"""
-
-class ContactCreateParams(BaseModel):
-    """Parameters for creating a contact. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[ContactCreateParamsDataItem]
-
-class ContactUpdateParamsDataItem(BaseModel):
-    """Nested schema for ContactUpdateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    first_name: str | None = Field(default=None, alias="First_Name", description="Contact's first name")
-    """Contact's first name"""
-    last_name: str | None = Field(default=None, alias="Last_Name", description="Contact's last name")
-    """Contact's last name"""
-    email: str | None = Field(default=None, alias="Email", description="Contact's email address")
-    """Contact's email address"""
-    phone: str | None = Field(default=None, alias="Phone", description="Contact's phone number")
-    """Contact's phone number"""
-    mobile: str | None = Field(default=None, alias="Mobile", description="Contact's mobile number")
-    """Contact's mobile number"""
-    title: str | None = Field(default=None, alias="Title", description="Contact's job title")
-    """Contact's job title"""
-    department: str | None = Field(default=None, alias="Department", description="Department the contact belongs to")
-    """Department the contact belongs to"""
-    lead_source: str | None = Field(default=None, alias="Lead_Source", description="Source from which the contact was generated")
-    """Source from which the contact was generated"""
-    date_of_birth: str | None = Field(default=None, alias="Date_of_Birth", description="Contact's date of birth (YYYY-MM-DD)")
-    """Contact's date of birth (YYYY-MM-DD)"""
-    mailing_street: str | None = Field(default=None, alias="Mailing_Street", description="Mailing street address")
-    """Mailing street address"""
-    mailing_city: str | None = Field(default=None, alias="Mailing_City", description="Mailing city")
-    """Mailing city"""
-    mailing_state: str | None = Field(default=None, alias="Mailing_State", description="Mailing state or province")
-    """Mailing state or province"""
-    mailing_zip: str | None = Field(default=None, alias="Mailing_Zip", description="Mailing ZIP/postal code")
-    """Mailing ZIP/postal code"""
-    mailing_country: str | None = Field(default=None, alias="Mailing_Country", description="Mailing country")
-    """Mailing country"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the contact")
-    """Description or notes about the contact"""
-
-class ContactUpdateParams(BaseModel):
-    """Parameters for updating a contact. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[ContactUpdateParamsDataItem]
-
-class AccountCreateParamsDataItem(BaseModel):
-    """Nested schema for AccountCreateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    account_name: str = Field(alias="Account_Name", description="Account/company name (required)")
-    """Account/company name (required)"""
-    account_number: str | None = Field(default=None, alias="Account_Number", description="Account number")
-    """Account number"""
-    account_type: str | None = Field(default=None, alias="Account_Type", description="Type of account (e.g., Analyst, Competitor, Customer)")
-    """Type of account (e.g., Analyst, Competitor, Customer)"""
-    industry: str | None = Field(default=None, alias="Industry", description="Industry the account belongs to")
-    """Industry the account belongs to"""
-    annual_revenue: float | None = Field(default=None, alias="Annual_Revenue", description="Annual revenue of the account")
-    """Annual revenue of the account"""
-    employees: int | None = Field(default=None, alias="Employees", description="Number of employees")
-    """Number of employees"""
-    phone: str | None = Field(default=None, alias="Phone", description="Account phone number")
-    """Account phone number"""
-    website: str | None = Field(default=None, alias="Website", description="Account website URL")
-    """Account website URL"""
-    ownership: str | None = Field(default=None, alias="Ownership", description="Ownership type (e.g., Public, Private)")
-    """Ownership type (e.g., Public, Private)"""
-    rating: str | None = Field(default=None, alias="Rating", description="Account rating")
-    """Account rating"""
-    billing_street: str | None = Field(default=None, alias="Billing_Street", description="Billing street address")
-    """Billing street address"""
-    billing_city: str | None = Field(default=None, alias="Billing_City", description="Billing city")
-    """Billing city"""
-    billing_state: str | None = Field(default=None, alias="Billing_State", description="Billing state or province")
-    """Billing state or province"""
-    billing_code: str | None = Field(default=None, alias="Billing_Code", description="Billing ZIP/postal code")
-    """Billing ZIP/postal code"""
-    billing_country: str | None = Field(default=None, alias="Billing_Country", description="Billing country")
-    """Billing country"""
-    shipping_street: str | None = Field(default=None, alias="Shipping_Street", description="Shipping street address")
-    """Shipping street address"""
-    shipping_city: str | None = Field(default=None, alias="Shipping_City", description="Shipping city")
-    """Shipping city"""
-    shipping_state: str | None = Field(default=None, alias="Shipping_State", description="Shipping state or province")
-    """Shipping state or province"""
-    shipping_code: str | None = Field(default=None, alias="Shipping_Code", description="Shipping ZIP/postal code")
-    """Shipping ZIP/postal code"""
-    shipping_country: str | None = Field(default=None, alias="Shipping_Country", description="Shipping country")
-    """Shipping country"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the account")
-    """Description or notes about the account"""
-
-class AccountCreateParams(BaseModel):
-    """Parameters for creating an account. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[AccountCreateParamsDataItem]
-
-class AccountUpdateParamsDataItem(BaseModel):
-    """Nested schema for AccountUpdateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    account_name: str | None = Field(default=None, alias="Account_Name", description="Account/company name")
-    """Account/company name"""
-    account_number: str | None = Field(default=None, alias="Account_Number", description="Account number")
-    """Account number"""
-    account_type: str | None = Field(default=None, alias="Account_Type", description="Type of account (e.g., Analyst, Competitor, Customer)")
-    """Type of account (e.g., Analyst, Competitor, Customer)"""
-    industry: str | None = Field(default=None, alias="Industry", description="Industry the account belongs to")
-    """Industry the account belongs to"""
-    annual_revenue: float | None = Field(default=None, alias="Annual_Revenue", description="Annual revenue of the account")
-    """Annual revenue of the account"""
-    employees: int | None = Field(default=None, alias="Employees", description="Number of employees")
-    """Number of employees"""
-    phone: str | None = Field(default=None, alias="Phone", description="Account phone number")
-    """Account phone number"""
-    website: str | None = Field(default=None, alias="Website", description="Account website URL")
-    """Account website URL"""
-    ownership: str | None = Field(default=None, alias="Ownership", description="Ownership type (e.g., Public, Private)")
-    """Ownership type (e.g., Public, Private)"""
-    rating: str | None = Field(default=None, alias="Rating", description="Account rating")
-    """Account rating"""
-    billing_street: str | None = Field(default=None, alias="Billing_Street", description="Billing street address")
-    """Billing street address"""
-    billing_city: str | None = Field(default=None, alias="Billing_City", description="Billing city")
-    """Billing city"""
-    billing_state: str | None = Field(default=None, alias="Billing_State", description="Billing state or province")
-    """Billing state or province"""
-    billing_code: str | None = Field(default=None, alias="Billing_Code", description="Billing ZIP/postal code")
-    """Billing ZIP/postal code"""
-    billing_country: str | None = Field(default=None, alias="Billing_Country", description="Billing country")
-    """Billing country"""
-    shipping_street: str | None = Field(default=None, alias="Shipping_Street", description="Shipping street address")
-    """Shipping street address"""
-    shipping_city: str | None = Field(default=None, alias="Shipping_City", description="Shipping city")
-    """Shipping city"""
-    shipping_state: str | None = Field(default=None, alias="Shipping_State", description="Shipping state or province")
-    """Shipping state or province"""
-    shipping_code: str | None = Field(default=None, alias="Shipping_Code", description="Shipping ZIP/postal code")
-    """Shipping ZIP/postal code"""
-    shipping_country: str | None = Field(default=None, alias="Shipping_Country", description="Shipping country")
-    """Shipping country"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the account")
-    """Description or notes about the account"""
-
-class AccountUpdateParams(BaseModel):
-    """Parameters for updating an account. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[AccountUpdateParamsDataItem]
-
-class DealCreateParamsDataItem(BaseModel):
-    """Nested schema for DealCreateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    deal_name: str = Field(alias="Deal_Name", description="Deal name (required)")
-    """Deal name (required)"""
-    amount: float | None = Field(default=None, alias="Amount", description="Monetary value of the deal")
-    """Monetary value of the deal"""
-    stage: str = Field(alias="Stage", description="Current stage of the deal in the pipeline (required)")
-    """Current stage of the deal in the pipeline (required)"""
-    probability: int | None = Field(default=None, alias="Probability", description="Probability of closing the deal (percentage)")
-    """Probability of closing the deal (percentage)"""
-    closing_date: str = Field(alias="Closing_Date", description="Expected closing date (YYYY-MM-DD)")
-    """Expected closing date (YYYY-MM-DD)"""
-    type_: str | None = Field(default=None, alias="Type", description="Type of deal (e.g., New Business, Existing Business)")
-    """Type of deal (e.g., New Business, Existing Business)"""
-    next_step: str | None = Field(default=None, alias="Next_Step", description="Next step in the deal process")
-    """Next step in the deal process"""
-    lead_source: str | None = Field(default=None, alias="Lead_Source", description="Source from which the deal originated")
-    """Source from which the deal originated"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the deal")
-    """Description or notes about the deal"""
-
-class DealCreateParams(BaseModel):
-    """Parameters for creating a deal. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[DealCreateParamsDataItem]
-
-class DealUpdateParamsDataItem(BaseModel):
-    """Nested schema for DealUpdateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    deal_name: str | None = Field(default=None, alias="Deal_Name", description="Deal name")
-    """Deal name"""
-    amount: float | None = Field(default=None, alias="Amount", description="Monetary value of the deal")
-    """Monetary value of the deal"""
-    stage: str | None = Field(default=None, alias="Stage", description="Current stage of the deal in the pipeline")
-    """Current stage of the deal in the pipeline"""
-    probability: int | None = Field(default=None, alias="Probability", description="Probability of closing the deal (percentage)")
-    """Probability of closing the deal (percentage)"""
-    closing_date: str | None = Field(default=None, alias="Closing_Date", description="Expected closing date (YYYY-MM-DD)")
-    """Expected closing date (YYYY-MM-DD)"""
-    type_: str | None = Field(default=None, alias="Type", description="Type of deal (e.g., New Business, Existing Business)")
-    """Type of deal (e.g., New Business, Existing Business)"""
-    next_step: str | None = Field(default=None, alias="Next_Step", description="Next step in the deal process")
-    """Next step in the deal process"""
-    lead_source: str | None = Field(default=None, alias="Lead_Source", description="Source from which the deal originated")
-    """Source from which the deal originated"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the deal")
-    """Description or notes about the deal"""
-
-class DealUpdateParams(BaseModel):
-    """Parameters for updating a deal. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[DealUpdateParamsDataItem]
-
-class TaskCreateParamsDataItem(BaseModel):
-    """Nested schema for TaskCreateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    subject: str = Field(alias="Subject", description="Subject or title of the task (required)")
-    """Subject or title of the task (required)"""
-    due_date: str | None = Field(default=None, alias="Due_Date", description="Due date for the task (YYYY-MM-DD)")
-    """Due date for the task (YYYY-MM-DD)"""
-    status: str | None = Field(default=None, alias="Status", description="Task status (e.g., Not Started, In Progress, Completed)")
-    """Task status (e.g., Not Started, In Progress, Completed)"""
-    priority: str | None = Field(default=None, alias="Priority", description="Priority level (e.g., High, Highest, Low, Lowest, Normal)")
-    """Priority level (e.g., High, Highest, Low, Lowest, Normal)"""
-    send_notification_email: bool | None = Field(default=None, alias="Send_Notification_Email", description="Whether to send a notification email")
-    """Whether to send a notification email"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the task")
-    """Description or notes about the task"""
-
-class TaskCreateParams(BaseModel):
-    """Parameters for creating a task. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[TaskCreateParamsDataItem]
-
-class TaskUpdateParamsDataItem(BaseModel):
-    """Nested schema for TaskUpdateParams.data_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    subject: str | None = Field(default=None, alias="Subject", description="Subject or title of the task")
-    """Subject or title of the task"""
-    due_date: str | None = Field(default=None, alias="Due_Date", description="Due date for the task (YYYY-MM-DD)")
-    """Due date for the task (YYYY-MM-DD)"""
-    status: str | None = Field(default=None, alias="Status", description="Task status (e.g., Not Started, In Progress, Completed)")
-    """Task status (e.g., Not Started, In Progress, Completed)"""
-    priority: str | None = Field(default=None, alias="Priority", description="Priority level (e.g., High, Highest, Low, Lowest, Normal)")
-    """Priority level (e.g., High, Highest, Low, Lowest, Normal)"""
-    send_notification_email: bool | None = Field(default=None, alias="Send_Notification_Email", description="Whether to send a notification email")
-    """Whether to send a notification email"""
-    description: str | None = Field(default=None, alias="Description", description="Description or notes about the task")
-    """Description or notes about the task"""
-
-class TaskUpdateParams(BaseModel):
-    """Parameters for updating a task. The record fields must be nested inside a data array."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: list[TaskUpdateParamsDataItem]
 
 # ===== METADATA TYPE DEFINITIONS (PYDANTIC) =====
 # Meta types for operations that extract metadata (e.g., pagination info)

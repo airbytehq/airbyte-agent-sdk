@@ -90,12 +90,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='leads',
             stream_name='incremental_leads_zoho_crm_stream',
-            actions=[
-                Action.LIST,
-                Action.CREATE,
-                Action.GET,
-                Action.UPDATE,
-            ],
+            actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -290,8 +285,116 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$converted': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record has been converted',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Email_Opt_Out': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record opted out of email',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Salutation': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Salutation (Mr., Ms., etc.)',
+                                        },
+                                        'Secondary_Email': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Secondary email address',
+                                        },
+                                        'Skype_ID': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Skype ID',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Twitter': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Twitter handle',
+                                        },
+                                        'Unsubscribed_Mode': {
+                                            'type': ['null', 'string'],
+                                            'description': 'How the record unsubscribed',
+                                        },
+                                        'Unsubscribed_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'When the record unsubscribed',
+                                        },
                                     },
                                     'required': ['id'],
+                                    'additionalProperties': {'description': 'Undeclared Zoho `$`-prefixed system metadata (e.g. `$state`, `$converted_detail`)'},
                                     'x-airbyte-entity-name': 'leads',
                                     'x-airbyte-stream-name': 'incremental_leads_zoho_crm_stream',
                                     'x-airbyte-ai-hints': {
@@ -321,113 +424,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.data',
                     meta_extractor={'more_records': '$.info.more_records', 'page': '$.info.page'},
                     preferred_for_check=True,
-                ),
-                Action.CREATE: EndpointDefinition(
-                    method='POST',
-                    path='/crm/v2/Leads',
-                    action=Action.CREATE,
-                    description='Creates a new lead record in Zoho CRM',
-                    body_fields=['data'],
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for creating a lead. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the lead record to create',
-                                'items': {
-                                    'type': 'object',
-                                    'required': ['Last_Name'],
-                                    'properties': {
-                                        'First_Name': {'type': 'string', 'description': "Lead's first name"},
-                                        'Last_Name': {'type': 'string', 'description': "Lead's last name (required)"},
-                                        'Email': {'type': 'string', 'description': "Lead's email address"},
-                                        'Phone': {'type': 'string', 'description': "Lead's phone number"},
-                                        'Mobile': {'type': 'string', 'description': "Lead's mobile number"},
-                                        'Company': {'type': 'string', 'description': 'Company the lead is associated with'},
-                                        'Title': {'type': 'string', 'description': "Lead's job title"},
-                                        'Lead_Source': {'type': 'string', 'description': 'Source from which the lead was generated'},
-                                        'Industry': {'type': 'string', 'description': 'Industry the lead belongs to'},
-                                        'Annual_Revenue': {'type': 'number', 'description': "Annual revenue of the lead's company"},
-                                        'No_of_Employees': {'type': 'integer', 'description': "Number of employees in the lead's company"},
-                                        'Rating': {'type': 'string', 'description': 'Lead rating'},
-                                        'Lead_Status': {'type': 'string', 'description': 'Current status of the lead'},
-                                        'Website': {'type': 'string', 'description': "Lead's website URL"},
-                                        'Street': {'type': 'string', 'description': 'Street address'},
-                                        'City': {'type': 'string', 'description': 'City'},
-                                        'State': {'type': 'string', 'description': 'State or province'},
-                                        'Zip_Code': {'type': 'string', 'description': 'ZIP/postal code'},
-                                        'Country': {'type': 'string', 'description': 'Country'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the lead'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -597,8 +593,116 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$converted': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record has been converted',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Email_Opt_Out': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record opted out of email',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Salutation': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Salutation (Mr., Ms., etc.)',
+                                        },
+                                        'Secondary_Email': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Secondary email address',
+                                        },
+                                        'Skype_ID': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Skype ID',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Twitter': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Twitter handle',
+                                        },
+                                        'Unsubscribed_Mode': {
+                                            'type': ['null', 'string'],
+                                            'description': 'How the record unsubscribed',
+                                        },
+                                        'Unsubscribed_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'When the record unsubscribed',
+                                        },
                                     },
                                     'required': ['id'],
+                                    'additionalProperties': {'description': 'Undeclared Zoho `$`-prefixed system metadata (e.g. `$state`, `$converted_detail`)'},
                                     'x-airbyte-entity-name': 'leads',
                                     'x-airbyte-stream-name': 'incremental_leads_zoho_crm_stream',
                                     'x-airbyte-ai-hints': {
@@ -626,116 +730,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data[0]',
-                ),
-                Action.UPDATE: EndpointDefinition(
-                    method='PUT',
-                    path='/crm/v2/Leads/{id}',
-                    action=Action.UPDATE,
-                    description='Updates an existing lead record in Zoho CRM',
-                    body_fields=['data'],
-                    path_params=['id'],
-                    path_params_schema={
-                        'id': {'type': 'string', 'required': True},
-                    },
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for updating a lead. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the lead fields to update',
-                                'items': {
-                                    'type': 'object',
-                                    'properties': {
-                                        'First_Name': {'type': 'string', 'description': "Lead's first name"},
-                                        'Last_Name': {'type': 'string', 'description': "Lead's last name"},
-                                        'Email': {'type': 'string', 'description': "Lead's email address"},
-                                        'Phone': {'type': 'string', 'description': "Lead's phone number"},
-                                        'Mobile': {'type': 'string', 'description': "Lead's mobile number"},
-                                        'Company': {'type': 'string', 'description': 'Company the lead is associated with'},
-                                        'Title': {'type': 'string', 'description': "Lead's job title"},
-                                        'Lead_Source': {'type': 'string', 'description': 'Source from which the lead was generated'},
-                                        'Industry': {'type': 'string', 'description': 'Industry the lead belongs to'},
-                                        'Annual_Revenue': {'type': 'number', 'description': "Annual revenue of the lead's company"},
-                                        'No_of_Employees': {'type': 'integer', 'description': "Number of employees in the lead's company"},
-                                        'Rating': {'type': 'string', 'description': 'Lead rating'},
-                                        'Lead_Status': {'type': 'string', 'description': 'Current status of the lead'},
-                                        'Website': {'type': 'string', 'description': "Lead's website URL"},
-                                        'Street': {'type': 'string', 'description': 'Street address'},
-                                        'City': {'type': 'string', 'description': 'City'},
-                                        'State': {'type': 'string', 'description': 'State or province'},
-                                        'Zip_Code': {'type': 'string', 'description': 'ZIP/postal code'},
-                                        'Country': {'type': 'string', 'description': 'Country'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the lead'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
             },
             entity_schema={
@@ -867,8 +861,116 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'description': 'Record status',
                     },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$converted': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record has been converted',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$zia_owner_assignment': {
+                        'type': ['null', 'string'],
+                        'description': 'Zia owner assignment suggestion',
+                    },
+                    'Email_Opt_Out': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record opted out of email',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Record_Image': {
+                        'type': ['null', 'string'],
+                        'description': 'Record image identifier',
+                    },
+                    'Salutation': {
+                        'type': ['null', 'string'],
+                        'description': 'Salutation (Mr., Ms., etc.)',
+                    },
+                    'Secondary_Email': {
+                        'type': ['null', 'string'],
+                        'description': 'Secondary email address',
+                    },
+                    'Skype_ID': {
+                        'type': ['null', 'string'],
+                        'description': 'Skype ID',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
+                    'Twitter': {
+                        'type': ['null', 'string'],
+                        'description': 'Twitter handle',
+                    },
+                    'Unsubscribed_Mode': {
+                        'type': ['null', 'string'],
+                        'description': 'How the record unsubscribed',
+                    },
+                    'Unsubscribed_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'When the record unsubscribed',
+                    },
                 },
                 'required': ['id'],
+                'additionalProperties': {'description': 'Undeclared Zoho `$`-prefixed system metadata (e.g. `$state`, `$converted_detail`)'},
                 'x-airbyte-entity-name': 'leads',
                 'x-airbyte-stream-name': 'incremental_leads_zoho_crm_stream',
                 'x-airbyte-ai-hints': {
@@ -892,12 +994,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='contacts',
             stream_name='incremental_contacts_zoho_crm_stream',
-            actions=[
-                Action.LIST,
-                Action.CREATE,
-                Action.GET,
-                Action.UPDATE,
-            ],
+            actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -1102,6 +1199,163 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$is_duplicate': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is flagged as a duplicate',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Assistant': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Assistant name',
+                                        },
+                                        'Asst_Phone': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Assistant phone number',
+                                        },
+                                        'Contact_Auto_Number': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Auto-generated contact number',
+                                        },
+                                        'Email_Opt_Out': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record opted out of email',
+                                        },
+                                        'Home_Phone': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Home phone number',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Other_Phone': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Other phone number',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Reporting_To': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Lookup reference to another record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'Referenced record name'},
+                                                        'id': {'type': 'string', 'description': 'Referenced record ID'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
+                                        'Salutation': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Salutation (Mr., Ms., etc.)',
+                                        },
+                                        'Secondary_Email': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Secondary email address',
+                                        },
+                                        'Skype_ID': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Skype ID',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Twitter': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Twitter handle',
+                                        },
+                                        'Unsubscribed_Mode': {
+                                            'type': ['null', 'string'],
+                                            'description': 'How the record unsubscribed',
+                                        },
+                                        'Unsubscribed_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'When the record unsubscribed',
+                                        },
+                                        'Vendor_Name': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Lookup reference to another record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'Referenced record name'},
+                                                        'id': {'type': 'string', 'description': 'Referenced record ID'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'contacts',
@@ -1132,112 +1386,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'more_records': '$.info.more_records', 'page': '$.info.page'},
-                ),
-                Action.CREATE: EndpointDefinition(
-                    method='POST',
-                    path='/crm/v2/Contacts',
-                    action=Action.CREATE,
-                    description='Creates a new contact record in Zoho CRM',
-                    body_fields=['data'],
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for creating a contact. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the contact record to create',
-                                'items': {
-                                    'type': 'object',
-                                    'required': ['Last_Name'],
-                                    'properties': {
-                                        'First_Name': {'type': 'string', 'description': "Contact's first name"},
-                                        'Last_Name': {'type': 'string', 'description': "Contact's last name (required)"},
-                                        'Email': {'type': 'string', 'description': "Contact's email address"},
-                                        'Phone': {'type': 'string', 'description': "Contact's phone number"},
-                                        'Mobile': {'type': 'string', 'description': "Contact's mobile number"},
-                                        'Title': {'type': 'string', 'description': "Contact's job title"},
-                                        'Department': {'type': 'string', 'description': 'Department the contact belongs to'},
-                                        'Lead_Source': {'type': 'string', 'description': 'Source from which the contact was generated'},
-                                        'Date_of_Birth': {
-                                            'type': 'string',
-                                            'format': 'date',
-                                            'description': "Contact's date of birth (YYYY-MM-DD)",
-                                        },
-                                        'Mailing_Street': {'type': 'string', 'description': 'Mailing street address'},
-                                        'Mailing_City': {'type': 'string', 'description': 'Mailing city'},
-                                        'Mailing_State': {'type': 'string', 'description': 'Mailing state or province'},
-                                        'Mailing_Zip': {'type': 'string', 'description': 'Mailing ZIP/postal code'},
-                                        'Mailing_Country': {'type': 'string', 'description': 'Mailing country'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the contact'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -1417,6 +1565,163 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$is_duplicate': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is flagged as a duplicate',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Assistant': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Assistant name',
+                                        },
+                                        'Asst_Phone': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Assistant phone number',
+                                        },
+                                        'Contact_Auto_Number': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Auto-generated contact number',
+                                        },
+                                        'Email_Opt_Out': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record opted out of email',
+                                        },
+                                        'Home_Phone': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Home phone number',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Other_Phone': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Other phone number',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Reporting_To': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Lookup reference to another record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'Referenced record name'},
+                                                        'id': {'type': 'string', 'description': 'Referenced record ID'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
+                                        'Salutation': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Salutation (Mr., Ms., etc.)',
+                                        },
+                                        'Secondary_Email': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Secondary email address',
+                                        },
+                                        'Skype_ID': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Skype ID',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Twitter': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Twitter handle',
+                                        },
+                                        'Unsubscribed_Mode': {
+                                            'type': ['null', 'string'],
+                                            'description': 'How the record unsubscribed',
+                                        },
+                                        'Unsubscribed_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'When the record unsubscribed',
+                                        },
+                                        'Vendor_Name': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Lookup reference to another record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'Referenced record name'},
+                                                        'id': {'type': 'string', 'description': 'Referenced record ID'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'contacts',
@@ -1446,115 +1751,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data[0]',
-                ),
-                Action.UPDATE: EndpointDefinition(
-                    method='PUT',
-                    path='/crm/v2/Contacts/{id}',
-                    action=Action.UPDATE,
-                    description='Updates an existing contact record in Zoho CRM',
-                    body_fields=['data'],
-                    path_params=['id'],
-                    path_params_schema={
-                        'id': {'type': 'string', 'required': True},
-                    },
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for updating a contact. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the contact fields to update',
-                                'items': {
-                                    'type': 'object',
-                                    'properties': {
-                                        'First_Name': {'type': 'string', 'description': "Contact's first name"},
-                                        'Last_Name': {'type': 'string', 'description': "Contact's last name"},
-                                        'Email': {'type': 'string', 'description': "Contact's email address"},
-                                        'Phone': {'type': 'string', 'description': "Contact's phone number"},
-                                        'Mobile': {'type': 'string', 'description': "Contact's mobile number"},
-                                        'Title': {'type': 'string', 'description': "Contact's job title"},
-                                        'Department': {'type': 'string', 'description': 'Department the contact belongs to'},
-                                        'Lead_Source': {'type': 'string', 'description': 'Source from which the contact was generated'},
-                                        'Date_of_Birth': {
-                                            'type': 'string',
-                                            'format': 'date',
-                                            'description': "Contact's date of birth (YYYY-MM-DD)",
-                                        },
-                                        'Mailing_Street': {'type': 'string', 'description': 'Mailing street address'},
-                                        'Mailing_City': {'type': 'string', 'description': 'Mailing city'},
-                                        'Mailing_State': {'type': 'string', 'description': 'Mailing state or province'},
-                                        'Mailing_Zip': {'type': 'string', 'description': 'Mailing ZIP/postal code'},
-                                        'Mailing_Country': {'type': 'string', 'description': 'Mailing country'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the contact'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
             },
             entity_schema={
@@ -1689,6 +1885,149 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'description': 'Record status',
                     },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$is_duplicate': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is flagged as a duplicate',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    '$zia_owner_assignment': {
+                        'type': ['null', 'string'],
+                        'description': 'Zia owner assignment suggestion',
+                    },
+                    'Assistant': {
+                        'type': ['null', 'string'],
+                        'description': 'Assistant name',
+                    },
+                    'Asst_Phone': {
+                        'type': ['null', 'string'],
+                        'description': 'Assistant phone number',
+                    },
+                    'Contact_Auto_Number': {
+                        'type': ['null', 'string'],
+                        'description': 'Auto-generated contact number',
+                    },
+                    'Email_Opt_Out': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record opted out of email',
+                    },
+                    'Home_Phone': {
+                        'type': ['null', 'string'],
+                        'description': 'Home phone number',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Other_Phone': {
+                        'type': ['null', 'string'],
+                        'description': 'Other phone number',
+                    },
+                    'Record_Image': {
+                        'type': ['null', 'string'],
+                        'description': 'Record image identifier',
+                    },
+                    'Reporting_To': {
+                        'oneOf': [
+                            {'$ref': '#/components/schemas/LookupRef'},
+                            {'type': 'null'},
+                        ],
+                    },
+                    'Salutation': {
+                        'type': ['null', 'string'],
+                        'description': 'Salutation (Mr., Ms., etc.)',
+                    },
+                    'Secondary_Email': {
+                        'type': ['null', 'string'],
+                        'description': 'Secondary email address',
+                    },
+                    'Skype_ID': {
+                        'type': ['null', 'string'],
+                        'description': 'Skype ID',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
+                    'Twitter': {
+                        'type': ['null', 'string'],
+                        'description': 'Twitter handle',
+                    },
+                    'Unsubscribed_Mode': {
+                        'type': ['null', 'string'],
+                        'description': 'How the record unsubscribed',
+                    },
+                    'Unsubscribed_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'When the record unsubscribed',
+                    },
+                    'Vendor_Name': {
+                        'oneOf': [
+                            {'$ref': '#/components/schemas/LookupRef'},
+                            {'type': 'null'},
+                        ],
+                    },
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'contacts',
@@ -1714,12 +2053,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='accounts',
             stream_name='incremental_accounts_zoho_crm_stream',
-            actions=[
-                Action.LIST,
-                Action.CREATE,
-                Action.GET,
-                Action.UPDATE,
-            ],
+            actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -1931,6 +2265,92 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$is_duplicate': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is flagged as a duplicate',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Account_Site': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Account site or location',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'accounts',
@@ -1961,114 +2381,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'more_records': '$.info.more_records', 'page': '$.info.page'},
-                ),
-                Action.CREATE: EndpointDefinition(
-                    method='POST',
-                    path='/crm/v2/Accounts',
-                    action=Action.CREATE,
-                    description='Creates a new account record in Zoho CRM',
-                    body_fields=['data'],
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for creating an account. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the account record to create',
-                                'items': {
-                                    'type': 'object',
-                                    'required': ['Account_Name'],
-                                    'properties': {
-                                        'Account_Name': {'type': 'string', 'description': 'Account/company name (required)'},
-                                        'Account_Number': {'type': 'string', 'description': 'Account number'},
-                                        'Account_Type': {'type': 'string', 'description': 'Type of account (e.g., Analyst, Competitor, Customer)'},
-                                        'Industry': {'type': 'string', 'description': 'Industry the account belongs to'},
-                                        'Annual_Revenue': {'type': 'number', 'description': 'Annual revenue of the account'},
-                                        'Employees': {'type': 'integer', 'description': 'Number of employees'},
-                                        'Phone': {'type': 'string', 'description': 'Account phone number'},
-                                        'Website': {'type': 'string', 'description': 'Account website URL'},
-                                        'Ownership': {'type': 'string', 'description': 'Ownership type (e.g., Public, Private)'},
-                                        'Rating': {'type': 'string', 'description': 'Account rating'},
-                                        'Billing_Street': {'type': 'string', 'description': 'Billing street address'},
-                                        'Billing_City': {'type': 'string', 'description': 'Billing city'},
-                                        'Billing_State': {'type': 'string', 'description': 'Billing state or province'},
-                                        'Billing_Code': {'type': 'string', 'description': 'Billing ZIP/postal code'},
-                                        'Billing_Country': {'type': 'string', 'description': 'Billing country'},
-                                        'Shipping_Street': {'type': 'string', 'description': 'Shipping street address'},
-                                        'Shipping_City': {'type': 'string', 'description': 'Shipping city'},
-                                        'Shipping_State': {'type': 'string', 'description': 'Shipping state or province'},
-                                        'Shipping_Code': {'type': 'string', 'description': 'Shipping ZIP/postal code'},
-                                        'Shipping_Country': {'type': 'string', 'description': 'Shipping country'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the account'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2255,6 +2567,92 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$is_duplicate': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is flagged as a duplicate',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Account_Site': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Account site or location',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'accounts',
@@ -2284,117 +2682,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data[0]',
-                ),
-                Action.UPDATE: EndpointDefinition(
-                    method='PUT',
-                    path='/crm/v2/Accounts/{id}',
-                    action=Action.UPDATE,
-                    description='Updates an existing account record in Zoho CRM',
-                    body_fields=['data'],
-                    path_params=['id'],
-                    path_params_schema={
-                        'id': {'type': 'string', 'required': True},
-                    },
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for updating an account. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the account fields to update',
-                                'items': {
-                                    'type': 'object',
-                                    'properties': {
-                                        'Account_Name': {'type': 'string', 'description': 'Account/company name'},
-                                        'Account_Number': {'type': 'string', 'description': 'Account number'},
-                                        'Account_Type': {'type': 'string', 'description': 'Type of account (e.g., Analyst, Competitor, Customer)'},
-                                        'Industry': {'type': 'string', 'description': 'Industry the account belongs to'},
-                                        'Annual_Revenue': {'type': 'number', 'description': 'Annual revenue of the account'},
-                                        'Employees': {'type': 'integer', 'description': 'Number of employees'},
-                                        'Phone': {'type': 'string', 'description': 'Account phone number'},
-                                        'Website': {'type': 'string', 'description': 'Account website URL'},
-                                        'Ownership': {'type': 'string', 'description': 'Ownership type (e.g., Public, Private)'},
-                                        'Rating': {'type': 'string', 'description': 'Account rating'},
-                                        'Billing_Street': {'type': 'string', 'description': 'Billing street address'},
-                                        'Billing_City': {'type': 'string', 'description': 'Billing city'},
-                                        'Billing_State': {'type': 'string', 'description': 'Billing state or province'},
-                                        'Billing_Code': {'type': 'string', 'description': 'Billing ZIP/postal code'},
-                                        'Billing_Country': {'type': 'string', 'description': 'Billing country'},
-                                        'Shipping_Street': {'type': 'string', 'description': 'Shipping street address'},
-                                        'Shipping_City': {'type': 'string', 'description': 'Shipping city'},
-                                        'Shipping_State': {'type': 'string', 'description': 'Shipping state or province'},
-                                        'Shipping_Code': {'type': 'string', 'description': 'Shipping ZIP/postal code'},
-                                        'Shipping_Country': {'type': 'string', 'description': 'Shipping country'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the account'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
             },
             entity_schema={
@@ -2536,6 +2823,92 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'description': 'Record status',
                     },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$is_duplicate': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is flagged as a duplicate',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    '$zia_owner_assignment': {
+                        'type': ['null', 'string'],
+                        'description': 'Zia owner assignment suggestion',
+                    },
+                    'Account_Site': {
+                        'type': ['null', 'string'],
+                        'description': 'Account site or location',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Record_Image': {
+                        'type': ['null', 'string'],
+                        'description': 'Record image identifier',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'accounts',
@@ -2561,12 +2934,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='deals',
             stream_name='incremental_deals_zoho_crm_stream',
-            actions=[
-                Action.LIST,
-                Action.CREATE,
-                Action.GET,
-                Action.UPDATE,
-            ],
+            actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -2753,6 +3121,104 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$followed': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the current user follows the record',
+                                        },
+                                        '$followers': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Users following the record',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Expected_Revenue': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Expected revenue (amount x probability)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Lead_Conversion_Time': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Days taken to convert the lead',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Overall_Sales_Duration': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Overall sales duration in days',
+                                        },
+                                        'Sales_Cycle_Duration': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Sales cycle duration in days',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'deals',
@@ -2783,106 +3249,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'more_records': '$.info.more_records', 'page': '$.info.page'},
-                ),
-                Action.CREATE: EndpointDefinition(
-                    method='POST',
-                    path='/crm/v2/Deals',
-                    action=Action.CREATE,
-                    description='Creates a new deal record in Zoho CRM',
-                    body_fields=['data'],
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for creating a deal. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the deal record to create',
-                                'items': {
-                                    'type': 'object',
-                                    'required': ['Deal_Name', 'Stage', 'Closing_Date'],
-                                    'properties': {
-                                        'Deal_Name': {'type': 'string', 'description': 'Deal name (required)'},
-                                        'Amount': {'type': 'number', 'description': 'Monetary value of the deal'},
-                                        'Stage': {'type': 'string', 'description': 'Current stage of the deal in the pipeline (required)'},
-                                        'Probability': {'type': 'integer', 'description': 'Probability of closing the deal (percentage)'},
-                                        'Closing_Date': {
-                                            'type': 'string',
-                                            'format': 'date',
-                                            'description': 'Expected closing date (YYYY-MM-DD)',
-                                        },
-                                        'Type': {'type': 'string', 'description': 'Type of deal (e.g., New Business, Existing Business)'},
-                                        'Next_Step': {'type': 'string', 'description': 'Next step in the deal process'},
-                                        'Lead_Source': {'type': 'string', 'description': 'Source from which the deal originated'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the deal'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3044,6 +3410,104 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$followed': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the current user follows the record',
+                                        },
+                                        '$followers': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Users following the record',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'Expected_Revenue': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Expected revenue (amount x probability)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Lead_Conversion_Time': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Days taken to convert the lead',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Overall_Sales_Duration': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Overall sales duration in days',
+                                        },
+                                        'Sales_Cycle_Duration': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Sales cycle duration in days',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'deals',
@@ -3073,109 +3537,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data[0]',
-                ),
-                Action.UPDATE: EndpointDefinition(
-                    method='PUT',
-                    path='/crm/v2/Deals/{id}',
-                    action=Action.UPDATE,
-                    description='Updates an existing deal record in Zoho CRM',
-                    body_fields=['data'],
-                    path_params=['id'],
-                    path_params_schema={
-                        'id': {'type': 'string', 'required': True},
-                    },
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for updating a deal. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the deal fields to update',
-                                'items': {
-                                    'type': 'object',
-                                    'properties': {
-                                        'Deal_Name': {'type': 'string', 'description': 'Deal name'},
-                                        'Amount': {'type': 'number', 'description': 'Monetary value of the deal'},
-                                        'Stage': {'type': 'string', 'description': 'Current stage of the deal in the pipeline'},
-                                        'Probability': {'type': 'integer', 'description': 'Probability of closing the deal (percentage)'},
-                                        'Closing_Date': {
-                                            'type': 'string',
-                                            'format': 'date',
-                                            'description': 'Expected closing date (YYYY-MM-DD)',
-                                        },
-                                        'Type': {'type': 'string', 'description': 'Type of deal (e.g., New Business, Existing Business)'},
-                                        'Next_Step': {'type': 'string', 'description': 'Next step in the deal process'},
-                                        'Lead_Source': {'type': 'string', 'description': 'Source from which the deal originated'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the deal'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
             },
             entity_schema={
@@ -3277,6 +3638,104 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     'Record_Status__s': {
                         'type': ['null', 'string'],
                         'description': 'Record status',
+                    },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$followed': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the current user follows the record',
+                    },
+                    '$followers': {
+                        'type': ['null', 'array'],
+                        'description': 'Users following the record',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    '$zia_owner_assignment': {
+                        'type': ['null', 'string'],
+                        'description': 'Zia owner assignment suggestion',
+                    },
+                    'Expected_Revenue': {
+                        'type': ['null', 'number'],
+                        'description': 'Expected revenue (amount x probability)',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Lead_Conversion_Time': {
+                        'type': ['null', 'integer'],
+                        'description': 'Days taken to convert the lead',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Overall_Sales_Duration': {
+                        'type': ['null', 'integer'],
+                        'description': 'Overall sales duration in days',
+                    },
+                    'Sales_Cycle_Duration': {
+                        'type': ['null', 'integer'],
+                        'description': 'Sales cycle duration in days',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
                     },
                 },
                 'required': ['id'],
@@ -3452,6 +3911,81 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Parent_Campaign': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Lookup reference to another record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'Referenced record name'},
+                                                        'id': {'type': 'string', 'description': 'Referenced record ID'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'campaigns',
@@ -3605,6 +4139,81 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Parent_Campaign': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Lookup reference to another record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'Referenced record name'},
+                                                        'id': {'type': 'string', 'description': 'Referenced record ID'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'campaigns',
@@ -3719,6 +4328,74 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'description': 'Record status',
                     },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Parent_Campaign': {
+                        'oneOf': [
+                            {'$ref': '#/components/schemas/LookupRef'},
+                            {'type': 'null'},
+                        ],
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'campaigns',
@@ -3744,12 +4421,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
         EntityDefinition(
             name='tasks',
             stream_name='incremental_tasks_zoho_crm_stream',
-            actions=[
-                Action.LIST,
-                Action.CREATE,
-                Action.GET,
-                Action.UPDATE,
-            ],
+            actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
@@ -3916,6 +4588,88 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'format': 'date-time',
                                             'description': 'Time the task was closed',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$u_id': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Unique identifier used by the calendar',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'BEST_TIME': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Best time to contact',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'tasks',
@@ -3946,103 +4700,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'more_records': '$.info.more_records', 'page': '$.info.page'},
-                ),
-                Action.CREATE: EndpointDefinition(
-                    method='POST',
-                    path='/crm/v2/Tasks',
-                    action=Action.CREATE,
-                    description='Creates a new task record in Zoho CRM',
-                    body_fields=['data'],
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for creating a task. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the task record to create',
-                                'items': {
-                                    'type': 'object',
-                                    'required': ['Subject'],
-                                    'properties': {
-                                        'Subject': {'type': 'string', 'description': 'Subject or title of the task (required)'},
-                                        'Due_Date': {
-                                            'type': 'string',
-                                            'format': 'date',
-                                            'description': 'Due date for the task (YYYY-MM-DD)',
-                                        },
-                                        'Status': {'type': 'string', 'description': 'Task status (e.g., Not Started, In Progress, Completed)'},
-                                        'Priority': {'type': 'string', 'description': 'Priority level (e.g., High, Highest, Low, Lowest, Normal)'},
-                                        'Send_Notification_Email': {'type': 'boolean', 'description': 'Whether to send a notification email'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the task'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -4184,6 +4841,88 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'format': 'date-time',
                                             'description': 'Time the task was closed',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$u_id': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Unique identifier used by the calendar',
+                                        },
+                                        '$zia_owner_assignment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Zia owner assignment suggestion',
+                                        },
+                                        'BEST_TIME': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Best time to contact',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'tasks',
@@ -4213,106 +4952,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data[0]',
-                ),
-                Action.UPDATE: EndpointDefinition(
-                    method='PUT',
-                    path='/crm/v2/Tasks/{id}',
-                    action=Action.UPDATE,
-                    description='Updates an existing task record in Zoho CRM',
-                    body_fields=['data'],
-                    path_params=['id'],
-                    path_params_schema={
-                        'id': {'type': 'string', 'required': True},
-                    },
-                    request_schema={
-                        'type': 'object',
-                        'description': 'Parameters for updating a task. The record fields must be nested inside a data array.',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'description': 'Array containing the task fields to update',
-                                'items': {
-                                    'type': 'object',
-                                    'properties': {
-                                        'Subject': {'type': 'string', 'description': 'Subject or title of the task'},
-                                        'Due_Date': {
-                                            'type': 'string',
-                                            'format': 'date',
-                                            'description': 'Due date for the task (YYYY-MM-DD)',
-                                        },
-                                        'Status': {'type': 'string', 'description': 'Task status (e.g., Not Started, In Progress, Completed)'},
-                                        'Priority': {'type': 'string', 'description': 'Priority level (e.g., High, Highest, Low, Lowest, Normal)'},
-                                        'Send_Notification_Email': {'type': 'boolean', 'description': 'Whether to send a notification email'},
-                                        'Description': {'type': 'string', 'description': 'Description or notes about the task'},
-                                    },
-                                },
-                            },
-                        },
-                        'required': ['data'],
-                    },
-                    response_schema={
-                        'type': 'object',
-                        'description': 'Response from a create or update operation',
-                        'properties': {
-                            'data': {
-                                'type': 'array',
-                                'items': {
-                                    'type': 'object',
-                                    'description': 'Individual record write result',
-                                    'properties': {
-                                        'code': {'type': 'string', 'description': 'Response code (e.g., SUCCESS)'},
-                                        'details': {
-                                            'type': 'object',
-                                            'description': 'Details of a successfully written record',
-                                            'properties': {
-                                                'Modified_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Last modification timestamp',
-                                                },
-                                                'Modified_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who last modified the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                                'Created_Time': {
-                                                    'type': ['null', 'string'],
-                                                    'format': 'date-time',
-                                                    'description': 'Record creation timestamp',
-                                                },
-                                                'id': {'type': 'string', 'description': 'Unique record identifier'},
-                                                'Created_By': {
-                                                    'oneOf': [
-                                                        {
-                                                            'type': 'object',
-                                                            'description': 'User who created the record',
-                                                            'properties': {
-                                                                'name': {'type': 'string', 'description': 'User name'},
-                                                                'id': {'type': 'string', 'description': 'User ID'},
-                                                                'email': {'type': 'string', 'description': 'User email'},
-                                                            },
-                                                        },
-                                                        {'type': 'null'},
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        'message': {'type': 'string', 'description': 'Response message'},
-                                        'status': {'type': 'string', 'description': 'Response status (e.g., success)'},
-                                    },
-                                },
-                            },
-                        },
-                    },
                 ),
             },
             entity_schema={
@@ -4401,6 +5040,88 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'format': 'date-time',
                         'description': 'Time the task was closed',
+                    },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$se_module': {
+                        'type': ['null', 'string'],
+                        'description': 'API name of the module the record is related to',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    '$u_id': {
+                        'type': ['null', 'string'],
+                        'description': 'Unique identifier used by the calendar',
+                    },
+                    '$zia_owner_assignment': {
+                        'type': ['null', 'string'],
+                        'description': 'Zia owner assignment suggestion',
+                    },
+                    'BEST_TIME': {
+                        'type': ['null', 'array'],
+                        'description': 'Best time to contact',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
                     },
                 },
                 'required': ['id'],
@@ -4605,6 +5326,137 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$calendar_booking_event': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the event was created via calendar booking',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$meeting_details': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Online meeting details',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$recurrence_id': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Recurrence identifier for repeating events',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$send_notification': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether participants are notified',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$u_id': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Unique identifier used by the calendar',
+                                        },
+                                        'Check_In_Address': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in address',
+                                        },
+                                        'Check_In_By': {
+                                            'type': ['null', 'object'],
+                                            'description': 'User who checked in',
+                                        },
+                                        'Check_In_City': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in city',
+                                        },
+                                        'Check_In_Comment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in comment',
+                                        },
+                                        'Check_In_Country': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in country',
+                                        },
+                                        'Check_In_State': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in state',
+                                        },
+                                        'Check_In_Status': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in status',
+                                        },
+                                        'Check_In_Sub_Locality': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in sub-locality',
+                                        },
+                                        'Check_In_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Check-in timestamp',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Latitude': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Check-in latitude',
+                                        },
+                                        'Longitude': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Check-in longitude',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'ZIP_Code': {
+                                            'type': ['null', 'string'],
+                                            'description': 'ZIP/postal code of the check-in location',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'events',
@@ -4787,6 +5639,137 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$calendar_booking_event': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the event was created via calendar booking',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$meeting_details': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Online meeting details',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$recurrence_id': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Recurrence identifier for repeating events',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$send_notification': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether participants are notified',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$u_id': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Unique identifier used by the calendar',
+                                        },
+                                        'Check_In_Address': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in address',
+                                        },
+                                        'Check_In_By': {
+                                            'type': ['null', 'object'],
+                                            'description': 'User who checked in',
+                                        },
+                                        'Check_In_City': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in city',
+                                        },
+                                        'Check_In_Comment': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in comment',
+                                        },
+                                        'Check_In_Country': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in country',
+                                        },
+                                        'Check_In_State': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in state',
+                                        },
+                                        'Check_In_Status': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in status',
+                                        },
+                                        'Check_In_Sub_Locality': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Check-in sub-locality',
+                                        },
+                                        'Check_In_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Check-in timestamp',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Latitude': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Check-in latitude',
+                                        },
+                                        'Longitude': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Check-in longitude',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'ZIP_Code': {
+                                            'type': ['null', 'string'],
+                                            'description': 'ZIP/postal code of the check-in location',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'events',
@@ -4915,6 +5898,137 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     'Record_Status__s': {
                         'type': ['null', 'string'],
                         'description': 'Record status',
+                    },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$calendar_booking_event': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the event was created via calendar booking',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$meeting_details': {
+                        'type': ['null', 'object'],
+                        'description': 'Online meeting details',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$recurrence_id': {
+                        'type': ['null', 'string'],
+                        'description': 'Recurrence identifier for repeating events',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$se_module': {
+                        'type': ['null', 'string'],
+                        'description': 'API name of the module the record is related to',
+                    },
+                    '$send_notification': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether participants are notified',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    '$u_id': {
+                        'type': ['null', 'string'],
+                        'description': 'Unique identifier used by the calendar',
+                    },
+                    'Check_In_Address': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in address',
+                    },
+                    'Check_In_By': {
+                        'type': ['null', 'object'],
+                        'description': 'User who checked in',
+                    },
+                    'Check_In_City': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in city',
+                    },
+                    'Check_In_Comment': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in comment',
+                    },
+                    'Check_In_Country': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in country',
+                    },
+                    'Check_In_State': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in state',
+                    },
+                    'Check_In_Status': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in status',
+                    },
+                    'Check_In_Sub_Locality': {
+                        'type': ['null', 'string'],
+                        'description': 'Check-in sub-locality',
+                    },
+                    'Check_In_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Check-in timestamp',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Latitude': {
+                        'type': ['null', 'number'],
+                        'description': 'Check-in latitude',
+                    },
+                    'Longitude': {
+                        'type': ['null', 'number'],
+                        'description': 'Check-in longitude',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
+                    'ZIP_Code': {
+                        'type': ['null', 'string'],
+                        'description': 'ZIP/postal code of the check-in location',
                     },
                 },
                 'required': ['id'],
@@ -5115,6 +6229,80 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$calendar_booking_call': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the call was created via calendar booking',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Dialled_Number': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Number dialled for the call',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Reminder': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Reminder setting',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'calls',
@@ -5293,6 +6481,80 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$calendar_booking_call': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the call was created via calendar booking',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Dialled_Number': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Number dialled for the call',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Reminder': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Reminder setting',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'calls',
@@ -5417,6 +6679,80 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     'Record_Status__s': {
                         'type': ['null', 'string'],
                         'description': 'Record status',
+                    },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$calendar_booking_call': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the call was created via calendar booking',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$se_module': {
+                        'type': ['null', 'string'],
+                        'description': 'API name of the module the record is related to',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    'Dialled_Number': {
+                        'type': ['null', 'string'],
+                        'description': 'Number dialled for the call',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Reminder': {
+                        'type': ['null', 'string'],
+                        'description': 'Reminder setting',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
                     },
                 },
                 'required': ['id'],
@@ -5645,8 +6981,91 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Taxable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the product is taxable',
+                                        },
+                                        'Usage_Unit': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Usage unit of the product',
+                                        },
                                     },
                                     'required': ['id'],
+                                    'additionalProperties': {'description': 'Undeclared Zoho `$`-prefixed system metadata (e.g. `$taxable`)'},
                                     'x-airbyte-entity-name': 'products',
                                     'x-airbyte-stream-name': 'incremental_products_zoho_crm_stream',
                                     'x-airbyte-ai-hints': {
@@ -5851,8 +7270,91 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Record_Image': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record image identifier',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Taxable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the product is taxable',
+                                        },
+                                        'Usage_Unit': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Usage unit of the product',
+                                        },
                                     },
                                     'required': ['id'],
+                                    'additionalProperties': {'description': 'Undeclared Zoho `$`-prefixed system metadata (e.g. `$taxable`)'},
                                     'x-airbyte-entity-name': 'products',
                                     'x-airbyte-stream-name': 'incremental_products_zoho_crm_stream',
                                     'x-airbyte-ai-hints': {
@@ -6004,8 +7506,91 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'description': 'Record status',
                     },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Record_Image': {
+                        'type': ['null', 'string'],
+                        'description': 'Record image identifier',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
+                    'Taxable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the product is taxable',
+                    },
+                    'Usage_Unit': {
+                        'type': ['null', 'string'],
+                        'description': 'Usage unit of the product',
+                    },
                 },
                 'required': ['id'],
+                'additionalProperties': {'description': 'Undeclared Zoho `$`-prefixed system metadata (e.g. `$taxable`)'},
                 'x-airbyte-entity-name': 'products',
                 'x-airbyte-stream-name': 'incremental_products_zoho_crm_stream',
                 'x-airbyte-ai-hints': {
@@ -6256,6 +7841,97 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$converted': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record has been converted',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$line_tax': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Line-item tax details',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Product_Details': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Line items',
+                                        },
+                                        'Quote_Number': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Auto-generated quote number',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Team': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Team associated with the quote',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'quotes',
@@ -6487,6 +8163,97 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$converted': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record has been converted',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$line_tax': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Line-item tax details',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Product_Details': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Line items',
+                                        },
+                                        'Quote_Number': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Auto-generated quote number',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
+                                        'Team': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Team associated with the quote',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'quotes',
@@ -6657,6 +8424,97 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     'Record_Status__s': {
                         'type': ['null', 'string'],
                         'description': 'Record status',
+                    },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$converted': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record has been converted',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$line_tax': {
+                        'type': ['null', 'array'],
+                        'description': 'Line-item tax details',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Product_Details': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Line items',
+                    },
+                    'Quote_Number': {
+                        'type': ['null', 'string'],
+                        'description': 'Auto-generated quote number',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
+                    'Team': {
+                        'type': ['null', 'string'],
+                        'description': 'Team associated with the quote',
                     },
                 },
                 'required': ['id'],
@@ -6936,6 +8794,89 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$line_tax': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Line-item tax details',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Product_Details': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Line items',
+                                        },
+                                        'Sales_Commission': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Sales commission',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'invoices',
@@ -7193,6 +9134,89 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['null', 'string'],
                                             'description': 'Record status',
                                         },
+                                        '$approval': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                                        },
+                                        '$approval_state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Approval state of the record',
+                                        },
+                                        '$approved': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is approved',
+                                        },
+                                        '$currency_symbol': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Currency symbol for monetary fields',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$in_merge': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is part of a merge in progress',
+                                        },
+                                        '$layout_id': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Layout used by the record (id, name, display_label)',
+                                        },
+                                        '$line_tax': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Line-item tax details',
+                                        },
+                                        '$locked_for_me': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked for the current user',
+                                        },
+                                        '$orchestration': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether an orchestration is active on the record',
+                                        },
+                                        '$process_flow': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether a blueprint process flow applies to the record',
+                                        },
+                                        '$review': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process metadata',
+                                        },
+                                        '$review_process': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Review process actions available on the record',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        'Last_Activity_Time': {
+                                            'type': ['null', 'string'],
+                                            'format': 'date-time',
+                                            'description': 'Timestamp of the last activity on the record',
+                                        },
+                                        'Locked__s': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is locked',
+                                        },
+                                        'Product_Details': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Line items',
+                                        },
+                                        'Sales_Commission': {
+                                            'type': ['null', 'number'],
+                                            'description': 'Sales commission',
+                                        },
+                                        'Tag': {
+                                            'type': ['null', 'array'],
+                                            'items': {'type': 'object'},
+                                            'description': 'Tags applied to the record',
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'invoices',
@@ -7383,6 +9407,89 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'description': 'Record status',
                     },
+                    '$approval': {
+                        'type': ['null', 'object'],
+                        'description': 'Approval actions available on the record (approve, reject, delegate, resubmit, takeover)',
+                    },
+                    '$approval_state': {
+                        'type': ['null', 'string'],
+                        'description': 'Approval state of the record',
+                    },
+                    '$approved': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is approved',
+                    },
+                    '$currency_symbol': {
+                        'type': ['null', 'string'],
+                        'description': 'Currency symbol for monetary fields',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$in_merge': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is part of a merge in progress',
+                    },
+                    '$layout_id': {
+                        'type': ['null', 'object'],
+                        'description': 'Layout used by the record (id, name, display_label)',
+                    },
+                    '$line_tax': {
+                        'type': ['null', 'array'],
+                        'description': 'Line-item tax details',
+                    },
+                    '$locked_for_me': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked for the current user',
+                    },
+                    '$orchestration': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether an orchestration is active on the record',
+                    },
+                    '$process_flow': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether a blueprint process flow applies to the record',
+                    },
+                    '$review': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process metadata',
+                    },
+                    '$review_process': {
+                        'type': ['null', 'object'],
+                        'description': 'Review process actions available on the record',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    'Last_Activity_Time': {
+                        'type': ['null', 'string'],
+                        'format': 'date-time',
+                        'description': 'Timestamp of the last activity on the record',
+                    },
+                    'Locked__s': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is locked',
+                    },
+                    'Product_Details': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Line items',
+                    },
+                    'Sales_Commission': {
+                        'type': ['null', 'number'],
+                        'description': 'Sales commission',
+                    },
+                    'Tag': {
+                        'type': ['null', 'array'],
+                        'items': {'type': 'object'},
+                        'description': 'Tags applied to the record',
+                    },
                 },
                 'required': ['id'],
                 'x-airbyte-entity-name': 'invoices',
@@ -7500,6 +9607,66 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'format': 'date-time',
                                             'description': 'Last modification timestamp',
                                         },
+                                        '$attachments': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Attachments on the note',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$is_shared_to_client': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the note is shared to the client portal',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$size': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Size of the note attachments',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$voice_note': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the note is a voice note',
+                                        },
+                                        'Created_By': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'User who created the record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'User name'},
+                                                        'id': {'type': 'string', 'description': 'User ID'},
+                                                        'email': {'type': 'string', 'description': 'User email'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
+                                        'Modified_By': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'User who last modified the record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'User name'},
+                                                        'id': {'type': 'string', 'description': 'User ID'},
+                                                        'email': {'type': 'string', 'description': 'User email'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'notes',
@@ -7596,6 +9763,66 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                             'format': 'date-time',
                                             'description': 'Last modification timestamp',
                                         },
+                                        '$attachments': {
+                                            'type': ['null', 'array'],
+                                            'description': 'Attachments on the note',
+                                        },
+                                        '$editable': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the record is editable by the current user',
+                                        },
+                                        '$field_states': {
+                                            'type': ['null', 'object'],
+                                            'description': 'Field-level state metadata',
+                                        },
+                                        '$is_shared_to_client': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the note is shared to the client portal',
+                                        },
+                                        '$se_module': {
+                                            'type': ['null', 'string'],
+                                            'description': 'API name of the module the record is related to',
+                                        },
+                                        '$size': {
+                                            'type': ['null', 'integer'],
+                                            'description': 'Size of the note attachments',
+                                        },
+                                        '$state': {
+                                            'type': ['null', 'string'],
+                                            'description': 'Record state (e.g. save)',
+                                        },
+                                        '$voice_note': {
+                                            'type': ['null', 'boolean'],
+                                            'description': 'Whether the note is a voice note',
+                                        },
+                                        'Created_By': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'User who created the record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'User name'},
+                                                        'id': {'type': 'string', 'description': 'User ID'},
+                                                        'email': {'type': 'string', 'description': 'User email'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
+                                        'Modified_By': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'User who last modified the record',
+                                                    'properties': {
+                                                        'name': {'type': 'string', 'description': 'User name'},
+                                                        'id': {'type': 'string', 'description': 'User ID'},
+                                                        'email': {'type': 'string', 'description': 'User email'},
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                        },
                                     },
                                     'required': ['id'],
                                     'x-airbyte-entity-name': 'notes',
@@ -7661,6 +9888,50 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['null', 'string'],
                         'format': 'date-time',
                         'description': 'Last modification timestamp',
+                    },
+                    '$attachments': {
+                        'type': ['null', 'array'],
+                        'description': 'Attachments on the note',
+                    },
+                    '$editable': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the record is editable by the current user',
+                    },
+                    '$field_states': {
+                        'type': ['null', 'object'],
+                        'description': 'Field-level state metadata',
+                    },
+                    '$is_shared_to_client': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the note is shared to the client portal',
+                    },
+                    '$se_module': {
+                        'type': ['null', 'string'],
+                        'description': 'API name of the module the record is related to',
+                    },
+                    '$size': {
+                        'type': ['null', 'integer'],
+                        'description': 'Size of the note attachments',
+                    },
+                    '$state': {
+                        'type': ['null', 'string'],
+                        'description': 'Record state (e.g. save)',
+                    },
+                    '$voice_note': {
+                        'type': ['null', 'boolean'],
+                        'description': 'Whether the note is a voice note',
+                    },
+                    'Created_By': {
+                        'oneOf': [
+                            {'$ref': '#/components/schemas/CreatedBy'},
+                            {'type': 'null'},
+                        ],
+                    },
+                    'Modified_By': {
+                        'oneOf': [
+                            {'$ref': '#/components/schemas/ModifiedBy'},
+                            {'type': 'null'},
+                        ],
                     },
                 },
                 'required': ['id'],
@@ -10348,14 +12619,17 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
             'List all products',
             'List all quotes',
             'List all invoices',
-            'Create a new lead named John Smith at Acme Corp',
-            'Update the status of lead to Contacted',
-            'Create a new contact with email jane@example.com',
-            'Create a new account called Global Industries',
-            'Create a deal called Enterprise License worth $50,000',
-            'Update the deal stage to Closed Won',
-            'Create a task to follow up with the client',
-            'Update the task priority to High',
+            'List all notes',
+            'Show me details for a specific note',
+            'Show me details for a specific call',
+            'Show me details for a specific campaign',
+            'Show me details for a specific event',
+            'Show me details for a specific invoice',
+            'Show me details for a specific product',
+            'Show me details for a specific quote',
+            'Show me details for a specific account',
+            'Show me details for a specific contact',
+            'Show me details for a specific task',
         ],
         context_store_search=[
             'Show me leads created in the last 30 days',
