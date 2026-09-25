@@ -7,8 +7,10 @@ info:
     Google Ads API connector for accessing advertising account data including
     campaigns, ad groups, ads, and labels. This connector uses the Google Ads
     Query Language (GAQL) via the REST search endpoint to retrieve structured
-    advertising data. Requires OAuth2 credentials and a Google Ads developer
-    token for authentication. All data retrieval is read-only.
+    advertising data. Authenticates with OAuth2 credentials from a Google
+    Cloud project; a legacy developer token value is still accepted for
+    compatibility with existing configurations. All data retrieval is
+    read-only.
   x-airbyte-connector-name: google-ads
   x-airbyte-qualification:
     status: candidate
@@ -1167,8 +1169,10 @@ components:
     oauth2:
       type: oauth2
       description: >-
-        OAuth 2.0 authentication for Google Ads API. Requires a developer token
-        in addition to OAuth credentials.
+        OAuth 2.0 authentication for Google Ads API. API access level is tied
+        to the Google Cloud project that owns the OAuth client; the legacy
+        developer token is no longer used by Google but a non-empty value is
+        still required for compatibility.
       flows:
         authorizationCode:
           authorizationUrl: https://accounts.google.com/o/oauth2/auth
@@ -1203,7 +1207,10 @@ components:
           developer_token:
             type: string
             title: Developer Token
-            description: Google Ads API developer token
+            description: >-
+              Legacy Google Ads API developer token. Google sunset developer
+              tokens on 2026-09-09 and now ignores this value; any non-empty
+              string is accepted. Existing tokens keep working unchanged.
         auth_mapping:
           refresh_token: "${refresh_token}"
           client_id: "${client_id}"

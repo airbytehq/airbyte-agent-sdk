@@ -76,7 +76,7 @@ GoogleAdsConnectorModel: ConnectorModel = ConnectorModel(
                 ),
                 'developer_token': AuthConfigFieldSpec(
                     title='Developer Token',
-                    description='Google Ads API developer token',
+                    description='Legacy Google Ads API developer token. Google sunset developer tokens on 2026-09-09 and now ignores this value; any non-empty string is accepted. Existing tokens keep working unchanged.',
                 ),
             },
             auth_mapping={

@@ -41,7 +41,7 @@
             "type": "str",
             "required": true,
             "title": "Developer Token",
-            "description": "Google Ads API developer token"
+            "description": "Legacy Google Ads API developer token. Google sunset developer tokens on 2026-09-09 and now ignores this value; any non-empty string is accepted. Existing tokens keep working unchanged."
           }
         ],
         "type_suffix": "Oauth2Authentication"
@@ -84,7 +84,7 @@
       }
     ]
   },
-  "custom_description": "Google Ads API connector for accessing advertising account data including campaigns, ad groups, ads, and labels. This connector uses the Google Ads Query Language (GAQL) via the REST search endpoint to retrieve structured advertising data. Requires OAuth2 credentials and a Google Ads developer token for authentication. All data retrieval is read-only.",
+  "custom_description": "Google Ads API connector for accessing advertising account data including campaigns, ad groups, ads, and labels. This connector uses the Google Ads Query Language (GAQL) via the REST search endpoint to retrieve structured advertising data. Authenticates with OAuth2 credentials from a Google Cloud project; a legacy developer token value is still accepted for compatibility with existing configurations. All data retrieval is read-only.",
   "supported_questions": "- List all accessible Google Ads customer accounts\n- Show me all campaigns and their statuses\n- List all ad groups across my campaigns\n- What ads are running in my ad groups?\n- Show me campaign labels\n- List all ad group labels\n- What labels are applied to my ads?\n- Pause campaign 'Summer Sale 2025'\n- Enable the ad group 'Brand Keywords'\n- Create a label called 'High Priority'\n- Apply the 'Q4 Campaigns' label to my search campaign\n- Update the name of campaign 123456 to 'Winter Promo'\n- Which campaigns have the highest cost this month?\n- Show me all paused campaigns\n- Find ad groups with the most impressions\n- What are my top performing ads by click-through rate?\n- Show campaigns with budget over $100 per day",
   "unsupported_questions": "- Create a new campaign\n- Delete an ad\n- Delete a campaign\n- Delete a label",
   "first_operation": {
