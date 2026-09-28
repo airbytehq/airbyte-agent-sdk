@@ -50,7 +50,7 @@ from uuid import (
 MondayConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('80a54ea2-9959-4040-aac1-eee42423ec9b'),
     name='monday',
-    version='2.0.0',
+    version='2.1.0',
     base_url='https://api.monday.com',
     auth=AuthConfig(
         options=[
@@ -60,7 +60,7 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                 config={
                     'header': 'Authorization',
                     'prefix': 'Bearer',
-                    'refresh_url': 'https://auth.monday.com/oauth2/token',
+                    'refresh_url': 'https://auth.monday.com/oauth_ms/oauth/token',
                     'additional_headers': {'API-Version': '2026-07'},
                 },
                 user_config_spec=AuthConfigSpec(
@@ -71,6 +71,10 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                         'access_token': AuthConfigFieldSpec(
                             title='Access Token',
                             description='Access token obtained via OAuth 2.0 flow',
+                        ),
+                        'refresh_token': AuthConfigFieldSpec(
+                            title='Refresh Token',
+                            description='Refresh token used to obtain new access tokens when the current one expires',
                         ),
                         'client_id': AuthConfigFieldSpec(
                             title='Client ID',
@@ -83,11 +87,13 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     auth_mapping={
                         'access_token': '${access_token}',
+                        'refresh_token': '${refresh_token}',
                         'client_id': '${client_id}',
                         'client_secret': '${client_secret}',
                     },
                     replication_auth_key_mapping={
                         'credentials.access_token': 'access_token',
+                        'credentials.refresh_token': 'refresh_token',
                         'credentials.client_id': 'client_id',
                         'credentials.client_secret': 'client_secret',
                     },

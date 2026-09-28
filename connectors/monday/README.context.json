@@ -3,9 +3,9 @@
   "class_name": "MondayConnector",
   "package_name": "airbyte_agent_sdk.connectors.monday",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "2.0.0",
+  "yaml_version": "2.1.0",
   "api_reference_url": "https://developer.monday.com/api-reference/docs",
-  "auth_example": "MondayAuthConfig(access_token=\"...\", client_id=\"...\", client_secret=\"...\")",
+  "auth_example": "MondayAuthConfig(access_token=\"...\", refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
   "auth_import": ", MondayAuthConfig",
   "auth_config": {
     "type_name": "MondayAuthConfig",
@@ -21,6 +21,13 @@
             "required": true,
             "title": "Access Token",
             "description": "Access token obtained via OAuth 2.0 flow"
+          },
+          {
+            "name": "refresh_token",
+            "type": "str",
+            "required": false,
+            "title": "Refresh Token",
+            "description": "Refresh token used to obtain new access tokens when the current one expires"
           },
           {
             "name": "client_id",

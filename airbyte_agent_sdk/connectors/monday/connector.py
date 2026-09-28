@@ -110,8 +110,8 @@ class MondayConnector:
     """
 
     connector_name = "monday"
-    connector_version = "2.0.0"
-    sdk_version = "0.1.350"
+    connector_version = "2.1.0"
+    sdk_version = "0.1.351"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -167,7 +167,7 @@ class MondayConnector:
                 Example: lambda tokens: save_to_database(tokens)
         Examples:
             # Local mode (direct API calls)
-            connector = MondayConnector(auth_config=MondayAuthConfig(access_token="...", client_id="...", client_secret="..."))
+            connector = MondayConnector(auth_config=MondayAuthConfig(access_token="...", refresh_token="...", client_id="...", client_secret="..."))
             # Hosted mode with explicit connector_id (no lookup needed)
             connector = MondayConnector(
                 auth_config=AirbyteAuthConfig(

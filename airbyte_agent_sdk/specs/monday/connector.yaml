@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Monday.com API Connector
-  version: 2.0.0
+  version: 2.1.0
   description: >
     Connector for the Monday.com platform API. Monday.com is a work operating system
     that enables teams to build workflows for project management, CRM, software development,
@@ -1615,8 +1615,8 @@ components:
       flows:
         authorizationCode:
           authorizationUrl: https://auth.monday.com/oauth2/authorize
-          tokenUrl: https://auth.monday.com/oauth2/token
-          refreshUrl: https://auth.monday.com/oauth2/token
+          tokenUrl: https://auth.monday.com/oauth_ms/oauth/token
+          refreshUrl: https://auth.monday.com/oauth_ms/oauth/token
           scopes:
             me:read: Read current user info
             boards:read: Read boards
@@ -1676,6 +1676,10 @@ components:
             type: string
             title: Access Token
             description: Access token obtained via OAuth 2.0 flow
+          refresh_token:
+            type: string
+            title: Refresh Token
+            description: Refresh token used to obtain new access tokens when the current one expires
           client_id:
             type: string
             title: Client ID
@@ -1686,12 +1690,14 @@ components:
             description: The Client Secret of your Monday.com OAuth application
         auth_mapping:
           access_token: "${access_token}"
+          refresh_token: "${refresh_token}"
           client_id: "${client_id}"
           client_secret: "${client_secret}"
         additional_headers:
           API-Version: "2026-07"
         replication_auth_key_mapping:
           credentials.access_token: "access_token"
+          credentials.refresh_token: "refresh_token"
           credentials.client_id: "client_id"
           credentials.client_secret: "client_secret"
         replication_auth_key_constants:
