@@ -939,7 +939,7 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
         direct=[
             'List all meeting notes from Granola',
             'Show me recent meeting notes',
-            'Get the details of a specific note',
+            'Get the details of my most recent note',
             'List notes created in the last week',
         ],
         context_store_search=[

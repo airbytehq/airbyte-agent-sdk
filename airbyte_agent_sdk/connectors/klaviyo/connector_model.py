@@ -3636,6 +3636,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
             'Show me details for a recent flow',
             'List all email templates',
             'Show me details for a recent email template',
+            'Show me the most recent tracked event in my account',
         ],
         unsupported=[
             'Create a new profile',

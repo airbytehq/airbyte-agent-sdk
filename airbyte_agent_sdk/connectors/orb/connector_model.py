@@ -2532,12 +2532,13 @@ OrbConnectorModel: ConnectorModel = ConnectorModel(
     example_questions=ExampleQuestions(
         direct=[
             'Show me all my customers in Orb',
-            'List all active subscriptions',
-            'What plans are available?',
-            'Show me recent invoices',
             'Show me details for a recent customer',
+            'List all active subscriptions',
             'What is the status of a recent subscription?',
+            'Show me the details of the most recent subscription',
+            'What plans are available?',
             'Show me the pricing details for a plan',
+            'Show me recent invoices',
             'Confirm the Stripe ID linked to a customer',
             'What is the payment provider ID for a customer?',
         ],

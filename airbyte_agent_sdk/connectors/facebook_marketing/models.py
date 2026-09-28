@@ -468,15 +468,6 @@ class VideosList(BaseModel):
     data: list[Video] | None = Field(default=None)
     paging: Paging | None = Field(default=None)
 
-class PixelOwnerBusiness(BaseModel):
-    """Business that owns the pixel"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None | None = Field(default=None, description="Owner business ID")
-    """Owner business ID"""
-    name: str | None | None = Field(default=None, description="Owner business name")
-    """Owner business name"""
-
 class PixelCreator(BaseModel):
     """User who created the pixel"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -485,6 +476,15 @@ class PixelCreator(BaseModel):
     """Creator user ID"""
     name: str | None | None = Field(default=None, description="Creator user name")
     """Creator user name"""
+
+class PixelOwnerBusiness(BaseModel):
+    """Business that owns the pixel"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None | None = Field(default=None, description="Owner business ID")
+    """Owner business ID"""
+    name: str | None | None = Field(default=None, description="Owner business name")
+    """Owner business name"""
 
 class PixelOwnerAdAccount(BaseModel):
     """Ad account that owns the pixel"""

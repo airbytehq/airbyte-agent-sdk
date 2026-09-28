@@ -22,12 +22,25 @@ info:
     - interview_schedules
   x-airbyte-example-questions:
     direct:
-    - List all open jobs
-    - Show me all candidates
-    - List recent applications
-    - List all departments
-    - Show me all job postings
-    - List all users in the organization
+    - "List all open jobs"
+    - "Show me the details of the first job"
+    - "Show me all candidates"
+    - "Show me the details of the most recent candidate"
+    - "List recent applications"
+    - "Show me the details of the most recent application"
+    - "List all departments"
+    - "Show me the details of the first department"
+    - "Show me all job postings"
+    - "Show me the details of the first job posting"
+    - "List all users in the organization"
+    - "Show me the details of the first user"
+    - "List all archive reasons"
+    - "Show me all candidate tags"
+    - "List all custom fields"
+    - "Show me all feedback form definitions"
+    - "List all locations"
+    - "Show me the details of the first location"
+    - "Show me all candidate sources"
     search:
     - Show me candidates who applied last month
     - What are the top sources for job applications?

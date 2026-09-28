@@ -53,7 +53,7 @@
     ]
   },
   "custom_description": "Connector for the Amplitude Analytics API. Provides access to core analytics data including event exports, cohort definitions, chart annotations, event type listings, active user counts, and average session length metrics. Authentication uses HTTP Basic with your Amplitude API key and secret key.\n",
-  "supported_questions": "- List all chart annotations in Amplitude\n- Show me all cohorts\n- List all event types\n- Which cohorts have more than 1000 users?\n- What are the most popular event types by total count?\n- Show me annotations created in the last month",
+  "supported_questions": "- List all chart annotations in Amplitude\n- Show me the details of the most recent annotation\n- Show me all cohorts\n- Show me the details of the first cohort\n- List all event types\n- How many daily active users did I have recently?\n- What is the average session length in Amplitude?\n- Which cohorts have more than 1000 users?\n- What are the most popular event types by total count?\n- Show me annotations created in the last month",
   "unsupported_questions": "- Create a new annotation\n- Delete a cohort\n- Export raw event data",
   "first_operation": {
     "method_name": "list_annotations",

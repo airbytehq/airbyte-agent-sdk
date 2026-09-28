@@ -599,6 +599,7 @@ AirtableConnectorModel: ConnectorModel = ConnectorModel(
             'Show me the schema for tables in a base',
             'List records from a table in my base',
             'Show me recent records from a table',
+            'Show me the details of the most recent record in my first table',
             'What fields are in a table?',
         ],
         context_store_search=["List records where Status is 'Done' in table tblXXX", 'Find records created last week in table tblXXX', 'Show me records updated in the last 30 days in base appXXX'],

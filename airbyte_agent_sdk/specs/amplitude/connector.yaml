@@ -207,8 +207,12 @@ info:
   x-airbyte-example-questions:
     direct:
       - "List all chart annotations in Amplitude"
+      - "Show me the details of the most recent annotation"
       - "Show me all cohorts"
+      - "Show me the details of the first cohort"
       - "List all event types"
+      - "How many daily active users did I have recently?"
+      - "What is the average session length in Amplitude?"
     search:
       - "Which cohorts have more than 1000 users?"
       - "What are the most popular event types by total count?"

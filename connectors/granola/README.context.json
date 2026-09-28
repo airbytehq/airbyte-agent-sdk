@@ -31,7 +31,7 @@
   "server_variables": [],
   "replication_config": null,
   "custom_description": "The Granola API connector provides read access to meeting notes from Granola,\nan AI-powered meeting notes platform. This connector integrates with the Granola\nAPI to list and retrieve notes, including summaries, transcripts, attendees,\nand calendar event details. Requires a Granola API key.\n",
-  "supported_questions": "- List all meeting notes from Granola\n- Show me recent meeting notes\n- Get the details of a specific note\n- List notes created in the last week\n- Find meeting notes from last month\n- Which meetings had the most attendees?\n- Show me notes that mention budget reviews\n- What meetings happened this quarter?",
+  "supported_questions": "- List all meeting notes from Granola\n- Show me recent meeting notes\n- Get the details of my most recent note\n- List notes created in the last week\n- Find meeting notes from last month\n- Which meetings had the most attendees?\n- Show me notes that mention budget reviews\n- What meetings happened this quarter?",
   "unsupported_questions": "- Create a new meeting note\n- Delete a meeting note\n- Update an existing note\n- Share a note with someone",
   "first_operation": {
     "method_name": "list_notes",

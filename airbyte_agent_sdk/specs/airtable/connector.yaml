@@ -103,6 +103,7 @@ info:
       - "Show me the schema for tables in a base"
       - "List records from a table in my base"
       - "Show me recent records from a table"
+      - "Show me the details of the most recent record in my first table"
       - "What fields are in a table?"
     search:
       - "List records where Status is 'Done' in table tblXXX"
