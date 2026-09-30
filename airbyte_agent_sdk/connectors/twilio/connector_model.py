@@ -43,7 +43,7 @@ from uuid import (
 TwilioConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('b9dc6155-672e-42ea-b10d-9f1f1fb95ab1'),
     name='twilio',
-    version='1.0.4',
+    version='1.0.5',
     base_url='https://api.twilio.com/2010-04-01',
     auth=AuthConfig(
         type=AuthType.BASIC,
@@ -2789,9 +2789,14 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                     method='GET',
                     path='/Accounts/{AccountSid}/Conferences.json',
                     action=Action.LIST,
-                    description='Returns a list of conferences for an account',
-                    query_params=['PageSize'],
+                    description='Returns a list of conferences for an account. From September 30, 2026 Twilio returns only in-progress conferences when Status is omitted, so pass Status explicitly to retrieve init or completed conferences.\n',
+                    query_params=['Status', 'PageSize'],
                     query_params_schema={
+                        'Status': {
+                            'type': 'string',
+                            'required': False,
+                            'enum': ['init', 'in-progress', 'completed'],
+                        },
                         'PageSize': {
                             'type': 'integer',
                             'required': False,
@@ -2874,7 +2879,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                         'trigger_phrases': ['conference call', 'conference'],
                                         'freshness': 'live',
                                         'example_questions': ['Show recent conference calls'],
-                                        'search_strategy': 'Filter by date or status',
+                                        'search_strategy': 'Pass Status=completed for past conferences; omitting Status returns only in-progress conferences from September 30, 2026',
                                     },
                                 },
                             },
@@ -2904,6 +2909,20 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'first_page_uri': '$.first_page_uri',
                         'page': '$.page',
                         'page_size': '$.page_size',
+                    },
+                    ai_hints={
+                        'summary': 'List Twilio conferences, optionally filtered by status',
+                        'when_to_use': 'When the user asks about conference calls, past or completed conferences, or conferences currently in progress',
+                        'trigger_phrases': [
+                            'conference call',
+                            'conference',
+                            'completed conferences',
+                            'past conferences',
+                            'active conferences',
+                        ],
+                        'freshness': 'live',
+                        'example_questions': ['Show recent completed conference calls', 'Are any conferences in progress right now?'],
+                        'search_strategy': 'Pass Status to choose which conferences to return: completed for past or finished conferences, in-progress for active ones, init for conferences created but not yet started. From September 30, 2026 Twilio returns only in-progress conferences when Status is omitted, so for questions about past, recent, or all conferences request Status=completed (and call again with in-progress or init if the user wants every status). Only one Status value can be sent per call.',
                     },
                 ),
                 Action.GET: EndpointDefinition(
@@ -2980,7 +2999,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                             'trigger_phrases': ['conference call', 'conference'],
                             'freshness': 'live',
                             'example_questions': ['Show recent conference calls'],
-                            'search_strategy': 'Filter by date or status',
+                            'search_strategy': 'Pass Status=completed for past conferences; omitting Status returns only in-progress conferences from September 30, 2026',
                         },
                     },
                 ),
@@ -3049,7 +3068,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                     'trigger_phrases': ['conference call', 'conference'],
                     'freshness': 'live',
                     'example_questions': ['Show recent conference calls'],
-                    'search_strategy': 'Filter by date or status',
+                    'search_strategy': 'Pass Status=completed for past conferences; omitting Status returns only in-progress conferences from September 30, 2026',
                 },
             },
             ai_hints={
@@ -3058,7 +3077,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                 'trigger_phrases': ['conference call', 'conference'],
                 'freshness': 'live',
                 'example_questions': ['Show recent conference calls'],
-                'search_strategy': 'Filter by date or status',
+                'search_strategy': 'Pass Status=completed for past conferences; omitting Status returns only in-progress conferences from September 30, 2026',
             },
             relationships=[
                 EntityRelationshipConfig(

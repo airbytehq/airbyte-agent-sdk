@@ -3,7 +3,7 @@
   "class_name": "TwilioConnector",
   "package_name": "airbyte_agent_sdk.connectors.twilio",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.4",
+  "yaml_version": "1.0.5",
   "api_reference_url": "https://www.twilio.com/docs/usage/api",
   "auth_example": "TwilioAuthConfig(account_sid=\"...\", auth_token=\"...\")",
   "auth_import": ", TwilioAuthConfig",
@@ -881,6 +881,22 @@
             "description": "Account SID"
           },
           {
+            "name": "Status",
+            "python_name": "status",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "init",
+                "in-progress",
+                "completed"
+              ]
+            },
+            "required": null,
+            "description": "Status of the conferences to return. Twilio defaults to in-progress conferences only from September 30, 2026; request completed conferences explicitly.\n",
+            "is_deep_object": false
+          },
+          {
             "name": "PageSize",
             "python_name": "page_size",
             "type": "int",
@@ -897,7 +913,7 @@
         ],
         "params_type_name": "ConferencesListParams",
         "response_type": "ConferencesListResult",
-        "description": "Returns a list of conferences for an account",
+        "description": "Returns a list of conferences for an account. From September 30, 2026 Twilio returns only in-progress conferences when Status is omitted, so pass Status explicitly to retrieve init or completed conferences.\n",
         "record_extractor": "$.conferences",
         "meta_extractor": {
           "next_page_uri": "$.next_page_uri",

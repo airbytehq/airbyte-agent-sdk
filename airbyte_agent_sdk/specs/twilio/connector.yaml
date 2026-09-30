@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Twilio API Connector
-  version: 1.0.4
+  version: 1.0.5
   description: >
     Connector for the Twilio REST API. Provides read and write access to core Twilio resources
     including accounts, calls, messages, recordings, conferences, incoming phone numbers,
@@ -1165,7 +1165,10 @@ paths:
   "/Accounts/{AccountSid}/Conferences.json":
     get:
       summary: List conferences
-      description: Returns a list of conferences for an account
+      description: >
+        Returns a list of conferences for an account. From September 30, 2026 Twilio returns
+        only in-progress conferences when Status is omitted, so pass Status explicitly to
+        retrieve init or completed conferences.
       operationId: listConferences
       x-airbyte-entity: conferences
       x-airbyte-action: list
@@ -1175,6 +1178,21 @@ paths:
         first_page_uri: $.first_page_uri
         page: $.page
         page_size: $.page_size
+      x-airbyte-ai-hints:
+        summary: "List Twilio conferences, optionally filtered by status"
+        when_to_use: "When the user asks about conference calls, past or completed conferences, or conferences currently in progress"
+        trigger_phrases: ["conference call", "conference", "completed conferences", "past conferences", "active conferences"]
+        freshness: live
+        search_strategy: >-
+          Pass Status to choose which conferences to return: completed for past or finished
+          conferences, in-progress for active ones, init for conferences created but not yet
+          started. From September 30, 2026 Twilio returns only in-progress conferences when
+          Status is omitted, so for questions about past, recent, or all conferences request
+          Status=completed (and call again with in-progress or init if the user wants every
+          status). Only one Status value can be sent per call.
+        example_questions:
+          - "Show recent completed conference calls"
+          - "Are any conferences in progress right now?"
       parameters:
       - name: AccountSid
         in: path
@@ -1182,6 +1200,17 @@ paths:
         description: Account SID
         schema:
           type: string
+      - name: Status
+        in: query
+        description: >
+          Status of the conferences to return. Twilio defaults to in-progress conferences only
+          from September 30, 2026; request completed conferences explicitly.
+        schema:
+          type: string
+          enum:
+          - init
+          - in-progress
+          - completed
       - name: PageSize
         in: query
         description: Number of items to return per page
@@ -2148,7 +2177,7 @@ components:
         when_to_use: "Questions about conference calls or multi-party calls"
         trigger_phrases: ["conference call", "conference"]
         freshness: live
-        search_strategy: "Filter by date or status"
+        search_strategy: "Pass Status=completed for past conferences; omitting Status returns only in-progress conferences from September 30, 2026"
         example_questions:
           - "Show recent conference calls"
       description: A Twilio conference

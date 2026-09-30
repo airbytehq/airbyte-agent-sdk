@@ -83,6 +83,7 @@ class RecordingsGetParams(TypedDict):
 class ConferencesListParams(TypedDict):
     """Parameters for conferences.list operation"""
     account_sid: str
+    status: NotRequired[str]
     page_size: NotRequired[int]
 
 class ConferencesGetParams(TypedDict):

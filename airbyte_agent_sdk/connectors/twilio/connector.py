@@ -139,8 +139,8 @@ class TwilioConnector:
     """
 
     connector_name = "twilio"
-    connector_version = "1.0.4"
-    sdk_version = "0.1.351"
+    connector_version = "1.0.5"
+    sdk_version = "0.1.352"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -186,7 +186,7 @@ class TwilioConnector:
         ('incoming_phone_numbers', 'get'): {'account_sid': 'AccountSid', 'sid': 'sid'},
         ('recordings', 'list'): {'account_sid': 'AccountSid', 'page_size': 'PageSize'},
         ('recordings', 'get'): {'account_sid': 'AccountSid', 'sid': 'sid'},
-        ('conferences', 'list'): {'account_sid': 'AccountSid', 'page_size': 'PageSize'},
+        ('conferences', 'list'): {'account_sid': 'AccountSid', 'status': 'Status', 'page_size': 'PageSize'},
         ('conferences', 'get'): {'account_sid': 'AccountSid', 'sid': 'sid'},
         ('usage_records', 'list'): {'account_sid': 'AccountSid', 'page_size': 'PageSize'},
         ('addresses', 'list'): {'account_sid': 'AccountSid', 'page_size': 'PageSize'},
@@ -1969,14 +1969,18 @@ class ConferencesQuery:
     async def list(
         self,
         account_sid: str,
+        status: str | None = None,
         page_size: int | None = None,
         **kwargs
     ) -> ConferencesListResult:
         """
-        Returns a list of conferences for an account
+        Returns a list of conferences for an account. From September 30, 2026 Twilio returns only in-progress conferences when Status is omitted, so pass Status explicitly to retrieve init or completed conferences.
+
 
         Args:
             account_sid: Account SID
+            status: Status of the conferences to return. Twilio defaults to in-progress conferences only from September 30, 2026; request completed conferences explicitly.
+
             page_size: Number of items to return per page
             **kwargs: Additional parameters
 
@@ -1985,6 +1989,7 @@ class ConferencesQuery:
         """
         params = {k: v for k, v in {
             "AccountSid": account_sid,
+            "Status": status,
             "PageSize": page_size,
             **kwargs
         }.items() if v is not None}
