@@ -62,6 +62,7 @@ info:
     - "Modify order line items after creation"
   x-airbyte-skip-suggested-streams:
   - customer_journey_summary
+  - market_countries
   - order_agreements
   - transactions_graphql
   x-airbyte-entity-relationships:
