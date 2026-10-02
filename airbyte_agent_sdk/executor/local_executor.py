@@ -30,6 +30,7 @@ from airbyte_agent_sdk.constants import (
 )
 from airbyte_agent_sdk.deprecated_action_aliases import resolve_action_alias
 from airbyte_agent_sdk.http.exceptions import ConnectorValidationError, HTTPClientError
+from airbyte_agent_sdk.http.protocols import HTTPClientProtocol
 from airbyte_agent_sdk.http_client import HTTPClient, TokenRefreshCallback
 from airbyte_agent_sdk.logging import NullLogger, RequestLogger
 from airbyte_agent_sdk.observability import ObservabilitySession
@@ -456,7 +457,8 @@ class LocalExecutor:
         config_values: dict[str, str] | None = None,
         on_token_refresh: TokenRefreshCallback = None,
         retry_config: RetryConfig | None = None,
-    ):
+        client: HTTPClientProtocol | None = None,
+    ) -> None:
         """Initialize async executor.
 
         Args:
@@ -547,6 +549,7 @@ class LocalExecutor:
         # Initialize async HTTP client with connection pooling
         self.http_client = HTTPClient(
             base_url=self.model.base_url,
+            client=client,
             auth_config=selected_auth_config,
             secrets=self.secrets,
             config_values=self.config_values,
