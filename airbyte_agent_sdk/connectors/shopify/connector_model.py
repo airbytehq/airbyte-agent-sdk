@@ -15497,6 +15497,7 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
                     untested=True,
+                    untested_reason='Shopify returned HTTP 404 for the product image metafields request.',
                     ai_hints={
                         'summary': 'Custom metafields attached to a product image',
                         'when_to_use': 'When you need custom fields stored on a product image',
@@ -18041,7 +18042,6 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.transactions',
                     meta_extractor={'next_page_url': '@link.next'},
-                    untested=True,
                 ),
             },
             entity_schema={
@@ -18275,6 +18275,7 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.disputes',
                     meta_extractor={'next_page_url': '@link.next'},
                     untested=True,
+                    untested_reason='Shopify returned HTTP 403: merchant approval for read_shopify_payments_disputes is required.',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -18363,6 +18364,7 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.dispute',
                     untested=True,
+                    untested_reason='No dispute ID is available because disputes.list requires merchant approval for the read_shopify_payments_disputes scope.',
                 ),
             },
             entity_schema={

@@ -898,6 +898,7 @@ paths:
       x-airbyte-entity: goals
       x-airbyte-action: get
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "goals.list sibling cassette returned HTTP 200 with zero records; no goal ID was available without guessing."
       x-airbyte-record-extractor: $.goal
       parameters:
       - name: goal_id
@@ -980,6 +981,7 @@ paths:
       x-airbyte-entity: view_tasks
       x-airbyte-action: list
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "ClickUp returned HTTP 400: the only test-workspace view is a conversation view, not a task view."
       x-airbyte-record-extractor: $.tasks
       x-airbyte-meta-extractor:
         last_page: $.last_page
@@ -1056,6 +1058,7 @@ paths:
       x-airbyte-entity: time_tracking
       x-airbyte-action: get
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "time_tracking.list sibling cassette returned HTTP 200 with zero records; no time_entry_id was available without guessing."
       x-airbyte-record-extractor: $.data
       parameters:
       - name: team_id

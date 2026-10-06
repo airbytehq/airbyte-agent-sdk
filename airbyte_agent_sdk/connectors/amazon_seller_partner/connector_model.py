@@ -481,6 +481,7 @@ AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.payload',
                     untested=True,
+                    untested_reason='orders.list sibling cassette returned HTTP 200 with zero records; no order ID was available without guessing.',
                     ai_hints={
                         'summary': 'Get details for a specific Amazon order by order ID',
                         'when_to_use': 'When the user asks about a specific order by its Amazon order ID',
@@ -866,6 +867,7 @@ AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.payload.OrderItems',
                     meta_extractor={'next_token': '$.payload.NextToken'},
                     untested=True,
+                    untested_reason='orders.list sibling cassette returned HTTP 200 with zero records; no order ID was available without guessing.',
                     ai_hints={
                         'summary': 'List individual items within a specific Amazon order',
                         'when_to_use': 'When the user asks about products in an order, item details, prices, or quantities for a specific order',

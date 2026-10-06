@@ -15,6 +15,11 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C14
+        reason: "ads.create and ads.update require Page-backed creatives, but the test account has no Facebook Page."
+      - criterion: C15
+        reason: "ad_library.list is blocked because Facebook returned HTTP 400 (Ad Library requires an app role); ads.create and ads.update require Page-backed creatives unavailable in the test account."
   x-airbyte-connector-definition-id: e7778cfc-e97c-4458-9ecb-b4f2bba8946c
   x-airbyte-replication-version: "6.0.2"
   x-airbyte-replication-compatibility: ">=6.0.2, <7.0.0"
@@ -828,6 +833,7 @@ paths:
       # Untested: Creating ads requires a Facebook Page to be connected to the ad account.
       # The test account does not have a Facebook Page, so this operation cannot be tested.
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "The operation requires a Page-backed creative; the test account has no Facebook Page, so no ad was created."
       tags:
       - Ads
       parameters:
@@ -1474,6 +1480,7 @@ paths:
       # Untested: Updating ads requires a Facebook Page to be connected to the ad account.
       # The test account does not have a Facebook Page, so this operation cannot be tested.
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "The operation requires a Page-backed creative; the test account has no Facebook Page and no ad created in this session was available to update."
       tags:
       - Ads
       parameters:
@@ -1512,6 +1519,7 @@ paths:
       # Untested: The Ad Library API requires identity verification and the Ad Library API
       # product enabled on the Facebook app, which the test credentials do not have.
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Facebook returned HTTP 400: Ad Library access requires an assigned app role on the test app."
       x-airbyte-record-extractor: $.data
       x-airbyte-meta-extractor:
         after: $.paging.cursors.after

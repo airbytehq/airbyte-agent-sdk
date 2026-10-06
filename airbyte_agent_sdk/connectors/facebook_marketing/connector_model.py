@@ -2583,6 +2583,7 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='The operation requires a Page-backed creative; the test account has no Facebook Page, so no ad was created.',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2849,6 +2850,7 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='The operation requires a Page-backed creative; the test account has no Facebook Page and no ad created in this session was available to update.',
                 ),
             },
             entity_schema={
@@ -5499,6 +5501,7 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.data',
                     meta_extractor={'after': '$.paging.cursors.after'},
                     untested=True,
+                    untested_reason='Facebook returned HTTP 400: Ad Library access requires an assigned app role on the test app.',
                 ),
             },
             entity_schema={

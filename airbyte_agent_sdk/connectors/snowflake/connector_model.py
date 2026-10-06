@@ -2473,6 +2473,7 @@ SnowflakeConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Snowflake returned HTTP 401: the programmatic access token is invalid.',
                 ),
             },
             entity_schema={

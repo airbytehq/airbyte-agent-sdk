@@ -2666,6 +2666,7 @@ PinterestConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.items',
                     meta_extractor={'cursor': '$.bookmark'},
                     untested=True,
+                    untested_reason='Pinterest returned HTTP 401: the OAuth refresh token is expired.',
                 ),
             },
             entity_schema={

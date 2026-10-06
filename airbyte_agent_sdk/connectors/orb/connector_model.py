@@ -1753,7 +1753,6 @@ OrbConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     meta_extractor={'next_cursor': '$.pagination_metadata.next_cursor'},
-                    untested=True,
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2039,7 +2038,6 @@ OrbConnectorModel: ConnectorModel = ConnectorModel(
                             'search_strategy': 'Filter by customer, date, or status',
                         },
                     },
-                    untested=True,
                 ),
             },
             entity_schema={

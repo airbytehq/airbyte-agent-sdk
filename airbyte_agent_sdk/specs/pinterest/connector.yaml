@@ -1175,6 +1175,7 @@ paths:
       x-airbyte-entity: catalogs_product_groups
       x-airbyte-action: list
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Pinterest returned HTTP 401: the OAuth refresh token is expired."
       x-airbyte-record-extractor: $.items
       x-airbyte-meta-extractor:
         cursor: $.bookmark

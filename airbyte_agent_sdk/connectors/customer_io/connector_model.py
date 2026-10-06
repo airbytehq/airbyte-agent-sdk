@@ -1942,6 +1942,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.message',
                     untested=True,
+                    untested_reason='messages.list sibling cassette returned HTTP 200 with zero deliveries; no message_id was available without guessing.',
                 ),
             },
             entity_schema={
@@ -2762,7 +2763,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.collections',
-                    untested=True,
                     no_pagination='Returns all collections in a single response without pagination',
                 ),
                 Action.CREATE: EndpointDefinition(
@@ -2837,7 +2837,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                     },
-                    untested=True,
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2902,7 +2901,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.collection',
-                    untested=True,
                 ),
                 Action.UPDATE: EndpointDefinition(
                     method='PUT',
@@ -2979,7 +2977,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                     },
-                    untested=True,
                 ),
             },
             entity_schema={
@@ -3115,7 +3112,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.reporting_webhooks',
-                    untested=True,
                     no_pagination='Returns all reporting webhooks in a single response without pagination',
                 ),
                 Action.CREATE: EndpointDefinition(
@@ -3195,7 +3191,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                             'search_strategy': 'Search by webhook name or endpoint URL',
                         },
                     },
-                    untested=True,
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3209,58 +3204,51 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                     response_schema={
                         'type': 'object',
                         'properties': {
-                            'reporting_webhook': {
-                                'type': 'object',
-                                'properties': {
-                                    'id': {
-                                        'type': ['null', 'integer'],
-                                        'description': 'Unique webhook identifier',
-                                    },
-                                    'name': {
-                                        'type': ['null', 'string'],
-                                        'description': 'Webhook display name',
-                                    },
-                                    'endpoint': {
-                                        'type': ['null', 'string'],
-                                        'description': 'Webhook URL',
-                                    },
-                                    'disabled': {
-                                        'type': ['null', 'boolean'],
-                                        'description': 'Whether the webhook is disabled',
-                                    },
-                                    'full_resolution': {
-                                        'type': ['null', 'boolean'],
-                                        'description': 'Send all events, not just unique',
-                                    },
-                                    'with_content': {
-                                        'type': ['null', 'boolean'],
-                                        'description': 'Include message body in sent events',
-                                    },
-                                    'events': {
-                                        'type': ['null', 'array'],
-                                        'description': 'Event types to report',
-                                        'items': {'type': 'string'},
-                                    },
-                                },
-                                'x-airbyte-entity-name': 'reporting_webhooks',
-                                'x-airbyte-ai-hints': {
-                                    'summary': 'Webhook endpoints configured to receive message event notifications',
-                                    'when_to_use': 'Questions about webhook configuration, event reporting endpoints, or notification URLs',
-                                    'trigger_phrases': [
-                                        'reporting webhooks',
-                                        'webhook config',
-                                        'event notifications',
-                                        'webhook endpoints',
-                                    ],
-                                    'freshness': 'static',
-                                    'example_questions': ['What reporting webhooks are configured?', 'Is there a webhook for email events?'],
-                                    'search_strategy': 'Search by webhook name or endpoint URL',
-                                },
+                            'id': {
+                                'type': ['null', 'integer'],
+                                'description': 'Unique webhook identifier',
+                            },
+                            'name': {
+                                'type': ['null', 'string'],
+                                'description': 'Webhook display name',
+                            },
+                            'endpoint': {
+                                'type': ['null', 'string'],
+                                'description': 'Webhook URL',
+                            },
+                            'disabled': {
+                                'type': ['null', 'boolean'],
+                                'description': 'Whether the webhook is disabled',
+                            },
+                            'full_resolution': {
+                                'type': ['null', 'boolean'],
+                                'description': 'Send all events, not just unique',
+                            },
+                            'with_content': {
+                                'type': ['null', 'boolean'],
+                                'description': 'Include message body in sent events',
+                            },
+                            'events': {
+                                'type': ['null', 'array'],
+                                'description': 'Event types to report',
+                                'items': {'type': 'string'},
                             },
                         },
+                        'x-airbyte-entity-name': 'reporting_webhooks',
+                        'x-airbyte-ai-hints': {
+                            'summary': 'Webhook endpoints configured to receive message event notifications',
+                            'when_to_use': 'Questions about webhook configuration, event reporting endpoints, or notification URLs',
+                            'trigger_phrases': [
+                                'reporting webhooks',
+                                'webhook config',
+                                'event notifications',
+                                'webhook endpoints',
+                            ],
+                            'freshness': 'static',
+                            'example_questions': ['What reporting webhooks are configured?', 'Is there a webhook for email events?'],
+                            'search_strategy': 'Search by webhook name or endpoint URL',
+                        },
                     },
-                    record_extractor='$.reporting_webhook',
-                    untested=True,
                 ),
                 Action.UPDATE: EndpointDefinition(
                     method='PUT',
@@ -3343,7 +3331,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                             'search_strategy': 'Search by webhook name or endpoint URL',
                         },
                     },
-                    untested=True,
                 ),
             },
             entity_schema={
@@ -3493,7 +3480,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.exports',
-                    untested=True,
                     no_pagination='Returns all exports in a single response without pagination',
                 ),
                 Action.CREATE: EndpointDefinition(
@@ -3581,7 +3567,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                             },
                         },
                     },
-                    untested=True,
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3665,7 +3650,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.export',
-                    untested=True,
                 ),
             },
             entity_schema={
@@ -4449,6 +4433,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Sends real messages to recipients; not recorded to avoid live notifications.',
                     ai_hints={
                         'summary': 'Send a one-to-one transactional email (order confirmations, password resets, etc.)',
                         'when_to_use': 'When the user wants to send a single transactional email to a specific person',
@@ -4509,6 +4494,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Sends real messages to recipients; not recorded to avoid live notifications.',
                     ai_hints={
                         'summary': 'Send a one-to-one transactional SMS via Twilio',
                         'when_to_use': 'When the user wants to send a single SMS to a specific person',
@@ -4581,6 +4567,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Sends real messages to recipients; not recorded to avoid live notifications.',
                     ai_hints={
                         'summary': 'Send a one-to-one transactional push notification to mobile or web',
                         'when_to_use': 'When the user wants to send a push notification to a specific person',
@@ -4625,6 +4612,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Sends real messages to recipients; not recorded to avoid live notifications.',
                     ai_hints={
                         'summary': "Send an in-app inbox message to a user's notification center",
                         'when_to_use': 'When the user wants to send an in-app notification via the Customer.io SDK inbox',
@@ -4693,6 +4681,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Sends real messages to recipients; not recorded to avoid live notifications.',
                     ai_hints={
                         'summary': 'Trigger an API-triggered broadcast campaign to send messages to a group of people',
                         'when_to_use': 'When the user wants to trigger or fire a broadcast campaign via the API',

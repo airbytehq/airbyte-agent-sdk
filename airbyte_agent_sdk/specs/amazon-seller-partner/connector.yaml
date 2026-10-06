@@ -702,6 +702,7 @@ paths:
       x-airbyte-entity: orders
       x-airbyte-action: get
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "orders.list sibling cassette returned HTTP 200 with zero records; no order ID was available without guessing."
       x-airbyte-record-extractor: $.payload
       x-airbyte-ai-hints:
         summary: "Get details for a specific Amazon order by order ID"
@@ -742,6 +743,7 @@ paths:
       x-airbyte-entity: order_items
       x-airbyte-action: list
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "orders.list sibling cassette returned HTTP 200 with zero records; no order ID was available without guessing."
       x-airbyte-record-extractor: $.payload.OrderItems
       x-airbyte-meta-extractor:
         next_token: $.payload.NextToken

@@ -3403,6 +3403,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.goal',
                     untested=True,
+                    untested_reason='goals.list sibling cassette returned HTTP 200 with zero records; no goal ID was available without guessing.',
                 ),
             },
             entity_schema={
@@ -4031,6 +4032,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     record_extractor='$.tasks',
                     meta_extractor={'last_page': '$.last_page'},
                     untested=True,
+                    untested_reason='ClickUp returned HTTP 400: the only test-workspace view is a conversation view, not a task view.',
                 ),
             },
             relationships=[
@@ -4198,6 +4200,7 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.data',
                     untested=True,
+                    untested_reason='time_tracking.list sibling cassette returned HTTP 200 with zero records; no time_entry_id was available without guessing.',
                 ),
             },
             entity_schema={

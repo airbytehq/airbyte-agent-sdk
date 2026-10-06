@@ -324,6 +324,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     meta_extractor={'created_id': '@header.x-restli-id'},
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -497,6 +498,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'required': ['patch'],
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -522,6 +524,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
             },
@@ -831,6 +834,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'required': ['patch'],
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
                 Action.CREATE: EndpointDefinition(
@@ -882,6 +886,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -908,6 +913,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
             },
@@ -2698,6 +2704,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     meta_extractor={'created_id': '@header.x-restli-id'},
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -2812,6 +2819,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                 ),
                 Action.UPDATE: EndpointDefinition(
                     method='POST',
@@ -2861,6 +2869,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'required': ['patch'],
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -2892,6 +2901,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
             },
@@ -3281,6 +3291,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     meta_extractor={'created_id': '@header.x-restli-id'},
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                 ),
                 Action.GET: EndpointDefinition(
                     method='GET',
@@ -3415,6 +3426,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                 ),
                 Action.UPDATE: EndpointDefinition(
                     method='POST',
@@ -3467,6 +3479,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'required': ['patch'],
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
             },
@@ -3679,6 +3692,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                 ),
             },
         ),
@@ -3725,6 +3739,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         'additionalProperties': True,
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
                 Action.DELETE: EndpointDefinition(
@@ -3751,6 +3766,7 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     untested=True,
+                    untested_reason='Not recorded: the LinkedIn test OAuth refresh token is rejected (invalid_grant); re-record once the credential is rotated.',
                     no_content_response=True,
                 ),
             },

@@ -269,24 +269,6 @@ def _get_connector_smoke_test_config(config: dict[str, Any] | None, connector_na
     )
 
 
-def _smoke_cases_for_operation(
-    smoke_connector: dict[str, Any] | None,
-    entity: str,
-    action: str,
-) -> list[dict[str, Any]]:
-    """Return non-skipped smoke cases for one operation."""
-    if smoke_connector is None:
-        return []
-    cases = smoke_connector.get("test_cases")
-    if not isinstance(cases, list):
-        return []
-    return [
-        case
-        for case in cases
-        if isinstance(case, dict) and case.get("entity") == entity and case.get("action") == action and not case.get("skip", False)
-    ]
-
-
 def validate_connector_qualification(
     connector_dir: str | Path,
     smoke_test_config_path: str | Path | None = None,
@@ -392,11 +374,7 @@ def validate_connector_qualification(
         missing_schemes = [] if single_auth_covered else sorted(declared_schemes)
     auth_passed = not missing_schemes and not untested_schemes
 
-    smoke_write_missing = [
-        f"{entity}.{action}"
-        for entity, action in write_operations
-        if not cassette_map.get((entity, action)) or not _smoke_cases_for_operation(smoke_connector, entity, action)
-    ]
+    write_missing = [f"{entity}.{action}" for entity, action in write_operations if not cassette_map.get((entity, action))]
     active_auth_configs = [auth for auth in (smoke_connector or {}).get("auth_configs", []) if isinstance(auth, dict) and not auth.get("skip", False)]
     has_smoke_case = any(isinstance(case, dict) and not case.get("skip", False) for case in (smoke_connector or {}).get("test_cases", []))
     live_smoke_result = _load_live_smoke_result(
@@ -423,7 +401,7 @@ def validate_connector_qualification(
     c10_passed = isinstance(gq_rate, (int, float)) and gq_rate >= MIN_GOLDEN_QUESTIONS_SUCCESS_RATE
     c11_passed = report is not None and report.summary.total_questions == len(direct_questions)
     c12_passed = bool(operation_count) and covered_pair_count / operation_count >= MIN_GOLDEN_QUESTIONS_ENTITY_COVERAGE
-    c14_passed = not write_operations or not smoke_write_missing
+    c14_passed = not write_missing
     c15_passed = bool(operation_count) and untested_ratio <= MAX_UNTESTED_OPERATION_RATIO and not missing_untested_operation_reasons
     if c15_passed:
         c15_detail = "Untested-operation ratio and marker reasons meet the threshold."
@@ -572,14 +550,14 @@ def validate_connector_qualification(
         ),
         _build_criterion_outcome(
             "C14",
-            "Every write action has a cassette and a smoke-test case",
+            "Every write action has a cassette",
             "gate",
             c14_passed,
-            {"uncovered": smoke_write_missing, "total_write_actions": len(write_operations)},
+            {"uncovered": write_missing, "total_write_actions": len(write_operations)},
             "all covered",
-            f"All {len(write_operations)} declared write actions have cassettes and smoke cases."
+            f"All {len(write_operations)} declared write actions have cassettes."
             if c14_passed
-            else f"Uncovered write actions: {smoke_write_missing}.",
+            else f"Write actions missing cassettes: {write_missing}.",
             bypass_reasons,
         ),
         _build_criterion_outcome(

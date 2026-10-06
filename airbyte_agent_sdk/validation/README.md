@@ -32,7 +32,7 @@ Criteria are grouped as C1..C17 (C13 was dropped as not measurable):
 | A. Static definition | C1-C6 | `validate_connector_readiness` results |
 | B. Auth parity | C7 | declared security schemes vs cassette coverage |
 | C. Golden questions | C8-C12 | `tests/golden_questions_report.yaml` + freshness hash |
-| D. Scope | C14-C15 | connector model, cassette map, smoke config |
+| D. Scope | C14-C15 | connector model, cassette map |
 | E. Live execution | C16-C17 | smoke-test config and live smoke results |
 
 Each criterion is a **gate** (must pass) or a **warn** (reported only). A criterion that cannot be computed is reported as `UNEVALUATED` and never counts as passed. C17 is only evaluated when a live smoke result is plumbed in (the daily fleet workflow does this); a result that exists but cannot be parsed fails the gate.

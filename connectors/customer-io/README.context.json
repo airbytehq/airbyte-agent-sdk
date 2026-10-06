@@ -1112,7 +1112,7 @@
         "params_type_name": "ReportingWebhooksGetParams",
         "response_type": "ReportingWebhook",
         "description": "Returns a single reporting webhook by ID.",
-        "record_extractor": "$.reporting_webhook",
+        "record_extractor": "$",
         "meta_extractor": null,
         "needs_envelope": null,
         "record_type": "ReportingWebhook",

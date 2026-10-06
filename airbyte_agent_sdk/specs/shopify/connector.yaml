@@ -3419,6 +3419,7 @@ paths:
         example_questions:
           - "Show custom metafields on a product image"
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Shopify returned HTTP 404 for the product image metafields request."
       x-airbyte-record-extractor: $.metafields
       x-airbyte-meta-extractor:
         next_page_url: "@link.next"
@@ -3874,7 +3875,6 @@ paths:
       operationId: BalanceTransactions_List
       x-airbyte-entity: balance_transactions
       x-airbyte-action: list
-      x-airbyte-untested: true
       x-airbyte-record-extractor: $.transactions
       x-airbyte-meta-extractor:
         next_page_url: "@link.next"
@@ -3926,6 +3926,7 @@ paths:
       x-airbyte-entity: disputes
       x-airbyte-action: list
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Shopify returned HTTP 403: merchant approval for read_shopify_payments_disputes is required."
       x-airbyte-record-extractor: $.disputes
       x-airbyte-meta-extractor:
         next_page_url: "@link.next"
@@ -3979,6 +3980,7 @@ paths:
       x-airbyte-entity: disputes
       x-airbyte-action: get
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "No dispute ID is available because disputes.list requires merchant approval for the read_shopify_payments_disputes scope."
       x-airbyte-record-extractor: $.dispute
       tags:
       - Disputes

@@ -784,6 +784,7 @@ paths:
       x-airbyte-entity: result_partitions
       x-airbyte-action: get
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Snowflake returned HTTP 401: the programmatic access token is invalid."
       x-airbyte-path-override:
         path: /api/v2/statements/{statementHandle}
       parameters:

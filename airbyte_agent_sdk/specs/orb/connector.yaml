@@ -408,7 +408,6 @@ paths:
       operationId: listInvoices
       x-airbyte-entity: invoices
       x-airbyte-action: list
-      x-airbyte-untested: true
       x-airbyte-record-extractor: "$.data"
       x-airbyte-meta-extractor:
         next_cursor: "$.pagination_metadata.next_cursor"
@@ -493,7 +492,6 @@ paths:
       operationId: getInvoice
       x-airbyte-entity: invoices
       x-airbyte-action: get
-      x-airbyte-untested: true
       parameters:
         - name: invoice_id
           in: path

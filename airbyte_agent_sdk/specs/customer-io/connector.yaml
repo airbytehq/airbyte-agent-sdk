@@ -16,6 +16,11 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C14
+        reason: "transactional_email.create, transactional_sms.create, transactional_push.create, transactional_inbox_message.create, and broadcast_trigger.create send real messages to recipients; not recorded to avoid live notifications."
+      - criterion: C15
+        reason: "messages.get is untested because messages.list returned HTTP 200 with zero deliveries; transactional_email.create, transactional_sms.create, transactional_push.create, transactional_inbox_message.create, and broadcast_trigger.create send real messages to recipients and were not recorded to avoid live notifications."
   x-airbyte-connector-definition-id: 34f697bc-b989-4eda-b06f-d0f39b88825b
   x-airbyte-replication-version: "0.4.12"
   x-airbyte-replication-compatibility: ">=0.4.12, <1.0.0"
@@ -720,6 +725,7 @@ paths:
       x-airbyte-entity: messages
       x-airbyte-action: get
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "messages.list sibling cassette returned HTTP 200 with zero deliveries; no message_id was available without guessing."
       x-airbyte-record-extractor: $.message
       parameters:
         - name: message_id
@@ -966,7 +972,6 @@ paths:
       operationId: listCollections
       x-airbyte-entity: collections
       x-airbyte-action: list
-      x-airbyte-untested: true
       x-airbyte-record-extractor: $.collections
       x-airbyte-no-pagination: "Returns all collections in a single response without pagination"
       responses:
@@ -989,7 +994,6 @@ paths:
       operationId: createCollection
       x-airbyte-entity: collections
       x-airbyte-action: create
-      x-airbyte-untested: true
       requestBody:
         required: true
         content:
@@ -1016,7 +1020,6 @@ paths:
       operationId: getCollection
       x-airbyte-entity: collections
       x-airbyte-action: get
-      x-airbyte-untested: true
       x-airbyte-record-extractor: $.collection
       parameters:
         - name: collection_id
@@ -1045,7 +1048,6 @@ paths:
       operationId: updateCollection
       x-airbyte-entity: collections
       x-airbyte-action: update
-      x-airbyte-untested: true
       parameters:
         - name: collection_id
           in: path
@@ -1082,7 +1084,6 @@ paths:
       operationId: listReportingWebhooks
       x-airbyte-entity: reporting_webhooks
       x-airbyte-action: list
-      x-airbyte-untested: true
       x-airbyte-record-extractor: $.reporting_webhooks
       x-airbyte-no-pagination: "Returns all reporting webhooks in a single response without pagination"
       responses:
@@ -1105,7 +1106,6 @@ paths:
       operationId: createReportingWebhook
       x-airbyte-entity: reporting_webhooks
       x-airbyte-action: create
-      x-airbyte-untested: true
       requestBody:
         required: true
         content:
@@ -1129,8 +1129,6 @@ paths:
       operationId: getReportingWebhook
       x-airbyte-entity: reporting_webhooks
       x-airbyte-action: get
-      x-airbyte-untested: true
-      x-airbyte-record-extractor: $.reporting_webhook
       parameters:
         - name: webhook_id
           in: path
@@ -1144,10 +1142,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  reporting_webhook:
-                    $ref: "#/components/schemas/ReportingWebhook"
+                $ref: "#/components/schemas/ReportingWebhook"
         "401":
           description: Unauthorized
         "404":
@@ -1158,7 +1153,6 @@ paths:
       operationId: updateReportingWebhook
       x-airbyte-entity: reporting_webhooks
       x-airbyte-action: update
-      x-airbyte-untested: true
       parameters:
         - name: webhook_id
           in: path
@@ -1192,7 +1186,6 @@ paths:
       operationId: listExports
       x-airbyte-entity: exports
       x-airbyte-action: list
-      x-airbyte-untested: true
       x-airbyte-record-extractor: $.exports
       x-airbyte-no-pagination: "Returns all exports in a single response without pagination"
       responses:
@@ -1217,7 +1210,6 @@ paths:
       operationId: createCustomerExport
       x-airbyte-entity: exports
       x-airbyte-action: create
-      x-airbyte-untested: true
       requestBody:
         required: true
         content:
@@ -1244,7 +1236,6 @@ paths:
       operationId: getExport
       x-airbyte-entity: exports
       x-airbyte-action: get
-      x-airbyte-untested: true
       x-airbyte-record-extractor: $.export
       parameters:
         - name: export_id
@@ -1420,6 +1411,7 @@ paths:
       x-airbyte-entity: transactional_email
       x-airbyte-action: create
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Sends real messages to recipients; not recorded to avoid live notifications."
       x-airbyte-ai-hints:
         summary: "Send a one-to-one transactional email (order confirmations, password resets, etc.)"
         when_to_use: "When the user wants to send a single transactional email to a specific person"
@@ -1457,6 +1449,7 @@ paths:
       x-airbyte-entity: transactional_sms
       x-airbyte-action: create
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Sends real messages to recipients; not recorded to avoid live notifications."
       x-airbyte-ai-hints:
         summary: "Send a one-to-one transactional SMS via Twilio"
         when_to_use: "When the user wants to send a single SMS to a specific person"
@@ -1494,6 +1487,7 @@ paths:
       x-airbyte-entity: transactional_push
       x-airbyte-action: create
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Sends real messages to recipients; not recorded to avoid live notifications."
       x-airbyte-ai-hints:
         summary: "Send a one-to-one transactional push notification to mobile or web"
         when_to_use: "When the user wants to send a push notification to a specific person"
@@ -1532,6 +1526,7 @@ paths:
       x-airbyte-entity: transactional_inbox_message
       x-airbyte-action: create
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Sends real messages to recipients; not recorded to avoid live notifications."
       x-airbyte-ai-hints:
         summary: "Send an in-app inbox message to a user's notification center"
         when_to_use: "When the user wants to send an in-app notification via the Customer.io SDK inbox"
@@ -1571,6 +1566,7 @@ paths:
       x-airbyte-entity: broadcast_trigger
       x-airbyte-action: create
       x-airbyte-untested: true
+      x-airbyte-untested-reason: "Sends real messages to recipients; not recorded to avoid live notifications."
       x-airbyte-ai-hints:
         summary: "Trigger an API-triggered broadcast campaign to send messages to a group of people"
         when_to_use: "When the user wants to trigger or fire a broadcast campaign via the API"
