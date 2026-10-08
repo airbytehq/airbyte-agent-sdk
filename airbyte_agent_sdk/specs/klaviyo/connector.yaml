@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Klaviyo API Connector
-  version: 1.0.6
+  version: 1.1.0
   description: |
     Klaviyo is a marketing automation platform that helps businesses build customer relationships
     through personalized email, SMS, and push notifications. This connector provides access to
@@ -724,15 +724,23 @@ info:
                 type:
                 - 'null'
                 - string
-              options_static:
+              datetime:
+                type:
+                - 'null'
+                - string
+              date:
+                type:
+                - 'null'
+                - string
+              throttle_percentage:
+                type:
+                - 'null'
+                - integer
+              options:
                 type:
                 - 'null'
                 - object
                 properties:
-                  datetime:
-                    type:
-                    - 'null'
-                    - string
                   is_local:
                     type:
                     - 'null'
@@ -741,28 +749,6 @@ info:
                     type:
                     - 'null'
                     - boolean
-              options_sto:
-                type:
-                - 'null'
-                - object
-                properties:
-                  date:
-                    type:
-                    - 'null'
-                    - string
-              options_throttled:
-                type:
-                - 'null'
-                - object
-                properties:
-                  datetime:
-                    type:
-                    - 'null'
-                    - string
-                  throttle_percentage:
-                    type:
-                    - 'null'
-                    - integer
           send_time:
             type:
             - 'null'
@@ -1226,7 +1212,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: page[size]
           in: query
           description: Number of results per page (max 100)
@@ -1265,7 +1251,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: id
           in: path
           required: true
@@ -1304,7 +1290,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: page[size]
           in: query
           description: Number of results per page (max 10)
@@ -1343,7 +1329,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: id
           in: path
           required: true
@@ -1382,7 +1368,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: filter
           in: query
           required: true
@@ -1420,7 +1406,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: id
           in: path
           required: true
@@ -1459,7 +1445,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: page[size]
           in: query
           description: Number of results per page (max 100)
@@ -1506,7 +1492,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: filter
           in: query
           required: false
@@ -1543,7 +1529,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: id
           in: path
           required: true
@@ -1582,7 +1568,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: page[size]
           in: query
           description: Number of results per page (max 100)
@@ -1621,7 +1607,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: id
           in: path
           required: true
@@ -1660,7 +1646,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: page[size]
           in: query
           description: Number of results per page (max 10)
@@ -1699,7 +1685,7 @@ paths:
           description: API revision date
           schema:
             type: string
-            default: "2024-10-15"
+            default: "2026-01-15"
         - name: id
           in: path
           required: true

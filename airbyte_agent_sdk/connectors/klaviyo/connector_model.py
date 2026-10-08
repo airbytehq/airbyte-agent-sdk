@@ -42,7 +42,7 @@ from uuid import (
 KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('95e8cffd-b8c4-4039-968e-d32fb4a69bde'),
     name='klaviyo',
-    version='1.0.6',
+    version='1.1.0',
     base_url='https://a.klaviyo.com/api',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -87,7 +87,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -251,7 +251,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -544,7 +544,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -642,7 +642,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -796,7 +796,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -924,7 +924,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -1145,7 +1145,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -1396,7 +1396,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -1505,7 +1505,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -1683,7 +1683,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -1794,7 +1794,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -1981,7 +1981,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -2087,7 +2087,7 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                         'revision': {
                             'type': 'string',
                             'required': True,
-                            'default': '2024-10-15',
+                            'default': '2026-01-15',
                         },
                     },
                     response_schema={
@@ -2846,36 +2846,23 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                                     'method': CacheFieldProperty(
                                         type=['null', 'string'],
                                     ),
-                                    'options_static': CacheFieldProperty(
+                                    'datetime': CacheFieldProperty(
+                                        type=['null', 'string'],
+                                    ),
+                                    'date': CacheFieldProperty(
+                                        type=['null', 'string'],
+                                    ),
+                                    'throttle_percentage': CacheFieldProperty(
+                                        type=['null', 'integer'],
+                                    ),
+                                    'options': CacheFieldProperty(
                                         type=['null', 'object'],
                                         properties={
-                                            'datetime': CacheFieldProperty(
-                                                type=['null', 'string'],
-                                            ),
                                             'is_local': CacheFieldProperty(
                                                 type=['null', 'boolean'],
                                             ),
                                             'send_past_recipients_immediately': CacheFieldProperty(
                                                 type=['null', 'boolean'],
-                                            ),
-                                        },
-                                    ),
-                                    'options_sto': CacheFieldProperty(
-                                        type=['null', 'object'],
-                                        properties={
-                                            'date': CacheFieldProperty(
-                                                type=['null', 'string'],
-                                            ),
-                                        },
-                                    ),
-                                    'options_throttled': CacheFieldProperty(
-                                        type=['null', 'object'],
-                                        properties={
-                                            'datetime': CacheFieldProperty(
-                                                type=['null', 'string'],
-                                            ),
-                                            'throttle_percentage': CacheFieldProperty(
-                                                type=['null', 'integer'],
                                             ),
                                         },
                                     ),
@@ -3452,15 +3439,12 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
             'attributes.send_options.use_smart_sending',
             'attributes.send_strategy',
             'attributes.send_strategy.method',
-            'attributes.send_strategy.options_static',
-            'attributes.send_strategy.options_static.datetime',
-            'attributes.send_strategy.options_static.is_local',
-            'attributes.send_strategy.options_static.send_past_recipients_immediately',
-            'attributes.send_strategy.options_sto',
-            'attributes.send_strategy.options_sto.date',
-            'attributes.send_strategy.options_throttled',
-            'attributes.send_strategy.options_throttled.datetime',
-            'attributes.send_strategy.options_throttled.throttle_percentage',
+            'attributes.send_strategy.datetime',
+            'attributes.send_strategy.date',
+            'attributes.send_strategy.throttle_percentage',
+            'attributes.send_strategy.options',
+            'attributes.send_strategy.options.is_local',
+            'attributes.send_strategy.options.send_past_recipients_immediately',
             'attributes.send_time',
             'attributes.status',
             'attributes.tracking_options',
