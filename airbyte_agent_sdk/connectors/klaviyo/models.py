@@ -96,6 +96,12 @@ class ProfilesList(BaseModel):
     data: list[Profile] | None = Field(default=None)
     links: ProfilesListLinks | None = Field(default=None)
 
+class ListLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
+
 class ListAttributes(BaseModel):
     """List attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -108,12 +114,6 @@ class ListAttributes(BaseModel):
     """Last update timestamp"""
     opt_in_process: str | None | None = Field(default=None, description="Opt-in process type")
     """Opt-in process type"""
-
-class ListLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
 
 class List(BaseModel):
     """A Klaviyo list for organizing profiles"""
@@ -196,12 +196,6 @@ class CampaignsList(BaseModel):
     data: list[Campaign] | None = Field(default=None)
     links: CampaignsListLinks | None = Field(default=None)
 
-class EventLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
-
 class EventAttributes(BaseModel):
     """Event attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -214,6 +208,12 @@ class EventAttributes(BaseModel):
     """Event UUID"""
     event_properties: dict[str, Any] | None | None = Field(default=None, description="Custom event properties")
     """Custom event properties"""
+
+class EventLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
 
 class EventRelationshipsProfileData(BaseModel):
     """Nested schema for EventRelationshipsProfile.data"""
@@ -324,6 +324,12 @@ class MetricsList(BaseModel):
     data: list[Metric] | None = Field(default=None)
     links: MetricsListLinks | None = Field(default=None)
 
+class FlowLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
+
 class FlowAttributes(BaseModel):
     """Flow attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -340,12 +346,6 @@ class FlowAttributes(BaseModel):
     """Last update timestamp"""
     trigger_type: str | None | None = Field(default=None, description="Type of trigger for the flow")
     """Type of trigger for the flow"""
-
-class FlowLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
 
 class Flow(BaseModel):
     """A Klaviyo flow (automated sequence)"""
@@ -371,6 +371,12 @@ class FlowsList(BaseModel):
     data: list[Flow] | None = Field(default=None)
     links: FlowsListLinks | None = Field(default=None)
 
+class TemplateLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
+
 class TemplateAttributes(BaseModel):
     """Template attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -387,12 +393,6 @@ class TemplateAttributes(BaseModel):
     """Creation timestamp"""
     updated: str | None | None = Field(default=None, description="Last update timestamp")
     """Last update timestamp"""
-
-class TemplateLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
 
 class Template(BaseModel):
     """A Klaviyo email template"""

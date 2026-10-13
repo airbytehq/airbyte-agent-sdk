@@ -42,6 +42,7 @@ from airbyte_agent_sdk.connectors.mailchimp import MailchimpConnector
 from airbyte_agent_sdk.connectors.monday import MondayConnector
 from airbyte_agent_sdk.connectors.notion import NotionConnector
 from airbyte_agent_sdk.connectors.orb import OrbConnector
+from airbyte_agent_sdk.connectors.outreach import OutreachConnector
 from airbyte_agent_sdk.connectors.paypal_transaction import PaypalTransactionConnector
 from airbyte_agent_sdk.connectors.pinterest import PinterestConnector
 from airbyte_agent_sdk.connectors.pylon import PylonConnector
@@ -516,6 +517,19 @@ def connect(
     organization_id: str | None = ...,
     auth_config: AirbyteAuthConfig | None = ...,
 ) -> OrbConnector: ...
+
+
+@overload
+def connect(
+    connector_name: Literal["outreach"],
+    *,
+    client_id: str | None = ...,
+    client_secret: str | None = ...,
+    workspace_name: str | None = ...,
+    connector_id: str | None = ...,
+    organization_id: str | None = ...,
+    auth_config: AirbyteAuthConfig | None = ...,
+) -> OutreachConnector: ...
 
 
 @overload
