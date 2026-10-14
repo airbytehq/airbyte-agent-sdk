@@ -36,7 +36,7 @@ from uuid import (
 HarvestConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('fe2b4084-3386-4d3b-9ad6-308f61a6f1e6'),
     name='harvest',
-    version='1.0.5',
+    version='1.0.6',
     base_url='https://api.harvestapp.com/v2',
     auth=AuthConfig(
         options=[
@@ -88,7 +88,6 @@ HarvestConnectorModel: ConnectorModel = ConnectorModel(
                     additional_headers={'Harvest-Account-Id': '{{ account_id }}'},
                     replication_auth_key_constants={'credentials.auth_type': 'Client', 'replication_start_date': "{{ day_delta(-180, '%Y-%m-%dT%H:%M:%SZ') }}"},
                 ),
-                untested=True,
             ),
             AuthOption(
                 scheme_name='bearer',

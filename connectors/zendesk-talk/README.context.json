@@ -3,7 +3,7 @@
   "class_name": "ZendeskTalkConnector",
   "package_name": "airbyte_agent_sdk.connectors.zendesk_talk",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.3",
+  "yaml_version": "1.0.4",
   "api_reference_url": "https://developer.zendesk.com/api-reference/voice/talk-api/introduction/",
   "auth_example": "ZendeskTalkAuthConfig(access_token=\"...\", refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
   "auth_import": ", ZendeskTalkAuthConfig",

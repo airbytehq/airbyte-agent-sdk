@@ -37,7 +37,7 @@ from uuid import (
 ZendeskTalkConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('c8630570-086d-4a40-99ae-ea5b18673071'),
     name='zendesk-talk',
-    version='1.0.3',
+    version='1.0.4',
     base_url='https://{subdomain}.zendesk.com/api/v2/channels/voice',
     auth=AuthConfig(
         options=[
@@ -86,7 +86,6 @@ ZendeskTalkConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     replication_auth_key_constants={'credentials.auth_type': 'oauth2_refresh'},
                 ),
-                untested=True,
             ),
             AuthOption(
                 scheme_name='zendeskAPIToken',

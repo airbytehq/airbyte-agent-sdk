@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Zendesk Talk API Connector
-  version: 1.0.3
+  version: 1.0.4
   description: |
     Connector for the Zendesk Talk (Voice) API. Provides access to phone numbers,
     addresses, greetings, IVR configurations, call data, and agent/account statistics
@@ -1079,7 +1079,6 @@ components:
   securitySchemes:
     zendeskOAuth:
       type: oauth2
-      x-airbyte-untested: true
       description: Zendesk OAuth 2.0 authentication
       flows:
         authorizationCode:
