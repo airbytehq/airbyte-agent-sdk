@@ -44,7 +44,7 @@ from uuid import (
 FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('e7778cfc-e97c-4458-9ecb-b4f2bba8946c'),
     name='facebook-marketing',
-    version='1.2.0',
+    version='1.2.1',
     base_url='https://graph.facebook.com/v25.0',
     auth=AuthConfig(
         options=[
@@ -101,7 +101,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     replication_auth_key_mapping={'credentials.access_token': 'account_key'},
                     replication_auth_key_constants={'credentials.auth_type': 'Service'},
                 ),
-                untested=True,
             ),
         ],
     ),

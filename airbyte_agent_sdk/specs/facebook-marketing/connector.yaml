@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Facebook Marketing API Connector
-  version: 1.2.0
+  version: 1.2.1
   description: 'Facebook Marketing API connector for managing ad campaigns, ad sets, ads, creatives,
 
     and accessing performance insights, pixel configuration, and event quality data.
@@ -1689,9 +1689,6 @@ components:
     facebookServiceAuth:
       type: http
       scheme: bearer
-      # Untested: No test credentials available for Service Account authentication.
-      # All cassettes use facebookOAuth (client credentials) authentication.
-      x-airbyte-untested: true
       description: Facebook Marketing API Service Account authentication using a long-lived access token
       x-airbyte-auth-config:
         title: "Service Account Key Authentication"
