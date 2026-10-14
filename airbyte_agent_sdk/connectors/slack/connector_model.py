@@ -52,7 +52,7 @@ from uuid import (
 SlackConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('c2281cee-86f9-4a86-bb48-d23286b4c7bd'),
     name='slack',
-    version='0.1.22',
+    version='0.1.23',
     base_url='https://slack.com/api',
     auth=AuthConfig(
         options=[
@@ -113,7 +113,6 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     replication_auth_key_constants={'credentials.option_title': 'Default OAuth2.0 authorization'},
                 ),
-                untested=True,
             ),
         ],
     ),
@@ -5694,12 +5693,12 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
         direct=[
             'List all users in my Slack workspace',
             'Show me all public channels',
-            'List members of a public channel',
+            'Show me details for a specific public channel',
             'Show me recent messages in a public channel',
             'Show me thread replies for a recent message',
             'List all channels I have access to',
             'Show me user details for a workspace member',
-            'List channel members for a public channel',
+            'How many members are in each public channel?',
             "Send a message to a channel saying 'Hello team!'",
             'Post a message in the general channel',
             'Update the most recent message in a channel',
@@ -5733,6 +5732,7 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
             'Create a new user in the workspace',
             'Update user profile information',
             'Unarchive a channel',
+            'List members of a public channel',
         ],
     ),
     response_error_check=ResponseErrorCheck(

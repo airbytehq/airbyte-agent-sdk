@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Shopify API Connector
-  version: 0.1.14
+  version: 0.1.15
   description: |
     Shopify is an e-commerce platform that enables businesses to create online stores,
     manage products, process orders, and handle customer relationships. This connector
@@ -11,6 +11,9 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C15
+        reason: "disputes.list and disputes.get are blocked: Shopify returns HTTP 403 \"This action requires merchant approval for read_shopify_payments_disputes scope.\" — a protected scope Shopify must approve for the app, and the test store's token does not have it."
   x-airbyte-connector-definition-id: 9da77001-af33-4bcd-be46-6252bf9342b9
   x-airbyte-replication-version: "4.0.0"
   x-airbyte-replication-compatibility: ">=4.0.0, <5.0.0"
@@ -143,7 +146,7 @@ info:
     cardinality: many_to_one
   - source_entity: metafield_product_images
     target_entity: product_images
-    foreign_key: image_id
+    foreign_key: "metafield[owner_id]"
     target_key: id
     cardinality: many_to_one
   - source_entity: customer_address
@@ -3403,7 +3406,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/MetafieldList"
 
-  /products/{product_id}/images/{image_id}/metafields.json:
+  /metafields.json:product_images:
     get:
       summary: List product image metafields
       description: Returns a list of metafields for a product image
@@ -3415,29 +3418,31 @@ paths:
         when_to_use: "When you need custom fields stored on a product image"
         trigger_phrases: ["product image metafield", "image custom field"]
         freshness: live
-        search_strategy: "Filter by product_id and image_id; identify by namespace and key"
+        search_strategy: "Filter by metafield[owner_id] (the product image ID); identify by namespace and key"
         example_questions:
           - "Show custom metafields on a product image"
-      x-airbyte-untested: true
-      x-airbyte-untested-reason: "Shopify returned HTTP 404 for the product image metafields request."
+      x-airbyte-path-override:
+        path: /metafields.json
       x-airbyte-record-extractor: $.metafields
       x-airbyte-meta-extractor:
         next_page_url: "@link.next"
       tags:
       - Metafields
       parameters:
-      - name: product_id
-        in: path
+      - name: "metafield[owner_id]"
+        in: query
         required: true
-        description: The product ID
+        description: The product image ID whose metafields to list
         schema:
           type: integer
-      - name: image_id
-        in: path
+      - name: "metafield[owner_resource]"
+        in: query
         required: true
-        description: The image ID
+        description: Owner resource type; always product_image
         schema:
-          type: integer
+          type: string
+          enum: [product_image]
+          default: product_image
       - name: limit
         in: query
         description: Maximum number of results to return (max 250)
@@ -5636,7 +5641,6 @@ components:
 
     shopifyOAuth:
       type: oauth2
-      x-airbyte-untested: true
       description: Shopify OAuth 2.0 authentication
       flows:
         authorizationCode:

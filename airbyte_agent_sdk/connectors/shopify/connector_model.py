@@ -40,7 +40,7 @@ from uuid import (
 ShopifyConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9da77001-af33-4bcd-be46-6252bf9342b9'),
     name='shopify',
-    version='0.1.14',
+    version='0.1.15',
     base_url='https://{shop}.myshopify.com/admin/api/2026-07',
     auth=AuthConfig(
         options=[
@@ -97,7 +97,6 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     replication_auth_key_constants={'credentials.auth_method': 'oauth2.0'},
                 ),
-                untested=True,
             ),
         ],
     ),
@@ -15399,16 +15398,28 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
             endpoints={
                 Action.LIST: EndpointDefinition(
                     method='GET',
-                    path='/products/{product_id}/images/{image_id}/metafields.json',
+                    path='/metafields.json:product_images',
+                    path_override=PathOverrideConfig(
+                        path='/metafields.json',
+                    ),
                     action=Action.LIST,
                     description='Returns a list of metafields for a product image',
                     query_params=[
+                        'metafield[owner_id]',
+                        'metafield[owner_resource]',
                         'limit',
                         'since_id',
                         'namespace',
                         'key',
                     ],
                     query_params_schema={
+                        'metafield[owner_id]': {'type': 'integer', 'required': True},
+                        'metafield[owner_resource]': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'product_image',
+                            'enum': ['product_image'],
+                        },
                         'limit': {
                             'type': 'integer',
                             'required': False,
@@ -15419,11 +15430,6 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                         'since_id': {'type': 'integer', 'required': False},
                         'namespace': {'type': 'string', 'required': False},
                         'key': {'type': 'string', 'required': False},
-                    },
-                    path_params=['product_id', 'image_id'],
-                    path_params_schema={
-                        'product_id': {'type': 'integer', 'required': True},
-                        'image_id': {'type': 'integer', 'required': True},
                     },
                     response_schema={
                         'type': 'object',
@@ -15496,15 +15502,13 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.metafields',
                     meta_extractor={'next_page_url': '@link.next'},
-                    untested=True,
-                    untested_reason='Shopify returned HTTP 404 for the product image metafields request.',
                     ai_hints={
                         'summary': 'Custom metafields attached to a product image',
                         'when_to_use': 'When you need custom fields stored on a product image',
                         'trigger_phrases': ['product image metafield', 'image custom field'],
                         'freshness': 'live',
                         'example_questions': ['Show custom metafields on a product image'],
-                        'search_strategy': 'Filter by product_id and image_id; identify by namespace and key',
+                        'search_strategy': 'Filter by metafield[owner_id] (the product image ID); identify by namespace and key',
                     },
                 ),
             },
@@ -15518,7 +15522,7 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                 EntityRelationshipConfig(
                     source_entity='metafield_product_images',
                     target_entity='product_images',
-                    foreign_key='image_id',
+                    foreign_key='metafield[owner_id]',
                     cardinality='many_to_one',
                 ),
             ],

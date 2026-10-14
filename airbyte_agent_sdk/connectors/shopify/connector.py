@@ -432,8 +432,8 @@ class ShopifyConnector:
     """
 
     connector_name = "shopify"
-    connector_version = "0.1.14"
-    sdk_version = "0.1.361"
+    connector_version = "0.1.15"
+    sdk_version = "0.1.362"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -586,7 +586,7 @@ class ShopifyConnector:
         ('metafield_locations', 'list'): {'location_id': 'location_id', 'limit': 'limit', 'since_id': 'since_id', 'namespace': 'namespace', 'key': 'key'},
         ('metafield_product_variants', 'list'): {'variant_id': 'variant_id', 'limit': 'limit', 'since_id': 'since_id', 'namespace': 'namespace', 'key': 'key'},
         ('metafield_smart_collections', 'list'): {'collection_id': 'collection_id', 'limit': 'limit', 'since_id': 'since_id', 'namespace': 'namespace', 'key': 'key'},
-        ('metafield_product_images', 'list'): {'product_id': 'product_id', 'image_id': 'image_id', 'limit': 'limit', 'since_id': 'since_id', 'namespace': 'namespace', 'key': 'key'},
+        ('metafield_product_images', 'list'): {'metafield_owner_id': 'metafield[owner_id]', 'metafield_owner_resource': 'metafield[owner_resource]', 'limit': 'limit', 'since_id': 'since_id', 'namespace': 'namespace', 'key': 'key'},
         ('customer_address', 'list'): {'customer_id': 'customer_id', 'limit': 'limit'},
         ('customer_address', 'get'): {'customer_id': 'customer_id', 'address_id': 'address_id'},
         ('fulfillment_orders', 'list'): {'order_id': 'order_id'},
@@ -7669,8 +7669,8 @@ class MetafieldProductImagesQuery:
 
     async def list(
         self,
-        product_id: str,
-        image_id: str,
+        metafield_owner_id: int,
+        metafield_owner_resource: str,
         limit: int | None = None,
         since_id: int | None = None,
         namespace: str | None = None,
@@ -7681,8 +7681,8 @@ class MetafieldProductImagesQuery:
         Returns a list of metafields for a product image
 
         Args:
-            product_id: The product ID
-            image_id: The image ID
+            metafield_owner_id: The product image ID whose metafields to list
+            metafield_owner_resource: Owner resource type; always product_image
             limit: Maximum number of results to return (max 250)
             since_id: Restrict results to after the specified ID
             namespace: Filter by namespace
@@ -7693,8 +7693,8 @@ class MetafieldProductImagesQuery:
             MetafieldProductImagesListResult
         """
         params = {k: v for k, v in {
-            "product_id": product_id,
-            "image_id": image_id,
+            "metafield[owner_id]": metafield_owner_id,
+            "metafield[owner_resource]": metafield_owner_resource,
             "limit": limit,
             "since_id": since_id,
             "namespace": namespace,

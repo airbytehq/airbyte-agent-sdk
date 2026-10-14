@@ -82,7 +82,7 @@ class OrbConnector:
 
     connector_name = "orb"
     connector_version = "0.1.9"
-    sdk_version = "0.1.361"
+    sdk_version = "0.1.362"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Slack API Connector
-  version: 0.1.22
+  version: 0.1.23
   description: |
     Slack is a business communication platform that offers messaging, file sharing, and integrations
     with other tools. This connector provides read access to users, channels, channel members, channel
@@ -25,12 +25,12 @@ info:
     direct:
       - "List all users in my Slack workspace"
       - "Show me all public channels"
-      - "List members of a public channel"
+      - "Show me details for a specific public channel"
       - "Show me recent messages in a public channel"
       - "Show me thread replies for a recent message"
       - "List all channels I have access to"
       - "Show me user details for a workspace member"
-      - "List channel members for a public channel"
+      - "How many members are in each public channel?"
       - "Send a message to a channel saying 'Hello team!'"
       - "Post a message in the general channel"
       - "Update the most recent message in a channel"
@@ -65,6 +65,7 @@ info:
       - "Create a new user in the workspace"
       - "Update user profile information"
       - "Unarchive a channel"
+      - "List members of a public channel"
   x-airbyte-auth-tooltip:
     "API Token Credentials": |
       Bot tokens always start with `xoxb-`. Slack supports multiple token types, but we require bot tokens. Do not use other token types.
@@ -1784,7 +1785,6 @@ components:
 
     oauth2:
       type: oauth2
-      x-airbyte-untested: true
       description: Slack OAuth 2.0 authentication for workspace installations
       flows:
         authorizationCode:

@@ -666,8 +666,8 @@ class MetafieldSmartCollectionsListParams(TypedDict):
 
 class MetafieldProductImagesListParams(TypedDict):
     """Parameters for metafield_product_images.list operation"""
-    product_id: str
-    image_id: str
+    metafield_owner_id: int
+    metafield_owner_resource: str
     limit: NotRequired[int]
     since_id: NotRequired[int]
     namespace: NotRequired[str]

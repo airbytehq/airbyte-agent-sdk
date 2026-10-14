@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Snapchat Marketing API Connector
-  version: 1.0.5
+  version: 1.0.6
   description: >
     Connector for the Snapchat Marketing API (Ads API). Provides access to
     Snapchat advertising entities including organizations, ad accounts,
@@ -12,6 +12,11 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C16
+        reason: "The smoke-test oauth2 auth config stays skipped: the Snapchat test access token expires hourly and the token endpoint rate-limits (HTTP 429) the hourly smoke refreshes, so the connector has no active smoke auth config."
+      - criterion: C17
+        reason: "No live smoke run is possible while the oauth2 auth config is skipped (hourly-expiring token, 429 on token refresh); cassettes and golden questions cover the operations instead."
   x-airbyte-connector-definition-id: 200330b2-ea62-4d11-ac6d-cfe3e3f8ab2b
   x-airbyte-replication-version: "1.5.46"
   x-airbyte-replication-compatibility: ">=1.5.46, <2.0.0"

@@ -3,7 +3,7 @@
   "class_name": "ShopifyConnector",
   "package_name": "airbyte_agent_sdk.connectors.shopify",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.1.14",
+  "yaml_version": "0.1.15",
   "api_reference_url": "https://shopify.dev/docs/api/admin-rest",
   "auth_example": "ShopifyAuthConfig(api_key=\"...\")",
   "auth_import": ", ShopifyAuthConfig",
@@ -4674,29 +4674,35 @@
       {
         "method_name": "metafield_product_images__list",
         "http_method": "get",
-        "path": "/products/{product_id}/images/{image_id}/metafields.json",
+        "path": "/metafields.json:product_images",
         "entity": "metafield_product_images",
         "action": "list",
         "parameters": [
           {
-            "name": "product_id",
-            "python_name": "product_id",
-            "type": "str",
+            "name": "metafield[owner_id]",
+            "python_name": "metafield_owner_id",
+            "type": "int",
             "schema": {
               "type": "integer"
             },
             "required": true,
-            "description": "The product ID"
+            "description": "The product image ID whose metafields to list",
+            "is_deep_object": false
           },
           {
-            "name": "image_id",
-            "python_name": "image_id",
+            "name": "metafield[owner_resource]",
+            "python_name": "metafield_owner_resource",
             "type": "str",
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "enum": [
+                "product_image"
+              ],
+              "default": "product_image"
             },
             "required": true,
-            "description": "The image ID"
+            "description": "Owner resource type; always product_image",
+            "is_deep_object": false
           },
           {
             "name": "limit",
