@@ -8,6 +8,9 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C7
+        reason: "jiraOAuth requires a 3LO refresh_token, but the test vault has only the OAuth client_id/client_secret; that client's client_credentials token has no accessible resources and api.atlassian.com/ex/jira/<cloudId> returns 403 'The app is not installed on this instance' for the airbyteio test site, so no jiraOAuth cassette can be recorded."
   x-airbyte-connector-definition-id: 68e63de2-bb83-4c7e-93fa-a8a9051e3993
   x-airbyte-replication-version: "6.0.1"
   x-airbyte-replication-compatibility: ">=6.0.1, <7.0.0"

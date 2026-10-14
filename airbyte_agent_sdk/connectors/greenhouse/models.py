@@ -43,6 +43,21 @@ class CandidateWebsiteAddressesItem(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
+class CandidateCustomFields(BaseModel):
+    """Nested schema for Candidate.custom_fields"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None | None = Field(default=None)
+    type_: str | None | None = Field(default=None, alias="type")
+    value: Any | None = Field(default=None)
+
+class CandidateEmailAddressesItem(BaseModel):
+    """Nested schema for Candidate.email_addresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type")
+    value: str | None | None = Field(default=None)
+
 class CandidatePhoneNumbersItem(BaseModel):
     """Nested schema for Candidate.phone_numbers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -56,21 +71,6 @@ class CandidateAddressesItem(BaseModel):
 
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
-
-class CandidateEmailAddressesItem(BaseModel):
-    """Nested schema for Candidate.email_addresses_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: str | None | None = Field(default=None, alias="type")
-    value: str | None | None = Field(default=None)
-
-class CandidateCustomFields(BaseModel):
-    """Nested schema for Candidate.custom_fields"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None | None = Field(default=None)
-    type_: str | None | None = Field(default=None, alias="type")
-    value: Any | None = Field(default=None)
 
 class Candidate(BaseModel):
     """Greenhouse candidate object"""
