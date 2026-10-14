@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Twilio API Connector
-  version: 1.0.5
+  version: 1.0.6
   description: >
     Connector for the Twilio REST API. Provides read and write access to core Twilio resources
     including accounts, calls, messages, recordings, conferences, incoming phone numbers,
@@ -2129,7 +2129,7 @@ components:
           type: ["null", "string"]
           description: The source of the recording
         error_code:
-          type: ["null", "string"]
+          type: ["null", "integer"]
           description: The error code if any
         media_url:
           type: ["null", "string"]

@@ -224,7 +224,7 @@ class Recording(BaseModel):
     status: str | None = Field(default=None)
     channels: int | None = Field(default=None)
     source: str | None = Field(default=None)
-    error_code: str | None = Field(default=None)
+    error_code: int | None = Field(default=None)
     media_url: str | None = Field(default=None)
     uri: str | None = Field(default=None)
     encryption_details: dict[str, Any] | None = Field(default=None)

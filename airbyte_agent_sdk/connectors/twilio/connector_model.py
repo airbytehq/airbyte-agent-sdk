@@ -43,7 +43,7 @@ from uuid import (
 TwilioConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('b9dc6155-672e-42ea-b10d-9f1f1fb95ab1'),
     name='twilio',
-    version='1.0.5',
+    version='1.0.6',
     base_url='https://api.twilio.com/2010-04-01',
     auth=AuthConfig(
         type=AuthType.BASIC,
@@ -2494,7 +2494,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                             'description': 'The source of the recording',
                                         },
                                         'error_code': {
-                                            'type': ['null', 'string'],
+                                            'type': ['null', 'integer'],
                                             'description': 'The error code if any',
                                         },
                                         'media_url': {
@@ -2630,7 +2630,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 'description': 'The source of the recording',
                             },
                             'error_code': {
-                                'type': ['null', 'string'],
+                                'type': ['null', 'integer'],
                                 'description': 'The error code if any',
                             },
                             'media_url': {
@@ -2729,7 +2729,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                         'description': 'The source of the recording',
                     },
                     'error_code': {
-                        'type': ['null', 'string'],
+                        'type': ['null', 'integer'],
                         'description': 'The error code if any',
                     },
                     'media_url': {
