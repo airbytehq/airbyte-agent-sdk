@@ -46,7 +46,7 @@ from uuid import (
 NotionConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('6e00b415-b02e-4160-bf02-58176a0ae687'),
     name='notion',
-    version='0.1.12',
+    version='0.1.13',
     base_url='https://api.notion.com',
     auth=AuthConfig(
         options=[
@@ -10420,13 +10420,12 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
             'Get the details of a specific page by ID',
             'List child blocks of a specific page',
             'Show me comments on a specific page',
-            'What is the schema of a specific data source?',
+            "What properties does the 'Roadmap' data source have?",
             'Who are the bot users in my workspace?',
             "Create a new page titled 'Meeting Notes' under page X",
             'Update the icon of page X to a rocket emoji',
             "Add a paragraph block saying 'Hello World' to page X",
             'Mark the to-do block as completed',
-            "Add a comment to page X saying 'Looks good!'",
             'Archive page X',
             "Update the title of data source X to 'Project Tracker'",
         ],
