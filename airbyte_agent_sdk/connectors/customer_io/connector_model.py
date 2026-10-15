@@ -42,6 +42,7 @@ from uuid import (
 CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('34f697bc-b989-4eda-b06f-d0f39b88825b'),
     name='customer-io',
+    version='1.0.1',
     base_url='https://api.customer.io',
     auth=AuthConfig(
         type=AuthType.BEARER,

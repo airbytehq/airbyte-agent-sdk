@@ -42,7 +42,7 @@ from uuid import (
 IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('7926da90-399e-4f9f-9833-52d8dc3fcb29'),
     name='incident-io',
-    version='1.0.4',
+    version='1.0.5',
     base_url='https://api.incident.io',
     auth=AuthConfig(
         type=AuthType.BEARER,

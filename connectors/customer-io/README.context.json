@@ -3,7 +3,7 @@
   "class_name": "CustomerIoConnector",
   "package_name": "airbyte_agent_sdk.connectors.customer_io",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.0",
+  "yaml_version": "1.0.1",
   "api_reference_url": "https://customer.io/docs/api/app/",
   "auth_example": "CustomerIoAuthConfig(app_api_key=\"...\")",
   "auth_import": ", CustomerIoAuthConfig",

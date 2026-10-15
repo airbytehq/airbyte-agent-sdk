@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Customer.io App API Connector
-  version: 1.0.0
+  version: 1.0.1
   description: >
     Connector for the Customer.io App API, providing read access to campaigns,
     newsletters, segments, messages, activities, sender identities, snippets,
@@ -24,6 +24,8 @@ info:
   x-airbyte-connector-definition-id: 34f697bc-b989-4eda-b06f-d0f39b88825b
   x-airbyte-replication-version: "0.4.12"
   x-airbyte-replication-compatibility: ">=0.4.12, <1.0.0"
+  x-airbyte-skip-suggested-streams:
+    - broadcasts
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Customer.io App API Documentation

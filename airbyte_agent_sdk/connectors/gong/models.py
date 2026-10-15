@@ -51,6 +51,13 @@ class PaginationRecords(BaseModel):
     current_page_number: int | None = Field(default=None, alias="currentPageNumber")
     cursor: str | None = Field(default=None)
 
+class UserSpokenlanguagesItem(BaseModel):
+    """Nested schema for User.spokenLanguages_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    language: str | None = Field(default=None)
+    primary: bool | None = Field(default=None)
+
 class UserSettings(BaseModel):
     """User settings"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -62,13 +69,6 @@ class UserSettings(BaseModel):
     prevent_email_import: bool | None = Field(default=None, alias="preventEmailImport")
     non_recorded_meetings_imported: bool | None = Field(default=None, alias="nonRecordedMeetingsImported")
     gong_connect_enabled: bool | None = Field(default=None, alias="gongConnectEnabled")
-
-class UserSpokenlanguagesItem(BaseModel):
-    """Nested schema for User.spokenLanguages_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    language: str | None = Field(default=None)
-    primary: bool | None = Field(default=None)
 
 class User(BaseModel):
     """User object"""
@@ -198,13 +198,6 @@ class TranscriptsResponse(BaseModel):
     records: PaginationRecords | None = Field(default=None)
     request_id: str | None = Field(default=None, alias="requestId")
 
-class ExtensiveCallMedia(BaseModel):
-    """Media URLs"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    audio_url: str | None = Field(default=None, alias="audioUrl")
-    video_url: str | None = Field(default=None, alias="videoUrl")
-
 class ExtensiveCallMetadata(BaseModel):
     """Call metadata"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -333,6 +326,20 @@ class ExtensiveCallCollaboration(BaseModel):
 
     public_comments: list[dict[str, Any]] | None = Field(default=None, alias="publicComments")
 
+class ExtensiveCallMedia(BaseModel):
+    """Media URLs"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    audio_url: str | None = Field(default=None, alias="audioUrl")
+    video_url: str | None = Field(default=None, alias="videoUrl")
+
+class ExtensiveCallContentTopicsItem(BaseModel):
+    """Nested schema for ExtensiveCallContent.topics_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None = Field(default=None)
+    duration: float | None = Field(default=None)
+
 class ExtensiveCallContentTrackersItem(BaseModel):
     """Nested schema for ExtensiveCallContent.trackers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -342,13 +349,6 @@ class ExtensiveCallContentTrackersItem(BaseModel):
     count: int | None = Field(default=None)
     type_: str | None = Field(default=None, alias="type")
     occurrences: list[dict[str, Any]] | None = Field(default=None)
-
-class ExtensiveCallContentTopicsItem(BaseModel):
-    """Nested schema for ExtensiveCallContent.topics_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None = Field(default=None)
-    duration: float | None = Field(default=None)
 
 class ExtensiveCallContent(BaseModel):
     """Content data including topics and trackers"""
