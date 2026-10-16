@@ -272,6 +272,15 @@ class TasksList(BaseModel):
     previous_page: int | None = Field(default=None)
     links: PaginationLinks | None = Field(default=None)
 
+class TimeEntryClient(BaseModel):
+    """The client associated with the time entry"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None, description="Client ID")
+    """Client ID"""
+    name: str | None | None = Field(default=None, description="Client name")
+    """Client name"""
+
 class TimeEntryUser(BaseModel):
     """The user associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -290,15 +299,6 @@ class TimeEntryInvoice(BaseModel):
     number: str | None | None = Field(default=None, description="Invoice number")
     """Invoice number"""
 
-class TimeEntryTask(BaseModel):
-    """The task associated with the time entry"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None, description="Task ID")
-    """Task ID"""
-    name: str | None | None = Field(default=None, description="Task name")
-    """Task name"""
-
 class TimeEntryProject(BaseModel):
     """The project associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -308,14 +308,14 @@ class TimeEntryProject(BaseModel):
     name: str | None | None = Field(default=None, description="Project name")
     """Project name"""
 
-class TimeEntryClient(BaseModel):
-    """The client associated with the time entry"""
+class TimeEntryTask(BaseModel):
+    """The task associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: int | None | None = Field(default=None, description="Client ID")
-    """Client ID"""
-    name: str | None | None = Field(default=None, description="Client name")
-    """Client name"""
+    id: int | None | None = Field(default=None, description="Task ID")
+    """Task ID"""
+    name: str | None | None = Field(default=None, description="Task name")
+    """Task name"""
 
 class TimeEntry(BaseModel):
     """A Harvest time entry"""
@@ -592,15 +592,6 @@ class RolesList(BaseModel):
     previous_page: int | None = Field(default=None)
     links: PaginationLinks | None = Field(default=None)
 
-class UserAssignmentUser(BaseModel):
-    """The user associated with the assignment"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None, description="User ID")
-    """User ID"""
-    name: str | None | None = Field(default=None, description="User name")
-    """User name"""
-
 class UserAssignmentProject(BaseModel):
     """The project associated with the assignment"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -611,6 +602,15 @@ class UserAssignmentProject(BaseModel):
     """Project name"""
     code: str | None | None = Field(default=None, description="Project code")
     """Project code"""
+
+class UserAssignmentUser(BaseModel):
+    """The user associated with the assignment"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None, description="User ID")
+    """User ID"""
+    name: str | None | None = Field(default=None, description="User name")
+    """User name"""
 
 class UserAssignment(BaseModel):
     """A Harvest user assignment linking a user to a project"""

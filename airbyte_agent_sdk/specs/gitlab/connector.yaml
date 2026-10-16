@@ -3086,7 +3086,6 @@ components:
     gitlabOAuth:
       type: oauth2
       description: OAuth 2.0 authentication
-      x-airbyte-untested: true
       flows:
         authorizationCode:
           authorizationUrl: https://gitlab.com/oauth/authorize

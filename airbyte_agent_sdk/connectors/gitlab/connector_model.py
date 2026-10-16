@@ -109,7 +109,6 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     replication_auth_key_constants={'credentials.auth_type': 'oauth2.0', 'credentials.token_expiry_date': ''},
                 ),
-                untested=True,
             ),
         ],
     ),

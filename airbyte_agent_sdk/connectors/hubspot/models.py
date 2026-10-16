@@ -207,6 +207,23 @@ class TicketsList(BaseModel):
     paging: Paging | None = Field(default=None)
     total: int | None = Field(default=None)
 
+class SchemaAssociationsItem(BaseModel):
+    """Nested schema for Schema.associations_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    from_object_type_id: str | None = Field(default=None, alias="fromObjectTypeId")
+    to_object_type_id: str | None = Field(default=None, alias="toObjectTypeId")
+    name: str | None = Field(default=None)
+    cardinality: str | None = Field(default=None)
+    id: str | None = Field(default=None)
+    inverse_cardinality: str | None = Field(default=None, alias="inverseCardinality")
+    has_user_enforced_max_to_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxToObjectIds")
+    has_user_enforced_max_from_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxFromObjectIds")
+    max_to_object_ids: int | None = Field(default=None, alias="maxToObjectIds")
+    max_from_object_ids: int | None = Field(default=None, alias="maxFromObjectIds")
+    created_at: str | None | None = Field(default=None, alias="createdAt")
+    updated_at: str | None | None = Field(default=None, alias="updatedAt")
+
 class SchemaLabels(BaseModel):
     """Display labels"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -249,23 +266,6 @@ class SchemaPropertiesItem(BaseModel):
     updated_user_id: str | None = Field(default=None, alias="updatedUserId")
     show_currency_symbol: bool | None = Field(default=None, alias="showCurrencySymbol")
     modification_metadata: SchemaPropertiesItemModificationmetadata | None = Field(default=None, alias="modificationMetadata")
-
-class SchemaAssociationsItem(BaseModel):
-    """Nested schema for Schema.associations_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    from_object_type_id: str | None = Field(default=None, alias="fromObjectTypeId")
-    to_object_type_id: str | None = Field(default=None, alias="toObjectTypeId")
-    name: str | None = Field(default=None)
-    cardinality: str | None = Field(default=None)
-    id: str | None = Field(default=None)
-    inverse_cardinality: str | None = Field(default=None, alias="inverseCardinality")
-    has_user_enforced_max_to_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxToObjectIds")
-    has_user_enforced_max_from_object_ids: bool | None = Field(default=None, alias="hasUserEnforcedMaxFromObjectIds")
-    max_to_object_ids: int | None = Field(default=None, alias="maxToObjectIds")
-    max_from_object_ids: int | None = Field(default=None, alias="maxFromObjectIds")
-    created_at: str | None | None = Field(default=None, alias="createdAt")
-    updated_at: str | None | None = Field(default=None, alias="updatedAt")
 
 class Schema(BaseModel):
     """Custom object schema definition"""
@@ -693,16 +693,12 @@ class Note(BaseModel):
     archived_at: str | None = Field(default=None, alias="archivedAt")
     associations: dict[str, Any] | None = Field(default=None)
 
-class NoteCreateParamsProperties(BaseModel):
-    """Note properties to set"""
+class NoteCreateParamsAssociationsItemTo(BaseModel):
+    """Nested schema for NoteCreateParamsAssociationsItem.to"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    hs_note_body: str = Field(description="The body content of the note (supports HTML)")
-    """The body content of the note (supports HTML)"""
-    hs_timestamp: str = Field(description="Required. Timestamp when the note activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one.")
-    """Required. Timestamp when the note activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
-    hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this note")
-    """ID of the HubSpot owner to assign to this note"""
+    id: str | None = Field(default=None, description="ID of the record to associate with")
+    """ID of the record to associate with"""
 
 class NoteCreateParamsAssociationsItemTypesItem(BaseModel):
     """Nested schema for NoteCreateParamsAssociationsItem.types_item"""
@@ -713,19 +709,23 @@ class NoteCreateParamsAssociationsItemTypesItem(BaseModel):
     association_type_id: int | None = Field(default=None, alias="associationTypeId", description="Association type ID (e.g., 202 for note-to-contact, 190 for note-to-company, 214 for note-to-deal, 18 for note-to-ticket)")
     """Association type ID (e.g., 202 for note-to-contact, 190 for note-to-company, 214 for note-to-deal, 18 for note-to-ticket)"""
 
-class NoteCreateParamsAssociationsItemTo(BaseModel):
-    """Nested schema for NoteCreateParamsAssociationsItem.to"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="ID of the record to associate with")
-    """ID of the record to associate with"""
-
 class NoteCreateParamsAssociationsItem(BaseModel):
     """Nested schema for NoteCreateParams.associations_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     to: NoteCreateParamsAssociationsItemTo | None = Field(default=None)
     types: list[NoteCreateParamsAssociationsItemTypesItem] | None = Field(default=None)
+
+class NoteCreateParamsProperties(BaseModel):
+    """Note properties to set"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    hs_note_body: str = Field(description="The body content of the note (supports HTML)")
+    """The body content of the note (supports HTML)"""
+    hs_timestamp: str = Field(description="Required. Timestamp when the note activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one.")
+    """Required. Timestamp when the note activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
+    hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this note")
+    """ID of the HubSpot owner to assign to this note"""
 
 class NoteCreateParams(BaseModel):
     """Parameters for creating a new note"""
@@ -802,6 +802,29 @@ class Call(BaseModel):
     archived_at: str | None = Field(default=None, alias="archivedAt")
     associations: dict[str, Any] | None = Field(default=None)
 
+class CallCreateParamsAssociationsItemTypesItem(BaseModel):
+    """Nested schema for CallCreateParamsAssociationsItem.types_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    association_category: str | None = Field(default=None, alias="associationCategory", description="Association category (e.g., HUBSPOT_DEFINED)")
+    """Association category (e.g., HUBSPOT_DEFINED)"""
+    association_type_id: int | None = Field(default=None, alias="associationTypeId", description="Association type ID (e.g., 194 for call-to-contact, 182 for call-to-company, 206 for call-to-deal, 220 for call-to-ticket)")
+    """Association type ID (e.g., 194 for call-to-contact, 182 for call-to-company, 206 for call-to-deal, 220 for call-to-ticket)"""
+
+class CallCreateParamsAssociationsItemTo(BaseModel):
+    """Nested schema for CallCreateParamsAssociationsItem.to"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None, description="ID of the record to associate with")
+    """ID of the record to associate with"""
+
+class CallCreateParamsAssociationsItem(BaseModel):
+    """Nested schema for CallCreateParams.associations_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    to: CallCreateParamsAssociationsItemTo | None = Field(default=None)
+    types: list[CallCreateParamsAssociationsItemTypesItem] | None = Field(default=None)
+
 class CallCreateParamsProperties(BaseModel):
     """Call properties to set"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -826,29 +849,6 @@ class CallCreateParamsProperties(BaseModel):
     """Required. Timestamp when the call activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
     hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this call")
     """ID of the HubSpot owner to assign to this call"""
-
-class CallCreateParamsAssociationsItemTo(BaseModel):
-    """Nested schema for CallCreateParamsAssociationsItem.to"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="ID of the record to associate with")
-    """ID of the record to associate with"""
-
-class CallCreateParamsAssociationsItemTypesItem(BaseModel):
-    """Nested schema for CallCreateParamsAssociationsItem.types_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    association_category: str | None = Field(default=None, alias="associationCategory", description="Association category (e.g., HUBSPOT_DEFINED)")
-    """Association category (e.g., HUBSPOT_DEFINED)"""
-    association_type_id: int | None = Field(default=None, alias="associationTypeId", description="Association type ID (e.g., 194 for call-to-contact, 182 for call-to-company, 206 for call-to-deal, 220 for call-to-ticket)")
-    """Association type ID (e.g., 194 for call-to-contact, 182 for call-to-company, 206 for call-to-deal, 220 for call-to-ticket)"""
-
-class CallCreateParamsAssociationsItem(BaseModel):
-    """Nested schema for CallCreateParams.associations_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    to: CallCreateParamsAssociationsItemTo | None = Field(default=None)
-    types: list[CallCreateParamsAssociationsItemTypesItem] | None = Field(default=None)
 
 class CallCreateParams(BaseModel):
     """Parameters for creating a new call"""
@@ -1064,29 +1064,6 @@ class Meeting(BaseModel):
     archived_at: str | None = Field(default=None, alias="archivedAt")
     associations: dict[str, Any] | None = Field(default=None)
 
-class MeetingCreateParamsProperties(BaseModel):
-    """Meeting properties to set"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    hs_meeting_title: str = Field(description="Required. Title of the meeting")
-    """Required. Title of the meeting"""
-    hs_meeting_body: str | None = Field(default=None, description="Description or notes about the meeting (supports HTML)")
-    """Description or notes about the meeting (supports HTML)"""
-    hs_meeting_start_time: str | None = Field(default=None, description="Start time of the meeting (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z)")
-    """Start time of the meeting (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z)"""
-    hs_meeting_end_time: str | None = Field(default=None, description="End time of the meeting (ISO 8601 format, e.g. 2025-01-15T11:30:00.000Z)")
-    """End time of the meeting (ISO 8601 format, e.g. 2025-01-15T11:30:00.000Z)"""
-    hs_meeting_location: str | None = Field(default=None, description="Location of the meeting")
-    """Location of the meeting"""
-    hs_meeting_outcome: str | None = Field(default=None, description="Outcome of the meeting (e.g., SCHEDULED, COMPLETED, RESCHEDULED, NO_SHOW, CANCELED)")
-    """Outcome of the meeting (e.g., SCHEDULED, COMPLETED, RESCHEDULED, NO_SHOW, CANCELED)"""
-    hs_internal_meeting_notes: str | None = Field(default=None, description="Internal notes about the meeting")
-    """Internal notes about the meeting"""
-    hs_timestamp: str = Field(description="Required. Timestamp when the meeting activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one.")
-    """Required. Timestamp when the meeting activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
-    hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this meeting")
-    """ID of the HubSpot owner to assign to this meeting"""
-
 class MeetingCreateParamsAssociationsItemTypesItem(BaseModel):
     """Nested schema for MeetingCreateParamsAssociationsItem.types_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1109,6 +1086,29 @@ class MeetingCreateParamsAssociationsItem(BaseModel):
 
     to: MeetingCreateParamsAssociationsItemTo | None = Field(default=None)
     types: list[MeetingCreateParamsAssociationsItemTypesItem] | None = Field(default=None)
+
+class MeetingCreateParamsProperties(BaseModel):
+    """Meeting properties to set"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    hs_meeting_title: str = Field(description="Required. Title of the meeting")
+    """Required. Title of the meeting"""
+    hs_meeting_body: str | None = Field(default=None, description="Description or notes about the meeting (supports HTML)")
+    """Description or notes about the meeting (supports HTML)"""
+    hs_meeting_start_time: str | None = Field(default=None, description="Start time of the meeting (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z)")
+    """Start time of the meeting (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z)"""
+    hs_meeting_end_time: str | None = Field(default=None, description="End time of the meeting (ISO 8601 format, e.g. 2025-01-15T11:30:00.000Z)")
+    """End time of the meeting (ISO 8601 format, e.g. 2025-01-15T11:30:00.000Z)"""
+    hs_meeting_location: str | None = Field(default=None, description="Location of the meeting")
+    """Location of the meeting"""
+    hs_meeting_outcome: str | None = Field(default=None, description="Outcome of the meeting (e.g., SCHEDULED, COMPLETED, RESCHEDULED, NO_SHOW, CANCELED)")
+    """Outcome of the meeting (e.g., SCHEDULED, COMPLETED, RESCHEDULED, NO_SHOW, CANCELED)"""
+    hs_internal_meeting_notes: str | None = Field(default=None, description="Internal notes about the meeting")
+    """Internal notes about the meeting"""
+    hs_timestamp: str = Field(description="Required. Timestamp when the meeting activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one.")
+    """Required. Timestamp when the meeting activity occurred (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
+    hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this meeting")
+    """ID of the HubSpot owner to assign to this meeting"""
 
 class MeetingCreateParams(BaseModel):
     """Parameters for creating a new meeting"""
@@ -1193,27 +1193,6 @@ class Task(BaseModel):
     archived_at: str | None = Field(default=None, alias="archivedAt")
     associations: dict[str, Any] | None = Field(default=None)
 
-class TaskCreateParamsProperties(BaseModel):
-    """Task properties to set"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    hs_task_body: str | None = Field(default=None, description="Description or notes for the task (supports HTML)")
-    """Description or notes for the task (supports HTML)"""
-    hs_task_subject: str = Field(description="Required. Subject or title of the task")
-    """Required. Subject or title of the task"""
-    hs_task_status: str | None = Field(default=None, description="Status of the task (NOT_STARTED, IN_PROGRESS, WAITING, COMPLETED, DEFERRED). Defaults to NOT_STARTED.")
-    """Status of the task (NOT_STARTED, IN_PROGRESS, WAITING, COMPLETED, DEFERRED). Defaults to NOT_STARTED."""
-    hs_task_priority: str | None = Field(default=None, description="Priority of the task (LOW, MEDIUM, HIGH)")
-    """Priority of the task (LOW, MEDIUM, HIGH)"""
-    hs_task_type: str | None = Field(default=None, description="Type of the task (TODO, CALL, EMAIL). Defaults to TODO.")
-    """Type of the task (TODO, CALL, EMAIL). Defaults to TODO."""
-    hs_task_reminders: str | None = Field(default=None, description="Reminder timestamp for the task (epoch milliseconds)")
-    """Reminder timestamp for the task (epoch milliseconds)"""
-    hs_timestamp: str = Field(description="Required. Due date / timestamp for the task (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one.")
-    """Required. Due date / timestamp for the task (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
-    hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this task")
-    """ID of the HubSpot owner to assign to this task"""
-
 class TaskCreateParamsAssociationsItemTypesItem(BaseModel):
     """Nested schema for TaskCreateParamsAssociationsItem.types_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1236,6 +1215,27 @@ class TaskCreateParamsAssociationsItem(BaseModel):
 
     to: TaskCreateParamsAssociationsItemTo | None = Field(default=None)
     types: list[TaskCreateParamsAssociationsItemTypesItem] | None = Field(default=None)
+
+class TaskCreateParamsProperties(BaseModel):
+    """Task properties to set"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    hs_task_body: str | None = Field(default=None, description="Description or notes for the task (supports HTML)")
+    """Description or notes for the task (supports HTML)"""
+    hs_task_subject: str = Field(description="Required. Subject or title of the task")
+    """Required. Subject or title of the task"""
+    hs_task_status: str | None = Field(default=None, description="Status of the task (NOT_STARTED, IN_PROGRESS, WAITING, COMPLETED, DEFERRED). Defaults to NOT_STARTED.")
+    """Status of the task (NOT_STARTED, IN_PROGRESS, WAITING, COMPLETED, DEFERRED). Defaults to NOT_STARTED."""
+    hs_task_priority: str | None = Field(default=None, description="Priority of the task (LOW, MEDIUM, HIGH)")
+    """Priority of the task (LOW, MEDIUM, HIGH)"""
+    hs_task_type: str | None = Field(default=None, description="Type of the task (TODO, CALL, EMAIL). Defaults to TODO.")
+    """Type of the task (TODO, CALL, EMAIL). Defaults to TODO."""
+    hs_task_reminders: str | None = Field(default=None, description="Reminder timestamp for the task (epoch milliseconds)")
+    """Reminder timestamp for the task (epoch milliseconds)"""
+    hs_timestamp: str = Field(description="Required. Due date / timestamp for the task (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one.")
+    """Required. Due date / timestamp for the task (ISO 8601 format, e.g. 2025-01-15T10:30:00.000Z). Use the current time if the user does not specify one."""
+    hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this task")
+    """ID of the HubSpot owner to assign to this task"""
 
 class TaskCreateParams(BaseModel):
     """Parameters for creating a new task"""
