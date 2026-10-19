@@ -36,7 +36,7 @@ from uuid import (
 ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('311a7a27-3fb5-4f7e-8265-5e4afe258b66'),
     name='clickup-api',
-    version='0.1.5',
+    version='0.1.6',
     base_url='https://api.clickup.com',
     auth=AuthConfig(
         type=AuthType.API_KEY,
@@ -2167,6 +2167,10 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                             'items': {'type': 'object'},
                                             'description': 'Task attachments',
                                         },
+                                        'subtasks_count': {
+                                            'type': ['integer', 'null'],
+                                            'description': 'Number of subtasks',
+                                        },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
                                     'x-airbyte-stream-name': 'task',
@@ -2410,6 +2414,10 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                 'type': 'array',
                                 'items': {'type': 'object'},
                                 'description': 'Task attachments',
+                            },
+                            'subtasks_count': {
+                                'type': ['integer', 'null'],
+                                'description': 'Number of subtasks',
                             },
                         },
                         'x-airbyte-entity-name': 'tasks',
@@ -2698,6 +2706,10 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                             'items': {'type': 'object'},
                                             'description': 'Task attachments',
                                         },
+                                        'subtasks_count': {
+                                            'type': ['integer', 'null'],
+                                            'description': 'Number of subtasks',
+                                        },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
                                     'x-airbyte-stream-name': 'task',
@@ -2928,6 +2940,10 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         'type': 'array',
                         'items': {'type': 'object'},
                         'description': 'Task attachments',
+                    },
+                    'subtasks_count': {
+                        'type': ['integer', 'null'],
+                        'description': 'Number of subtasks',
                     },
                 },
                 'x-airbyte-entity-name': 'tasks',
@@ -3281,6 +3297,64 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['string', 'null'],
                                             'description': 'Goal URL',
                                         },
+                                        'date_updated': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Last updated date (Unix ms)',
+                                        },
+                                        'folder_id': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Goal folder ID',
+                                        },
+                                        'folder_name': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Goal folder name',
+                                        },
+                                        'role_subtype': {
+                                            'type': ['integer', 'null'],
+                                            'description': 'Role subtype of the requesting user',
+                                        },
+                                        'group_members': {
+                                            'type': 'array',
+                                            'items': {'type': 'object'},
+                                            'description': 'Goal group members',
+                                        },
+                                        'owners': {
+                                            'type': 'array',
+                                            'items': {
+                                                'type': 'object',
+                                                'properties': {
+                                                    'id': {
+                                                        'type': ['integer', 'null'],
+                                                        'description': 'User ID',
+                                                    },
+                                                    'username': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'Username',
+                                                    },
+                                                    'email': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'User email',
+                                                    },
+                                                    'color': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'User color',
+                                                    },
+                                                    'initials': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'User initials',
+                                                    },
+                                                    'profilePicture': {
+                                                        'type': ['string', 'null'],
+                                                        'description': 'Profile picture URL',
+                                                    },
+                                                },
+                                            },
+                                            'description': 'Goal owners',
+                                        },
+                                        'key_result_count': {
+                                            'type': ['integer', 'null'],
+                                            'description': 'Number of key results',
+                                        },
                                     },
                                     'x-airbyte-entity-name': 'goals',
                                     'x-airbyte-stream-name': 'team_goals',
@@ -3382,6 +3456,64 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         'type': ['string', 'null'],
                                         'description': 'Goal URL',
                                     },
+                                    'date_updated': {
+                                        'type': ['string', 'null'],
+                                        'description': 'Last updated date (Unix ms)',
+                                    },
+                                    'folder_id': {
+                                        'type': ['string', 'null'],
+                                        'description': 'Goal folder ID',
+                                    },
+                                    'folder_name': {
+                                        'type': ['string', 'null'],
+                                        'description': 'Goal folder name',
+                                    },
+                                    'role_subtype': {
+                                        'type': ['integer', 'null'],
+                                        'description': 'Role subtype of the requesting user',
+                                    },
+                                    'group_members': {
+                                        'type': 'array',
+                                        'items': {'type': 'object'},
+                                        'description': 'Goal group members',
+                                    },
+                                    'owners': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'object',
+                                            'properties': {
+                                                'id': {
+                                                    'type': ['integer', 'null'],
+                                                    'description': 'User ID',
+                                                },
+                                                'username': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'Username',
+                                                },
+                                                'email': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'User email',
+                                                },
+                                                'color': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'User color',
+                                                },
+                                                'initials': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'User initials',
+                                                },
+                                                'profilePicture': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'Profile picture URL',
+                                                },
+                                            },
+                                        },
+                                        'description': 'Goal owners',
+                                    },
+                                    'key_result_count': {
+                                        'type': ['integer', 'null'],
+                                        'description': 'Number of key results',
+                                    },
                                 },
                                 'x-airbyte-entity-name': 'goals',
                                 'x-airbyte-stream-name': 'team_goals',
@@ -3402,8 +3534,6 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.goal',
-                    untested=True,
-                    untested_reason='goals.list sibling cassette returned HTTP 200 with zero records; no goal ID was available without guessing.',
                 ),
             },
             entity_schema={
@@ -3466,6 +3596,64 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     'pretty_url': {
                         'type': ['string', 'null'],
                         'description': 'Goal URL',
+                    },
+                    'date_updated': {
+                        'type': ['string', 'null'],
+                        'description': 'Last updated date (Unix ms)',
+                    },
+                    'folder_id': {
+                        'type': ['string', 'null'],
+                        'description': 'Goal folder ID',
+                    },
+                    'folder_name': {
+                        'type': ['string', 'null'],
+                        'description': 'Goal folder name',
+                    },
+                    'role_subtype': {
+                        'type': ['integer', 'null'],
+                        'description': 'Role subtype of the requesting user',
+                    },
+                    'group_members': {
+                        'type': 'array',
+                        'items': {'type': 'object'},
+                        'description': 'Goal group members',
+                    },
+                    'owners': {
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'id': {
+                                    'type': ['integer', 'null'],
+                                    'description': 'User ID',
+                                },
+                                'username': {
+                                    'type': ['string', 'null'],
+                                    'description': 'Username',
+                                },
+                                'email': {
+                                    'type': ['string', 'null'],
+                                    'description': 'User email',
+                                },
+                                'color': {
+                                    'type': ['string', 'null'],
+                                    'description': 'User color',
+                                },
+                                'initials': {
+                                    'type': ['string', 'null'],
+                                    'description': 'User initials',
+                                },
+                                'profilePicture': {
+                                    'type': ['string', 'null'],
+                                    'description': 'Profile picture URL',
+                                },
+                            },
+                        },
+                        'description': 'Goal owners',
+                    },
+                    'key_result_count': {
+                        'type': ['integer', 'null'],
+                        'description': 'Number of key results',
                     },
                 },
                 'x-airbyte-entity-name': 'goals',
@@ -4005,6 +4193,10 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                             'items': {'type': 'object'},
                                             'description': 'Task attachments',
                                         },
+                                        'subtasks_count': {
+                                            'type': ['integer', 'null'],
+                                            'description': 'Number of subtasks',
+                                        },
                                     },
                                     'x-airbyte-entity-name': 'tasks',
                                     'x-airbyte-stream-name': 'task',
@@ -4031,8 +4223,6 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     record_extractor='$.tasks',
                     meta_extractor={'last_page': '$.last_page'},
-                    untested=True,
-                    untested_reason='ClickUp returned HTTP 400: the only test-workspace view is a conversation view, not a task view.',
                 ),
             },
             relationships=[
@@ -4089,7 +4279,33 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                             'type': ['string', 'null'],
                                             'description': 'Workspace ID',
                                         },
-                                        'user': {'type': 'object', 'description': 'User who tracked time'},
+                                        'user': {
+                                            'type': 'object',
+                                            'description': 'User who tracked time',
+                                            'properties': {
+                                                'id': {'type': 'integer', 'description': 'User ID'},
+                                                'username': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'Username',
+                                                },
+                                                'email': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'User email',
+                                                },
+                                                'color': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'User color',
+                                                },
+                                                'initials': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'User initials',
+                                                },
+                                                'profilePicture': {
+                                                    'type': ['string', 'null'],
+                                                    'description': 'Profile picture URL',
+                                                },
+                                            },
+                                        },
                                         'billable': {'type': 'boolean', 'description': 'Whether the entry is billable'},
                                         'start': {'type': 'string', 'description': 'Start time (Unix ms)'},
                                         'end': {
@@ -4109,6 +4325,26 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         'at': {
                                             'type': ['string', 'null'],
                                             'description': 'Last updated (Unix ms)',
+                                        },
+                                        'source': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Source that created the entry',
+                                        },
+                                        'is_locked': {
+                                            'type': ['boolean', 'null'],
+                                            'description': 'Whether the entry is locked',
+                                        },
+                                        'approval_id': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Timesheet approval ID',
+                                        },
+                                        'task_location': {
+                                            'type': ['object', 'null'],
+                                            'description': 'List, folder and space IDs of the task',
+                                        },
+                                        'task_url': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Task URL',
                                         },
                                     },
                                     'x-airbyte-entity-name': 'time_tracking',
@@ -4158,7 +4394,33 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                         'type': ['string', 'null'],
                                         'description': 'Workspace ID',
                                     },
-                                    'user': {'type': 'object', 'description': 'User who tracked time'},
+                                    'user': {
+                                        'type': 'object',
+                                        'description': 'User who tracked time',
+                                        'properties': {
+                                            'id': {'type': 'integer', 'description': 'User ID'},
+                                            'username': {
+                                                'type': ['string', 'null'],
+                                                'description': 'Username',
+                                            },
+                                            'email': {
+                                                'type': ['string', 'null'],
+                                                'description': 'User email',
+                                            },
+                                            'color': {
+                                                'type': ['string', 'null'],
+                                                'description': 'User color',
+                                            },
+                                            'initials': {
+                                                'type': ['string', 'null'],
+                                                'description': 'User initials',
+                                            },
+                                            'profilePicture': {
+                                                'type': ['string', 'null'],
+                                                'description': 'Profile picture URL',
+                                            },
+                                        },
+                                    },
                                     'billable': {'type': 'boolean', 'description': 'Whether the entry is billable'},
                                     'start': {'type': 'string', 'description': 'Start time (Unix ms)'},
                                     'end': {
@@ -4178,6 +4440,26 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                                     'at': {
                                         'type': ['string', 'null'],
                                         'description': 'Last updated (Unix ms)',
+                                    },
+                                    'source': {
+                                        'type': ['string', 'null'],
+                                        'description': 'Source that created the entry',
+                                    },
+                                    'is_locked': {
+                                        'type': ['boolean', 'null'],
+                                        'description': 'Whether the entry is locked',
+                                    },
+                                    'approval_id': {
+                                        'type': ['string', 'null'],
+                                        'description': 'Timesheet approval ID',
+                                    },
+                                    'task_location': {
+                                        'type': ['object', 'null'],
+                                        'description': 'List, folder and space IDs of the task',
+                                    },
+                                    'task_url': {
+                                        'type': ['string', 'null'],
+                                        'description': 'Task URL',
                                     },
                                 },
                                 'x-airbyte-entity-name': 'time_tracking',
@@ -4199,8 +4481,6 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     },
                     record_extractor='$.data',
-                    untested=True,
-                    untested_reason='time_tracking.list sibling cassette returned HTTP 200 with zero records; no time_entry_id was available without guessing.',
                 ),
             },
             entity_schema={
@@ -4215,7 +4495,33 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         'type': ['string', 'null'],
                         'description': 'Workspace ID',
                     },
-                    'user': {'type': 'object', 'description': 'User who tracked time'},
+                    'user': {
+                        'type': 'object',
+                        'description': 'User who tracked time',
+                        'properties': {
+                            'id': {'type': 'integer', 'description': 'User ID'},
+                            'username': {
+                                'type': ['string', 'null'],
+                                'description': 'Username',
+                            },
+                            'email': {
+                                'type': ['string', 'null'],
+                                'description': 'User email',
+                            },
+                            'color': {
+                                'type': ['string', 'null'],
+                                'description': 'User color',
+                            },
+                            'initials': {
+                                'type': ['string', 'null'],
+                                'description': 'User initials',
+                            },
+                            'profilePicture': {
+                                'type': ['string', 'null'],
+                                'description': 'Profile picture URL',
+                            },
+                        },
+                    },
                     'billable': {'type': 'boolean', 'description': 'Whether the entry is billable'},
                     'start': {'type': 'string', 'description': 'Start time (Unix ms)'},
                     'end': {
@@ -4235,6 +4541,26 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                     'at': {
                         'type': ['string', 'null'],
                         'description': 'Last updated (Unix ms)',
+                    },
+                    'source': {
+                        'type': ['string', 'null'],
+                        'description': 'Source that created the entry',
+                    },
+                    'is_locked': {
+                        'type': ['boolean', 'null'],
+                        'description': 'Whether the entry is locked',
+                    },
+                    'approval_id': {
+                        'type': ['string', 'null'],
+                        'description': 'Timesheet approval ID',
+                    },
+                    'task_location': {
+                        'type': ['object', 'null'],
+                        'description': 'List, folder and space IDs of the task',
+                    },
+                    'task_url': {
+                        'type': ['string', 'null'],
+                        'description': 'Task URL',
                     },
                 },
                 'x-airbyte-entity-name': 'time_tracking',

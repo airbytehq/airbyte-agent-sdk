@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: ClickUp API Connector
-  version: 0.1.5
+  version: 0.1.6
   description: |
     ClickUp is a productivity platform that provides project management, task tracking, docs, goals,
     and time tracking for teams. This connector provides access to workspaces, spaces, folders, lists,
@@ -897,8 +897,6 @@ paths:
       operationId: getGoal
       x-airbyte-entity: goals
       x-airbyte-action: get
-      x-airbyte-untested: true
-      x-airbyte-untested-reason: "goals.list sibling cassette returned HTTP 200 with zero records; no goal ID was available without guessing."
       x-airbyte-record-extractor: $.goal
       parameters:
       - name: goal_id
@@ -980,8 +978,6 @@ paths:
       operationId: getViewTasks
       x-airbyte-entity: view_tasks
       x-airbyte-action: list
-      x-airbyte-untested: true
-      x-airbyte-untested-reason: "ClickUp returned HTTP 400: the only test-workspace view is a conversation view, not a task view."
       x-airbyte-record-extractor: $.tasks
       x-airbyte-meta-extractor:
         last_page: $.last_page
@@ -1057,8 +1053,6 @@ paths:
       operationId: getTimeEntry
       x-airbyte-entity: time_tracking
       x-airbyte-action: get
-      x-airbyte-untested: true
-      x-airbyte-untested-reason: "time_tracking.list sibling cassette returned HTTP 200 with zero records; no time_entry_id was available without guessing."
       x-airbyte-record-extractor: $.data
       parameters:
       - name: team_id
@@ -2254,6 +2248,11 @@ components:
           items:
             type: object
           description: Task attachments
+        subtasks_count:
+          type:
+          - integer
+          - "null"
+          description: Number of subtasks
 
     TasksListResponse:
       type: object
@@ -2471,6 +2470,72 @@ components:
           - string
           - "null"
           description: Goal URL
+        date_updated:
+          type:
+          - string
+          - "null"
+          description: Last updated date (Unix ms)
+        folder_id:
+          type:
+          - string
+          - "null"
+          description: Goal folder ID
+        folder_name:
+          type:
+          - string
+          - "null"
+          description: Goal folder name
+        role_subtype:
+          type:
+          - integer
+          - "null"
+          description: Role subtype of the requesting user
+        group_members:
+          type: array
+          items:
+            type: object
+          description: Goal group members
+        owners:
+          type: array
+          items:
+            type: object
+            properties:
+                id:
+                  type:
+                  - integer
+                  - "null"
+                  description: User ID
+                username:
+                  type:
+                  - string
+                  - "null"
+                  description: Username
+                email:
+                  type:
+                  - string
+                  - "null"
+                  description: User email
+                color:
+                  type:
+                  - string
+                  - "null"
+                  description: User color
+                initials:
+                  type:
+                  - string
+                  - "null"
+                  description: User initials
+                profilePicture:
+                  type:
+                  - string
+                  - "null"
+                  description: Profile picture URL
+          description: Goal owners
+        key_result_count:
+          type:
+          - integer
+          - "null"
+          description: Number of key results
 
     GoalsListResponse:
       type: object
@@ -2645,6 +2710,35 @@ components:
         user:
           type: object
           description: User who tracked time
+          properties:
+            id:
+              type: integer
+              description: User ID
+            username:
+              type:
+              - string
+              - "null"
+              description: Username
+            email:
+              type:
+              - string
+              - "null"
+              description: User email
+            color:
+              type:
+              - string
+              - "null"
+              description: User color
+            initials:
+              type:
+              - string
+              - "null"
+              description: User initials
+            profilePicture:
+              type:
+              - string
+              - "null"
+              description: Profile picture URL
         billable:
           type: boolean
           description: Whether the entry is billable
@@ -2674,6 +2768,31 @@ components:
           - string
           - "null"
           description: Last updated (Unix ms)
+        source:
+          type:
+          - string
+          - "null"
+          description: Source that created the entry
+        is_locked:
+          type:
+          - boolean
+          - "null"
+          description: Whether the entry is locked
+        approval_id:
+          type:
+          - string
+          - "null"
+          description: Timesheet approval ID
+        task_location:
+          type:
+          - object
+          - "null"
+          description: List, folder and space IDs of the task
+        task_url:
+          type:
+          - string
+          - "null"
+          description: Task URL
 
     TimeEntriesListResponse:
       type: object
