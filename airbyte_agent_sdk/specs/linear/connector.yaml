@@ -1901,7 +1901,6 @@ components:
   securitySchemes:
     linearOAuth:
       type: oauth2
-      x-airbyte-untested: true
       description: Linear OAuth 2.0 authentication with automatic token refresh
       flows:
         authorizationCode:

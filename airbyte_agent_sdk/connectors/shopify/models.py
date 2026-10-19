@@ -133,6 +133,55 @@ class OrderAddress(BaseModel):
     latitude: float | None = Field(default=None)
     longitude: float | None = Field(default=None)
 
+class Transaction(BaseModel):
+    """An order transaction"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int
+    order_id: int | None = Field(default=None)
+    kind: str | None = Field(default=None)
+    gateway: str | None = Field(default=None)
+    status: str | None = Field(default=None)
+    message: str | None = Field(default=None)
+    created_at: str | None = Field(default=None)
+    test: bool | None = Field(default=None)
+    authorization: str | None = Field(default=None)
+    location_id: int | None = Field(default=None)
+    user_id: int | None = Field(default=None)
+    parent_id: int | None = Field(default=None)
+    processed_at: str | None = Field(default=None)
+    device_id: int | None = Field(default=None)
+    error_code: str | None = Field(default=None)
+    source_name: str | None = Field(default=None)
+    receipt: dict[str, Any] | None = Field(default=None)
+    currency_exchange_adjustment: dict[str, Any] | None = Field(default=None)
+    amount: str | None = Field(default=None)
+    currency: str | None = Field(default=None)
+    payment_id: str | None = Field(default=None)
+    total_unsettled_set: dict[str, Any] | None = Field(default=None)
+    manual_payment_gateway: bool | None = Field(default=None)
+    admin_graphql_api_id: str | None = Field(default=None)
+
+class Refund(BaseModel):
+    """An order refund"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int
+    order_id: int | None = Field(default=None)
+    created_at: str | None = Field(default=None)
+    note: str | None = Field(default=None)
+    user_id: int | None = Field(default=None)
+    processed_at: str | None = Field(default=None)
+    restock: bool | None = Field(default=None)
+    duties: list[dict[str, Any]] | None = Field(default=None)
+    total_duties_set: dict[str, Any] | None = Field(default=None)
+    return_: dict[str, Any] | None = Field(default=None, alias="return")
+    refund_line_items: list[dict[str, Any]] | None = Field(default=None)
+    transactions: list[Transaction] | None = Field(default=None)
+    order_adjustments: list[dict[str, Any]] | None = Field(default=None)
+    admin_graphql_api_id: str | None = Field(default=None)
+    refund_shipping_lines: list[dict[str, Any]] | None = Field(default=None)
+
 class LineItem(BaseModel):
     """LineItem type definition"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -189,55 +238,6 @@ class Fulfillment(BaseModel):
     receipt: dict[str, Any] | None = Field(default=None)
     name: str | None = Field(default=None)
     admin_graphql_api_id: str | None = Field(default=None)
-
-class Transaction(BaseModel):
-    """An order transaction"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int
-    order_id: int | None = Field(default=None)
-    kind: str | None = Field(default=None)
-    gateway: str | None = Field(default=None)
-    status: str | None = Field(default=None)
-    message: str | None = Field(default=None)
-    created_at: str | None = Field(default=None)
-    test: bool | None = Field(default=None)
-    authorization: str | None = Field(default=None)
-    location_id: int | None = Field(default=None)
-    user_id: int | None = Field(default=None)
-    parent_id: int | None = Field(default=None)
-    processed_at: str | None = Field(default=None)
-    device_id: int | None = Field(default=None)
-    error_code: str | None = Field(default=None)
-    source_name: str | None = Field(default=None)
-    receipt: dict[str, Any] | None = Field(default=None)
-    currency_exchange_adjustment: dict[str, Any] | None = Field(default=None)
-    amount: str | None = Field(default=None)
-    currency: str | None = Field(default=None)
-    payment_id: str | None = Field(default=None)
-    total_unsettled_set: dict[str, Any] | None = Field(default=None)
-    manual_payment_gateway: bool | None = Field(default=None)
-    admin_graphql_api_id: str | None = Field(default=None)
-
-class Refund(BaseModel):
-    """An order refund"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int
-    order_id: int | None = Field(default=None)
-    created_at: str | None = Field(default=None)
-    note: str | None = Field(default=None)
-    user_id: int | None = Field(default=None)
-    processed_at: str | None = Field(default=None)
-    restock: bool | None = Field(default=None)
-    duties: list[dict[str, Any]] | None = Field(default=None)
-    total_duties_set: dict[str, Any] | None = Field(default=None)
-    return_: dict[str, Any] | None = Field(default=None, alias="return")
-    refund_line_items: list[dict[str, Any]] | None = Field(default=None)
-    transactions: list[Transaction] | None = Field(default=None)
-    order_adjustments: list[dict[str, Any]] | None = Field(default=None)
-    admin_graphql_api_id: str | None = Field(default=None)
-    refund_shipping_lines: list[dict[str, Any]] | None = Field(default=None)
 
 class Order(BaseModel):
     """A Shopify order"""
@@ -1162,14 +1162,6 @@ class CustomerDeleteResponse(BaseModel):
 
     data: CustomerDeleteResponseData | None = Field(default=None)
 
-class ProductCreateParamsMediaItem(BaseModel):
-    """Nested schema for ProductCreateParams.media_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    original_source: str | None = Field(default=None, alias="originalSource", description="URL of the media")
-    """URL of the media"""
-    media_content_type: str | None = Field(default=None, alias="mediaContentType")
-
 class ProductCreateParamsProduct(BaseModel):
     """ProductCreateInput object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1186,6 +1178,14 @@ class ProductCreateParamsProduct(BaseModel):
     """Tags for the product"""
     status: str | None = Field(default=None, description="Product status (ACTIVE, ARCHIVED, DRAFT)")
     """Product status (ACTIVE, ARCHIVED, DRAFT)"""
+
+class ProductCreateParamsMediaItem(BaseModel):
+    """Nested schema for ProductCreateParams.media_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    original_source: str | None = Field(default=None, alias="originalSource", description="URL of the media")
+    """URL of the media"""
+    media_content_type: str | None = Field(default=None, alias="mediaContentType")
 
 class ProductCreateParams(BaseModel):
     """Parameters for creating a product.
@@ -1382,6 +1382,12 @@ class ProductVariantsDeleteResponse(BaseModel):
 
     data: ProductVariantsDeleteResponseData | None = Field(default=None)
 
+class OrderCreateParamsOptions(BaseModel):
+    """OrderCreateOptionsInput"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    inventory_behaviour: str | None = Field(default=None, alias="inventoryBehaviour")
+
 class OrderCreateParamsOrderShippingaddress(BaseModel):
     """Nested schema for OrderCreateParamsOrder.shippingAddress"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1434,12 +1440,6 @@ class OrderCreateParamsOrder(BaseModel):
     tags: list[str] | None = Field(default=None, description="Order tags")
     """Order tags"""
     shipping_address: OrderCreateParamsOrderShippingaddress | None = Field(default=None, alias="shippingAddress")
-
-class OrderCreateParamsOptions(BaseModel):
-    """OrderCreateOptionsInput"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    inventory_behaviour: str | None = Field(default=None, alias="inventoryBehaviour")
 
 class OrderCreateParams(BaseModel):
     """Parameters for creating an order.

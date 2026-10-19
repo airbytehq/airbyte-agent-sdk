@@ -98,7 +98,6 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     replication_auth_key_constants={'credentials.auth_type': 'OAuth2.0'},
                 ),
-                untested=True,
             ),
             AuthOption(
                 scheme_name='apiKeyAuth',

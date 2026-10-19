@@ -272,6 +272,15 @@ class TasksList(BaseModel):
     previous_page: int | None = Field(default=None)
     links: PaginationLinks | None = Field(default=None)
 
+class TimeEntryTask(BaseModel):
+    """The task associated with the time entry"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None, description="Task ID")
+    """Task ID"""
+    name: str | None | None = Field(default=None, description="Task name")
+    """Task name"""
+
 class TimeEntryClient(BaseModel):
     """The client associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -280,6 +289,15 @@ class TimeEntryClient(BaseModel):
     """Client ID"""
     name: str | None | None = Field(default=None, description="Client name")
     """Client name"""
+
+class TimeEntryUser(BaseModel):
+    """The user associated with the time entry"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None, description="User ID")
+    """User ID"""
+    name: str | None | None = Field(default=None, description="User name")
+    """User name"""
 
 class TimeEntryInvoice(BaseModel):
     """The invoice associated with the time entry"""
@@ -298,24 +316,6 @@ class TimeEntryProject(BaseModel):
     """Project ID"""
     name: str | None | None = Field(default=None, description="Project name")
     """Project name"""
-
-class TimeEntryUser(BaseModel):
-    """The user associated with the time entry"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None, description="User ID")
-    """User ID"""
-    name: str | None | None = Field(default=None, description="User name")
-    """User name"""
-
-class TimeEntryTask(BaseModel):
-    """The task associated with the time entry"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None, description="Task ID")
-    """Task ID"""
-    name: str | None | None = Field(default=None, description="Task name")
-    """Task name"""
 
 class TimeEntry(BaseModel):
     """A Harvest time entry"""

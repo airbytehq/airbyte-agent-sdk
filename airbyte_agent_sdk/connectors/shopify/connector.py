@@ -433,7 +433,7 @@ class ShopifyConnector:
 
     connector_name = "shopify"
     connector_version = "0.1.15"
-    sdk_version = "0.1.369"
+    sdk_version = "0.1.370"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
