@@ -1162,14 +1162,6 @@ class CustomerDeleteResponse(BaseModel):
 
     data: CustomerDeleteResponseData | None = Field(default=None)
 
-class ProductCreateParamsMediaItem(BaseModel):
-    """Nested schema for ProductCreateParams.media_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    original_source: str | None = Field(default=None, alias="originalSource", description="URL of the media")
-    """URL of the media"""
-    media_content_type: str | None = Field(default=None, alias="mediaContentType")
-
 class ProductCreateParamsProduct(BaseModel):
     """ProductCreateInput object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1186,6 +1178,14 @@ class ProductCreateParamsProduct(BaseModel):
     """Tags for the product"""
     status: str | None = Field(default=None, description="Product status (ACTIVE, ARCHIVED, DRAFT)")
     """Product status (ACTIVE, ARCHIVED, DRAFT)"""
+
+class ProductCreateParamsMediaItem(BaseModel):
+    """Nested schema for ProductCreateParams.media_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    original_source: str | None = Field(default=None, alias="originalSource", description="URL of the media")
+    """URL of the media"""
+    media_content_type: str | None = Field(default=None, alias="mediaContentType")
 
 class ProductCreateParams(BaseModel):
     """Parameters for creating a product.
@@ -1896,13 +1896,6 @@ class InventoryAdjustQuantitiesResponse(BaseModel):
 
     data: InventoryAdjustQuantitiesResponseData | None = Field(default=None)
 
-class DiscountCodeCreateParamsBasiccodediscountCustomergetsItems(BaseModel):
-    """Which items the discount applies to"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    all: bool | None = Field(default=None, description="Set to true for all items")
-    """Set to true for all items"""
-
 class DiscountCodeCreateParamsBasiccodediscountCustomergetsValueDiscountamount(BaseModel):
     """Nested schema for DiscountCodeCreateParamsBasiccodediscountCustomergetsValue.discountAmount"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1917,6 +1910,13 @@ class DiscountCodeCreateParamsBasiccodediscountCustomergetsValue(BaseModel):
     percentage: float | None = Field(default=None, description="Percentage discount (e.g. 0.1 for 10%)")
     """Percentage discount (e.g. 0.1 for 10%)"""
     discount_amount: DiscountCodeCreateParamsBasiccodediscountCustomergetsValueDiscountamount | None = Field(default=None, alias="discountAmount")
+
+class DiscountCodeCreateParamsBasiccodediscountCustomergetsItems(BaseModel):
+    """Which items the discount applies to"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    all: bool | None = Field(default=None, description="Set to true for all items")
+    """Set to true for all items"""
 
 class DiscountCodeCreateParamsBasiccodediscountCustomergets(BaseModel):
     """What the customer gets from this discount"""

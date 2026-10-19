@@ -42,7 +42,7 @@ from uuid import (
 GranolaConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9023923c-002f-4131-9554-3ebdf56540a4'),
     name='granola',
-    version='1.0.7',
+    version='1.0.8',
     base_url='https://public-api.granola.ai',
     auth=AuthConfig(
         type=AuthType.BEARER,

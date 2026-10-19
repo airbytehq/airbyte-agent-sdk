@@ -36,7 +36,7 @@ from uuid import (
 GmailConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('f7833dac-fc18-4feb-a2a9-94b22001edc6'),
     name='gmail',
-    version='0.2.0',
+    version='0.2.1',
     base_url='https://gmail.googleapis.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,

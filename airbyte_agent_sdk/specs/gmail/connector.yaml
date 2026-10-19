@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Gmail API Connector
-  version: 0.2.0
+  version: 0.2.1
   description: |
     Gmail is Google's email service that provides email sending, receiving, and organization
     capabilities. This connector provides access to messages, threads, labels, drafts, and
@@ -21,6 +21,8 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+  x-airbyte-skip-suggested-streams:
+    - labels_details
   x-airbyte-skip-auth-methods:
     - service_account
   x-airbyte-context-store:

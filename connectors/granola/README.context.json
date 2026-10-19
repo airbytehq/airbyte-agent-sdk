@@ -3,7 +3,7 @@
   "class_name": "GranolaConnector",
   "package_name": "airbyte_agent_sdk.connectors.granola",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.7",
+  "yaml_version": "1.0.8",
   "api_reference_url": "https://docs.granola.ai/introduction",
   "auth_example": "GranolaAuthConfig(api_key=\"...\")",
   "auth_import": ", GranolaAuthConfig",

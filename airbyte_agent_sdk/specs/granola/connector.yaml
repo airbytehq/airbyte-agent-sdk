@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Granola API Connector
-  version: 1.0.7
+  version: 1.0.8
   description: |
     The Granola API connector provides read access to meeting notes from Granola,
     an AI-powered meeting notes platform. This connector integrates with the Granola
@@ -12,6 +12,11 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C16
+        reason: "The granola smoke auth config is skipped because Granola test API keys are short-lived; the stored key returns 401 \"API key has expired\" on every smoke run (including backend-acceptance-tests), so no active auth config can be wired. The connector was checked manually."
+      - criterion: C17
+        reason: "Granola test API keys are short-lived and expire before the next scheduled smoke runs (live smoke fails with 401 \"API key has expired\"); the connector was checked manually and recorded cassettes plus golden questions cover its operations."
   x-airbyte-connector-definition-id: 9023923c-002f-4131-9554-3ebdf56540a4
   x-airbyte-replication-version: "0.3.0"
   x-airbyte-replication-compatibility: ">=0.3.0, <1.0.0"

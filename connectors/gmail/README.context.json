@@ -3,7 +3,7 @@
   "class_name": "GmailConnector",
   "package_name": "airbyte_agent_sdk.connectors.gmail",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.2.0",
+  "yaml_version": "0.2.1",
   "api_reference_url": "https://developers.google.com/gmail/api/reference/rest",
   "auth_example": "GmailAuthConfig(access_token=\"...\", refresh_token=\"...\", client_id=\"...\", client_secret=\"...\")",
   "auth_import": ", GmailAuthConfig",
