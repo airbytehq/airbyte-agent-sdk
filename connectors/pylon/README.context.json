@@ -3,7 +3,7 @@
   "class_name": "PylonConnector",
   "package_name": "airbyte_agent_sdk.connectors.pylon",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.1.10",
+  "yaml_version": "0.1.11",
   "api_reference_url": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference",
   "auth_example": "PylonAuthConfig(api_token=\"...\")",
   "auth_import": ", PylonAuthConfig",

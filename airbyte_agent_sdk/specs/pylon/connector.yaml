@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Pylon API Connector
-  version: 0.1.10
+  version: 0.1.11
   description: |
     Pylon is a customer support platform that helps B2B companies manage customer interactions
     across Slack, email, chat widgets, and other channels. This connector provides access to
@@ -12,6 +12,11 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C16
+        reason: "The Pylon test organization is suspended: every API call with the stored test api_token returns HTTP 401 organization_suspended (\"Organization is suspended!\"), so the connector cannot be wired into the smoke suite with a working auth config."
+      - criterion: C17
+        reason: "No live smoke run is possible while the Pylon test organization is suspended (HTTP 401 organization_suspended); recorded cassettes and golden questions cover the operations instead."
   x-airbyte-connector-definition-id: f2e53e88-3c6b-4e5a-b7c2-a1d9c5e8f4b6
   x-airbyte-replication-version: "0.0.20"
   x-airbyte-replication-compatibility: ">=0.0.20, <1.0.0"

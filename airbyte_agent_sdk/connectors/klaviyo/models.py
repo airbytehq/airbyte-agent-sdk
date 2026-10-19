@@ -209,19 +209,6 @@ class EventAttributes(BaseModel):
     event_properties: dict[str, Any] | None | None = Field(default=None, description="Custom event properties")
     """Custom event properties"""
 
-class EventRelationshipsProfileData(BaseModel):
-    """Nested schema for EventRelationshipsProfile.data"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: str | None | None = Field(default=None, alias="type")
-    id: str | None | None = Field(default=None)
-
-class EventRelationshipsProfile(BaseModel):
-    """Nested schema for EventRelationships.profile"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    data: EventRelationshipsProfileData | None | None = Field(default=None)
-
 class EventRelationshipsMetricData(BaseModel):
     """Nested schema for EventRelationshipsMetric.data"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -234,6 +221,19 @@ class EventRelationshipsMetric(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     data: EventRelationshipsMetricData | None | None = Field(default=None)
+
+class EventRelationshipsProfileData(BaseModel):
+    """Nested schema for EventRelationshipsProfile.data"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type")
+    id: str | None | None = Field(default=None)
+
+class EventRelationshipsProfile(BaseModel):
+    """Nested schema for EventRelationships.profile"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    data: EventRelationshipsProfileData | None | None = Field(default=None)
 
 class EventRelationships(BaseModel):
     """Related resources"""
@@ -273,12 +273,6 @@ class EventsList(BaseModel):
     data: list[Event] | None = Field(default=None)
     links: EventsListLinks | None = Field(default=None)
 
-class MetricLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
-
 class MetricAttributesIntegration(BaseModel):
     """Integration information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -299,6 +293,12 @@ class MetricAttributes(BaseModel):
     """Last update timestamp"""
     integration: MetricAttributesIntegration | None | None = Field(default=None, description="Integration information")
     """Integration information"""
+
+class MetricLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
 
 class Metric(BaseModel):
     """A Klaviyo metric (event type)"""

@@ -30,6 +30,20 @@ class GreenhouseAuthConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
+class CandidateEmailAddressesItem(BaseModel):
+    """Nested schema for Candidate.email_addresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type")
+    value: str | None | None = Field(default=None)
+
+class CandidateWebsiteAddressesItem(BaseModel):
+    """Nested schema for Candidate.website_addresses_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None | None = Field(default=None, alias="type")
+    value: str | None | None = Field(default=None)
+
 class CandidatePhoneNumbersItem(BaseModel):
     """Nested schema for Candidate.phone_numbers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -37,18 +51,10 @@ class CandidatePhoneNumbersItem(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
-class CandidateAddressesItem(BaseModel):
-    """Nested schema for Candidate.addresses_item"""
+class CandidateSocialMediaAddressesItem(BaseModel):
+    """Nested schema for Candidate.social_media_addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type_: str | None | None = Field(default=None, alias="type")
-    value: str | None | None = Field(default=None)
-
-class CandidateEmailAddressesItem(BaseModel):
-    """Nested schema for Candidate.email_addresses_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
 class CandidateCustomFields(BaseModel):
@@ -59,14 +65,8 @@ class CandidateCustomFields(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: Any | None = Field(default=None)
 
-class CandidateSocialMediaAddressesItem(BaseModel):
-    """Nested schema for Candidate.social_media_addresses_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    value: str | None | None = Field(default=None)
-
-class CandidateWebsiteAddressesItem(BaseModel):
-    """Nested schema for Candidate.website_addresses_item"""
+class CandidateAddressesItem(BaseModel):
+    """Nested schema for Candidate.addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     type_: str | None | None = Field(default=None, alias="type")
