@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Shopify API Connector
-  version: 0.1.15
+  version: 0.1.16
   description: |
     Shopify is an e-commerce platform that enables businesses to create online stores,
     manage products, process orders, and handle customer relationships. This connector
@@ -4858,9 +4858,10 @@ paths:
         required: true
         x-airbyte-body-type:
           type: graphql
-          query: "mutation inventorySetQuantities($input: InventorySetQuantitiesInput!) { inventorySetQuantities(input: $input) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }"
+          query: "mutation inventorySetQuantities($input: InventorySetQuantitiesInput!, $idempotencyKey: String!) { inventorySetQuantities(input: $input) @idempotent(key: $idempotencyKey) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }"
           variables:
             input: "{{ input }}"
+            idempotencyKey: "{{ idempotencyKey }}"
         content:
           application/json:
             schema:
@@ -4898,9 +4899,10 @@ paths:
         required: true
         x-airbyte-body-type:
           type: graphql
-          query: "mutation inventoryAdjustQuantities($input: InventoryAdjustQuantitiesInput!) { inventoryAdjustQuantities(input: $input) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }"
+          query: "mutation inventoryAdjustQuantities($input: InventoryAdjustQuantitiesInput!, $idempotencyKey: String!) { inventoryAdjustQuantities(input: $input) @idempotent(key: $idempotencyKey) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }"
           variables:
             input: "{{ input }}"
+            idempotencyKey: "{{ idempotencyKey }}"
         content:
           application/json:
             schema:
@@ -9186,6 +9188,7 @@ components:
         Requires a reason and reference document URI.
       required:
       - input
+      - idempotencyKey
       properties:
         input:
           type: object
@@ -9212,6 +9215,7 @@ components:
                 - inventoryItemId
                 - locationId
                 - quantity
+                - changeFromQuantity
                 properties:
                   inventoryItemId:
                     type: string
@@ -9222,12 +9226,19 @@ components:
                   quantity:
                     type: integer
                     description: Absolute quantity to set
+                  changeFromQuantity:
+                    type: ["null", "integer"]
+                    description: "The quantity currently at the location, for a compare-and-set check; pass null to skip the check"
+        idempotencyKey:
+          type: string
+          description: "Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation"
 
     InventoryAdjustQuantitiesParams:
       type: object
       description: Parameters for adjusting inventory quantities relatively (add/subtract).
       required:
       - input
+      - idempotencyKey
       properties:
         input:
           type: object
@@ -9254,6 +9265,7 @@ components:
                 - inventoryItemId
                 - locationId
                 - delta
+                - changeFromQuantity
                 properties:
                   inventoryItemId:
                     type: string
@@ -9264,6 +9276,12 @@ components:
                   delta:
                     type: integer
                     description: "Amount to adjust (positive to add, negative to subtract)"
+                  changeFromQuantity:
+                    type: ["null", "integer"]
+                    description: "The quantity currently at the location, for a compare-and-set check; pass null to skip the check"
+        idempotencyKey:
+          type: string
+          description: "Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation"
 
     InventoryAdjustmentGroup:
       type: object

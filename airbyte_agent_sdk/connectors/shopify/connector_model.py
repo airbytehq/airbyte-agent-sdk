@@ -40,7 +40,7 @@ from uuid import (
 ShopifyConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9da77001-af33-4bcd-be46-6252bf9342b9'),
     name='shopify',
-    version='0.1.15',
+    version='0.1.16',
     base_url='https://{shop}.myshopify.com/admin/api/2026-07',
     auth=AuthConfig(
         options=[
@@ -18971,8 +18971,8 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'mutation inventorySetQuantities($input: InventorySetQuantitiesInput!) { inventorySetQuantities(input: $input) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }',
-                        'variables': {'input': '{{ input }}'},
+                        'query': 'mutation inventorySetQuantities($input: InventorySetQuantitiesInput!, $idempotencyKey: String!) { inventorySetQuantities(input: $input) @idempotent(key: $idempotencyKey) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }',
+                        'variables': {'input': '{{ input }}', 'idempotencyKey': '{{ idempotencyKey }}'},
                     },
                     record_extractor='$.data.inventorySetQuantities',
                     ai_hints={
@@ -19065,8 +19065,8 @@ ShopifyConnectorModel: ConnectorModel = ConnectorModel(
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'mutation inventoryAdjustQuantities($input: InventoryAdjustQuantitiesInput!) { inventoryAdjustQuantities(input: $input) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }',
-                        'variables': {'input': '{{ input }}'},
+                        'query': 'mutation inventoryAdjustQuantities($input: InventoryAdjustQuantitiesInput!, $idempotencyKey: String!) { inventoryAdjustQuantities(input: $input) @idempotent(key: $idempotencyKey) { userErrors { field message code } inventoryAdjustmentGroup { reason referenceDocumentUri changes { name delta quantityAfterChange } } } }',
+                        'variables': {'input': '{{ input }}', 'idempotencyKey': '{{ idempotencyKey }}'},
                     },
                     record_extractor='$.data.inventoryAdjustQuantities',
                     ai_hints={

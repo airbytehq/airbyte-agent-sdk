@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Amazon Seller Partner API Connector
-  version: 1.0.5
+  version: 1.0.6
   description: >
     Connector for the Amazon Selling Partner API (SP-API). Provides access to
     seller orders and order items, financial events and event groups, catalog
@@ -12,6 +12,15 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C9
+        reason: "Lack of test data: the SP-API test seller accounts (1Password and GSM SECRET_SOURCE-AMAZON-SELLER-PARTNER__CREDS) have zero orders since 2020 across all 7 marketplaces, so orders.get / order_items.list cannot be recorded and the order-based golden questions cannot pass. The golden-questions report cannot be regenerated with all 8 direct questions passing until a seller account with order history is provided."
+      - criterion: C10
+        reason: "Lack of test data: the SP-API test seller accounts (1Password and GSM SECRET_SOURCE-AMAZON-SELLER-PARTNER__CREDS) have zero orders since 2020 across all 7 marketplaces, so orders.get / order_items.list cannot be recorded and the order-based golden questions cannot pass. The golden-questions report cannot be regenerated with all 8 direct questions passing until a seller account with order history is provided."
+      - criterion: C11
+        reason: "Lack of test data: the SP-API test seller accounts (1Password and GSM SECRET_SOURCE-AMAZON-SELLER-PARTNER__CREDS) have zero orders since 2020 across all 7 marketplaces, so orders.get / order_items.list cannot be recorded and the order-based golden questions cannot pass. The golden-questions report cannot be regenerated with all 8 direct questions passing until a seller account with order history is provided."
+      - criterion: C15
+        reason: "Lack of test data: the SP-API test seller accounts (1Password and GSM SECRET_SOURCE-AMAZON-SELLER-PARTNER__CREDS) have zero orders since 2020 across all 7 marketplaces, so orders.get / order_items.list cannot be recorded and the order-based golden questions cannot pass. The golden-questions report cannot be regenerated with all 8 direct questions passing until a seller account with order history is provided."
   x-airbyte-connector-definition-id: e55879a8-0ef8-4557-abcf-ab34c53ec460
   x-airbyte-replication-version: "5.9.4"
   x-airbyte-replication-compatibility: ">=5.9.4, <6.0.0"

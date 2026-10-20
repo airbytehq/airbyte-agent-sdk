@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Snowflake SQL API Connector
-  version: 1.0.0
+  version: 1.0.1
   description: |
     Connects to Snowflake via the SQL REST API (POST /api/v2/statements) to query
     metadata about databases, schemas, tables, views, warehouses, and columns,
@@ -18,6 +18,19 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C15
+        reason: "result_partitions.get cannot be recorded: no working Snowflake test credentials. The 1Password PAT (test-credentials-pat) is rejected with 394400 'Programmatic access token is invalid', and the GSM username/password credentials for the same account require MFA or are IP-restricted, so a replacement PAT cannot be minted."
+      - criterion: C16
+        reason: "No working Snowflake test credentials to wire into the smoke suite: the 1Password PAT (test-credentials-pat) is rejected with 394400 'Programmatic access token is invalid', and the GSM username/password credentials require MFA or are IP-restricted, so no active smoke auth config can be added until a valid PAT is provisioned."
+      - criterion: C8
+        reason: "Snowflake programmatic access tokens are short-lived (they expire and must be re-minted), and the 1Password PAT (test-credentials-pat) has expired and is rejected with 394400 'Programmatic access token is invalid'. The GSM username/password credentials require MFA or are IP-restricted, so a replacement PAT cannot be minted, and tests/golden_questions_report.yaml cannot be generated against the live API."
+      - criterion: C9
+        reason: "Snowflake programmatic access tokens are short-lived (they expire and must be re-minted), and the 1Password PAT (test-credentials-pat) has expired and is rejected with 394400 'Programmatic access token is invalid'. The GSM username/password credentials require MFA or are IP-restricted, so a replacement PAT cannot be minted, and the golden-questions report (and its freshness_hash) cannot be generated against the live API."
+      - criterion: C10
+        reason: "Snowflake programmatic access tokens are short-lived (they expire and must be re-minted), and the 1Password PAT (test-credentials-pat) has expired and is rejected with 394400 'Programmatic access token is invalid'. The GSM username/password credentials require MFA or are IP-restricted, so a replacement PAT cannot be minted, and the direct golden questions cannot be run against the live API to produce a success rate."
+      - criterion: C11
+        reason: "Snowflake programmatic access tokens are short-lived (they expire and must be re-minted), and the 1Password PAT (test-credentials-pat) has expired and is rejected with 394400 'Programmatic access token is invalid'. The GSM username/password credentials require MFA or are IP-restricted, so a replacement PAT cannot be minted, and the golden-questions report cannot be generated to match the declared direct question count."
   x-airbyte-connector-definition-id: e2d65910-8c8b-40a1-ae7d-ee2416b2bfa2
   x-airbyte-replication-version: "1.1.1"
   x-airbyte-replication-compatibility: ">=1.1.1, <2.0.0"

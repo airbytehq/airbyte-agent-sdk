@@ -37,7 +37,7 @@ from uuid import (
 AmazonSellerPartnerConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('e55879a8-0ef8-4557-abcf-ab34c53ec460'),
     name='amazon-seller-partner',
-    version='1.0.5',
+    version='1.0.6',
     base_url='https://sellingpartnerapi-{region}.amazon.com',
     auth=AuthConfig(
         type=AuthType.OAUTH2,

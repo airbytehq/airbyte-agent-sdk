@@ -215,6 +215,7 @@ class InventorySetCreateParamsInputQuantitiesItem(TypedDict):
     inventory_item_id: str
     location_id: str
     quantity: int
+    change_from_quantity: int | None
 
 class InventorySetCreateParamsInput(TypedDict):
     """Nested schema for InventorySetCreateParams.input"""
@@ -228,6 +229,7 @@ class InventoryAdjustCreateParamsInputChangesItem(TypedDict):
     inventory_item_id: str
     location_id: str
     delta: int
+    change_from_quantity: int | None
 
 class InventoryAdjustCreateParamsInput(TypedDict):
     """Nested schema for InventoryAdjustCreateParams.input"""
@@ -843,10 +845,12 @@ class DraftOrderCompleteUpdateParams(TypedDict):
 class InventorySetCreateParams(TypedDict):
     """Parameters for inventory_set.create operation"""
     input: InventorySetCreateParamsInput
+    idempotency_key: str
 
 class InventoryAdjustCreateParams(TypedDict):
     """Parameters for inventory_adjust.create operation"""
     input: InventoryAdjustCreateParamsInput
+    idempotency_key: str
 
 class DiscountCodesCreateParams(TypedDict):
     """Parameters for discount_codes.create operation"""

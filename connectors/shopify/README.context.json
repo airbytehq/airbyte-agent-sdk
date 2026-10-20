@@ -3,7 +3,7 @@
   "class_name": "ShopifyConnector",
   "package_name": "airbyte_agent_sdk.connectors.shopify",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "0.1.15",
+  "yaml_version": "0.1.16",
   "api_reference_url": "https://shopify.dev/docs/api/admin-rest",
   "auth_example": "ShopifyAuthConfig(api_key=\"...\")",
   "auth_import": ", ShopifyAuthConfig",
@@ -6216,7 +6216,8 @@
                     "required": [
                       "inventoryItemId",
                       "locationId",
-                      "quantity"
+                      "quantity",
+                      "changeFromQuantity"
                     ],
                     "properties": {
                       "inventoryItemId": {
@@ -6230,6 +6231,13 @@
                       "quantity": {
                         "type": "integer",
                         "description": "Absolute quantity to set"
+                      },
+                      "changeFromQuantity": {
+                        "type": [
+                          "null",
+                          "integer"
+                        ],
+                        "description": "The quantity currently at the location, for a compare-and-set check; pass null to skip the check"
                       }
                     }
                   }
@@ -6238,6 +6246,17 @@
             },
             "required": true,
             "description": ""
+          },
+          {
+            "name": "idempotencyKey",
+            "python_name": "idempotency_key",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation"
+            },
+            "required": true,
+            "description": "Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation"
           }
         ],
         "params_type_name": "InventorySetCreateParams",
@@ -6291,7 +6310,8 @@
                     "required": [
                       "inventoryItemId",
                       "locationId",
-                      "delta"
+                      "delta",
+                      "changeFromQuantity"
                     ],
                     "properties": {
                       "inventoryItemId": {
@@ -6305,6 +6325,13 @@
                       "delta": {
                         "type": "integer",
                         "description": "Amount to adjust (positive to add, negative to subtract)"
+                      },
+                      "changeFromQuantity": {
+                        "type": [
+                          "null",
+                          "integer"
+                        ],
+                        "description": "The quantity currently at the location, for a compare-and-set check; pass null to skip the check"
                       }
                     }
                   }
@@ -6313,6 +6340,17 @@
             },
             "required": true,
             "description": ""
+          },
+          {
+            "name": "idempotencyKey",
+            "python_name": "idempotency_key",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "description": "Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation"
+            },
+            "required": true,
+            "description": "Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation"
           }
         ],
         "params_type_name": "InventoryAdjustCreateParams",

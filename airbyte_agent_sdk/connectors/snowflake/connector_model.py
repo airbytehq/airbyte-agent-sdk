@@ -33,6 +33,7 @@ from uuid import (
 SnowflakeConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('e2d65910-8c8b-40a1-ae7d-ee2416b2bfa2'),
     name='snowflake',
+    version='1.0.1',
     base_url='https://{account}.snowflakecomputing.com',
     auth=AuthConfig(
         type=AuthType.BEARER,

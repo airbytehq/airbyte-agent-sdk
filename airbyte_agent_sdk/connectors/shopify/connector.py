@@ -432,8 +432,8 @@ class ShopifyConnector:
     """
 
     connector_name = "shopify"
-    connector_version = "0.1.15"
-    sdk_version = "0.1.371"
+    connector_version = "0.1.16"
+    sdk_version = "0.1.372"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -619,8 +619,8 @@ class ShopifyConnector:
         ('draft_orders', 'update'): {'id': 'id', 'input': 'input'},
         ('draft_orders', 'delete'): {'input': 'input'},
         ('draft_order_complete', 'update'): {'id': 'id', 'payment_pending': 'paymentPending'},
-        ('inventory_set', 'create'): {'input': 'input'},
-        ('inventory_adjust', 'create'): {'input': 'input'},
+        ('inventory_set', 'create'): {'input': 'input', 'idempotency_key': 'idempotencyKey'},
+        ('inventory_adjust', 'create'): {'input': 'input', 'idempotency_key': 'idempotencyKey'},
         ('discount_codes', 'create'): {'basic_code_discount': 'basicCodeDiscount'},
         ('discount_codes', 'update'): {'id': 'id', 'basic_code_discount': 'basicCodeDiscount'},
         ('discount_codes', 'delete'): {'id': 'id'},
@@ -9611,6 +9611,7 @@ class InventorySetQuery:
     async def create(
         self,
         input: InventorySetCreateParamsInput,
+        idempotency_key: str,
         **kwargs
     ) -> InventorySetQuantitiesPayload:
         """
@@ -9620,6 +9621,7 @@ Uses the inventorySetQuantities mutation with a required reason and reference do
 
         Args:
             input: Parameter input
+            idempotency_key: Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation
             **kwargs: Additional parameters
 
         Returns:
@@ -9627,6 +9629,7 @@ Uses the inventorySetQuantities mutation with a required reason and reference do
         """
         params = {k: v for k, v in {
             "input": input,
+            "idempotencyKey": idempotency_key,
             **kwargs
         }.items() if v is not None}
 
@@ -9647,6 +9650,7 @@ class InventoryAdjustQuery:
     async def create(
         self,
         input: InventoryAdjustCreateParamsInput,
+        idempotency_key: str,
         **kwargs
     ) -> InventoryAdjustQuantitiesPayload:
         """
@@ -9655,6 +9659,7 @@ class InventoryAdjustQuery:
 
         Args:
             input: Parameter input
+            idempotency_key: Unique key (e.g. a UUID) so Shopify can deduplicate retries of this mutation
             **kwargs: Additional parameters
 
         Returns:
@@ -9662,6 +9667,7 @@ class InventoryAdjustQuery:
         """
         params = {k: v for k, v in {
             "input": input,
+            "idempotencyKey": idempotency_key,
             **kwargs
         }.items() if v is not None}
 
