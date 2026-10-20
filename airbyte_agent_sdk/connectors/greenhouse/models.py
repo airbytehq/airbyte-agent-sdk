@@ -30,19 +30,12 @@ class GreenhouseAuthConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class CandidateSocialMediaAddressesItem(BaseModel):
-    """Nested schema for Candidate.social_media_addresses_item"""
+class CandidatePhoneNumbersItem(BaseModel):
+    """Nested schema for Candidate.phone_numbers_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    value: str | None | None = Field(default=None)
-
-class CandidateCustomFields(BaseModel):
-    """Nested schema for Candidate.custom_fields"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None | None = Field(default=None)
     type_: str | None | None = Field(default=None, alias="type")
-    value: Any | None = Field(default=None)
+    value: str | None | None = Field(default=None)
 
 class CandidateWebsiteAddressesItem(BaseModel):
     """Nested schema for Candidate.website_addresses_item"""
@@ -58,11 +51,10 @@ class CandidateAddressesItem(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
-class CandidatePhoneNumbersItem(BaseModel):
-    """Nested schema for Candidate.phone_numbers_item"""
+class CandidateSocialMediaAddressesItem(BaseModel):
+    """Nested schema for Candidate.social_media_addresses_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
 
 class CandidateEmailAddressesItem(BaseModel):
@@ -71,6 +63,14 @@ class CandidateEmailAddressesItem(BaseModel):
 
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
+
+class CandidateCustomFields(BaseModel):
+    """Nested schema for Candidate.custom_fields"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None | None = Field(default=None)
+    type_: str | None | None = Field(default=None, alias="type")
+    value: Any | None = Field(default=None)
 
 class Candidate(BaseModel):
     """Greenhouse candidate object"""
@@ -197,6 +197,13 @@ class Offer(BaseModel):
     updated_at: str | None = Field(default=None)
     version: int | None = Field(default=None)
 
+class UserInterviewerTagsItem(BaseModel):
+    """Nested schema for User.interviewer_tags_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None)
+    name: str | None | None = Field(default=None)
+
 class UserCustomFields(BaseModel):
     """Nested schema for User.custom_fields"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -204,13 +211,6 @@ class UserCustomFields(BaseModel):
     name: str | None | None = Field(default=None)
     type_: str | None | None = Field(default=None, alias="type")
     value: Any | None = Field(default=None)
-
-class UserInterviewerTagsItem(BaseModel):
-    """Nested schema for User.interviewer_tags_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None)
-    name: str | None | None = Field(default=None)
 
 class User(BaseModel):
     """Greenhouse user object"""

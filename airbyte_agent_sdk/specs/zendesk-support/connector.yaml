@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Zendesk Support API Connector
-  version: 0.1.20
+  version: 0.1.21
   description: |
     Zendesk Support is a customer service platform that helps businesses manage support
     tickets, customer interactions, and help center content. This connector provides
@@ -1990,7 +1990,6 @@ components:
     zendeskAPIToken:
       type: http
       scheme: basic
-      x-airbyte-untested: true
       description: |
         Zendesk API Token authentication.
         API tokens are managed in Admin Center at Apps and integrations > APIs > Zendesk API.

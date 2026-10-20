@@ -49,7 +49,7 @@ from uuid import (
 ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('79c1aa37-dae3-42ae-b333-d1c105477715'),
     name='zendesk-support',
-    version='0.1.20',
+    version='0.1.21',
     base_url='https://{subdomain}.zendesk.com/api/v2',
     auth=AuthConfig(
         options=[
@@ -104,7 +104,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                     replication_auth_key_mapping={'credentials.email': 'email', 'credentials.api_token': 'api_token'},
                     replication_auth_key_constants={'credentials.credentials': 'api_token'},
                 ),
-                untested=True,
             ),
         ],
     ),

@@ -74,7 +74,7 @@ class SnowflakeConnector:
 
     connector_name = "snowflake"
     connector_version = "1.0.1"
-    sdk_version = "0.1.372"
+    sdk_version = "0.1.373"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
