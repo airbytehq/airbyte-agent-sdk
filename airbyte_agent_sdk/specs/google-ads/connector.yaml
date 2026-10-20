@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Google Ads API Connector
-  version: 1.0.9
+  version: 1.0.10
   description: >-
     Google Ads API connector for accessing advertising account data including
     campaigns, ad groups, ads, and labels. This connector uses the Google Ads
@@ -15,6 +15,15 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C8
+        reason: "Connector is working, but no test credential can read campaign data: every Google Ads OAuth test credential (1Password and GSM SECRET_SOURCE-GOOGLE-ADS* sets) resolves to the same user, which can read customers/4651612872 but gets ACTION_NOT_PERMITTED on campaign/ad_group queries (no Standard/Admin role); the manager account 9016006472 returns USER_PERMISSION_DENIED and the remaining sets are deleted_client. The golden-questions report for the 12 direct questions cannot be generated until that user is granted campaign access."
+      - criterion: C9
+        reason: "Connector is working, but no test credential can read campaign data: every Google Ads OAuth test credential (1Password and GSM SECRET_SOURCE-GOOGLE-ADS* sets) resolves to the same user, which can read customers/4651612872 but gets ACTION_NOT_PERMITTED on campaign/ad_group queries (no Standard/Admin role); the manager account 9016006472 returns USER_PERMISSION_DENIED and the remaining sets are deleted_client. The golden-questions report for the 12 direct questions cannot be generated until that user is granted campaign access."
+      - criterion: C10
+        reason: "Connector is working, but no test credential can read campaign data: every Google Ads OAuth test credential (1Password and GSM SECRET_SOURCE-GOOGLE-ADS* sets) resolves to the same user, which can read customers/4651612872 but gets ACTION_NOT_PERMITTED on campaign/ad_group queries (no Standard/Admin role); the manager account 9016006472 returns USER_PERMISSION_DENIED and the remaining sets are deleted_client. The golden-questions report for the 12 direct questions cannot be generated until that user is granted campaign access."
+      - criterion: C11
+        reason: "Connector is working, but no test credential can read campaign data: every Google Ads OAuth test credential (1Password and GSM SECRET_SOURCE-GOOGLE-ADS* sets) resolves to the same user, which can read customers/4651612872 but gets ACTION_NOT_PERMITTED on campaign/ad_group queries (no Standard/Admin role); the manager account 9016006472 returns USER_PERMISSION_DENIED and the remaining sets are deleted_client. The golden-questions report for the 12 direct questions cannot be generated until that user is granted campaign access."
   x-airbyte-connector-definition-id: 253487c0-2246-43ba-a21f-5116b20a2c50
   x-airbyte-replication-version: "6.1.0"
   x-airbyte-replication-compatibility: ">=6.1.0, <7.0.0"

@@ -35,12 +35,6 @@ class SentryReplicationConfig(BaseModel):
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 
-class ProjectLatestrelease(BaseModel):
-    """The most recent release for this project."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    version: str | None | None = Field(default=None)
-
 class ProjectAvatar(BaseModel):
     """Project avatar information."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -49,8 +43,8 @@ class ProjectAvatar(BaseModel):
     avatar_uuid: str | None | None = Field(default=None, alias="avatarUuid")
     avatar_url: str | None | None = Field(default=None, alias="avatarUrl")
 
-class ProjectOrganization(BaseModel):
-    """Organization this project belongs to. Not returned by the organization-scoped list endpoint; available via project_detail."""
+class ProjectTeamsItem(BaseModel):
+    """Nested schema for Project.teams_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: str | None | None = Field(default=None)
@@ -65,13 +59,19 @@ class ProjectTeam(BaseModel):
     name: str | None | None = Field(default=None)
     slug: str | None | None = Field(default=None)
 
-class ProjectTeamsItem(BaseModel):
-    """Nested schema for Project.teams_item"""
+class ProjectOrganization(BaseModel):
+    """Organization this project belongs to. Not returned by the organization-scoped list endpoint; available via project_detail."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: str | None | None = Field(default=None)
     name: str | None | None = Field(default=None)
     slug: str | None | None = Field(default=None)
+
+class ProjectLatestrelease(BaseModel):
+    """The most recent release for this project."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    version: str | None | None = Field(default=None)
 
 class Project(BaseModel):
     """A Sentry project (summary view from list endpoint)."""
@@ -123,8 +123,8 @@ class Project(BaseModel):
     latest_release: ProjectLatestrelease | None = Field(default=None, alias="latestRelease")
     latest_deploys: dict[str, Any] | None = Field(default=None, alias="latestDeploys")
 
-class ProjectDetailTeam(BaseModel):
-    """Primary team for this project."""
+class ProjectDetailTeamsItem(BaseModel):
+    """Nested schema for ProjectDetail.teams_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: str | None | None = Field(default=None)
@@ -139,8 +139,8 @@ class ProjectDetailOrganization(BaseModel):
     name: str | None | None = Field(default=None)
     slug: str | None | None = Field(default=None)
 
-class ProjectDetailTeamsItem(BaseModel):
-    """Nested schema for ProjectDetail.teams_item"""
+class ProjectDetailTeam(BaseModel):
+    """Primary team for this project."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     id: str | None | None = Field(default=None)
@@ -239,14 +239,6 @@ class ProjectDetail(BaseModel):
     highlight_preset: dict[str, Any] | None = Field(default=None, alias="highlightPreset")
     debug_files_role: str | None = Field(default=None, alias="debugFilesRole")
 
-class IssueProject(BaseModel):
-    """Project this issue belongs to."""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None | None = Field(default=None)
-    name: str | None | None = Field(default=None)
-    slug: str | None | None = Field(default=None)
-
 class IssueMetadata(BaseModel):
     """Issue metadata."""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -255,6 +247,14 @@ class IssueMetadata(BaseModel):
     type_: str | None | None = Field(default=None, alias="type")
     value: str | None | None = Field(default=None)
     filename: str | None | None = Field(default=None)
+
+class IssueProject(BaseModel):
+    """Project this issue belongs to."""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None | None = Field(default=None)
+    name: str | None | None = Field(default=None)
+    slug: str | None | None = Field(default=None)
 
 class Issue(BaseModel):
     """A Sentry issue (group of similar events)."""
@@ -355,24 +355,6 @@ class Event(BaseModel):
     grouping_config: EventGroupingconfig | None = Field(default=None, alias="groupingConfig")
     meta: dict[str, Any] | None = Field(default=None, alias="_meta")
 
-class ReleaseAuthorsItem(BaseModel):
-    """Nested schema for Release.authors_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None | None = Field(default=None)
-    email: str | None | None = Field(default=None)
-
-class ReleaseProjectsItem(BaseModel):
-    """Nested schema for Release.projects_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None)
-    name: str | None | None = Field(default=None)
-    slug: str | None | None = Field(default=None)
-    platform: str | None | None = Field(default=None)
-    new_groups: int | None | None = Field(default=None, alias="newGroups")
-    has_health_data: bool | None | None = Field(default=None, alias="hasHealthData")
-
 class ReleaseVersioninfoVersion(BaseModel):
     """Nested schema for ReleaseVersioninfo.version"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -393,6 +375,24 @@ class ReleaseVersioninfo(BaseModel):
     description: str | None | None = Field(default=None)
     package: str | None | None = Field(default=None)
     build_hash: str | None | None = Field(default=None, alias="buildHash")
+
+class ReleaseAuthorsItem(BaseModel):
+    """Nested schema for Release.authors_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None | None = Field(default=None)
+    email: str | None | None = Field(default=None)
+
+class ReleaseProjectsItem(BaseModel):
+    """Nested schema for Release.projects_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None)
+    name: str | None | None = Field(default=None)
+    slug: str | None | None = Field(default=None)
+    platform: str | None | None = Field(default=None)
+    new_groups: int | None | None = Field(default=None, alias="newGroups")
+    has_health_data: bool | None | None = Field(default=None, alias="hasHealthData")
 
 class Release(BaseModel):
     """A Sentry release."""
