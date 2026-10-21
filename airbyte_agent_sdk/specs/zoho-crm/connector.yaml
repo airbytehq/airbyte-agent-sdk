@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Zoho CRM API Connector
-  version: 1.1.0
+  version: 1.1.1
   description: >
     Connector for the Zoho CRM API, providing access to CRM modules including
     leads, contacts, accounts, deals, campaigns, tasks, events, calls, products,
@@ -13,14 +13,14 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C17
+        reason: "zoho-crm uses OAuth 2.0 with a single non-expiring refresh token; the write-back smoke test for test credentials is not supported for this credential type yet."
   x-airbyte-connector-definition-id: 4942d392-c7b5-4271-91f9-3b4f4e51eb3e
   x-airbyte-replication-version: "0.3.0"
   x-airbyte-replication-compatibility: ">=0.3.0, <1.0.0"
   x-airbyte-platform-availability:
     state: enabled
-  x-airbyte-qualification:
-    status: candidate
-    criteria_version: v1
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Zoho CRM API Documentation
