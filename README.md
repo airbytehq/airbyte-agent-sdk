@@ -1,10 +1,10 @@
 # Airbyte Agent SDK
 
-Type-safe connector execution framework with blessed connectors and full IDE autocomplete.
+Typed connector tools for working with third-party APIs, with full IDE autocomplete.
 
 ## Overview
 
-The Airbyte Agent SDK gives AI agents access to 50+ third-party APIs through strongly typed, well-documented tools. Connectors can run through the Airbyte platform (which manages credentials, rate limiting, and execution) or locally in OSS mode.
+The Airbyte Agent SDK provides 50+ connectors with typed tools for third-party APIs. Run connectors locally with your own credentials in connector-specific auth configs; the SDK makes direct calls to each third-party API.
 
 ## How to install
 
@@ -12,19 +12,11 @@ The Airbyte Agent SDK gives AI agents access to 50+ third-party APIs through str
 uv pip install airbyte-agent-sdk
 ```
 
-## Documentation
-
-Full documentation is available at [docs.airbyte.com/ai-agents/about/](https://docs.airbyte.com/ai-agents/about/).
-
-- [SDK guides](https://docs.airbyte.com/ai-agents/interfaces/sdk) — authentication, adding connectors, executing operations.
-- [SDK API reference](https://docs.airbyte.com/ai-agents/reference/sdk) — generated from the SDK's docstrings.
-- [pdoc site](https://airbytehq.github.io/sonar/airbyte_agent_sdk.html) — the same reference rendered by pdoc; requires access to the `airbytehq/sonar` repo.
-
 ## Tool integration
 
 The SDK ships a tool builder and two connector-tool decorators for turning connector calls into LLM tools with retry-aware exception translation, output-size guards, and framework-specific error signalling, plus `translate_exceptions` for callables that are not connector tools. Pick from these in this order:
 
-- **`build_connector_tools(connector, framework="...")`** — the simplest, preferred default on supported frameworks (PydanticAI, LangChain, OpenAI Agents, FastMCP) when you do not need custom tool bodies. Returns `inspect_connector`, `read_skill_docs`, and `execute` callables bound to one connector; the tool names are fixed, so register one connector's tool set per agent. Hosted connectors, or local connectors passed an explicit `docs_provider`, use outline-only guidance and tell the agent to inspect/read docs before execution; local/offline connectors without a docs provider keep generated YAML-derived rich docs. Pass `use_progressive_docs=False` to make `tools.as_list()` expose only `execute` with the legacy rich description.
+- **`build_connector_tools(connector, framework="...")`** — the simplest, preferred default on supported frameworks (PydanticAI, LangChain, OpenAI Agents, FastMCP) when you do not need custom tool bodies. Returns `inspect_connector`, `read_skill_docs`, and `execute` callables bound to one connector; the tool names are fixed, so register one connector's tool set per agent. With a local connector, `inspect_connector` returns a `mode: "local"` payload with a warning, and `read_skill_docs` returns the full generated connector docs; a section request returns a notice followed by the same docs. Pass `use_progressive_docs=False` to make `tools.as_list()` expose only `execute` with the legacy rich description.
 - **`@<Connector>.agent_tool(...)`** — use when you need custom tool bodies, a framework the SDK does not natively support, or a multi-connector agent. Decorate three functions (execute, inspect, docs) and the execute docstring steers the agent through the inspect → docs → execute flow instead of embedding the full entity/action reference. On supported frameworks pass `framework="pydantic_ai"`, `"langchain"`, `"openai_agents"`, or `"mcp"` to target that framework's failure signal; on unsupported frameworks omit it and failures raise `AirbyteToolError` (`framework="none"`; no auto-detection).
 - **`@<Connector>.tool_utils`** — deprecated; retained only for backwards compatibility with existing integrations that use one broad, generated-description tool. Do not use it for new tools. It auto-detects supported frameworks and remains available so existing integrations can migrate independently.
 - **`@translate_exceptions`** — same translation behaviour for any callable that is not a generated `Connector` (custom helpers, eval harnesses, ad-hoc tools).
@@ -36,28 +28,25 @@ The builder and decorators preserve async callables, `__name__`, and `__doc__`. 
 ### Prebuilt connector tools (default)
 
 ```python
+import os
+
 from pydantic_ai import Agent
 from airbyte_agent_sdk import build_connector_tools
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-from airbyte_agent_sdk.types import AirbyteAuthConfig
+from airbyte_agent_sdk.connectors.stripe import StripeConnector, StripeAuthConfig
 
 stripe = StripeConnector(
-    auth_config=AirbyteAuthConfig(
-        airbyte_client_id="client_abc123",
-        airbyte_client_secret="secret_xyz789",
-        connector_id="src_123",
-    )
+    auth_config=StripeAuthConfig(api_key=os.environ["STRIPE_API_KEY"])
 )
 tools = build_connector_tools(stripe, framework="pydantic_ai")
 
 agent = Agent("openai:gpt-4o", tools=tools.as_list())
 ```
 
-The model-facing docs flow is `inspect_connector()` -> `read_skill_docs()` -> `read_skill_docs(section="...")` -> `execute(...)`. The docs tool binds the hosted `docs_skill_id` internally, so the model only passes an optional `section`.
+The model-facing docs flow is `inspect_connector()` -> `read_skill_docs()` -> `read_skill_docs(section="...")` -> `execute(...)`. Locally, `inspect_connector()` returns a `mode: "local"` payload with a warning, and `read_skill_docs()` returns the full generated connector docs; a section request adds a notice that section-specific docs are unavailable, then returns the same full docs.
 
 The builder covers one connector per agent — the tool names are fixed (`inspect_connector`, `read_skill_docs`, `execute`), so the tool sets for multiple connectors collide when registered on the same agent. Renaming the callables at registration avoids the collision, but the generated `execute` guidance still tells the model to call `inspect_connector` and `read_skill_docs`, so it points at the wrong tools. Multi-connector agents use `agent_tool` with connector-specific function names, which weaves those names into the guidance via `inspect_tool=` and `docs_tool=`.
 
-To opt out of the progressive inspect/docs flow:
+Locally, the inspect/docs round trip returns the full generated docs that the `execute` description would carry. To opt out of that flow:
 
 ```python
 tools = build_connector_tools(stripe, framework="pydantic_ai", use_progressive_docs=False)
@@ -73,11 +62,12 @@ is execute, `(section, ...)` is docs, `()` is inspect — or pass it explicitly
 (`agent_tool("execute")`). Extra parameters are allowed.
 
 ```python
-from airbyte_agent_sdk.connectors.stripe import StripeConnector
-from airbyte_agent_sdk.types import AirbyteAuthConfig
+import os
+
+from airbyte_agent_sdk.connectors.stripe import StripeAuthConfig, StripeConnector
 from pydantic_ai import Agent
 
-stripe = StripeConnector(auth_config=AirbyteAuthConfig(...))
+stripe = StripeConnector(auth_config=StripeAuthConfig(api_key=os.environ["STRIPE_API_KEY"]))
 agent = Agent("openai:gpt-4o")
 
 @agent.tool_plain
@@ -158,7 +148,11 @@ and auto-detects the installed supported framework. It is deprecated and kept
 only so existing integrations can migrate independently; new code uses
 `build_connector_tools` or `agent_tool(framework="...")`.
 
-See the [`translate_exceptions`](https://airbytehq.github.io/sonar/airbyte_agent_sdk/translation.html) reference for advanced kwargs (`internal_retries`, `should_internal_retry`, `exhausted_runtime_failure_message`).
+The advanced kwargs `internal_retries`, `should_internal_retry`, and `exhausted_runtime_failure_message` are documented in the function docstrings.
+
+## Search and Airbyte Cloud
+
+Fast search across your data and context-layer queries aren't part of this SDK. They're available in Airbyte Cloud through the Airbyte MCP at `https://mcp.airbyte.com/mcp`; [sign up for Airbyte Cloud](https://cloud.airbyte.com/signup). Some connectors list `context_store_search` and `context_store_sql_query` actions, but the local executor rejects either with `NotImplementedError` before making an API call.
 
 ## How to install the skills
 
@@ -183,5 +177,3 @@ npx skills add airbytehq/airbyte-agent-sdk
 git clone https://github.com/airbytehq/airbyte-agent-sdk ~/.codex/skills/airbyte-agent-sdk-src
 ln -s ~/.codex/skills/airbyte-agent-sdk-src/connector-sdk/.claude/skills/* ~/.codex/skills/
 ```
-
-See [docs.airbyte.com/ai-agents/about/](https://docs.airbyte.com/ai-agents/about/) for full documentation.
