@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Reddit Ads API Connector
-  version: 1.0.0
+  version: 1.0.1
   description: >
     Connector for the Reddit Ads API v3. Provides read access to Reddit advertising
     account structure: businesses, ad accounts, campaigns, ad groups, and ads.
@@ -10,9 +10,17 @@ info:
     support cursor-based pagination via page.token. Performance metrics (impressions,
     clicks, spend, CTR) are not exposed by this connector.
   x-airbyte-connector-name: reddit-ads
+  x-airbyte-qualification:
+    status: candidate
+    criteria_version: v1
   x-airbyte-connector-definition-id: c876992b-877e-4bb3-946b-4678c82bb7ac
-  x-airbyte-replication-version: "0.0.9"
-  x-airbyte-replication-compatibility: ">=0.0.9, <1.0.0"
+  x-airbyte-replication-version: "1.0.0"
+  x-airbyte-replication-compatibility: ">=1.0.0, <2.0.0"
+  x-airbyte-skip-suggested-streams:
+    - campaign_report
+    - ad_account_report
+    - ad_group_report
+    - ad_report
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Reddit Ads API Documentation
@@ -723,9 +731,11 @@ components:
           client_secret: "${client_secret}"
           refresh_token: "${refresh_token}"
         replication_auth_key_mapping:
-          client_id: "client_id"
-          client_secret: "client_secret"
-          refresh_token: "refresh_token"
+          credentials.client_id: "client_id"
+          credentials.client_secret: "client_secret"
+          credentials.refresh_token: "refresh_token"
+        replication_auth_key_constants:
+          credentials.auth_type: "OwnApp"
 
   schemas:
     Pagination:
@@ -807,6 +817,7 @@ components:
     AdAccount:
       type: object
       x-airbyte-entity-name: ad_accounts
+      x-airbyte-stream-name: ad_account
       x-airbyte-ai-hints:
         summary: "Reddit advertising accounts with billing, attribution, and configuration settings"
         when_to_use: "Questions about ad account setup, billing status, attribution windows, or account-level settings"
@@ -1096,6 +1107,7 @@ components:
     AdGroup:
       type: object
       x-airbyte-entity-name: ad_groups
+      x-airbyte-stream-name: ad_group
       x-airbyte-ai-hints:
         summary: "Reddit ad groups with targeting, bidding, and scheduling settings within campaigns"
         when_to_use: "Questions about ad group targeting, bid settings, optimization, or scheduling"

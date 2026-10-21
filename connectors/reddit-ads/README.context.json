@@ -3,7 +3,7 @@
   "class_name": "RedditAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.reddit_ads",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.0",
+  "yaml_version": "1.0.1",
   "api_reference_url": "https://ads-api.reddit.com/docs/v3/api/reddit-advertising-api",
   "auth_example": "RedditAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\")",
   "auth_import": ", RedditAdsAuthConfig",

@@ -36,6 +36,7 @@ from uuid import (
 RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('c876992b-877e-4bb3-946b-4678c82bb7ac'),
     name='reddit-ads',
+    version='1.0.1',
     base_url='https://ads-api.reddit.com/api/v3',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -70,10 +71,11 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                 'refresh_token': '${refresh_token}',
             },
             replication_auth_key_mapping={
-                'client_id': 'client_id',
-                'client_secret': 'client_secret',
-                'refresh_token': 'refresh_token',
+                'credentials.client_id': 'client_id',
+                'credentials.client_secret': 'client_secret',
+                'credentials.refresh_token': 'refresh_token',
             },
+            replication_auth_key_constants={'credentials.auth_type': 'OwnApp'},
         ),
     ),
     entities=[
@@ -230,6 +232,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='ad_accounts',
+            stream_name='ad_account',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -329,6 +332,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ad_accounts',
+                                    'x-airbyte-stream-name': 'ad_account',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Reddit advertising accounts with billing, attribution, and configuration settings',
                                         'when_to_use': 'Questions about ad account setup, billing status, attribution windows, or account-level settings',
@@ -450,6 +454,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'ad_accounts',
+                                'x-airbyte-stream-name': 'ad_account',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Reddit advertising accounts with billing, attribution, and configuration settings',
                                     'when_to_use': 'Questions about ad account setup, billing status, attribution windows, or account-level settings',
@@ -544,6 +549,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ad_accounts',
+                'x-airbyte-stream-name': 'ad_account',
                 'x-airbyte-ai-hints': {
                     'summary': 'Reddit advertising accounts with billing, attribution, and configuration settings',
                     'when_to_use': 'Questions about ad account setup, billing status, attribution windows, or account-level settings',
@@ -1129,6 +1135,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
         ),
         EntityDefinition(
             name='ad_groups',
+            stream_name='ad_group',
             actions=[Action.LIST, Action.GET],
             endpoints={
                 Action.LIST: EndpointDefinition(
@@ -1405,6 +1412,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                                         },
                                     },
                                     'x-airbyte-entity-name': 'ad_groups',
+                                    'x-airbyte-stream-name': 'ad_group',
                                     'x-airbyte-ai-hints': {
                                         'summary': 'Reddit ad groups with targeting, bidding, and scheduling settings within campaigns',
                                         'when_to_use': 'Questions about ad group targeting, bid settings, optimization, or scheduling',
@@ -1702,6 +1710,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                                 'x-airbyte-entity-name': 'ad_groups',
+                                'x-airbyte-stream-name': 'ad_group',
                                 'x-airbyte-ai-hints': {
                                     'summary': 'Reddit ad groups with targeting, bidding, and scheduling settings within campaigns',
                                     'when_to_use': 'Questions about ad group targeting, bid settings, optimization, or scheduling',
@@ -1972,6 +1981,7 @@ RedditAdsConnectorModel: ConnectorModel = ConnectorModel(
                     },
                 },
                 'x-airbyte-entity-name': 'ad_groups',
+                'x-airbyte-stream-name': 'ad_group',
                 'x-airbyte-ai-hints': {
                     'summary': 'Reddit ad groups with targeting, bidding, and scheduling settings within campaigns',
                     'when_to_use': 'Questions about ad group targeting, bid settings, optimization, or scheduling',
