@@ -149,8 +149,8 @@ class PinterestConnector:
     """
 
     connector_name = "pinterest"
-    connector_version = "0.1.5"
-    sdk_version = "0.1.374"
+    connector_version = "0.1.6"
+    sdk_version = "0.1.375"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

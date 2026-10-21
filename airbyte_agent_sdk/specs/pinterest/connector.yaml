@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Pinterest API Connector
-  version: 0.1.5
+  version: 0.1.6
   description: >
     Connector for the Pinterest API v5, enabling access to Pinterest advertising
     and content management data. Supports reading ad accounts, boards, campaigns,
@@ -12,6 +12,13 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C15
+        reason: "catalogs_product_groups.list is x-airbyte-untested because the Pinterest OAuth refresh token is expired (HTTP 401 \"Refresh token is expired.\"); its cassette cannot be recorded until test credentials are rotated in the vault."
+      - criterion: C16
+        reason: "The pinterest oauth2 smoke auth config is skipped because the stored OAuth refresh token is expired (HTTP 401 \"Refresh token is expired.\"); every smoke run, including backend-acceptance-tests, would fail until the token is rotated in 1Password."
+      - criterion: C17
+        reason: "pinterest uses OAuth 2.0 with a single refresh token; the write-back smoke test for test credentials is not supported for this credential type, and the stored token is expired (HTTP 401)."
   x-airbyte-connector-definition-id: 5cb7e5fe-38c2-11ec-8d3d-0242ac130003
   x-airbyte-replication-version: "2.2.11"
   x-airbyte-replication-compatibility: ">=2.2.11, <3.0.0"

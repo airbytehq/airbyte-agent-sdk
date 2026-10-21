@@ -37,7 +37,7 @@ from uuid import (
 PinterestConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('5cb7e5fe-38c2-11ec-8d3d-0242ac130003'),
     name='pinterest',
-    version='0.1.5',
+    version='0.1.6',
     base_url='https://api.pinterest.com/v5',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
