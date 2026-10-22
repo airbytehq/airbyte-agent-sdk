@@ -272,15 +272,6 @@ class TasksList(BaseModel):
     previous_page: int | None = Field(default=None)
     links: PaginationLinks | None = Field(default=None)
 
-class TimeEntryUser(BaseModel):
-    """The user associated with the time entry"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: int | None | None = Field(default=None, description="User ID")
-    """User ID"""
-    name: str | None | None = Field(default=None, description="User name")
-    """User name"""
-
 class TimeEntryTask(BaseModel):
     """The task associated with the time entry"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -298,6 +289,15 @@ class TimeEntryClient(BaseModel):
     """Client ID"""
     name: str | None | None = Field(default=None, description="Client name")
     """Client name"""
+
+class TimeEntryUser(BaseModel):
+    """The user associated with the time entry"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: int | None | None = Field(default=None, description="User ID")
+    """User ID"""
+    name: str | None | None = Field(default=None, description="User name")
+    """User name"""
 
 class TimeEntryInvoice(BaseModel):
     """The invoice associated with the time entry"""

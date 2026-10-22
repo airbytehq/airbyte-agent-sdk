@@ -863,6 +863,10 @@ components:
       type: object
       x-airbyte-entity-name: stargazers
       x-airbyte-stream-name: stargazers
+      x-airbyte-ai-hints:
+        summary: "Users who starred a repository; the list may be restricted while the aggregate count remains available"
+        when_to_use: "Use for questions about repository star counts or who starred a repository."
+        search_strategy: "Empty results do not mean zero stargazers: GitHub only lists stargazers to repository administrators and collaborators. Restricted responses come in two shapes: stargazer_count is positive with empty results, or stargazer_count is null with empty results and a FORBIDDEN entry in errors. In both cases report the aggregate count (stargazer_count, or stargazers_count from repositories.get when it is null), state that individual stargazers cannot be listed, and never report zero stargazers."
 
     GitHubTagsStreamMapping:
       type: object
@@ -5053,7 +5057,16 @@ paths:
   /graphql:stargazers:list:
     post:
       summary: List stargazers for a repository
-      description: Returns a list of users who have starred the repository using GraphQL
+      description: |
+        Lists users who have starred the repository using GraphQL. Since July 2026,
+        GitHub restricts stargazer and watcher listings to repository administrators
+        and collaborators. A token without that access gets one of two shapes:
+        stargazer_count greater than zero with empty results, or stargazer_count
+        null with empty results and a FORBIDDEN entry in the errors metadata. Either
+        way the aggregate count is authoritative (fall back to stargazers_count from
+        repositories.get when it is null): report it and explain that individual
+        stargazers are unavailable; in this restricted case, never report zero
+        stargazers.
       operationId: Stargazers_List
       x-airbyte-entity: stargazers
       x-airbyte-action: list
@@ -5063,6 +5076,8 @@ paths:
       x-airbyte-meta-extractor:
         has_next_page: $.data.repository.stargazers.pageInfo.hasNextPage
         end_cursor: $.data.repository.stargazers.pageInfo.endCursor
+        stargazer_count: $.data.repository.stargazerCount
+        errors: $.errors
       tags:
         - Stargazers
       parameters:
@@ -5109,6 +5124,7 @@ paths:
           query: |
             query ListStargazers($owner: String!, $name: String!, $first: Int!, $after: String) {
               repository(owner: $owner, name: $name) {
+                stargazerCount
                 stargazers(first: $first, after: $after, orderBy: {field: STARRED_AT, direction: DESC}) {
                   pageInfo {
                     hasNextPage
@@ -5139,8 +5155,10 @@ paths:
                     type: object
                     properties:
                       repository:
-                        type: object
+                        type: ["null", "object"]
                         properties:
+                          stargazerCount:
+                            type: integer
                           stargazers:
                             type: object
                             properties:
@@ -5150,11 +5168,20 @@ paths:
                                   hasNextPage:
                                     type: boolean
                                   endCursor:
-                                    type: string
+                                    type: ["null", "string"]
                               edges:
                                 type: array
                                 items:
                                   type: object
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        message:
+                          type: string
         "404":
           description: Repository not found
 

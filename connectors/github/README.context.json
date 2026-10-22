@@ -3521,11 +3521,13 @@
         ],
         "params_type_name": "StargazersListParams",
         "response_type": "StargazersListResult",
-        "description": "Returns a list of users who have starred the repository using GraphQL",
+        "description": "Lists users who have starred the repository using GraphQL. Since July 2026,\nGitHub restricts stargazer and watcher listings to repository administrators\nand collaborators. A token without that access gets one of two shapes:\nstargazer_count greater than zero with empty results, or stargazer_count\nnull with empty results and a FORBIDDEN entry in the errors metadata. Either\nway the aggregate count is authoritative (fall back to stargazers_count from\nrepositories.get when it is null): report it and explain that individual\nstargazers are unavailable; in this restricted case, never report zero\nstargazers.\n",
         "record_extractor": "$.data.repository.stargazers.edges",
         "meta_extractor": {
           "has_next_page": "$.data.repository.stargazers.pageInfo.hasNextPage",
-          "end_cursor": "$.data.repository.stargazers.pageInfo.endCursor"
+          "end_cursor": "$.data.repository.stargazers.pageInfo.endCursor",
+          "stargazer_count": "$.data.repository.stargazerCount",
+          "errors": "$.errors"
         },
         "needs_envelope": true,
         "record_type": "list[dict[str, Any]]",
@@ -3543,7 +3545,37 @@
             "python_name": "end_cursor",
             "type": "str",
             "schema": {
-              "type": "string"
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "stargazer_count",
+            "python_name": "stargazer_count",
+            "type": "int",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "errors",
+            "python_name": "errors",
+            "type": "list[dict[str, Any]]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         ],

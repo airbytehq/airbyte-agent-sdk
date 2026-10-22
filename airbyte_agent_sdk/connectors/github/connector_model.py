@@ -3219,7 +3219,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                         path='/graphql',
                     ),
                     action=Action.LIST,
-                    description='Returns a list of users who have starred the repository using GraphQL',
+                    description='Lists users who have starred the repository using GraphQL. Since July 2026,\nGitHub restricts stargazer and watcher listings to repository administrators\nand collaborators. A token without that access gets one of two shapes:\nstargazer_count greater than zero with empty results, or stargazer_count\nnull with empty results and a FORBIDDEN entry in the errors metadata. Either\nway the aggregate count is authoritative (fall back to stargazers_count from\nrepositories.get when it is null): report it and explain that individual\nstargazers are unavailable; in this restricted case, never report zero\nstargazers.\n',
                     query_params=[
                         'owner',
                         'repo',
@@ -3251,8 +3251,9 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                 'type': 'object',
                                 'properties': {
                                     'repository': {
-                                        'type': 'object',
+                                        'type': ['null', 'object'],
                                         'properties': {
+                                            'stargazerCount': {'type': 'integer'},
                                             'stargazers': {
                                                 'type': 'object',
                                                 'properties': {
@@ -3260,7 +3261,9 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                                         'type': 'object',
                                                         'properties': {
                                                             'hasNextPage': {'type': 'boolean'},
-                                                            'endCursor': {'type': 'string'},
+                                                            'endCursor': {
+                                                                'type': ['null', 'string'],
+                                                            },
                                                         },
                                                     },
                                                     'edges': {
@@ -3273,11 +3276,21 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 },
                             },
+                            'errors': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'properties': {
+                                        'type': {'type': 'string'},
+                                        'message': {'type': 'string'},
+                                    },
+                                },
+                            },
                         },
                     },
                     graphql_body={
                         'type': 'graphql',
-                        'query': 'query ListStargazers($owner: String!, $name: String!, $first: Int!, $after: String) {\n  repository(owner: $owner, name: $name) {\n    stargazers(first: $first, after: $after, orderBy: {field: STARRED_AT, direction: DESC}) {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n      edges {\n        {{ fields }}\n      }\n    }\n  }\n}\n',
+                        'query': 'query ListStargazers($owner: String!, $name: String!, $first: Int!, $after: String) {\n  repository(owner: $owner, name: $name) {\n    stargazerCount\n    stargazers(first: $first, after: $after, orderBy: {field: STARRED_AT, direction: DESC}) {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n      edges {\n        {{ fields }}\n      }\n    }\n  }\n}\n',
                         'variables': {
                             'owner': '{{ owner }}',
                             'name': '{{ repo }}',
@@ -3287,13 +3300,28 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                         'default_fields': 'starredAt node { id login name avatarUrl url }',
                     },
                     record_extractor='$.data.repository.stargazers.edges',
-                    meta_extractor={'has_next_page': '$.data.repository.stargazers.pageInfo.hasNextPage', 'end_cursor': '$.data.repository.stargazers.pageInfo.endCursor'},
+                    meta_extractor={
+                        'has_next_page': '$.data.repository.stargazers.pageInfo.hasNextPage',
+                        'end_cursor': '$.data.repository.stargazers.pageInfo.endCursor',
+                        'stargazer_count': '$.data.repository.stargazerCount',
+                        'errors': '$.errors',
+                    },
                 ),
             },
             entity_schema={
                 'type': 'object',
                 'x-airbyte-entity-name': 'stargazers',
                 'x-airbyte-stream-name': 'stargazers',
+                'x-airbyte-ai-hints': {
+                    'summary': 'Users who starred a repository; the list may be restricted while the aggregate count remains available',
+                    'when_to_use': 'Use for questions about repository star counts or who starred a repository.',
+                    'search_strategy': 'Empty results do not mean zero stargazers: GitHub only lists stargazers to repository administrators and collaborators. Restricted responses come in two shapes: stargazer_count is positive with empty results, or stargazer_count is null with empty results and a FORBIDDEN entry in errors. In both cases report the aggregate count (stargazer_count, or stargazers_count from repositories.get when it is null), state that individual stargazers cannot be listed, and never report zero stargazers.',
+                },
+            },
+            ai_hints={
+                'summary': 'Users who starred a repository; the list may be restricted while the aggregate count remains available',
+                'when_to_use': 'Use for questions about repository star counts or who starred a repository.',
+                'search_strategy': 'Empty results do not mean zero stargazers: GitHub only lists stargazers to repository administrators and collaborators. Restricted responses come in two shapes: stargazer_count is positive with empty results, or stargazer_count is null with empty results and a FORBIDDEN entry in errors. In both cases report the aggregate count (stargazer_count, or stargazers_count from repositories.get when it is null), state that individual stargazers cannot be listed, and never report zero stargazers.',
             },
         ),
         EntityDefinition(

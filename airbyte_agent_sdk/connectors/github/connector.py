@@ -226,7 +226,7 @@ class GithubConnector:
 
     connector_name = "github"
     connector_version = "0.1.19"
-    sdk_version = "0.1.378"
+    sdk_version = "0.1.379"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -4661,7 +4661,16 @@ class StargazersQuery:
         **kwargs
     ) -> StargazersListResult:
         """
-        Returns a list of users who have starred the repository using GraphQL
+        Lists users who have starred the repository using GraphQL. Since July 2026,
+GitHub restricts stargazer and watcher listings to repository administrators
+and collaborators. A token without that access gets one of two shapes:
+stargazer_count greater than zero with empty results, or stargazer_count
+null with empty results and a FORBIDDEN entry in the errors metadata. Either
+way the aggregate count is authoritative (fall back to stargazers_count from
+repositories.get when it is null): report it and explain that individual
+stargazers are unavailable; in this restricted case, never report zero
+stargazers.
+
 
         Args:
             owner: The account owner of the repository
