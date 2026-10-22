@@ -30,6 +30,9 @@ from airbyte_agent_sdk.schema.extensions import (
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
 )
+from airbyte_agent_sdk.schema.components import (
+    PathOverrideConfig,
+)
 from uuid import (
     UUID,
 )
@@ -37,7 +40,7 @@ from uuid import (
 AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('c6b0a29e-1da9-4512-9002-7bfd0cba2246'),
     name='amazon-ads',
-    version='1.0.10',
+    version='1.0.11',
     base_url='{region}',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -487,117 +490,146 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     meta_extractor={'next_token': '$.nextToken'},
                 ),
                 Action.GET: EndpointDefinition(
-                    method='GET',
-                    path='/v2/portfolios/{portfolioId}',
+                    method='POST',
+                    path='/portfolios/list:get',
+                    path_override=PathOverrideConfig(
+                        path='/portfolios/list',
+                    ),
                     action=Action.GET,
-                    description='Retrieves a single portfolio by its ID using the v2 API.\n',
-                    path_params=['portfolioId'],
-                    path_params_schema={
-                        'portfolioId': {
-                            'type': 'integer',
-                            'required': True,
-                            'format': 'int64',
-                        },
-                    },
+                    description='Fetches a single portfolio by ID through the v3 list endpoint using an ID filter.\n',
+                    body_fields=['portfolioIdFilter', 'includeExtendedDataFields'],
                     header_params=['Amazon-Advertising-API-ClientId', 'Amazon-Advertising-API-Scope'],
                     header_params_schema={
                         'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
                         'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
                     },
+                    request_body_defaults={'includeExtendedDataFields': 'true'},
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'portfolioIdFilter': {
+                                'type': 'object',
+                                'description': 'Pass {"include": ["<portfolioId>"]} to fetch the portfolio with this ID.',
+                                'properties': {
+                                    'include': {
+                                        'type': 'array',
+                                        'items': {'type': 'string'},
+                                        'minItems': 1,
+                                    },
+                                },
+                                'required': ['include'],
+                            },
+                            'includeExtendedDataFields': {
+                                'type': 'string',
+                                'default': 'true',
+                                'description': 'Whether to include extended data fields in the response',
+                            },
+                        },
+                        'required': ['portfolioIdFilter'],
+                    },
                     response_schema={
                         'type': 'object',
-                        'description': 'A portfolio is a container for grouping campaigns together for organizational\nand budget management purposes.\n',
                         'properties': {
-                            'portfolioId': {
-                                'oneOf': [
-                                    {'type': 'string'},
-                                    {'type': 'integer', 'format': 'int64'},
-                                ],
-                                'description': 'The unique identifier of the portfolio',
-                            },
-                            'name': {
-                                'type': ['string', 'null'],
-                                'description': 'The name of the portfolio',
-                            },
-                            'budget': {
-                                'oneOf': [
-                                    {
-                                        'type': 'object',
-                                        'description': 'Budget configuration for a portfolio',
-                                        'properties': {
-                                            'amount': {
-                                                'type': ['number', 'null'],
-                                                'description': 'The budget amount',
-                                            },
-                                            'currencyCode': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The currency code for the budget',
-                                            },
-                                            'policy': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The budget policy (dateRange, monthlyRecurring)',
-                                            },
-                                            'startDate': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The start date of the budget period',
-                                            },
-                                            'endDate': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The end date of the budget period',
-                                            },
+                            'portfolios': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A portfolio is a container for grouping campaigns together for organizational\nand budget management purposes.\n',
+                                    'properties': {
+                                        'portfolioId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the portfolio',
+                                        },
+                                        'name': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The name of the portfolio',
+                                        },
+                                        'budget': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Budget configuration for a portfolio',
+                                                    'properties': {
+                                                        'amount': {
+                                                            'type': ['number', 'null'],
+                                                            'description': 'The budget amount',
+                                                        },
+                                                        'currencyCode': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The currency code for the budget',
+                                                        },
+                                                        'policy': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The budget policy (dateRange, monthlyRecurring)',
+                                                        },
+                                                        'startDate': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The start date of the budget period',
+                                                        },
+                                                        'endDate': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The end date of the budget period',
+                                                        },
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                            'description': 'Budget configuration for the portfolio',
+                                        },
+                                        'inBudget': {
+                                            'type': ['boolean', 'null'],
+                                            'description': 'Whether the portfolio is within its budget',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the portfolio (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'creationDate': {
+                                            'type': ['integer', 'null'],
+                                            'format': 'int64',
+                                            'description': 'The creation date of the portfolio (epoch milliseconds)',
+                                        },
+                                        'lastUpdatedDate': {
+                                            'type': ['integer', 'null'],
+                                            'format': 'int64',
+                                            'description': 'The last updated date of the portfolio (epoch milliseconds)',
+                                        },
+                                        'servingStatus': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The serving status of the portfolio',
                                         },
                                     },
-                                    {'type': 'null'},
-                                ],
-                                'description': 'Budget configuration for the portfolio',
+                                    'x-airbyte-entity-name': 'portfolios',
+                                    'x-airbyte-stream-name': 'portfolios',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Portfolios that group advertising campaigns together for budget management',
+                                        'when_to_use': 'Questions about campaign groupings, portfolio budgets, or organizational structure of ad campaigns',
+                                        'trigger_phrases': [
+                                            'portfolios',
+                                            'campaign groups',
+                                            'portfolio budget',
+                                            'list portfolios',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['List all portfolios for one of my profiles', 'Which portfolios are within budget?'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list portfolios for that profile.',
+                                    },
+                                },
                             },
-                            'inBudget': {
-                                'type': ['boolean', 'null'],
-                                'description': 'Whether the portfolio is within its budget',
-                            },
-                            'state': {
-                                'type': ['string', 'null'],
-                                'description': 'The state of the portfolio (enabled, paused, archived)',
-                                'enum': [
-                                    'enabled',
-                                    'paused',
-                                    'archived',
-                                    'ENABLED',
-                                    'PAUSED',
-                                    'ARCHIVED',
-                                ],
-                            },
-                            'creationDate': {
-                                'type': ['integer', 'null'],
-                                'format': 'int64',
-                                'description': 'The creation date of the portfolio (epoch milliseconds)',
-                            },
-                            'lastUpdatedDate': {
-                                'type': ['integer', 'null'],
-                                'format': 'int64',
-                                'description': 'The last updated date of the portfolio (epoch milliseconds)',
-                            },
-                            'servingStatus': {
-                                'type': ['string', 'null'],
-                                'description': 'The serving status of the portfolio',
-                            },
-                        },
-                        'x-airbyte-entity-name': 'portfolios',
-                        'x-airbyte-stream-name': 'portfolios',
-                        'x-airbyte-ai-hints': {
-                            'summary': 'Portfolios that group advertising campaigns together for budget management',
-                            'when_to_use': 'Questions about campaign groupings, portfolio budgets, or organizational structure of ad campaigns',
-                            'trigger_phrases': [
-                                'portfolios',
-                                'campaign groups',
-                                'portfolio budget',
-                                'list portfolios',
-                            ],
-                            'freshness': 'live',
-                            'example_questions': ['List all portfolios for one of my profiles', 'Which portfolios are within budget?'],
-                            'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list portfolios for that profile.',
                         },
                     },
+                    record_extractor='$.portfolios[0]',
                 ),
             },
             entity_schema={
@@ -748,7 +780,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                                 'type': 'array',
                                 'items': {
                                     'type': 'object',
-                                    'description': 'A Sponsored Products campaign promotes individual product listings on Amazon.\nCampaigns contain ad groups, which contain ads and targeting settings.\nNote: The list endpoint (v3) and get endpoint (v2) return slightly different field formats.\n',
+                                    'description': 'A Sponsored Products campaign promotes individual product listings on Amazon.\nCampaigns contain ad groups, which contain ads and targeting settings.\n',
                                     'properties': {
                                         'campaignId': {
                                             'oneOf': [
@@ -940,212 +972,250 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                     meta_extractor={'next_token': '$.nextToken'},
                 ),
                 Action.GET: EndpointDefinition(
-                    method='GET',
-                    path='/v2/sp/campaigns/{campaignId}',
+                    method='POST',
+                    path='/sp/campaigns/list:get',
+                    path_override=PathOverrideConfig(
+                        path='/sp/campaigns/list',
+                    ),
                     action=Action.GET,
-                    description='Retrieves a single sponsored product campaign by its ID using the v2 API.\n',
-                    path_params=['campaignId'],
-                    path_params_schema={
-                        'campaignId': {
-                            'type': 'integer',
-                            'required': True,
-                            'format': 'int64',
-                        },
-                    },
-                    header_params=['Amazon-Advertising-API-ClientId', 'Amazon-Advertising-API-Scope'],
+                    description='Fetches a single sponsored product campaign by ID through the v3 list endpoint using an ID filter.\n',
+                    body_fields=['campaignIdFilter'],
+                    header_params=[
+                        'Amazon-Advertising-API-ClientId',
+                        'Amazon-Advertising-API-Scope',
+                        'Accept',
+                        'Content-Type',
+                    ],
                     header_params_schema={
                         'Amazon-Advertising-API-ClientId': {'type': 'string', 'required': True},
                         'Amazon-Advertising-API-Scope': {'type': 'string', 'required': True},
+                        'Accept': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spCampaign.v3+json',
+                        },
+                        'Content-Type': {
+                            'type': 'string',
+                            'required': True,
+                            'default': 'application/vnd.spCampaign.v3+json',
+                        },
+                    },
+                    request_schema={
+                        'type': 'object',
+                        'properties': {
+                            'campaignIdFilter': {
+                                'type': 'object',
+                                'description': 'Pass {"include": ["<campaignId>"]} to fetch the campaign with this ID.',
+                                'properties': {
+                                    'include': {
+                                        'type': 'array',
+                                        'items': {'type': 'string'},
+                                        'minItems': 1,
+                                    },
+                                },
+                                'required': ['include'],
+                            },
+                        },
+                        'required': ['campaignIdFilter'],
                     },
                     response_schema={
                         'type': 'object',
-                        'description': 'A Sponsored Products campaign promotes individual product listings on Amazon.\nCampaigns contain ad groups, which contain ads and targeting settings.\nNote: The list endpoint (v3) and get endpoint (v2) return slightly different field formats.\n',
                         'properties': {
-                            'campaignId': {
-                                'oneOf': [
-                                    {'type': 'string'},
-                                    {'type': 'integer', 'format': 'int64'},
-                                ],
-                                'description': 'The unique identifier of the campaign',
-                            },
-                            'portfolioId': {
-                                'oneOf': [
-                                    {'type': 'string'},
-                                    {'type': 'integer', 'format': 'int64'},
-                                    {'type': 'null'},
-                                ],
-                                'description': 'The portfolio ID this campaign belongs to',
-                            },
-                            'name': {
-                                'type': ['string', 'null'],
-                                'description': 'The name of the campaign',
-                            },
-                            'campaignType': {
-                                'type': ['string', 'null'],
-                                'description': 'The type of campaign (sponsoredProducts) - returned by v2 API',
-                            },
-                            'tags': {
-                                'type': ['object', 'null'],
-                                'additionalProperties': True,
-                                'description': 'Tags associated with the campaign',
-                            },
-                            'targetingType': {
-                                'type': ['string', 'null'],
-                                'description': 'The targeting type (manual, auto)',
-                                'enum': [
-                                    'manual',
-                                    'auto',
-                                    'MANUAL',
-                                    'AUTO',
-                                ],
-                            },
-                            'premiumBidAdjustment': {
-                                'type': ['boolean', 'null'],
-                                'description': 'Whether premium bid adjustment is enabled - returned by v2 API',
-                            },
-                            'state': {
-                                'type': ['string', 'null'],
-                                'description': 'The state of the campaign (enabled, paused, archived)',
-                                'enum': [
-                                    'enabled',
-                                    'paused',
-                                    'archived',
-                                    'ENABLED',
-                                    'PAUSED',
-                                    'ARCHIVED',
-                                ],
-                            },
-                            'dynamicBidding': {
-                                'oneOf': [
-                                    {
-                                        'type': 'object',
-                                        'description': 'Dynamic bidding settings for a campaign',
-                                        'properties': {
-                                            'placementBidding': {
-                                                'type': ['array', 'null'],
-                                                'items': {
+                            'campaigns': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'description': 'A Sponsored Products campaign promotes individual product listings on Amazon.\nCampaigns contain ad groups, which contain ads and targeting settings.\n',
+                                    'properties': {
+                                        'campaignId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                            ],
+                                            'description': 'The unique identifier of the campaign',
+                                        },
+                                        'portfolioId': {
+                                            'oneOf': [
+                                                {'type': 'string'},
+                                                {'type': 'integer', 'format': 'int64'},
+                                                {'type': 'null'},
+                                            ],
+                                            'description': 'The portfolio ID this campaign belongs to',
+                                        },
+                                        'name': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The name of the campaign',
+                                        },
+                                        'campaignType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The type of campaign (sponsoredProducts) - returned by v2 API',
+                                        },
+                                        'tags': {
+                                            'type': ['object', 'null'],
+                                            'additionalProperties': True,
+                                            'description': 'Tags associated with the campaign',
+                                        },
+                                        'targetingType': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The targeting type (manual, auto)',
+                                            'enum': [
+                                                'manual',
+                                                'auto',
+                                                'MANUAL',
+                                                'AUTO',
+                                            ],
+                                        },
+                                        'premiumBidAdjustment': {
+                                            'type': ['boolean', 'null'],
+                                            'description': 'Whether premium bid adjustment is enabled - returned by v2 API',
+                                        },
+                                        'state': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The state of the campaign (enabled, paused, archived)',
+                                            'enum': [
+                                                'enabled',
+                                                'paused',
+                                                'archived',
+                                                'ENABLED',
+                                                'PAUSED',
+                                                'ARCHIVED',
+                                            ],
+                                        },
+                                        'dynamicBidding': {
+                                            'oneOf': [
+                                                {
                                                     'type': 'object',
+                                                    'description': 'Dynamic bidding settings for a campaign',
                                                     'properties': {
-                                                        'placement': {
-                                                            'type': ['string', 'null'],
-                                                            'description': 'The placement type',
+                                                        'placementBidding': {
+                                                            'type': ['array', 'null'],
+                                                            'items': {
+                                                                'type': 'object',
+                                                                'properties': {
+                                                                    'placement': {
+                                                                        'type': ['string', 'null'],
+                                                                        'description': 'The placement type',
+                                                                    },
+                                                                    'percentage': {
+                                                                        'type': ['integer', 'null'],
+                                                                        'description': 'The bid adjustment percentage',
+                                                                    },
+                                                                },
+                                                            },
                                                         },
-                                                        'percentage': {
-                                                            'type': ['integer', 'null'],
-                                                            'description': 'The bid adjustment percentage',
+                                                        'strategy': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The bidding strategy (legacyForSales, autoForSales, manual)',
                                                         },
                                                     },
                                                 },
-                                            },
-                                            'strategy': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The bidding strategy (legacyForSales, autoForSales, manual)',
-                                            },
+                                                {'type': 'null'},
+                                            ],
+                                            'description': 'Dynamic bidding settings for the campaign (v3 API format)',
                                         },
-                                    },
-                                    {'type': 'null'},
-                                ],
-                                'description': 'Dynamic bidding settings for the campaign (v3 API format)',
-                            },
-                            'bidding': {
-                                'oneOf': [
-                                    {
-                                        'type': 'object',
-                                        'description': 'Dynamic bidding settings for a campaign',
-                                        'properties': {
-                                            'placementBidding': {
-                                                'type': ['array', 'null'],
-                                                'items': {
+                                        'bidding': {
+                                            'oneOf': [
+                                                {
                                                     'type': 'object',
+                                                    'description': 'Dynamic bidding settings for a campaign',
                                                     'properties': {
-                                                        'placement': {
-                                                            'type': ['string', 'null'],
-                                                            'description': 'The placement type',
+                                                        'placementBidding': {
+                                                            'type': ['array', 'null'],
+                                                            'items': {
+                                                                'type': 'object',
+                                                                'properties': {
+                                                                    'placement': {
+                                                                        'type': ['string', 'null'],
+                                                                        'description': 'The placement type',
+                                                                    },
+                                                                    'percentage': {
+                                                                        'type': ['integer', 'null'],
+                                                                        'description': 'The bid adjustment percentage',
+                                                                    },
+                                                                },
+                                                            },
                                                         },
-                                                        'percentage': {
-                                                            'type': ['integer', 'null'],
-                                                            'description': 'The bid adjustment percentage',
+                                                        'strategy': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The bidding strategy (legacyForSales, autoForSales, manual)',
                                                         },
                                                     },
                                                 },
-                                            },
-                                            'strategy': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The bidding strategy (legacyForSales, autoForSales, manual)',
-                                            },
+                                                {'type': 'null'},
+                                            ],
+                                            'description': 'Bidding settings for the campaign (v2 API format)',
+                                        },
+                                        'startDate': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The start date of the campaign (YYYYMMDD format)',
+                                        },
+                                        'endDate': {
+                                            'type': ['string', 'null'],
+                                            'description': 'The end date of the campaign (YYYYMMDD format)',
+                                        },
+                                        'dailyBudget': {
+                                            'type': ['number', 'null'],
+                                            'description': 'The daily budget amount - returned by v2 API',
+                                        },
+                                        'budget': {
+                                            'oneOf': [
+                                                {
+                                                    'type': 'object',
+                                                    'description': 'Budget configuration for a campaign',
+                                                    'properties': {
+                                                        'budgetType': {
+                                                            'type': ['string', 'null'],
+                                                            'description': 'The budget type (daily)',
+                                                        },
+                                                        'budget': {
+                                                            'type': ['number', 'null'],
+                                                            'description': 'The budget amount',
+                                                        },
+                                                    },
+                                                },
+                                                {'type': 'null'},
+                                            ],
+                                            'description': 'Budget configuration for the campaign (v3 API format)',
+                                        },
+                                        'extendedData': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Extended data fields for the campaign',
+                                        },
+                                        'marketplaceBudgetAllocation': {
+                                            'type': ['string', 'null'],
+                                            'description': 'Marketplace budget allocation setting (MANUAL, AUTO)',
+                                        },
+                                        'offAmazonSettings': {
+                                            'type': ['object', 'null'],
+                                            'description': 'Off-Amazon settings for the campaign',
                                         },
                                     },
-                                    {'type': 'null'},
-                                ],
-                                'description': 'Bidding settings for the campaign (v2 API format)',
-                            },
-                            'startDate': {
-                                'type': ['string', 'null'],
-                                'description': 'The start date of the campaign (YYYYMMDD format)',
-                            },
-                            'endDate': {
-                                'type': ['string', 'null'],
-                                'description': 'The end date of the campaign (YYYYMMDD format)',
-                            },
-                            'dailyBudget': {
-                                'type': ['number', 'null'],
-                                'description': 'The daily budget amount - returned by v2 API',
-                            },
-                            'budget': {
-                                'oneOf': [
-                                    {
-                                        'type': 'object',
-                                        'description': 'Budget configuration for a campaign',
-                                        'properties': {
-                                            'budgetType': {
-                                                'type': ['string', 'null'],
-                                                'description': 'The budget type (daily)',
-                                            },
-                                            'budget': {
-                                                'type': ['number', 'null'],
-                                                'description': 'The budget amount',
-                                            },
-                                        },
+                                    'x-airbyte-entity-name': 'sponsored_product_campaigns',
+                                    'x-airbyte-stream-name': 'sponsored_product_campaigns',
+                                    'x-airbyte-ai-hints': {
+                                        'summary': 'Sponsored Products campaigns that promote individual product listings on Amazon',
+                                        'when_to_use': 'Questions about advertising campaigns, campaign status, budgets, bidding strategies, or targeting types',
+                                        'trigger_phrases': [
+                                            'campaigns',
+                                            'sponsored products',
+                                            'ad campaigns',
+                                            'campaign budget',
+                                            'campaign status',
+                                        ],
+                                        'freshness': 'live',
+                                        'example_questions': ['Show me all sponsored product campaigns', 'What campaigns are currently enabled?', 'Find campaigns with a specific targeting type'],
+                                        'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list campaigns for that profile.',
                                     },
-                                    {'type': 'null'},
-                                ],
-                                'description': 'Budget configuration for the campaign (v3 API format)',
+                                },
                             },
-                            'extendedData': {
-                                'type': ['object', 'null'],
-                                'description': 'Extended data fields for the campaign',
-                            },
-                            'marketplaceBudgetAllocation': {
-                                'type': ['string', 'null'],
-                                'description': 'Marketplace budget allocation setting (MANUAL, AUTO)',
-                            },
-                            'offAmazonSettings': {
-                                'type': ['object', 'null'],
-                                'description': 'Off-Amazon settings for the campaign',
-                            },
-                        },
-                        'x-airbyte-entity-name': 'sponsored_product_campaigns',
-                        'x-airbyte-stream-name': 'sponsored_product_campaigns',
-                        'x-airbyte-ai-hints': {
-                            'summary': 'Sponsored Products campaigns that promote individual product listings on Amazon',
-                            'when_to_use': 'Questions about advertising campaigns, campaign status, budgets, bidding strategies, or targeting types',
-                            'trigger_phrases': [
-                                'campaigns',
-                                'sponsored products',
-                                'ad campaigns',
-                                'campaign budget',
-                                'campaign status',
-                            ],
-                            'freshness': 'live',
-                            'example_questions': ['Show me all sponsored product campaigns', 'What campaigns are currently enabled?', 'Find campaigns with a specific targeting type'],
-                            'search_strategy': 'The Amazon-Advertising-API-Scope header is required and must be set to a profileId obtained from listing profiles. First list profiles to get available profileId values, then use a profileId as the Scope header value to list campaigns for that profile.',
                         },
                     },
+                    record_extractor='$.campaigns[0]',
                 ),
             },
             entity_schema={
                 'type': 'object',
-                'description': 'A Sponsored Products campaign promotes individual product listings on Amazon.\nCampaigns contain ad groups, which contain ads and targeting settings.\nNote: The list endpoint (v3) and get endpoint (v2) return slightly different field formats.\n',
+                'description': 'A Sponsored Products campaign promotes individual product listings on Amazon.\nCampaigns contain ad groups, which contain ads and targeting settings.\n',
                 'properties': {
                     'campaignId': {
                         'oneOf': [

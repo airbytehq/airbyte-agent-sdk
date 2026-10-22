@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Amazon Ads API Connector
-  version: 1.0.10
+  version: 1.0.11
   description: |
     Amazon Ads is Amazon's advertising platform that enables sellers and vendors to promote their
     products across Amazon's marketplace. This connector provides access to advertising profiles,
@@ -346,24 +346,20 @@ paths:
         "403":
           description: Forbidden - Insufficient permissions
 
-  /v2/portfolios/{portfolioId}:
-    get:
-      summary: Get a portfolio
+  /portfolios/list:get:
+    post:
+      summary: Get a portfolio by ID
       description: |
-        Retrieves a single portfolio by its ID using the v2 API.
+        Fetches a single portfolio by ID through the v3 list endpoint using an ID filter.
       operationId: getPortfolio
       x-airbyte-entity: portfolios
       x-airbyte-action: get
+      x-airbyte-path-override:
+        path: /portfolios/list
+      x-airbyte-record-extractor: $.portfolios[0]
       tags:
         - Portfolios
       parameters:
-        - name: portfolioId
-          in: path
-          required: true
-          description: The unique identifier of the portfolio
-          schema:
-            type: integer
-            format: int64
         - name: Amazon-Advertising-API-ClientId
           in: header
           required: true
@@ -376,13 +372,42 @@ paths:
           description: The profile ID to scope the request to
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                portfolioIdFilter:
+                  type: object
+                  description: 'Pass {"include": ["<portfolioId>"]} to fetch the portfolio with this ID.'
+                  properties:
+                    include:
+                      type: array
+                      items:
+                        type: string
+                      minItems: 1
+                  required:
+                    - include
+                includeExtendedDataFields:
+                  type: string
+                  default: "true"
+                  description: Whether to include extended data fields in the response
+              required:
+                - portfolioIdFilter
       responses:
         "200":
-          description: Portfolio details
+          description: Portfolio matching the requested ID
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Portfolio"
+                type: object
+                properties:
+                  portfolios:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Portfolio"
         "401":
           description: Unauthorized - Invalid or expired access token
         "404":
@@ -469,24 +494,20 @@ paths:
         "403":
           description: Forbidden - Insufficient permissions
 
-  /v2/sp/campaigns/{campaignId}:
-    get:
-      summary: Get a sponsored product campaign
+  /sp/campaigns/list:get:
+    post:
+      summary: Get a sponsored product campaign by ID
       description: |
-        Retrieves a single sponsored product campaign by its ID using the v2 API.
+        Fetches a single sponsored product campaign by ID through the v3 list endpoint using an ID filter.
       operationId: getSponsoredProductCampaign
       x-airbyte-entity: sponsored_product_campaigns
       x-airbyte-action: get
+      x-airbyte-path-override:
+        path: /sp/campaigns/list
+      x-airbyte-record-extractor: $.campaigns[0]
       tags:
         - Sponsored Product Campaigns
       parameters:
-        - name: campaignId
-          in: path
-          required: true
-          description: The unique identifier of the campaign
-          schema:
-            type: integer
-            format: int64
         - name: Amazon-Advertising-API-ClientId
           in: header
           required: true
@@ -499,13 +520,50 @@ paths:
           description: The profile ID to scope the request to
           schema:
             type: string
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spCampaign.v3+json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            default: application/vnd.spCampaign.v3+json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                campaignIdFilter:
+                  type: object
+                  description: 'Pass {"include": ["<campaignId>"]} to fetch the campaign with this ID.'
+                  properties:
+                    include:
+                      type: array
+                      items:
+                        type: string
+                      minItems: 1
+                  required:
+                    - include
+              required:
+                - campaignIdFilter
       responses:
         "200":
-          description: Campaign details
+          description: Campaign matching the requested ID
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SponsoredProductCampaign"
+                type: object
+                properties:
+                  campaigns:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SponsoredProductCampaign"
         "401":
           description: Unauthorized - Invalid or expired access token
         "404":
@@ -1362,7 +1420,6 @@ components:
       description: |
         A Sponsored Products campaign promotes individual product listings on Amazon.
         Campaigns contain ad groups, which contain ads and targeting settings.
-        Note: The list endpoint (v3) and get endpoint (v2) return slightly different field formats.
       properties:
         campaignId:
           oneOf:

@@ -21,6 +21,7 @@ from airbyte_agent_sdk.translation import DEFAULT_MAX_OUTPUT_CHARS, FrameworkNam
 from airbyte_agent_sdk.types import AirbyteAuthConfig
 from .types import (
     PortfoliosGetParams,
+    PortfoliosGetParamsPortfolioidfilter,
     PortfoliosListParams,
     ProfilesGetParams,
     ProfilesListParams,
@@ -31,6 +32,7 @@ from .types import (
     SponsoredProductAdGroupsListParams,
     SponsoredProductAdGroupsListParamsStatefilter,
     SponsoredProductCampaignsGetParams,
+    SponsoredProductCampaignsGetParamsCampaignidfilter,
     SponsoredProductCampaignsListParams,
     SponsoredProductCampaignsListParamsStatefilter,
     SponsoredProductKeywordsListParams,
@@ -65,9 +67,7 @@ from .models import (
     SponsoredProductNegativeTargetsListResult,
     SponsoredBrandsCampaignsListResult,
     SponsoredBrandsAdGroupsListResult,
-    Portfolio,
     Profile,
-    SponsoredProductCampaign,
     AirbyteSearchMeta,
     AirbyteSearchResult,
     ProfilesSearchData,
@@ -88,8 +88,8 @@ class AmazonAdsConnector:
     """
 
     connector_name = "amazon-ads"
-    connector_version = "1.0.10"
-    sdk_version = "0.1.377"
+    connector_version = "1.0.11"
+    sdk_version = "0.1.378"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -115,9 +115,9 @@ class AmazonAdsConnector:
         ('profiles', 'list'): {'profile_type_filter': 'profileTypeFilter'},
         ('profiles', 'get'): {'profile_id': 'profileId'},
         ('portfolios', 'list'): {'include_extended_data_fields': 'includeExtendedDataFields'},
-        ('portfolios', 'get'): {'portfolio_id': 'portfolioId'},
+        ('portfolios', 'get'): {'portfolio_id_filter': 'portfolioIdFilter', 'include_extended_data_fields': 'includeExtendedDataFields'},
         ('sponsored_product_campaigns', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
-        ('sponsored_product_campaigns', 'get'): {'campaign_id': 'campaignId'},
+        ('sponsored_product_campaigns', 'get'): {'campaign_id_filter': 'campaignIdFilter'},
         ('sponsored_product_ad_groups', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
         ('sponsored_product_keywords', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
         ('sponsored_product_product_ads', 'list'): {'state_filter': 'stateFilter', 'max_results': 'maxResults', 'next_token': 'nextToken'},
@@ -292,7 +292,7 @@ class AmazonAdsConnector:
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "Portfolio": ...
+    ) -> "dict[str, Any]": ...
 
     @overload
     async def execute(
@@ -316,7 +316,7 @@ class AmazonAdsConnector:
         select_fields: list[str] | None = ...,
         exclude_fields: list[str] | None = ...,
         skip_truncation: bool = ...
-    ) -> "SponsoredProductCampaign": ...
+    ) -> "dict[str, Any]": ...
 
     @overload
     async def execute(
@@ -1064,22 +1064,25 @@ group campaigns together for organizational and budget management purposes.
 
     async def get(
         self,
-        portfolio_id: str,
+        portfolio_id_filter: PortfoliosGetParamsPortfolioidfilter,
+        include_extended_data_fields: str | None = None,
         **kwargs
-    ) -> Portfolio:
+    ) -> dict[str, Any]:
         """
-        Retrieves a single portfolio by its ID using the v2 API.
+        Fetches a single portfolio by ID through the v3 list endpoint using an ID filter.
 
 
         Args:
-            portfolio_id: The unique identifier of the portfolio
+            portfolio_id_filter: Pass {"include": ["<portfolioId>"]} to fetch the portfolio with this ID.
+            include_extended_data_fields: Whether to include extended data fields in the response
             **kwargs: Additional parameters
 
         Returns:
-            Portfolio
+            dict[str, Any]
         """
         params = {k: v for k, v in {
-            "portfolioId": portfolio_id,
+            "portfolioIdFilter": portfolio_id_filter,
+            "includeExtendedDataFields": include_extended_data_fields,
             **kwargs
         }.items() if v is not None}
 
@@ -1136,22 +1139,22 @@ Sponsored Products campaigns promote individual product listings on Amazon.
 
     async def get(
         self,
-        campaign_id: str,
+        campaign_id_filter: SponsoredProductCampaignsGetParamsCampaignidfilter,
         **kwargs
-    ) -> SponsoredProductCampaign:
+    ) -> dict[str, Any]:
         """
-        Retrieves a single sponsored product campaign by its ID using the v2 API.
+        Fetches a single sponsored product campaign by ID through the v3 list endpoint using an ID filter.
 
 
         Args:
-            campaign_id: The unique identifier of the campaign
+            campaign_id_filter: Pass {"include": ["<campaignId>"]} to fetch the campaign with this ID.
             **kwargs: Additional parameters
 
         Returns:
-            SponsoredProductCampaign
+            dict[str, Any]
         """
         params = {k: v for k, v in {
-            "campaignId": campaign_id,
+            "campaignIdFilter": campaign_id_filter,
             **kwargs
         }.items() if v is not None}
 

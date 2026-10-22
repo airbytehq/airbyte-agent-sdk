@@ -18,9 +18,17 @@ from typing import Any, Literal
 # ===== NESTED PARAM TYPE DEFINITIONS =====
 # Nested parameter schemas discovered during parameter extraction
 
+class PortfoliosGetParamsPortfolioidfilter(TypedDict):
+    """Pass {"include": ["<portfolioId>"]} to fetch the portfolio with this ID."""
+    include: list[str]
+
 class SponsoredProductCampaignsListParamsStatefilter(TypedDict):
     """Nested schema for SponsoredProductCampaignsListParams.stateFilter"""
     include: NotRequired[str]
+
+class SponsoredProductCampaignsGetParamsCampaignidfilter(TypedDict):
+    """Pass {"include": ["<campaignId>"]} to fetch the campaign with this ID."""
+    include: list[str]
 
 class SponsoredProductAdGroupsListParamsStatefilter(TypedDict):
     """Nested schema for SponsoredProductAdGroupsListParams.stateFilter"""
@@ -70,7 +78,8 @@ class PortfoliosListParams(TypedDict):
 
 class PortfoliosGetParams(TypedDict):
     """Parameters for portfolios.get operation"""
-    portfolio_id: str
+    portfolio_id_filter: PortfoliosGetParamsPortfolioidfilter
+    include_extended_data_fields: NotRequired[str]
 
 class SponsoredProductCampaignsListParams(TypedDict):
     """Parameters for sponsored_product_campaigns.list operation"""
@@ -80,7 +89,7 @@ class SponsoredProductCampaignsListParams(TypedDict):
 
 class SponsoredProductCampaignsGetParams(TypedDict):
     """Parameters for sponsored_product_campaigns.get operation"""
-    campaign_id: str
+    campaign_id_filter: SponsoredProductCampaignsGetParamsCampaignidfilter
 
 class SponsoredProductAdGroupsListParams(TypedDict):
     """Parameters for sponsored_product_ad_groups.list operation"""

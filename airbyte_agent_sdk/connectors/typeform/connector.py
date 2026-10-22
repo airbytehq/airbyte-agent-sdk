@@ -93,7 +93,7 @@ class TypeformConnector:
 
     connector_name = "typeform"
     connector_version = "1.0.4"
-    sdk_version = "0.1.377"
+    sdk_version = "0.1.378"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

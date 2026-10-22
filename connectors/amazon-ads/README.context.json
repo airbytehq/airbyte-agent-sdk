@@ -3,7 +3,7 @@
   "class_name": "AmazonAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.amazon_ads",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.10",
+  "yaml_version": "1.0.11",
   "api_reference_url": "https://advertising.amazon.com/API/docs/en-us",
   "auth_example": "AmazonAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\")",
   "auth_import": ", AmazonAdsAuthConfig",
@@ -193,30 +193,54 @@
       },
       {
         "method_name": "get_portfolio",
-        "http_method": "get",
-        "path": "/v2/portfolios/{portfolioId}",
+        "http_method": "post",
+        "path": "/portfolios/list:get",
         "entity": "portfolios",
         "action": "get",
         "parameters": [
           {
-            "name": "portfolioId",
-            "python_name": "portfolio_id",
-            "type": "str",
+            "name": "portfolioIdFilter",
+            "python_name": "portfolio_id_filter",
+            "type": "PortfoliosGetParamsPortfolioidfilter",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "object",
+              "description": "Pass {\"include\": [\"<portfolioId>\"]} to fetch the portfolio with this ID.",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "include"
+              ]
             },
             "required": true,
-            "description": "The unique identifier of the portfolio"
+            "description": "Pass {\"include\": [\"<portfolioId>\"]} to fetch the portfolio with this ID."
+          },
+          {
+            "name": "includeExtendedDataFields",
+            "python_name": "include_extended_data_fields",
+            "type": "str",
+            "schema": {
+              "type": "string",
+              "default": "true",
+              "description": "Whether to include extended data fields in the response"
+            },
+            "required": false,
+            "description": "Whether to include extended data fields in the response"
           }
         ],
         "params_type_name": "PortfoliosGetParams",
-        "response_type": "Portfolio",
-        "description": "Retrieves a single portfolio by its ID using the v2 API.\n",
-        "record_extractor": "$",
+        "response_type": "dict[str, Any]",
+        "description": "Fetches a single portfolio by ID through the v3 list endpoint using an ID filter.\n",
+        "record_extractor": "$.portfolios[0]",
         "meta_extractor": null,
         "needs_envelope": null,
-        "record_type": "Portfolio",
+        "record_type": "dict[str, Any]",
         "meta_fields": null,
         "is_download": false
       }
@@ -296,30 +320,42 @@
       },
       {
         "method_name": "get_sponsored_product_campaign",
-        "http_method": "get",
-        "path": "/v2/sp/campaigns/{campaignId}",
+        "http_method": "post",
+        "path": "/sp/campaigns/list:get",
         "entity": "sponsored_product_campaigns",
         "action": "get",
         "parameters": [
           {
-            "name": "campaignId",
-            "python_name": "campaign_id",
-            "type": "str",
+            "name": "campaignIdFilter",
+            "python_name": "campaign_id_filter",
+            "type": "SponsoredProductCampaignsGetParamsCampaignidfilter",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "object",
+              "description": "Pass {\"include\": [\"<campaignId>\"]} to fetch the campaign with this ID.",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "include"
+              ]
             },
             "required": true,
-            "description": "The unique identifier of the campaign"
+            "description": "Pass {\"include\": [\"<campaignId>\"]} to fetch the campaign with this ID."
           }
         ],
         "params_type_name": "SponsoredProductCampaignsGetParams",
-        "response_type": "SponsoredProductCampaign",
-        "description": "Retrieves a single sponsored product campaign by its ID using the v2 API.\n",
-        "record_extractor": "$",
+        "response_type": "dict[str, Any]",
+        "description": "Fetches a single sponsored product campaign by ID through the v3 list endpoint using an ID filter.\n",
+        "record_extractor": "$.campaigns[0]",
         "meta_extractor": null,
         "needs_envelope": null,
-        "record_type": "SponsoredProductCampaign",
+        "record_type": "dict[str, Any]",
         "meta_fields": null,
         "is_download": false
       }
