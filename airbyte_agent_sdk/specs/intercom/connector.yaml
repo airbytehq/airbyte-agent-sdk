@@ -688,7 +688,6 @@ info:
                   sampling: { sample_type: whole, unit_label: part }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 # Newline-separated, not "Name: ": an unattributed part would otherwise embed a
                 # dangling colon, and conditional sample prefixes are not in the schema here.
                 template: "{author_name}\n\n{part_body}"
@@ -1067,7 +1066,6 @@ info:
                   sampling: { sample_type: whole, unit_label: conversation, text_path: "body", text_content_type: html }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{title}\n{subject}\n{author_name}\n\n{opening_message}"
               # Order matters: the first record-root entry is the record key, the second is the
               # cursor, and both names must be real raw-table columns.

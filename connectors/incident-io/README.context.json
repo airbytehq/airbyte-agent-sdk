@@ -2229,16 +2229,6 @@
           "semantic": false
         },
         {
-          "name": "semantic_type",
-          "python_name": "semantic_type",
-          "type": "str | None",
-          "json_type": "null | string",
-          "example_value_json": "\"<str>\"",
-          "json_example_value": "<str>",
-          "description": "Semantic type for special behavior",
-          "semantic": false
-        },
-        {
           "name": "type_name",
           "python_name": "type_name",
           "type": "str | None",

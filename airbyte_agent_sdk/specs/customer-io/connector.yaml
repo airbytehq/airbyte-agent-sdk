@@ -179,7 +179,6 @@ info:
                   sampling: { sample_type: whole, unit_label: action }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{action_name}\n{subject}\n{preheader}\n\n{action_body}"
               # Order is load-bearing: the first record-root entry is the record key and the
               # second is the incremental cursor, taken positionally. Their names must equal

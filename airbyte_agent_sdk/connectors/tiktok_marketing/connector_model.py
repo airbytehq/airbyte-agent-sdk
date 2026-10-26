@@ -25,7 +25,6 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     ScopingParamConfig,
-    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
     SemanticSampling,
@@ -6323,9 +6322,6 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
                             ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
-                            ),
                             metadata=[
                                 SemanticMetadataField(
                                     name='ad_id',
@@ -8383,9 +8379,6 @@ TiktokMarketingConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(

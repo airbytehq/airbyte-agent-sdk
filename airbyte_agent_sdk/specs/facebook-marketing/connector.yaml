@@ -292,7 +292,6 @@ info:
             sampling: { sample_type: whole, unit_label: creative }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{title}\n\n{creative_body}"
           # AdCreative has no created_time/updated_time on the Graph API object and Airbyte's
           # AdCreatives stream is full-refresh only, so there is no incremental cursor for

@@ -316,16 +316,13 @@ class SemanticWindowing(BaseModel):
 
 class SemanticEmbedding(BaseModel):
     """
-    Embedding configuration for semantic search (the `embedding` block).
+    Template configuration for the embedded text (the `embedding` block).
 
-    Used inside x-airbyte-semantic-search on a context-store field.
+    Used inside x-airbyte-semantic-search on a context-store field. The embedding model is a platform profile, not a connector setting.
     """
 
     model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
-    model: str = Field(
-        description="Embedding model identifier (e.g. 'text-embedding-3-small').",
-    )
     template: str | None = Field(
         default=None,
         description="Template for the embedded context text. Each '{name}' placeholder is replaced "
@@ -412,8 +409,6 @@ class SemanticSearchConfig(BaseModel):
           windowing:
             context_max_chars: 2048
             context_boundary: whole_unit
-          embedding:
-            model: text-embedding-3-small
           metadata:
             - { name: speakerId, path: "speakerId", type: string }
             - { name: callId, path: "/callId", type: string }
@@ -426,7 +421,10 @@ class SemanticSearchConfig(BaseModel):
     )
     samples: list[SemanticSample]
     windowing: SemanticWindowing = Field(default_factory=SemanticWindowing)
-    embedding: SemanticEmbedding
+    embedding: SemanticEmbedding | None = Field(
+        default=None,
+        description="Template for the embedded text; its `template` is required with two or more samples.",
+    )
     metadata: list[SemanticMetadataField] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -524,7 +522,7 @@ class SemanticSearchConfig(BaseModel):
                 f"to the record key column ('{record_key}')."
             )
 
-        template = self.embedding.template
+        template = self.embedding.template if self.embedding is not None else None
         if len(samples) >= 2:
             if template is None:
                 raise ValueError("x-airbyte-semantic-search: embedding.template is required when there are 2 or more samples.")

@@ -4981,10 +4981,6 @@
           "type": "string"
         },
         {
-          "name": "block_id",
-          "type": "string"
-        },
-        {
           "name": "discussion_id",
           "type": "string"
         },

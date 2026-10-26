@@ -4037,7 +4037,6 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{issue_title}\n{culprit}\n{value}',
                             ),
                             metadata=[
@@ -4618,7 +4617,6 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{issue_title}\n{culprit}\n{value}',
                 ),
                 metadata=[

@@ -361,7 +361,6 @@ info:
                 context_max_chars: 2048
                 context_boundary: whole_unit
               embedding:
-                model: text-embedding-3-small
                 template: '{title}
 
 
@@ -444,7 +443,6 @@ info:
                 context_max_chars: 2048
                 context_boundary: whole_unit
               embedding:
-                model: text-embedding-3-small
                 template: '{title}
 
 
@@ -593,7 +591,6 @@ info:
                 context_max_chars: 2048
                 context_boundary: whole_unit
               embedding:
-                model: text-embedding-3-small
                 template: '{name}
 
 

@@ -130,7 +130,7 @@ class GongConnector:
 
     connector_name = "gong"
     connector_version = "0.1.25"
-    sdk_version = "0.1.379"
+    sdk_version = "0.1.380"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

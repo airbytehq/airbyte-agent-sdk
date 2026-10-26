@@ -147,7 +147,7 @@ class IncidentIoConnector:
 
     connector_name = "incident-io"
     connector_version = "1.0.5"
-    sdk_version = "0.1.379"
+    sdk_version = "0.1.380"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -2714,7 +2714,6 @@ class CatalogTypesQuery:
         - registry_type: Registry type if synced from an integration
         - required_integrations: Integrations required for this type
         - schema_: Schema definition for the catalog type
-        - semantic_type: Semantic type for special behavior
         - type_name: Programmatic type name
         - updated_at: When the catalog type was last updated
 

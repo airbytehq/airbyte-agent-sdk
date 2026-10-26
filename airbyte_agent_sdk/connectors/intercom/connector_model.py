@@ -7457,7 +7457,6 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{author_name}\n\n{part_body}',
                             ),
                             metadata=[
@@ -7874,7 +7873,6 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{title}\n{subject}\n{author_name}\n\n{opening_message}',
                             ),
                             metadata=[
@@ -8383,7 +8381,6 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{author_name}\n\n{part_body}',
                 ),
                 metadata=[
@@ -8449,7 +8446,6 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{title}\n{subject}\n{author_name}\n\n{opening_message}',
                 ),
                 metadata=[

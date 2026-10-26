@@ -3302,7 +3302,6 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{title}\n{description}\n\n{questions}',
                             ),
                             metadata=[
@@ -3566,9 +3565,6 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
-                            ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -4111,7 +4107,6 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{title}\n{description}\n\n{questions}',
                 ),
                 metadata=[
@@ -4162,9 +4157,6 @@ TypeformConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(

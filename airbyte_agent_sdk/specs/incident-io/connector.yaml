@@ -150,7 +150,6 @@ info:
                   sampling: { sample_type: whole, unit_label: incident }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{incident_name}\n\n{summary}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -243,7 +242,6 @@ info:
                   sampling: { sample_type: whole, unit_label: alert }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{title}\n\n{alert_description}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -324,14 +322,10 @@ info:
             x-airbyte-semantic-search:
               content_type: markdown
               samples:
-                - { name: alert_title, path: "/updater.alert.title" }
                 - name: update_message
                   windowed: true
                   sampling: { sample_type: whole, unit_label: update }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding:
-                model: text-embedding-3-small
-                template: "{update_message}\n\n{alert_title}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: created_at, path: "/created_at", type: string }
@@ -554,9 +548,6 @@ info:
                 type: ["null", "array"]
               version:
                 type: ["null", "number"]
-          - name: semantic_type
-            type: ["null", "string"]
-            description: Semantic type for special behavior
           - name: type_name
             type: ["null", "string"]
             description: Programmatic type name

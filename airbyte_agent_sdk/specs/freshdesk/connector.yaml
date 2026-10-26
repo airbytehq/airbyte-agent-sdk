@@ -78,7 +78,6 @@ info:
                   sampling: { sample_type: whole, unit_label: ticket }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{subject}\n\n{ticket_body}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -302,7 +301,6 @@ info:
                   sampling: { sample_type: whole, unit_label: contact }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{contact_name}\n\n{contact_notes}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -365,7 +363,6 @@ info:
                   sampling: { sample_type: whole, unit_label: company }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{company_name}\n\n{company_description}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -390,7 +387,6 @@ info:
                   sampling: { sample_type: whole, unit_label: company }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{company_name}\n\n{company_note}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -473,8 +469,6 @@ info:
                   windowed: true
                   sampling: { sample_type: whole, unit_label: rating }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding:
-                model: text-embedding-3-small
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -543,8 +537,6 @@ info:
                   windowed: true
                   sampling: { sample_type: whole, unit_label: time_entry }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding:
-                model: text-embedding-3-small
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

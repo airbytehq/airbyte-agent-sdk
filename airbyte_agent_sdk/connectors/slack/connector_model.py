@@ -4741,7 +4741,6 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{bot_name|webhook_name}{message}',
                             ),
                             metadata=[
@@ -4977,7 +4976,6 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{message}{parent_text}',
                             ),
                             metadata=[
@@ -5517,7 +5515,6 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{bot_name|webhook_name}{message}',
                 ),
                 metadata=[
@@ -5583,7 +5580,6 @@ SlackConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{message}{parent_text}',
                 ),
                 metadata=[

@@ -292,7 +292,6 @@ info:
               sampling: { sample_type: whole, unit_label: issue }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{issue_title}\n{culprit}\n{value}"
           metadata:
             - { name: id, path: "/id", type: string }

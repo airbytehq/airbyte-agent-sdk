@@ -10010,7 +10010,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{lead_name}\n{job_title}\n{company}\n\n{notes}',
                             ),
                             metadata=[
@@ -10205,7 +10204,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{contact_name}\n{job_title}\n{account}\n\n{notes}',
                             ),
                             metadata=[
@@ -10366,7 +10364,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{account_name}\n\n{notes}',
                             ),
                             metadata=[
@@ -10528,7 +10525,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{deal_name}\n{account}\n\n{notes}\n{next_step}',
                             ),
                             metadata=[
@@ -10670,7 +10666,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{campaign_name}\n\n{notes}',
                             ),
                             metadata=[
@@ -10812,7 +10807,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{task_subject}\n{contact}\n{related_to}\n\n{notes}',
                             ),
                             metadata=[
@@ -10968,7 +10962,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{event_title}\n{contact}\n{related_to}\n\n{notes}',
                             ),
                             metadata=[
@@ -11127,7 +11120,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{call_subject}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}',
                             ),
                             metadata=[
@@ -11296,7 +11288,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{product_name}\n\n{notes}',
                             ),
                             metadata=[
@@ -11614,7 +11605,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{note}\n\n{note_title}\n{parent}',
                             ),
                             metadata=[
@@ -11928,7 +11918,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{lead_name}\n{job_title}\n{company}\n\n{notes}',
                 ),
                 metadata=[
@@ -12008,7 +11997,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{contact_name}\n{job_title}\n{account}\n\n{notes}',
                 ),
                 metadata=[
@@ -12076,7 +12064,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{account_name}\n\n{notes}',
                 ),
                 metadata=[
@@ -12148,7 +12135,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{deal_name}\n{account}\n\n{notes}\n{next_step}',
                 ),
                 metadata=[
@@ -12212,7 +12198,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{campaign_name}\n\n{notes}',
                 ),
                 metadata=[
@@ -12280,7 +12265,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{task_subject}\n{contact}\n{related_to}\n\n{notes}',
                 ),
                 metadata=[
@@ -12356,7 +12340,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{event_title}\n{contact}\n{related_to}\n\n{notes}',
                 ),
                 metadata=[
@@ -12440,7 +12423,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{call_subject}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}',
                 ),
                 metadata=[
@@ -12508,7 +12490,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{product_name}\n\n{notes}',
                 ),
                 metadata=[
@@ -12572,7 +12553,6 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{note}\n\n{note_title}\n{parent}',
                 ),
                 metadata=[

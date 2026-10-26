@@ -367,7 +367,6 @@ info:
                   sampling: { sample_type: whole, unit_label: message }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{bot_name|webhook_name}{message}"
               # Order matters: the first record-root entry is the record key, the second is the
               # cursor. The names define the embeddings-table columns; changing them after
@@ -538,6 +537,9 @@ info:
                 # itself -- the thing that matched. Parent rows (ts == thread_ts) resolve no
                 # sibling, so the "In reply to:" label only renders when a parent exists.
                 # max_chars bounds a very long parent (an ellipsis marks the cut).
+                # Fusion cannot execute lookup samples (the joined column is never in the
+                # source schema), so Fusion skips this block (logged once per process); only
+                # the legacy MotherDuck path embeds threads.
                 - name: parent_text
                   lookup: { local: thread_ts, foreign: ts, from: text }
                   max_chars: 512
@@ -547,7 +549,6 @@ info:
                   sampling: { sample_type: whole, unit_label: message }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{message}{parent_text}"
               # Order matters: the first record-root entry is the record key, the second is the
               # cursor. The names define the embeddings-table columns; changing them after

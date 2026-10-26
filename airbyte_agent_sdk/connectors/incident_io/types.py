@@ -2117,8 +2117,6 @@ class CatalogTypesSearchFilter(TypedDict, total=False):
     """Integrations required for this type"""
     schema_: dict[str, Any] | None
     """Schema definition for the catalog type"""
-    semantic_type: str | None
-    """Semantic type for special behavior"""
     type_name: str | None
     """Programmatic type name"""
     updated_at: str | None
@@ -2155,8 +2153,6 @@ class CatalogTypesInFilter(TypedDict, total=False):
     """Integrations required for this type"""
     schema_: list[dict[str, Any]]
     """Schema definition for the catalog type"""
-    semantic_type: list[str]
-    """Semantic type for special behavior"""
     type_name: list[str]
     """Programmatic type name"""
     updated_at: list[str]
@@ -2193,8 +2189,6 @@ class CatalogTypesAnyValueFilter(TypedDict, total=False):
     """Integrations required for this type"""
     schema_: Any
     """Schema definition for the catalog type"""
-    semantic_type: Any
-    """Semantic type for special behavior"""
     type_name: Any
     """Programmatic type name"""
     updated_at: Any
@@ -2231,8 +2225,6 @@ class CatalogTypesStringFilter(TypedDict, total=False):
     """Integrations required for this type"""
     schema_: str
     """Schema definition for the catalog type"""
-    semantic_type: str
-    """Semantic type for special behavior"""
     type_name: str
     """Programmatic type name"""
     updated_at: str
@@ -2269,8 +2261,6 @@ class CatalogTypesSortFilter(TypedDict, total=False):
     """Integrations required for this type"""
     schema_: AirbyteSortOrder
     """Schema definition for the catalog type"""
-    semantic_type: AirbyteSortOrder
-    """Semantic type for special behavior"""
     type_name: AirbyteSortOrder
     """Programmatic type name"""
     updated_at: AirbyteSortOrder

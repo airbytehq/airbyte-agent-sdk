@@ -4893,7 +4893,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{incident_name}\n\n{summary}',
                             ),
                             metadata=[
@@ -5076,7 +5075,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{title}\n\n{alert_description}',
                             ),
                             metadata=[
@@ -5227,10 +5225,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='markdown',
                             samples=[
                                 SemanticSample(
-                                    name='alert_title',
-                                    path='/updater.alert.title',
-                                ),
-                                SemanticSample(
                                     name='update_message',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -5241,10 +5235,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
-                            ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
-                                template='{update_message}\n\n{alert_title}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5633,11 +5623,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     ),
                     CacheFieldConfig(
-                        name='semantic_type',
-                        type=['null', 'string'],
-                        description='Semantic type for special behavior',
-                    ),
-                    CacheFieldConfig(
                         name='type_name',
                         type=['null', 'string'],
                         description='Programmatic type name',
@@ -5987,7 +5972,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
             'schema.attributes',
             'schema.attributes[]',
             'schema.version',
-            'semantic_type',
             'type_name',
             'updated_at',
         ],
@@ -6056,7 +6040,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{incident_name}\n\n{summary}',
                 ),
                 metadata=[
@@ -6124,7 +6107,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{title}\n\n{alert_description}',
                 ),
                 metadata=[
@@ -6164,10 +6146,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='markdown',
                 samples=[
                     SemanticSample(
-                        name='alert_title',
-                        path='/updater.alert.title',
-                    ),
-                    SemanticSample(
                         name='update_message',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -6178,10 +6156,6 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
-                    template='{update_message}\n\n{alert_title}',
                 ),
                 metadata=[
                     SemanticMetadataField(

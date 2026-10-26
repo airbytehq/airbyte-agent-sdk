@@ -124,6 +124,8 @@ info:
               - "null"
               - string
             description: Extracted text content of the file.
+            # Under file transfer the source stream carries only file metadata; `content` is
+            # produced by the legacy MotherDuck files job, so Fusion never selects this block.
             x-airbyte-semantic-search:
               content_type: document
               samples:
@@ -131,7 +133,6 @@ info:
                   windowed: true
                   sampling: { sample_type: whole, unit_label: chunk }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding: { model: text-embedding-3-small }
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

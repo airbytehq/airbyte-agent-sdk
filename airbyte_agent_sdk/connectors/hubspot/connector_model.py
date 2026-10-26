@@ -8286,7 +8286,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{ticket_subject}\n\n{ticket_content}',
                             ),
                             metadata=[
@@ -8386,9 +8385,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
-                            ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8500,7 +8496,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{call_title}\n\n{call_body}',
                             ),
                             metadata=[
@@ -8675,7 +8670,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{email_subject}\n\n{email_body}',
                             ),
                             metadata=[
@@ -8846,7 +8840,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{meeting_title}\n\n{meeting_body}',
                             ),
                             metadata=[
@@ -8999,7 +8992,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{task_subject}\n\n{task_body}',
                             ),
                             metadata=[
@@ -9252,7 +9244,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{ticket_subject}\n\n{ticket_content}',
                 ),
                 metadata=[
@@ -9305,9 +9296,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -9366,7 +9354,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{call_title}\n\n{call_body}',
                 ),
                 metadata=[
@@ -9434,7 +9421,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{email_subject}\n\n{email_body}',
                 ),
                 metadata=[
@@ -9498,7 +9484,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{meeting_title}\n\n{meeting_body}',
                 ),
                 metadata=[
@@ -9562,7 +9547,6 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{task_subject}\n\n{task_body}',
                 ),
                 metadata=[

@@ -517,7 +517,6 @@ info:
             windowed: true
             sampling: { sample_type: regex, unit_label: comment_paragraph, split_pattern: '\n\s*\n' }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-          embedding: { model: text-embedding-3-small }
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: created_at, path: "/created_at", type: string }

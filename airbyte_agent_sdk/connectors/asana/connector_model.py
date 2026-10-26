@@ -4209,7 +4209,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{project_name}\n\n{notes}',
                             ),
                             metadata=[
@@ -4605,7 +4604,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{task_name}\n\n{notes}',
                             ),
                             metadata=[
@@ -4789,7 +4787,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{team_name}\n\n{description}',
                             ),
                             metadata=[
@@ -5140,7 +5137,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{project_name}\n\n{notes}',
                 ),
                 metadata=[
@@ -5212,7 +5208,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{task_name}\n\n{notes}',
                 ),
                 metadata=[
@@ -5289,7 +5284,6 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{team_name}\n\n{description}',
                 ),
                 metadata=[

@@ -178,7 +178,6 @@ info:
                   windowed: true
                   sampling: { sample_type: regex, unit_label: comment_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding: { model: text-embedding-3-small }
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -252,7 +251,6 @@ info:
                   sampling: { sample_type: regex, unit_label: issue_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{title}\n\n{issue_paragraph}"
               metadata:
                 - { name: id, path: "/id", type: string }
@@ -454,7 +452,6 @@ info:
                   sampling: { sample_type: regex, unit_label: pr_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{title}\n\n{pr_paragraph}"
               metadata:
                 - { name: id, path: "/id", type: string }

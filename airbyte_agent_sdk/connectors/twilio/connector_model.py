@@ -4634,7 +4634,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{message_body}\n{error_detail}',
                             ),
                             metadata=[
@@ -5282,7 +5281,6 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{message_body}\n{error_detail}',
                 ),
                 metadata=[

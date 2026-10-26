@@ -99,7 +99,6 @@ info:
                   windowed: true
                   sampling: { sample_type: regex, unit_label: summary_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding: { model: text-embedding-3-small }
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -205,7 +204,6 @@ info:
                   windowed: true
                   sampling: { sample_type: element, unit_label: transcript_segment, sample_path: "[]", text_path: "text" }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding: { model: text-embedding-3-small }
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

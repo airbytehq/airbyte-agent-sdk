@@ -5956,7 +5956,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{title}\n\n{creative_body}',
                             ),
                             metadata=[
@@ -6537,7 +6536,6 @@ FacebookMarketingConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{title}\n\n{creative_body}',
                 ),
                 metadata=[

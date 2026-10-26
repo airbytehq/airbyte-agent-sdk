@@ -432,7 +432,6 @@ info:
             sampling: { sample_type: whole, unit_label: project }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{project_name}\n\n{notes}"
           metadata:
           - { name: gid, path: "/gid", type: string }
@@ -787,7 +786,6 @@ info:
             sampling: { sample_type: whole, unit_label: task }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{task_name}\n\n{notes}"
           metadata:
           - { name: gid, path: "/gid", type: string }
@@ -921,7 +919,6 @@ info:
             sampling: { sample_type: whole, unit_label: team }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{team_name}\n\n{description}"
           metadata:
           - { name: gid, path: "/gid", type: string }

@@ -2382,15 +2382,12 @@ $defs:
     type: object
   SemanticEmbedding:
     additionalProperties: false
-    description: 'Embedding configuration for semantic search (the `embedding` block).
+    description: 'Template configuration for the embedded text (the `embedding` block).
 
 
-      Used inside x-airbyte-semantic-search on a context-store field.'
+      Used inside x-airbyte-semantic-search on a context-store field. The embedding
+      model is a platform profile, not a connector setting.'
     properties:
-      model:
-        description: Embedding model identifier (e.g. 'text-embedding-3-small').
-        title: Model
-        type: string
       template:
         anyOf:
         - type: string
@@ -2403,8 +2400,6 @@ $defs:
           samples never double-render. Required when there are >=2 samples; forbidden
           for a single sample (which defaults to '{<windowed name>}').
         title: Template
-    required:
-    - model
     title: SemanticEmbedding
     type: object
   SemanticMetadataField:
@@ -2660,9 +2655,8 @@ $defs:
       \            unit_label: speaker_turn\n            sample_path: \"[]\"\n   \
       \         text_path: \"sentences[].text\"\n            stitch: \"\\n\"\n   \
       \   windowing:\n        context_max_chars: 2048\n        context_boundary: whole_unit\n\
-      \      embedding:\n        model: text-embedding-3-small\n      metadata:\n\
-      \        - { name: speakerId, path: \"speakerId\", type: string }\n        -\
-      \ { name: callId, path: \"/callId\", type: string }"
+      \      metadata:\n        - { name: speakerId, path: \"speakerId\", type: string\
+      \ }\n        - { name: callId, path: \"/callId\", type: string }"
     properties:
       content_type:
         description: How to decode the raw field value before sampling.
@@ -2684,7 +2678,12 @@ $defs:
       windowing:
         $ref: '#/$defs/SemanticWindowing'
       embedding:
-        $ref: '#/$defs/SemanticEmbedding'
+        anyOf:
+        - $ref: '#/$defs/SemanticEmbedding'
+        - type: 'null'
+        default: null
+        description: Template for the embedded text; its `template` is required with
+          two or more samples.
       metadata:
         items:
           $ref: '#/$defs/SemanticMetadataField'
@@ -2693,7 +2692,6 @@ $defs:
     required:
     - content_type
     - samples
-    - embedding
     title: SemanticSearchConfig
     type: object
   SemanticWindowing:

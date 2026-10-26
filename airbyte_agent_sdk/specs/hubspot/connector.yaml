@@ -529,7 +529,6 @@ info:
             sampling: { sample_type: whole, unit_label: ticket }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{ticket_subject}\n\n{ticket_content}"
           metadata:
           - { name: id, path: "/id", type: string }
@@ -592,8 +591,6 @@ info:
             windowed: true
             sampling: { sample_type: whole, unit_label: note }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-          embedding:
-            model: text-embedding-3-small
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: updatedAt, path: "/updatedAt", type: string }
@@ -663,7 +660,6 @@ info:
             sampling: { sample_type: whole, unit_label: call }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{call_title}\n\n{call_body}"
           metadata:
           - { name: id, path: "/id", type: string }
@@ -790,7 +786,6 @@ info:
             sampling: { sample_type: whole, unit_label: email }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{email_subject}\n\n{email_body}"
           metadata:
           - { name: id, path: "/id", type: string }
@@ -916,7 +911,6 @@ info:
             sampling: { sample_type: whole, unit_label: meeting }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{meeting_title}\n\n{meeting_body}"
           metadata:
           - { name: id, path: "/id", type: string }
@@ -1024,7 +1018,6 @@ info:
             sampling: { sample_type: whole, unit_label: task }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            model: text-embedding-3-small
             template: "{task_subject}\n\n{task_body}"
           metadata:
           - { name: id, path: "/id", type: string }

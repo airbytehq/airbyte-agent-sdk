@@ -141,7 +141,6 @@ info:
               # context_text per paragraph unit -- N chunks, one distinct vector.
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{board_name}\n\n{board_description}"
               # [0] record key, [1] cursor, positionally. workspace_id and board_kind are the
               # scoping filters a "which board covers X" query narrows on, and the metadata set
@@ -263,7 +262,6 @@ info:
                   sampling: { sample_type: whole, unit_label: item }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 template: "{board_name}\n\n{item_name}"
               # [0] record key, [1] cursor, positionally. board_id and group_id are the two
               # dimensions a scoped query narrows on and are otherwise unreachable -- an outer
@@ -390,7 +388,6 @@ info:
               # MotherDuck's embedding() instead of sliding into sub-windows.
               windowing: { context_max_chars: 0, context_boundary: whole_unit }
               embedding:
-                model: text-embedding-3-small
                 # The reply LEADS and the parent TRAILS, matching Slack's threads annotation: a
                 # search hit's context is front-truncated at 200 chars, and with the parent
                 # leading, Slack measured 816 of 929 replies returning a context that showed only
@@ -452,7 +449,6 @@ info:
               # silently truncates input at 2048 characters, so a higher cap would return a
               # context containing text that was never embedded.
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding: { model: text-embedding-3-small }
               # Order is load-bearing: the first record-root ('/') entry is the record key and
               # the second is the cursor, taken positionally, and both names are resolved as
               # physical raw-table columns. source-monday's updates stream is full-refresh

@@ -29,7 +29,6 @@ from airbyte_agent_sdk.schema.extensions import (
     EnrichmentMatch,
     EnrichmentProjection,
     EntityRelationshipConfig,
-    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
     SemanticSampling,
@@ -6932,9 +6931,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
                             ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
-                            ),
                             metadata=[
                                 SemanticMetadataField(
                                     name='id',
@@ -8811,9 +8807,6 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(

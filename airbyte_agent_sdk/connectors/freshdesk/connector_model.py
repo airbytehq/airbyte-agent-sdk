@@ -3276,7 +3276,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{subject}\n\n{ticket_body}',
                             ),
                             metadata=[
@@ -3689,7 +3688,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{contact_name}\n\n{contact_notes}',
                             ),
                             metadata=[
@@ -3819,7 +3817,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{company_name}\n\n{company_description}',
                             ),
                             metadata=[
@@ -3883,7 +3880,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{company_name}\n\n{company_note}',
                             ),
                             metadata=[
@@ -4044,9 +4040,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
                             ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
-                            ),
                             metadata=[
                                 SemanticMetadataField(
                                     name='id',
@@ -4187,9 +4180,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
-                            ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -4553,7 +4543,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{subject}\n\n{ticket_body}',
                 ),
                 metadata=[
@@ -4621,7 +4610,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{contact_name}\n\n{contact_notes}',
                 ),
                 metadata=[
@@ -4681,7 +4669,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{company_name}\n\n{company_description}',
                 ),
                 metadata=[
@@ -4735,7 +4722,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{company_name}\n\n{company_note}',
                 ),
                 metadata=[
@@ -4785,9 +4771,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -4844,9 +4827,6 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(

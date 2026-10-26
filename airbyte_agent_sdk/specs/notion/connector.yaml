@@ -510,12 +510,10 @@ info:
                     text_path: "[].plain_text"
                     stitch: " "
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
-              embedding: { model: text-embedding-3-small }
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: last_edited_time, path: "/last_edited_time", type: string }
                 - { name: page_id, path: "/parent.page_id", type: string }
-                - { name: block_id, path: "/parent.block_id", type: string }
                 - { name: discussion_id, path: "/discussion_id", type: string }
                 - { name: created_by_id, path: "/created_by.id", type: string }
   x-airbyte-example-questions:

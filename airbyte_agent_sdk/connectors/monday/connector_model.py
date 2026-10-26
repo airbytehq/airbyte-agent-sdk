@@ -3076,7 +3076,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{board_name}\n\n{board_description}',
                             ),
                             metadata=[
@@ -3280,7 +3279,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{board_name}\n\n{item_name}',
                             ),
                             metadata=[
@@ -3463,7 +3461,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                                 ),
                             ],
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{reply_body}\n\nIn reply to: {parent_body}',
                             ),
                             metadata=[
@@ -3520,9 +3517,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
-                            ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -3903,7 +3897,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{board_name}\n\n{board_description}',
                 ),
                 metadata=[
@@ -3955,7 +3948,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{board_name}\n\n{item_name}',
                 ),
                 metadata=[
@@ -4014,7 +4006,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                     ),
                 ],
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{reply_body}\n\nIn reply to: {parent_body}',
                 ),
                 metadata=[
@@ -4066,9 +4057,6 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
-                ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                 ),
                 metadata=[
                     SemanticMetadataField(

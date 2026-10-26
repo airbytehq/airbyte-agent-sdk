@@ -2736,7 +2736,6 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{template_name}\n\n{template_body}',
                             ),
                             metadata=[
@@ -3576,7 +3575,6 @@ KlaviyoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{template_name}\n\n{template_body}',
                 ),
                 metadata=[

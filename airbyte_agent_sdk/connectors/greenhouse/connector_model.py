@@ -3071,7 +3071,6 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{title}\n\n{job_post_content}',
                             ),
                             metadata=[
@@ -3164,7 +3163,6 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{title}\n\n{internal_job_post_content}',
                             ),
                             metadata=[
@@ -3319,7 +3317,6 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{name}\n\n{job_notes}',
                             ),
                             metadata=[
@@ -3831,7 +3828,6 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{title}\n\n{job_post_content}',
                 ),
                 metadata=[
@@ -3889,7 +3885,6 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{title}\n\n{internal_job_post_content}',
                 ),
                 metadata=[
@@ -3949,7 +3944,6 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{name}\n\n{job_notes}',
                 ),
                 metadata=[

@@ -4848,7 +4848,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
                                 template='{action_name}\n{subject}\n{preheader}\n\n{action_body}',
                             ),
                             metadata=[
@@ -5173,7 +5172,6 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
                     template='{action_name}\n{subject}\n{preheader}\n\n{action_body}',
                 ),
                 metadata=[

@@ -26,7 +26,6 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
-    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
     SemanticSampling,
@@ -10221,9 +10220,6 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
                             ),
-                            embedding=SemanticEmbedding(
-                                model='text-embedding-3-small',
-                            ),
                             metadata=[
                                 SemanticMetadataField(
                                     name='id',
@@ -10236,10 +10232,6 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                                 SemanticMetadataField(
                                     name='page_id',
                                     path='/parent.page_id',
-                                ),
-                                SemanticMetadataField(
-                                    name='block_id',
-                                    path='/parent.block_id',
                                 ),
                                 SemanticMetadataField(
                                     name='discussion_id',
@@ -10380,9 +10372,6 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
                 ),
-                embedding=SemanticEmbedding(
-                    model='text-embedding-3-small',
-                ),
                 metadata=[
                     SemanticMetadataField(
                         name='id',
@@ -10395,10 +10384,6 @@ NotionConnectorModel: ConnectorModel = ConnectorModel(
                     SemanticMetadataField(
                         name='page_id',
                         path='/parent.page_id',
-                    ),
-                    SemanticMetadataField(
-                        name='block_id',
-                        path='/parent.block_id',
                     ),
                     SemanticMetadataField(
                         name='discussion_id',
