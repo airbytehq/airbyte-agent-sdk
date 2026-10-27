@@ -196,14 +196,22 @@ class SemanticSampleLookup(BaseModel):
     """
     Lookup supplying a scalar sample's value from a related record.
 
-    The embedding engine resolves the value with a join over raw rows: for each
-    record, the related record whose `foreign` column equals this record's `local`
-    column is located (one related record per foreign value, latest version), and
-    its `from` column becomes the sample's value. A record whose `local` column is
-    null or unmatched resolves to no value.
+    Without `stream`, the related record is in this record's own stream (a self-join):
+    for each record, the related record whose `foreign` column equals this record's
+    `local` column is located (one related record per foreign value, latest version),
+    and its `from` column becomes the sample's value. A record whose `local` column is
+    null or unmatched resolves to no value, and a record that is its own sibling
+    resolves to no value. `foreign` must be the stream's record key.
 
-    The lookup side is this record's own stream (a self-join), and a record that
-    is its own sibling resolves to no value; a lookup may only reference the same stream.
+    With `stream`, the related record is in that parent stream of the same connector
+    (e.g. a ticket for a ticket comment). `foreign` must be the parent stream's primary
+    key; Fusion fills the value at index time from the parent rows it has already
+    indexed, so a parent that is missing, not yet indexed, or keyed by another type
+    resolves to no value and the sample renders empty (its prefix and suffix are
+    omitted). A long parent text field is served as an excerpt: the parent's indexed
+    row keeps the first `max_chars` characters of it for this sample (4,096 when
+    `max_chars` is unset), so declare `max_chars` on a lookup of a long field. A later
+    change to the parent's field does not re-embed the child.
 
     `from` may be a dotted path (e.g. `profile.real_name`): the first segment is
     the lookup-side column, and the remaining segments resolve within its value.
@@ -225,6 +233,11 @@ class SemanticSampleLookup(BaseModel):
         alias="from",
         min_length=1,
         description="Column on the related record supplying the sample's value; a dotted path resolves nested values within that column.",
+    )
+    stream: str | None = Field(
+        default=None,
+        min_length=1,
+        description="Parent stream holding the related record; omitted for a lookup within this record's own stream.",
     )
 
     @field_validator("local", "foreign", "source")
@@ -544,7 +557,7 @@ class SemanticSearchConfig(BaseModel):
         # value equals the base row's record key -- only meaningful when the foreign column IS that
         # record key. The embedding engine rejects any other foreign column at run time, so without
         # the same check here a connector validates and ships yet fails every embedding run.
-        lookup_samples = [sample for sample in samples if sample.lookup is not None]
+        lookup_samples = [sample for sample in samples if sample.lookup is not None and sample.lookup.stream is None]
         record_key = next((meta.name for meta in self.metadata if meta.path.startswith("/")), None)
         if lookup_samples and record_key is None:
             raise ValueError("x-airbyte-semantic-search: same-stream lookup samples require record-root ('/') metadata declaring the record key.")

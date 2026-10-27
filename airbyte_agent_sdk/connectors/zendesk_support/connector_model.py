@@ -29,8 +29,10 @@ from airbyte_agent_sdk.schema.extensions import (
     EnrichmentMatch,
     EnrichmentProjection,
     EntityRelationshipConfig,
+    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
+    SemanticSampleLookup,
     SemanticSampling,
     SemanticSearchConfig,
     SemanticWindowing,
@@ -6919,6 +6921,29 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='plaintext',
                             samples=[
                                 SemanticSample(
+                                    name='ticket_subject',
+                                    lookup=SemanticSampleLookup(
+                                        local='ticket_id',
+                                        foreign='id',
+                                        source='subject',
+                                        stream='tickets',
+                                    ),
+                                    max_chars=200,
+                                    prefix='Ticket: ',
+                                    suffix='\n',
+                                ),
+                                SemanticSample(
+                                    name='ticket_status',
+                                    lookup=SemanticSampleLookup(
+                                        local='ticket_id',
+                                        foreign='id',
+                                        source='status',
+                                        stream='tickets',
+                                    ),
+                                    prefix='Status: ',
+                                    suffix='\n\n',
+                                ),
+                                SemanticSample(
                                     name='comment_paragraph',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -6930,6 +6955,9 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{ticket_subject}{ticket_status}{comment_paragraph}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8796,6 +8824,29 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='plaintext',
                 samples=[
                     SemanticSample(
+                        name='ticket_subject',
+                        lookup=SemanticSampleLookup(
+                            local='ticket_id',
+                            foreign='id',
+                            source='subject',
+                            stream='tickets',
+                        ),
+                        max_chars=200,
+                        prefix='Ticket: ',
+                        suffix='\n',
+                    ),
+                    SemanticSample(
+                        name='ticket_status',
+                        lookup=SemanticSampleLookup(
+                            local='ticket_id',
+                            foreign='id',
+                            source='status',
+                            stream='tickets',
+                        ),
+                        prefix='Status: ',
+                        suffix='\n\n',
+                    ),
+                    SemanticSample(
                         name='comment_paragraph',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -8807,6 +8858,9 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{ticket_subject}{ticket_status}{comment_paragraph}',
                 ),
                 metadata=[
                     SemanticMetadataField(

@@ -253,15 +253,6 @@ class GroupsList(BaseModel):
     size: int | None = Field(default=None)
     links: GroupsListLinks | None = Field(default=None, alias="_links")
 
-class AuditRecordAffectedobject(BaseModel):
-    """Object affected by the audit event"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    name: str | None = Field(default=None, description="Name of the affected object")
-    """Name of the affected object"""
-    object_type: str | None = Field(default=None, alias="objectType", description="Type of the affected object")
-    """Type of the affected object"""
-
 class AuditRecordAuthor(BaseModel):
     """User who triggered the audit event"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -280,6 +271,15 @@ class AuditRecordAuthor(BaseModel):
     """Whether the author is an external collaborator"""
     operations: Any | None = Field(default=None, description="Operations available for the author")
     """Operations available for the author"""
+
+class AuditRecordAffectedobject(BaseModel):
+    """Object affected by the audit event"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    name: str | None = Field(default=None, description="Name of the affected object")
+    """Name of the affected object"""
+    object_type: str | None = Field(default=None, alias="objectType", description="Type of the affected object")
+    """Type of the affected object"""
 
 class AuditRecordAssociatedobjectsItem(BaseModel):
     """Nested schema for AuditRecord.associatedObjects_item"""

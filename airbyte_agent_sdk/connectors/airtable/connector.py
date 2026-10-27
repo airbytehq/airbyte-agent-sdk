@@ -66,7 +66,7 @@ class AirtableConnector:
 
     connector_name = "airtable"
     connector_version = "1.0.8"
-    sdk_version = "0.1.381"
+    sdk_version = "0.1.382"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

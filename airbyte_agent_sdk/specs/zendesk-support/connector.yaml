@@ -513,9 +513,23 @@ info:
         x-airbyte-semantic-search:
           content_type: plaintext
           samples:
+          # Parent ticket context, read by Fusion at index time from the indexed tickets stream; a comment whose
+          # ticket is not indexed yet embeds without it. The legacy MotherDuck path does not resolve parent-stream
+          # lookups and embeds the comment text alone.
+          - name: ticket_subject
+            lookup: { stream: tickets, local: ticket_id, foreign: id, from: subject }
+            max_chars: 200
+            prefix: "Ticket: "
+            suffix: "\n"
+          - name: ticket_status
+            lookup: { stream: tickets, local: ticket_id, foreign: id, from: status }
+            prefix: "Status: "
+            suffix: "\n\n"
           - name: comment_paragraph
             windowed: true
             sampling: { sample_type: regex, unit_label: comment_paragraph, split_pattern: '\n\s*\n' }
+          embedding:
+            template: "{ticket_subject}{ticket_status}{comment_paragraph}"
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           metadata:
           - { name: id, path: "/id", type: string }
