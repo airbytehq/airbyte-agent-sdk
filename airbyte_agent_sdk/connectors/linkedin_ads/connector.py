@@ -219,7 +219,7 @@ class LinkedinAdsConnector:
 
     connector_name = "linkedin-ads"
     connector_version = "1.2.0"
-    sdk_version = "0.1.382"
+    sdk_version = "0.1.383"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

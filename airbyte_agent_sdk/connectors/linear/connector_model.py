@@ -29,6 +29,7 @@ from airbyte_agent_sdk.schema.extensions import (
     EnrichmentMatch,
     EnrichmentProjection,
     EntityRelationshipConfig,
+    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
     SemanticSampling,
@@ -2817,6 +2818,15 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='markdown',
                             samples=[
                                 SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                ),
+                                SemanticSample(
+                                    name='priority',
+                                    path='/priorityLabel',
+                                    prefix='\nPriority: ',
+                                ),
+                                SemanticSample(
                                     name='issue_description_paragraph',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -2828,6 +2838,9 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{priority}\n\n{issue_description_paragraph}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -3889,6 +3902,15 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='markdown',
                 samples=[
                     SemanticSample(
+                        name='title',
+                        path='/title',
+                    ),
+                    SemanticSample(
+                        name='priority',
+                        path='/priorityLabel',
+                        prefix='\nPriority: ',
+                    ),
+                    SemanticSample(
                         name='issue_description_paragraph',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -3900,6 +3922,9 @@ LinearConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{priority}\n\n{issue_description_paragraph}',
                 ),
                 metadata=[
                     SemanticMetadataField(

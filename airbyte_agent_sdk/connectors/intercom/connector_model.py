@@ -7851,6 +7851,11 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/title',
                                 ),
                                 SemanticSample(
+                                    name='state',
+                                    path='/state',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='subject',
                                     path='/source.subject',
                                 ),
@@ -7873,7 +7878,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{title}\n{subject}\n{author_name}\n\n{opening_message}',
+                                template='{title}{state}\n{subject}\n{author_name}\n\n{opening_message}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8424,6 +8429,11 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                         path='/title',
                     ),
                     SemanticSample(
+                        name='state',
+                        path='/state',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='subject',
                         path='/source.subject',
                     ),
@@ -8446,7 +8456,7 @@ IntercomConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{title}\n{subject}\n{author_name}\n\n{opening_message}',
+                    template='{title}{state}\n{subject}\n{author_name}\n\n{opening_message}',
                 ),
                 metadata=[
                     SemanticMetadataField(

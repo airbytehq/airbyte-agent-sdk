@@ -267,13 +267,15 @@ info:
         x-airbyte-semantic-search:
           content_type: plaintext
           samples:
+            - { name: direction, path: "/direction", prefix: "Direction: " }
+            - { name: status, path: "/status", prefix: "\nStatus: " }
             - { name: error_detail, path: "/error_message" }
             - name: message_body
               windowed: true
               sampling: { sample_type: whole, unit_label: message }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{message_body}\n{error_detail}"
+            template: "{direction}{status}\n\n{message_body}\n{error_detail}"
           metadata:
             - { name: sid, path: "/sid", type: string }
             - { name: date_sent, path: "/date_sent", type: string }
@@ -2759,5 +2761,4 @@ components:
         SmsApplicationSid:
           type: string
           description: SID of the application to handle SMS messages
-
 

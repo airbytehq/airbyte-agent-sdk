@@ -8274,6 +8274,16 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/properties_content',
                                 ),
                                 SemanticSample(
+                                    name='ticket_priority',
+                                    path='/properties_hs_ticket_priority',
+                                    prefix='\nPriority: ',
+                                ),
+                                SemanticSample(
+                                    name='ticket_category',
+                                    path='/properties_hs_ticket_category',
+                                    prefix='\nCategory: ',
+                                ),
+                                SemanticSample(
                                     name='ticket_subject',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -8286,7 +8296,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{ticket_subject}\n\n{ticket_content}',
+                                template='{ticket_subject}{ticket_priority}{ticket_category}\n\n{ticket_content}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8484,6 +8494,16 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/properties_hs_call_title',
                                 ),
                                 SemanticSample(
+                                    name='call_direction',
+                                    path='/properties_hs_call_direction',
+                                    prefix='\nDirection: ',
+                                ),
+                                SemanticSample(
+                                    name='call_status',
+                                    path='/properties_hs_call_status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='call_body',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -8496,7 +8516,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{call_title}\n\n{call_body}',
+                                template='{call_title}{call_direction}{call_status}\n\n{call_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8658,6 +8678,16 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/properties_hs_email_text',
                                 ),
                                 SemanticSample(
+                                    name='email_direction',
+                                    path='/properties_hs_email_direction',
+                                    prefix='\nDirection: ',
+                                ),
+                                SemanticSample(
+                                    name='email_status',
+                                    path='/properties_hs_email_status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='email_subject',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -8670,7 +8700,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{email_subject}\n\n{email_body}',
+                                template='{email_subject}{email_direction}{email_status}\n\n{email_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8828,6 +8858,11 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/properties_hs_meeting_body',
                                 ),
                                 SemanticSample(
+                                    name='meeting_outcome',
+                                    path='/properties_hs_meeting_outcome',
+                                    prefix='\nOutcome: ',
+                                ),
+                                SemanticSample(
                                     name='meeting_title',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -8840,7 +8875,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{meeting_title}\n\n{meeting_body}',
+                                template='{meeting_title}{meeting_outcome}\n\n{meeting_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -8980,6 +9015,21 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/properties_hs_task_body',
                                 ),
                                 SemanticSample(
+                                    name='task_status',
+                                    path='/properties_hs_task_status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='task_priority',
+                                    path='/properties_hs_task_priority',
+                                    prefix='\nPriority: ',
+                                ),
+                                SemanticSample(
+                                    name='task_type',
+                                    path='/properties_hs_task_type',
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
                                     name='task_subject',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -8992,7 +9042,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{task_subject}\n\n{task_body}',
+                                template='{task_subject}{task_status}{task_priority}{task_type}\n\n{task_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -9232,6 +9282,16 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         path='/properties_content',
                     ),
                     SemanticSample(
+                        name='ticket_priority',
+                        path='/properties_hs_ticket_priority',
+                        prefix='\nPriority: ',
+                    ),
+                    SemanticSample(
+                        name='ticket_category',
+                        path='/properties_hs_ticket_category',
+                        prefix='\nCategory: ',
+                    ),
+                    SemanticSample(
                         name='ticket_subject',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -9244,7 +9304,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{ticket_subject}\n\n{ticket_content}',
+                    template='{ticket_subject}{ticket_priority}{ticket_category}\n\n{ticket_content}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -9342,6 +9402,16 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         path='/properties_hs_call_title',
                     ),
                     SemanticSample(
+                        name='call_direction',
+                        path='/properties_hs_call_direction',
+                        prefix='\nDirection: ',
+                    ),
+                    SemanticSample(
+                        name='call_status',
+                        path='/properties_hs_call_status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='call_body',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -9354,7 +9424,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{call_title}\n\n{call_body}',
+                    template='{call_title}{call_direction}{call_status}\n\n{call_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -9409,6 +9479,16 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         path='/properties_hs_email_text',
                     ),
                     SemanticSample(
+                        name='email_direction',
+                        path='/properties_hs_email_direction',
+                        prefix='\nDirection: ',
+                    ),
+                    SemanticSample(
+                        name='email_status',
+                        path='/properties_hs_email_status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='email_subject',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -9421,7 +9501,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{email_subject}\n\n{email_body}',
+                    template='{email_subject}{email_direction}{email_status}\n\n{email_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -9472,6 +9552,11 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         path='/properties_hs_meeting_body',
                     ),
                     SemanticSample(
+                        name='meeting_outcome',
+                        path='/properties_hs_meeting_outcome',
+                        prefix='\nOutcome: ',
+                    ),
+                    SemanticSample(
                         name='meeting_title',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -9484,7 +9569,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{meeting_title}\n\n{meeting_body}',
+                    template='{meeting_title}{meeting_outcome}\n\n{meeting_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -9535,6 +9620,21 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                         path='/properties_hs_task_body',
                     ),
                     SemanticSample(
+                        name='task_status',
+                        path='/properties_hs_task_status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='task_priority',
+                        path='/properties_hs_task_priority',
+                        prefix='\nPriority: ',
+                    ),
+                    SemanticSample(
+                        name='task_type',
+                        path='/properties_hs_task_type',
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
                         name='task_subject',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -9547,7 +9647,7 @@ HubspotConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{task_subject}\n\n{task_body}',
+                    template='{task_subject}{task_status}{task_priority}{task_type}\n\n{task_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(

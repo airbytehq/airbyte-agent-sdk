@@ -4017,6 +4017,21 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='plaintext',
                             samples=[
                                 SemanticSample(
+                                    name='level',
+                                    path='/level',
+                                    prefix='\nLevel: ',
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='issue_type',
+                                    path='/issueType',
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
                                     name='culprit',
                                     path='/culprit',
                                 ),
@@ -4037,7 +4052,7 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{issue_title}\n{culprit}\n{value}',
+                                template='{issue_title}{level}{status}{issue_type}\n\n{culprit}\n{value}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -4597,6 +4612,21 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='plaintext',
                 samples=[
                     SemanticSample(
+                        name='level',
+                        path='/level',
+                        prefix='\nLevel: ',
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='issue_type',
+                        path='/issueType',
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
                         name='culprit',
                         path='/culprit',
                     ),
@@ -4617,7 +4647,7 @@ SentryConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{issue_title}\n{culprit}\n{value}',
+                    template='{issue_title}{level}{status}{issue_type}\n\n{culprit}\n{value}',
                 ),
                 metadata=[
                     SemanticMetadataField(

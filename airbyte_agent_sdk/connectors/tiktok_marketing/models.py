@@ -330,6 +330,23 @@ class SparkAdItemInfo(BaseModel):
     item_type: str | None | None = Field(default=None, description="The type of Spark Ads post (VIDEO or CAROUSEL)")
     """The type of Spark Ads post (VIDEO or CAROUSEL)"""
 
+class SparkAdVideoInfo(BaseModel):
+    """Information about the video post"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    duration: float | None | None = Field(default=None, description="The duration of the video, in seconds")
+    """The duration of the video, in seconds"""
+    preview_url: str | None | None = Field(default=None, description="The preview URL for the video")
+    """The preview URL for the video"""
+    poster_url: str | None | None = Field(default=None, description="The URL to the video poster")
+    """The URL to the video poster"""
+    height: int | None | None = Field(default=None, description="The height of the video")
+    """The height of the video"""
+    width: int | None | None = Field(default=None, description="The width of the video")
+    """The width of the video"""
+    size: int | None | None = Field(default=None, description="The size of the video, in bytes")
+    """The size of the video, in bytes"""
+
 class SparkAdAuthInfo(BaseModel):
     """Information about the authorization"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -353,23 +370,6 @@ class SparkAdUserInfo(BaseModel):
     """Identity ID"""
     identity_type: str | None | None = Field(default=None, description="Identity type")
     """Identity type"""
-
-class SparkAdVideoInfo(BaseModel):
-    """Information about the video post"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    duration: float | None | None = Field(default=None, description="The duration of the video, in seconds")
-    """The duration of the video, in seconds"""
-    preview_url: str | None | None = Field(default=None, description="The preview URL for the video")
-    """The preview URL for the video"""
-    poster_url: str | None | None = Field(default=None, description="The URL to the video poster")
-    """The URL to the video poster"""
-    height: int | None | None = Field(default=None, description="The height of the video")
-    """The height of the video"""
-    width: int | None | None = Field(default=None, description="The width of the video")
-    """The width of the video"""
-    size: int | None | None = Field(default=None, description="The size of the video, in bytes")
-    """The size of the video, in bytes"""
 
 class SparkAd(BaseModel):
     """TikTok Spark Ad post authorization"""

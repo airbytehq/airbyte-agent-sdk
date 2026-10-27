@@ -4881,6 +4881,21 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/summary',
                                 ),
                                 SemanticSample(
+                                    name='status',
+                                    path='/incident_status.name',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='severity',
+                                    path='/severity.name',
+                                    prefix='\nSeverity: ',
+                                ),
+                                SemanticSample(
+                                    name='incident_type',
+                                    path='/incident_type.name',
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
                                     name='incident_name',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -4893,7 +4908,7 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{incident_name}\n\n{summary}',
+                                template='{incident_name}{status}{severity}{incident_type}\n\n{summary}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5063,6 +5078,11 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/title',
                                 ),
                                 SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='alert_description',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -5075,7 +5095,7 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{title}\n\n{alert_description}',
+                                template='{title}{status}\n\n{alert_description}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5225,6 +5245,16 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='markdown',
                             samples=[
                                 SemanticSample(
+                                    name='status',
+                                    path='/new_incident_status.name',
+                                    prefix='Status: ',
+                                ),
+                                SemanticSample(
+                                    name='severity',
+                                    path='/new_severity.name',
+                                    prefix='\nSeverity: ',
+                                ),
+                                SemanticSample(
                                     name='update_message',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -5235,6 +5265,9 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{status}{severity}\n\n{update_message}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -6028,6 +6061,21 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                         path='/summary',
                     ),
                     SemanticSample(
+                        name='status',
+                        path='/incident_status.name',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='severity',
+                        path='/severity.name',
+                        prefix='\nSeverity: ',
+                    ),
+                    SemanticSample(
+                        name='incident_type',
+                        path='/incident_type.name',
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
                         name='incident_name',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -6040,7 +6088,7 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{incident_name}\n\n{summary}',
+                    template='{incident_name}{status}{severity}{incident_type}\n\n{summary}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -6095,6 +6143,11 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                         path='/title',
                     ),
                     SemanticSample(
+                        name='status',
+                        path='/status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='alert_description',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -6107,7 +6160,7 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{title}\n\n{alert_description}',
+                    template='{title}{status}\n\n{alert_description}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -6146,6 +6199,16 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='markdown',
                 samples=[
                     SemanticSample(
+                        name='status',
+                        path='/new_incident_status.name',
+                        prefix='Status: ',
+                    ),
+                    SemanticSample(
+                        name='severity',
+                        path='/new_severity.name',
+                        prefix='\nSeverity: ',
+                    ),
+                    SemanticSample(
                         name='update_message',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -6156,6 +6219,9 @@ IncidentIoConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{status}{severity}\n\n{update_message}',
                 ),
                 metadata=[
                     SemanticMetadataField(

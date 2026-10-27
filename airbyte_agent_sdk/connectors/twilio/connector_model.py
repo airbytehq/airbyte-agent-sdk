@@ -4618,6 +4618,16 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='plaintext',
                             samples=[
                                 SemanticSample(
+                                    name='direction',
+                                    path='/direction',
+                                    prefix='Direction: ',
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='error_detail',
                                     path='/error_message',
                                 ),
@@ -4634,7 +4644,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{message_body}\n{error_detail}',
+                                template='{direction}{status}\n\n{message_body}\n{error_detail}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5265,6 +5275,16 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='plaintext',
                 samples=[
                     SemanticSample(
+                        name='direction',
+                        path='/direction',
+                        prefix='Direction: ',
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='error_detail',
                         path='/error_message',
                     ),
@@ -5281,7 +5301,7 @@ TwilioConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{message_body}\n{error_detail}',
+                    template='{direction}{status}\n\n{message_body}\n{error_detail}',
                 ),
                 metadata=[
                     SemanticMetadataField(

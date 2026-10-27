@@ -95,10 +95,13 @@ info:
             x-airbyte-semantic-search:
               content_type: markdown
               samples:
+                - { name: title, path: "/title" }
                 - name: summary_paragraph
                   windowed: true
                   sampling: { sample_type: regex, unit_label: summary_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{summary_paragraph}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -200,10 +203,13 @@ info:
             x-airbyte-semantic-search:
               content_type: json
               samples:
+                - { name: title, path: "/title" }
                 - name: transcript_segment
                   windowed: true
                   sampling: { sample_type: element, unit_label: transcript_segment, sample_path: "[]", text_path: "text" }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{transcript_segment}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

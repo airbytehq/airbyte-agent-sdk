@@ -582,6 +582,9 @@ info:
               samples:
                 - name: name
                   path: /name
+                - name: status
+                  path: /status
+                  prefix: "\nStatus: "
                 - name: job_notes
                   windowed: true
                   sampling:
@@ -591,10 +594,7 @@ info:
                 context_max_chars: 2048
                 context_boundary: whole_unit
               embedding:
-                template: '{name}
-
-
-                  {job_notes}'
+                template: "{name}{status}\n\n{job_notes}"
               metadata:
                 - name: id
                   path: /id

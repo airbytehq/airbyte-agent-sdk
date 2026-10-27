@@ -246,12 +246,14 @@ info:
               content_type: markdown
               samples:
                 - { name: title, path: "/title" }
+                - { name: state, path: "/state", prefix: "\nStatus: " }
+                - { name: state_reason, path: "/state_reason", prefix: "\nReason: " }
                 - name: issue_paragraph
                   windowed: true
                   sampling: { sample_type: regex, unit_label: issue_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{title}\n\n{issue_paragraph}"
+                template: "{title}{state}{state_reason}\n\n{issue_paragraph}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -447,12 +449,13 @@ info:
               content_type: markdown
               samples:
                 - { name: title, path: "/title" }
+                - { name: state, path: "/state", prefix: "\nStatus: " }
                 - name: pr_paragraph
                   windowed: true
                   sampling: { sample_type: regex, unit_label: pr_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{title}\n\n{pr_paragraph}"
+                template: "{title}{state}\n\n{pr_paragraph}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

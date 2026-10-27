@@ -4828,6 +4828,16 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/name',
                                 ),
                                 SemanticSample(
+                                    name='type',
+                                    path='/type',
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
+                                    name='sending_state',
+                                    path='/sending_state',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='subject',
                                     path='/subject',
                                 ),
@@ -4848,7 +4858,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{action_name}\n{subject}\n{preheader}\n\n{action_body}',
+                                template='{action_name}{type}{sending_state}\n{subject}\n{preheader}\n\n{action_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5152,6 +5162,16 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                         path='/name',
                     ),
                     SemanticSample(
+                        name='type',
+                        path='/type',
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
+                        name='sending_state',
+                        path='/sending_state',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='subject',
                         path='/subject',
                     ),
@@ -5172,7 +5192,7 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{action_name}\n{subject}\n{preheader}\n\n{action_body}',
+                    template='{action_name}{type}{sending_state}\n{subject}\n{preheader}\n\n{action_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(

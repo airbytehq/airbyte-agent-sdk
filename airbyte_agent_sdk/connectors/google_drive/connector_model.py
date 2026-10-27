@@ -26,6 +26,7 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
+    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
     SemanticSampling,
@@ -7282,6 +7283,10 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='document',
                             samples=[
                                 SemanticSample(
+                                    name='file_name',
+                                    path='/file_name',
+                                ),
+                                SemanticSample(
                                     name='chunk',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -7291,6 +7296,9 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{file_name}\n\n{chunk}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -7337,6 +7345,10 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='document',
                 samples=[
                     SemanticSample(
+                        name='file_name',
+                        path='/file_name',
+                    ),
+                    SemanticSample(
                         name='chunk',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -7346,6 +7358,9 @@ GoogleDriveConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{file_name}\n\n{chunk}',
                 ),
                 metadata=[
                     SemanticMetadataField(

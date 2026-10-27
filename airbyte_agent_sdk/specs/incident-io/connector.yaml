@@ -145,12 +145,15 @@ info:
               content_type: plaintext
               samples:
                 - { name: summary, path: "/summary" }
+                - { name: status, path: "/incident_status.name", prefix: "\nStatus: " }
+                - { name: severity, path: "/severity.name", prefix: "\nSeverity: " }
+                - { name: incident_type, path: "/incident_type.name", prefix: "\nType: " }
                 - name: incident_name
                   windowed: true
                   sampling: { sample_type: whole, unit_label: incident }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{incident_name}\n\n{summary}"
+                template: "{incident_name}{status}{severity}{incident_type}\n\n{summary}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -237,12 +240,13 @@ info:
               content_type: markdown
               samples:
                 - { name: title, path: "/title" }
+                - { name: status, path: "/status", prefix: "\nStatus: " }
                 - name: alert_description
                   windowed: true
                   sampling: { sample_type: whole, unit_label: alert }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{title}\n\n{alert_description}"
+                template: "{title}{status}\n\n{alert_description}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }
@@ -322,10 +326,14 @@ info:
             x-airbyte-semantic-search:
               content_type: markdown
               samples:
+                - { name: status, path: "/new_incident_status.name", prefix: "Status: " }
+                - { name: severity, path: "/new_severity.name", prefix: "\nSeverity: " }
                 - name: update_message
                   windowed: true
                   sampling: { sample_type: whole, unit_label: update }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{status}{severity}\n\n{update_message}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: created_at, path: "/created_at", type: string }
@@ -2458,4 +2466,3 @@ components:
               slack_user_id:
                 type: ["null", "string"]
                 description: Slack ID of the user
-

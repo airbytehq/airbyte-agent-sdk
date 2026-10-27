@@ -3064,6 +3064,11 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/name',
                                 ),
                                 SemanticSample(
+                                    name='status',
+                                    path='/state',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='board_description',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -3076,7 +3081,7 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{board_name}\n\n{board_description}',
+                                template='{board_name}{status}\n\n{board_description}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -3263,8 +3268,14 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='plaintext',
                             samples=[
                                 SemanticSample(
+                                    name='status',
+                                    path='/state',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='board_name',
                                     path='/board.name',
+                                    prefix='\nProject: ',
                                 ),
                                 SemanticSample(
                                     name='item_name',
@@ -3279,7 +3290,7 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{board_name}\n\n{item_name}',
+                                template='{status}{board_name}\n\n{item_name}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -3885,6 +3896,11 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                         path='/name',
                     ),
                     SemanticSample(
+                        name='status',
+                        path='/state',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='board_description',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -3897,7 +3913,7 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{board_name}\n\n{board_description}',
+                    template='{board_name}{status}\n\n{board_description}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -3932,8 +3948,14 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='plaintext',
                 samples=[
                     SemanticSample(
+                        name='status',
+                        path='/state',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='board_name',
                         path='/board.name',
+                        prefix='\nProject: ',
                     ),
                     SemanticSample(
                         name='item_name',
@@ -3948,7 +3970,7 @@ MondayConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{board_name}\n\n{item_name}',
+                    template='{status}{board_name}\n\n{item_name}',
                 ),
                 metadata=[
                     SemanticMetadataField(

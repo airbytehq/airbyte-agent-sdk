@@ -129,10 +129,13 @@ info:
             x-airbyte-semantic-search:
               content_type: document
               samples:
+                - { name: file_name, path: "/file_name" }
                 - name: chunk
                   windowed: true
                   sampling: { sample_type: whole, unit_label: chunk }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{file_name}\n\n{chunk}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

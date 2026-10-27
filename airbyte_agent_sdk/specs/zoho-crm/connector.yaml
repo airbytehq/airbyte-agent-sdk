@@ -629,6 +629,7 @@ info:
               samples:
                 - { name: contact, path: "/Who_Id.name" }
                 - { name: related_to, path: "/What_Id.name" }
+                - { name: status, path: "/Call_Status", prefix: "\nStatus: " }
                 - { name: agenda, path: "/Call_Agenda" }
                 - { name: notes, path: "/Description" }
                 - { name: result, path: "/Call_Result" }
@@ -637,7 +638,7 @@ info:
                   sampling: { sample_type: whole, unit_label: call }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{call_subject}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}"
+                template: "{call_subject}{status}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: Modified_Time, path: "/Modified_Time", type: string }

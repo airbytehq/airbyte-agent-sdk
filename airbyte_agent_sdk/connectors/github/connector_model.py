@@ -4201,6 +4201,16 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/title',
                                 ),
                                 SemanticSample(
+                                    name='state',
+                                    path='/state',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='state_reason',
+                                    path='/state_reason',
+                                    prefix='\nReason: ',
+                                ),
+                                SemanticSample(
                                     name='issue_paragraph',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -4214,7 +4224,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{title}\n\n{issue_paragraph}',
+                                template='{title}{state}{state_reason}\n\n{issue_paragraph}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -4539,6 +4549,11 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/title',
                                 ),
                                 SemanticSample(
+                                    name='state',
+                                    path='/state',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='pr_paragraph',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -4552,7 +4567,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{title}\n\n{pr_paragraph}',
+                                template='{title}{state}\n\n{pr_paragraph}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5122,6 +5137,16 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                         path='/title',
                     ),
                     SemanticSample(
+                        name='state',
+                        path='/state',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='state_reason',
+                        path='/state_reason',
+                        prefix='\nReason: ',
+                    ),
+                    SemanticSample(
                         name='issue_paragraph',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -5135,7 +5160,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{title}\n\n{issue_paragraph}',
+                    template='{title}{state}{state_reason}\n\n{issue_paragraph}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -5178,6 +5203,11 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                         path='/title',
                     ),
                     SemanticSample(
+                        name='state',
+                        path='/state',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='pr_paragraph',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -5191,7 +5221,7 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{title}\n\n{pr_paragraph}',
+                    template='{title}{state}\n\n{pr_paragraph}',
                 ),
                 metadata=[
                     SemanticMetadataField(

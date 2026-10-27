@@ -285,6 +285,9 @@ info:
         x-airbyte-semantic-search:
           content_type: plaintext
           samples:
+            - { name: level, path: "/level", prefix: "\nLevel: " }
+            - { name: status, path: "/status", prefix: "\nStatus: " }
+            - { name: issue_type, path: "/issueType", prefix: "\nType: " }
             - { name: culprit, path: "/culprit" }
             - { name: value, path: "/metadata.value" }
             - name: issue_title
@@ -292,7 +295,7 @@ info:
               sampling: { sample_type: whole, unit_label: issue }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{issue_title}\n{culprit}\n{value}"
+            template: "{issue_title}{level}{status}{issue_type}\n\n{culprit}\n{value}"
           metadata:
             - { name: id, path: "/id", type: string }
             - { name: lastSeen, path: "/lastSeen", type: string }

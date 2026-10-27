@@ -3305,6 +3305,11 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/name',
                                 ),
                                 SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='job_notes',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -3317,7 +3322,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{name}\n\n{job_notes}',
+                                template='{name}{status}\n\n{job_notes}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -3932,6 +3937,11 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                         path='/name',
                     ),
                     SemanticSample(
+                        name='status',
+                        path='/status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='job_notes',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -3944,7 +3954,7 @@ GreenhouseConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{name}\n\n{job_notes}',
+                    template='{name}{status}\n\n{job_notes}',
                 ),
                 metadata=[
                     SemanticMetadataField(

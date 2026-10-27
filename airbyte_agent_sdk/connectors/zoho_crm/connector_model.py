@@ -11096,6 +11096,11 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/What_Id.name',
                                 ),
                                 SemanticSample(
+                                    name='status',
+                                    path='/Call_Status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
                                     name='agenda',
                                     path='/Call_Agenda',
                                 ),
@@ -11120,7 +11125,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{call_subject}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}',
+                                template='{call_subject}{status}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -12399,6 +12404,11 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                         path='/What_Id.name',
                     ),
                     SemanticSample(
+                        name='status',
+                        path='/Call_Status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
                         name='agenda',
                         path='/Call_Agenda',
                     ),
@@ -12423,7 +12433,7 @@ ZohoCrmConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{call_subject}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}',
+                    template='{call_subject}{status}\n{contact}\n{related_to}\n\n{agenda}\n{notes}\n{result}',
                 ),
                 metadata=[
                     SemanticMetadataField(

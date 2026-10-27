@@ -286,10 +286,14 @@ info:
             x-airbyte-semantic-search:
               content_type: markdown
               samples:
+                - { name: title, path: "/title" }
+                - { name: priority, path: "/priorityLabel", prefix: "\nPriority: " }
                 - name: issue_description_paragraph
                   windowed: true
                   sampling: { sample_type: regex, unit_label: issue_description_paragraph, split_pattern: '\n\s*\n' }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{priority}\n\n{issue_description_paragraph}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: url, path: "/url", type: string }

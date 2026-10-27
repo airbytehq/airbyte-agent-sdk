@@ -172,6 +172,8 @@ info:
               content_type: html
               samples:
                 - { name: action_name, path: "/name" }
+                - { name: type, path: "/type", prefix: "\nType: " }
+                - { name: sending_state, path: "/sending_state", prefix: "\nStatus: " }
                 - { name: subject, path: "/subject" }
                 - { name: preheader, path: "/preheader_text" }
                 - name: action_body
@@ -179,7 +181,7 @@ info:
                   sampling: { sample_type: whole, unit_label: action }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{action_name}\n{subject}\n{preheader}\n\n{action_body}"
+                template: "{action_name}{type}{sending_state}\n{subject}\n{preheader}\n\n{action_body}"
               # Order is load-bearing: the first record-root entry is the record key and the
               # second is the incremental cursor, taken positionally. Their names must equal
               # their path segment because _required_raw_columns looks them up as physical raw

@@ -524,12 +524,14 @@ info:
           content_type: plaintext
           samples:
           - { name: ticket_content, path: "/properties_content" }
+          - { name: ticket_priority, path: "/properties_hs_ticket_priority", prefix: "\nPriority: " }
+          - { name: ticket_category, path: "/properties_hs_ticket_category", prefix: "\nCategory: " }
           - name: ticket_subject
             windowed: true
             sampling: { sample_type: whole, unit_label: ticket }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{ticket_subject}\n\n{ticket_content}"
+            template: "{ticket_subject}{ticket_priority}{ticket_category}\n\n{ticket_content}"
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: updatedAt, path: "/updatedAt", type: string }
@@ -655,12 +657,14 @@ info:
           content_type: plaintext
           samples:
           - { name: call_title, path: "/properties_hs_call_title" }
+          - { name: call_direction, path: "/properties_hs_call_direction", prefix: "\nDirection: " }
+          - { name: call_status, path: "/properties_hs_call_status", prefix: "\nStatus: " }
           - name: call_body
             windowed: true
             sampling: { sample_type: whole, unit_label: call }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{call_title}\n\n{call_body}"
+            template: "{call_title}{call_direction}{call_status}\n\n{call_body}"
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: updatedAt, path: "/updatedAt", type: string }
@@ -781,12 +785,14 @@ info:
           content_type: plaintext
           samples:
           - { name: email_body, path: "/properties_hs_email_text" }
+          - { name: email_direction, path: "/properties_hs_email_direction", prefix: "\nDirection: " }
+          - { name: email_status, path: "/properties_hs_email_status", prefix: "\nStatus: " }
           - name: email_subject
             windowed: true
             sampling: { sample_type: whole, unit_label: email }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{email_subject}\n\n{email_body}"
+            template: "{email_subject}{email_direction}{email_status}\n\n{email_body}"
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: updatedAt, path: "/updatedAt", type: string }
@@ -906,12 +912,13 @@ info:
           content_type: plaintext
           samples:
           - { name: meeting_body, path: "/properties_hs_meeting_body" }
+          - { name: meeting_outcome, path: "/properties_hs_meeting_outcome", prefix: "\nOutcome: " }
           - name: meeting_title
             windowed: true
             sampling: { sample_type: whole, unit_label: meeting }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{meeting_title}\n\n{meeting_body}"
+            template: "{meeting_title}{meeting_outcome}\n\n{meeting_body}"
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: updatedAt, path: "/updatedAt", type: string }
@@ -1013,12 +1020,15 @@ info:
           content_type: plaintext
           samples:
           - { name: task_body, path: "/properties_hs_task_body" }
+          - { name: task_status, path: "/properties_hs_task_status", prefix: "\nStatus: " }
+          - { name: task_priority, path: "/properties_hs_task_priority", prefix: "\nPriority: " }
+          - { name: task_type, path: "/properties_hs_task_type", prefix: "\nType: " }
           - name: task_subject
             windowed: true
             sampling: { sample_type: whole, unit_label: task }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{task_subject}\n\n{task_body}"
+            template: "{task_subject}{task_status}{task_priority}{task_type}\n\n{task_body}"
           metadata:
           - { name: id, path: "/id", type: string }
           - { name: updatedAt, path: "/updatedAt", type: string }

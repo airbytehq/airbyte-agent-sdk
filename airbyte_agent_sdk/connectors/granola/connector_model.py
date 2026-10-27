@@ -25,6 +25,7 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     CacheFieldProperty,
+    SemanticEmbedding,
     SemanticMetadataField,
     SemanticSample,
     SemanticSampling,
@@ -669,6 +670,10 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='markdown',
                             samples=[
                                 SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                ),
+                                SemanticSample(
                                     name='summary_paragraph',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -680,6 +685,9 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{summary_paragraph}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -783,6 +791,10 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                             content_type='json',
                             samples=[
                                 SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                ),
+                                SemanticSample(
                                     name='transcript_segment',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -795,6 +807,9 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                             ],
                             windowing=SemanticWindowing(
                                 context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{transcript_segment}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -861,6 +876,10 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='markdown',
                 samples=[
                     SemanticSample(
+                        name='title',
+                        path='/title',
+                    ),
+                    SemanticSample(
                         name='summary_paragraph',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -872,6 +891,9 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{summary_paragraph}',
                 ),
                 metadata=[
                     SemanticMetadataField(
@@ -892,6 +914,10 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                 content_type='json',
                 samples=[
                     SemanticSample(
+                        name='title',
+                        path='/title',
+                    ),
+                    SemanticSample(
                         name='transcript_segment',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -904,6 +930,9 @@ GranolaConnectorModel: ConnectorModel = ConnectorModel(
                 ],
                 windowing=SemanticWindowing(
                     context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{transcript_segment}',
                 ),
                 metadata=[
                     SemanticMetadataField(

@@ -3288,6 +3288,12 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                     },
                                 ),
                                 SemanticSample(
+                                    name='type',
+                                    path='/type',
+                                    prefix='Type: ',
+                                    suffix='\n',
+                                ),
+                                SemanticSample(
                                     name='ticket_body',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -3300,7 +3306,7 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{subject}\n{status}{priority}\n{ticket_body}',
+                                template='{subject}\n{status}{priority}{type}\n{ticket_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -4579,6 +4585,12 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                         },
                     ),
                     SemanticSample(
+                        name='type',
+                        path='/type',
+                        prefix='Type: ',
+                        suffix='\n',
+                    ),
+                    SemanticSample(
                         name='ticket_body',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -4591,7 +4603,7 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{subject}\n{status}{priority}\n{ticket_body}',
+                    template='{subject}\n{status}{priority}{type}\n{ticket_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(

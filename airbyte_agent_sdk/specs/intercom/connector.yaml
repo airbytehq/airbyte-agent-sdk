@@ -1047,11 +1047,9 @@ info:
               samples:
                 # Three scalar leads, because no single one is reliably present: `title` is set on
                 # Intercom-created conversations, `source.subject` only on email-initiated ones,
-                # and `source.author.name` names whoever opened it. Each renders empty when absent
-                # and they are newline-separated rather than punctuated, so a missing value leaves
-                # a blank line instead of a dangling "Name: " -- conditional sample prefixes are
-                # not in the schema on this branch.
+                # and `source.author.name` names whoever opened it. Each renders empty when absent.
                 - { name: title, path: "/title" }
+                - { name: state, path: "/state", prefix: "\nStatus: " }
                 - { name: subject, path: "/source.subject" }
                 - { name: author_name, path: "/source.author.name" }
                 - name: opening_message
@@ -1066,7 +1064,7 @@ info:
                   sampling: { sample_type: whole, unit_label: conversation, text_path: "body", text_content_type: html }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{title}\n{subject}\n{author_name}\n\n{opening_message}"
+                template: "{title}{state}\n{subject}\n{author_name}\n\n{opening_message}"
               # Order matters: the first record-root entry is the record key, the second is the
               # cursor, and both names must be real raw-table columns.
               metadata:

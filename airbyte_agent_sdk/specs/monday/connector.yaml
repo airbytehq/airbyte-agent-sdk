@@ -134,6 +134,7 @@ info:
                 # The board name leads: descriptions open mid-thought ("Welcome to your
                 # inventory management board...") and the name is what a query actually names.
                 - { name: board_name, path: "/name" }
+                - { name: status, path: "/state", prefix: "\nStatus: " }
                 - name: board_description
                   windowed: true
                   sampling: { sample_type: whole, unit_label: board }
@@ -141,7 +142,7 @@ info:
               # context_text per paragraph unit -- N chunks, one distinct vector.
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{board_name}\n\n{board_description}"
+                template: "{board_name}{status}\n\n{board_description}"
               # [0] record key, [1] cursor, positionally. workspace_id and board_kind are the
               # scoping filters a "which board covers X" query narrows on, and the metadata set
               # is now-or-never -- adding a column once vectors exist forces a rebuild.
@@ -256,13 +257,14 @@ info:
                 # The board name disambiguates titles that repeat across boards ("Task 1",
                 # "Design review"). It is read from the nested `board` struct on the item row --
                 # no lookup, and no cross-entity join, which does not exist at index time.
-                - { name: board_name, path: "/board.name" }
+                - { name: status, path: "/state", prefix: "\nStatus: " }
+                - { name: board_name, path: "/board.name", prefix: "\nProject: " }
                 - name: item_name
                   windowed: true
                   sampling: { sample_type: whole, unit_label: item }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{board_name}\n\n{item_name}"
+                template: "{status}{board_name}\n\n{item_name}"
               # [0] record key, [1] cursor, positionally. board_id and group_id are the two
               # dimensions a scoped query narrows on and are otherwise unreachable -- an outer
               # WHERE over semantic_search(...) runs after the inner top-k, so a dimension left

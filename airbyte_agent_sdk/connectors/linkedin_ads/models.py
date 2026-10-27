@@ -164,13 +164,6 @@ class AccountUsersList(BaseModel):
     elements: list[AccountUser] | None = Field(default=None)
     paging: AccountUsersListPaging | None = Field(default=None)
 
-class CampaignUnitcost(BaseModel):
-    """Cost per unit (bid amount)"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    amount: str | None | None = Field(default=None)
-    currency_code: str | None | None = Field(default=None, alias="currencyCode")
-
 class CampaignRunschedule(BaseModel):
     """Campaign run schedule"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -178,12 +171,32 @@ class CampaignRunschedule(BaseModel):
     start: int | None | None = Field(default=None)
     end: int | None | None = Field(default=None)
 
+class CampaignDailybudget(BaseModel):
+    """Daily budget configuration"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    amount: str | None | None = Field(default=None)
+    currency_code: str | None | None = Field(default=None, alias="currencyCode")
+
 class CampaignTotalbudget(BaseModel):
     """Total budget configuration"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     amount: str | None | None = Field(default=None)
     currency_code: str | None | None = Field(default=None, alias="currencyCode")
+
+class CampaignVersion(BaseModel):
+    """Version information"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    version_tag: str | None | None = Field(default=None, alias="versionTag")
+
+class CampaignLocale(BaseModel):
+    """Campaign locale settings"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    country: str | None | None = Field(default=None)
+    language: str | None | None = Field(default=None)
 
 class CampaignChangeauditstampsLastmodified(BaseModel):
     """Nested schema for CampaignChangeauditstamps.lastModified"""
@@ -206,21 +219,8 @@ class CampaignChangeauditstamps(BaseModel):
     created: CampaignChangeauditstampsCreated | None | None = Field(default=None)
     last_modified: CampaignChangeauditstampsLastmodified | None | None = Field(default=None, alias="lastModified")
 
-class CampaignLocale(BaseModel):
-    """Campaign locale settings"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    country: str | None | None = Field(default=None)
-    language: str | None | None = Field(default=None)
-
-class CampaignVersion(BaseModel):
-    """Version information"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    version_tag: str | None | None = Field(default=None, alias="versionTag")
-
-class CampaignDailybudget(BaseModel):
-    """Daily budget configuration"""
+class CampaignUnitcost(BaseModel):
+    """Cost per unit (bid amount)"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     amount: str | None | None = Field(default=None)
@@ -1608,12 +1608,12 @@ class RestliPartialUpdateRequest(BaseModel):
 
     patch: RestliPartialUpdateRequestPatch
 
-class CampaignCreateRequestRunschedule(BaseModel):
-    """Scheduled run window (epoch milliseconds)"""
+class CampaignCreateRequestLocale(BaseModel):
+    """Campaign locale"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    start: int | None = Field(default=None)
-    end: int | None = Field(default=None)
+    country: str | None = Field(default=None)
+    language: str | None = Field(default=None)
 
 class CampaignCreateRequestUnitcost(BaseModel):
     """Bid amount per unit (per click, per impression, etc.)"""
@@ -1622,12 +1622,12 @@ class CampaignCreateRequestUnitcost(BaseModel):
     amount: str | None = Field(default=None)
     currency_code: str | None = Field(default=None, alias="currencyCode")
 
-class CampaignCreateRequestLocale(BaseModel):
-    """Campaign locale"""
+class CampaignCreateRequestRunschedule(BaseModel):
+    """Scheduled run window (epoch milliseconds)"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    country: str | None = Field(default=None)
-    language: str | None = Field(default=None)
+    start: int | None = Field(default=None)
+    end: int | None = Field(default=None)
 
 class CampaignCreateRequestDailybudget(BaseModel):
     """Daily budget"""
