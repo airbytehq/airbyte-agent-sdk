@@ -30,6 +30,7 @@ from uuid import (
 ExaConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('7c3acca3-8781-4a4b-bb10-fd2e4500da18'),
     name='exa',
+    version='1.0.1',
     base_url='https://api.exa.ai',
     auth=AuthConfig(
         type=AuthType.API_KEY,

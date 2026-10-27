@@ -3,7 +3,7 @@
   "class_name": "ExaConnector",
   "package_name": "airbyte_agent_sdk.connectors.exa",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.0",
+  "yaml_version": "1.0.1",
   "api_reference_url": "https://docs.exa.ai/reference/getting-started",
   "auth_example": "ExaAuthConfig(api_key=\"...\")",
   "auth_import": ", ExaAuthConfig",

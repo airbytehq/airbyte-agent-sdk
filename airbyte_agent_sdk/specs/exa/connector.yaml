@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Exa AI API Connector
-  version: 1.0.0
+  version: 1.0.1
   description: |
     Exa is an AI-powered search engine that finds the exact content you're looking
     for on the web using embeddings-based search. This connector provides access to
@@ -12,6 +12,11 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C16
+        reason: "Exa is direct_only and has no Airbyte source definition, but the smoke runner creates an org source template via POST /api/v1/integrations/templates/sources, which resolves the spec from the Airbyte API and returns 404 \"Source definition specification not found\" for direct-only connectors. Recorded cassettes and live golden questions cover all operations."
+      - criterion: C17
+        reason: "Exa cannot be wired into the smoke suite (see C16: smoke source-template creation is unsupported for direct_only connectors), so no live smoke result can exist. Recorded cassettes and live golden questions cover all operations."
   x-airbyte-connector-display-name: Exa
   x-airbyte-connector-definition-id: 7c3acca3-8781-4a4b-bb10-fd2e4500da18
   x-airbyte-platform-availability:
