@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Outreach API Connector
-  version: 1.0.0
+  version: 1.0.1
   description: |
     Connector for the Outreach sales engagement platform API. Outreach helps sales teams
     automate and optimize their outreach workflows through sequences, templates, and
@@ -14,6 +14,9 @@ info:
   x-airbyte-qualification:
     status: candidate
     criteria_version: v1
+    bypassed_criteria:
+      - criterion: C15
+        reason: "sequence_states.get is x-airbyte-untested because the Outreach sandbox has no sequence states and none can be created: POST /sequenceStates returns HTTP 422 (\"Mailbox does not have send enabled.\", \"Mailbox has invalid send credentials.\") since the sandbox has no send-enabled mailbox. The get cassette can be recorded once a sending mailbox is connected."
   x-airbyte-connector-definition-id: 3490c201-5d95-4783-b600-eaf07a4c7787
   x-airbyte-replication-version: "1.1.48"
   x-airbyte-replication-compatibility: ">=1.1.48, <2.0.0"

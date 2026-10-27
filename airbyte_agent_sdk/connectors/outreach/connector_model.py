@@ -35,6 +35,7 @@ from uuid import (
 OutreachConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('3490c201-5d95-4783-b600-eaf07a4c7787'),
     name='outreach',
+    version='1.0.1',
     base_url='https://api.outreach.io/api/v2',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
