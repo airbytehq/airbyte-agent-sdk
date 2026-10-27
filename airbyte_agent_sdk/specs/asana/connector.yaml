@@ -781,12 +781,13 @@ info:
           content_type: plaintext
           samples:
           - { name: notes, path: "/notes" }
+          - { name: completed, path: "/completed", suffix: "\n", labels: { true: Completed, false: Not completed } }
           - name: task_name
             windowed: true
             sampling: { sample_type: whole, unit_label: task }
           windowing: { context_max_chars: 2048, context_boundary: whole_unit }
           embedding:
-            template: "{task_name}\n\n{notes}"
+            template: "{task_name}\n{completed}\n{notes}"
           metadata:
           - { name: gid, path: "/gid", type: string }
           - { name: modified_at, path: "/modified_at", type: string }

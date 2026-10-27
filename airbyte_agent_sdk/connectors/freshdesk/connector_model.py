@@ -3264,6 +3264,30 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/subject',
                                 ),
                                 SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    prefix='Status: ',
+                                    suffix='\n',
+                                    labels={
+                                        '2': 'Open',
+                                        '3': 'Pending',
+                                        '4': 'Resolved',
+                                        '5': 'Closed',
+                                    },
+                                ),
+                                SemanticSample(
+                                    name='priority',
+                                    path='/priority',
+                                    prefix='Priority: ',
+                                    suffix='\n',
+                                    labels={
+                                        '1': 'Low',
+                                        '2': 'Medium',
+                                        '3': 'High',
+                                        '4': 'Urgent',
+                                    },
+                                ),
+                                SemanticSample(
                                     name='ticket_body',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -3276,7 +3300,7 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{subject}\n\n{ticket_body}',
+                                template='{subject}\n{status}{priority}\n{ticket_body}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -4531,6 +4555,30 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                         path='/subject',
                     ),
                     SemanticSample(
+                        name='status',
+                        path='/status',
+                        prefix='Status: ',
+                        suffix='\n',
+                        labels={
+                            '2': 'Open',
+                            '3': 'Pending',
+                            '4': 'Resolved',
+                            '5': 'Closed',
+                        },
+                    ),
+                    SemanticSample(
+                        name='priority',
+                        path='/priority',
+                        prefix='Priority: ',
+                        suffix='\n',
+                        labels={
+                            '1': 'Low',
+                            '2': 'Medium',
+                            '3': 'High',
+                            '4': 'Urgent',
+                        },
+                    ),
+                    SemanticSample(
                         name='ticket_body',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -4543,7 +4591,7 @@ FreshdeskConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{subject}\n\n{ticket_body}',
+                    template='{subject}\n{status}{priority}\n{ticket_body}',
                 ),
                 metadata=[
                     SemanticMetadataField(

@@ -10,7 +10,9 @@ Provides Pydantic models for OpenAPI x-airbyte-* extensions:
 - QualificationMetadata: qualification intent and criteria metadata
 """
 
+import math
 import re
+from decimal import Decimal
 from enum import StrEnum
 from typing import Any, Literal
 
@@ -236,6 +238,19 @@ class SemanticSampleLookup(BaseModel):
         return value
 
 
+def semantic_label_key(value: Any) -> str:
+    """Canonical text form of a scalar value for matching `SemanticSample.labels` keys.
+
+    YAML gives typed keys (`2:`, `true:`), JSON gives strings (`"2"`, `"true"`), and records may
+    carry `2`, `True` or `2.0`; all meet here so the same value spelled any of those ways matches.
+    """
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (float, Decimal)) and math.isfinite(value) and value == int(value):
+        return str(int(value))
+    return str(value)
+
+
 class SemanticSample(BaseModel):
     """
     A single sample contributing to a semantic-search field's embedded text.
@@ -277,6 +292,14 @@ class SemanticSample(BaseModel):
         default=None,
         description="Scalar samples only: literal appended to the resolved value, only when it is non-empty.",
     )
+    labels: dict[str, str] | None = Field(
+        default=None,
+        min_length=1,
+        description="Scalar samples only: map from resolved value to the text rendered in its place, so numeric codes and "
+        "booleans embed as words (e.g. `{2: Open, 3: Pending}` or `{true: Completed, false: Not completed}`). Keys match "
+        "the value's canonical text (booleans as `true`/`false`, integral numbers without a fraction). A value with no "
+        "label renders nothing, like an empty value, so `prefix`/`suffix` are skipped too. `max_chars` applies to the label.",
+    )
     windowed: bool = Field(
         default=False,
         description="Whether this sample is the windowed sample (exactly one per field).",
@@ -285,6 +308,16 @@ class SemanticSample(BaseModel):
         default=None,
         description="Windowed sample only: how the decoded field value is split into units.",
     )
+
+    @field_validator("labels", mode="before")
+    @classmethod
+    def canonicalize_label_keys(cls, value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        canonical = {semantic_label_key(key): label for key, label in value.items()}
+        if len(canonical) != len(value):
+            raise ValueError("x-airbyte-semantic-search: 'labels' keys collide once canonicalized (e.g. 2 and '2').")
+        return canonical
 
 
 class SemanticWindowing(BaseModel):
@@ -465,6 +498,8 @@ class SemanticSearchConfig(BaseModel):
             raise ValueError("x-airbyte-semantic-search: the windowed sample must not set 'max_chars' (use windowing.context_max_chars).")
         if windowed.prefix is not None or windowed.suffix is not None:
             raise ValueError("x-airbyte-semantic-search: the windowed sample must not set 'prefix' or 'suffix' (put literals in the template).")
+        if windowed.labels is not None:
+            raise ValueError("x-airbyte-semantic-search: the windowed sample must not set 'labels'.")
 
         for sample in samples:
             if sample is windowed:

@@ -73,12 +73,14 @@ info:
               content_type: plaintext
               samples:
                 - { name: subject, path: "/subject" }
+                - { name: status, path: "/status", prefix: "Status: ", suffix: "\n", labels: { 2: Open, 3: Pending, 4: Resolved, 5: Closed } }
+                - { name: priority, path: "/priority", prefix: "Priority: ", suffix: "\n", labels: { 1: Low, 2: Medium, 3: High, 4: Urgent } }
                 - name: ticket_body
                   windowed: true
                   sampling: { sample_type: whole, unit_label: ticket }
               windowing: { context_max_chars: 2048, context_boundary: whole_unit }
               embedding:
-                template: "{subject}\n\n{ticket_body}"
+                template: "{subject}\n{status}{priority}\n{ticket_body}"
               metadata:
                 - { name: id, path: "/id", type: string }
                 - { name: updated_at, path: "/updated_at", type: string }

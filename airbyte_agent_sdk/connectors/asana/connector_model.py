@@ -4592,6 +4592,12 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                     path='/notes',
                                 ),
                                 SemanticSample(
+                                    name='completed',
+                                    path='/completed',
+                                    suffix='\n',
+                                    labels={'true': 'Completed', 'false': 'Not completed'},
+                                ),
+                                SemanticSample(
                                     name='task_name',
                                     windowed=True,
                                     sampling=SemanticSampling(
@@ -4604,7 +4610,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                                 context_max_chars=2048,
                             ),
                             embedding=SemanticEmbedding(
-                                template='{task_name}\n\n{notes}',
+                                template='{task_name}\n{completed}\n{notes}',
                             ),
                             metadata=[
                                 SemanticMetadataField(
@@ -5196,6 +5202,12 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                         path='/notes',
                     ),
                     SemanticSample(
+                        name='completed',
+                        path='/completed',
+                        suffix='\n',
+                        labels={'true': 'Completed', 'false': 'Not completed'},
+                    ),
+                    SemanticSample(
                         name='task_name',
                         windowed=True,
                         sampling=SemanticSampling(
@@ -5208,7 +5220,7 @@ AsanaConnectorModel: ConnectorModel = ConnectorModel(
                     context_max_chars=2048,
                 ),
                 embedding=SemanticEmbedding(
-                    template='{task_name}\n\n{notes}',
+                    template='{task_name}\n{completed}\n{notes}',
                 ),
                 metadata=[
                     SemanticMetadataField(

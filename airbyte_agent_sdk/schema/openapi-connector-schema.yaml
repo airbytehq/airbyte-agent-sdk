@@ -2506,6 +2506,21 @@ $defs:
         description: 'Scalar samples only: literal appended to the resolved value,
           only when it is non-empty.'
         title: Suffix
+      labels:
+        anyOf:
+        - additionalProperties:
+            type: string
+          minProperties: 1
+          type: object
+        - type: 'null'
+        default: null
+        description: 'Scalar samples only: map from resolved value to the text rendered
+          in its place, so numeric codes and booleans embed as words (e.g. `{2: Open,
+          3: Pending}` or `{true: Completed, false: Not completed}`). Keys match the
+          value''s canonical text (booleans as `true`/`false`, integral numbers without
+          a fraction). A value with no label renders nothing, like an empty value,
+          so `prefix`/`suffix` are skipped too. `max_chars` applies to the label.'
+        title: Labels
       windowed:
         default: false
         description: Whether this sample is the windowed sample (exactly one per field).
