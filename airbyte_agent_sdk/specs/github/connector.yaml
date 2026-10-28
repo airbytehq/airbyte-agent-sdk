@@ -514,6 +514,25 @@ info:
             x-airbyte-name: body
             type: ["null", "string"]
             description: "Markdown body / release notes"
+            x-airbyte-semantic-search:
+              content_type: markdown
+              samples:
+                - { name: release_name, path: "/name" }
+                - { name: tag_name, path: "/tag_name", prefix: "\nTag: " }
+                - name: release_paragraph
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: release_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{release_name}{tag_name}\n\n{release_paragraph}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: created_at, path: "/created_at", type: string }
+                - { name: tag_name, path: "/tag_name", type: string }
+                - { name: name, path: "/name", type: string }
+                - { name: published_at, path: "/published_at", type: string }
+                - { name: html_url, path: "/html_url", type: string }
+                - { name: node_id, path: "/node_id", type: string }
           - name: publishedAt
             x-airbyte-name: published_at
             type: ["null", "string"]
@@ -606,6 +625,23 @@ info:
           - name: body
             type: ["null", "string"]
             description: "Review body text"
+            x-airbyte-semantic-search:
+              content_type: markdown
+              samples:
+                - { name: state, path: "/state", prefix: "Review: " }
+                - name: review_paragraph
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: review_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{state}\n\n{review_paragraph}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: state, path: "/state", type: string }
+                - { name: submitted_at, path: "/submitted_at", type: string }
+                - { name: html_url, path: "/html_url", type: string }
+                - { name: node_id, path: "/node_id", type: string }
           - name: submittedAt
             x-airbyte-name: submitted_at
             type: ["null", "string"]

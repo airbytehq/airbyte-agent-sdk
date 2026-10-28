@@ -7962,6 +7962,55 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                         name='body',
                         type=['null', 'string'],
                         description='The body content of the article (HTML)',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                ),
+                                SemanticSample(
+                                    name='article_body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='article_body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{article_body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='title',
+                                    path='/title',
+                                ),
+                                SemanticMetadataField(
+                                    name='html_url',
+                                    path='/html_url',
+                                ),
+                                SemanticMetadataField(
+                                    name='locale',
+                                    path='/locale',
+                                ),
+                                SemanticMetadataField(
+                                    name='section_id',
+                                    path='/section_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='locale',
@@ -8882,6 +8931,57 @@ ZendeskSupportConnectorModel: ConnectorModel = ConnectorModel(
                     SemanticMetadataField(
                         name='public',
                         path='/public',
+                    ),
+                ],
+            ),
+        },
+        'articles': {
+            'body': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/title',
+                    ),
+                    SemanticSample(
+                        name='article_body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='article_body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{article_body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='title',
+                        path='/title',
+                    ),
+                    SemanticMetadataField(
+                        name='html_url',
+                        path='/html_url',
+                    ),
+                    SemanticMetadataField(
+                        name='locale',
+                        path='/locale',
+                    ),
+                    SemanticMetadataField(
+                        name='section_id',
+                        path='/section_id',
                     ),
                 ],
             ),

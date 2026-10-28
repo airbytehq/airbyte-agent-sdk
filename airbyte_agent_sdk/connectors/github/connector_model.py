@@ -4676,6 +4676,65 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                         x_airbyte_name='body',
                         type=['null', 'string'],
                         description='Markdown body / release notes',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='markdown',
+                            samples=[
+                                SemanticSample(
+                                    name='release_name',
+                                    path='/name',
+                                ),
+                                SemanticSample(
+                                    name='tag_name',
+                                    path='/tag_name',
+                                    prefix='\nTag: ',
+                                ),
+                                SemanticSample(
+                                    name='release_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='release_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{release_name}{tag_name}\n\n{release_paragraph}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='tag_name',
+                                    path='/tag_name',
+                                ),
+                                SemanticMetadataField(
+                                    name='name',
+                                    path='/name',
+                                ),
+                                SemanticMetadataField(
+                                    name='published_at',
+                                    path='/published_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='html_url',
+                                    path='/html_url',
+                                ),
+                                SemanticMetadataField(
+                                    name='node_id',
+                                    path='/node_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='publishedAt',
@@ -4817,6 +4876,57 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                         name='body',
                         type=['null', 'string'],
                         description='Review body text',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='markdown',
+                            samples=[
+                                SemanticSample(
+                                    name='state',
+                                    path='/state',
+                                    prefix='Review: ',
+                                ),
+                                SemanticSample(
+                                    name='review_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='review_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{state}\n\n{review_paragraph}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='state',
+                                    path='/state',
+                                ),
+                                SemanticMetadataField(
+                                    name='submitted_at',
+                                    path='/submitted_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='html_url',
+                                    path='/html_url',
+                                ),
+                                SemanticMetadataField(
+                                    name='node_id',
+                                    path='/node_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='submittedAt',
@@ -5243,6 +5353,120 @@ GithubConnectorModel: ConnectorModel = ConnectorModel(
                     SemanticMetadataField(
                         name='title',
                         path='/title',
+                    ),
+                    SemanticMetadataField(
+                        name='html_url',
+                        path='/html_url',
+                    ),
+                    SemanticMetadataField(
+                        name='node_id',
+                        path='/node_id',
+                    ),
+                ],
+            ),
+        },
+        'releases': {
+            'body': SemanticSearchConfig(
+                content_type='markdown',
+                samples=[
+                    SemanticSample(
+                        name='release_name',
+                        path='/name',
+                    ),
+                    SemanticSample(
+                        name='tag_name',
+                        path='/tag_name',
+                        prefix='\nTag: ',
+                    ),
+                    SemanticSample(
+                        name='release_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='release_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{release_name}{tag_name}\n\n{release_paragraph}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='tag_name',
+                        path='/tag_name',
+                    ),
+                    SemanticMetadataField(
+                        name='name',
+                        path='/name',
+                    ),
+                    SemanticMetadataField(
+                        name='published_at',
+                        path='/published_at',
+                    ),
+                    SemanticMetadataField(
+                        name='html_url',
+                        path='/html_url',
+                    ),
+                    SemanticMetadataField(
+                        name='node_id',
+                        path='/node_id',
+                    ),
+                ],
+            ),
+        },
+        'reviews': {
+            'body': SemanticSearchConfig(
+                content_type='markdown',
+                samples=[
+                    SemanticSample(
+                        name='state',
+                        path='/state',
+                        prefix='Review: ',
+                    ),
+                    SemanticSample(
+                        name='review_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='review_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{state}\n\n{review_paragraph}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='state',
+                        path='/state',
+                    ),
+                    SemanticMetadataField(
+                        name='submitted_at',
+                        path='/submitted_at',
                     ),
                     SemanticMetadataField(
                         name='html_url',

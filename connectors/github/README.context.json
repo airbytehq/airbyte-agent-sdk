@@ -5524,7 +5524,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Markdown body / release notes",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "publishedAt",
@@ -5577,8 +5577,44 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body",
+          "description": "Markdown body / release notes",
+          "context_max_chars": 2048,
+          "content_type": "markdown"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "tag_name",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "published_at",
+          "type": "string"
+        },
+        {
+          "name": "html_url",
+          "type": "string"
+        },
+        {
+          "name": "node_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -5784,7 +5820,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Review body text",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "submittedAt",
@@ -5827,8 +5863,40 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body",
+          "description": "Review body text",
+          "context_max_chars": 2048,
+          "content_type": "markdown"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "submitted_at",
+          "type": "string"
+        },
+        {
+          "name": "html_url",
+          "type": "string"
+        },
+        {
+          "name": "node_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

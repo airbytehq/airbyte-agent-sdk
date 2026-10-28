@@ -1446,6 +1446,23 @@ info:
         - "null"
         - "string"
         description: The body content of the article (HTML)
+        x-airbyte-semantic-search:
+          content_type: html
+          samples:
+            - { name: title, path: "/title" }
+            - name: article_body
+              windowed: true
+              sampling: { sample_type: whole, unit_label: article_body }
+          windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+          embedding:
+            template: "{title}\n\n{article_body}"
+          metadata:
+            - { name: id, path: "/id", type: string }
+            - { name: updated_at, path: "/updated_at", type: string }
+            - { name: title, path: "/title", type: string }
+            - { name: html_url, path: "/html_url", type: string }
+            - { name: locale, path: "/locale", type: string }
+            - { name: section_id, path: "/section_id", type: string }
       - name: locale
         type:
         - "null"

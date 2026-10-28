@@ -6596,7 +6596,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "The body content of the article (HTML)",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "locale",
@@ -6709,8 +6709,40 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body",
+          "description": "The body content of the article (HTML)",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "html_url",
+          "type": "string"
+        },
+        {
+          "name": "locale",
+          "type": "string"
+        },
+        {
+          "name": "section_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": [
         "authorName",
