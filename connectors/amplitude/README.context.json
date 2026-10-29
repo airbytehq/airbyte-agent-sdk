@@ -352,7 +352,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Additional details or information related to the annotation",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "id",
@@ -375,8 +375,24 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "details",
+          "description": "Additional details or information related to the annotation",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -572,7 +588,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "The name or title of the cohort",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "owners",
@@ -655,8 +671,28 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "name",
+          "description": "The name or title of the cohort",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "lastMod",
+          "type": "string"
+        },
+        {
+          "name": "createdAt",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

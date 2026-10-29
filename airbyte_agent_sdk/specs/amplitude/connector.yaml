@@ -24,6 +24,7 @@ info:
     entities:
       - entity: annotations
         x-airbyte-name: annotations
+        suggested: true
         fields:
           - name: date
             type: ["null", "string"]
@@ -31,6 +32,19 @@ info:
           - name: details
             type: ["null", "string"]
             description: Additional details or information related to the annotation
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - { name: title, path: "/label", max_chars: 200 }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: date, path: "/date", type: string }
           - name: id
             type: ["null", "integer"]
             description: The unique identifier for the annotation
@@ -95,6 +109,20 @@ info:
           - name: name
             type: ["null", "string"]
             description: The name or title of the cohort
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - name: title
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: paragraph, split_pattern: '\n\s*\n' }
+                - { name: body, path: "/description", max_chars: 1600 }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: lastMod, path: "/lastMod", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
           - name: owners
             type: ["null", "array"]
             description: The owners or administrators of the cohort

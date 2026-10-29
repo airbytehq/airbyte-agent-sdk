@@ -24,6 +24,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheConfig,
     CacheEntityConfig,
     CacheFieldConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -1226,6 +1232,7 @@ AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
         entities=[
             CacheEntityConfig(
                 entity='annotations',
+                suggested=True,
                 x_airbyte_name='annotations',
                 fields=[
                     CacheFieldConfig(
@@ -1237,6 +1244,41 @@ AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
                         name='details',
                         type=['null', 'string'],
                         description='Additional details or information related to the annotation',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/label',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date',
+                                    path='/date',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='id',
@@ -1344,6 +1386,45 @@ AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
                         name='name',
                         type=['null', 'string'],
                         description='The name or title of the cohort',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    path='/description',
+                                    max_chars=1600,
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='lastMod',
+                                    path='/lastMod',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='owners',
@@ -1558,6 +1639,86 @@ AmplitudeConnectorModel: ConnectorModel = ConnectorModel(
         ],
         'active_users': ['date', 'statistics'],
         'average_session_length': ['date', 'length'],
+    },
+    semantic_search_fields={
+        'annotations': {
+            'details': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/label',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date',
+                        path='/date',
+                    ),
+                ],
+            ),
+        },
+        'cohorts': {
+            'name': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                    SemanticSample(
+                        name='body',
+                        path='/description',
+                        max_chars=1600,
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='lastMod',
+                        path='/lastMod',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[
