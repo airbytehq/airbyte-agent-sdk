@@ -26,6 +26,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheFieldConfig,
     CacheFieldProperty,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -2526,6 +2532,55 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
                         name='headline',
                         type=['null', 'string'],
                         description='Creative headline',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='brand',
+                                    path='/brand_name',
+                                    max_chars=200,
+                                    prefix='\nBrand: ',
+                                ),
+                                SemanticSample(
+                                    name='type',
+                                    path='/type',
+                                    max_chars=200,
+                                    prefix='\nCreative type: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{body}{brand}{type}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='ad_account_id',
+                                    path='/ad_account_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='id',
@@ -2981,6 +3036,59 @@ SnapchatMarketingConnectorModel: ConnectorModel = ConnectorModel(
             'visible_to',
             'visible_to[]',
         ],
+    },
+    semantic_search_fields={
+        'creatives': {
+            'headline': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='brand',
+                        path='/brand_name',
+                        max_chars=200,
+                        prefix='\nBrand: ',
+                    ),
+                    SemanticSample(
+                        name='type',
+                        path='/type',
+                        max_chars=200,
+                        prefix='\nCreative type: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{body}{brand}{type}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='ad_account_id',
+                        path='/ad_account_id',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

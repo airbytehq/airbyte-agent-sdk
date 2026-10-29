@@ -25,6 +25,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     CacheFieldProperty,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -2219,6 +2225,55 @@ PaypalTransactionConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='The detailed description of the product',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='type',
+                                    path='/type',
+                                    max_chars=200,
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{type}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='update_time',
+                                    path='/update_time',
+                                ),
+                                SemanticMetadataField(
+                                    name='create_time',
+                                    path='/create_time',
+                                ),
+                                SemanticMetadataField(
+                                    name='home_url',
+                                    path='/home_url',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='home_url',
@@ -2685,6 +2740,59 @@ PaypalTransactionConnectorModel: ConnectorModel = ConnectorModel(
             'transactions[]',
             'update_time',
         ],
+    },
+    semantic_search_fields={
+        'show_product_details': {
+            'description': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='type',
+                        path='/type',
+                        max_chars=200,
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{type}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='update_time',
+                        path='/update_time',
+                    ),
+                    SemanticMetadataField(
+                        name='create_time',
+                        path='/create_time',
+                    ),
+                    SemanticMetadataField(
+                        name='home_url',
+                        path='/home_url',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

@@ -449,6 +449,40 @@ info:
       - name: headline
         type: ["null", "string"]
         description: Creative headline
+        x-airbyte-semantic-search:
+          content_type: plaintext
+          samples:
+          - name: brand
+            path: /brand_name
+            max_chars: 200
+            prefix: "\nBrand: "
+          - name: type
+            path: /type
+            max_chars: 200
+            prefix: "\nCreative type: "
+          - name: body
+            windowed: true
+            sampling:
+              sample_type: whole
+              unit_label: body
+          windowing:
+            context_max_chars: 2048
+            context_boundary: whole_unit
+          embedding:
+            template: "{body}{brand}{type}"
+          metadata:
+          - name: id
+            path: /id
+            type: string
+          - name: updated_at
+            path: /updated_at
+            type: string
+          - name: created_at
+            path: /created_at
+            type: string
+          - name: ad_account_id
+            path: /ad_account_id
+            type: string
       - name: id
         type: ["null", "string"]
         description: Unique creative identifier

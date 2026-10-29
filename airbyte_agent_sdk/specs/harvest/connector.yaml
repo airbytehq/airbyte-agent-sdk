@@ -442,6 +442,23 @@ info:
           - name: notes
             type: ["null", "string"]
             description: "Notes"
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - { name: title, path: "/project.name", max_chars: 200 }
+                - { name: task, path: "/task.name", max_chars: 200, prefix: "\nTask: " }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{task}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: created_at, path: "/created_at", type: string }
+                - { name: project_id, path: "/project.id", type: string }
+                - { name: client_id, path: "/client.id", type: string }
           - name: project
             type: ["null", "object"]
             description: "Associated project"

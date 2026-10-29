@@ -1686,6 +1686,13 @@ class CallDispositionResponse(BaseModel):
 
     data: CallDisposition | None = Field(default=None)
 
+class CallPurposeLinks(BaseModel):
+    """Links associated with this resource"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None = Field(default=None, description="URL for this resource")
+    """URL for this resource"""
+
 class CallPurposeAttributes(BaseModel):
     """Nested schema for CallPurpose.attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1695,13 +1702,6 @@ class CallPurposeAttributes(BaseModel):
     updated_at: str | None | None = Field(default=None, alias="updatedAt")
     order: int | None | None = Field(default=None, description="The purpose’s display order within the collection.")
     """The purpose’s display order within the collection."""
-
-class CallPurposeLinks(BaseModel):
-    """Links associated with this resource"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None = Field(default=None, description="URL for this resource")
-    """URL for this resource"""
 
 class CallPurpose(BaseModel):
     """Outreach call purpose object"""
@@ -2022,6 +2022,13 @@ class TaskResponse(BaseModel):
     data: Task | None = Field(default=None)
     meta: dict[str, Any] | None = Field(default=None)
 
+class UserLinks(BaseModel):
+    """Links associated with this resource"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None = Field(default=None, description="URL for this resource")
+    """URL for this resource"""
+
 class UserAttributes(BaseModel):
     """Nested schema for User.attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -2192,13 +2199,6 @@ class UserAttributes(BaseModel):
     weekly_digest_email_enabled: bool | None | None = Field(default=None, alias="weeklyDigestEmailEnabled", description="A boolean value whether the user's weekly digest email are enabled.")
     """A boolean value whether the user's weekly digest email are enabled."""
 
-class UserLinks(BaseModel):
-    """Links associated with this resource"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None = Field(default=None, description="URL for this resource")
-    """URL for this resource"""
-
 class User(BaseModel):
     """Outreach user object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -2309,13 +2309,6 @@ class PersonaResponse(BaseModel):
     data: Persona | None = Field(default=None)
     meta: dict[str, Any] | None = Field(default=None)
 
-class TemplateLinks(BaseModel):
-    """Links associated with this resource"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None = Field(default=None, description="URL for this resource")
-    """URL for this resource"""
-
 class TemplateAttributes(BaseModel):
     """Nested schema for Template.attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -2378,6 +2371,13 @@ class TemplateAttributes(BaseModel):
     track_opens: bool | None | None = Field(default=None, alias="trackOpens", description="Boolean value indicating if open tracking is on for the template.")
     """Boolean value indicating if open tracking is on for the template."""
 
+class TemplateLinks(BaseModel):
+    """Links associated with this resource"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None = Field(default=None, description="URL for this resource")
+    """URL for this resource"""
+
 class Template(BaseModel):
     """Outreach template object"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -2403,13 +2403,6 @@ class TemplateResponse(BaseModel):
     data: Template | None = Field(default=None)
     meta: dict[str, Any] | None = Field(default=None)
 
-class SnippetLinks(BaseModel):
-    """Links associated with this resource"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None = Field(default=None, description="URL for this resource")
-    """URL for this resource"""
-
 class SnippetAttributes(BaseModel):
     """Nested schema for Snippet.attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -2426,6 +2419,13 @@ class SnippetAttributes(BaseModel):
     """The permissions for sharing the snippet; must be 'private' or 'shared.'"""
     tags: list[str] | None | None = Field(default=None, description="A list of tags associated with the snippet (e.g. ['Useful', 'Prospecting']).")
     """A list of tags associated with the snippet (e.g. ['Useful', 'Prospecting'])."""
+
+class SnippetLinks(BaseModel):
+    """Links associated with this resource"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None = Field(default=None, description="URL for this resource")
+    """URL for this resource"""
 
 class Snippet(BaseModel):
     """Outreach snippet object"""

@@ -109,6 +109,36 @@ info:
         - 'null'
         - string
         description: Description of the project
+        x-airbyte-semantic-search:
+          content_type: markdown
+          samples:
+          - name: title
+            path: /name_with_namespace
+            max_chars: 200
+          - name: body
+            windowed: true
+            sampling:
+              sample_type: regex
+              unit_label: paragraph
+              split_pattern: '\n\s*\n'
+          windowing:
+            context_max_chars: 2048
+            context_boundary: whole_unit
+          embedding:
+            template: "{title}\n\n{body}"
+          metadata:
+          - name: id
+            path: /id
+            type: string
+          - name: updated_at
+            path: /updated_at
+            type: string
+          - name: created_at
+            path: /created_at
+            type: string
+          - name: web_url
+            path: /web_url
+            type: string
       - name: description_html
         type:
         - 'null'
@@ -523,6 +553,43 @@ info:
         - 'null'
         - string
         description: Description of the issue
+        x-airbyte-semantic-search:
+          content_type: markdown
+          samples:
+          - name: title
+            path: /title
+            max_chars: 200
+          - name: status
+            path: /state
+            max_chars: 200
+            prefix: "\nStatus: "
+          - name: body
+            windowed: true
+            sampling:
+              sample_type: regex
+              unit_label: paragraph
+              split_pattern: '\n\s*\n'
+          windowing:
+            context_max_chars: 2048
+            context_boundary: whole_unit
+          embedding:
+            template: "{title}{status}\n\n{body}"
+          metadata:
+          - name: id
+            path: /id
+            type: string
+          - name: updated_at
+            path: /updated_at
+            type: string
+          - name: created_at
+            path: /created_at
+            type: string
+          - name: web_url
+            path: /web_url
+            type: string
+          - name: project_id
+            path: /project_id
+            type: string
       - name: state
         type:
         - 'null'
@@ -712,6 +779,43 @@ info:
         - 'null'
         - string
         description: Description of the merge request
+        x-airbyte-semantic-search:
+          content_type: markdown
+          samples:
+          - name: title
+            path: /title
+            max_chars: 200
+          - name: status
+            path: /state
+            max_chars: 200
+            prefix: "\nStatus: "
+          - name: body
+            windowed: true
+            sampling:
+              sample_type: regex
+              unit_label: paragraph
+              split_pattern: '\n\s*\n'
+          windowing:
+            context_max_chars: 2048
+            context_boundary: whole_unit
+          embedding:
+            template: "{title}{status}\n\n{body}"
+          metadata:
+          - name: id
+            path: /id
+            type: string
+          - name: updated_at
+            path: /updated_at
+            type: string
+          - name: created_at
+            path: /created_at
+            type: string
+          - name: web_url
+            path: /web_url
+            type: string
+          - name: project_id
+            path: /project_id
+            type: string
       - name: state
         type:
         - 'null'

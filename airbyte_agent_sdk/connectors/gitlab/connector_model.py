@@ -26,6 +26,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -5708,6 +5714,49 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='Description of the project',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='markdown',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/name_with_namespace',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='web_url',
+                                    path='/web_url',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='description_html',
@@ -6125,6 +6174,59 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='Description of the issue',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='markdown',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/state',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='web_url',
+                                    path='/web_url',
+                                ),
+                                SemanticMetadataField(
+                                    name='project_id',
+                                    path='/project_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='state',
@@ -6317,6 +6419,59 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='Description of the merge request',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='markdown',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/state',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='web_url',
+                                    path='/web_url',
+                                ),
+                                SemanticMetadataField(
+                                    name='project_id',
+                                    path='/project_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='state',
@@ -7694,6 +7849,163 @@ GitlabConnectorModel: ConnectorModel = ConnectorModel(
             'expired',
             'web_url',
         ],
+    },
+    semantic_search_fields={
+        'projects': {
+            'description': SemanticSearchConfig(
+                content_type='markdown',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/name_with_namespace',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='web_url',
+                        path='/web_url',
+                    ),
+                ],
+            ),
+        },
+        'issues': {
+            'description': SemanticSearchConfig(
+                content_type='markdown',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/title',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/state',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='web_url',
+                        path='/web_url',
+                    ),
+                    SemanticMetadataField(
+                        name='project_id',
+                        path='/project_id',
+                    ),
+                ],
+            ),
+        },
+        'merge_requests': {
+            'description': SemanticSearchConfig(
+                content_type='markdown',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/title',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/state',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='web_url',
+                        path='/web_url',
+                    ),
+                    SemanticMetadataField(
+                        name='project_id',
+                        path='/project_id',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

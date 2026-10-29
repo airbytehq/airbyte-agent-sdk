@@ -224,6 +224,40 @@ info:
           - name: description
             type: ["null", "string"]
             description: The detailed description of the product
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - name: title
+                  path: /name
+                  max_chars: 200
+                - name: type
+                  path: /type
+                  max_chars: 200
+                  prefix: "\nType: "
+                - name: body
+                  windowed: true
+                  sampling:
+                    sample_type: regex
+                    unit_label: paragraph
+                    split_pattern: '\n\s*\n'
+              windowing:
+                context_max_chars: 2048
+                context_boundary: whole_unit
+              embedding:
+                template: "{title}{type}\n\n{body}"
+              metadata:
+                - name: id
+                  path: /id
+                  type: string
+                - name: update_time
+                  path: /update_time
+                  type: string
+                - name: create_time
+                  path: /create_time
+                  type: string
+                - name: home_url
+                  path: /home_url
+                  type: string
           - name: home_url
             type: ["null", "string"]
             description: The URL for the home page of the product

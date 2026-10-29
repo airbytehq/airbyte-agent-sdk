@@ -25,6 +25,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheConfig,
     CacheEntityConfig,
     CacheFieldConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -6293,6 +6299,59 @@ HarvestConnectorModel: ConnectorModel = ConnectorModel(
                         name='notes',
                         type=['null', 'string'],
                         description='Notes',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/project.name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='task',
+                                    path='/task.name',
+                                    max_chars=200,
+                                    prefix='\nTask: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{task}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='project_id',
+                                    path='/project.id',
+                                ),
+                                SemanticMetadataField(
+                                    name='client_id',
+                                    path='/client.id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='project',
@@ -6732,6 +6791,63 @@ HarvestConnectorModel: ConnectorModel = ConnectorModel(
             'updated_at',
             'weekly_capacity',
         ],
+    },
+    semantic_search_fields={
+        'time_entries': {
+            'notes': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/project.name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='task',
+                        path='/task.name',
+                        max_chars=200,
+                        prefix='\nTask: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{task}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='project_id',
+                        path='/project.id',
+                    ),
+                    SemanticMetadataField(
+                        name='client_id',
+                        path='/client.id',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

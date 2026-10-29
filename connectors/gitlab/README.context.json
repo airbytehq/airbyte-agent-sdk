@@ -2357,7 +2357,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Description of the project",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "description_html",
@@ -3130,8 +3130,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Description of the project",
+          "context_max_chars": 2048,
+          "content_type": "markdown"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "web_url",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -3197,7 +3221,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Description of the issue",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "state",
@@ -3520,8 +3544,36 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Description of the issue",
+          "context_max_chars": 2048,
+          "content_type": "markdown"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "web_url",
+          "type": "string"
+        },
+        {
+          "name": "project_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -3587,7 +3639,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Description of the merge request",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "state",
@@ -4040,8 +4092,36 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Description of the merge request",
+          "context_max_chars": 2048,
+          "content_type": "markdown"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "web_url",
+          "type": "string"
+        },
+        {
+          "name": "project_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
