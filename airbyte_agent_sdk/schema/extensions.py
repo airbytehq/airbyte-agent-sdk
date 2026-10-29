@@ -201,7 +201,10 @@ class SemanticSampleLookup(BaseModel):
     `local` column is located (one related record per foreign value, latest version),
     and its `from` column becomes the sample's value. A record whose `local` column is
     null or unmatched resolves to no value, and a record that is its own sibling
-    resolves to no value. `foreign` must be the stream's record key.
+    resolves to no value. `foreign` must be the stream's record key. Fusion resolves a
+    same-stream lookup at index time from the stream's indexed rows and the batch being
+    indexed, matching the related record on this record's primary key with `foreign`
+    replaced by `local`.
 
     With `stream`, the related record is in that parent stream of the same connector
     (e.g. a ticket for a ticket comment). `foreign` must be the parent stream's primary

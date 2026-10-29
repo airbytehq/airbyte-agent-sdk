@@ -537,9 +537,7 @@ info:
                 # itself -- the thing that matched. Parent rows (ts == thread_ts) resolve no
                 # sibling, so the "In reply to:" label only renders when a parent exists.
                 # max_chars bounds a very long parent (an ellipsis marks the cut).
-                # Fusion cannot execute lookup samples (the joined column is never in the
-                # source schema), so Fusion skips this block (logged once per process); only
-                # the legacy MotherDuck path embeds threads.
+                # Fusion resolves this same-stream parent from the channel's indexed rows at index time.
                 - name: parent_text
                   lookup: { local: thread_ts, foreign: ts, from: text }
                   max_chars: 512
