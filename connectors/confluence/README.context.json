@@ -1098,7 +1098,7 @@
           "example_value_json": "{}",
           "json_example_value": {},
           "description": "Blog post body content",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "createdAt",
@@ -1161,8 +1161,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body",
+          "description": "Blog post body content",
+          "context_max_chars": 2048,
+          "content_type": "json"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "createdAt",
+          "type": "string"
+        },
+        {
+          "name": "version_createdAt",
+          "type": "string"
+        },
+        {
+          "name": "spaceId",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -1268,7 +1292,7 @@
           "example_value_json": "{}",
           "json_example_value": {},
           "description": "Page body content",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "createdAt",
@@ -1381,8 +1405,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body",
+          "description": "Page body content",
+          "context_max_chars": 2048,
+          "content_type": "json"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "createdAt",
+          "type": "string"
+        },
+        {
+          "name": "version_createdAt",
+          "type": "string"
+        },
+        {
+          "name": "spaceId",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

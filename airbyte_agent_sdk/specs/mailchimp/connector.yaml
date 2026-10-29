@@ -360,6 +360,21 @@ info:
         type:
         - 'null'
         - 'object'
+        x-airbyte-semantic-search:
+          content_type: json
+          samples:
+            - { name: title, path: "/settings.subject_line", max_chars: 200 }
+            - { name: status, path: "/status", max_chars: 200, prefix: "\nStatus: " }
+            - name: body
+              windowed: true
+              sampling: { sample_type: whole, unit_label: preview, text_path: preview_text }
+          windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+          embedding:
+            template: "{title}{status}\n\n{body}"
+          metadata:
+            - { name: id, path: "/id", type: string }
+            - { name: create_time, path: "/create_time", type: string }
+            - { name: archive_url, path: "/archive_url", type: string }
         description: 'The settings for your campaign, including subject, from name, reply-to address, and more.'
         properties:
           authenticate:

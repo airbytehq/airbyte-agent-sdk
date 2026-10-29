@@ -197,6 +197,47 @@ info:
               - "null"
               - array
             description: IDs of agents in chat
+          - name: history
+            type:
+              - "null"
+              - array
+            description: Chat history events including message text in msg
+            x-airbyte-semantic-search:
+              content_type: json
+              samples:
+                - name: visitor
+                  path: /visitor.name
+                  max_chars: 200
+                  prefix: 'Visitor: '
+                - name: department
+                  path: /department_name
+                  max_chars: 200
+                  prefix: "\nDepartment: "
+                - name: body
+                  windowed: true
+                  sampling:
+                    sample_type: element
+                    unit_label: message
+                    sample_path: '[]'
+                    text_path: msg
+              windowing:
+                context_max_chars: 2048
+                context_boundary: whole_unit
+              embedding:
+                template: "{visitor}{department}\n\n{body}"
+              metadata:
+                - name: id
+                  path: /id
+                  type: string
+                - name: update_timestamp
+                  path: /update_timestamp
+                  type: string
+                - name: timestamp
+                  path: /timestamp
+                  type: string
+                - name: department_id
+                  path: /department_id
+                  type: string
 
       - entity: departments
         x-airbyte-name: departments

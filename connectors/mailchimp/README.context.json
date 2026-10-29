@@ -2054,7 +2054,7 @@
           "example_value_json": "{}",
           "json_example_value": {},
           "description": "The settings for your campaign, including subject, from name, reply-to address, and more.",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "social_card",
@@ -2117,8 +2117,28 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "settings",
+          "description": "The settings for your campaign, including subject, from name, reply-to address, and more.",
+          "context_max_chars": 2048,
+          "content_type": "json"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "create_time",
+          "type": "string"
+        },
+        {
+          "name": "archive_url",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

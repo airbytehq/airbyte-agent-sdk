@@ -702,6 +702,30 @@ info:
               - "null"
               - string
             description: Text description of the opportunity
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+              - { name: title, path: "/Name", max_chars: 200 }
+              - name: account
+                lookup: { stream: Account, local: AccountId, foreign: Id, from: Name }
+                max_chars: 200
+                prefix: "\nAccount: "
+              - { name: stage, path: "/StageName", prefix: "\nStage: " }
+              - name: body_paragraph
+                windowed: true
+                sampling: { sample_type: regex, unit_label: body_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{account}{stage}\n\n{body_paragraph}"
+              metadata:
+              - { name: Id, path: "/Id", type: string }
+              - { name: SystemModstamp, path: "/SystemModstamp", type: string }
+              - { name: CreatedDate, path: "/CreatedDate", type: string }
+              - { name: LastModifiedDate, path: "/LastModifiedDate", type: string }
+              - { name: Name, path: "/Name", type: string }
+              - { name: StageName, path: "/StageName", type: string }
+              - { name: AccountId, path: "/AccountId", type: string }
+              - { name: OwnerId, path: "/OwnerId", type: string }
           - name: ExpectedRevenue
             type:
               - "null"
@@ -840,6 +864,32 @@ info:
               - "null"
               - string
             description: Text description or notes about the task
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+              - { name: title, path: "/Subject", max_chars: 200 }
+              - name: account
+                lookup: { stream: Account, local: AccountId, foreign: Id, from: Name }
+                max_chars: 200
+                prefix: "\nAccount: "
+              - { name: status, path: "/Status", prefix: "\nStatus: " }
+              - name: body_paragraph
+                windowed: true
+                sampling: { sample_type: regex, unit_label: body_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{account}{status}\n\n{body_paragraph}"
+              metadata:
+              - { name: Id, path: "/Id", type: string }
+              - { name: SystemModstamp, path: "/SystemModstamp", type: string }
+              - { name: CreatedDate, path: "/CreatedDate", type: string }
+              - { name: LastModifiedDate, path: "/LastModifiedDate", type: string }
+              - { name: Subject, path: "/Subject", type: string }
+              - { name: Status, path: "/Status", type: string }
+              - { name: AccountId, path: "/AccountId", type: string }
+              - { name: WhatId, path: "/WhatId", type: string }
+              - { name: WhoId, path: "/WhoId", type: string }
+              - { name: OwnerId, path: "/OwnerId", type: string }
           - name: IsClosed
             type:
               - "null"

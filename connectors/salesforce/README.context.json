@@ -6455,7 +6455,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Text description of the opportunity",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "ExpectedRevenue",
@@ -6628,8 +6628,48 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "Description",
+          "description": "Text description of the opportunity",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "Id",
+          "type": "string"
+        },
+        {
+          "name": "SystemModstamp",
+          "type": "string"
+        },
+        {
+          "name": "CreatedDate",
+          "type": "string"
+        },
+        {
+          "name": "LastModifiedDate",
+          "type": "string"
+        },
+        {
+          "name": "Name",
+          "type": "string"
+        },
+        {
+          "name": "StageName",
+          "type": "string"
+        },
+        {
+          "name": "AccountId",
+          "type": "string"
+        },
+        {
+          "name": "OwnerId",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -6745,7 +6785,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Text description or notes about the task",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "IsClosed",
@@ -6888,8 +6928,56 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "Description",
+          "description": "Text description or notes about the task",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "Id",
+          "type": "string"
+        },
+        {
+          "name": "SystemModstamp",
+          "type": "string"
+        },
+        {
+          "name": "CreatedDate",
+          "type": "string"
+        },
+        {
+          "name": "LastModifiedDate",
+          "type": "string"
+        },
+        {
+          "name": "Subject",
+          "type": "string"
+        },
+        {
+          "name": "Status",
+          "type": "string"
+        },
+        {
+          "name": "AccountId",
+          "type": "string"
+        },
+        {
+          "name": "WhatId",
+          "type": "string"
+        },
+        {
+          "name": "WhoId",
+          "type": "string"
+        },
+        {
+          "name": "OwnerId",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

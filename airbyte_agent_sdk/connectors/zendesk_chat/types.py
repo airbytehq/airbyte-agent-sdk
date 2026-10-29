@@ -350,6 +350,8 @@ class ChatsSearchFilter(TypedDict, total=False):
     """Whether chat was missed"""
     agent_ids: list[Any] | None
     """IDs of agents in chat"""
+    history: list[Any] | None
+    """Chat history events including message text in msg"""
 
 
 class ChatsInFilter(TypedDict, total=False):
@@ -372,6 +374,8 @@ class ChatsInFilter(TypedDict, total=False):
     """Whether chat was missed"""
     agent_ids: list[list[Any]]
     """IDs of agents in chat"""
+    history: list[list[Any]]
+    """Chat history events including message text in msg"""
 
 
 class ChatsAnyValueFilter(TypedDict, total=False):
@@ -394,6 +398,8 @@ class ChatsAnyValueFilter(TypedDict, total=False):
     """Whether chat was missed"""
     agent_ids: Any
     """IDs of agents in chat"""
+    history: Any
+    """Chat history events including message text in msg"""
 
 
 class ChatsStringFilter(TypedDict, total=False):
@@ -416,6 +422,8 @@ class ChatsStringFilter(TypedDict, total=False):
     """Whether chat was missed"""
     agent_ids: str
     """IDs of agents in chat"""
+    history: str
+    """Chat history events including message text in msg"""
 
 
 class ChatsSortFilter(TypedDict, total=False):
@@ -438,6 +446,8 @@ class ChatsSortFilter(TypedDict, total=False):
     """Whether chat was missed"""
     agent_ids: AirbyteSortOrder
     """IDs of agents in chat"""
+    history: AirbyteSortOrder
+    """Chat history events including message text in msg"""
 
 
 # Entity-specific condition types for chats

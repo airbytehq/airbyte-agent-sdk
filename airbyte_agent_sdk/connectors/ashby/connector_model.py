@@ -24,6 +24,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheConfig,
     CacheEntityConfig,
     CacheFieldConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -3873,6 +3879,51 @@ AshbyConnectorModel: ConnectorModel = ConnectorModel(
                         name='title',
                         type=['null', 'string'],
                         description='Title of the job',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='employment_type',
+                                    path='/employmentType',
+                                    max_chars=200,
+                                    prefix='\nEmployment: ',
+                                ),
+                                SemanticSample(
+                                    name='job_title',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='job',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{job_title}{status}{employment_type}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updatedAt',
+                                    path='/updatedAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='status',
@@ -3955,6 +4006,55 @@ AshbyConnectorModel: ConnectorModel = ConnectorModel(
             'lastName',
             'email',
         ],
+    },
+    semantic_search_fields={
+        'jobs': {
+            'title': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='employment_type',
+                        path='/employmentType',
+                        max_chars=200,
+                        prefix='\nEmployment: ',
+                    ),
+                    SemanticSample(
+                        name='job_title',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='job',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{job_title}{status}{employment_type}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updatedAt',
+                        path='/updatedAt',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

@@ -25,6 +25,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     CacheFieldProperty,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -1510,6 +1516,56 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                 type=['null', 'object'],
                             ),
                         },
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='document',
+                                        text_path='storage.value',
+                                        text_content_type='html',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='version_createdAt',
+                                    path='/version.createdAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='spaceId',
+                                    path='/spaceId',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='createdAt',
@@ -1624,6 +1680,56 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
                                 type=['null', 'object'],
                             ),
                         },
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='document',
+                                        text_path='storage.value',
+                                        text_content_type='html',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='version_createdAt',
+                                    path='/version.createdAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='spaceId',
+                                    path='/spaceId',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='createdAt',
@@ -1872,6 +1978,112 @@ ConfluenceConnectorModel: ConnectorModel = ConnectorModel(
             'status',
             'type',
         ],
+    },
+    semantic_search_fields={
+        'blog_posts': {
+            'body': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/title',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='document',
+                            text_path='storage.value',
+                            text_content_type='html',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                    SemanticMetadataField(
+                        name='version_createdAt',
+                        path='/version.createdAt',
+                    ),
+                    SemanticMetadataField(
+                        name='spaceId',
+                        path='/spaceId',
+                    ),
+                ],
+            ),
+        },
+        'pages': {
+            'body': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/title',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='document',
+                            text_path='storage.value',
+                            text_content_type='html',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                    SemanticMetadataField(
+                        name='version_createdAt',
+                        path='/version.createdAt',
+                    ),
+                    SemanticMetadataField(
+                        name='spaceId',
+                        path='/spaceId',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

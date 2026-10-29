@@ -27,6 +27,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheFieldConfig,
     CacheFieldProperty,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -12296,6 +12302,59 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
                         name='content',
                         type=['null', 'object'],
                         description='The actual content of the creative.',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/intendedStatus',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='ad_copy',
+                                        text_path='textAd.description',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='lastModifiedAt',
+                                    path='/lastModifiedAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='account',
+                                    path='/account',
+                                ),
+                                SemanticMetadataField(
+                                    name='campaign',
+                                    path='/campaign',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='createdAt',
@@ -19492,6 +19551,63 @@ LinkedinAdsConnectorModel: ConnectorModel = ConnectorModel(
             'submitter',
             'versionedLeadGenFormUrn',
         ],
+    },
+    semantic_search_fields={
+        'creatives': {
+            'content': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/intendedStatus',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='ad_copy',
+                            text_path='textAd.description',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='lastModifiedAt',
+                        path='/lastModifiedAt',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                    SemanticMetadataField(
+                        name='account',
+                        path='/account',
+                    ),
+                    SemanticMetadataField(
+                        name='campaign',
+                        path='/campaign',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

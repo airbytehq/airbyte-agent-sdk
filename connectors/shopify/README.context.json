@@ -9322,7 +9322,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Product description in HTML",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "vendor",
@@ -9415,8 +9415,28 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body_html",
+          "description": "Product description in HTML",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -9922,7 +9942,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "HTML content of the page",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "published_at",
@@ -9955,8 +9975,28 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body_html",
+          "description": "HTML content of the page",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -10122,7 +10162,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "HTML content of the article body",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "summary_html",
@@ -10175,8 +10215,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body_html",
+          "description": "HTML content of the article body",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "blog_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

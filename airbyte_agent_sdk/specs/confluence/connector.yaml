@@ -115,6 +115,26 @@ info:
           - name: body
             type: ["null", "object"]
             description: Blog post body content
+            x-airbyte-semantic-search:
+              content_type: json
+              samples:
+                - { name: title, path: "/title", max_chars: 200 }
+                - { name: status, path: "/status", max_chars: 200, prefix: "\nStatus: " }
+                - name: body
+                  windowed: true
+                  sampling:
+                    sample_type: whole
+                    unit_label: document
+                    text_path: storage.value
+                    text_content_type: html
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{status}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
+                - { name: version_createdAt, path: "/version.createdAt", type: string }
+                - { name: spaceId, path: "/spaceId", type: string }
             properties:
               storage:
                 type: ["null", "object"]
@@ -184,6 +204,26 @@ info:
           - name: body
             type: ["null", "object"]
             description: Page body content
+            x-airbyte-semantic-search:
+              content_type: json
+              samples:
+                - { name: title, path: "/title", max_chars: 200 }
+                - { name: status, path: "/status", max_chars: 200, prefix: "\nStatus: " }
+                - name: body
+                  windowed: true
+                  sampling:
+                    sample_type: whole
+                    unit_label: document
+                    text_path: storage.value
+                    text_content_type: html
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{status}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
+                - { name: version_createdAt, path: "/version.createdAt", type: string }
+                - { name: spaceId, path: "/spaceId", type: string }
             properties:
               storage:
                 type: ["null", "object"]

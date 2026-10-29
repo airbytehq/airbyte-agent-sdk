@@ -434,6 +434,25 @@ info:
       - name: content
         type: ["null", "object"]
         description: "The actual content of the creative."
+        # `content` is an opaque object upstream; only text ads carry inline copy
+        # (sponsored-content creatives hold a post URN), so only textAd.description is windowed.
+        x-airbyte-semantic-search:
+          content_type: json
+          samples:
+            - { name: title, path: "/name", max_chars: 200 }
+            - { name: status, path: "/intendedStatus", prefix: "\nStatus: ", max_chars: 200 }
+            - name: body
+              windowed: true
+              sampling: { sample_type: whole, unit_label: ad_copy, text_path: "textAd.description" }
+          windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+          embedding:
+            template: "{title}{status}\n\n{body}"
+          metadata:
+            - { name: id, path: "/id", type: string }
+            - { name: lastModifiedAt, path: "/lastModifiedAt", type: string }
+            - { name: createdAt, path: "/createdAt", type: string }
+            - { name: account, path: "/account", type: string }
+            - { name: campaign, path: "/campaign", type: string }
       - name: createdAt
         type: ["null", "integer"]
         description: "The timestamp when the creative was created."

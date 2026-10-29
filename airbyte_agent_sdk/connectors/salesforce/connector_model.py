@@ -25,6 +25,13 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampleLookup,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -4696,6 +4703,81 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         name='Description',
                         type=['null', 'string'],
                         description='Text description of the opportunity',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/Name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='account',
+                                    lookup=SemanticSampleLookup(
+                                        local='AccountId',
+                                        foreign='Id',
+                                        source='Name',
+                                        stream='Account',
+                                    ),
+                                    max_chars=200,
+                                    prefix='\nAccount: ',
+                                ),
+                                SemanticSample(
+                                    name='stage',
+                                    path='/StageName',
+                                    prefix='\nStage: ',
+                                ),
+                                SemanticSample(
+                                    name='body_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='body_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{account}{stage}\n\n{body_paragraph}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='Id',
+                                    path='/Id',
+                                ),
+                                SemanticMetadataField(
+                                    name='SystemModstamp',
+                                    path='/SystemModstamp',
+                                ),
+                                SemanticMetadataField(
+                                    name='CreatedDate',
+                                    path='/CreatedDate',
+                                ),
+                                SemanticMetadataField(
+                                    name='LastModifiedDate',
+                                    path='/LastModifiedDate',
+                                ),
+                                SemanticMetadataField(
+                                    name='Name',
+                                    path='/Name',
+                                ),
+                                SemanticMetadataField(
+                                    name='StageName',
+                                    path='/StageName',
+                                ),
+                                SemanticMetadataField(
+                                    name='AccountId',
+                                    path='/AccountId',
+                                ),
+                                SemanticMetadataField(
+                                    name='OwnerId',
+                                    path='/OwnerId',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='ExpectedRevenue',
@@ -4838,6 +4920,89 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
                         name='Description',
                         type=['null', 'string'],
                         description='Text description or notes about the task',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/Subject',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='account',
+                                    lookup=SemanticSampleLookup(
+                                        local='AccountId',
+                                        foreign='Id',
+                                        source='Name',
+                                        stream='Account',
+                                    ),
+                                    max_chars=200,
+                                    prefix='\nAccount: ',
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/Status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='body_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{account}{status}\n\n{body_paragraph}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='Id',
+                                    path='/Id',
+                                ),
+                                SemanticMetadataField(
+                                    name='SystemModstamp',
+                                    path='/SystemModstamp',
+                                ),
+                                SemanticMetadataField(
+                                    name='CreatedDate',
+                                    path='/CreatedDate',
+                                ),
+                                SemanticMetadataField(
+                                    name='LastModifiedDate',
+                                    path='/LastModifiedDate',
+                                ),
+                                SemanticMetadataField(
+                                    name='Subject',
+                                    path='/Subject',
+                                ),
+                                SemanticMetadataField(
+                                    name='Status',
+                                    path='/Status',
+                                ),
+                                SemanticMetadataField(
+                                    name='AccountId',
+                                    path='/AccountId',
+                                ),
+                                SemanticMetadataField(
+                                    name='WhatId',
+                                    path='/WhatId',
+                                ),
+                                SemanticMetadataField(
+                                    name='WhoId',
+                                    path='/WhoId',
+                                ),
+                                SemanticMetadataField(
+                                    name='OwnerId',
+                                    path='/OwnerId',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='IsClosed',
@@ -5370,6 +5535,170 @@ SalesforceConnectorModel: ConnectorModel = ConnectorModel(
             'SortOrder',
             'SystemModstamp',
         ],
+    },
+    semantic_search_fields={
+        'opportunities': {
+            'Description': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/Name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='account',
+                        lookup=SemanticSampleLookup(
+                            local='AccountId',
+                            foreign='Id',
+                            source='Name',
+                            stream='Account',
+                        ),
+                        max_chars=200,
+                        prefix='\nAccount: ',
+                    ),
+                    SemanticSample(
+                        name='stage',
+                        path='/StageName',
+                        prefix='\nStage: ',
+                    ),
+                    SemanticSample(
+                        name='body_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='body_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{account}{stage}\n\n{body_paragraph}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='Id',
+                        path='/Id',
+                    ),
+                    SemanticMetadataField(
+                        name='SystemModstamp',
+                        path='/SystemModstamp',
+                    ),
+                    SemanticMetadataField(
+                        name='CreatedDate',
+                        path='/CreatedDate',
+                    ),
+                    SemanticMetadataField(
+                        name='LastModifiedDate',
+                        path='/LastModifiedDate',
+                    ),
+                    SemanticMetadataField(
+                        name='Name',
+                        path='/Name',
+                    ),
+                    SemanticMetadataField(
+                        name='StageName',
+                        path='/StageName',
+                    ),
+                    SemanticMetadataField(
+                        name='AccountId',
+                        path='/AccountId',
+                    ),
+                    SemanticMetadataField(
+                        name='OwnerId',
+                        path='/OwnerId',
+                    ),
+                ],
+            ),
+        },
+        'tasks': {
+            'Description': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/Subject',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='account',
+                        lookup=SemanticSampleLookup(
+                            local='AccountId',
+                            foreign='Id',
+                            source='Name',
+                            stream='Account',
+                        ),
+                        max_chars=200,
+                        prefix='\nAccount: ',
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/Status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='body_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{account}{status}\n\n{body_paragraph}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='Id',
+                        path='/Id',
+                    ),
+                    SemanticMetadataField(
+                        name='SystemModstamp',
+                        path='/SystemModstamp',
+                    ),
+                    SemanticMetadataField(
+                        name='CreatedDate',
+                        path='/CreatedDate',
+                    ),
+                    SemanticMetadataField(
+                        name='LastModifiedDate',
+                        path='/LastModifiedDate',
+                    ),
+                    SemanticMetadataField(
+                        name='Subject',
+                        path='/Subject',
+                    ),
+                    SemanticMetadataField(
+                        name='Status',
+                        path='/Status',
+                    ),
+                    SemanticMetadataField(
+                        name='AccountId',
+                        path='/AccountId',
+                    ),
+                    SemanticMetadataField(
+                        name='WhatId',
+                        path='/WhatId',
+                    ),
+                    SemanticMetadataField(
+                        name='WhoId',
+                        path='/WhoId',
+                    ),
+                    SemanticMetadataField(
+                        name='OwnerId',
+                        path='/OwnerId',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

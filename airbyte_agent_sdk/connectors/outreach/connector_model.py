@@ -24,6 +24,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheConfig,
     CacheEntityConfig,
     CacheFieldConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -15928,6 +15934,55 @@ OutreachConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='Description',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='industry',
+                                    path='/industry',
+                                    max_chars=200,
+                                    prefix='\nIndustry: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{industry}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updatedAt',
+                                    path='/updatedAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='websiteUrl',
+                                    path='/websiteUrl',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='domain',
@@ -16114,6 +16169,52 @@ OutreachConnectorModel: ConnectorModel = ConnectorModel(
                         name='note',
                         type=['null', 'string'],
                         description='Note',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='state',
+                                    path='/state',
+                                    max_chars=200,
+                                    prefix='Status: ',
+                                ),
+                                SemanticSample(
+                                    name='type',
+                                    path='/direction',
+                                    max_chars=200,
+                                    prefix='\nDirection: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{state}{type}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updatedAt',
+                                    path='/updatedAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='opportunity',
@@ -16357,6 +16458,50 @@ OutreachConnectorModel: ConnectorModel = ConnectorModel(
                         name='bodyHtml',
                         type=['null', 'string'],
                         description='Body html',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/subject',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/state',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updatedAt',
+                                    path='/updatedAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='bodyText',
@@ -20233,6 +20378,50 @@ OutreachConnectorModel: ConnectorModel = ConnectorModel(
                         name='bodyHtml',
                         type=['null', 'string'],
                         description='Body html',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/subject',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='name',
+                                    path='/name',
+                                    max_chars=200,
+                                    prefix='\nTemplate: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{name}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updatedAt',
+                                    path='/updatedAt',
+                                ),
+                                SemanticMetadataField(
+                                    name='createdAt',
+                                    path='/createdAt',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='bodyText',
@@ -22381,6 +22570,199 @@ OutreachConnectorModel: ConnectorModel = ConnectorModel(
             'voicemailPrompts[]',
             'weeklyDigestEmailEnabled',
         ],
+    },
+    semantic_search_fields={
+        'accounts': {
+            'description': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='industry',
+                        path='/industry',
+                        max_chars=200,
+                        prefix='\nIndustry: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{industry}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updatedAt',
+                        path='/updatedAt',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                    SemanticMetadataField(
+                        name='websiteUrl',
+                        path='/websiteUrl',
+                    ),
+                ],
+            ),
+        },
+        'calls': {
+            'note': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='state',
+                        path='/state',
+                        max_chars=200,
+                        prefix='Status: ',
+                    ),
+                    SemanticSample(
+                        name='type',
+                        path='/direction',
+                        max_chars=200,
+                        prefix='\nDirection: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{state}{type}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updatedAt',
+                        path='/updatedAt',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                ],
+            ),
+        },
+        'mailings': {
+            'bodyHtml': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/subject',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/state',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updatedAt',
+                        path='/updatedAt',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                ],
+            ),
+        },
+        'templates': {
+            'bodyHtml': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/subject',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='name',
+                        path='/name',
+                        max_chars=200,
+                        prefix='\nTemplate: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{name}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updatedAt',
+                        path='/updatedAt',
+                    ),
+                    SemanticMetadataField(
+                        name='createdAt',
+                        path='/createdAt',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

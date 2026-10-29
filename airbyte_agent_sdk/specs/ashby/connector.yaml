@@ -173,6 +173,37 @@ info:
               - "null"
               - "string"
             description: "Title of the job"
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - name: status
+                  path: /status
+                  max_chars: 200
+                  prefix: "\nStatus: "
+                - name: employment_type
+                  path: /employmentType
+                  max_chars: 200
+                  prefix: "\nEmployment: "
+                - name: job_title
+                  windowed: true
+                  sampling:
+                    sample_type: whole
+                    unit_label: job
+              windowing:
+                context_max_chars: 2048
+                context_boundary: whole_unit
+              embedding:
+                template: "{job_title}{status}{employment_type}"
+              metadata:
+                - name: id
+                  path: /id
+                  type: string
+                - name: updatedAt
+                  path: /updatedAt
+                  type: string
+                - name: createdAt
+                  path: /createdAt
+                  type: string
           - name: status
             type:
               - "null"

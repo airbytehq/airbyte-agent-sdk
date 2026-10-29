@@ -24,6 +24,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheConfig,
     CacheEntityConfig,
     CacheFieldConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -2952,6 +2958,62 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
                         type=['null', 'array'],
                         description='IDs of agents in chat',
                     ),
+                    CacheFieldConfig(
+                        name='history',
+                        type=['null', 'array'],
+                        description='Chat history events including message text in msg',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='visitor',
+                                    path='/visitor.name',
+                                    max_chars=200,
+                                    prefix='Visitor: ',
+                                ),
+                                SemanticSample(
+                                    name='department',
+                                    path='/department_name',
+                                    max_chars=200,
+                                    prefix='\nDepartment: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='element',
+                                        unit_label='message',
+                                        sample_path='[]',
+                                        text_path='msg',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{visitor}{department}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='update_timestamp',
+                                    path='/update_timestamp',
+                                ),
+                                SemanticMetadataField(
+                                    name='timestamp',
+                                    path='/timestamp',
+                                ),
+                                SemanticMetadataField(
+                                    name='department_id',
+                                    path='/department_id',
+                                ),
+                            ],
+                        ),
+                    ),
                 ],
             ),
             CacheEntityConfig(
@@ -3055,6 +3117,8 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
             'missed',
             'agent_ids',
             'agent_ids[]',
+            'history',
+            'history[]',
         ],
         'departments': [
             'id',
@@ -3071,6 +3135,61 @@ ZendeskChatConnectorModel: ConnectorModel = ConnectorModel(
             'tags[]',
         ],
         'triggers': ['id', 'name', 'enabled'],
+    },
+    semantic_search_fields={
+        'chats': {
+            'history': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='visitor',
+                        path='/visitor.name',
+                        max_chars=200,
+                        prefix='Visitor: ',
+                    ),
+                    SemanticSample(
+                        name='department',
+                        path='/department_name',
+                        max_chars=200,
+                        prefix='\nDepartment: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='element',
+                            unit_label='message',
+                            sample_path='[]',
+                            text_path='msg',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{visitor}{department}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='update_timestamp',
+                        path='/update_timestamp',
+                    ),
+                    SemanticMetadataField(
+                        name='timestamp',
+                        path='/timestamp',
+                    ),
+                    SemanticMetadataField(
+                        name='department_id',
+                        path='/department_id',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

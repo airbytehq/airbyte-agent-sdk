@@ -26,6 +26,13 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheFieldConfig,
     CacheFieldProperty,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampleLookup,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -8534,6 +8541,58 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='Product description',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='type',
+                                    path='/type',
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}{type}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_modified_gmt',
+                                    path='/date_modified_gmt',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_created_gmt',
+                                    path='/date_created_gmt',
+                                ),
+                                SemanticMetadataField(
+                                    name='permalink',
+                                    path='/permalink',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='dimensions',
@@ -9019,6 +9078,68 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
                         name='review',
                         type=['null', 'string'],
                         description='The content of the review',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='product_name',
+                                    lookup=SemanticSampleLookup(
+                                        local='product_id',
+                                        foreign='id',
+                                        source='name',
+                                        stream='products',
+                                    ),
+                                    max_chars=200,
+                                    prefix='Product: ',
+                                    suffix='\n',
+                                ),
+                                SemanticSample(
+                                    name='reviewer',
+                                    path='/reviewer',
+                                    max_chars=200,
+                                    prefix='Reviewer: ',
+                                    suffix='\n',
+                                ),
+                                SemanticSample(
+                                    name='rating',
+                                    path='/rating',
+                                    prefix='Rating: ',
+                                    suffix='/5\n\n',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{product_name}{reviewer}{rating}{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_created_gmt',
+                                    path='/date_created_gmt',
+                                ),
+                                SemanticMetadataField(
+                                    name='product_id',
+                                    path='/product_id',
+                                ),
+                                SemanticMetadataField(
+                                    name='status',
+                                    path='/status',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='reviewer',
@@ -9308,6 +9429,46 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
                         name='note',
                         type=['null', 'string'],
                         description='Order note content',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='author',
+                                    path='/author',
+                                    max_chars=200,
+                                    prefix='Order note by ',
+                                    suffix='\n\n',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{author}{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_created_gmt',
+                                    path='/date_created_gmt',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_created',
+                                    path='/date_created',
+                                ),
+                            ],
+                        ),
                     ),
                 ],
             ),
@@ -9890,6 +10051,168 @@ WoocommerceConnectorModel: ConnectorModel = ConnectorModel(
             'state',
         ],
         'tax_classes': ['name', 'slug'],
+    },
+    semantic_search_fields={
+        'products': {
+            'description': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='type',
+                        path='/type',
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}{type}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date_modified_gmt',
+                        path='/date_modified_gmt',
+                    ),
+                    SemanticMetadataField(
+                        name='date_created_gmt',
+                        path='/date_created_gmt',
+                    ),
+                    SemanticMetadataField(
+                        name='permalink',
+                        path='/permalink',
+                    ),
+                ],
+            ),
+        },
+        'product_reviews': {
+            'review': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='product_name',
+                        lookup=SemanticSampleLookup(
+                            local='product_id',
+                            foreign='id',
+                            source='name',
+                            stream='products',
+                        ),
+                        max_chars=200,
+                        prefix='Product: ',
+                        suffix='\n',
+                    ),
+                    SemanticSample(
+                        name='reviewer',
+                        path='/reviewer',
+                        max_chars=200,
+                        prefix='Reviewer: ',
+                        suffix='\n',
+                    ),
+                    SemanticSample(
+                        name='rating',
+                        path='/rating',
+                        prefix='Rating: ',
+                        suffix='/5\n\n',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{product_name}{reviewer}{rating}{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date_created_gmt',
+                        path='/date_created_gmt',
+                    ),
+                    SemanticMetadataField(
+                        name='product_id',
+                        path='/product_id',
+                    ),
+                    SemanticMetadataField(
+                        name='status',
+                        path='/status',
+                    ),
+                ],
+            ),
+        },
+        'order_notes': {
+            'note': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='author',
+                        path='/author',
+                        max_chars=200,
+                        prefix='Order note by ',
+                        suffix='\n\n',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{author}{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date_created_gmt',
+                        path='/date_created_gmt',
+                    ),
+                    SemanticMetadataField(
+                        name='date_created',
+                        path='/date_created',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

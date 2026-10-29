@@ -26,6 +26,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheFieldConfig,
     CacheFieldProperty,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -6027,6 +6033,51 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
                                 type=['null', 'boolean'],
                             ),
                         },
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/settings.subject_line',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/status',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='preview',
+                                        text_path='preview_text',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='create_time',
+                                    path='/create_time',
+                                ),
+                                SemanticMetadataField(
+                                    name='archive_url',
+                                    path='/archive_url',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='social_card',
@@ -7714,6 +7765,55 @@ MailchimpConnectorModel: ConnectorModel = ConnectorModel(
             'list_id',
             'list_is_active',
         ],
+    },
+    semantic_search_fields={
+        'campaigns': {
+            'settings': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/settings.subject_line',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/status',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='preview',
+                            text_path='preview_text',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='create_time',
+                        path='/create_time',
+                    ),
+                    SemanticMetadataField(
+                        name='archive_url',
+                        path='/archive_url',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

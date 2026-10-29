@@ -1420,6 +1420,22 @@ info:
           - name: description
             type: ["null", "string"]
             description: "Description of the item"
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - { name: title, path: "/name", max_chars: 200 }
+                - { name: status, path: "/status", prefix: "\nStatus: ", max_chars: 200 }
+                - { name: type, path: "/type", prefix: "\nType: ", max_chars: 200 }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{status}{type}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: item_family_id, path: "/item_family_id", type: string }
           - name: enabled_for_checkout
             type: ["null", "boolean"]
             description: "Flag indicating if the item is enabled for checkout"

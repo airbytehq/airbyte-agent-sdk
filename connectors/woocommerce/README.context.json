@@ -3255,7 +3255,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Product description",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "dimensions",
@@ -3708,8 +3708,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Product description",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date_modified_gmt",
+          "type": "string"
+        },
+        {
+          "name": "date_created_gmt",
+          "type": "string"
+        },
+        {
+          "name": "permalink",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -4255,7 +4279,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "The content of the review",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "reviewer",
@@ -4298,8 +4322,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "review",
+          "description": "The content of the review",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date_created_gmt",
+          "type": "string"
+        },
+        {
+          "name": "product_id",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -4855,11 +4903,31 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Order note content",
-          "semantic": false
+          "semantic": true
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "note",
+          "description": "Order note content",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date_created_gmt",
+          "type": "string"
+        },
+        {
+          "name": "date_created",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

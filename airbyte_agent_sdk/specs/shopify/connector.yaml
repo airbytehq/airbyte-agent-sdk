@@ -984,6 +984,21 @@ info:
           - name: body_html
             type: ["null", "string"]
             description: "Product description in HTML"
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - { name: title, path: "/title", max_chars: 200 }
+                - { name: type, path: "/product_type", max_chars: 200, prefix: "\nType: " }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: body }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{type}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: created_at, path: "/created_at", type: string }
           - name: vendor
             type: ["null", "string"]
             description: "Product vendor or manufacturer"
@@ -1150,6 +1165,20 @@ info:
           - name: body_html
             type: ["null", "string"]
             description: "HTML content of the page"
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - { name: title, path: "/title", max_chars: 200 }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: body }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: created_at, path: "/created_at", type: string }
           - name: published_at
             type: ["null", "string"]
             description: "ISO 8601 timestamp when the page was published"
@@ -1204,6 +1233,21 @@ info:
           - name: body_html
             type: ["null", "string"]
             description: "HTML content of the article body"
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - { name: title, path: "/title", max_chars: 200 }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: body }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: created_at, path: "/created_at", type: string }
+                - { name: blog_id, path: "/blog_id", type: string }
           - name: summary_html
             type: ["null", "string"]
             description: "Summary of the article in HTML"

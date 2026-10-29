@@ -552,6 +552,22 @@ info:
           - name: description
             type: ["null", "string"]
             description: Description
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - { name: title, path: "/name", max_chars: 200 }
+                - { name: industry, path: "/industry", max_chars: 200, prefix: "\nIndustry: " }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{industry}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updatedAt, path: "/updatedAt", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
+                - { name: websiteUrl, path: "/websiteUrl", type: string }
           - name: domain
             type: ["null", "string"]
             description: Domain
@@ -663,6 +679,21 @@ info:
           - name: note
             type: ["null", "string"]
             description: Note
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - { name: state, path: "/state", max_chars: 200, prefix: "Status: " }
+                - { name: type, path: "/direction", max_chars: 200, prefix: "\nDirection: " }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{state}{type}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updatedAt, path: "/updatedAt", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
           - name: opportunity
             type: ["null", "array"]
             description: Opportunity
@@ -807,6 +838,21 @@ info:
           - name: bodyHtml
             type: ["null", "string"]
             description: Body html
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - { name: title, path: "/subject", max_chars: 200 }
+                - { name: status, path: "/state", max_chars: 200, prefix: "\nStatus: " }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: body }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{status}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updatedAt, path: "/updatedAt", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
           - name: bodyText
             type: ["null", "string"]
             description: Body text
@@ -3126,6 +3172,21 @@ info:
           - name: bodyHtml
             type: ["null", "string"]
             description: Body html
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - { name: title, path: "/subject", max_chars: 200 }
+                - { name: name, path: "/name", max_chars: 200, prefix: "\nTemplate: " }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: body }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{name}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updatedAt, path: "/updatedAt", type: string }
+                - { name: createdAt, path: "/createdAt", type: string }
           - name: bodyText
             type: ["null", "string"]
             description: Body text

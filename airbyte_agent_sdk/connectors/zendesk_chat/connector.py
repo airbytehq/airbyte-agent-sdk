@@ -112,7 +112,7 @@ class ZendeskChatConnector:
 
     connector_name = "zendesk-chat"
     connector_version = "0.1.10"
-    sdk_version = "0.1.389"
+    sdk_version = "0.1.390"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1345,6 +1345,7 @@ class ChatsQuery:
         - rating: Satisfaction rating
         - missed: Whether chat was missed
         - agent_ids: IDs of agents in chat
+        - history: Chat history events including message text in msg
 
         Args:
             query: Filter and sort conditions. Supports operators such as eq, neq, gt, gte, lt, lte,

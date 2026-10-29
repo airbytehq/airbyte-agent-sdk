@@ -909,10 +909,44 @@
           "json_example_value": [],
           "description": "IDs of agents in chat",
           "semantic": false
+        },
+        {
+          "name": "history",
+          "python_name": "history",
+          "type": "list[Any] | None",
+          "json_type": "null | array",
+          "example_value_json": "[]",
+          "json_example_value": [],
+          "description": "Chat history events including message text in msg",
+          "semantic": true
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "history",
+          "description": "Chat history events including message text in msg",
+          "context_max_chars": 2048,
+          "content_type": "json"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "update_timestamp",
+          "type": "string"
+        },
+        {
+          "name": "timestamp",
+          "type": "string"
+        },
+        {
+          "name": "department_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

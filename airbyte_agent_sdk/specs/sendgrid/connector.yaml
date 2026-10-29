@@ -392,6 +392,22 @@ info:
           - name: versions
             type: ["null", "array"]
             description: Template versions
+            x-airbyte-semantic-search:
+              content_type: json
+              samples:
+                - { name: title, path: "/name", max_chars: 200 }
+                # source-sendgrid syncs the list endpoint, whose versions are the lean shape (name,
+                # subject, active, editor); html_content needs a per-version fetch, so embed the subject.
+                - name: version_subject
+                  windowed: true
+                  sampling: { sample_type: element, unit_label: version, sample_path: "[]", text_path: "subject" }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{version_subject}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: generation, path: "/generation", type: string }
 
 servers:
   - url: https://api.sendgrid.com

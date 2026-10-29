@@ -167,6 +167,19 @@ info:
       - name: description
         type: ["null", "string"]
         description: Board description
+        x-airbyte-semantic-search:
+          content_type: plaintext
+          samples:
+            - { name: title, path: "/name", max_chars: 200 }
+            - name: board_description_paragraph
+              windowed: true
+              sampling: { sample_type: regex, unit_label: board_description_paragraph, split_pattern: '\n\s*\n' }
+          windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+          embedding:
+            template: "{title}\n\n{board_description_paragraph}"
+          metadata:
+            - { name: id, path: "/id", type: string }
+            - { name: created_at, path: "/created_at", type: string }
       - name: follower_count
         type: ["null", "integer"]
         description: Number of followers
@@ -449,6 +462,21 @@ info:
       - name: description
         type: ["null", "string"]
         description: Pin description
+        x-airbyte-semantic-search:
+          content_type: plaintext
+          samples:
+            - { name: title, path: "/title", max_chars: 200 }
+            - name: pin_description_paragraph
+              windowed: true
+              sampling: { sample_type: regex, unit_label: pin_description_paragraph, split_pattern: '\n\s*\n' }
+          windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+          embedding:
+            template: "{title}\n\n{pin_description_paragraph}"
+          metadata:
+            - { name: id, path: "/id", type: string }
+            - { name: created_at, path: "/created_at", type: string }
+            - { name: link, path: "/link", type: string }
+            - { name: board_id, path: "/board_id", type: string }
       - name: dominant_color
         type: ["null", "string"]
         description: Dominant color from the pin image

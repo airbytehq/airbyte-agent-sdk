@@ -1420,7 +1420,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Board description",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "follower_count",
@@ -1493,8 +1493,24 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Board description",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -2380,7 +2396,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Pin description",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "dominant_color",
@@ -2483,8 +2499,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Pin description",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "link",
+          "type": "string"
+        },
+        {
+          "name": "board_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
