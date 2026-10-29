@@ -165,6 +165,26 @@ info:
             type:
               - object
             description: The rendered value of each field present on the issue
+            x-airbyte-semantic-search:
+              # The source requests expand=renderedFields; fields.description is ADF, so window the rendered HTML instead.
+              content_type: json
+              samples:
+                - { name: title, path: "/fields.summary", max_chars: 200 }
+                - { name: status, path: "/fields.status.name", max_chars: 200, prefix: "\nStatus: " }
+                - { name: type, path: "/fields.issuetype.name", max_chars: 200, prefix: "\nType: " }
+                - name: description
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: description, text_path: "description", text_content_type: html }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{status}{type}\n\n{description}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated, path: "/updated", type: string }
+                - { name: created, path: "/created", type: string }
+                - { name: key, path: "/key", type: string }
+                - { name: self, path: "/self", type: string }
+                - { name: projectId, path: "/projectId", type: string }
           - name: schema
             type:
               - object
@@ -428,6 +448,28 @@ info:
             type:
               - object
             description: The comment text in Atlassian Document Format
+            x-airbyte-semantic-search:
+              # Each top-level ADF block is a unit built from descendant text nodes and mention/emoji attrs.text.
+              # There is no ADF decoder, so marks and links remain plain text.
+              content_type: json
+              samples:
+                - name: issue_summary
+                  lookup: { stream: issues, local: issueId, foreign: id, from: fields.summary }
+                  max_chars: 200
+                  prefix: "Issue: "
+                  suffix: "\n\n"
+                - name: comment
+                  windowed: true
+                  sampling: { sample_type: element, unit_label: comment_block, sample_path: "content[]", text_path: "**.text", stitch: " " }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{issue_summary}{comment}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated, path: "/updated", type: string }
+                - { name: created, path: "/created", type: string }
+                - { name: issueId, path: "/issueId", type: string }
+                - { name: self, path: "/self", type: string }
           - name: created
             type:
               - string

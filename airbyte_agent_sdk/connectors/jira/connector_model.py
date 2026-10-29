@@ -26,6 +26,13 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampleLookup,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -4708,6 +4715,70 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                         name='renderedFields',
                         type=['object'],
                         description='The rendered value of each field present on the issue',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/fields.summary',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/fields.status.name',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='type',
+                                    path='/fields.issuetype.name',
+                                    max_chars=200,
+                                    prefix='\nType: ',
+                                ),
+                                SemanticSample(
+                                    name='description',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='description',
+                                        text_path='description',
+                                        text_content_type='html',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}{type}\n\n{description}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated',
+                                    path='/updated',
+                                ),
+                                SemanticMetadataField(
+                                    name='created',
+                                    path='/created',
+                                ),
+                                SemanticMetadataField(
+                                    name='key',
+                                    path='/key',
+                                ),
+                                SemanticMetadataField(
+                                    name='self',
+                                    path='/self',
+                                ),
+                                SemanticMetadataField(
+                                    name='projectId',
+                                    path='/projectId',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='schema',
@@ -5004,6 +5075,62 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
                         name='body',
                         type=['object'],
                         description='The comment text in Atlassian Document Format',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='json',
+                            samples=[
+                                SemanticSample(
+                                    name='issue_summary',
+                                    lookup=SemanticSampleLookup(
+                                        local='issueId',
+                                        foreign='id',
+                                        source='fields.summary',
+                                        stream='issues',
+                                    ),
+                                    max_chars=200,
+                                    prefix='Issue: ',
+                                    suffix='\n\n',
+                                ),
+                                SemanticSample(
+                                    name='comment',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='element',
+                                        unit_label='comment_block',
+                                        sample_path='content[]',
+                                        text_path='**.text',
+                                        stitch=' ',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{issue_summary}{comment}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated',
+                                    path='/updated',
+                                ),
+                                SemanticMetadataField(
+                                    name='created',
+                                    path='/created',
+                                ),
+                                SemanticMetadataField(
+                                    name='issueId',
+                                    path='/issueId',
+                                ),
+                                SemanticMetadataField(
+                                    name='self',
+                                    path='/self',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='created',
@@ -5316,6 +5443,132 @@ JiraConnectorModel: ConnectorModel = ConnectorModel(
             'updated',
             'visibility',
         ],
+    },
+    semantic_search_fields={
+        'issues': {
+            'renderedFields': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/fields.summary',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/fields.status.name',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='type',
+                        path='/fields.issuetype.name',
+                        max_chars=200,
+                        prefix='\nType: ',
+                    ),
+                    SemanticSample(
+                        name='description',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='description',
+                            text_path='description',
+                            text_content_type='html',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}{type}\n\n{description}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated',
+                        path='/updated',
+                    ),
+                    SemanticMetadataField(
+                        name='created',
+                        path='/created',
+                    ),
+                    SemanticMetadataField(
+                        name='key',
+                        path='/key',
+                    ),
+                    SemanticMetadataField(
+                        name='self',
+                        path='/self',
+                    ),
+                    SemanticMetadataField(
+                        name='projectId',
+                        path='/projectId',
+                    ),
+                ],
+            ),
+        },
+        'issue_comments': {
+            'body': SemanticSearchConfig(
+                content_type='json',
+                samples=[
+                    SemanticSample(
+                        name='issue_summary',
+                        lookup=SemanticSampleLookup(
+                            local='issueId',
+                            foreign='id',
+                            source='fields.summary',
+                            stream='issues',
+                        ),
+                        max_chars=200,
+                        prefix='Issue: ',
+                        suffix='\n\n',
+                    ),
+                    SemanticSample(
+                        name='comment',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='element',
+                            unit_label='comment_block',
+                            sample_path='content[]',
+                            text_path='**.text',
+                            stitch=' ',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{issue_summary}{comment}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated',
+                        path='/updated',
+                    ),
+                    SemanticMetadataField(
+                        name='created',
+                        path='/created',
+                    ),
+                    SemanticMetadataField(
+                        name='issueId',
+                        path='/issueId',
+                    ),
+                    SemanticMetadataField(
+                        name='self',
+                        path='/self',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

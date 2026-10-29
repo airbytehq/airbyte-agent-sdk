@@ -186,7 +186,7 @@ class OutreachConnector:
 
     connector_name = "outreach"
     connector_version = "1.0.1"
-    sdk_version = "0.1.391"
+    sdk_version = "0.1.392"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

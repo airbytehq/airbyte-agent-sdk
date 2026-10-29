@@ -176,7 +176,7 @@ class SemanticSampling(BaseModel):
     )
     text_path: str | None = Field(
         default=None,
-        description="element/whole: path to text leaves under the anchor.",
+        description="element/whole: path to text leaves under the anchor; `**` descends any number of levels through mappings and lists.",
     )
     text_content_type: Literal["plaintext", "html"] = Field(
         default="plaintext",

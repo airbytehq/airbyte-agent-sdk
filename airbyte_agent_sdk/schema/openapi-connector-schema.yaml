@@ -2661,7 +2661,8 @@ $defs:
         - type: string
         - type: 'null'
         default: null
-        description: 'element/whole: path to text leaves under the anchor.'
+        description: 'element/whole: path to text leaves under the anchor; `**` descends
+          any number of levels through mappings and lists.'
         title: Text Path
       text_content_type:
         default: plaintext
