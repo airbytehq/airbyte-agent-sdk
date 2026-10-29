@@ -2607,6 +2607,16 @@
           "semantic": false
         },
         {
+          "name": "body_html",
+          "python_name": "body_html",
+          "type": "str | None",
+          "json_type": "null | string",
+          "example_value_json": "\"<str>\"",
+          "json_example_value": "<str>",
+          "description": "HTML body of the issue (the opening message)",
+          "semantic": true
+        },
+        {
           "name": "state",
           "python_name": "state",
           "type": "str | None",
@@ -2697,8 +2707,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "body_html",
+          "description": "HTML body of the issue (the opening message)",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "link",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

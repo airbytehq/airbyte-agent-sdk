@@ -24,6 +24,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheConfig,
     CacheEntityConfig,
     CacheFieldConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -2381,6 +2387,41 @@ OrbConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['string', 'null'],
                         description='A description of the plan',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='description_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='description_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}\n\n{description_paragraph}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='prices',
@@ -2526,6 +2567,45 @@ OrbConnectorModel: ConnectorModel = ConnectorModel(
             'line_items[]',
             'subscription',
         ],
+    },
+    semantic_search_fields={
+        'plans': {
+            'description': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='description_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='description_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}\n\n{description_paragraph}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

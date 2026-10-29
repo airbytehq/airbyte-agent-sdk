@@ -25,6 +25,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -5848,6 +5854,59 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
                         description='Title of the issue',
                     ),
                     CacheFieldConfig(
+                        name='body_html',
+                        type=['null', 'string'],
+                        description='HTML body of the issue (the opening message)',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='title',
+                                    path='/title',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='status',
+                                    path='/state',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='body',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='body',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{title}{status}\n\n{body}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='updated_at',
+                                    path='/updated_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='created_at',
+                                    path='/created_at',
+                                ),
+                                SemanticMetadataField(
+                                    name='link',
+                                    path='/link',
+                                ),
+                            ],
+                        ),
+                    ),
+                    CacheFieldConfig(
                         name='state',
                         type=['null', 'string'],
                         description='Current state of the issue (e.g. new, in_progress, closed)',
@@ -6140,6 +6199,7 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
         'issues': [
             'id',
             'title',
+            'body_html',
             'state',
             'source',
             'type',
@@ -6192,6 +6252,58 @@ PylonConnectorModel: ConnectorModel = ConnectorModel(
             'is_public',
         ],
         'user_roles': ['id', 'name', 'slug'],
+    },
+    semantic_search_fields={
+        'issues': {
+            'body_html': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='title',
+                        path='/title',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='status',
+                        path='/state',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='body',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='body',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{title}{status}\n\n{body}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='updated_at',
+                        path='/updated_at',
+                    ),
+                    SemanticMetadataField(
+                        name='created_at',
+                        path='/created_at',
+                    ),
+                    SemanticMetadataField(
+                        name='link',
+                        path='/link',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

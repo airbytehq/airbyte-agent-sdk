@@ -123,6 +123,19 @@ info:
           - name: description
             type: [string, "null"]
             description: A description of the plan
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+                - { name: title, path: "/name", max_chars: 200 }
+                - name: description_paragraph
+                  windowed: true
+                  sampling: { sample_type: regex, unit_label: description_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}\n\n{description_paragraph}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: created_at, path: "/created_at", type: string }
           - name: prices
             type: [array, "null"]
             description: The pricing options for the plan

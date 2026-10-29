@@ -25,6 +25,12 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     EntityRelationshipConfig,
+    SemanticEmbedding,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -5060,6 +5066,53 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         name='name',
                         type=['null', 'string'],
                         description='Name of the task',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='status',
+                                    path='/status.status',
+                                    max_chars=200,
+                                    prefix='\nStatus: ',
+                                ),
+                                SemanticSample(
+                                    name='task_name',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='task',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{task_name}{status}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_updated',
+                                    path='/date_updated',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_created',
+                                    path='/date_created',
+                                ),
+                                SemanticMetadataField(
+                                    name='url',
+                                    path='/url',
+                                ),
+                                SemanticMetadataField(
+                                    name='parent',
+                                    path='/parent',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='date_created',
@@ -5112,6 +5165,33 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         name='comment_text',
                         type=['null', 'string'],
                         description='Plain-text content of the comment',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='comment_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='comment_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date',
+                                    path='/date',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='date',
@@ -5144,6 +5224,49 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
                         name='description',
                         type=['null', 'string'],
                         description='Description of the goal',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='plaintext',
+                            samples=[
+                                SemanticSample(
+                                    name='goal_name',
+                                    path='/name',
+                                    max_chars=200,
+                                ),
+                                SemanticSample(
+                                    name='description_paragraph',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='regex',
+                                        unit_label='description_paragraph',
+                                        split_pattern='\\n\\s*\\n',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            embedding=SemanticEmbedding(
+                                template='{goal_name}\n\n{description_paragraph}',
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_updated',
+                                    path='/date_updated',
+                                ),
+                                SemanticMetadataField(
+                                    name='date_created',
+                                    path='/date_created',
+                                ),
+                                SemanticMetadataField(
+                                    name='team_id',
+                                    path='/team_id',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='archived',
@@ -5250,6 +5373,131 @@ ClickupApiConnectorModel: ConnectorModel = ConnectorModel(
             'team_id',
         ],
         'time_tracking': ['time', 'user'],
+    },
+    semantic_search_fields={
+        'tasks': {
+            'name': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='status',
+                        path='/status.status',
+                        max_chars=200,
+                        prefix='\nStatus: ',
+                    ),
+                    SemanticSample(
+                        name='task_name',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='task',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{task_name}{status}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date_updated',
+                        path='/date_updated',
+                    ),
+                    SemanticMetadataField(
+                        name='date_created',
+                        path='/date_created',
+                    ),
+                    SemanticMetadataField(
+                        name='url',
+                        path='/url',
+                    ),
+                    SemanticMetadataField(
+                        name='parent',
+                        path='/parent',
+                    ),
+                ],
+            ),
+        },
+        'comments': {
+            'comment_text': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='comment_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='comment_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date',
+                        path='/date',
+                    ),
+                ],
+            ),
+        },
+        'goals': {
+            'description': SemanticSearchConfig(
+                content_type='plaintext',
+                samples=[
+                    SemanticSample(
+                        name='goal_name',
+                        path='/name',
+                        max_chars=200,
+                    ),
+                    SemanticSample(
+                        name='description_paragraph',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='regex',
+                            unit_label='description_paragraph',
+                            split_pattern='\\n\\s*\\n',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                embedding=SemanticEmbedding(
+                    template='{goal_name}\n\n{description_paragraph}',
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='date_updated',
+                        path='/date_updated',
+                    ),
+                    SemanticMetadataField(
+                        name='date_created',
+                        path='/date_created',
+                    ),
+                    SemanticMetadataField(
+                        name='team_id',
+                        path='/team_id',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

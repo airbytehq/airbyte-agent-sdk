@@ -1472,7 +1472,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Name of the task",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "date_created",
@@ -1545,8 +1545,36 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "name",
+          "description": "Name of the task",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date_updated",
+          "type": "string"
+        },
+        {
+          "name": "date_created",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "parent",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -1582,7 +1610,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Plain-text content of the comment",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "date",
@@ -1605,8 +1633,24 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "comment_text",
+          "description": "Plain-text content of the comment",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },
@@ -1652,7 +1696,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Description of the goal",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "archived",
@@ -1725,8 +1769,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "description",
+          "description": "Description of the goal",
+          "context_max_chars": 2048,
+          "content_type": "plaintext"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "date_updated",
+          "type": "string"
+        },
+        {
+          "name": "date_created",
+          "type": "string"
+        },
+        {
+          "name": "team_id",
+          "type": "string"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

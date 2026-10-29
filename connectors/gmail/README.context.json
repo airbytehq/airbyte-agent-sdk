@@ -1265,7 +1265,7 @@
           "example_value_json": "\"<str>\"",
           "json_example_value": "<str>",
           "description": "Short snippet of the message text",
-          "semantic": false
+          "semantic": true
         },
         {
           "name": "historyId",
@@ -1308,8 +1308,32 @@
           "semantic": false
         }
       ],
-      "semantic_fields": [],
-      "semantic_entity_fields": [],
+      "semantic_fields": [
+        {
+          "name": "snippet",
+          "description": "Short snippet of the message text",
+          "context_max_chars": 2048,
+          "content_type": "html"
+        }
+      ],
+      "semantic_entity_fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "internalDate",
+          "type": "string"
+        },
+        {
+          "name": "threadId",
+          "type": "string"
+        },
+        {
+          "name": "labelIds",
+          "type": "array"
+        }
+      ],
       "semantic_metadata_fields": [],
       "enrichment_outputs": []
     },

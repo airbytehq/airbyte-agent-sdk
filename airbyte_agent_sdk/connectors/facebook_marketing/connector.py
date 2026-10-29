@@ -141,7 +141,7 @@ class FacebookMarketingConnector:
 
     connector_name = "facebook-marketing"
     connector_version = "1.2.1"
-    sdk_version = "0.1.388"
+    sdk_version = "0.1.389"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {

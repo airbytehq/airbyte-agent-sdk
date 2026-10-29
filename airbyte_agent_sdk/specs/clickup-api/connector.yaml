@@ -140,6 +140,22 @@ info:
               - "null"
               - "string"
             description: "Name of the task"
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+              - { name: status, path: "/status.status", max_chars: 200, prefix: "\nStatus: " }
+              - name: task_name
+                windowed: true
+                sampling: { sample_type: whole, unit_label: task }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{task_name}{status}"
+              metadata:
+              - { name: id, path: "/id", type: string }
+              - { name: date_updated, path: "/date_updated", type: string }
+              - { name: date_created, path: "/date_created", type: string }
+              - { name: url, path: "/url", type: string }
+              - { name: parent, path: "/parent", type: string }
           - name: date_created
             type:
               - "null"
@@ -187,6 +203,16 @@ info:
               - "null"
               - "string"
             description: "Plain-text content of the comment"
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+              - name: comment_paragraph
+                windowed: true
+                sampling: { sample_type: regex, unit_label: comment_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              metadata:
+              - { name: id, path: "/id", type: string }
+              - { name: date, path: "/date", type: string }
           - name: date
             type:
               - "null"
@@ -214,6 +240,21 @@ info:
               - "null"
               - "string"
             description: "Description of the goal"
+            x-airbyte-semantic-search:
+              content_type: plaintext
+              samples:
+              - { name: goal_name, path: "/name", max_chars: 200 }
+              - name: description_paragraph
+                windowed: true
+                sampling: { sample_type: regex, unit_label: description_paragraph, split_pattern: '\n\s*\n' }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{goal_name}\n\n{description_paragraph}"
+              metadata:
+              - { name: id, path: "/id", type: string }
+              - { name: date_updated, path: "/date_updated", type: string }
+              - { name: date_created, path: "/date_created", type: string }
+              - { name: team_id, path: "/team_id", type: string }
           - name: archived
             type:
               - "null"

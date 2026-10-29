@@ -289,6 +289,8 @@ class IssuesSearchFilter(TypedDict, total=False):
     """Unique identifier for the issue"""
     title: str | None
     """Title of the issue"""
+    body_html: str | None
+    """HTML body of the issue (the opening message)"""
     state: str | None
     """Current state of the issue (e.g. new, in_progress, closed)"""
     source: str | None
@@ -315,6 +317,8 @@ class IssuesInFilter(TypedDict, total=False):
     """Unique identifier for the issue"""
     title: list[str]
     """Title of the issue"""
+    body_html: list[str]
+    """HTML body of the issue (the opening message)"""
     state: list[str]
     """Current state of the issue (e.g. new, in_progress, closed)"""
     source: list[str]
@@ -341,6 +345,8 @@ class IssuesAnyValueFilter(TypedDict, total=False):
     """Unique identifier for the issue"""
     title: Any
     """Title of the issue"""
+    body_html: Any
+    """HTML body of the issue (the opening message)"""
     state: Any
     """Current state of the issue (e.g. new, in_progress, closed)"""
     source: Any
@@ -367,6 +373,8 @@ class IssuesStringFilter(TypedDict, total=False):
     """Unique identifier for the issue"""
     title: str
     """Title of the issue"""
+    body_html: str
+    """HTML body of the issue (the opening message)"""
     state: str
     """Current state of the issue (e.g. new, in_progress, closed)"""
     source: str
@@ -393,6 +401,8 @@ class IssuesSortFilter(TypedDict, total=False):
     """Unique identifier for the issue"""
     title: AirbyteSortOrder
     """Title of the issue"""
+    body_html: AirbyteSortOrder
+    """HTML body of the issue (the opening message)"""
     state: AirbyteSortOrder
     """Current state of the issue (e.g. new, in_progress, closed)"""
     source: AirbyteSortOrder

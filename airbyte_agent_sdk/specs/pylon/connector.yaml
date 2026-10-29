@@ -34,6 +34,27 @@ info:
               - "null"
               - "string"
             description: "Title of the issue"
+          - name: body_html
+            type:
+              - "null"
+              - "string"
+            description: "HTML body of the issue (the opening message)"
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - { name: title, path: "/title", max_chars: 200 }
+                - { name: status, path: "/state", prefix: "\nStatus: ", max_chars: 200 }
+                - name: body
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: body }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              embedding:
+                template: "{title}{status}\n\n{body}"
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: updated_at, path: "/updated_at", type: string }
+                - { name: created_at, path: "/created_at", type: string }
+                - { name: link, path: "/link", type: string }
           - name: state
             type:
               - "null"

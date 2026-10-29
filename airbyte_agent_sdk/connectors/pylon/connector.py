@@ -161,7 +161,7 @@ class PylonConnector:
 
     connector_name = "pylon"
     connector_version = "0.1.11"
-    sdk_version = "0.1.388"
+    sdk_version = "0.1.389"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
@@ -1531,6 +1531,7 @@ class IssuesQuery:
         Available filter fields (IssuesSearchFilter):
         - id: Unique identifier for the issue
         - title: Title of the issue
+        - body_html: HTML body of the issue (the opening message)
         - state: Current state of the issue (e.g. new, in_progress, closed)
         - source: Channel the issue originated from (e.g. email, slack)
         - type_: Type classification of the issue

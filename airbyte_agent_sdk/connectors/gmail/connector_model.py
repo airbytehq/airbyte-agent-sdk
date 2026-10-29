@@ -25,6 +25,11 @@ from airbyte_agent_sdk.schema.extensions import (
     CacheEntityConfig,
     CacheFieldConfig,
     CacheFieldProperty,
+    SemanticMetadataField,
+    SemanticSample,
+    SemanticSampling,
+    SemanticSearchConfig,
+    SemanticWindowing,
 )
 from airbyte_agent_sdk.schema.base import (
     ExampleQuestions,
@@ -2737,6 +2742,41 @@ GmailConnectorModel: ConnectorModel = ConnectorModel(
                         name='snippet',
                         type=['string', 'null'],
                         description='Short snippet of the message text',
+                        x_airbyte_semantic_search=SemanticSearchConfig(
+                            content_type='html',
+                            samples=[
+                                SemanticSample(
+                                    name='snippet',
+                                    windowed=True,
+                                    sampling=SemanticSampling(
+                                        sample_type='whole',
+                                        unit_label='snippet',
+                                    ),
+                                ),
+                            ],
+                            windowing=SemanticWindowing(
+                                context_max_chars=2048,
+                            ),
+                            metadata=[
+                                SemanticMetadataField(
+                                    name='id',
+                                    path='/id',
+                                ),
+                                SemanticMetadataField(
+                                    name='internalDate',
+                                    path='/internalDate',
+                                ),
+                                SemanticMetadataField(
+                                    name='threadId',
+                                    path='/threadId',
+                                ),
+                                SemanticMetadataField(
+                                    name='labelIds',
+                                    path='/labelIds[]',
+                                    type='array',
+                                ),
+                            ],
+                        ),
                     ),
                     CacheFieldConfig(
                         name='historyId',
@@ -2957,6 +2997,45 @@ GmailConnectorModel: ConnectorModel = ConnectorModel(
         ],
         'drafts': ['id', 'message'],
         'threads': ['id', 'historyId', 'snippet'],
+    },
+    semantic_search_fields={
+        'messages': {
+            'snippet': SemanticSearchConfig(
+                content_type='html',
+                samples=[
+                    SemanticSample(
+                        name='snippet',
+                        windowed=True,
+                        sampling=SemanticSampling(
+                            sample_type='whole',
+                            unit_label='snippet',
+                        ),
+                    ),
+                ],
+                windowing=SemanticWindowing(
+                    context_max_chars=2048,
+                ),
+                metadata=[
+                    SemanticMetadataField(
+                        name='id',
+                        path='/id',
+                    ),
+                    SemanticMetadataField(
+                        name='internalDate',
+                        path='/internalDate',
+                    ),
+                    SemanticMetadataField(
+                        name='threadId',
+                        path='/threadId',
+                    ),
+                    SemanticMetadataField(
+                        name='labelIds',
+                        path='/labelIds[]',
+                        type='array',
+                    ),
+                ],
+            ),
+        },
     },
     example_questions=ExampleQuestions(
         direct=[

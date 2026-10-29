@@ -936,6 +936,8 @@ class IssuesSearchData(BaseModel):
     """Unique identifier for the issue"""
     title: str | None = None
     """Title of the issue"""
+    body_html: str | None = None
+    """HTML body of the issue (the opening message)"""
     state: str | None = None
     """Current state of the issue (e.g. new, in_progress, closed)"""
     source: str | None = None

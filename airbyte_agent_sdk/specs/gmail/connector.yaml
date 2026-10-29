@@ -72,6 +72,18 @@ info:
               - "string"
               - "null"
             description: "Short snippet of the message text"
+            x-airbyte-semantic-search:
+              content_type: html
+              samples:
+                - name: snippet
+                  windowed: true
+                  sampling: { sample_type: whole, unit_label: snippet }
+              windowing: { context_max_chars: 2048, context_boundary: whole_unit }
+              metadata:
+                - { name: id, path: "/id", type: string }
+                - { name: internalDate, path: "/internalDate", type: string }
+                - { name: threadId, path: "/threadId", type: string }
+                - { name: labelIds, path: "/labelIds[]", type: array }
           - name: historyId
             type:
               - "string"
