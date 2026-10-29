@@ -46,7 +46,7 @@ from uuid import (
 ShopifyConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('9da77001-af33-4bcd-be46-6252bf9342b9'),
     name='shopify',
-    version='0.1.16',
+    version='0.1.17',
     base_url='https://{shop}.myshopify.com/admin/api/2026-07',
     auth=AuthConfig(
         options=[

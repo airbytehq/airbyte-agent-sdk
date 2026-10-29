@@ -53,6 +53,14 @@ class User(BaseModel):
     permission_id: str | None = Field(default=None, alias="permissionId")
     email_address: str | None = Field(default=None, alias="emailAddress")
 
+class FileShortcutdetails(BaseModel):
+    """Shortcut file details"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    target_id: str | None | None = Field(default=None, alias="targetId")
+    target_mime_type: str | None | None = Field(default=None, alias="targetMimeType")
+    target_resource_key: str | None | None = Field(default=None, alias="targetResourceKey")
+
 class FileImagemediametadataLocation(BaseModel):
     """Nested schema for FileImagemediametadata.location"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -87,16 +95,6 @@ class FileImagemediametadata(BaseModel):
     lens: str | None | None = Field(default=None)
     location: FileImagemediametadataLocation | None | None = Field(default=None)
 
-class FileContentrestrictionsItem(BaseModel):
-    """Nested schema for File.contentRestrictions_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    read_only: bool | None | None = Field(default=None, alias="readOnly")
-    reason: str | None | None = Field(default=None)
-    restricting_user: Any | None = Field(default=None, alias="restrictingUser")
-    restriction_time: str | None | None = Field(default=None, alias="restrictionTime")
-    type_: str | None | None = Field(default=None, alias="type")
-
 class FileCapabilities(BaseModel):
     """Capabilities the current user has on this file"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -129,19 +127,21 @@ class FileLinksharemetadata(BaseModel):
     security_update_eligible: bool | None | None = Field(default=None, alias="securityUpdateEligible")
     security_update_enabled: bool | None | None = Field(default=None, alias="securityUpdateEnabled")
 
-class FileShortcutdetails(BaseModel):
-    """Shortcut file details"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    target_id: str | None | None = Field(default=None, alias="targetId")
-    target_mime_type: str | None | None = Field(default=None, alias="targetMimeType")
-    target_resource_key: str | None | None = Field(default=None, alias="targetResourceKey")
-
 class FileLabelinfo(BaseModel):
     """An overview of the labels on the file"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     labels: list[dict[str, Any]] | None | None = Field(default=None)
+
+class FileContentrestrictionsItem(BaseModel):
+    """Nested schema for File.contentRestrictions_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    read_only: bool | None | None = Field(default=None, alias="readOnly")
+    reason: str | None | None = Field(default=None)
+    restricting_user: Any | None = Field(default=None, alias="restrictingUser")
+    restriction_time: str | None | None = Field(default=None, alias="restrictionTime")
+    type_: str | None | None = Field(default=None, alias="type")
 
 class File(BaseModel):
     """The metadata for a file"""
@@ -243,6 +243,16 @@ class FileUploadParams(BaseModel):
     description: str | None = Field(default=None)
     file_mime_type: str | None = Field(default=None)
 
+class DriveRestrictions(BaseModel):
+    """A set of restrictions that apply to this shared drive"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    copy_requires_writer_permission: bool | None | None = Field(default=None, alias="copyRequiresWriterPermission")
+    domain_users_only: bool | None | None = Field(default=None, alias="domainUsersOnly")
+    drive_members_only: bool | None | None = Field(default=None, alias="driveMembersOnly")
+    admin_managed_restrictions: bool | None | None = Field(default=None, alias="adminManagedRestrictions")
+    sharing_folders_requires_organizer_permission: bool | None | None = Field(default=None, alias="sharingFoldersRequiresOrganizerPermission")
+
 class DriveCapabilities(BaseModel):
     """Capabilities the current user has on this shared drive"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -276,16 +286,6 @@ class DriveBackgroundimagefile(BaseModel):
     x_coordinate: float | None | None = Field(default=None, alias="xCoordinate")
     y_coordinate: float | None | None = Field(default=None, alias="yCoordinate")
     width: float | None | None = Field(default=None)
-
-class DriveRestrictions(BaseModel):
-    """A set of restrictions that apply to this shared drive"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    copy_requires_writer_permission: bool | None | None = Field(default=None, alias="copyRequiresWriterPermission")
-    domain_users_only: bool | None | None = Field(default=None, alias="domainUsersOnly")
-    drive_members_only: bool | None | None = Field(default=None, alias="driveMembersOnly")
-    admin_managed_restrictions: bool | None | None = Field(default=None, alias="adminManagedRestrictions")
-    sharing_folders_requires_organizer_permission: bool | None | None = Field(default=None, alias="sharingFoldersRequiresOrganizerPermission")
 
 class Drive(BaseModel):
     """Representation of a shared drive"""

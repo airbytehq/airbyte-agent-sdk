@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Shopify API Connector
-  version: 0.1.16
+  version: 0.1.17
   description: |
     Shopify is an e-commerce platform that enables businesses to create online stores,
     manage products, process orders, and handle customer relationships. This connector
@@ -1443,7 +1443,9 @@ servers:
       default: my-store
       description: Your Shopify store name (e.g., 'my-store' from my-store.myshopify.com)
   x-airbyte-replication-environment-mapping:
-    shop: shop
+    shop:
+      source: shop
+      format: "{{ value | trim | lower | replace('https://', '') | replace('http://', '') | replace('.myshopify.com', '') | replace('/', '') }}"
 
 security:
 - shopifyOAuth: []
