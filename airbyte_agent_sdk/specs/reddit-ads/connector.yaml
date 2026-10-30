@@ -14,7 +14,7 @@ info:
     status: candidate
     criteria_version: v1
   x-airbyte-connector-definition-id: c876992b-877e-4bb3-946b-4678c82bb7ac
-  x-airbyte-replication-version: "1.0.0"
+  x-airbyte-replication-version: "1.0.3"
   x-airbyte-replication-compatibility: ">=1.0.0, <2.0.0"
   x-airbyte-skip-suggested-streams:
     - campaign_report
