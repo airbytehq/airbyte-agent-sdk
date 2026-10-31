@@ -196,6 +196,12 @@ class CampaignsList(BaseModel):
     data: list[Campaign] | None = Field(default=None)
     links: CampaignsListLinks | None = Field(default=None)
 
+class EventLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
+
 class EventAttributes(BaseModel):
     """Event attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -242,12 +248,6 @@ class EventRelationships(BaseModel):
     profile: EventRelationshipsProfile | None | None = Field(default=None)
     metric: EventRelationshipsMetric | None | None = Field(default=None)
 
-class EventLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
-
 class Event(BaseModel):
     """A Klaviyo event representing an action taken by a profile"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -273,6 +273,12 @@ class EventsList(BaseModel):
     data: list[Event] | None = Field(default=None)
     links: EventsListLinks | None = Field(default=None)
 
+class MetricLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
+
 class MetricAttributesIntegration(BaseModel):
     """Integration information"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -293,12 +299,6 @@ class MetricAttributes(BaseModel):
     """Last update timestamp"""
     integration: MetricAttributesIntegration | None | None = Field(default=None, description="Integration information")
     """Integration information"""
-
-class MetricLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
 
 class Metric(BaseModel):
     """A Klaviyo metric (event type)"""
@@ -371,12 +371,6 @@ class FlowsList(BaseModel):
     data: list[Flow] | None = Field(default=None)
     links: FlowsListLinks | None = Field(default=None)
 
-class TemplateLinks(BaseModel):
-    """Related links"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    self: str | None | None = Field(default=None)
-
 class TemplateAttributes(BaseModel):
     """Template attributes"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -393,6 +387,12 @@ class TemplateAttributes(BaseModel):
     """Creation timestamp"""
     updated: str | None | None = Field(default=None, description="Last update timestamp")
     """Last update timestamp"""
+
+class TemplateLinks(BaseModel):
+    """Related links"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    self: str | None | None = Field(default=None)
 
 class Template(BaseModel):
     """A Klaviyo email template"""

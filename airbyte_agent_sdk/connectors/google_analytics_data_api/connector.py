@@ -124,7 +124,7 @@ class GoogleAnalyticsDataApiConnector:
 
     connector_name = "google-analytics-data-api"
     connector_version = "1.1.1"
-    sdk_version = "0.1.394"
+    sdk_version = "0.1.395"
 
     # Map of (entity, action) -> needs_envelope for envelope wrapping decision
     _ENVELOPE_MAP = {
