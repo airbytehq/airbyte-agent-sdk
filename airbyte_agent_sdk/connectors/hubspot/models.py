@@ -207,6 +207,13 @@ class TicketsList(BaseModel):
     paging: Paging | None = Field(default=None)
     total: int | None = Field(default=None)
 
+class SchemaLabels(BaseModel):
+    """Display labels"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    singular: str | None = Field(default=None)
+    plural: str | None = Field(default=None)
+
 class SchemaPropertiesItemModificationmetadata(BaseModel):
     """Nested schema for SchemaPropertiesItem.modificationMetadata"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -242,13 +249,6 @@ class SchemaPropertiesItem(BaseModel):
     updated_user_id: str | None = Field(default=None, alias="updatedUserId")
     show_currency_symbol: bool | None = Field(default=None, alias="showCurrencySymbol")
     modification_metadata: SchemaPropertiesItemModificationmetadata | None = Field(default=None, alias="modificationMetadata")
-
-class SchemaLabels(BaseModel):
-    """Display labels"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    singular: str | None = Field(default=None)
-    plural: str | None = Field(default=None)
 
 class SchemaAssociationsItem(BaseModel):
     """Nested schema for Schema.associations_item"""
@@ -620,6 +620,23 @@ to apply between the two records. Multiple labels can be set in a single call.
 
     pass
 
+class AssociationListResultPagingNext(BaseModel):
+    """Cursor for the next page of results"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    after: str | None = Field(default=None, description="Paging cursor token for retrieving the next page")
+    """Paging cursor token for retrieving the next page"""
+    link: str | None = Field(default=None, description="URL for retrieving the next page of results")
+    """URL for retrieving the next page of results"""
+
+class AssociationListResultPaging(BaseModel):
+    """Pagination information for retrieving additional results"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    next: AssociationListResultPagingNext | None = Field(default=None, description="Cursor for the next page of results")
+    """Cursor for the next page of results"""
+    additional_properties: Any | None = Field(default=None, alias="additionalProperties")
+
 class AssociationListResultResultsItemAssociationtypesItem(BaseModel):
     """Nested schema for AssociationListResultResultsItem.associationTypes_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -639,23 +656,6 @@ class AssociationListResultResultsItem(BaseModel):
     """ID of the associated target record"""
     association_types: list[AssociationListResultResultsItemAssociationtypesItem] | None = Field(default=None, alias="associationTypes", description="List of association types linking the two records")
     """List of association types linking the two records"""
-
-class AssociationListResultPagingNext(BaseModel):
-    """Cursor for the next page of results"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    after: str | None = Field(default=None, description="Paging cursor token for retrieving the next page")
-    """Paging cursor token for retrieving the next page"""
-    link: str | None = Field(default=None, description="URL for retrieving the next page of results")
-    """URL for retrieving the next page of results"""
-
-class AssociationListResultPaging(BaseModel):
-    """Pagination information for retrieving additional results"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    next: AssociationListResultPagingNext | None = Field(default=None, description="Cursor for the next page of results")
-    """Cursor for the next page of results"""
-    additional_properties: Any | None = Field(default=None, alias="additionalProperties")
 
 class AssociationListResult(BaseModel):
     """Paginated list of associations for a CRM record"""
@@ -827,13 +827,6 @@ class CallCreateParamsProperties(BaseModel):
     hubspot_owner_id: str | None = Field(default=None, description="ID of the HubSpot owner to assign to this call")
     """ID of the HubSpot owner to assign to this call"""
 
-class CallCreateParamsAssociationsItemTo(BaseModel):
-    """Nested schema for CallCreateParamsAssociationsItem.to"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="ID of the record to associate with")
-    """ID of the record to associate with"""
-
 class CallCreateParamsAssociationsItemTypesItem(BaseModel):
     """Nested schema for CallCreateParamsAssociationsItem.types_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -842,6 +835,13 @@ class CallCreateParamsAssociationsItemTypesItem(BaseModel):
     """Association category (e.g., HUBSPOT_DEFINED)"""
     association_type_id: int | None = Field(default=None, alias="associationTypeId", description="Association type ID (e.g., 194 for call-to-contact, 182 for call-to-company, 206 for call-to-deal, 220 for call-to-ticket)")
     """Association type ID (e.g., 194 for call-to-contact, 182 for call-to-company, 206 for call-to-deal, 220 for call-to-ticket)"""
+
+class CallCreateParamsAssociationsItemTo(BaseModel):
+    """Nested schema for CallCreateParamsAssociationsItem.to"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None, description="ID of the record to associate with")
+    """ID of the record to associate with"""
 
 class CallCreateParamsAssociationsItem(BaseModel):
     """Nested schema for CallCreateParams.associations_item"""
@@ -1193,6 +1193,13 @@ class Task(BaseModel):
     archived_at: str | None = Field(default=None, alias="archivedAt")
     associations: dict[str, Any] | None = Field(default=None)
 
+class TaskCreateParamsAssociationsItemTo(BaseModel):
+    """Nested schema for TaskCreateParamsAssociationsItem.to"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    id: str | None = Field(default=None, description="ID of the record to associate with")
+    """ID of the record to associate with"""
+
 class TaskCreateParamsAssociationsItemTypesItem(BaseModel):
     """Nested schema for TaskCreateParamsAssociationsItem.types_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -1201,13 +1208,6 @@ class TaskCreateParamsAssociationsItemTypesItem(BaseModel):
     """Association category (e.g., HUBSPOT_DEFINED)"""
     association_type_id: int | None = Field(default=None, alias="associationTypeId", description="Association type ID (e.g., 204 for task-to-contact, 192 for task-to-company, 216 for task-to-deal, 228 for task-to-ticket)")
     """Association type ID (e.g., 204 for task-to-contact, 192 for task-to-company, 216 for task-to-deal, 228 for task-to-ticket)"""
-
-class TaskCreateParamsAssociationsItemTo(BaseModel):
-    """Nested schema for TaskCreateParamsAssociationsItem.to"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    id: str | None = Field(default=None, description="ID of the record to associate with")
-    """ID of the record to associate with"""
 
 class TaskCreateParamsAssociationsItem(BaseModel):
     """Nested schema for TaskCreateParams.associations_item"""

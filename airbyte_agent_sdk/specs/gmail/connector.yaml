@@ -286,16 +286,19 @@ info:
   x-airbyte-external-documentation-urls:
     - type: api_reference
       title: Gmail API Reference
-      url: https://developers.google.com/gmail/api/reference/rest
+      url: https://developers.google.com/workspace/gmail/api/reference/rest
+    - type: api_release_history
+      title: Gmail API Release Notes
+      url: https://developers.google.com/workspace/gmail/release-notes
     - type: authentication_guide
-      title: Gmail Authentication
-      url: https://developers.google.com/gmail/api/auth/about-auth
+      title: Choose Gmail API Scopes
+      url: https://developers.google.com/workspace/gmail/api/auth/scopes
     - type: rate_limits
       title: Gmail API Quotas
-      url: https://developers.google.com/gmail/api/reference/quota
+      url: https://developers.google.com/workspace/gmail/api/reference/quota
     - type: status_page
       title: Google Workspace Status
-      url: https://www.google.com/appsstatus/
+      url: https://www.google.com/appsstatus/dashboard/
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from Gmail.

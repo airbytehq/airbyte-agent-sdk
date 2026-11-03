@@ -68,7 +68,7 @@ This connector supports the following entities and actions. For more details, se
 
 ## Gmail API docs
 
-See the official [Gmail API reference](https://developers.google.com/gmail/api/reference/rest).
+See the official [Gmail API reference](https://developers.google.com/workspace/gmail/api/reference/rest).
 
 ## Interfaces
 
