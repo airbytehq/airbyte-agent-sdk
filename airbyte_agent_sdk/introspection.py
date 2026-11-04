@@ -104,7 +104,7 @@ EXECUTE_INSTRUCTIONS = (
     "HOW TO USE DOWNLOAD:\n"
     "- By default, download returns a stream for API/SDK clients. For agent/MCP JSON responses, omit `range_header` "
     'and pass params={"_airbyte_response_type": "json", "_airbyte_response_format": "text", "_airbyte_max_chars": 20000}.\n'
-    "- Rich documents (PDF/DOCX/XLSX/PPTX) are converted to a bounded 20,000-character Markdown window; "
+    "- Rich documents (DOCX/XLSX/PPTX) are converted to a bounded 20,000-character Markdown window; "
     "plain-text files are decoded.\n"
     "- If `has_more` is true, request the next converted-text window with "
     "`params._airbyte_text_offset` set to `next_offset` and `params._airbyte_download_token` set to "
