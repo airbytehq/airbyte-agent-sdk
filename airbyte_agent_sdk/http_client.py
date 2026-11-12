@@ -26,6 +26,7 @@ from airbyte_agent_sdk.http import (
     HTTPStatusError,
     NetworkError,
     RateLimitError,
+    RefreshTokenRejectedError,
     TimeoutConfig,
     TimeoutError,
 )
@@ -596,6 +597,13 @@ class HTTPClient:
                     config_values=self.config_values,
                     http_client=None,  # Let strategy create its own client
                 )
+            except RefreshTokenRejectedError as refresh_error:
+                self.logger.log_error(
+                    request_id=request_id,
+                    error=f"Credential refresh failed: {refresh_error!s}",
+                    status_code=status_code,
+                )
+                raise
             except Exception as refresh_error:
                 self.logger.log_error(
                     request_id=request_id,

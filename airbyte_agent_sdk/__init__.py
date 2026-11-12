@@ -75,6 +75,7 @@ connector.close()` in a `finally` block.
 hierarchy**, covering [`HTTPClientError`](#HTTPClientError) (and its
 subclasses [`HTTPStatusError`](#HTTPStatusError),
 [`AuthenticationError`](#AuthenticationError),
+[`RefreshTokenRejectedError`](#RefreshTokenRejectedError),
 [`RateLimitError`](#RateLimitError), [`NetworkError`](#NetworkError),
 [`TimeoutError`](#TimeoutError)) plus [`ExecutorError`](#ExecutorError)
 and its subclasses. It does **not** catch:
@@ -138,6 +139,7 @@ from .http.exceptions import (
     HTTPStatusError,
     NetworkError,
     RateLimitError,
+    RefreshTokenRejectedError,
     TimeoutError,
 )
 from .registry import list_connectors
@@ -181,6 +183,7 @@ __all__ = [
     "HTTPClientError",
     "HTTPStatusError",
     "AuthenticationError",
+    "RefreshTokenRejectedError",
     "ConnectorValidationError",
     "RateLimitError",
     "NetworkError",

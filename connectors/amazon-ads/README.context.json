@@ -3,7 +3,7 @@
   "class_name": "AmazonAdsConnector",
   "package_name": "airbyte_agent_sdk.connectors.amazon_ads",
   "install_package": "airbyte-agent-sdk",
-  "yaml_version": "1.0.11",
+  "yaml_version": "1.0.12",
   "api_reference_url": "https://advertising.amazon.com/API/docs/en-us",
   "auth_example": "AmazonAdsAuthConfig(client_id=\"...\", client_secret=\"...\", refresh_token=\"...\")",
   "auth_import": ", AmazonAdsAuthConfig",
@@ -34,7 +34,7 @@
             "type": "str",
             "required": true,
             "title": "Refresh Token",
-            "description": "The refresh token obtained from the OAuth authorization flow"
+            "description": "The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token."
           }
         ],
         "type_suffix": "Oauth2Authentication"

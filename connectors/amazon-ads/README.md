@@ -495,7 +495,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -520,7 +520,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -552,7 +552,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -579,7 +579,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -607,7 +607,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -659,7 +659,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -713,7 +713,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -741,7 +741,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -770,7 +770,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -802,7 +802,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com
@@ -832,4 +832,4 @@ If your organization restricts access to specific IPs, add the [Airbyte Agents I
 
 ## Version information
 
-**Connector version:** 1.0.11
+**Connector version:** 1.0.12

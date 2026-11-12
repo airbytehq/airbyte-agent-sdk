@@ -5,7 +5,7 @@ openapi: 3.1.0
 
 info:
   title: Amazon Ads API Connector
-  version: 1.0.11
+  version: 1.0.12
   description: |
     Amazon Ads is Amazon's advertising platform that enables sellers and vendors to promote their
     products across Amazon's marketplace. This connector provides access to advertising profiles,
@@ -1247,7 +1247,7 @@ components:
           refresh_token:
             type: string
             title: Refresh Token
-            description: The refresh token obtained from the OAuth authorization flow
+            description: The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.
         auth_mapping:
           client_id: "${client_id}"
           client_secret: "${client_secret}"

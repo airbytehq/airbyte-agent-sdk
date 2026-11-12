@@ -40,7 +40,7 @@ from uuid import (
 AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
     id=UUID('c6b0a29e-1da9-4512-9002-7bfd0cba2246'),
     name='amazon-ads',
-    version='1.0.11',
+    version='1.0.12',
     base_url='{region}',
     auth=AuthConfig(
         type=AuthType.OAUTH2,
@@ -65,7 +65,7 @@ AmazonAdsConnectorModel: ConnectorModel = ConnectorModel(
                 ),
                 'refresh_token': AuthConfigFieldSpec(
                     title='Refresh Token',
-                    description='The refresh token obtained from the OAuth authorization flow',
+                    description='The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.',
                 ),
             },
             auth_mapping={

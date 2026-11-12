@@ -24,7 +24,7 @@ class AmazonAdsAuthConfig(BaseModel):
     client_secret: Optional[str] = None
     """The client secret of your Amazon Ads API application"""
     refresh_token: str
-    """The refresh token obtained from the OAuth authorization flow"""
+    """The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token."""
 
 # ===== RESPONSE TYPE DEFINITIONS (PYDANTIC) =====
 

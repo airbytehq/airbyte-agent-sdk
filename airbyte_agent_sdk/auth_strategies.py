@@ -17,7 +17,7 @@ from jinja2 import Template
 
 from airbyte_agent_sdk.secrets import SecretStr
 
-from .exceptions import AuthenticationError
+from .exceptions import AuthenticationError, RefreshTokenRejectedError
 from .types import AuthType
 
 if TYPE_CHECKING:
@@ -808,6 +808,9 @@ class OAuth2AuthStrategy(AuthStrategy):
         Returns:
             TokenRefreshResult with new tokens if refresh successful, None otherwise.
 
+        Raises:
+            RefreshTokenRejectedError: If the provider rejects the refresh token; the user must re-authenticate.
+
         Note:
             Only attempts refresh on 401 (Unauthorized) errors with valid refresh_token.
             Other status codes (403, etc.) return None immediately.
@@ -835,9 +838,10 @@ class OAuth2AuthStrategy(AuthStrategy):
                 secrets=secrets,  # type: ignore[arg-type]
             )
 
+        except RefreshTokenRejectedError:
+            raise
         except Exception as e:
-            # Token refresh failed - log the error and return None
-            # HTTPClient will raise the original auth error
+            # Other refresh failures: log and return None; HTTPClient will raise the original auth error
             logger.warning("OAuth2 token refresh failed: %s", str(e))
             return None
 
@@ -913,6 +917,8 @@ class OAuth2AuthStrategy(AuthStrategy):
             logger.info("Proactive token refresh successful")
             return result
 
+        except RefreshTokenRejectedError:
+            raise
         except Exception as e:
             # Proactive refresh failed - this is fatal since we have no access_token
             msg = f"Failed to obtain access_token via token refresh: {e!s}"
@@ -934,6 +940,9 @@ class OAuth2TokenRefresher:
 
     # Maximum length for error response text to avoid exposing large bodies
     MAX_ERROR_RESPONSE_LENGTH = 500
+    REFRESH_TOKEN_ERROR_STATUS_CODES = frozenset({400, 401})
+    REFRESH_TOKEN_ERROR_KEY = "error"
+    REFRESH_TOKEN_ERROR_VALUES = frozenset({"invalid_grant", "invalid_permissions"})
 
     def __init__(
         self,
@@ -951,6 +960,19 @@ class OAuth2TokenRefresher:
         """
         self._http_client = http_client
         self._config_values = config_values or {}
+
+    @staticmethod
+    def _is_refresh_token_rejected(response: httpx.Response) -> bool:
+        if response.status_code not in OAuth2TokenRefresher.REFRESH_TOKEN_ERROR_STATUS_CODES:
+            return False
+        try:
+            body = response.json()
+        except ValueError:
+            return False
+        if not isinstance(body, dict):
+            return False
+        error = body.get(OAuth2TokenRefresher.REFRESH_TOKEN_ERROR_KEY)
+        return isinstance(error, str) and error in OAuth2TokenRefresher.REFRESH_TOKEN_ERROR_VALUES
 
     async def refresh_token(
         self,
@@ -1213,6 +1235,11 @@ class OAuth2TokenRefresher:
             # Check for successful response
             if response.status_code != 200:
                 response_text = response.text[: self.MAX_ERROR_RESPONSE_LENGTH]
+                if config.get("grant_type", "refresh_token") == "refresh_token" and self._is_refresh_token_rejected(response):
+                    raise RefreshTokenRejectedError(
+                        message=(f"{RefreshTokenRejectedError.DEFAULT_MESSAGE} Provider response: " f"{response.status_code} {response_text}"),
+                        status_code=response.status_code,
+                    )
                 msg = f"Token refresh failed: {response.status_code} {response_text}"
                 raise AuthenticationError(msg)
 

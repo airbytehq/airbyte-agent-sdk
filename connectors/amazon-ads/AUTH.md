@@ -26,7 +26,7 @@ For API-first use cases, create a connector with OAuth credentials directly.
 |------------|------|----------|-------------|
 | `client_id` | `str` | No | The client ID of your Amazon Ads API application |
 | `client_secret` | `str` | No | The client secret of your Amazon Ads API application |
-| `refresh_token` | `str` | Yes | The refresh token obtained from the OAuth authorization flow |
+| `refresh_token` | `str` | Yes | The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token. |
 
 Example request:
 
@@ -41,7 +41,7 @@ curl -X POST "https://api.airbyte.ai/api/v1/integrations/connectors" \
     "credentials": {
       "client_id": "<The client ID of your Amazon Ads API application>",
       "client_secret": "<The client secret of your Amazon Ads API application>",
-      "refresh_token": "<The refresh token obtained from the OAuth authorization flow>"
+      "refresh_token": "<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     }
   }'
 ```
@@ -461,7 +461,7 @@ In open source mode, provide API credentials directly to the connector.
 |------------|------|----------|-------------|
 | `client_id` | `str` | No | The client ID of your Amazon Ads API application |
 | `client_secret` | `str` | No | The client secret of your Amazon Ads API application |
-| `refresh_token` | `str` | Yes | The refresh token obtained from the OAuth authorization flow |
+| `refresh_token` | `str` | Yes | The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token. |
 
 Example request:
 
@@ -473,7 +473,7 @@ connector = AmazonAdsConnector(
     auth_config=AmazonAdsAuthConfig(
         client_id="<The client ID of your Amazon Ads API application>",
         client_secret="<The client secret of your Amazon Ads API application>",
-        refresh_token="<The refresh token obtained from the OAuth authorization flow>"
+        refresh_token="<The refresh token obtained from the OAuth authorization flow. Amazon Ads refresh tokens issued on or after July 30, 2026 expire 365 days after the advertiser grants consent; when that happens, re-authenticate to get a new refresh token.>"
     ),
     region="<The Amazon Ads API endpoint URL based on region:
 - NA (North America): https://advertising-api.amazon.com

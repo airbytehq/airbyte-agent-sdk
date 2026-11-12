@@ -58,6 +58,22 @@ class AuthenticationError(HTTPStatusError):
         super().__init__(status_code=status_code, message=message, response=response)
 
 
+class RefreshTokenRejectedError(AuthenticationError):
+    """Raised when the OAuth provider rejects the refresh token; the user must re-authenticate."""
+
+    DEFAULT_MESSAGE = (
+        "Refresh token was rejected by the OAuth provider (invalid, expired, or already used). " "Re-authenticate this connector's credentials."
+    )
+
+    def __init__(
+        self,
+        message: str = DEFAULT_MESSAGE,
+        status_code: int = 401,
+        response: "HTTPResponse | None" = None,
+    ) -> None:
+        super().__init__(message=message, status_code=status_code, response=response)
+
+
 class ConnectorValidationError(HTTPStatusError):
     """Raised when a connector request fails client-side or server-side validation.
 

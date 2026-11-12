@@ -13,6 +13,7 @@ from airbyte_agent_sdk.http.exceptions import (
     HTTPStatusError,
     NetworkError,
     RateLimitError,
+    RefreshTokenRejectedError,
     TimeoutError,
 )
 from airbyte_agent_sdk.http.protocols import HTTPClientProtocol, HTTPResponseProtocol
@@ -32,6 +33,7 @@ __all__ = [
     "HTTPClientError",
     "HTTPStatusError",
     "AuthenticationError",
+    "RefreshTokenRejectedError",
     "ConnectorValidationError",
     "RateLimitError",
     "NetworkError",
