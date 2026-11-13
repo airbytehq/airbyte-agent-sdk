@@ -10,8 +10,10 @@ info:
     templates. Customer.io is a messaging platform that lets you send automated
     emails, push notifications, SMS, and in-app messages based on customer
     behavior. This connector retrieves data from the App API (not the Track
-    API) and requires a Bearer-type App API key generated in your Customer.io
-    workspace settings.
+    API) and uses bearer authentication with a private API key (sk_...) or an
+    existing legacy App API key for your Customer.io workspace. Create a private
+    key at Account Settings > API Credentials > Create API key > Private API key.
+    Public API keys (pk_) and Track API keys do not work.
   x-airbyte-connector-name: customer-io
   x-airbyte-qualification:
     status: candidate
@@ -1610,20 +1612,24 @@ components:
       type: http
       scheme: bearer
       description: >
-        App API Key authentication. Generate an App API key in your
-        Customer.io workspace settings under API Credentials.
+        Bearer authentication with a private API key (sk_...) or an existing
+        legacy App API key for your Customer.io workspace. Create a private key
+        at Account Settings > API Credentials > Create API key > Private API key.
+        Public API keys (pk_) and Track API keys do not work.
       x-airbyte-auth-config:
-        title: App API Key Authentication
+        title: API Key Authentication
         type: object
         required:
           - app_api_key
         properties:
           app_api_key:
             type: string
-            title: App API Key
+            title: API Key
             description: >
-              Your Customer.io App API key. Generate one in your workspace
-              settings at Settings > API Credentials > App API Key.
+              Your Customer.io workspace's private API key (sk_...) or an existing
+              legacy App API key. Create a private key at Account Settings > API
+              Credentials > Create API key > Private API key. Public API keys
+              (pk_) and Track API keys do not work.
         auth_mapping:
           token: "${app_api_key}"
         replication_auth_key_mapping:

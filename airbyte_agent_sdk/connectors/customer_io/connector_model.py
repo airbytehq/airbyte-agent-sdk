@@ -48,13 +48,13 @@ CustomerIoConnectorModel: ConnectorModel = ConnectorModel(
         type=AuthType.BEARER,
         config={'header': 'Authorization', 'prefix': 'Bearer'},
         user_config_spec=AuthConfigSpec(
-            title='App API Key Authentication',
+            title='API Key Authentication',
             type='object',
             required=['app_api_key'],
             properties={
                 'app_api_key': AuthConfigFieldSpec(
-                    title='App API Key',
-                    description='Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.\n',
+                    title='API Key',
+                    description="Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.\n",
                 ),
             },
             auth_mapping={'token': '${app_api_key}'},

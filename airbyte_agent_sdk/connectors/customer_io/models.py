@@ -14,12 +14,12 @@ from typing import TypeVar, Generic, Any
 # Authentication configuration
 
 class CustomerIoAuthConfig(BaseModel):
-    """App API Key Authentication"""
+    """API Key Authentication"""
 
     model_config = ConfigDict(extra="forbid")
 
     app_api_key: str
-    """Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+    """Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 """
 
 # Replication configuration

@@ -12,18 +12,18 @@
     "base_name": "CustomerIo",
     "options": [
       {
-        "title": "App API Key Authentication",
+        "title": "API Key Authentication",
         "description": "",
         "fields": [
           {
             "name": "app_api_key",
             "type": "str",
             "required": true,
-            "title": "App API Key",
-            "description": "Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.\n"
+            "title": "API Key",
+            "description": "Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.\n"
           }
         ],
-        "type_suffix": "AppApiKeyAuthentication"
+        "type_suffix": "ApiKeyAuthentication"
       }
     ],
     "is_multi_auth": false
@@ -45,7 +45,7 @@
       }
     ]
   },
-  "custom_description": "Connector for the Customer.io App API, providing read access to campaigns, newsletters, segments, messages, activities, sender identities, snippets, collections, reporting webhooks, exports, and transactional message templates. Customer.io is a messaging platform that lets you send automated emails, push notifications, SMS, and in-app messages based on customer behavior. This connector retrieves data from the App API (not the Track API) and requires a Bearer-type App API key generated in your Customer.io workspace settings.\n",
+  "custom_description": "Connector for the Customer.io App API, providing read access to campaigns, newsletters, segments, messages, activities, sender identities, snippets, collections, reporting webhooks, exports, and transactional message templates. Customer.io is a messaging platform that lets you send automated emails, push notifications, SMS, and in-app messages based on customer behavior. This connector retrieves data from the App API (not the Track API) and uses bearer authentication with a private API key (sk_...) or an existing legacy App API key for your Customer.io workspace. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.\n",
   "supported_questions": "- List all campaigns in Customer.io\n- Get the details of the first campaign in my workspace\n- List the actions for the first campaign in my workspace\n- Show me the details of the first action of my most recent campaign\n- Show me all newsletters\n- Show me the details of the most recent newsletter\n- What segments are defined in my workspace?\n- Show me the details of the first segment\n- List all sender identities\n- Show me the details of the first sender identity\n- Show me all reporting webhooks\n- What snippets do we have?\n- List all collections\n- Show recent activities\n- List recent messages\n- List all transactional message templates\n- Show me the details of the first transactional message template\n- Show the content variants of the first transactional template\n- Create a snippet called 'footer' with content '<p>Thanks!</p>'\n- Update the snippet 'header' to say 'Welcome back!'\n- Create a new collection called 'products'\n- Create a reporting webhook for email events\n- Create a manual segment called 'VIP Customers'\n- Export all customers matching a segment\n- Send a transactional email using the first transactional message template to the email address of the first sender identity\n- Which campaigns are currently active?\n- Find newsletters sent in the last month\n- What are the most recent email deliveries?\n- Which exports have completed?",
   "unsupported_questions": "- Create a new campaign\n- Delete a segment\n- Delete a snippet\n- Delete a collection\n- Delete a reporting webhook\n- Delete a newsletter\n- Send a newsletter via API\n- Schedule a newsletter via API",
   "first_operation": {

@@ -18,7 +18,7 @@ Create a connector with Token credentials.
 
 | Field Name | Type | Required | Description |
 |------------|------|----------|-------------|
-| `app_api_key` | `str` | Yes | Your Customer.io App API key. Generate one in your workspace settings at Settings \> API Credentials \> App API Key.
+| `app_api_key` | `str` | Yes | Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings \> API Credentials \> Create API key \> Private API key. Public API keys (pk_) and Track API keys do not work.
  |
 
 `replication_config` fields you need:
@@ -39,7 +39,7 @@ curl -X POST "https://api.airbyte.ai/api/v1/integrations/connectors" \
     "connector_type": "Customer-Io",
     "name": "My Customer-Io Connector",
     "credentials": {
-      "app_api_key": "<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+      "app_api_key": "<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     },
     "replication_config": {
@@ -457,7 +457,7 @@ This authentication method isn't available for this connector.
 
 | Field Name | Type | Required | Description |
 |------------|------|----------|-------------|
-| `app_api_key` | `str` | Yes | Your Customer.io App API key. Generate one in your workspace settings at Settings \> API Credentials \> App API Key.
+| `app_api_key` | `str` | Yes | Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings \> API Credentials \> Create API key \> Private API key. Public API keys (pk_) and Track API keys do not work.
  |
 
 Example request:
@@ -468,7 +468,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )

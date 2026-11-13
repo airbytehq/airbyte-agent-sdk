@@ -2,7 +2,7 @@
 
 The Customer-Io agent connector is a Python package that equips AI agents to interact with Customer-Io through strongly typed, well-documented tools. It's ready to use directly in your Python app, in an agent framework, or exposed through an MCP.
 
-Connector for the Customer.io App API, providing read access to campaigns, newsletters, segments, messages, activities, sender identities, snippets, collections, reporting webhooks, exports, and transactional message templates. Customer.io is a messaging platform that lets you send automated emails, push notifications, SMS, and in-app messages based on customer behavior. This connector retrieves data from the App API (not the Track API) and requires a Bearer-type App API key generated in your Customer.io workspace settings.
+Connector for the Customer.io App API, providing read access to campaigns, newsletters, segments, messages, activities, sender identities, snippets, collections, reporting webhooks, exports, and transactional message templates. Customer.io is a messaging platform that lets you send automated emails, push notifications, SMS, and in-app messages based on customer behavior. This connector retrieves data from the App API (not the Track API) and uses bearer authentication with a private API key (sk_...) or an existing legacy App API key for your Customer.io workspace. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 
 
 ## Example prompts
@@ -513,7 +513,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -532,7 +532,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -558,7 +558,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -579,7 +579,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -601,7 +601,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -647,7 +647,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -695,7 +695,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -717,7 +717,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -740,7 +740,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
@@ -766,7 +766,7 @@ from airbyte_agent_sdk.connectors.customer_io.models import CustomerIoAuthConfig
 
 connector = CustomerIoConnector(
     auth_config=CustomerIoAuthConfig(
-        app_api_key="<Your Customer.io App API key. Generate one in your workspace settings at Settings > API Credentials > App API Key.
+        app_api_key="<Your Customer.io workspace's private API key (sk_...) or an existing legacy App API key. Create a private key at Account Settings > API Credentials > Create API key > Private API key. Public API keys (pk_) and Track API keys do not work.
 >"
     )
 )
