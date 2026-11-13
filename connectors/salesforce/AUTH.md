@@ -2,6 +2,21 @@
 
 This page documents the authentication and configuration options for the Salesforce agent connector.
 
+## Refresh-token expiration
+
+Salesforce expires OAuth refresh tokens after 30 days without a successful token refresh. This applies to both Airbyte-managed and customer-owned OAuth apps, including Connected Apps and External Client Apps. Salesforce administrators can't extend the limit, and more restrictive app policies can expire tokens sooner.
+
+Enforcement began on a rolling basis starting November 4, 2026, for production, scratch, and Developer Edition organizations, and October 21, 2026, for sandboxes. At enforcement, tokens already unused for 30 days or longer expire immediately. There is no new 30-day grace period. See [Salesforce's enforcement notice](https://help.salesforce.com/s/articleView?id=005461275&language=en_US&type=1).
+
+A successful refresh-token exchange resets the inactivity window. API calls that only use an access token don't reset it. If you use the connector less than once every 30 days, plan for reauthorization rather than creating artificial refresh activity solely to prevent expiration.
+
+If Salesforce rejects the refresh token with `invalid_grant` and `expired access/refresh token`:
+
+- **Hosted mode**: reconnect Salesforce through the hosted OAuth setup flow to authorize your account again, then retry the operation.
+- **Open source mode**: repeat your app's OAuth authorization flow to obtain a new refresh token. Replace `refresh_token` in your `SalesforceAuthConfig`, initialize the connector with the updated credentials, and retry the operation.
+
+Retrying with the expired refresh token won't restore access. The `invalid_grant` error can also indicate revocation or other authentication problems; it doesn't prove that the idle limit caused the failure.
+
 ## Hosted mode (most cases)
 
 In hosted mode, create the connector through the Airbyte Agent CLI or API, then execute operations using the CLI, Python SDK, or API. If you need a step-by-step guide, see the [developer quickstart](https://docs.airbyte.com/ai-agents/get-started/developer-quickstart/).
