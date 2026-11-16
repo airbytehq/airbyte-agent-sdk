@@ -328,17 +328,6 @@ class SparkAdAuthInfo(BaseModel):
     ad_auth_status: str | None | None = Field(default=None, description="The authorization status (e.g. AUTHORIZED)")
     """The authorization status (e.g. AUTHORIZED)"""
 
-class SparkAdUserInfo(BaseModel):
-    """Information about the TikTok account"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    tiktok_name: str | None | None = Field(default=None, description="The user name of the TikTok account")
-    """The user name of the TikTok account"""
-    identity_id: str | None | None = Field(default=None, description="Identity ID")
-    """Identity ID"""
-    identity_type: str | None | None = Field(default=None, description="Identity type")
-    """Identity type"""
-
 class SparkAdVideoInfo(BaseModel):
     """Information about the video post"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
@@ -355,6 +344,17 @@ class SparkAdVideoInfo(BaseModel):
     """The width of the video"""
     size: int | None | None = Field(default=None, description="The size of the video, in bytes")
     """The size of the video, in bytes"""
+
+class SparkAdUserInfo(BaseModel):
+    """Information about the TikTok account"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    tiktok_name: str | None | None = Field(default=None, description="The user name of the TikTok account")
+    """The user name of the TikTok account"""
+    identity_id: str | None | None = Field(default=None, description="Identity ID")
+    """Identity ID"""
+    identity_type: str | None | None = Field(default=None, description="Identity type")
+    """Identity type"""
 
 class SparkAdItemInfo(BaseModel):
     """Information about the Spark Ads post"""

@@ -68,16 +68,15 @@ info:
   x-airbyte-skip-auth-methods:
     - oauth2
   x-airbyte-skip-suggested-streams:
-    - ad_group_ad_report
+    - ad_group_ad_legacy
     - click_view
     - account_performance_report
-    - keyword_report
-    - user_location_report
-    - geographic_report
+    - keyword_view
+    - user_location_view
     - geographic_view_with_metrics
-    - display_keyword_performance_report
-    - shopping_performance_report
-    - display_topics_performance_report
+    - display_keyword_view
+    - shopping_performance_view
+    - topic_view
   x-airbyte-replication-config:
     title: Replication Configuration
     description: Settings for data replication from Google Ads.
