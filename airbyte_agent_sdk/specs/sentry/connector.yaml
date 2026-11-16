@@ -13,8 +13,8 @@ info:
     status: candidate
     criteria_version: v1
   x-airbyte-connector-definition-id: cdaf146a-9b75-49fd-9dd2-9d64a0bb4781
-  x-airbyte-replication-version: "1.0.6"
-  x-airbyte-replication-compatibility: ">=1.0.6, <2.0.0"
+  x-airbyte-replication-version: "1.1.2"
+  x-airbyte-replication-compatibility: ">=1.1.0, <2.0.0"
   x-airbyte-external-documentation-urls:
   - type: api_reference
     title: Sentry API Documentation
@@ -518,9 +518,11 @@ info:
         title: Organization
         description: The slug of the organization to replicate data from.
       project:
-        type: string
-        title: Project
-        description: The slug of the project to replicate data from.
+        type: array
+        title: Projects
+        description: The slugs of the projects to replicate data from.
+        items:
+          type: string
     required:
     - organization
     - project

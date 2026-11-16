@@ -25,7 +25,7 @@ Create a connector with Token credentials.
 | Field Name | Type | Required | Description |
 |------------|------|----------|-------------|
 | `organization` | `str` | Yes | The slug of the organization to replicate data from. |
-| `project` | `str` | Yes | The slug of the project to replicate data from. |
+| `project` | `str` | Yes | The slugs of the projects to replicate data from. |
 
 Example request:
 
@@ -43,7 +43,7 @@ curl -X POST "https://api.airbyte.ai/api/v1/integrations/connectors" \
     },
     "replication_config": {
       "organization": "<The slug of the organization to replicate data from.>",
-      "project": "<The slug of the project to replicate data from.>"
+      "project": "<The slugs of the projects to replicate data from.>"
     }
   }'
 ```

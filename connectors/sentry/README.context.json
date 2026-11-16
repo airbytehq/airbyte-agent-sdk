@@ -53,8 +53,8 @@
         "name": "project",
         "type": "str",
         "required": true,
-        "title": "Project",
-        "description": "The slug of the project to replicate data from.",
+        "title": "Projects",
+        "description": "The slugs of the projects to replicate data from.",
         "format": null,
         "default": null
       }

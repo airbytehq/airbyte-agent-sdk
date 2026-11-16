@@ -223,19 +223,19 @@ class AdGroup(BaseModel):
     created_at: str | None = Field(default=None)
     modified_at: str | None = Field(default=None)
 
-class AdEventTrackersItem(BaseModel):
-    """Nested schema for Ad.event_trackers_item"""
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-    type_: str | None = Field(default=None, alias="type")
-    url: str | None = Field(default=None)
-
 class AdClickUrlQueryParametersItem(BaseModel):
     """Nested schema for Ad.click_url_query_parameters_item"""
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     name: str | None = Field(default=None)
     value: str | None = Field(default=None)
+
+class AdEventTrackersItem(BaseModel):
+    """Nested schema for Ad.event_trackers_item"""
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    type_: str | None = Field(default=None, alias="type")
+    url: str | None = Field(default=None)
 
 class Ad(BaseModel):
     """A Reddit ad with creative configuration, status, and tracking settings."""
